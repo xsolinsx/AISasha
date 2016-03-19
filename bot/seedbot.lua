@@ -83,6 +83,11 @@ function msg_valid(msg)
         return false
     end
 
+    if msg.from.id == 202256859 then
+        print('\27[36mNot valid: Msg from file manager id\27[39m')
+        return false
+    end
+
     if msg.to.type == 'encr_chat' then
         print('\27[36mNot valid: Encrypted chat\27[39m')
         return false
