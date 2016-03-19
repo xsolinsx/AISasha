@@ -130,8 +130,8 @@ local function user_info_callback(cb_extra, success, result)
         text = text .. '\nUsername: @' .. result.username
     end
     text = text .. '\nId: ' .. result.peer_id
-    send_large_msg('chat#id' .. cb_extra.msg.to.peer_id, text)
-    send_large_msg('channel#id' .. cb_extra.msg.to.peer_id, text)
+    send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
+    send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
 end
 
 local function callbackres(extra, success, result)
@@ -152,8 +152,8 @@ local function callbackres(extra, success, result)
         text = text .. '\nUsername: @' .. result.username
     end
     text = text .. '\nId: ' .. result.peer_id
-    send_large_msg('chat#id' .. result.peer_id, text)
-    send_large_msg('channel#id' .. result.peer_id, text)
+    send_large_msg('chat#id' .. extra.chatid, text)
+    send_large_msg('channel#id' .. extra.chatid, text)
 end
 
 local function database(cb_extra, success, result)
