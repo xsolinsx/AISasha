@@ -143,7 +143,7 @@ local function run(msg, matches)
         set_text('username', '\nUsername: ')
         set_text('youAreWriting', '\n\nStai scrivendo a')
         set_text('groupName', '\nNome gruppo: ')
-        set_text('members', '\Membri: ')
+        set_text('members', '\nMembri: ')
         set_text('supergroupName', '\nNome supergruppo: ')
         set_text('userInfo', 'Info utente:')
 
