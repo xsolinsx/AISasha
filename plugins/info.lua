@@ -130,8 +130,8 @@ local function user_info_callback(cb_extra, success, result)
         text = text .. '\nUsername: @' .. result.username
     end
     text = text .. '\nId: ' .. result.peer_id
-    send_large_msg('chat#id' .. result.peer_id, text)
-    send_large_msg('channel#id' .. result.peer_id, text)
+    send_large_msg('chat#id' .. cb_extra.msg.to.peer_id, text)
+    send_large_msg('channel#id' .. cb_extra.msg.to.peer_id, text)
 end
 
 local function callbackres(extra, success, result)
@@ -258,9 +258,11 @@ local function run(msg, matches)
         elseif chat_type == 'chat' or chat_type == 'channel' then
             if is_momod(msg) then
                 if string.match(matches[2], '^%d+$') then
-                    return user_info("user#id" .. matches[2], user_info_callback, { msg = msg })
+                    user_info("user#id" .. matches[2], user_info_callback, { msg = msg })
+                    return
                 else
-                    return res_user(matches[2]:gsub("@", ""), callbackres, { chatid = msg.to.id })
+                    resolve_username(matches[2]:gsub("@", ""), callbackres, { chatid = msg.to.id })
+                    return
                 end
             else
                 return lang_text('require_mod')
