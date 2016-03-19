@@ -1,32 +1,44 @@
-local function save_value(msg, name, value)
-  if (not name or not value) then
-    return "Usage: !set var_name value"
-  end
-  local hash = nil
-  if msg.to.type == 'chat' or msg.to.type == 'channel'  then
-    hash = 'chat:'..msg.to.id..':variables'
-  end
-  if hash then
-    redis:hset(hash, name, value)
-    return "Saved "..name
-  end
+﻿local function set_value(msg, name, value)
+    if (not name or not value) then
+        return lang_text('errorTryAgain')
+    end
+
+    local hash = nil
+    if msg.to.type == 'channel' then
+        hash = 'channel:' .. msg.to.id .. ':variables'
+    end
+    if msg.to.type == 'chat' then
+        hash = 'chat:' .. msg.to.id .. ':variables'
+    end
+    if msg.to.type == 'user' then
+        hash = 'user:' .. msg.from.id .. ':variables'
+    end
+    if hash then
+        redis:hset(hash, name, value)
+        return name .. lang_text('saved')
+    end
 end
+
 local function run(msg, matches)
-  if not is_momod(msg) then
-    return "For moderators only!"
-  end
-  local name = string.sub(matches[1], 1, 50)
-  local value = string.sub(matches[2], 1, 1000)
-  local name1 = user_print_name(msg.from)
-  savelog(msg.to.id, name1.." ["..msg.from.id.."] saved ["..name.."] as > "..value )
-  local text = save_value(msg, name, value)
-  return text
+    local name = string.sub(matches[1]:lower(), 1, 50)
+    local value = string.sub(matches[2], 1, 1000)
+
+    if is_momod(msg) then
+        return set_value(msg, name, value)
+    else
+        return lang_text('require_mod')
+    end
 end
 
 return {
-  patterns = {
-   "^[#!/]save ([^%s]+) (.+)$"
-  }, 
-  run = run 
+    description = "SET",
+    usage = "(/set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.",
+    patterns =
+    {
+        "[#!/][sS][eE][tT] ([^%s]+) (.+)$",
+        -- set
+        "[sS][aA][sS][hH][aA] [sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
+        "[sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
+    },
+    run = run
 }
-

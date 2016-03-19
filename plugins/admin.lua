@@ -1,305 +1,386 @@
 local function set_bot_photo(msg, success, result)
-  local receiver = get_receiver(msg)
-  if success then
-    local file = 'data/photos/bot.jpg'
-    print('File downloaded to:', result)
-    os.rename(result, file)
-    print('File moved to:', file)
-    set_profile_photo(file, ok_cb, false)
-    send_large_msg(receiver, 'Photo changed!', ok_cb, false)
-    redis:del("bot:photo")
-  else
-    print('Error downloading: '..msg.id)
-    send_large_msg(receiver, 'Failed, please try again!', ok_cb, false)
-  end
-end
-
---Function to add log supergroup
-local function logadd(msg)
-	local data = load_data(_config.moderation.data)
-	local receiver = get_receiver(msg)
-	local GBan_log = 'GBan_log'
-   	if not data[tostring(GBan_log)] then
-		data[tostring(GBan_log)] = {}
-		save_data(_config.moderation.data, data)
-	end
-	data[tostring(GBan_log)][tostring(msg.to.id)] = msg.to.peer_id
-	save_data(_config.moderation.data, data)
-	local text = 'Log_SuperGroup has has been set!'
-	reply_msg(msg.id,text,ok_cb,false)
-	return
-end
-
---Function to remove log supergroup
-local function logrem(msg)
-	local data = load_data(_config.moderation.data)
     local receiver = get_receiver(msg)
-	local GBan_log = 'GBan_log'
-	if not data[tostring(GBan_log)] then
-		data[tostring(GBan_log)] = nil
-		save_data(_config.moderation.data, data)
-	end
-	data[tostring(GBan_log)][tostring(msg.to.id)] = nil
-	save_data(_config.moderation.data, data)
-	local text = 'Log_SuperGroup has has been removed!'
-	reply_msg(msg.id,text,ok_cb,false)
-	return
+    if success then
+        local file = 'data/photos/bot.jpg'
+        print('File downloaded to:', result)
+        os.rename(result, file)
+        print('File moved to:', file)
+        set_profile_photo(file, ok_cb, false)
+        send_large_msg(receiver, lang_text('botPicChanged'), ok_cb, false)
+        redis:del("bot:photo")
+    else
+        print('Error downloading: ' .. msg.id)
+        send_large_msg(receiver, lang_text('errorTryAgain'), ok_cb, false)
+    end
+end
+
+-- Function to add log supergroup
+local function logadd(msg)
+    local data = load_data(_config.moderation.data)
+    local receiver = get_receiver(msg)
+    local GBan_log = 'GBan_log'
+    if not data[tostring(GBan_log)] then
+        data[tostring(GBan_log)] = { }
+        save_data(_config.moderation.data, data)
+    end
+    data[tostring(GBan_log)][tostring(msg.to.id)] = msg.to.peer_id
+    save_data(_config.moderation.data, data)
+    local text = lang_text('logSet')
+    reply_msg(msg.id, text, ok_cb, false)
+    return
+end
+
+-- Function to remove log supergroup
+local function logrem(msg)
+    local data = load_data(_config.moderation.data)
+    local receiver = get_receiver(msg)
+    local GBan_log = 'GBan_log'
+    if not data[tostring(GBan_log)] then
+        data[tostring(GBan_log)] = nil
+        save_data(_config.moderation.data, data)
+    end
+    data[tostring(GBan_log)][tostring(msg.to.id)] = nil
+    save_data(_config.moderation.data, data)
+    local text = lang_text('logUnset')
+    reply_msg(msg.id, text, ok_cb, false)
+    return
 end
 
 
 local function parsed_url(link)
-  local parsed_link = URL.parse(link)
-  local parsed_path = URL.parse_path(parsed_link.path)
-  return parsed_path[2]
+    local parsed_link = URL.parse(link)
+    local parsed_path = URL.parse_path(parsed_link.path)
+    return parsed_path[2]
 end
 
-local function get_contact_list_callback (cb_extra, success, result)
-  local text = " "
-  for k,v in pairs(result) do
-    if v.print_name and v.id and v.phone then
-      text = text..string.gsub(v.print_name ,  "_" , " ").." ["..v.id.."] = "..v.phone.."\n"
+local function get_contact_list_callback(cb_extra, success, result)
+    local text = " "
+    local filetype = cb_extra.filetype
+    for k, v in pairs(result) do
+        if v.print_name and v.id and v.phone then
+            text = text .. string.gsub(v.print_name, "_", " ") .. " [" .. v.id .. "] = " .. v.phone .. "\n"
+        end
     end
-  end
-  local file = io.open("contact_list.txt", "w")
-  file:write(text)
-  file:flush()
-  file:close()
-  send_document("user#id"..cb_extra.target,"contact_list.txt", ok_cb, false)--.txt format
-  local file = io.open("contact_list.json", "w")
-  file:write(json:encode_pretty(result))
-  file:flush()
-  file:close()
-  send_document("user#id"..cb_extra.target,"contact_list.json", ok_cb, false)--json format
+    if (filetype == "txt") then
+        local file = io.open("contact_list.txt", "w")
+        file:write(text)
+        file:flush()
+        file:close()
+        send_document("user#id" .. cb_extra.target, "contact_list.txt", ok_cb, false)
+        -- .txt format
+    end
+    if (filetype == "json") then
+        local file = io.open("contact_list.json", "w")
+        file:write(json:encode_pretty(result))
+        file:flush()
+        file:close()
+        send_document("user#id" .. cb_extra.target, "contact_list.json", ok_cb, false)
+        -- json format
+    end
 end
 
 local function get_dialog_list_callback(cb_extra, success, result)
-  local text = ""
-  for k,v in pairsByKeys(result) do
-    if v.peer then
-      if v.peer.type == "chat" then
-        text = text.."group{"..v.peer.title.."}["..v.peer.id.."]("..v.peer.members_num..")"
-      else
-        if v.peer.print_name and v.peer.id then
-          text = text.."user{"..v.peer.print_name.."}["..v.peer.id.."]"
+    local text = ""
+    for k, v in pairsByKeys(result) do
+        if v.peer then
+            if v.peer.type == "chat" then
+                text = text .. "group{" .. v.peer.title .. "}[" .. v.peer.id .. "](" .. v.peer.members_num .. ")"
+            else
+                if v.peer.print_name and v.peer.id then
+                    text = text .. "user{" .. v.peer.print_name .. "}[" .. v.peer.id .. "]"
+                end
+                if v.peer.username then
+                    text = text .. "(" .. v.peer.username .. ")"
+                end
+                if v.peer.phone then
+                    text = text .. "'" .. v.peer.phone .. "'"
+                end
+            end
         end
-        if v.peer.username then
-          text = text.."("..v.peer.username..")"
+        if v.message then
+            text = text .. '\nlast msg >\nmsg id = ' .. v.message.id
+            if v.message.text then
+                text = text .. "\n text = " .. v.message.text
+            end
+            if v.message.action then
+                text = text .. "\n" .. serpent.block(v.message.action, { comment = false })
+            end
+            if v.message.from then
+                if v.message.from.print_name then
+                    text = text .. "\n From > \n" .. string.gsub(v.message.from.print_name, "_", " ") .. "[" .. v.message.from.id .. "]"
+                end
+                if v.message.from.username then
+                    text = text .. "( " .. v.message.from.username .. " )"
+                end
+                if v.message.from.phone then
+                    text = text .. "' " .. v.message.from.phone .. " '"
+                end
+            end
         end
-        if v.peer.phone then
-          text = text.."'"..v.peer.phone.."'"
-        end
-      end
+        text = text .. "\n\n"
     end
-    if v.message then
-      text = text..'\nlast msg >\nmsg id = '..v.message.id
-      if v.message.text then
-        text = text .. "\n text = "..v.message.text
-      end
-      if v.message.action then
-        text = text.."\n"..serpent.block(v.message.action, {comment=false})
-      end
-      if v.message.from then
-        if v.message.from.print_name then
-          text = text.."\n From > \n"..string.gsub(v.message.from.print_name, "_"," ").."["..v.message.from.id.."]"
-        end
-        if v.message.from.username then
-          text = text.."( "..v.message.from.username.." )"
-        end
-        if v.message.from.phone then
-          text = text.."' "..v.message.from.phone.." '"
-        end
-      end
+    if (filetype == "txt") then
+        local file = io.open("dialog_list.txt", "w")
+        file:write(text)
+        file:flush()
+        file:close()
+        send_document("user#id" .. cb_extra.target, "dialog_list.txt", ok_cb, false)
+        -- .txt format
     end
-    text = text.."\n\n"
-  end
-  local file = io.open("dialog_list.txt", "w")
-  file:write(text)
-  file:flush()
-  file:close()
-  send_document("user#id"..cb_extra.target,"dialog_list.txt", ok_cb, false)--.txt format
-  local file = io.open("dialog_list.json", "w")
-  file:write(json:encode_pretty(result))
-  file:flush()
-  file:close()
-  send_document("user#id"..cb_extra.target,"dialog_list.json", ok_cb, false)--json format
+    if (filetype == "json") then
+        local file = io.open("dialog_list.json", "w")
+        file:write(json:encode_pretty(result))
+        file:flush()
+        file:close()
+        send_document("user#id" .. cb_extra.target, "dialog_list.json", ok_cb, false)
+        -- json format
+    end
 end
 
 -- Returns the key (index) in the config.enabled_plugins table
-local function plugin_enabled( name )
-  for k,v in pairs(_config.enabled_plugins) do
-    if name == v then
-      return k
+local function plugin_enabled(name)
+    for k, v in pairs(_config.enabled_plugins) do
+        if name == v then
+            return k
+        end
     end
-  end
-  -- If not found
-  return false
+    -- If not found
+    return false
 end
 
 -- Returns true if file exists in plugins folder
-local function plugin_exists( name )
-  for k,v in pairs(plugins_names()) do
-    if name..'.lua' == v then
-      return true
+local function plugin_exists(name)
+    for k, v in pairs(plugins_names()) do
+        if name .. '.lua' == v then
+            return true
+        end
     end
-  end
-  return false
+    return false
 end
 
-local function reload_plugins( )
-	plugins = {}
-  return load_plugins()
+local function reload_plugins()
+    plugins = { }
+    return load_plugins()
 end
 
-local function run(msg,matches)
+local function run(msg, matches)
     local receiver = get_receiver(msg)
     local group = msg.to.id
-	local print_name = user_print_name(msg.from):gsub("‮", "")
-	local name_log = print_name:gsub("_", " ")
+    local print_name = user_print_name(msg.from):gsub("‮", "")
+    local name_log = print_name:gsub("_", " ")
     if not is_admin1(msg) then
-    	return 
+        return
     end
     if msg.media then
-      	if msg.media.type == 'photo' and redis:get("bot:photo") then
-      		if redis:get("bot:photo") == 'waiting' then
-        		load_photo(msg.id, set_bot_photo, msg)
-      		end
-      	end
+        if msg.media.type == 'photo' and redis:get("bot:photo") then
+            if redis:get("bot:photo") == 'waiting' then
+                load_photo(msg.id, set_bot_photo, msg)
+            end
+        end
     end
-    if matches[1] == "setbotphoto" then
-    	redis:set("bot:photo", "waiting")
-    	return 'Please send me bot photo now'
+    if matches[1]:lower() == "setbotphoto" or matches[1]:lower() == "sasha setta foto" then
+        redis:set("bot:photo", "waiting")
+        return lang_text('sendNewPic')
     end
-    if matches[1] == "markread" then
-    	if matches[2] == "on" then
-    		redis:set("bot:markread", "on")
-    		return "Mark read > on"
-    	end
-    	if matches[2] == "off" then
-    		redis:del("bot:markread")
-    		return "Mark read > off"
-    	end
-    	return
+    if matches[1] == "markread" or matches[1]:lower() == "sasha segna letto" then
+        if matches[2] == "on" then
+            redis:set("bot:markread", "on")
+            return lang_text('markRead') .. " > on"
+        end
+        if matches[2] == "off" then
+            redis:del("bot:markread")
+            return lang_text('markRead') .. " > off"
+        end
+        return
     end
-    if matches[1] == "pm" then
-    	send_large_msg("user#id"..matches[2],matches[3])
-    	return "Msg sent"
+    if matches[1]:lower() == "pm" or matches[1]:lower() == "sasha messaggia" then
+        send_large_msg("user#id" .. matches[2], matches[3])
+        return lang_text('pmSent')
     end
-    if matches[1] == "pmblock" then
-    	if is_admin2(matches[2]) then
-    		return "You can't block admins"
-    	end
-    	block_user("user#id"..matches[2],ok_cb,false)
-    	return "User blocked"
+    if matches[1]:lower() == "pmblock" or matches[1]:lower() == "sasha blocca" then
+        if is_admin2(matches[2]) then
+            return lang_text('cantBlockAdmin')
+        end
+        block_user("user#id" .. matches[2], ok_cb, false)
+        return lang_text('userBlocked')
     end
-    if matches[1] == "pmunblock" then
-    	unblock_user("user#id"..matches[2],ok_cb,false)
-    	return "User unblocked"
+    if matches[1]:lower() == "pmunblock" or matches[1]:lower() == "sasha sblocca" then
+        unblock_user("user#id" .. matches[2], ok_cb, false)
+        return lang_text('userUnblocked')
     end
-    if matches[1] == "import" then--join by group link
-    	local hash = parsed_url(matches[2])
-    	import_chat_link(hash,ok_cb,false)
+    if matches[1]:lower() == "import" then
+        -- join by group link
+        local hash = parsed_url(matches[2])
+        import_chat_link(hash, ok_cb, false)
     end
-    if matches[1] == "contactlist" then
-	    if not is_sudo(msg) then-- Sudo only
-    		return
-    	end
-      get_contact_list(get_contact_list_callback, {target = msg.from.id})
-      return "I've sent contact list with both json and text format to your private"
+    if matches[1]:lower() == "contactlist" or matches[1]:lower() == "sasha lista contatti" then
+        if not is_sudo(msg) then
+            -- Sudo only
+            return
+        end
+        if not matches[2] then
+            get_contact_list(get_contact_list_callback, { target = msg.from.id, filetype = "txt" })
+        else
+            get_contact_list(get_contact_list_callback, { target = msg.from.id, filetype = matches[2]:lower() })
+        end
+        return lang_text('contactListSent')
     end
-    if matches[1] == "delcontact" then
-	    if not is_sudo(msg) then-- Sudo only
-    		return
-    	end
-      del_contact("user#id"..matches[2],ok_cb,false)
-      return "User "..matches[2].." removed from contact list"
+    if matches[1]:lower() == "delcontact" or matches[1]:lower() == "sasha elimina contatto" and matches[2] then
+        if not is_sudo(msg) then
+            -- Sudo only
+            return
+        end
+        del_contact("user#id" .. matches[2], ok_cb, false)
+        return lang_text('user') .. matches[2] .. lang_text('removedFromContacts')
     end
-    if matches[1] == "dialoglist" then
-      get_dialog_list(get_dialog_list_callback, {target = msg.from.id})
-      return "I've sent a group dialog list with both json and text format to your private messages"
+    if matches[1]:lower() == "addcontact" or matches[1]:lower() == "sasha aggiungi contatto" and matches[2] then
+        if not is_sudo(msg) then
+            -- Sudo only
+            return
+        end
+        add_contact(matches[2], matches[3], matches[4], ok_cb, false)
+        return lang_text('user') .. matches[2] .. lang_text('addedToContacts')
     end
-    if matches[1] == "whois" then
-      user_info("user#id"..matches[2],user_info_callback,{msg=msg})
+    if matches[1]:lower() == "dialoglist" or matches[1]:lower() == "sasha lista chat" then
+        if not matches[2] then
+            get_dialog_list(get_dialog_list_callback, { target = msg.from.id, filetype = "txt" })
+        else
+            get_dialog_list(get_dialog_list_callback, { target = msg.from.id, filetype = matches[2]:lower() })
+        end
+        return lang_text('chatListSent')
     end
-    if matches[1] == "sync_gbans" then
-    	if not is_sudo(msg) then-- Sudo only
-    		return
-    	end
-    	local url = "http://seedteam.org/Teleseed/Global_bans.json"
-    	local SEED_gbans = http.request(url)
-    	local jdat = json:decode(SEED_gbans)
-    	for k,v in pairs(jdat) do
-			redis:hset('user:'..v, 'print_name', k)
-			banall_user(v)
-      		print(k, v.." Globally banned")
-    	end
+    if matches[1]:lower() == "sync_gbans" or matches[1]:lower() == "sasha sincronizza lista superban" then
+        if not is_sudo(msg) then
+            -- Sudo only
+            return
+        end
+        local url = "http://seedteam.org/Teleseed/Global_bans.json"
+        local SEED_gbans = http.request(url)
+        local jdat = json:decode(SEED_gbans)
+        for k, v in pairs(jdat) do
+            redis:hset('user:' .. v, 'print_name', k)
+            banall_user(v)
+            print(k, v .. " Globally banned")
+        end
+        return lang_text('gbansSync')
     end
-	if matches[1] == 'reload' then
-		receiver = get_receiver(msg)
-		reload_plugins(true)
-		post_msg(receiver, "Reloaded!", ok_cb, false)
-		return "Reloaded!"
-	end
-	--[[*For Debug*
+    --[[*For Debug*
 	if matches[1] == "vardumpmsg" and is_admin1(msg) then
 		local text = serpent.block(msg, {comment=false})
 		send_large_msg("channel#id"..msg.to.id, text)
 	end]]
-	if matches[1] == 'updateid' then
-		local data = load_data(_config.moderation.data)
-		local long_id = data[tostring(msg.to.id)]['long_id']
-		if not long_id then
-			data[tostring(msg.to.id)]['long_id'] = msg.to.peer_id 
-			save_data(_config.moderation.data, data)
-			return "Updated ID"
-		end
-	end
-	if matches[1] == 'addlog' and not matches[2] then
-		if is_log_group(msg) then
-			return "Already a Log_SuperGroup"
-		end
-		print("Log_SuperGroup "..msg.to.title.."("..msg.to.id..") added")
-		savelog(msg.to.id, name_log.." ["..msg.from.id.."] added Log_SuperGroup")
-		logadd(msg)
-	end
-	if matches[1] == 'remlog' and not matches[2] then
-		if not is_log_group(msg) then
-			return "Not a Log_SuperGroup"
-		end
-		print("Log_SuperGroup "..msg.to.title.."("..msg.to.id..") removed")
-		savelog(msg.to.id, name_log.." ["..msg.from.id.."] added Log_SuperGroup")
-		logrem(msg)
-	end
+    if matches[1]:lower() == 'updateid' or matches[1]:lower() == 'sasha aggiorna longid' then
+        local data = load_data(_config.moderation.data)
+        local long_id = data[tostring(msg.to.id)]['long_id']
+        if not long_id then
+            data[tostring(msg.to.id)]['long_id'] = msg.to.peer_id
+            save_data(_config.moderation.data, data)
+            return lang_text('longidUpdate')
+        end
+    end
+    if matches[1]:lower() == 'addlog' or matches[1]:lower() == 'sasha aggiungi log' and not matches[2] then
+        if is_log_group(msg) then
+            return lang_text('alreadyLog')
+        end
+        print("Log_SuperGroup " .. msg.to.title .. "(" .. msg.to.id .. ") added")
+        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")
+        logadd(msg)
+    end
+    if matches[1]:lower() == 'remlog' or matches[1]:lower() == 'sasha rimuovi log' and not matches[2] then
+        if not is_log_group(msg) then
+            return lang_text('notLog')
+        end
+        print("Log_SuperGroup " .. msg.to.title .. "(" .. msg.to.id .. ") removed")
+        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")
+        logrem(msg)
+    end
     return
 end
 
 local function pre_process(msg)
-  if not msg.text and msg.media then
-    msg.text = '['..msg.media.type..']'
-  end
-  return msg
+    if not msg.text and msg.media then
+        msg.text = '[' .. msg.media.type .. ']'
+    end
+    return msg
 end
 
 return {
-  patterns = {
-	"^[#!/](pm) (%d+) (.*)$",
-	"^[#!/](import) (.*)$",
-	"^[#!/](pmunblock) (%d+)$",
-	"^[#!/](pmblock) (%d+)$",
-	"^[#!/](markread) (on)$",
-	"^[#!/](markread) (off)$",
-	"^[#!/](setbotphoto)$",
-	"^[#!/](contactlist)$",
-	"^[#!/](dialoglist)$",
-	"^[#!/](delcontact) (%d+)$",
-	"^[#/!](reload)$",
-	"^[#/!](updateid)$",
-	"^[#/!](addlog)$",
-	"^[#/!](remlog)$",
-	"%[(photo)%]",
-  },
-  run = run,
-  pre_process = pre_process
+    description = "ADMIN",
+    usage =
+    {
+        "(/pm|sasha messaggia) <user_id> <msg>: Sasha invia <msg> a <user_id>.",
+        "/import <group_link>: Sasha entra nel gruppo tramite <group_link>.",
+        "(/block|sasha blocca) <user_id>: Sasha blocca <user_id>.",
+        "(/unblock|sasha sblocca) <user_id>: Sasha sblocca <user_id>.",
+        "(/markread|sasha segna letto) (on|off): Sasha segna come [non] letti i messaggi ricevuti.",
+        "/setbotphoto|sasha cambia foto: Sasha chiede la foto da settare come profilo.",
+        "(/contactlist|sasha lista contatti) (txt|json): Sasha manda la lista dei contatti.",
+        "(/dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.",
+        "(/addcontact|sasha aggiungi contatto) <phone> <name> <surname>: Sasha aggiunge il contatto specificato.",
+        "(/delcontact|sasha elimina contatto) <user_id>: Sasha elimina il contatto <user_id>.",
+        "/sync_gbans|sasha sincronizza lista superban: Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.",
+        "/updateid|sasha aggiorna longid: Sasha salva il long_id.",
+        "/addlog|sasha aggiungi log: Sasha aggiunge il log.",
+        "/remlog|sasha rimuovi log: Sasha rimuove il log.",
+    },
+    patterns =
+    {
+        "^[#!/]([pP][mM]) (%d+) (.*)$",
+        "^[#!/]([iI][mM][pP][oO][rR][tT]) (.*)$",
+        "^[#!/]([pP][mM][bB][lL][oO][cC][kK]) (%d+)$",
+        "^[#!/]([pP][mM][uU][nN][bB][lL][oO][cC][kK]) (%d+)$",
+        "^[#!/]([mM][aA][rR][kK][rR][eE][aA][dD]) ([oO][nN])$",
+        "^[#!/]([mM][aA][rR][kK][rR][eE][aA][dD]) ([oO][fF][fF])$",
+        "^[#!/]([sS][eE][tT][bB][oO][tT][pP][hH][oO][tT][oO])$",
+        "^[#!/]([cC][oO][nN][tT][aA][cC][tT][lL][iI][sS][tT])$",
+        "^[#!/]([dD][iI][aA][lL][oO][gG][lL][iI][sS][tT])$",
+        "^[#!/]([aA][dD][dD][cC][oO][nN][tT][aA][cC][tT]) (.*) (.*) (.*)$",
+        "^[#!/]([dD][eE][lL][cC][oO][nN][tT][aA][cC][tT]) (%d+)$",
+        "^[#!/]([sS][yY][nN][cC]_[gG][bB][aA][nN][sS])$",
+        -- sync your global bans with seed
+        "^[#!/]([uU][pP][dD][aA][tT][eE][iI][dD])$",
+        "^[#!/]([aA][dD][dD][lL][oO][gG])$",
+        "^[#!/]([rR][eE][mM][lL][oO][gG])$",
+        "%[(photo)%]",
+        -- pm
+        "^([sS][aA][sS][hH][aA] [mM][eE][sS][sS][aA][gG][gG][iI][aA]) (%d+) (.*)$",
+        -- pmblock
+        "^([sS][aA][sS][hH][aA] [bB][lL][oO][cC][cC][aA]) (%d+)$",
+        -- pmunblock
+        "^([sS][aA][sS][hH][aA] [sS][bB][lL][oO][cC][cC][aA]) (%d+)$",
+        -- markread
+        "^([sS][aA][sS][hH][aA] [sS][eE][gG][nN][aA] [lL][eE][tT][tT][oO]) ([oO][nN])$",
+        "^([sS][aA][sS][hH][aA] [sS][eE][gG][nN][aA] [lL][eE][tT][tT][oO]) ([oO][fF][fF])$",
+        -- setbotphoto
+        "^([sS][aA][sS][hH][aA] [cC][aA][mM][bB][iI][aA] [fF][oO][tT][oO])$",
+        -- contactlist
+        "^[#!/]([cC][oO][nN][tT][aA][cC][tT][lL][iI][sS][tT]) ([tT][xX][tT])$",
+        "^[#!/]([cC][oO][nN][tT][aA][cC][tT][lL][iI][sS][tT]) ([jJ][sS][oO][nN])$",
+        "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [cC][oO][nN][tT][aA][tT][tT][iI])$",
+        "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [cC][oO][nN][tT][aA][tT][tT][iI]) ([tT][xX][tT])$",
+        "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [cC][oO][nN][tT][aA][tT][tT][iI]) ([jJ][sS][oO][nN])$",
+        -- dialoglist
+        "^[#!/]([dD][iI][aA][lL][oO][gG][lL][iI][sS][tT]) ([tT][xX][tT])$",
+        "^[#!/]([dD][iI][aA][lL][oO][gG][lL][iI][sS][tT]) ([jJ][sS][oO][nN])$",
+        "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [cC][hH][aA][tT])$",
+        "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [cC][hH][aA][tT]) ([tT][xX][tT])$",
+        "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [cC][hH][aA][tT]) ([jJ][sS][oO][nN])$",
+        -- addcontact
+        "^([sS][aA][sS][hH][aA] [aA][gG][gG][iI][uU][nN][gG][iI] [cC][oO][nN][tT][aA][tT][tT][oO]) (.*) (.*) (.*)$",
+        -- delcontact
+        "^([sS][aA][sS][hH][aA] [eE][lL][iI][mM][iI][nN][aA] [cC][oO][nN][tT][aA][tT][tT][oO]) (%d+)$",
+        -- sync_gbans
+        "^([sS][aA][sS][hH][aA] [sS][iI][nN][cC][rR][oO][nN][iI][zZ][zZ][aA] [lL][iI][sS][tT][aA] [sS][uU][pP][eE][rR][bB][aA][nN])$",
+        -- updateid
+        "^[sS][aA][sS][hH][aA] ([aA][gG][gG][iI][oO][rR][nN][aA] [lL][oO][nN][gG][iI][dD])$",
+        -- addlog
+        "^[sS][aA][sS][hH][aA] ([aA][gG][gG][iI][uU][nN][gG][iI] [lL][oO][gG])$",
+        -- remlog
+        "^[sS][aA][sS][hH][aA] ([rR][iI][mM][uU][oO][vV][iI] [lL][oO][gG])$",
+    },
+    run = run,
+    pre_process = pre_process
 }
---By @imandaneshi :)
---https://github.com/SEEDTEAM/TeleSeed/blob/test/plugins/admin.lua
----Modified by @Rondoozle for supergroups
+-- By @imandaneshi :)
+-- https://github.com/SEEDTEAM/TeleSeed/blob/test/plugins/admin.lua
+--- Modified by @Rondoozle for supergroups
