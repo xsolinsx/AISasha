@@ -168,7 +168,7 @@ local function run(msg, matches)
 
     if not is_momod(msg) then
         -- Ignore normal users
-        return lang_text('require_mod')
+        return
     end
 
     if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
@@ -289,7 +289,7 @@ local function run(msg, matches)
     end
 
     if not is_admin1(msg) and not is_support(support_id) then
-        return lang_text('require_admin')
+        return
     end
 
     if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
