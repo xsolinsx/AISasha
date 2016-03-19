@@ -48,7 +48,7 @@ local function kickrandom_channel(extra, success, result)
     while not kickable do
         id = result[math.random(#result)].id
         print(id)
-        if not(tonumber(id) == tonumber(our_id) or is_mod(receiver, id)) then
+        if not(tonumber(id) == tonumber(our_id) or is_mod(receiver, id) or tonumber(id) == 202256859) then
             kickable = true
             kick_user(id, result.id)
         else
