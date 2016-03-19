@@ -257,7 +257,7 @@ local function run(msg, matches)
             end
         elseif chat_type == 'chat' or chat_type == 'channel' then
             if is_momod(msg) then
-                if is_id(matches[2]) then
+                if string.match(matches[2], '^%d+$') then
                     return user_info("user#id" .. matches[2], user_info_callback, { msg = msg })
                 else
                     return resolve_username(matches[2]:gsub("@", ""), callbackres, { chatid = msg.to.id })
