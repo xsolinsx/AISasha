@@ -39,7 +39,7 @@ local function run(msg, matches)
     if (matches[1]:lower() == 'get' or matches[1]:lower() == 'getlist' or matches[1]:lower() == 'sasha lista') and not matches[2] then
         return list_variables(msg)
     else
-        if matches[2] and not string.match(matches[2]:lower(), 'chat_add_user_link') then
+        if not string.match(msg.text:lower(), 'chat_add_user_link') then
             local vars = list_variables(msg)
             if vars ~= nil then
                 local t = vars:split('\n')
