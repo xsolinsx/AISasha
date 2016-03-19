@@ -520,9 +520,9 @@ function show_supergroup_settingsmod(msg, target)
     end
     local settings = data[tostring(target)]['settings']
     local text = lang_text('supergroupSettings') ..
-    lang_text('linkLock') .. settings.lock_link ..
-    lang_text('floodLock') .. settings.flood ..
-    lang_text('floodSensiblity') .. NUM_MSG_MAX ..
+    lang_text('linksLock') .. settings.lock_link ..
+    lang_text('flood') .. settings.flood ..
+    lang_text('floodSensibility') .. NUM_MSG_MAX ..
     lang_text('spamLock') .. settings.lock_spam ..
     lang_text('arabicLock') .. settings.lock_arabic ..
     lang_text('membersLock') .. settings.lock_member ..
