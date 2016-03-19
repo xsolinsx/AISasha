@@ -876,7 +876,7 @@ function run(msg, matches)
     end
 
     if matches[1] == 'chat_add_user' then
-        if not msg.service then
+        if not msg.service or msg.action.user.id == 202256859 then
             return
         end
         local user = 'user#id' .. msg.action.user.id

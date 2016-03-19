@@ -145,7 +145,7 @@ local function run(msg, matches)
         local username = msg.action.user.username
         savelog(msg.from.id, "Added Admin " .. user_name .. "  " .. user_id .. " to chat " .. group_name .. " (ID:" .. msg.to.id .. ")")
         if username then
-            send_large_msg("user#id" .. user_id, lang_text('adminAdded') .. "@" .. username .. "[" .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
+            send_large_msg("user#id" .. user_id, lang_text('adminAdded') .. "@" .. username .. " " .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         else
             send_large_msg("user#id" .. user_id, lang_text('adminAdded') .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         end
