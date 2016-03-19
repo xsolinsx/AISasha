@@ -109,7 +109,7 @@ local function get_message_callback_id(extra, success, result)
     end
     text = text .. '\nId: ' .. result.from.peer_id
     send_msg('chat#id' .. result.to.peer_id, text, ok_cb, false)
-    send_msg('channel#id' .. result.to.peer_id, text, ok_cb, false)
+    post_large_msg('channel#id' .. result.peer_id, text)
 end
 
 local function user_info_callback(cb_extra, success, result)
@@ -131,7 +131,7 @@ local function user_info_callback(cb_extra, success, result)
     end
     text = text .. '\nId: ' .. result.peer_id
     send_msg('chat#id' .. result.peer_id, text, ok_cb, false)
-    send_msg('channel#id' .. result.peer_id, text, ok_cb, false)
+    post_large_msg('channel#id' .. result.peer_id, text)
 end
 
 local function callbackres(extra, success, result)
@@ -153,7 +153,7 @@ local function callbackres(extra, success, result)
     end
     text = text .. '\nId: ' .. result.peer_id
     send_msg('chat#id' .. result.peer_id, text, ok_cb, false)
-    send_msg('channel#id' .. result.peer_id, text, ok_cb, false)
+    post_large_msg('channel#id' .. result.peer_id, text)
 end
 
 local function database(cb_extra, success, result)
@@ -186,7 +186,7 @@ local function database(cb_extra, success, result)
     db:flush()
     db:close()
     send_msg('chat#id' .. result.peer_id, "Data leak.", ok_cb, false)
-    send_msg('channel#id' .. result.peer_id, "Data leak.", ok_cb, false)
+    post_large_msg('channel#id' .. result.peer_id, "Data leak.")
 end
 -- OLDINFOFUNCTIONS
 
