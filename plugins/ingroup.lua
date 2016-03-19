@@ -469,6 +469,20 @@ local function unlock_group_leave(msg, data, target)
     end
 end
 
+local function lock_group_photomod(msg, data, target)
+    if not is_momod(msg) then
+        return
+    end
+    local group_photo_lock = data[tostring(target)]['settings']['lock_photo']
+    if group_photo_lock == 'yes' then
+        return lang_text('photoAlreadyLocked')
+    else
+        data[tostring(target)]['settings']['lock_photo'] = 'yes'
+        save_data(_config.moderation.data, data)
+        return lang_text('photoLocked')
+    end
+end
+
 local function unlock_group_photomod(msg, data, target)
     if not is_momod(msg) then
         return
