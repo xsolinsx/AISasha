@@ -345,7 +345,7 @@ return {
     patterns =
     {
         "^[#!/]([hH][eE][lL][pP])$",
-        "^[#!/]([hH][eE][lL][pP] [aA][lL][lL])$",
+        "^[#!/]([hH][eE][lL][pP][aA][lL][lL])$",
         "^[#!/]([hH][eE][lL][pP]) (.+)",
         -- help
         -- "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][sS])$",
