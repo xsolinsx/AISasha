@@ -109,7 +109,7 @@ local function get_message_callback_id(extra, success, result)
     end
     text = text .. '\nId: ' .. result.from.peer_id
     send_msg('chat#id' .. result.to.peer_id, text, ok_cb, false)
-    post_large_msg('channel#id' .. result.peer_id, text)
+    post_large_msg('channel#id' .. result.to.peer_id, text)
 end
 
 local function user_info_callback(cb_extra, success, result)
