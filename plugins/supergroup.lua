@@ -582,7 +582,7 @@ local function demote2(receiver, member_username, user_id)
         return send_large_msg(receiver, lang_text('supergroupNotAdded'))
     end
     if not data[group]['moderators'][tostring(user_id)] then
-        return send_large_msg(receiver, member_tag_username .. lang_text('notMod'))
+        return send_large_msg(receiver, member_username .. lang_text('notMod'))
     end
     data[group]['moderators'][tostring(user_id)] = nil
     save_data(_config.moderation.data, data)
