@@ -1629,30 +1629,30 @@ local function run(msg, matches)
                     local receiver = get_receiver(msg)
                     chat_info(receiver, cleanmember, { receiver = receiver })
                 end
-            end
-            if matches[2]:lower() == 'modlist' then
-                if next(data[tostring(msg.to.id)]['moderators']) == nil then
-                    -- fix way
-                    return lang_text('noGroupMods')
+                if matches[2]:lower() == 'modlist' then
+                    if next(data[tostring(msg.to.id)]['moderators']) == nil then
+                        -- fix way
+                        return lang_text('noGroupMods')
+                    end
+                    local message = lang_text('modListStart') .. string.gsub(msg.to.print_name, '_', ' ') .. ':\n'
+                    for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
+                        data[tostring(msg.to.id)]['moderators'][tostring(k)] = nil
+                        save_data(_config.moderation.data, data)
+                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned modlist")
                 end
-                local message = lang_text('modListStart') .. string.gsub(msg.to.print_name, '_', ' ') .. ':\n'
-                for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
-                    data[tostring(msg.to.id)]['moderators'][tostring(k)] = nil
+                if matches[2]:lower() == 'rules' then
+                    local data_cat = 'rules'
+                    data[tostring(msg.to.id)][data_cat] = nil
                     save_data(_config.moderation.data, data)
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned rules")
                 end
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned modlist")
-            end
-            if matches[2]:lower() == 'rules' then
-                local data_cat = 'rules'
-                data[tostring(msg.to.id)][data_cat] = nil
-                save_data(_config.moderation.data, data)
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned rules")
-            end
-            if matches[2]:lower() == 'about' then
-                local data_cat = 'description'
-                data[tostring(msg.to.id)][data_cat] = nil
-                save_data(_config.moderation.data, data)
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned about")
+                if matches[2]:lower() == 'about' then
+                    local data_cat = 'description'
+                    data[tostring(msg.to.id)][data_cat] = nil
+                    save_data(_config.moderation.data, data)
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned about")
+                end
             end
         end
         if msg.to.type == 'chat' then
