@@ -260,7 +260,7 @@ local function run(msg, matches)
                 if string.match(matches[2], '^%d+$') then
                     return user_info("user#id" .. matches[2], user_info_callback, { msg = msg })
                 else
-                    return resolve_username(matches[2]:gsub("@", ""), callbackres, { chatid = msg.to.id })
+                    return res_user(matches[2]:gsub("@", ""), callbackres, { chatid = msg.to.id })
                 end
             else
                 return lang_text('require_mod')
