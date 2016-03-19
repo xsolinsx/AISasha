@@ -327,13 +327,13 @@ local function run(msg, matches)
     'Le parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n'
     table.sort(plugins)
     if (matches[1]:lower() == "help" and not matches[2]) or(matches[1]:lower() == "sasha aiuto" and not matches[2]) then
-        text = telegram_help()
+        text = text .. telegram_help()
     elseif matches[1]:lower() == "helpall" or(matches[1]:lower() == "sasha aiuto tutto" and not matches[2]) then
-        text = help_all(get_receiver(msg))
+        text = text .. help_all(get_receiver(msg))
     else
         text = plugin_help(matches[2], get_receiver(msg))
         if not text then
-            text = telegram_help()
+            text = text .. telegram_help()
         end
     end
     send_large_msg(get_receiver(msg), text)
