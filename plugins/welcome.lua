@@ -59,7 +59,7 @@ local function run(msg, matches)
     if matches[1]:lower() == 'getmemberswelcome' and is_owner(msg) then
         return get_memberswelcome(msg)
     end
-    if msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link" and is_owner(msg) then
+    if msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link" then
         local hash
         if msg.to.type == 'channel' then
             hash = 'channel:welcome' .. msg.to.id
