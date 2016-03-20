@@ -60,7 +60,6 @@ local function run(msg, matches)
         return get_memberswelcome(msg)
     end
     if msg.service and(msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and is_owner(msg) then
-        -- incr it on redis
         local hash
         if msg.to.type == 'channel' then
             hash = 'channel:welcome' .. msg.to.id
@@ -70,9 +69,11 @@ local function run(msg, matches)
         end
         redis:incr(hash)
         local hashonredis = redis:get(hash)
+        print(hashonredis)
         -- Check if user has spammed is group more than 4 times
         if hashonredis then
             if tonumber(hashonredis) == tonumber(get_memberswelcome(msg)) then
+                print('in')
                 send_large_msg(receiver, get_welcome(msg) .. '\n' .. get_rules(msg), ok_cb, false)
                 redis:getset(hash, 0)
             end
