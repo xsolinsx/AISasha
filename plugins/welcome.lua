@@ -60,7 +60,7 @@ local function run(msg, matches)
         return get_memberswelcome(msg)
     end
     print('welcome')
-    if msg.service and(msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and is_owner(msg) then
+    if msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link" and is_owner(msg) then
         print('inwelcome')
         local hash
         if msg.to.type == 'channel' then
