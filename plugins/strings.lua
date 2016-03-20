@@ -352,6 +352,11 @@ local function run(msg, matches)
         -- unset.lua --
         set_text('deleted', ' eliminato.')
 
+        -- welcome.lua --
+        set_text('newWelcome', 'Nuovo messaggio di benvenuto:\n')
+        set_text('newWelcomeNumber', 'Il benvenuto sarà mandato ogni X membri.')
+        set_text('noSetValue', 'Nessun valore impostato.')
+
         -- whitelist.lua --
         set_text('userBot', 'Utente/Bot ')
         set_text('whitelistRemoved', ' rimosso dalla whitelist.')
@@ -574,7 +579,7 @@ end
 
 return {
     description = "SHOUT",
-    usage = "/install|/update it|italian_lang: Sasha installa|aggiorna le stringhe di testp.",
+    usage = "/install|/update it|italian_lang: Sasha installa|aggiorna le stringhe di testo.",
     patterns =
     {
         '[#!/]([iI][nN][sS][tT][aA][lL][lL]) (italian_lang)$',
