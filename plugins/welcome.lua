@@ -75,6 +75,8 @@ local function run(msg, matches)
                 send_large_msg(receiver, get_welcome(msg) .. '\n' .. get_rules(msg), ok_cb, false)
                 redis:getset(hash, 0)
             end
+        else
+            redis:set(hash, 0)
         end
     end
 end
