@@ -63,6 +63,7 @@ local function run(msg, matches)
         counter = counter + 1
         if counter == tonumber(get_memberswelcome(msg)) then
             send_large_msg(receiver, get_welcome(msg) .. '\n' .. get_rules(msg), ok_cb, false)
+            counter = 0
         end
     end
 end
