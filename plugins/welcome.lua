@@ -67,12 +67,13 @@ local function run(msg, matches)
         if msg.to.type == 'chat' then
             hash = 'chat:welcome' .. msg.to.id
         end
+        print(hash)
         redis:incr(hash)
         local hashonredis = redis:get(hash)
         -- Check if user has spammed is group more than 4 times
         if hashonredis then
-            if tonumber(hashonredis) == tonumber(get_memberswelcome(msg)) then
-                send_large_msg(receiver, get_welcome(msg) .. '\n' .. get_rules(msg), ok_cb, false)
+            if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg)) then
+                send_large_msg(get_receiver(msg), get_welcome(msg) .. '\n' .. get_rules(msg), ok_cb, false)
                 redis:getset(hash, 0)
             end
         else
