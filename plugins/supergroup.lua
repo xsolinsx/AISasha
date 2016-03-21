@@ -760,7 +760,7 @@ function get_message_callback(extra, success, result)
         if is_muted_user(chat_id, user_id) then
             unmute_user(chat_id, user_id)
             send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
-        elseif is_admin1(msg) then
+        elseif is_momod(msg) then
             mute_user(chat_id, user_id)
             send_large_msg(receiver, user_id .. lang_text('muteUserAdd'))
         end
