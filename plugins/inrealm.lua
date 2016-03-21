@@ -676,7 +676,7 @@ function run(msg, matches)
         if is_realm(msg) and is_admin1(msg) then
             print("Admin detected")
         else
-            return lang_text('require_sudo')
+            return
         end
     end
 
