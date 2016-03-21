@@ -1863,7 +1863,7 @@ local function run(msg, matches)
                     unmute_user(chat_id, user_id)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. user_id .. "] from the muted users list")
                     return user_id .. lang_text('muteUserRemoved')
-                elseif is_owner(msg) then
+                elseif is_momod(msg) then
                     mute_user(chat_id, user_id)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. user_id .. "] to the muted users list")
                     return user_id .. lang_text('muteUserAdd')
