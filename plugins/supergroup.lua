@@ -1900,10 +1900,10 @@ local function run(msg, matches)
 
         if matches[1]:lower() == 'rules' then
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
-            --[[if not(msg.to.peer_id == 1026492373 and is_momod(msg)) then
+            if not(msg.to.peer_id == 1026492373 and is_momod(msg)) then
                 -- moderatore del canile abusivo usa rules allora ok altrimenti return
                 return
-            end]]
+            end
             return get_rules(msg, data)
         end
 
