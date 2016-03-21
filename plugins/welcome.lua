@@ -48,11 +48,15 @@ end
 
 local function run(msg, matches)
     if matches[1]:lower() == 'getwelcome' then
-        --[[if not(msg.to.peer_id == 1026492373 and is_momod(msg)) then
-            -- moderatore del canile abusivo usa getwelcome allora ok altrimenti return
+        if msg.to.peer_id == 1026492373 then
+            if is_momod(msg) then
+                -- moderatore del canile abusivo usa getwelcome allora ok altrimenti return
+                return get_welcome(msg)
+            end
             return
-        end]]
-        return get_welcome(msg)
+        else
+            return get_welcome(msg)
+        end
     end
     if matches[1]:lower() == 'setwelcome' and is_owner(msg) then
         return set_welcome(msg, matches[2])
