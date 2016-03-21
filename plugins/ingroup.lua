@@ -1628,7 +1628,7 @@ local function run(msg, matches)
                 return lang_text('require_mod')
             end
             if tonumber(matches[2]) < 5 or tonumber(matches[2]) > 20 then
-                return lang_text('erroreFloodRange')
+                return lang_text('errorFloodRange')
             end
             local flood_max = matches[2]
             data[tostring(msg.to.id)]['settings']['flood_msg_max'] = flood_max
