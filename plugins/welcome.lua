@@ -48,12 +48,13 @@ end
 
 local function run(msg, matches)
     if matches[1]:lower() == 'getwelcome' then
-        if msg.to.peer_id == 1026492373 then
+        if tonumber(msg.to.peer_id) == 1026492373 then
             if is_momod(msg) then
                 -- moderatore del canile abusivo usa getwelcome allora ok altrimenti return
                 return get_welcome(msg)
+            else
+                return
             end
-            return
         else
             return get_welcome(msg)
         end
