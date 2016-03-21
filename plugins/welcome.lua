@@ -48,14 +48,19 @@ end
 
 local function run(msg, matches)
     if matches[1]:lower() == 'getwelcome' then
-        if tonumber(msg.to.peer_id) == 1026492373 then
+        print('peerid' .. msg.to.peer_id)
+        if tonumber(msg.to.peer_id) == 1031209686 then
+            print('right group')
             if is_momod(msg) then
+                print('mod')
                 -- moderatore del canile abusivo usa getwelcome allora ok altrimenti return
                 return get_welcome(msg)
             else
+                print('not mod')
                 return
             end
         else
+            print('wrong group')
             return get_welcome(msg)
         end
     end

@@ -1900,13 +1900,19 @@ local function run(msg, matches)
 
         if matches[1]:lower() == 'rules' then
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
-            if tonumber(msg.to.peer_id) == 1026492373 then
+            print('peerid' .. msg.to.peer_id)
+            if tonumber(msg.to.peer_id) == 1031209686 then
+                print('right group')
                 if is_momod(msg) then
+                    print('mod')
                     -- moderatore del canile abusivo usa rules allora ok altrimenti return
                     return get_rules(msg, data)
+                else
+                    print('not mod')
+                    return
                 end
-                return
             else
+                print('wrong group')
                 return get_rules(msg, data)
             end
         end
