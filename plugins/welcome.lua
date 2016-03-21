@@ -49,7 +49,7 @@ end
 local function run(msg, matches)
     if matches[1]:lower() == 'getwelcome' then
         print('peerid' .. msg.to.id)
-        if tonumber(msg.to.id) == 1031209686 then
+        if tonumber(msg.to.id) == 1026492373 then
             print('right group')
             if is_momod(msg) then
                 print('mod')

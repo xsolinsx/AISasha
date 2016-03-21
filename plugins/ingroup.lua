@@ -1228,7 +1228,7 @@ local function run(msg, matches)
             if matches[1]:lower() == 'rules' or matches[1]:lower() == 'sasha regole' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
                 print('peerid' .. msg.to.id)
-                if tonumber(msg.to.id) == 1031209686 then
+                if tonumber(msg.to.id) == 1026492373 then
                     print('right group')
                     if is_momod(msg) then
                         print('mod')
