@@ -1227,6 +1227,10 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == 'rules' or matches[1]:lower() == 'sasha regole' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
+                if not(msg.to.peer_id == 1026492373 and is_momod(msg)) then
+                    -- moderatore del canile abusivo usa rules allora ok altrimenti return
+                    return
+                end
                 return get_rules(msg, data)
             end
             if matches[1]:lower() == 'setrules' or matches[1]:lower() == 'sasha imposta regole' then

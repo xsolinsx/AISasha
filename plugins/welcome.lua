@@ -23,7 +23,7 @@ local function set_memberswelcome(msg, value)
     local data_cat = 'welcomemembers'
     data[tostring(msg.to.id)][data_cat] = value
     save_data(_config.moderation.data, data)
-    return string.gsub(lang_text('newWelcomeNumber'), 'X', tostring(value)) .. value
+    return string.gsub(lang_text('newWelcomeNumber'), 'X', tostring(value))
 end
 
 local function get_memberswelcome(msg)
@@ -48,6 +48,10 @@ end
 
 local function run(msg, matches)
     if matches[1]:lower() == 'getwelcome' then
+        if not(msg.to.peer_id == 1026492373 and is_momod(msg)) then
+            -- moderatore del canile abusivo usa getwelcome allora ok altrimenti return
+            return
+        end
         return get_welcome(msg)
     end
     if matches[1]:lower() == 'setwelcome' and is_owner(msg) then

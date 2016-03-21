@@ -672,14 +672,15 @@ function run(msg, matches)
         send_document("chat#id" .. msg.to.id, "./groups/lists/" .. msg.to.id .. "memberlist.txt", ok_cb, false)
     end
 
-    if not is_sudo(msg) and not is_realm(msg) and is_admin1(msg) then
-        return
+    if not is_sudo(msg) then
+        if is_realm(msg) and is_admin1(msg) then
+            print("Admin detected")
+        else
+            return lang_text('require_sudo')
+        end
     end
 
     if (matches[1]:lower() == 'creategroup' or matches[1]:lower() == 'sasha crea gruppo') and matches[2] then
-        if not is_sudo(msg) then
-            return lang_text('require_sudo')
-        end
         group_name = matches[2]
         group_type = 'group'
         return create_group(msg)
