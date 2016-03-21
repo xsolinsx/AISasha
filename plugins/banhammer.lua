@@ -1,4 +1,3 @@
-
 local function pre_process(msg)
     local data = load_data(_config.moderation.data)
     -- SERVICE MESSAGE
@@ -174,7 +173,7 @@ local function run(msg, matches)
     if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
         if type(msg.reply_id) ~= "nil" and is_momod(msg) then
             if is_admin1(msg) then
-                local msgr = get_message(msg.reply_id, Kick_by_reply_admins, false)
+                msgr = get_message(msg.reply_id, Kick_by_reply_admins, false)
             else
                 msgr = get_message(msg.reply_id, Kick_by_reply, false)
             end
@@ -254,7 +253,7 @@ local function run(msg, matches)
     if matches[1]:lower() == 'unban' or matches[1]:lower() == 'sasha sbanna' or matches[1]:lower() == 'sasha ricompila' or matches[1]:lower() == 'sasha compila' or matches[1]:lower() == 'sbanna' or matches[1]:lower() == 'ricompila' or matches[1]:lower() == 'compila' then
         -- /unban
         if type(msg.reply_id) ~= "nil" and is_momod(msg) then
-            local msgr = get_message(msg.reply_id, unban_by_reply, false)
+            msgr = get_message(msg.reply_id, unban_by_reply, false)
         end
         local user_id = matches[2]
         local chat_id = msg.to.id
