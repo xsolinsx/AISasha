@@ -128,9 +128,9 @@ local function list_disabled_plugin_on_chat(receiver)
 
     local status = '❌'
     local text = ''
-    for i, v in pairs(_config.disabled_plugin_on_chat[receiver]) do
-        if _config.disabled_plugin_on_chat[receiver][v] == true then
-            text = text .. status .. ' ' .. v .. '\n'
+    for k in pairs(_config.disabled_plugin_on_chat[receiver]) do
+        if _config.disabled_plugin_on_chat[receiver][k] == true then
+            text = text .. status .. ' ' .. k .. '\n'
         end
     end
     return text
