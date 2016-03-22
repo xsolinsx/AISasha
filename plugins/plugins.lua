@@ -45,7 +45,6 @@ local function reload_plugins()
     return list_plugins(true)
 end
 
-
 local function enable_plugin(plugin_name)
     print('checking if ' .. plugin_name .. ' exists')
     -- Check if plugin is enabled
@@ -118,49 +117,87 @@ local function reenable_plugin_on_chat(receiver, plugin)
     return plugin .. lang_text('pluginEnabledAgain')
 end
 
+local function list_disabled_plugin_on_chat(receiver)
+    if not _config.disabled_plugin_on_chat then
+        return lang_text('noDisabledPlugin')
+    end
+
+    if not _config.disabled_plugin_on_chat[receiver] then
+        return lang_text('noDisabledPlugin')
+    end
+
+    local status = '❌'
+    local text = ''
+    for i, v in pairs(_config.disabled_plugin_on_chat[receiver]) do
+        if _config.disabled_plugin_on_chat[receiver][v] == true then
+            text = text .. status .. ' ' .. v .. '\n'
+        end
+    end
+    return text
+end
+
 local function run(msg, matches)
-    -- Show the available plugins
-    if matches[1]:lower() == '#plugins' or matches[1]:lower() == '!plugins' or matches[1]:lower() == '/plugins' or matches[1]:lower() == 'sasha lista plugins' or matches[1]:lower() == 'lista plugins' then
-        return list_plugins()
-    end
+    if is_owner(msg) then
+        if matches[3] then
+            -- Re-enable a plugin for this chat
+            if (matches[1]:lower() == 'enable' or matches[1]:lower() == 'sasha abilita' or matches[1]:lower() == 'sasha attiva' or matches[1]:lower() == 'abilita' or matches[1]:lower() == 'attiva') and matches[3]:lower() == 'chat' then
+                local receiver = get_receiver(msg)
+                local plugin = matches[2]
+                print("enable " .. plugin .. ' on this chat')
+                return reenable_plugin_on_chat(receiver, plugin)
+            end
 
-    -- Enable a plugin
-    if (matches[1]:lower() == 'enable' or matches[1]:lower() == 'sasha abilita' or matches[1]:lower() == 'sasha attiva' or matches[1]:lower() == 'abilita' or matches[1]:lower() == 'attiva') and not matches[3] then
-        local plugin_name = matches[2]
-        print("enable: " .. matches[2])
-        return enable_plugin(plugin_name)
-    end
+            if (matches[2] and matches[2] == 'strings') then
+                return print("can't disable strings")
+            end
 
-    -- Re-enable a plugin for this chat
-    if (matches[1]:lower() == 'enable' or matches[1]:lower() == 'sasha abilita' or matches[1]:lower() == 'sasha attiva' or matches[1]:lower() == 'abilita' or matches[1]:lower() == 'attiva') and matches[3]:lower() == 'chat' then
-        local receiver = get_receiver(msg)
-        local plugin = matches[2]
-        print("enable " .. plugin .. ' on this chat')
-        return reenable_plugin_on_chat(receiver, plugin)
+            -- Disable a plugin on a chat
+            if (matches[1]:lower() == 'disable' or matches[1]:lower() == 'sasha disabilita' or matches[1]:lower() == 'sasha disattiva' or matches[1]:lower() == 'disabilita' or matches[1]:lower() == 'disattiva') and matches[3]:lower() == 'chat' then
+                local plugin = matches[2]
+                local receiver = get_receiver(msg)
+                print("disable " .. plugin .. ' on this chat')
+                return disable_plugin_on_chat(receiver, plugin)
+            end
+        else
+            -- Show on chat disabled plugin
+            if matches[1]:lower() == 'sasha lista disabilitati' or matches[1]:lower() == 'sasha lista disattivati' or matches[1]:lower() == 'lista disabilitati' or matches[1]:lower() == 'lista disattivati' then
+                local receiver = get_receiver(msg)
+                return list_disabled_plugin_on_chat(receiver)
+            end
+        end
+    else
+        return lang_text('require_owner')
     end
+    if is_sudo(msg) then
+        -- Show the available plugins
+        if matches[1]:lower() == '#plugins' or matches[1]:lower() == '!plugins' or matches[1]:lower() == '/plugins' or matches[1]:lower() == 'sasha lista plugins' or matches[1]:lower() == 'lista plugins' then
+            return list_plugins()
+        end
 
-    if (matches[2] and matches[2] == 'strings') then
-        return print("can't disable strings")
-    end
+        -- Reload all the plugins!
+        if matches[1]:lower() == 'reload' or matches[1]:lower() == 'sasha ricarica' or matches[1]:lower() == 'ricarica' then
+            print(reload_plugins())
+            return lang_text('pluginsReloaded')
+        end
 
-    -- Disable a plugin
-    if (matches[1]:lower() == 'disable' or matches[1]:lower() == 'sasha disabilita' or matches[1]:lower() == 'sasha disattiva' or matches[1]:lower() == 'disabilita' or matches[1]:lower() == 'disattiva') and not matches[3] then
-        print("disable: " .. matches[2])
-        return disable_plugin(matches[2])
-    end
+        -- Enable a plugin
+        if matches[1]:lower() == 'enable' or matches[1]:lower() == 'sasha abilita' or matches[1]:lower() == 'sasha attiva' or matches[1]:lower() == 'abilita' or matches[1]:lower() == 'attiva' then
+            local plugin_name = matches[2]
+            print("enable: " .. matches[2])
+            return enable_plugin(plugin_name)
+        end
 
-    -- Disable a plugin on a chat
-    if (matches[1]:lower() == 'disable' or matches[1]:lower() == 'sasha disabilita' or matches[1]:lower() == 'sasha disattiva' or matches[1]:lower() == 'disabilita' or matches[1]:lower() == 'disattiva') and matches[3]:lower() == 'chat' then
-        local plugin = matches[2]
-        local receiver = get_receiver(msg)
-        print("disable " .. plugin .. ' on this chat')
-        return disable_plugin_on_chat(receiver, plugin)
-    end
+        if matches[2] and matches[2] == 'strings' then
+            return print("can't disable strings")
+        end
 
-    -- Reload all the plugins!
-    if matches[1]:lower() == 'reload' or matches[1]:lower() == 'sasha ricarica' or matches[1]:lower() == 'ricarica' then
-        print(reload_plugins())
-        return lang_text('pluginsReloaded')
+        -- Disable a plugin
+        if matches[1]:lower() == 'disable' or matches[1]:lower() == 'sasha disabilita' or matches[1]:lower() == 'sasha disattiva' or matches[1]:lower() == 'disabilita' or matches[1]:lower() == 'disattiva' then
+            print("disable: " .. matches[2])
+            return disable_plugin(matches[2])
+        end
+    else
+        return lang_text('require_sudo')
     end
 end
 
@@ -169,6 +206,7 @@ return {
     usage =
     {
         "/plugins|[sasha] lista plugins: Sasha mostra una lista di tutti i plugins.",
+        "[sasha] lista disabilitati|disattivati: Sasha mostra una lista dei plugins disabilitati su questa chat.",
         "(/[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]: Sasha abilita <plugin>, se specificato solo su questa chat.",
         "(/[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]: Sasha disabilita <plugin>, se specificato solo su questa chat.",
         "/[plugin[s]] reload|[sasha] ricarica: Sasha ricarica tutti i plugins.",
@@ -197,6 +235,8 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] ([Aa][Tt][Tt][Ii][Vv][Aa]) ([%w_%.%-]+) ([Cc][Hh][Aa][Tt])",
         "^[Ss][Aa][Ss][Hh][Aa] ([Dd][Ii][Ss][Aa][Tt][Tt][Ii][Vv][Aa]) ([%w_%.%-]+) ([Cc][Hh][Aa][Tt])",
         "^[Ss][Aa][Ss][Hh][Aa] ([rR][iI][cC][aA][rR][iI][cC][aA])$",
+        "^[Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Dd][Ii][Ss][Aa][Bb][Ii][Ll][Ii][Tt][Aa][Tt][Ii]$",
+        "^[Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Dd][Ii][Ss][Aa][Tt][Tt][Ii][Vv][Aa][Tt][Ii]$",
         "^[Ll][Ii][Ss][Tt][Aa] [Pp][Ll][Uu][Gg][Ii][Nn][Ss]$",
         "^([Aa][Bb][Ii][Ll][Ii][Tt][Aa]) ([%w_%.%-]+)$",
         "^([Dd][Ii][Ss][Aa][Bb][Ii][Ll][Ii][Tt][Aa]) ([%w_%.%-]+)$",
@@ -207,7 +247,8 @@ return {
         "^([Aa][Tt][Tt][Ii][Vv][Aa]) ([%w_%.%-]+) ([Cc][Hh][Aa][Tt])",
         "^([Dd][Ii][Ss][Aa][Tt][Tt][Ii][Vv][Aa]) ([%w_%.%-]+) ([Cc][Hh][Aa][Tt])",
         "^([Rr][Ii][Cc][Aa][Rr][Ii][Cc][Aa])$",
+        "^[Ll][Ii][Ss][Tt][Aa] [Dd][Ii][Ss][Aa][Bb][Ii][Ll][Ii][Tt][Aa][Tt][Ii]$",
+        "^[Ll][Ii][Ss][Tt][Aa] [Dd][Ii][Ss][Aa][Tt][Tt][Ii][Vv][Aa][Tt][Ii]$",
     },
     run = run,
-    privileged = true
 }
