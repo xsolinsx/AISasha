@@ -112,9 +112,8 @@ local function banall_by_reply(extra, success, result)
         end
         local name = user_print_name(result.from)
         banall_user(result.from.peer_id)
-        chat_del_user(chat, 'user#id' .. result.from.peer_id, ok_cb, false)
+        kick_user(result.from.peer_id, result.to.peer_id)
         send_large_msg(chat, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('gbanned'))
-        channel_kick(chat, 'user#id' .. result.from.peer_id, ok_cb, false)
         send_large_msg(channel, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('gbanned'))
     else
         return lang_text('useYourGroups')
