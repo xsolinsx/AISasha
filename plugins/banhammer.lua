@@ -363,8 +363,6 @@ local function run(msg, matches)
             else
                 msgr = get_message(msg.reply_id, ban_by_reply, false)
             end
-            local user_id = matches[2]
-            local chat_id = msg.to.id
         elseif string.match(matches[2], '^%d+$') then
             if tonumber(matches[2]) == tonumber(our_id) then
                 return
@@ -375,6 +373,8 @@ local function run(msg, matches)
             if tonumber(matches[2]) == tonumber(msg.from.id) then
                 return lang_text('noAutoBan')
             end
+            local user_id = matches[2]
+            local chat_id = msg.to.id
             local print_name = user_print_name(msg.from):gsub("‮", "")
             local name = print_name:gsub("_", "")
             local receiver = get_receiver(msg)
@@ -397,6 +397,7 @@ local function run(msg, matches)
         -- /unban
         if type(msg.reply_id) ~= "nil" and is_momod(msg) then
             msgr = get_message(msg.reply_id, unban_by_reply, false)
+            return
         end
         local user_id = matches[2]
         local chat_id = msg.to.id
@@ -438,6 +439,7 @@ local function run(msg, matches)
         -- Global ban
         if type(msg.reply_id) ~= "nil" and is_admin1(msg) then
             banall = get_message(msg.reply_id, banall_by_reply, false)
+            return
         end
         local user_id = matches[2]
         local chat_id = msg.to.id
@@ -463,6 +465,7 @@ local function run(msg, matches)
         -- Global unban
         if type(msg.reply_id) ~= "nil" and is_admin1(msg) then
             unbanall = get_message(msg.reply_id, unbanall_by_reply, false)
+            return
         end
         local user_id = matches[2]
         local chat_id = msg.to.id
