@@ -1572,7 +1572,7 @@ local function run(msg, matches)
                 local function callback(extra, success, result)
                     local receiver = 'chat#' .. msg.to.id
                     if success == 0 then
-                        return send_large_msg(receiver, lang_text('errorCreatingLink'))
+                        return send_large_msg(receiver, lang_text('errorCreateLink'))
                     end
                     send_large_msg(receiver, lang_text('linkCreated'))
                     data[tostring(msg.to.id)]['settings']['set_link'] = result
