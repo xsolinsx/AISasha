@@ -97,7 +97,7 @@ return {
         "^[#!/]([rR][uU][lL][eE][tT][aA])$",
         "^[#!/]([kK][iI][cC][kK] [rR][aA][nN][dD][oO][mM])$",
         -- ruleta
-        "([rR][uU][lL][eE][tT][aA])",
+        "^([rR][uU][lL][eE][tT][aA])",
         -- kick random
         "^([sS][aA][sS][hH][aA] [uU][cC][cC][iI][dD][iI] [rR][aA][nN][dD][oO][mM])$",
         "^([sS][aA][sS][hH][aA] [sS][pP][aA][rR][aA] [rR][aA][nN][dD][oO][mM])$",
