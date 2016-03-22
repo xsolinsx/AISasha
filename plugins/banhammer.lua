@@ -1,7 +1,8 @@
 -- kick by reply for mods and owner
 local function Kick_by_reply(extra, success, result)
-    if result.to.type == 'chat' or result.to.type == 'channel' then
+    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id
+        local channel = 'channel#id' .. result.to.peer_id
         if tonumber(result.from.peer_id) == tonumber(our_id) then
             -- Ignore bot
             return
@@ -19,7 +20,7 @@ end
 
 -- Kick by reply for admins
 local function Kick_by_reply_admins(extra, success, result)
-    if result.to.type == 'chat' or result.to.type == 'channel' then
+    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id
         local channel = 'channel#id' .. result.to.peer_id
         if tonumber(result.from.peer_id) == tonumber(our_id) then
@@ -39,7 +40,7 @@ end
 
 -- Ban by reply for admins
 local function ban_by_reply(extra, success, result)
-    if result.to.type == 'chat' or result.to.type == 'channel' then
+    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id
         local channel = 'channel#id' .. result.to.peer_id
         if tonumber(result.from.peer_id) == tonumber(our_id) then
@@ -81,7 +82,7 @@ end
 
 -- Unban by reply
 local function unban_by_reply(extra, success, result)
-    if result.to.type == 'chat' or result.to.type == 'channel' then
+    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id
         local channel = 'channel#id' .. result.to.peer_id
         if tonumber(result.from.peer_id) == tonumber(our_id) then
@@ -98,7 +99,7 @@ local function unban_by_reply(extra, success, result)
     end
 end
 local function banall_by_reply(extra, success, result)
-    if result.to.type == 'chat' or result.to.type == 'channel' then
+    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id
         local channel = 'channel#id' .. result.to.peer_id
         if tonumber(result.from.peer_id) == tonumber(our_id) then
@@ -120,7 +121,7 @@ local function banall_by_reply(extra, success, result)
     end
 end
 local function unbanall_by_reply(extra, success, result)
-    if result.to.type == 'chat' or result.to.type == 'channel' then
+    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id
         local channel = 'channel#id' .. result.to.peer_id
         if tonumber(result.from.peer_id) == tonumber(our_id) then

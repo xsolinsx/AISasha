@@ -1,10 +1,10 @@
 ﻿-- invite by reply
 local function Invite_by_reply(extra, success, result)
-    if result.to.type == 'chat' or result.to.type == 'channel' then
+    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id
         local channel = 'channel#id' .. result.to.peer_id
-        chat_add_user(chat, 'user#id' .. result.from.id, ok_cb, false)
-        channel_invite(channel, 'user#id' .. result.from.id, ok_cb, false)
+        chat_add_user(chat, 'user#id' .. result.from.peer_id, ok_cb, false)
+        channel_invite(channel, 'user#id' .. result.from.peer_id, ok_cb, false)
     else
         return lang_text('useYourGroups')
     end
