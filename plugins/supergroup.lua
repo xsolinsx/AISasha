@@ -1039,6 +1039,9 @@ end
 -- 'Set supergroup photo' function
 local function set_supergroup_photo(msg, success, result)
     local data = load_data(_config.moderation.data)
+    if not data[tostring(msg.to.id)] then
+        return
+    end
     local receiver = get_receiver(msg)
     if success then
         local file = 'data/photos/channel_photo_' .. msg.to.id .. '.jpg'
@@ -1102,6 +1105,9 @@ local function run(msg, matches)
             rem_mutes(msg.to.id)
         end
 
+        if not data[tostring(msg.to.id)] then
+            return
+        end
         if matches[1]:lower() == "info" then
             if not is_owner(msg) then
                 return
