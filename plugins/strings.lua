@@ -85,8 +85,8 @@ local function run(msg, matches)
         set_text('noUsernameFound', 'Non trovo nessun utente con quell\'username.')
 
         -- bot.lua --
-        set_text('botOn', 'Sono tornata.')
-        set_text('botOff', 'Nulla da fare qui.')
+        set_text('botOn', 'Sono tornata. ')
+        set_text('botOff', 'Nulla da fare qui. ')
 
         -- feedback.lua --
         set_text('feedStart', '@EricSolinas hai ricevuto un feedback: #newfeedback\n\nMittente')

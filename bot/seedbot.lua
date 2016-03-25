@@ -51,6 +51,8 @@ function on_binlog_replay_end()
 end
 
 function msg_valid(msg)
+    local receiver = get_receiver(msg)
+
     -- Don't process outgoing messages
     if msg.out then
         print('\27[36mNot valid: msg from us\27[39m')
@@ -95,6 +97,20 @@ function msg_valid(msg)
 
     if msg.from.id == 777000 then
         -- send_large_msg(*group id*, msg.text) *login code will be sent to GroupID*
+        return false
+    end
+
+    if is_owner(msg) then
+        if msg.text:lower() == "#bot on" or msg.text:lower() == "!bot on" or msg.text:lower() == "/bot on" or msg.text:lower() == "sasha on" then
+            enable_channel(receiver, msg.to.id)
+        end
+        if msg.text:lower() == "#bot off" or msg.text:lower() == "!bot off" or msg.text:lower() == "/bot off" or msg.text:lower() == "sasha off" then
+            disable_channel(receiver, msg.to.id)
+        end
+    end
+
+    if is_channel_disabled(receiver) then
+        print('\27[36mNot valid: Channel disabled\27[39m')
         return false
     end
 
