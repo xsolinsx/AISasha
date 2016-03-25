@@ -143,6 +143,42 @@ local function callbackres(extra, success, result)
     send_large_msg('channel#id' .. extra.chatid, text)
 end
 
+local function channel_callback_info(cb_extra, success, result)
+    local title = lang_text('infoFor') .. result.title .. "\n\n"
+    local admin_num = lang_text('adminListStart') .. result.admins_count
+    local user_num = lang_text('users') .. result.participants_count
+    local kicked_num = lang_text('kickedUsers') .. result.kicked_count
+    local channel_id = "\nID: " .. result.peer_id
+    if result.username then
+        channel_username = lang_text('username') .. "@" .. result.username
+    else
+        channel_username = ""
+    end
+    local text = title .. admin_num .. user_num .. kicked_num .. channel_id .. channel_username
+    send_large_msg(cb_extra.receiver, text)
+end
+
+local function chat_callback_info(cb_extra, success, result)
+    print('cb_extra')
+    vardump(cb_extra)
+    print('success')
+    vardump(success)
+    print('result')
+    vardump(result)
+    --[[local title = lang_text('infoFor') .. result.title .. "\n\n"
+    local admin_num = lang_text('adminListStart') .. result.admins_count
+    local user_num = lang_text('users') .. result.participants_count
+    local kicked_num = lang_text('kickedUsers') .. result.kicked_count
+    local channel_id = "\nID: " .. result.peer_id
+    if result.username then
+        channel_username = lang_text('username') .. "@" .. result.username
+    else
+        channel_username = ""
+    end
+    local text = title .. admin_num .. user_num .. kicked_num .. channel_id .. channel_username
+    send_large_msg(cb_extra.receiver, text)]]
+end
+
 local function database(cb_extra, success, result)
     local text
     local id
@@ -298,6 +334,7 @@ local function all(msg, target, receiver)
     send_document(receiver, "./groups/all/" .. target .. "all.txt", ok_cb, false)
     return
 end]]
+
 local function run(msg, matches)
     local receiver = get_receiver(msg)
     local chat = msg.to.id
@@ -306,7 +343,7 @@ local function run(msg, matches)
     -- OLDINFO
     if matches[1]:lower() == 'info' or matches[1]:lower() == 'sasha info' then
         if not matches[2] then
-            if type(msg.reply_id) ~= "nil" then
+            if type(msg.reply_id) ~= 'nil' then
                 if is_momod(msg) then
                     return get_message(msg.reply_id, get_message_callback_id, false)
                 else
@@ -332,7 +369,7 @@ local function run(msg, matches)
                 end
                 text = text .. '\nId: ' .. msg.from.id ..
                 lang_text('youAreWriting')
-                if chat_type == "user" then
+                if chat_type == 'user' then
                     if msg.to.first_name then
                         text = text .. lang_text('name') .. msg.to.first_name
                     end
@@ -366,7 +403,7 @@ local function run(msg, matches)
         elseif chat_type == 'chat' or chat_type == 'channel' then
             if is_momod(msg) then
                 if string.match(matches[2], '^%d+$') then
-                    user_info("user#id" .. matches[2], user_info_callback, { msg = msg })
+                    user_info('user#id' .. matches[2], user_info_callback, { msg = msg })
                     return
                 else
                     resolve_username(matches[2]:gsub("@", ""), callbackres, { chatid = msg.to.id })
@@ -377,8 +414,22 @@ local function run(msg, matches)
             end
         end
     end
+    --[[if (matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo') and matches[2] and is_owner2(msg.from.id, matches[2]) then
+        return all(matches[2], receiver)
+    end]]
+    if (matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo') and not matches[2] then
+        if is_owner(msg) then
+            if chat_type == 'channel' then
+                channel_info(receiver, channel_callback_info, { receiver = receiver, msg = msg })
+            elseif chat_type == 'chat' then
+                chat_info(receiver, database, { receiver = receiver })
+            end
+        else
+            return lang_text('require_owner')
+        end
+    end
     if (matches[1]:lower() == 'database' or matches[1]:lower() == 'sasha database') and msg.to.type ~= 'user' and is_sudo(msg) then
-        return chat_info(get_receiver(msg), database, { receiver = get_receiver(msg) })
+        return chat_info(receiver, database, { receiver = receiver })
     end
     -- OLDINFO
 
@@ -446,6 +497,7 @@ return {
     {
         "[/]|[sasha] database: Sasha salva i dati di tutti gli utenti.",
         "[/]|[sasha] info [<id>|<username>|<reply>]: Sasha manda le info dell'utente e della chat o di se stessa. Se è specificato uno dei parametri manda le informazioni richieste.",
+        "(/groupinfo|[sasha] info gruppo) [<group_id>] Sasha manda le info del gruppo specificato.",
     },
     patterns =
     {
@@ -455,10 +507,17 @@ return {
         "^#[Ii][Dd][Ss]? ([Cc][Hh][Aa][Nn][Nn][Ee][Ll])$",
         "^#([Ww][Hh][Oo][Ii][Ss]) (.*)$",]]
         "^[!/#]([dD][aA][tT][aA][bB][aA][sS][eE])$",
+        "^[!/#]([gG][rR][oO][uU][pP][iI][nN][fF][oO]) (%d+)$",
+        "^[!/#]([gG][rR][oO][uU][pP][iI][nN][fF][oO])$",
         "^[!/#]([iI][nN][fF][oO])$",
         "^[!/#]([iI][nN][fF][oO]) (.*)$",
         -- database
         "^([sS][aA][sS][hH][aA] [dD][aA][tT][aA][bB][aA][sS][eE])$",
+        -- groupinfo
+        "^([sS][aA][sS][hH][aA] [iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO]) (%d+)$",
+        "^([iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO]) (%d+)$",
+        "^([sS][aA][sS][hH][aA] [iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO])$",
+        "^([iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO])$",
         -- info
         "^([sS][aA][sS][hH][aA] [iI][nN][fF][oO])$",
         "^([sS][aA][sS][hH][aA] [iI][nN][fF][oO]) (.*)$",

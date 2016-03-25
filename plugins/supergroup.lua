@@ -102,22 +102,6 @@ local function callback(cb_extra, success, result)
     send_large_msg(cb_extra.receiver, text)
 end
 
--- Get and output info about supergroup
-local function callback_info(cb_extra, success, result)
-    local title = lang_text('infoFor') .. result.title .. "\n\n"
-    local admin_num = lang_text('adminListStart') .. result.admins_count
-    local user_num = lang_text('users') .. result.participants_count
-    local kicked_num = lang_text('kickedUsers') .. result.kicked_count
-    local channel_id = "\nID: " .. result.peer_id
-    if result.username then
-        channel_username = lang_text('username') .. "@" .. result.username
-    else
-        channel_username = ""
-    end
-    local text = title .. admin_num .. user_num .. kicked_num .. channel_id .. channel_username
-    send_large_msg(cb_extra.receiver, text)
-end
-
 -- Get and output members of supergroup
 local function callback_who(cb_extra, success, result)
     local text = lang_text('membersOf') .. cb_extra.receiver
@@ -1108,13 +1092,6 @@ local function run(msg, matches)
         if not data[tostring(msg.to.id)] then
             return
         end
-        if matches[1]:lower() == "info" then
-            if not is_owner(msg) then
-                return
-            end
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup info")
-            channel_info(receiver, callback_info, { receiver = receiver, msg = msg })
-        end
 
         if matches[1]:lower() == "admins" then
             if not is_owner(msg) and not is_support(msg.from.id) then
@@ -1986,7 +1963,6 @@ return {
     {
         "/add: Sasha aggiunge il supergruppo.",
         "/rem: Sasha rimuove il supergruppo.",
-        "/info: Sasha manda le informazioni del supergruppo.",
         "/admins: Sasha manda la lista degli amministratori.",
         "/owner: Sasha manda il proprietario.",
         "/modlist: Sasha manda la lista dei moderatori.",
@@ -2031,7 +2007,6 @@ return {
         "^[#!/]([aA][dD][dD])$",
         "^[#!/]([rR][eE][mM])$",
         "^[#!/]([mM][oO][vV][eE]) (.*)$",
-        "^[#!/]([iI][nN][fF][oO])$",
         "^[#!/]([aA][dD][mM][iI][nN][sS])$",
         "^[#!/]([oO][wW][nN][eE][rR])$",
         "^[#!/]([mM][oO][dD][lL][iI][sS][tT])$",
