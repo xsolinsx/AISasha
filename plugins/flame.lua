@@ -134,7 +134,11 @@ end
 
 return {
     description = "FLAME",
-    usage = "(/flame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l'utente specificato.",
+    usage =
+    {
+        "(/flame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l'utente specificato.",
+        "/stopflame|[sasha] stop flame: Sasha smette di flammare"
+    },
     patterns =
     {
         "^[#!/]([Ss][Tt][Aa][Rr][Tt][Ff][Ll][Aa][Mm][Ee]) (.*)$",
