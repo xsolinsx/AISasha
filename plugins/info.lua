@@ -159,24 +159,11 @@ local function channel_callback_info(cb_extra, success, result)
 end
 
 local function chat_callback_info(cb_extra, success, result)
-    print('cb_extra')
-    vardump(cb_extra)
-    print('success')
-    vardump(success)
-    print('result')
-    vardump(result)
-    --[[local title = lang_text('infoFor') .. result.title .. "\n\n"
-    local admin_num = lang_text('adminListStart') .. result.admins_count
-    local user_num = lang_text('users') .. result.participants_count
-    local kicked_num = lang_text('kickedUsers') .. result.kicked_count
-    local channel_id = "\nID: " .. result.peer_id
-    if result.username then
-        channel_username = lang_text('username') .. "@" .. result.username
-    else
-        channel_username = ""
-    end
-    local text = title .. admin_num .. user_num .. kicked_num .. channel_id .. channel_username
-    send_large_msg(cb_extra.receiver, text)]]
+    local title = lang_text('infoFor') .. result.title .. "\n\n"
+    local user_num = lang_text('users') .. result.print_name:gsub("_", " ")
+    local chat_id = "\nID: " .. result.peer_id
+    local text = title .. user_num .. chat_id
+    send_large_msg(cb_extra.receiver, text)
 end
 
 local function database(cb_extra, success, result)
@@ -414,22 +401,27 @@ local function run(msg, matches)
             end
         end
     end
-    --[[if (matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo') and matches[2] and is_owner2(msg.from.id, matches[2]) then
-        return all(matches[2], receiver)
-    end]]
-    if (matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo') and not matches[2] then
+    if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' then
         if is_owner(msg) then
             if chat_type == 'channel' then
                 channel_info(receiver, channel_callback_info, { receiver = receiver, msg = msg })
             elseif chat_type == 'chat' then
-                chat_info(receiver, database, { receiver = receiver })
+                chat_info(receiver, chat_callback_info, { receiver = receiver })
             end
         else
             return lang_text('require_owner')
         end
     end
-    if (matches[1]:lower() == 'database' or matches[1]:lower() == 'sasha database') and msg.to.type ~= 'user' and is_sudo(msg) then
-        return chat_info(receiver, database, { receiver = receiver })
+    if matches[1]:lower() == 'database' or matches[1]:lower() == 'sasha database' then
+        if is_sudo(msg) then
+            if chat_type == 'channel' then
+                channel_info(receiver, database, { receiver = receiver, msg = msg })
+            elseif chat_type == 'chat' then
+                chat_info(receiver, database, { receiver = receiver })
+            end
+        else
+            return lang_text('require_sudo')
+        end
     end
     -- OLDINFO
 
@@ -491,7 +483,6 @@ local function run(msg, matches)
 end
 
 return {
-
     description = "INFO",
     usage =
     {
@@ -507,15 +498,12 @@ return {
         "^#[Ii][Dd][Ss]? ([Cc][Hh][Aa][Nn][Nn][Ee][Ll])$",
         "^#([Ww][Hh][Oo][Ii][Ss]) (.*)$",]]
         "^[!/#]([dD][aA][tT][aA][bB][aA][sS][eE])$",
-        "^[!/#]([gG][rR][oO][uU][pP][iI][nN][fF][oO]) (%d+)$",
         "^[!/#]([gG][rR][oO][uU][pP][iI][nN][fF][oO])$",
         "^[!/#]([iI][nN][fF][oO])$",
         "^[!/#]([iI][nN][fF][oO]) (.*)$",
         -- database
         "^([sS][aA][sS][hH][aA] [dD][aA][tT][aA][bB][aA][sS][eE])$",
         -- groupinfo
-        "^([sS][aA][sS][hH][aA] [iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO]) (%d+)$",
-        "^([iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO]) (%d+)$",
         "^([sS][aA][sS][hH][aA] [iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO])$",
         "^([iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO])$",
         -- info
