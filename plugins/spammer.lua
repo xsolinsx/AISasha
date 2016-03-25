@@ -19,7 +19,7 @@ local function run(msg, matches)
                 time_msg = tonumber(matches[2])
                 return string.gsub(lang_text('timeBetweenMsgs'), 'X', tostring(time_msg))
             end
-        elseif matches[1]:lower() == 'spam' then
+        elseif matches[1]:lower() == 'spam' or matches[1]:lower() == 'sasha spamma' or matches[1]:lower() == 'spamma' then
             local i = 0
             if text then
                 if num_msg == "nil" then
