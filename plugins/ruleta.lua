@@ -73,11 +73,11 @@ local function run(msg, matches)
             if msg.to.type == 'chat' then
                 local chat = 'chat#id' .. msg.to.id
                 chat_info(chat, kickrandom_chat, { chat_id = msg.to.id })
-                send_msg('chat#id' .. msg.to.id, 'ℹ️ ' .. lang_text(msg.to.id, 'kickUser:1') .. ' ' .. user_id .. ' ' .. lang_text(msg.to.id, 'kickUser:2'), ok_cb, false)
+                send_msg('chat#id' .. msg.to.id, 'ℹ️ ' .. lang_text('kickUser:1') .. ' ' .. user_id .. ' ' .. lang_text('kickUser:2'), ok_cb, false)
             elseif msg.to.type == 'channel' then
                 local chan =("%s#id%s"):format(msg.to.type, msg.to.id)
                 channel_get_users(chan, kickrandom_channel, { chat_id = msg.to.id })
-                send_msg('channel#id' .. msg.to.id, 'ℹ️ ' .. lang_text(msg.to.id, 'kickUser:1') .. ' ' .. user_id .. ' ' .. lang_text(msg.to.id, 'kickUser:2'), ok_cb, false)
+                send_msg('channel#id' .. msg.to.id, 'ℹ️ ' .. lang_text('kickUser:1') .. ' ' .. user_id .. ' ' .. lang_text('kickUser:2'), ok_cb, false)
             end
         else
             return lang_text('require_mod')

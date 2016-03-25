@@ -1,5 +1,3 @@
-local counter = 0
-
 local function set_welcome(msg, welcome)
     local data = load_data(_config.moderation.data)
     local data_cat = 'welcome'
@@ -48,19 +46,14 @@ end
 
 local function run(msg, matches)
     if matches[1]:lower() == 'getwelcome' then
-        print('peerid' .. msg.to.id)
         if tonumber(msg.to.id) == 1026492373 then
-            print('right group')
             if is_momod(msg) then
-                print('mod')
                 -- moderatore del canile abusivo usa getwelcome allora ok altrimenti return
                 return get_welcome(msg)
             else
-                print('not mod')
                 return
             end
         else
-            print('wrong group')
             return get_welcome(msg)
         end
     end
@@ -81,10 +74,8 @@ local function run(msg, matches)
         if msg.to.type == 'chat' then
             hash = 'chat:welcome' .. msg.to.id
         end
-        print(hash)
         redis:incr(hash)
         local hashonredis = redis:get(hash)
-        -- Check if user has spammed is group more than 4 times
         if hashonredis then
             if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg)) then
                 send_large_msg(get_receiver(msg), get_welcome(msg) .. '\n' .. get_rules(msg), ok_cb, false)

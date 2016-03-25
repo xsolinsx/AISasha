@@ -95,6 +95,10 @@ local function run(msg, matches)
         set_text('feedUsername', '\nUsername: @')
         set_text('feedSent', 'Feedback inviato!')
 
+        -- flamer.lua --
+        set_text('cantFlameHigher', 'Non puoi flammare un mod/owner/admin/sudo/!')
+        set_text('noAutoFlame', 'Non posso flammarmi da sola trisomico del cazzo!')
+
         -- help.lua --
         set_text('pluginListStart', 'ℹ️Lista plugin: \n\n')
         set_text('helpInfo', 'ℹ️Scrivi "!help <plugin_name>|<plugin_number>" per maggiori informazioni su quel plugin.\nℹ️O "!help all" per mostrare tutte le informazioni.')
@@ -145,6 +149,10 @@ local function run(msg, matches)
         set_text('groupName', '\nNome gruppo: ')
         set_text('members', '\nMembri: ')
         set_text('supergroupName', '\nNome supergruppo: ')
+        set_text('infoFor', 'Info per: ')
+        set_text('users', '\nUtenti: ')
+        set_text('admins', '\nAdmins: ')
+        set_text('kickedUsers', '\nUtenti rimossi: ')
         set_text('userInfo', 'Info utente:')
 
         -- ingroup.lua --
@@ -312,6 +320,12 @@ local function run(msg, matches)
         -- set.lua --
         set_text('saved', ' salvato.')
 
+        -- spammer.lua --
+        set_text('msgSet', 'Messaggio impostato.')
+        set_text('msgsToSend', 'Messaggi da mandare: ')
+        set_text('timeBetweenMsgs', 'Tempo tra ogni messaggio: X secondi.')
+        set_text('msgNotSet', 'Non hai impostato il messaggio, usa /setspam.')
+
         -- stats.lua --
         set_text('usersInChat', 'Utenti in questa chat\n')
         set_text('groups', '\nGruppi: ')
@@ -328,9 +342,6 @@ local function run(msg, matches)
         set_text('supergroupAdded', 'Il supergruppo è stato aggiunto.')
         set_text('supergroupRemoved', 'Il supergruppo è stato rimosso.')
         set_text('supergroupNotAdded', 'Supergruppo non aggiunto.')
-        set_text('infoFor', 'Info per: ')
-        set_text('users', '\nUtenti: ')
-        set_text('kickedUsers', '\nUtenti rimossi: ')
         set_text('membersOf', 'Membri di ')
         set_text('membersKickedFrom', 'Membri rimossi da ')
         set_text('cantKickOtherAdmin', 'Non puoi rimuovere altri amministratori.')

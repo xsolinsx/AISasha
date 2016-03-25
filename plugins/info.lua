@@ -144,9 +144,9 @@ local function callbackres(extra, success, result)
 end
 
 local function channel_callback_info(cb_extra, success, result)
-    local title = lang_text('infoFor') .. result.title .. "\n\n"
-    local admin_num = lang_text('adminListStart') .. result.admins_count
+    local title = lang_text('infoFor') .. result.title .. "\n"
     local user_num = lang_text('users') .. result.participants_count
+    local admin_num = lang_text('admins') .. result.admins_count
     local kicked_num = lang_text('kickedUsers') .. result.kicked_count
     local channel_id = "\nID: " .. result.peer_id
     if result.username then
@@ -159,7 +159,7 @@ local function channel_callback_info(cb_extra, success, result)
 end
 
 local function chat_callback_info(cb_extra, success, result)
-    local title = lang_text('infoFor') .. result.print_name:gsub("_", " ") .. "\n\n"
+    local title = lang_text('infoFor') .. result.title .. "\n"
     local user_num = lang_text('users') .. result.members_num
     local chat_id = "\nID: " .. result.peer_id
     local text = title .. user_num .. chat_id
