@@ -98,6 +98,8 @@ local function run(msg, matches)
         -- flamer.lua --
         set_text('cantFlameHigher', 'Non puoi flammare un mod/owner/admin/sudo/!')
         set_text('noAutoFlame', 'Non posso flammarmi da sola trisomico del cazzo!')
+        set_text('hereIAm', 'Eccomi qua!')
+        set_text('stopFlame', 'Si si mi fermo però porca madonna.')
 
         -- help.lua --
         set_text('pluginListStart', 'ℹ️Lista plugin: \n\n')

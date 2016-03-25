@@ -1,5 +1,4 @@
 local sashaflamma = {
-    "Eccomi.",
     "Davvero ritardato del cazzo stai zitto.",
     "Mi sembri peggio dei cristiani porcoddio.",
     "Dei calci in bocca meriti altrochè.",
@@ -15,17 +14,19 @@ local sashaflamma = {
     "Ok adesso mi prenderò un attimo di tempo per te, dimmi, cosa ti turba?",
     "Finito il tempo, ops.",
 }
+
 local function flame_by_reply(extra, success, result)
+    vardump(result)
     if tonumber(result.from.peer_id) == tonumber(our_id) then
         return lang_text('noAutoFlame')
     end
     local hash
     local tokick
-    if msg.to.type == 'channel' then
+    if result.to.type == 'channel' then
         hash = 'channel:flame' .. result.to.peer_id
         tokick = 'channel:tokick' .. result.to.peer_id
     end
-    if msg.to.type == 'chat' then
+    if result.to.type == 'chat' then
         hash = 'chat:flame' .. result.to.peer_id
         tokick = 'chat:tokick' .. result.to.peer_id
     end
@@ -36,11 +37,11 @@ end
 local function flame_by_username(extra, success, result)
     local hash
     local tokick
-    if msg.to.type == 'channel' then
+    if result.type == 'channel' then
         hash = 'channel:flame' .. result.peer_id
         tokick = 'channel:tokick' .. result.peer_id
     end
-    if msg.to.type == 'chat' then
+    if result.type == 'chat' then
         hash = 'chat:flame' .. result.peer_id
         tokick = 'chat:tokick' .. result.peer_id
     end
@@ -49,26 +50,34 @@ local function flame_by_username(extra, success, result)
 end
 
 local function pre_process(msg)
-    local hash
-    local tokick
-    if msg.to.type == 'channel' then
-        hash = 'channel:flame' .. msg.to.id
-        tokick = 'channel:tokick' .. msg.to.id
-    end
-    if msg.to.type == 'chat' then
-        hash = 'chat:flame' .. msg.to.id
-        tokick = 'chat:tokick' .. msg.to.id
-    end
-    redis:incr(hash)
-    local hashonredis = redis:get(hash)
-    if hashonredis then
-        send_large_msg(get_receiver(msg), sashaflamma[hashonredis], ok_cb, false)
-        if tonumber(hashonredis) == #sashaflamma then
-            kick_user(redis:get(tokick), msg.to.id)
-            redis:del(hash)
-            redis:del(tokick)
+    if msg.to.type == 'chat' or msg.to.type == 'channel' then
+        local hash
+        local tokick
+        if msg.to.type == 'channel' then
+            hash = 'channel:flame' .. msg.to.id
+            tokick = 'channel:tokick' .. msg.to.id
+        end
+        if msg.to.type == 'chat' then
+            hash = 'chat:flame' .. msg.to.id
+            tokick = 'chat:tokick' .. msg.to.id
+        end
+        if tostring(msg.from.id) == tostring(redis:get(tokick)) then
+            redis:incr(hash)
+            local hashonredis = redis:get(hash)
+            print('hashonredis ' .. hashonredis)
+            if hashonredis then
+                send_large_msg('chat#id' .. msg.to.id, sashaflamma[tonumber(hashonredis)])
+                send_large_msg('channel#id' .. msg.to.id, sashaflamma[tonumber(hashonredis)])
+                print('msg sent')
+                if tonumber(hashonredis) == #sashaflamma then
+                    kick_user(redis:get(tokick), msg.to.id)
+                    redis:del(hash)
+                    redis:del(tokick)
+                end
+            end
         end
     end
+    return msg
 end
 
 local function run(msg, matches)
@@ -77,6 +86,7 @@ local function run(msg, matches)
             if matches[1]:lower() == 'startflame' or matches[1]:lower() == 'sasha flamma' or matches[1]:lower() == 'flamma' then
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, flame_by_reply, false)
+                    return lang_text('hereIAm')
                 elseif matches[2] then
                     if string.match(matches[2], '^%d+$') then
                         if tonumber(matches[2]) == tonumber(our_id) then
@@ -94,11 +104,13 @@ local function run(msg, matches)
                         end
                         redis:set(hash, 0);
                         redis:set(tokick, matches[2]);
+                        return lang_text('hereIAm')
                     else
                         if string.gsub(matches[2], '@', ''):lower() == 'aisasha' then
                             return lang_text('noAutoFlame')
                         end
                         resolve_username(string.gsub(matches[2], '@', ''), flame_by_username, { chat_id = msg.to.id, })
+                        return lang_text('hereIAm')
                     end
                 end
             elseif matches[1]:lower() == 'stopflame' or matches[1]:lower() == 'sasha stop flame' or matches[1]:lower() == 'stop flame' then
@@ -114,6 +126,7 @@ local function run(msg, matches)
                 end
                 redis:del(hash)
                 redis:del(tokick)
+                return lang_text('stopFlame')
             end
         else
             lang_text('require_mod')
@@ -124,7 +137,7 @@ local function run(msg, matches)
 end
 
 return {
-    description = "FLAMER",
+    description = "FLAME",
     usage = "(/flame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l'utente specificato.",
     patterns =
     {
@@ -139,5 +152,6 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Tt][Oo][Pp] [Ff][Ll][Aa][Mm][Ee])$",
         "^([Ss][Tt][Oo][Pp] [Ff][Ll][Aa][Mm][Mm][Ee])$",
     },
+    pre_process = pre_process,
     run = run
 }

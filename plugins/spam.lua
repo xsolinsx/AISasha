@@ -53,7 +53,7 @@ local function run(msg, matches)
 end
 
 return {
-    description = "SPAMMER",
+    description = "SPAM",
     usage =
     {
         "/setspam <text>: Sasha imposta <text> come messaggio da spammare.",
