@@ -14,7 +14,7 @@ local function run(msg, matches)
                 return lang_text('msgSet')
             elseif matches[1]:lower() == 'setmsgs' and tonumber(matches[2]) then
                 num_msg = tonumber(matches[2])
-                return lang_text('msgToSend') .. tostring(num_msg)
+                return lang_text('msgsToSend') .. tostring(num_msg)
             elseif matches[1]:lower() == 'setwait' and tonumber(matches[2]) then
                 time_msg = tonumber(matches[2])
                 return string.gsub(lang_text('timeBetweenMsgs'), 'X', tostring(time_msg))
