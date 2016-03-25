@@ -159,8 +159,8 @@ local function channel_callback_info(cb_extra, success, result)
 end
 
 local function chat_callback_info(cb_extra, success, result)
-    local title = lang_text('infoFor') .. result.title .. "\n\n"
-    local user_num = lang_text('users') .. result.print_name:gsub("_", " ")
+    local title = lang_text('infoFor') .. result.print_name:gsub("_", " ") .. "\n\n"
+    local user_num = lang_text('users') .. result.members_num
     local chat_id = "\nID: " .. result.peer_id
     local text = title .. user_num .. chat_id
     send_large_msg(cb_extra.receiver, text)
