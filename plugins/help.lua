@@ -293,7 +293,7 @@ local function telegram_help()
     return text
 end
 
--- !help all command
+-- !helpall command
 local function help_all(chat)
     local ret = ""
     local i = 0
@@ -354,10 +354,10 @@ return {
         "^([sS][aA][sS][hH][aA] [aA][iI][uU][tT][oO] [tT][uU][tT][tT][oO])$",
         "^([sS][aA][sS][hH][aA] [aA][iI][uU][tT][oO]) (.+)",
         -- original helps
-        "^[#!/]?([sS][eE][eE][dD][pP][mM][hH][eE][lL][pP])$",
-        "^[#!/]?([sS][eE][eE][dD][gG][rR][oO][uU][pP][hH][eE][lL][pP])$",
-        "^[#!/]?([sS][eE][eE][dD][rR][eE][aA][lL][mM][hH][eE][lL][pP])$",
-        "^[#!/]?([sS][eE][eE][dD][sS][uU][pP][eE][rR][gG][rR][oO][uU][pP][hH][eE][lL][pP])$",
+        "^[#!/]([sS][eE][eE][dD][pP][mM][hH][eE][lL][pP])$",
+        "^[#!/]([sS][eE][eE][dD][gG][rR][oO][uU][pP][hH][eE][lL][pP])$",
+        "^[#!/]([sS][eE][eE][dD][rR][eE][aA][lL][mM][hH][eE][lL][pP])$",
+        "^[#!/]([sS][eE][eE][dD][sS][uU][pP][eE][rR][gG][rR][oO][uU][pP][hH][eE][lL][pP])$",
     },
     run = run
 }

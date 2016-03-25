@@ -1982,7 +1982,7 @@ return {
         "/demoteadmin <user_id>|<username>|<reply_user>: Sasha degrada l'utente specificato (telegram).",
         "/setowner <user_id>|<username>|<reply_user>: Sasha imposta l'utente specificato come proprietario.",
         "/promote <user_id>|<username>|<reply_user>: Sasha promuove l'utente specificato a moderatore.",
-        "/demote <user_id>|<username>|<reply_user>: Sasha declassa l'utente specificato.",
+        "/demote <user_id>|<username>|<reply_user>: Sasha degrada l'utente specificato.",
         "/setname <text>: Sasha cambia il nome del gruppo con <text>.",
         "/setphoto: Sasha cambia la foto del gruppo.",
         "/setrules <text>: Sasha cambia le regole del gruppo con <text>.",
