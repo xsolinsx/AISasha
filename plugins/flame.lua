@@ -101,7 +101,7 @@ local function run(msg, matches)
                         redis:set(hash, 0);
                         redis:set(tokick, matches[2]);
                         return lang_text('hereIAm')
-                    else
+                    elseif string.find(matches[2], '@') then
                         if string.gsub(matches[2], '@', ''):lower() == 'aisasha' then
                             return lang_text('noAutoFlame')
                         end
