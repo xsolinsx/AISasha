@@ -1663,7 +1663,7 @@ local function run(msg, matches)
             if not is_momod(msg) then
                 return
             end
-            if tonumber(matches[2]) < 5 or tonumber(matches[2]) > 20 then
+            if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
                 return lang_text('errorFloodRange')
             end
             local flood_max = matches[2]

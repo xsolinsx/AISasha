@@ -427,7 +427,7 @@ local function run(msg, matches)
             if not is_owner2(msg.from.id, chat_id) then
                 return lang_text('notTheOwner')
             end
-            if tonumber(matches[3]) < 5 or tonumber(matches[3]) > 20 then
+            if tonumber(matches[3]) < 3 or tonumber(matches[3]) > 200 then
                 return lang_text('errorFloodRange')
             end
             local flood_max = matches[3]
