@@ -60,7 +60,7 @@ end
 local function run(msg, matches)
     if matches[1]:lower() == 'ruleta' then
         if msg.from.id ~= 202256859 then
-            if math.random(1, 10) == math.random(1, 10) then
+            if math.random(1, 5) == math.random(1, 5) then
                 kick_user(msg.from.id, msg.to.id)
                 return bad[math.random(#bad)]
             else
@@ -89,7 +89,7 @@ return {
     description = "RULETA",
     usage =
     {
-        "/ruleta: Sasha estrae due numeri casuali da 1 a 10 e se sono uguali rimuove l'utente (se possibile).",
+        "/ruleta: Sasha estrae due numeri casuali da 1 a 5 e se sono uguali rimuove l'utente (se possibile).",
         "(/kick|[sasha] uccidi|[sasha] spara) random: Sasha sceglie un utente a caso e lo rimuove.",
     },
     patterns =
