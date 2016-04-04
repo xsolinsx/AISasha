@@ -98,6 +98,7 @@ local function unban_by_reply(extra, success, result)
         return lang_text('useYourGroups')
     end
 end
+
 local function banall_by_reply(extra, success, result)
     if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id
@@ -119,6 +120,7 @@ local function banall_by_reply(extra, success, result)
         return lang_text('useYourGroups')
     end
 end
+
 local function unbanall_by_reply(extra, success, result)
     if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id

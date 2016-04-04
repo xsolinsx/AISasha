@@ -64,6 +64,7 @@ local function run(msg, matches)
         set_text('contactListSent', 'Ti ho mandato in privato la lista dei contatti nel formato da te richiesto.')
         set_text('removedFromContacts', ' rimosso dai contatti.')
         set_text('addedToContacts', ' aggiunto ai contatti.')
+        set_text('contactMissing', 'Non ho il tuo numero di telefono!')
         set_text('chatListSent', 'Ti ho mandato in privato la lista delle chat nel formato da te richiesto.')
         set_text('gbansSync', 'Lista ban globali sincronizzata.')
         set_text('longidUpdate', 'Aggiorna long_ID.')
@@ -103,8 +104,10 @@ local function run(msg, matches)
 
         -- help.lua --
         set_text('pluginListStart', 'ℹ️Lista plugin: \n\n')
-        set_text('helpInfo', 'ℹ️Scrivi "!help <plugin_name>|<plugin_number>" per maggiori informazioni su quel plugin.\nℹ️O "!help all" per mostrare tutte le informazioni.')
+        set_text('helpInfo', 'ℹ️Scrivi "!help <plugin_name>|<plugin_number>" per maggiori informazioni su quel plugin.\nℹ️O "!helpall" per mostrare tutte le informazioni.')
         set_text('errorNoPlugin', 'Questo plugin non esiste o non ha una descrizione.')
+        set_text('doYourBusiness', 'Ma una sportina di cazzi tuoi no?')
+        set_text('helpInfo', 'Ogni \'/\' può essere sostituito con i simboli \'!\' o \'#\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n')
 
         -- groups --
         set_text('newDescription', 'Nuova descrizione:\n')
@@ -275,6 +278,11 @@ local function run(msg, matches)
         set_text('rtlLocked', 'Caratteri RTL vietati.')
         set_text('rtlAlreadyUnlocked', 'Caratteri RTL già consentiti.')
         set_text('rtlUnlocked', 'Caratteri RTL consentiti.')
+        set_text('tgserviceLock', '\Blocco messaggi di servizio: ')
+        set_text('tgserviceAlreadyLocked', 'Messaggi di servizio già bloccati.')
+        set_text('tgserviceLocked', 'Messaggi di servizio bloccati.')
+        set_text('tgserviceAlreadyUnlocked', 'Messaggi di servizio già sbloccati.')
+        set_text('tgserviceUnlocked', 'Messaggi di servizio sbloccati.')
         set_text('stickersLock', '\nBlocco stickers: ')
         set_text('stickersAlreadyLocked', 'Stickers già vietati.')
         set_text('stickersLocked', 'Stickers vietati.')
@@ -306,6 +314,7 @@ local function run(msg, matches)
         set_text('enabled', ' abilitato.')
         set_text('disabled', ' disabilitato.')
         set_text('notExist', '  non esiste.')
+        set_text('systemPlugin', 'Non è possibile disabilitare questo plugin in quanto è necessario per il corretto funzionamento del sistema.')
         set_text('disabledOnChat', ' disabilitato su questa chat.')
         set_text('noDisabledPlugin', 'Nessun plugin disabilitato su questa chat.')
         set_text('pluginNotDisabled', 'Questo plugin non è disabilitato su questa chat.')
@@ -333,7 +342,6 @@ local function run(msg, matches)
         set_text('groups', '\nGruppi: ')
 
         -- strings.lua --
-        set_text('langInstall', 'ℹ️ Stringhe installate.')
         set_text('langUpdate', 'ℹ️ Stringhe aggiornate.')
 
         -- supergroup.lua --
@@ -580,25 +588,21 @@ local function run(msg, matches)
         -- set_text('wiki:1', 'WIKI')
         -- set_text('wiki:2', '[#]|[sasha] wiki[lang] <text>: manda un estratto da [lang] Wikipedia.')
         -- set_text('wiki:3', '[#]|[sasha] wiki[lang] search <text>: manda gli articoli di [lang] Wikipedia.')
-        if matches[1]:lower() == 'install' then
-            return lang_text('langInstall')
-        elseif matches[1]:lower() == 'update' then
-            return lang_text('langUpdate')
-        end
+        return lang_text('langUpdate')
     else
         return lang_text('require_sudo')
     end
 end
 
 return {
-    description = "SHOUT",
-    usage = "/install|/update it|italian_lang: Sasha installa|aggiorna le stringhe di testo.",
+    description = "STRINGS",
+    usage = "/updatestrings|[sasha] aggiorna stringhe: Sasha installa|aggiorna le stringhe di testo.",
     patterns =
     {
-        '[#!/]([iI][nN][sS][tT][aA][lL][lL]) (italian_lang)$',
-        '[#!/]([uU][pP][dD][aA][tT][eE]) (italian_lang)$',
-        '[#!/]([iI][nN][sS][tT][aA][lL][lL]) ([Ii][Tt])$',
-        '[#!/]([uU][pP][dD][aA][tT][eE]) ([Ii][Tt])$',
+        '[#!/]([uU][pP][dD][aA][tT][eE][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
+        -- updatestrings
+        '([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
+        '([Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
     },
     run = run
 }

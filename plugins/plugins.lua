@@ -136,6 +136,13 @@ local function list_disabled_plugin_on_chat(receiver)
     return text
 end
 
+local function check_plugin(plugin)
+    if plugin == 'admin' or plugin == 'anti_spam' or plugin == 'arabic_lock' or plugin == 'banhammer' or plugin == 'bot' or plugin == 'broadcast' or plugin == 'feedback' or plugin == 'ingroup' or plugin == 'inpm' or plugin == 'inrealm' or plugin == 'leave_ban' or plugin == 'msg_checks' or plugin == 'onservice' or plugin == 'owners' or plugin == 'plugins' or plugin == 'strings' or plugin == 'supergroup' or plugin == 'welcome' or plugin == 'whitelist' then
+        return true
+    end
+    return false
+end
+
 local function run(msg, matches)
     if is_owner(msg) then
         if matches[3] then
@@ -147,14 +154,13 @@ local function run(msg, matches)
                 return reenable_plugin_on_chat(receiver, plugin)
             end
 
-            if (matches[2] and matches[2] == 'strings') then
-                return print("can't disable strings")
-            end
-
             -- Disable a plugin on a chat
             if (matches[1]:lower() == 'disable' or matches[1]:lower() == 'sasha disabilita' or matches[1]:lower() == 'sasha disattiva' or matches[1]:lower() == 'disabilita' or matches[1]:lower() == 'disattiva') and matches[3]:lower() == 'chat' then
                 local plugin = matches[2]
                 local receiver = get_receiver(msg)
+                if check_plugin(plugin) then
+                    return lang_text('systemPlugin')
+                end
                 print("disable " .. plugin .. ' on this chat')
                 return disable_plugin_on_chat(receiver, plugin)
             end
@@ -187,12 +193,11 @@ local function run(msg, matches)
             return enable_plugin(plugin_name)
         end
 
-        if matches[2] and matches[2] == 'strings' then
-            return print("can't disable strings")
-        end
-
         -- Disable a plugin
         if matches[1]:lower() == 'disable' or matches[1]:lower() == 'sasha disabilita' or matches[1]:lower() == 'sasha disattiva' or matches[1]:lower() == 'disabilita' or matches[1]:lower() == 'disattiva' then
+            if check_plugin(matches[2]) then
+                return lang_text('systemPlugin')
+            end
             print("disable: " .. matches[2])
             return disable_plugin(matches[2])
         end

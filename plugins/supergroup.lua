@@ -27,6 +27,7 @@ local function check_member_super(cb_extra, success, result)
                     member = 'no',
                     public = 'no',
                     lock_rtl = 'no',
+                    lock_tgservice = 'yes',
                     lock_contacts = 'no',
                     strict = 'no'
                 }
@@ -325,6 +326,34 @@ local function unlock_group_rtl(msg, data, target)
     end
 end
 
+local function lock_group_tgservice(msg, data, target)
+    if not is_momod(msg) then
+        return
+    end
+    local group_tgservice_lock = data[tostring(target)]['settings']['lock_tgservice']
+    if group_tgservice_lock == 'yes' then
+        return lang_text('tgserviceAlreadyLocked')
+    else
+        data[tostring(target)]['settings']['lock_tgservice'] = 'yes'
+        save_data(_config.moderation.data, data)
+        return lang_text('tgserviceLocked')
+    end
+end
+
+local function unlock_group_tgservice(msg, data, target)
+    if not is_momod(msg) then
+        return
+    end
+    local group_tgservice_lock = data[tostring(target)]['settings']['lock_tgservice']
+    if group_tgservice_lock == 'no' then
+        return lang_text('tgserviceAlreadyUnlocked')
+    else
+        data[tostring(target)]['settings']['lock_rtl'] = 'no'
+        save_data(_config.moderation.data, data)
+        return lang_text('tgserviceUnlocked')
+    end
+end
+
 local function lock_group_sticker(msg, data, target)
     if not is_momod(msg) then
         return lang_text('require_mod')
@@ -498,6 +527,11 @@ function show_supergroup_settingsmod(msg, target)
         end
     end
     if data[tostring(target)]['settings'] then
+        if not data[tostring(target)]['settings']['lock_tgservice'] then
+            data[tostring(target)]['settings']['lock_tgservice'] = 'no'
+        end
+    end
+    if data[tostring(target)]['settings'] then
         if not data[tostring(target)]['settings']['lock_member'] then
             data[tostring(target)]['settings']['lock_member'] = 'no'
         end
@@ -511,6 +545,7 @@ function show_supergroup_settingsmod(msg, target)
     lang_text('arabicLock') .. settings.lock_arabic ..
     lang_text('membersLock') .. settings.lock_member ..
     lang_text('rtlLock') .. settings.lock_rtl ..
+    lang_text('tgserviceLock') .. settings.lock_tgservice ..
     lang_text('stickersLock') .. settings.lock_sticker ..
     lang_text('public') .. settings.public ..
     lang_text('strictrules') .. settings.strict
@@ -1605,6 +1640,10 @@ local function run(msg, matches)
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked rtl chars. in names")
                 return lock_group_rtl(msg, data, target)
             end
+            if matches[2]:lower() == 'tgservice' then
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked Tgservice Actions")
+                return lock_group_tgservice(msg, data, target)
+            end
             if matches[2]:lower() == 'sticker' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked sticker posting")
                 return lock_group_sticker(msg, data, target)
@@ -1644,6 +1683,10 @@ local function run(msg, matches)
             if matches[2]:lower() == 'rtl' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked RTL chars. in names")
                 return unlock_group_rtl(msg, data, target)
+            end
+            if matches[2]:lower() == 'tgservice' then
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked tgservice actions")
+                return unlock_group_tgservice(msg, data, target)
             end
             if matches[2]:lower() == 'sticker' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked sticker posting")
@@ -1989,8 +2032,8 @@ return {
         "/setabout <text>: Sasha cambia la descrizione del gruppo con <text>.",
         "/setusername <text>: Sasha cambia l'username del gruppo con <text>.",
         "/del <reply>: Sasha elimina il messaggio specificato.",
-        "/lock links|spam|flood|arabic|member|rtl|sticker|contacts|strict: Sasha blocca l'opzione specificata.",
-        "/unlock links|spam|flood|arabic|member|rtl|sticker|contacts|strict: Sasha sblocca l'opzione specificata.",
+        "/lock links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha blocca l'opzione specificata.",
+        "/unlock links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha sblocca l'opzione specificata.",
         "/mute all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.",
         "/unmute all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.",
         "/muteuser <user_id>|<username>|<reply_user>: Sasha imposta|toglie il muto sull'utente.",

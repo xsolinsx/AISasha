@@ -137,32 +137,6 @@ local function get_dialog_list_callback(cb_extra, success, result)
     end
 end
 
--- Returns the key (index) in the config.enabled_plugins table
-local function plugin_enabled(name)
-    for k, v in pairs(_config.enabled_plugins) do
-        if name == v then
-            return k
-        end
-    end
-    -- If not found
-    return false
-end
-
--- Returns true if file exists in plugins folder
-local function plugin_exists(name)
-    for k, v in pairs(plugins_names()) do
-        if name .. '.lua' == v then
-            return true
-        end
-    end
-    return false
-end
-
-local function reload_plugins()
-    plugins = { }
-    return load_plugins()
-end
-
 local function run(msg, matches)
     local receiver = get_receiver(msg)
     local group = msg.to.id
@@ -213,11 +187,7 @@ local function run(msg, matches)
         local hash = parsed_url(matches[2])
         import_chat_link(hash, ok_cb, false)
     end
-    if matches[1]:lower() == "contactlist" or matches[1]:lower() == "sasha lista contatti" then
-        if not is_sudo(msg) then
-            -- Sudo only
-            return
-        end
+    if (matches[1]:lower() == "contactlist" or matches[1]:lower() == "sasha lista contatti") and is_sudo(msg) then
         if not matches[2] then
             get_contact_list(get_contact_list_callback, { target = msg.from.id, filetype = "txt" })
         else
@@ -225,23 +195,35 @@ local function run(msg, matches)
         end
         return lang_text('contactListSent')
     end
-    if matches[1]:lower() == "delcontact" or matches[1]:lower() == "sasha elimina contatto" and matches[2] then
-        if not is_sudo(msg) then
-            -- Sudo only
-            return
-        end
+    if (matches[1]:lower() == "delcontact" or matches[1]:lower() == "sasha elimina contatto" and matches[2]) and is_sudo(msg) then
         del_contact("user#id" .. matches[2], ok_cb, false)
         return lang_text('user') .. matches[2] .. lang_text('removedFromContacts')
     end
-    if matches[1]:lower() == "addcontact" or matches[1]:lower() == "sasha aggiungi contatto" and matches[2] then
-        if not is_sudo(msg) then
-            -- Sudo only
-            return
-        end
-        add_contact(matches[2], matches[3], matches[4], ok_cb, false)
-        return lang_text('user') .. matches[2] .. lang_text('addedToContacts')
+    if (matches[1]:lower() == "addcontact" or matches[1]:lower() == "sasha aggiungi contatto" and matches[2]) and is_sudo(msg) then
+        phone = matches[2]
+        first_name = matches[3]
+        last_name = matches[4]
+        add_contact(phone, first_name, last_name, ok_cb, false)
+        return lang_text('user') .. phone .. lang_text('addedToContacts')
     end
-    if matches[1]:lower() == "dialoglist" or matches[1]:lower() == "sasha lista chat" then
+    -- \PATTERNS
+    if (matches[1]:lower() == "sendcontact" or matches[1]:lower() == "sasha invia contatto") and is_sudo(msg) then
+        phone = matches[2]
+        first_name = matches[3]
+        last_name = matches[4]
+        send_contact(get_receiver(msg), phone, first_name, last_name, ok_cb, false)
+    end
+    if (matches[1]:lower() == "mycontact" or matches[1]:lower() == "sasha mio contatto") and is_sudo(msg) then
+        if not msg.from.phone then
+            return lang_text('contactMissing')
+        end
+        phone = msg.from.phone
+        first_name =(msg.from.first_name or msg.from.phone)
+        last_name =(msg.from.last_name or msg.from.id)
+        send_contact(get_receiver(msg), phone, first_name, last_name, ok_cb, false)
+    end
+    -- /PATTERNS
+    if (matches[1]:lower() == "dialoglist" or matches[1]:lower() == "sasha lista chat") and is_sudo(msg) then
         if not matches[2] then
             get_dialog_list(get_dialog_list_callback, { target = msg.from.id, filetype = "txt" })
         else
@@ -249,11 +231,7 @@ local function run(msg, matches)
         end
         return lang_text('chatListSent')
     end
-    if matches[1]:lower() == "sync_gbans" or matches[1]:lower() == "sasha sincronizza lista superban" then
-        if not is_sudo(msg) then
-            -- Sudo only
-            return
-        end
+    if (matches[1]:lower() == "sync_gbans" or matches[1]:lower() == "sasha sincronizza lista superban") and is_sudo(msg) then
         local url = "http://seedteam.org/Teleseed/Global_bans.json"
         local SEED_gbans = http.request(url)
         local jdat = json:decode(SEED_gbans)
@@ -318,6 +296,8 @@ return {
         "(/dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.",
         "(/addcontact|sasha aggiungi contatto) <phone> <name> <surname>: Sasha aggiunge il contatto specificato.",
         "(/delcontact|sasha elimina contatto) <user_id>: Sasha elimina il contatto <user_id>.",
+        "(/sendcontact|sasha invia contatto) <phone> <name> <surname>",
+        "(/mycontact|sasha mio contatto)",
         "/sync_gbans|sasha sincronizza lista superban: Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.",
         "/updateid|sasha aggiorna longid: Sasha salva il long_id.",
         "/addlog|sasha aggiungi log: Sasha aggiunge il log.",
@@ -327,15 +307,17 @@ return {
     {
         "^[#!/]([pP][mM]) (%d+) (.*)$",
         "^[#!/]([iI][mM][pP][oO][rR][tT]) (.*)$",
-        "^[#!/]([pP][mM][bB][lL][oO][cC][kK]) (%d+)$",
         "^[#!/]([pP][mM][uU][nN][bB][lL][oO][cC][kK]) (%d+)$",
+        "^[#!/]([pP][mM][bB][lL][oO][cC][kK]) (%d+)$",
         "^[#!/]([mM][aA][rR][kK][rR][eE][aA][dD]) ([oO][nN])$",
         "^[#!/]([mM][aA][rR][kK][rR][eE][aA][dD]) ([oO][fF][fF])$",
         "^[#!/]([sS][eE][tT][bB][oO][tT][pP][hH][oO][tT][oO])$",
         "^[#!/]([cC][oO][nN][tT][aA][cC][tT][lL][iI][sS][tT])$",
         "^[#!/]([dD][iI][aA][lL][oO][gG][lL][iI][sS][tT])$",
-        "^[#!/]([aA][dD][dD][cC][oO][nN][tT][aA][cC][tT]) (.*) (.*) (.*)$",
         "^[#!/]([dD][eE][lL][cC][oO][nN][tT][aA][cC][tT]) (%d+)$",
+        "^[#!/]([aA][dD][dD][cC][oO][nN][tT][aA][cC][tT]) (.*) (.*) (.*)$",
+        "^[#!/]([Ss][Ee][Nn][Dd][Cc][Oo][Nn][Tt][Aa][Cc][Tt]) (.*) (.*) (.*)$",
+        "^[#!/]([Mm][Yy][Cc][Oo][Nn][Tt][Aa][Cc][Tt])$",
         "^[#!/]([sS][yY][nN][cC]_[gG][bB][aA][nN][sS])$",
         -- sync your global bans with seed
         "^[#!/]([uU][pP][dD][aA][tT][eE][iI][dD])$",
