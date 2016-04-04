@@ -53,7 +53,7 @@ local function run(msg, matches)
                 redis:sadd(hash, user_id)
                 return lang_text('userBot') .. user_id .. lang_text('whitelistAdded')
             end
-        elseif not string.match(matches[2], '^%d+$') then
+        else
             local receiver = get_receiver(msg)
             local username = matches[2]
             local username = string.gsub(matches[2], '@', '')

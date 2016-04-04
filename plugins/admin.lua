@@ -206,7 +206,6 @@ local function run(msg, matches)
         add_contact(phone, first_name, last_name, ok_cb, false)
         return lang_text('user') .. phone .. lang_text('addedToContacts')
     end
-    -- \PATTERNS
     if (matches[1]:lower() == "sendcontact" or matches[1]:lower() == "sasha invia contatto") and is_sudo(msg) then
         phone = matches[2]
         first_name = matches[3]
@@ -222,7 +221,6 @@ local function run(msg, matches)
         last_name =(msg.from.last_name or msg.from.id)
         send_contact(get_receiver(msg), phone, first_name, last_name, ok_cb, false)
     end
-    -- /PATTERNS
     if (matches[1]:lower() == "dialoglist" or matches[1]:lower() == "sasha lista chat") and is_sudo(msg) then
         if not matches[2] then
             get_dialog_list(get_dialog_list_callback, { target = msg.from.id, filetype = "txt" })
@@ -326,10 +324,10 @@ return {
         "%[(photo)%]",
         -- pm
         "^([sS][aA][sS][hH][aA] [mM][eE][sS][sS][aA][gG][gG][iI][aA]) (%d+) (.*)$",
-        -- pmblock
-        "^([sS][aA][sS][hH][aA] [bB][lL][oO][cC][cC][aA]) (%d+)$",
         -- pmunblock
         "^([sS][aA][sS][hH][aA] [sS][bB][lL][oO][cC][cC][aA]) (%d+)$",
+        -- pmblock
+        "^([sS][aA][sS][hH][aA] [bB][lL][oO][cC][cC][aA]) (%d+)$",
         -- markread
         "^([sS][aA][sS][hH][aA] [sS][eE][gG][nN][aA] [lL][eE][tT][tT][oO]) ([oO][nN])$",
         "^([sS][aA][sS][hH][aA] [sS][eE][gG][nN][aA] [lL][eE][tT][tT][oO]) ([oO][fF][fF])$",
@@ -347,10 +345,14 @@ return {
         "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [cC][hH][aA][tT])$",
         "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [cC][hH][aA][tT]) ([tT][xX][tT])$",
         "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [cC][hH][aA][tT]) ([jJ][sS][oO][nN])$",
-        -- addcontact
-        "^([sS][aA][sS][hH][aA] [aA][gG][gG][iI][uU][nN][gG][iI] [cC][oO][nN][tT][aA][tT][tT][oO]) (.*) (.*) (.*)$",
         -- delcontact
         "^([sS][aA][sS][hH][aA] [eE][lL][iI][mM][iI][nN][aA] [cC][oO][nN][tT][aA][tT][tT][oO]) (%d+)$",
+        -- addcontact
+        "^([sS][aA][sS][hH][aA] [aA][gG][gG][iI][uU][nN][gG][iI] [cC][oO][nN][tT][aA][tT][tT][oO]) (.*) (.*) (.*)$",
+        -- sendcontact
+        "^([sS][aA][sS][hH][aA] [Ii][Nn][Vv][iI][Aa] [cC][oO][nN][tT][aA][tT][tT][oO]) (.*) (.*) (.*)$",
+        -- mycontact
+        "^([sS][aA][sS][hH][aA] [Mm][Ii][Oo] [cC][oO][nN][tT][aA][tT][tT][oO])$",
         -- sync_gbans
         "^([sS][aA][sS][hH][aA] [sS][iI][nN][cC][rR][oO][nN][iI][zZ][zZ][aA] [lL][iI][sS][tT][aA] [sS][uU][pP][eE][rR][bB][aA][nN])$",
         -- updateid
