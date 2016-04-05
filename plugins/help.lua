@@ -37,7 +37,7 @@ local function plugin_help(var, chat, rank)
         end
         return text
     else
-        return lang_text('require_higher')
+        return text .. lang_text('require_higher')
     end
 end
 
