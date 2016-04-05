@@ -39,5 +39,6 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] [Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)$",
         "^[Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)$",
     },
-    run = run
+    run = run,
+    min_rank = 1
 }

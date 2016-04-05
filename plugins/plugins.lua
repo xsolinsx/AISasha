@@ -137,7 +137,7 @@ local function list_disabled_plugin_on_chat(receiver)
 end
 
 local function check_plugin(plugin)
-    if plugin == 'admin' or plugin == 'anti_spam' or plugin == 'arabic_lock' or plugin == 'banhammer' or plugin == 'bot' or plugin == 'broadcast' or plugin == 'feedback' or plugin == 'ingroup' or plugin == 'inpm' or plugin == 'inrealm' or plugin == 'leave_ban' or plugin == 'msg_checks' or plugin == 'onservice' or plugin == 'owners' or plugin == 'plugins' or plugin == 'strings' or plugin == 'supergroup' or plugin == 'welcome' or plugin == 'whitelist' then
+    if plugin == 'admin' or plugin == 'anti_spam' or plugin == 'arabic_lock' or plugin == 'banhammer' or plugin == 'bot' or plugin == 'broadcast' or plugin == 'feedback' or plugin == 'ingroup' or plugin == 'inpm' or plugin == 'inrealm' or plugin == 'leave_ban' or plugin == 'msg_checks' or plugin == 'onservice' or plugin == 'owners' or plugin == 'permissions' or plugin == 'plugins' or plugin == 'strings' or plugin == 'supergroup' or plugin == 'welcome' or plugin == 'whitelist' then
         return true
     end
     return false
@@ -256,4 +256,5 @@ return {
         "^[Ll][Ii][Ss][Tt][Aa] [Dd][Ii][Ss][Aa][Tt][Tt][Ii][Vv][Aa][Tt][Ii]$",
     },
     run = run,
+    min_rank = 2
 }

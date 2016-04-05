@@ -330,312 +330,277 @@ end
 
 local function run(msg, matches)
     if msg.to.type == 'user' then
-        local print_name = user_print_name(msg.from):gsub("‮", "")
-        local name = print_name:gsub("_", " ")
-        local chat_id = matches[1]
-        local receiver = get_receiver(msg)
-        local data = load_data(_config.moderation.data)
-        if matches[2]:lower() == 'ban' then
+        if is_owner2(msg.from.id, chat_id) then
+            local print_name = user_print_name(msg.from):gsub("‮", "")
+            local name = print_name:gsub("_", " ")
             local chat_id = matches[1]
-            if not is_owner2(msg.from.id, chat_id) then
-                return lang_text('notTheOwner')
-            end
-            if tonumber(matches[3]) == tonumber(our_id) then return false end
-            local user_id = matches[3]
-            if tonumber(matches[3]) == tonumber(msg.from.id) then
-                return lang_text('noAutoBan')
-            end
-            ban_user(matches[3], matches[1])
-            local name = user_print_name(msg.from)
-            savelog(matches[1], name .. " [" .. msg.from.id .. "] banned user " .. matches[3])
-            return lang_text('user') .. user_id .. lang_text('banned')
-        end
-
-        if matches[2]:lower() == 'unban' then
-            if tonumber(matches[3]) == tonumber(our_id) then return false end
-            local chat_id = matches[1]
-            if not is_owner2(msg.from.id, chat_id) then
-                return lang_text('notTheOwner')
-            end
-            local user_id = matches[3]
-            if tonumber(matches[3]) == tonumber(msg.from.id) then
-                return lang_text('noAutoUnban')
-            end
-            local hash = 'banned:' .. matches[1]
-            redis:srem(hash, user_id)
-            savelog(matches[1], name .. " [" .. msg.from.id .. "] unbanned user " .. matches[3])
-            return lang_text('user') .. user_id .. lang_text('unbanned')
-        end
-
-        if matches[2]:lower() == 'kick' then
-            local chat_id = matches[1]
-            if not is_owner2(msg.from.id, chat_id) then
-                return lang_text('notTheOwner')
-            end
-            if tonumber(matches[3]) == tonumber(our_id) then return false end
-            local user_id = matches[3]
-            if tonumber(matches[3]) == tonumber(msg.from.id) then
-                return lang_text('noAutoKick')
-            end
-            kick_user(matches[3], chat_id)
-            savelog(matches[1], name .. " [" .. msg.from.id .. "] kicked user " .. matches[3])
-            return lang_text('user') .. user_id .. lang_text('kicked')
-        end
-
-        if matches[2]:lower() == 'clean' then
-            if matches[3]:lower() == 'modlist' then
-                if not is_owner2(msg.from.id, chat_id) then
-                    return lang_text('notTheOwner')
+            local receiver = get_receiver(msg)
+            local data = load_data(_config.moderation.data)
+            if matches[2]:lower() == 'ban' then
+                local chat_id = matches[1]
+                if tonumber(matches[3]) == tonumber(our_id) then return false end
+                local user_id = matches[3]
+                if tonumber(matches[3]) == tonumber(msg.from.id) then
+                    return lang_text('noAutoBan')
                 end
-                for k, v in pairs(data[tostring(matches[1])]['moderators']) do
-                    data[tostring(matches[1])]['moderators'][tostring(k)] = nil
-                    save_data(_config.moderation.data, data)
-                end
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] cleaned modlist")
-                return lang_text('modlistCleaned')
-            end
-            if matches[3]:lower() == 'rules' then
-                if not is_owner2(msg.from.id, chat_id) then
-                    return lang_text('notTheOwner')
-                end
-                local data_cat = 'rules'
-                data[tostring(matches[1])][data_cat] = nil
-                save_data(_config.moderation.data, data)
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] cleaned rules")
-                return lang_text('rulesCleaned')
-            end
-            if matches[3]:lower() == 'about' then
-                if not is_owner2(msg.from.id, chat_id) then
-                    return lang_text('notTheOwner')
-                end
-                local data_cat = 'description'
-                data[tostring(matches[1])][data_cat] = nil
-                save_data(_config.moderation.data, data)
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] cleaned about")
-                channel_set_about(receiver, about_text, ok_cb, false)
-                return lang_text('descriptionCleaned')
-            end
-            if matches[3]:lower() == 'mutelist' then
-                chat_id = string.match(matches[1], '^%d+$')
-                local hash = 'mute_user:' .. chat_id
-                redis:del(hash)
-                return lang_text('mutelistCleaned')
-            end
-        end
-
-        if matches[2]:lower() == "setflood" then
-            if not is_owner2(msg.from.id, chat_id) then
-                return lang_text('notTheOwner')
-            end
-            if tonumber(matches[3]) < 3 or tonumber(matches[3]) > 200 then
-                return lang_text('errorFloodRange')
-            end
-            local flood_max = matches[3]
-            data[tostring(matches[1])]['settings']['flood_msg_max'] = flood_max
-            save_data(_config.moderation.data, data)
-            savelog(matches[1], name .. " [" .. msg.from.id .. "] set flood to [" .. matches[3] .. "]")
-            return lang_text('floodSet') .. matches[3]
-        end
-
-        if matches[2]:lower() == 'lock' then
-            if not is_owner2(msg.from.id, chat_id) then
-                return lang_text('notTheOwner')
-            end
-            local target = matches[1]
-            local group_type = data[tostring(matches[1])]['group_type']
-            if matches[3]:lower() == 'name' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] locked name ")
-                return lock_group_namemod(msg, data, target)
-            end
-            if matches[3]:lower() == 'member' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] locked member ")
-                return lock_group_membermod(msg, data, target)
-            end
-            if matches[3]:lower() == 'arabic' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] locked arabic ")
-                return lock_group_arabic(msg, data, target)
-            end
-            if matches[3]:lower() == 'links' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] locked links ")
-                return lock_group_links(msg, data, target)
-            end
-            if matches[3]:lower() == 'spam' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] locked spam ")
-                return lock_group_spam(msg, data, target)
-            end
-            if matches[3]:lower() == 'rtl' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] locked RTL chars. in names")
-                return unlock_group_rtl(msg, data, target)
-            end
-            if matches[3]:lower() == 'sticker' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] locked sticker")
-                return lock_group_sticker(msg, data, target)
+                ban_user(matches[3], matches[1])
+                local name = user_print_name(msg.from)
+                savelog(matches[1], name .. " [" .. msg.from.id .. "] banned user " .. matches[3])
+                return lang_text('user') .. user_id .. lang_text('banned')
             end
 
-        end
-
-        if matches[2]:lower() == 'unlock' then
-            if not is_owner2(msg.from.id, chat_id) then
-                return lang_text('notTheOwner')
-            end
-            local target = matches[1]
-            local group_type = data[tostring(matches[1])]['group_type']
-            if matches[3]:lower() == 'name' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked name ")
-                return unlock_group_namemod(msg, data, target)
-            end
-            if matches[3]:lower() == 'member' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked member ")
-                return unlock_group_membermod(msg, data, target)
-            end
-            if matches[3]:lower() == 'arabic' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked arabic ")
-                return unlock_group_arabic(msg, data, target)
-            end
-            if matches[3]:lower() == 'links' and group_type == "SuperGroup" then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked links ")
-                return unlock_group_links(msg, data, target)
-            end
-            if matches[3]:lower() == 'spam' and group_type == "SuperGroup" then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked spam ")
-                return unlock_group_spam(msg, data, target)
-            end
-            if matches[3]:lower() == 'rtl' then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked RTL chars. in names")
-                return unlock_group_rtl(msg, data, target)
-            end
-            if matches[3]:lower() == 'sticker' and group_type == "SuperGroup" then
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked sticker")
-                return unlock_group_sticker(msg, data, target)
-            end
-            if matches[3]:lower() == 'contacts' and group_type == "SuperGroup" then
-                savelog(matches[1], name_log .. " [" .. msg.from.id .. "] locked contact posting")
-                return lock_group_contacts(msg, data, target)
-            end
-            if matches[3]:lower() == 'strict' and group_type == "SuperGroup" then
-                savelog(matches[1], name_log .. " [" .. msg.from.id .. "] locked enabled strict settings")
-                return enable_strict_rules(msg, data, target)
-            end
-        end
-
-        if matches[2]:lower() == 'new' then
-            if matches[3]:lower() == 'link' then
-                local group_type = data[tostring(matches[1])]['group_type']
-                if not is_owner2(msg.from.id, chat_id) then
-                    return lang_text('notTheOwner')
+            if matches[2]:lower() == 'unban' then
+                if tonumber(matches[3]) == tonumber(our_id) then return false end
+                local chat_id = matches[1]
+                local user_id = matches[3]
+                if tonumber(matches[3]) == tonumber(msg.from.id) then
+                    return lang_text('noAutoUnban')
                 end
-                local function callback_grouplink(extra, success, result)
-                    local receiver = 'chat#id' .. matches[1]
-                    if success == 0 then
-                        send_large_msg(receiver, lang_text('errorCreateLink'))
-                    end
-                    data[tostring(matches[1])]['settings']['set_link'] = result
-                    save_data(_config.moderation.data, data)
-                    return
+                local hash = 'banned:' .. matches[1]
+                redis:srem(hash, user_id)
+                savelog(matches[1], name .. " [" .. msg.from.id .. "] unbanned user " .. matches[3])
+                return lang_text('user') .. user_id .. lang_text('unbanned')
+            end
+
+            if matches[2]:lower() == 'kick' then
+                local chat_id = matches[1]
+                if tonumber(matches[3]) == tonumber(our_id) then return false end
+                local user_id = matches[3]
+                if tonumber(matches[3]) == tonumber(msg.from.id) then
+                    return lang_text('noAutoKick')
                 end
-                local function callback_superlink(extra, success, result)
-                    vardump(result)
-                    local receiver = 'channel#id' .. matches[1]
-                    local user = extra.user
-                    if success == 0 then
-                        data[tostring(matches[1])]['settings']['set_link'] = nil
+                kick_user(matches[3], chat_id)
+                savelog(matches[1], name .. " [" .. msg.from.id .. "] kicked user " .. matches[3])
+                return lang_text('user') .. user_id .. lang_text('kicked')
+            end
+
+            if matches[2]:lower() == 'clean' then
+                if matches[3]:lower() == 'modlist' then
+                    for k, v in pairs(data[tostring(matches[1])]['moderators']) do
+                        data[tostring(matches[1])]['moderators'][tostring(k)] = nil
                         save_data(_config.moderation.data, data)
-                        return send_large_msg(user, lang_text('errorCreateSuperLink'))
-                    else
+                    end
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] cleaned modlist")
+                    return lang_text('modlistCleaned')
+                end
+                if matches[3]:lower() == 'rules' then
+                    local data_cat = 'rules'
+                    data[tostring(matches[1])][data_cat] = nil
+                    save_data(_config.moderation.data, data)
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] cleaned rules")
+                    return lang_text('rulesCleaned')
+                end
+                if matches[3]:lower() == 'about' then
+                    local data_cat = 'description'
+                    data[tostring(matches[1])][data_cat] = nil
+                    save_data(_config.moderation.data, data)
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] cleaned about")
+                    channel_set_about(receiver, about_text, ok_cb, false)
+                    return lang_text('descriptionCleaned')
+                end
+                if matches[3]:lower() == 'mutelist' then
+                    chat_id = string.match(matches[1], '^%d+$')
+                    local hash = 'mute_user:' .. chat_id
+                    redis:del(hash)
+                    return lang_text('mutelistCleaned')
+                end
+            end
+
+            if matches[2]:lower() == "setflood" then
+                if tonumber(matches[3]) < 3 or tonumber(matches[3]) > 200 then
+                    return lang_text('errorFloodRange')
+                end
+                local flood_max = matches[3]
+                data[tostring(matches[1])]['settings']['flood_msg_max'] = flood_max
+                save_data(_config.moderation.data, data)
+                savelog(matches[1], name .. " [" .. msg.from.id .. "] set flood to [" .. matches[3] .. "]")
+                return lang_text('floodSet') .. matches[3]
+            end
+
+            if matches[2]:lower() == 'lock' then
+                local target = matches[1]
+                local group_type = data[tostring(matches[1])]['group_type']
+                if matches[3]:lower() == 'name' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] locked name ")
+                    return lock_group_namemod(msg, data, target)
+                end
+                if matches[3]:lower() == 'member' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] locked member ")
+                    return lock_group_membermod(msg, data, target)
+                end
+                if matches[3]:lower() == 'arabic' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] locked arabic ")
+                    return lock_group_arabic(msg, data, target)
+                end
+                if matches[3]:lower() == 'links' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] locked links ")
+                    return lock_group_links(msg, data, target)
+                end
+                if matches[3]:lower() == 'spam' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] locked spam ")
+                    return lock_group_spam(msg, data, target)
+                end
+                if matches[3]:lower() == 'rtl' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] locked RTL chars. in names")
+                    return unlock_group_rtl(msg, data, target)
+                end
+                if matches[3]:lower() == 'sticker' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] locked sticker")
+                    return lock_group_sticker(msg, data, target)
+                end
+
+            end
+
+            if matches[2]:lower() == 'unlock' then
+                local target = matches[1]
+                local group_type = data[tostring(matches[1])]['group_type']
+                if matches[3]:lower() == 'name' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked name ")
+                    return unlock_group_namemod(msg, data, target)
+                end
+                if matches[3]:lower() == 'member' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked member ")
+                    return unlock_group_membermod(msg, data, target)
+                end
+                if matches[3]:lower() == 'arabic' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked arabic ")
+                    return unlock_group_arabic(msg, data, target)
+                end
+                if matches[3]:lower() == 'links' and group_type == "SuperGroup" then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked links ")
+                    return unlock_group_links(msg, data, target)
+                end
+                if matches[3]:lower() == 'spam' and group_type == "SuperGroup" then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked spam ")
+                    return unlock_group_spam(msg, data, target)
+                end
+                if matches[3]:lower() == 'rtl' then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked RTL chars. in names")
+                    return unlock_group_rtl(msg, data, target)
+                end
+                if matches[3]:lower() == 'sticker' and group_type == "SuperGroup" then
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] unlocked sticker")
+                    return unlock_group_sticker(msg, data, target)
+                end
+                if matches[3]:lower() == 'contacts' and group_type == "SuperGroup" then
+                    savelog(matches[1], name_log .. " [" .. msg.from.id .. "] locked contact posting")
+                    return lock_group_contacts(msg, data, target)
+                end
+                if matches[3]:lower() == 'strict' and group_type == "SuperGroup" then
+                    savelog(matches[1], name_log .. " [" .. msg.from.id .. "] locked enabled strict settings")
+                    return enable_strict_rules(msg, data, target)
+                end
+            end
+
+            if matches[2]:lower() == 'new' then
+                if matches[3]:lower() == 'link' then
+                    local group_type = data[tostring(matches[1])]['group_type']
+                    local function callback_grouplink(extra, success, result)
+                        local receiver = 'chat#id' .. matches[1]
+                        if success == 0 then
+                            send_large_msg(receiver, lang_text('errorCreateLink'))
+                        end
                         data[tostring(matches[1])]['settings']['set_link'] = result
                         save_data(_config.moderation.data, data)
-                        return send_large_msg(user, lang_text('linkCreated'))
+                        return
+                    end
+                    local function callback_superlink(extra, success, result)
+                        vardump(result)
+                        local receiver = 'channel#id' .. matches[1]
+                        local user = extra.user
+                        if success == 0 then
+                            data[tostring(matches[1])]['settings']['set_link'] = nil
+                            save_data(_config.moderation.data, data)
+                            return send_large_msg(user, lang_text('errorCreateSuperLink'))
+                        else
+                            data[tostring(matches[1])]['settings']['set_link'] = result
+                            save_data(_config.moderation.data, data)
+                            return send_large_msg(user, lang_text('linkCreated'))
+                        end
+                    end
+                    if group_type == "Group" then
+                        local receiver = 'chat#id' .. matches[1]
+                        savelog(matches[1], name .. " [" .. msg.from.id .. "] created/revoked group link ")
+                        export_chat_link(receiver, callback_grouplink, false)
+                        return lang_text('linkCreated')
+                    elseif group_type == "SuperGroup" then
+                        local receiver = 'channel#id' .. matches[1]
+                        local user = 'user#id' .. msg.from.id
+                        savelog(matches[1], name .. " [" .. msg.from.id .. "] attempted to create a new SuperGroup link")
+                        export_channel_link(receiver, callback_superlink, { user = user })
                     end
                 end
-                if group_type == "Group" then
-                    local receiver = 'chat#id' .. matches[1]
-                    savelog(matches[1], name .. " [" .. msg.from.id .. "] created/revoked group link ")
-                    export_chat_link(receiver, callback_grouplink, false)
-                    return lang_text('linkCreated')
+            end
+
+            if matches[2]:lower() == 'get' then
+                if matches[3]:lower() == 'link' then
+                    local group_link = data[tostring(matches[1])]['settings']['set_link']
+                    if not group_link then
+                        return lang_text('createLinkInfo')
+                    end
+                    savelog(matches[1], name .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
+                    return lang_text('groupLink') .. group_link
+                end
+            end
+
+            if matches[1]:lower() == 'changeabout' and matches[2] then
+                local group_type = data[tostring(matches[2])]['group_type']
+                if group_type == "Group" or group_type == "Realm" then
+                    local target = matches[2]
+                    local about = matches[3]
+                    local name = user_print_name(msg.from)
+                    savelog(matches[2], name .. " [" .. msg.from.id .. "] has changed group description to [" .. matches[3] .. "]")
+                    return set_description(target, about)
                 elseif group_type == "SuperGroup" then
-                    local receiver = 'channel#id' .. matches[1]
-                    local user = 'user#id' .. msg.from.id
-                    savelog(matches[1], name .. " [" .. msg.from.id .. "] attempted to create a new SuperGroup link")
-                    export_channel_link(receiver, callback_superlink, { user = user })
+                    local channel = 'channel#id' .. matches[2]
+                    local about_text = matches[3]
+                    local data_cat = 'description'
+                    local target = matches[2]
+                    channel_set_about(channel, about_text, ok_cb, false)
+                    data[tostring(target)][data_cat] = about_text
+                    save_data(_config.moderation.data, data)
+                    savelog(matches[2], name .. " [" .. msg.from.id .. "] has changed SuperGroup description to [" .. matches[3] .. "]")
+                    return lang_text('newDescription') .. matches[2]
                 end
             end
-        end
 
-        if matches[2]:lower() == 'get' then
-            if matches[3]:lower() == 'link' then
-                if not is_owner2(msg.from.id, chat_id) then
-                    return lang_text('notTheOwner')
-                end
-                local group_link = data[tostring(matches[1])]['settings']['set_link']
-                if not group_link then
-                    return lang_text('createLinkInfo')
-                end
-                savelog(matches[1], name .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
-                return lang_text('groupLink') .. group_link
-            end
-        end
-
-        if matches[1]:lower() == 'changeabout' and matches[2] then
-            if not is_owner2(msg.from.id, matches[2]) then
-                return lang_text('notTheOwner')
-            end
-            local group_type = data[tostring(matches[2])]['group_type']
-            if group_type == "Group" or group_type == "Realm" then
+            if matches[1]:lower() == 'viewsettings' and data[tostring(matches[2])]['settings'] then
                 local target = matches[2]
-                local about = matches[3]
+                local group_type = data[tostring(matches[2])]['group_type']
+                if group_type == "Group" or group_type == "Realm" then
+                    savelog(matches[2], name .. " [" .. msg.from.id .. "] requested group settings ")
+                    return show_group_settings(msg, data, target)
+                elseif group_type == "SuperGroup" then
+                    savelog(matches[2], name .. " [" .. msg.from.id .. "] requested SuperGroup settings ")
+                    return show_super_group_settings(msg, data, target)
+                end
+            end
+
+            if matches[1]:lower() == 'changerules' then
+                local rules = matches[3]
+                local target = matches[2]
                 local name = user_print_name(msg.from)
-                savelog(matches[2], name .. " [" .. msg.from.id .. "] has changed group description to [" .. matches[3] .. "]")
-                return set_description(target, about)
-            elseif group_type == "SuperGroup" then
-                local channel = 'channel#id' .. matches[2]
-                local about_text = matches[3]
-                local data_cat = 'description'
-                local target = matches[2]
-                channel_set_about(channel, about_text, ok_cb, false)
-                data[tostring(target)][data_cat] = about_text
+                savelog(matches[2], name .. " [" .. msg.from.id .. "] has changed group rules to [" .. matches[3] .. "]")
+                return set_rules(target, rules)
+            end
+            if matches[1]:lower() == 'changename' then
+                local new_name = string.gsub(matches[3], '_', ' ')
+                data[tostring(matches[2])]['settings']['set_name'] = new_name
+                local group_name_set = data[tostring(matches[2])]['settings']['set_name']
                 save_data(_config.moderation.data, data)
-                savelog(matches[2], name .. " [" .. msg.from.id .. "] has changed SuperGroup description to [" .. matches[3] .. "]")
-                return lang_text('newDescription') .. matches[2]
+                local chat_to_rename = 'chat#id' .. matches[2]
+                local channel_to_rename = 'channel#id' .. matches[2]
+                savelog(matches[2], "Group name changed to [ " .. new_name .. " ] by " .. name .. " [" .. msg.from.id .. "]")
+                rename_chat(chat_to_rename, group_name_set, ok_cb, false)
+                rename_channel(channel_to_rename, group_name_set, ok_cb, false)
             end
-        end
 
-        if matches[1]:lower() == 'viewsettings' and data[tostring(matches[2])]['settings'] then
-            if not is_owner2(msg.from.id, matches[2]) then
-                return lang_text('notTheOwner')
+            if matches[1]:lower() == 'loggroup' and matches[2] then
+                savelog(matches[2], "log file created by owner/support/admin")
+                send_document("user#id" .. msg.from.id, "./groups/logs/" .. matches[2] .. "log.txt", ok_cb, false)
             end
-            local target = matches[2]
-            local group_type = data[tostring(matches[2])]['group_type']
-            if group_type == "Group" or group_type == "Realm" then
-                savelog(matches[2], name .. " [" .. msg.from.id .. "] requested group settings ")
-                return show_group_settings(msg, data, target)
-            elseif group_type == "SuperGroup" then
-                savelog(matches[2], name .. " [" .. msg.from.id .. "] requested SuperGroup settings ")
-                return show_super_group_settings(msg, data, target)
-            end
-        end
-
-        if matches[1]:lower() == 'changerules' and is_owner2(msg.from.id, matches[2]) then
-            local rules = matches[3]
-            local target = matches[2]
-            local name = user_print_name(msg.from)
-            savelog(matches[2], name .. " [" .. msg.from.id .. "] has changed group rules to [" .. matches[3] .. "]")
-            return set_rules(target, rules)
-        end
-        if matches[1]:lower() == 'changename' and is_owner2(msg.from.id, matches[2]) then
-            local new_name = string.gsub(matches[3], '_', ' ')
-            data[tostring(matches[2])]['settings']['set_name'] = new_name
-            local group_name_set = data[tostring(matches[2])]['settings']['set_name']
-            save_data(_config.moderation.data, data)
-            local chat_to_rename = 'chat#id' .. matches[2]
-            local channel_to_rename = 'channel#id' .. matches[2]
-            savelog(matches[2], "Group name changed to [ " .. new_name .. " ] by " .. name .. " [" .. msg.from.id .. "]")
-            rename_chat(chat_to_rename, group_name_set, ok_cb, false)
-            rename_channel(channel_to_rename, group_name_set, ok_cb, false)
-        end
-
-        if matches[1]:lower() == 'loggroup' and matches[2] and is_owner2(msg.from.id, matches[2]) then
-            savelog(matches[2], "log file created by owner/support/admin")
-            send_document("user#id" .. msg.from.id, "./groups/logs/" .. matches[2] .. "log.txt", ok_cb, false)
+        else
+            return lang_text('notTheOwner')
         end
     end
 end
@@ -661,5 +626,6 @@ return {
         "^[#!/]([vV][iI][eE][wW][sS][eE][tT][tT][iI][nN][gG][sS]) (%d+)$",
         "^[#!/]([lL][oO][gG][gG][rR][oO][uU][pP]) (%d+)$"
     },
-    run = run
+    run = run,
+    min_rank = 2
 }

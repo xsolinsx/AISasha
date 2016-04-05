@@ -70,5 +70,6 @@ return {
         "^[#!/]([Aa][Ss][Tt][Rr][Oo][Tt][Ee][Xx][Tt])$",
         "^[#!/]([Aa][Ss][Tt][Rr][Oo][Tt][Ee][Xx][Tt]) (%d%d%d%d%-%d%d%-%d%d)$",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

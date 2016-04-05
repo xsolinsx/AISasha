@@ -25,5 +25,6 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] [Ee][Qq][Uu][Aa][Zz][Ii][Oo][Nn][Ee] (.+)$",
         "^[Ee][Qq][Uu][Aa][Zz][Ii][Oo][Nn][Ee] (.+)$",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

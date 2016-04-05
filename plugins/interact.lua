@@ -118,5 +118,6 @@ return {
         "([nN][aA][zZ][iI])",
         "([hH][iI][tT][lL][eE][rR])",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

@@ -36,11 +36,15 @@ local function get_webshot_url(param)
 end
 
 local function run(msg, matches)
-    local find = get_webshot_url(matches[1])
-    if find then
-        local imgurl = base .. find
-        local receiver = get_receiver(msg)
-        send_photo_from_url(receiver, imgurl)
+    if is_momod(msg) then
+        local find = get_webshot_url(matches[1])
+        if find then
+            local imgurl = base .. find
+            local receiver = get_receiver(msg)
+            send_photo_from_url(receiver, imgurl)
+        end
+    else
+        return lang_text('require_mod')
     end
 end
 
@@ -55,5 +59,6 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+)$",
         "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([%w-_%.%?%.:/%+=&]+)$",
     },
-    run = run
+    run = run,
+    min_rank = 1
 }

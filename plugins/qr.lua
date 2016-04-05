@@ -87,5 +87,6 @@ return {
         "^[sS][aA][sS][hH][aA] [qQ][rR] \"(%w+)\" \"(%w+)\" (.+)$",
         "^[sS][aA][sS][hH][aA] [qQ][rR] (.+)$",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

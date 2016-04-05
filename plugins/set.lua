@@ -40,5 +40,6 @@ return {
         "[sS][aA][sS][hH][aA] [sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
         "[sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
     },
-    run = run
+    run = run,
+    min_rank = 1
 }

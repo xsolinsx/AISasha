@@ -311,6 +311,7 @@ local function run(msg, matches)
         set_text('noAutoUnban', 'Non puoi unbannarti da solo.')
 
         -- plugins.lua --
+        set_text('require_higher', 'Questo plugin richiede privilegi superiori a quelli che possiedi.')
         set_text('enabled', ' abilitato.')
         set_text('disabled', ' disabilitato.')
         set_text('notExist', '  non esiste.')
@@ -604,5 +605,6 @@ return {
         '([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
         '([Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
     },
-    run = run
+    run = run,
+    min_rank = 5
 }

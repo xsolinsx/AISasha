@@ -153,5 +153,6 @@ return {
         "^([Ss][Tt][Oo][Pp] [Ff][Ll][Aa][Mm][Ee])$",
     },
     pre_process = pre_process,
-    run = run
+    run = run,
+    min_rank = 1
 }

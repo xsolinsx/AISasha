@@ -78,5 +78,6 @@ return {
         "^([^%s]+) (.+)$",
         "^([^%s]+)$",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

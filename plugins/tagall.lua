@@ -38,7 +38,7 @@ local function run(msg, matches)
             end
         end
     else
-        return lang_text('require_mod')
+        return lang_text('require_owner')
     end
 end
 
@@ -50,5 +50,6 @@ return {
         "^[#!/][Tt][Aa][Gg][Aa][Ll][Ll] +(.+)$",
         "^[Ss][Aa][Ss][Hh][Aa] [Tt][Aa][Gg][Gg][Aa] [Tt][Uu][Tt][Tt][Ii] +(.+)$",
     },
-    run = run
+    run = run,
+    min_rank = 2
 }

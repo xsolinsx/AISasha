@@ -64,5 +64,6 @@ return {
         "^[#!/][Pp][Oo][Kk][ÈèÉéEe][Dd][Ee][Xx] (.*)$",
         "^[#!/][Pp][Oo][Kk][ÈèÉéEe][Mm][Oo][Nn] (.+)$"
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

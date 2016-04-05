@@ -7,7 +7,7 @@ local function has_usage_data(dict)
 end
 
 -- Get commands for that plugin
-local function plugin_help(var, chat)
+local function plugin_help(var, chat, rank)
     local plugin = ''
     if tonumber(var) then
         local i = 0
@@ -26,15 +26,19 @@ local function plugin_help(var, chat)
     if (type(plugin.description) == "string") then
         text = text .. '🅿️' .. plugin.description .. '\n\n'
     end
-    if (type(plugin.usage) == "table") then
-        for ku, usage in pairs(plugin.usage) do
-            text = text .. usage .. '\n'
+    if plugin.min_rank <= rank then
+        if (type(plugin.usage) == "table") then
+            for ku, usage in pairs(plugin.usage) do
+                text = text .. usage .. '\n'
+            end
+        elseif has_usage_data(plugin) then
+            -- Is not empty
+            text = text .. plugin.usage .. '\n'
         end
-    elseif has_usage_data(plugin) then
-        -- Is not empty
-        text = text .. plugin.usage .. '\n'
+        return text
+    else
+        return lang_text('require_higher')
     end
-    return text
 end
 
 -- !help command
@@ -51,19 +55,48 @@ local function telegram_help()
 end
 
 -- !helpall command
-local function help_all(chat)
+local function help_all(chat, rank)
     local ret = ""
     local i = 0
     for name in pairsByKeys(plugins) do
-        ret = ret .. plugin_help(name, chat)
+        ret = ret .. plugin_help(name, chat, rank)
         i = i + 1
     end
     return ret
 end
 
 local function run(msg, matches)
-    if msg.to.peer_type == 'user' and not is_sudo(msg) then
+    if msg.to.peer_type == 'user' and not is_admin(msg) then
         return lang_text('doYourBusiness')
+    end
+
+    local rank
+    if not is_sudo(msg) then
+        if not is_admin1(msg) then
+            if not is_support(msg.from.peer_id) then
+                if not is_owner(msg) then
+                    if not is_momod(msg) then
+                        -- user
+                        rank = 0
+                    else
+                        -- mod
+                        rank = 1
+                    end
+                else
+                    -- owner
+                    rank = 2
+                end
+            else
+                -- support
+                rank = 3
+            end
+        else
+            -- admin
+            rank = 4
+        end
+    else
+        -- sudo
+        rank = 5
     end
 
     local text = lang_text('helpIntro')
@@ -73,10 +106,10 @@ local function run(msg, matches)
             text = text .. telegram_help()
         end
         if matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
-            text = text .. help_all(get_receiver(msg))
+            text = text .. help_all(get_receiver(msg), rank)
         end
     else
-        text = plugin_help(matches[2], get_receiver(msg))
+        text = plugin_help(matches[2], get_receiver(msg), rank)
         if not text then
             text = text .. telegram_help()
         end
@@ -104,5 +137,6 @@ return {
         "^([sS][aA][sS][hH][aA] [aA][iI][uU][tT][oO] [tT][uU][tT][tT][oO])$",
         "^([sS][aA][sS][hH][aA] [aA][iI][uU][tT][oO]) (.+)",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

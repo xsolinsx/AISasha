@@ -69,15 +69,15 @@ end
 local function bot_stats()
 
     local redis_scan = [[
-                            local cursor = '0'
-                            local count = 0
+                                local cursor = '0'
+                                local count = 0
 
-                            repeat
-                            local r = redis.call("SCAN", cursor, "MATCH", KEYS[1])
-                            cursor = r[1]
-                            count = count + #r[2]
-                            until cursor == '0'
-                            return count]]
+                                repeat
+                                local r = redis.call("SCAN", cursor, "MATCH", KEYS[1])
+                                cursor = r[1]
+                                count = count + #r[2]
+                                until cursor == '0'
+                                return count]]
 
     -- Users
     local hash = 'msgs:*:' .. our_id
@@ -166,5 +166,6 @@ return {
         "^[#!/]([mM][eE][sS][sS][aA][gG][eE][sS])$",
         "^([sS][aA][sS][hH][aA] [mM][eE][sS][sS][aA][gG][gG][iI])$",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

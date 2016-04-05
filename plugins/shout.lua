@@ -1,5 +1,4 @@
-﻿function run(msg, matches)
-
+﻿local function run(msg, matches)
     matches[1] = matches[1]:trim()
 
     if matches[1]:len() > 20 then
@@ -23,7 +22,6 @@
     end
     res = res:trim()
     return res
-
 end
 
 return {
@@ -38,5 +36,6 @@ return {
         "^[Gg][Rr][Ii][Dd][Aa] (.*)$",
         "^[Uu][Rr][Ll][Aa] (.*)$",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

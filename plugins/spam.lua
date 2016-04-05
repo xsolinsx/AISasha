@@ -70,5 +70,6 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Mm][Mm][Aa])$",
         "^([Ss][Pp][Aa][Mm][Mm][Aa])$",
     },
-    run = run
+    run = run,
+    min_rank = 2
 }

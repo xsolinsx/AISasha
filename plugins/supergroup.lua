@@ -634,23 +634,7 @@ function get_message_callback(extra, success, result)
     local data = load_data(_config.moderation.data)
     local print_name = user_print_name(msg.from):gsub("‮", "")
     local name_log = print_name:gsub("_", " ")
-    if get_cmd == "id" and not result.action then
-        local channel = 'channel#id' .. result.to.peer_id
-        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] obtained id for: [" .. result.from.peer_id .. "]")
-        id1 = send_large_msg(channel, result.from.peer_id)
-    elseif get_cmd == 'id' and result.action then
-        local action = result.action.type
-        if action == 'chat_add_user' or action == 'chat_del_user' or action == 'chat_rename' or action == 'chat_change_photo' then
-            if result.action.user then
-                user_id = result.action.user.peer_id
-            else
-                user_id = result.peer_id
-            end
-            local channel = 'channel#id' .. result.to.peer_id
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] obtained id by service msg for: [" .. user_id .. "]")
-            id1 = send_large_msg(channel, user_id)
-        end
-    elseif get_cmd == "idfrom" then
+    if get_cmd == "idfrom" then
         local channel = 'channel#id' .. result.to.peer_id
         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] obtained id for msg fwd from: [" .. result.fwd_from.peer_id .. "]")
         id2 = send_large_msg(channel, result.fwd_from.peer_id)
@@ -837,22 +821,7 @@ local function callbackres(extra, success, result)
     local member_id = result.peer_id
     local member_username = "@" .. result.username
     local get_cmd = extra.get_cmd
-    if get_cmd == "res" then
-        local user = result.peer_id
-        local name = string.gsub(result.print_name, "_", " ")
-        local channel = 'channel#id' .. extra.channelid
-        send_large_msg(channel, user .. '\n' .. name)
-        return user
-    elseif get_cmd == "id" then
-        local user = result.peer_id
-        local channel = 'channel#id' .. extra.channelid
-        send_large_msg(channel, user)
-        return user
-    elseif get_cmd == "invite" then
-        local receiver = extra.channel
-        local user_id = "user#id" .. result.peer_id
-        channel_invite(receiver, user_id, ok_cb, false)
-        --[[elseif get_cmd == "channel_block" then
+    --[[elseif get_cmd == "channel_block" then
 		local user_id = result.peer_id
 		local channel_id = extra.channelid
     local sender = extra.sender
@@ -899,7 +868,7 @@ local function callbackres(extra, success, result)
 		end
 		send_large_msg(receiver, text)
   end]]
-    elseif get_cmd == "promote" then
+    if get_cmd == "promote" then
         local receiver = extra.channel
         local user_id = result.peer_id
         -- local user = "user#id"..result.peer_id
@@ -1217,34 +1186,6 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == 'id' then
-            if type(msg.reply_id) ~= "nil" and is_momod(msg) and not matches[2] then
-                local cbreply_extra = {
-                    get_cmd = 'id',
-                    msg = msg
-                }
-                get_message(msg.reply_id, get_message_callback, cbreply_extra)
-            elseif type(msg.reply_id) ~= "nil" and matches[2]:lower() == "from" and is_momod(msg) then
-                local cbreply_extra = {
-                    get_cmd = 'idfrom',
-                    msg = msg
-                }
-                get_message(msg.reply_id, get_message_callback, cbreply_extra)
-            elseif msg.text:match("@[%a%d]") then
-                local cbres_extra = {
-                    channelid = msg.to.id,
-                    get_cmd = 'id'
-                }
-                local username = matches[2]
-                local username = username:gsub("@", "")
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested ID for: @" .. username)
-                resolve_username(username, callbackres, cbres_extra)
-            else
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup ID")
-                return "ID " .. string.gsub(msg.to.print_name, "_", " ") .. ":\n\n" .. msg.to.id
-            end
-        end
-
         if matches[1]:lower() == 'kickme' then
             if msg.to.type == 'channel' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] left via kickme")
@@ -1293,28 +1234,6 @@ local function run(msg, matches)
             end
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
             return lang_text('groupLink') .. group_link
-        end
-
-        if matches[1]:lower() == "invite" and is_sudo(msg) then
-            local cbres_extra = {
-                channel = get_receiver(msg),
-                get_cmd = "invite"
-            }
-            local username = matches[2]
-            local username = username:gsub("@", "")
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] invited @" .. username)
-            resolve_username(username, callbackres, cbres_extra)
-        end
-
-        if matches[1]:lower() == 'res' and is_owner(msg) then
-            local cbres_extra = {
-                channelid = msg.to.id,
-                get_cmd = 'res'
-            }
-            local username = matches[2]
-            local username = username:gsub("@", "")
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] resolved username: @" .. username)
-            resolve_username(username, callbackres, cbres_extra)
         end
 
         --[[if matches[1]:lower() == 'kick' and is_momod(msg) then
@@ -2014,13 +1933,11 @@ return {
         "/kicked: Sasha manda la lista degli utenti rimossi.",
         "/block <user_id>|<username>|<reply_user>: Sasha rimuove l'utente specificato dal supergruppo e lo blocca.",
         "/tosuper: Sasha aggiorna il gruppo a supergruppo.",
-        "/id [<reply_user>]: Sasha manda l'id del gruppo o dell'utente specificato.",
         "/id from: Sasha manda l'id del mittente originale.",
         "/kickme: Sasha rimuove l'utente.",
         "/newlink: Sasha crea un nuovo link d'invito.",
         "/setlink: Sasha imposta il link d'invito con quello che le verrà inviato.",
         "/link: Sasha manda il link d'invito.",
-        "/res <username>: Sasha manda l'id di <username>.",
         "/setadmin <user_id>|<username>|<reply_user>: Sasha promuove l'utente specificato ad amministratore (telegram).",
         "/demoteadmin <user_id>|<username>|<reply_user>: Sasha degrada l'utente specificato (telegram).",
         "/setowner <user_id>|<username>|<reply_user>: Sasha imposta l'utente specificato come proprietario.",
@@ -2059,14 +1976,11 @@ return {
         "^[#!/]([bB][lL][oO][cC][kK]) (.*)",
         "^[#!/]([bB][lL][oO][cC][kK])",
         "^[#!/]([tT][oO][sS][uU][pP][eE][rR])$",
-        "^[#!/]([iI][dD])$",
-        "^[#!/]([iI][dD]) (.*)$",
         "^[#!/]([kK][iI][cC][kK][mM][eE])$",
         "^[#!/]([kK][iI][cC][kK]) (.*)$",
         "^[#!/]([nN][eE][wW][lL][iI][nN][kK])$",
         "^[#!/]([sS][eE][tT][lL][iI][nN][kK])$",
         "^[#!/]([lL][iI][nN][kK])$",
-        "^[#!/]([rR][eE][sS]) (.*)$",
         "^[#!/]([sS][eE][tT][aA][dD][mM][iI][nN]) (.*)$",
         "^[#!/]([sS][eE][tT][aA][dD][mM][iI][nN])",
         "^[#!/]([dD][eE][mM][oO][tT][eE][aA][dD][mM][iI][nN]) (.*)$",
@@ -2099,7 +2013,7 @@ return {
         "^[#!/]([mM][pP]) (.*)$",
         "^[#!/]([mM][dD]) (.*)$",
         "^(https://telegram.me/joinchat/%S+)$",
-        "msg.to.peer_id",
+        "[Mm][Ss][Gg].[Tt][Oo].[Pp][Ee][Ee][Rr]_[Ii][Dd]",
         "%[(document)%]",
         "%[(photo)%]",
         "%[(video)%]",
@@ -2108,7 +2022,8 @@ return {
         "^!!tgservice (.+)$",
     },
     run = run,
-    pre_process = pre_process
+    pre_process = pre_process,
+    min_rank = 0
 }
 -- End supergrpup.lua
 -- By @Rondoozle

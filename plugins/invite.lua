@@ -28,43 +28,43 @@ local function callbackres(extra, success, result)
 end
 function run(msg, matches)
     local data = load_data(_config.moderation.data)
-    --[[if not is_momod(msg) then
-            return lang_text('require_mod')
-        end]]
-    if not is_admin1(msg) then
-        -- Only admins!
-        return lang_text('require_admin')
-    end
-    if not is_realm(msg) then
-        if data[tostring(msg.to.id)]['settings']['lock_member'] == 'yes' and not is_admin1(msg) then
-            return lang_text('privateGroup')
-        end
-    end
-    if msg.to.type == 'chat' or msg.to.type == 'channel' then
-        local chat = 'chat#id' .. msg.to.id
-        local channel = 'channel#id' .. msg.to.id
-        if type(msg.reply_id) ~= "nil" then
-            local msgr = get_message(msg.reply_id, Invite_by_reply, false)
-        else
-            if matches[2] then
-                local user = matches[2]
-                if not string.match(matches[2], '^%d+$') then
-                    -- User submitted a user name
-                    local cbres_extra = { chatid = msg.to.id }
-                    resolve_username(user:gsub("@", ""), callbackres, cbres_extra)
-                else
-                    -- User submitted an id
-                    user = 'user#id' .. user
-                    -- The message must come from a chat group
-                    chat_add_user(chat, user, callback, false)
-                    channel_invite(channel, user, callback, false)
-                end
+    -- if is_momod(msg) then
+    if is_admin1(msg) then
+        if not is_realm(msg) then
+            if data[tostring(msg.to.id)]['settings']['lock_member'] == 'yes' and not is_admin1(msg) then
+                return lang_text('privateGroup')
             end
         end
+        if msg.to.type == 'chat' or msg.to.type == 'channel' then
+            local chat = 'chat#id' .. msg.to.id
+            local channel = 'channel#id' .. msg.to.id
+            if type(msg.reply_id) ~= "nil" then
+                local msgr = get_message(msg.reply_id, Invite_by_reply, false)
+            else
+                if matches[2] then
+                    local user = matches[2]
+                    if not string.match(matches[2], '^%d+$') then
+                        -- User submitted a user name
+                        local cbres_extra = { chatid = msg.to.id }
+                        resolve_username(user:gsub("@", ""), callbackres, cbres_extra)
+                    else
+                        -- User submitted an id
+                        user = 'user#id' .. user
+                        -- The message must come from a chat group
+                        chat_add_user(chat, user, callback, false)
+                        channel_invite(channel, user, callback, false)
+                    end
+                end
+            end
+        else
+            return lang_text('useYourGroups')
+        end
     else
-        return lang_text('useYourGroups')
+        -- return lang_text('require_mod')
+        return lang_text('require_admin')
     end
 end
+
 return {
     description = "INVITE",
     usage = "(/invite|[sasha] invita|[sasha] resuscita|[sasha] [ri]compila) <id>|<username>|<reply>: Sasha invita l'utente specificato.",
@@ -82,5 +82,6 @@ return {
         "^([Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa]) (.*)$",
         "^([Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa])$",
     },
-    run = run
+    run = run,
+    min_rank = 4
 }

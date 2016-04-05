@@ -1,8 +1,6 @@
 -- An empty table for solving multiple kicking problem(thanks to @topkecleon )
 kicktable = { }
-
 do
-
     local TIME_CHECK = 2
     -- seconds
     -- Save stats, ban user
@@ -165,10 +163,10 @@ do
 
     return {
         description = "ANTI_SPAM",
-        usage = "Rimuove l'utente che spamma oltre al massimo consentito.",
+        usage = "Sasha rimuove l'utente che spamma oltre al massimo consentito.",
         patterns = { },
         cron = cron,
-        pre_process = pre_process
+        pre_process = pre_process,
+        min_rank = 0
     }
-
 end

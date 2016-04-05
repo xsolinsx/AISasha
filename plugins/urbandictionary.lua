@@ -39,4 +39,5 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] [Uu][Dd] (.+)$",
     },
     run = run,
+    min_rank = 0
 }

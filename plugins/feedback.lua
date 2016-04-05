@@ -22,5 +22,6 @@ return {
     {
         "^[#!/][Ff][Ee][Ee][Dd][Bb][Aa][Cc][Kk] (.*)$",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

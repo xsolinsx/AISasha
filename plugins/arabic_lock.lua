@@ -1,11 +1,7 @@
-﻿antiarabic = { }-- An empty table for solving multiple kicking problem
-
-do
-    local function run(msg, matches)
-        if is_momod(msg) then
-            -- Ignore mods,owner,admins
-            return
-        end
+﻿antiarabic = { }
+-- An empty table for solving multiple kicking problem
+local function run(msg, matches)
+    if not is_momod(msg) then
         local data = load_data(_config.moderation.data)
         if data[tostring(msg.to.id)]['settings']['lock_arabic'] then
             if data[tostring(msg.to.id)]['settings']['lock_arabic'] == 'yes' then
@@ -33,23 +29,22 @@ do
                 antiarabic[msg.from.id] = true
             end
         end
-        return
     end
-
-    local function cron()
-        antiarabic = { }
-        -- Clear antiarabic table
-    end
-
-    return {
-        description = "ARABIC_LOCK",
-        usage = "Sasha blocca l'arabo nei gruppi.",
-        patterns =
-        {
-            "([\216-\219][\128-\191])"
-        },
-        run = run,
-        cron = cron
-    }
-
 end
+
+local function cron()
+    antiarabic = { }
+    -- Clear antiarabic table
+end
+
+return {
+    description = "ARABIC_LOCK",
+    usage = "Sasha blocca l'arabo nei gruppi.",
+    patterns =
+    {
+        "([\216-\219][\128-\191])"
+    },
+    run = run,
+    cron = cron,
+    min_rank = 0
+}

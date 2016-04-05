@@ -105,4 +105,5 @@ return {
         "^([sS][pP][aA][rR][aA] [rR][aA][nN][dD][oO][mM])$",
     },
     run = run,
+    min_rank = 0
 }

@@ -1063,4 +1063,5 @@ return {
         -- "^([rR][iI][pP][rR][iI][sS][tT][iI][nN][aA]) ([^%s]+)$",
     },
     run = run,
+    min_rank = 1
 }

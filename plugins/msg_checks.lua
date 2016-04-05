@@ -302,7 +302,8 @@ return {
     description = "MSG_CHECKS",
     usage = "Sasha controlla i messaggi che riceve.",
     patterns = { },
-    pre_process = pre_process
+    pre_process = pre_process,
+    min_rank = 0
 }
 -- End msg_checks.lua
 -- By @Rondoozle

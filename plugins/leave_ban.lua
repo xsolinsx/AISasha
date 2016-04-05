@@ -17,7 +17,6 @@
     end
 end
 
-
 return {
     description = "LEAVE_BAN",
     usage = "Sasha banna l'utente che esce dal gruppo.",
@@ -25,5 +24,6 @@ return {
     {
         "^!!tgservice (.*)$"
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

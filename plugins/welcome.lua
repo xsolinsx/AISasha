@@ -104,5 +104,6 @@ return {
         "^[#!/]([Gg][Ee][Tt][Mm][Ee][Mm][Bb][Ee][Rr][Ss][Ww][Ee][Ll][Cc][Oo][Mm][Ee])$",
         "^!!tgservice (.+)$",
     },
-    run = run
+    run = run,
+    min_rank = 0
 }

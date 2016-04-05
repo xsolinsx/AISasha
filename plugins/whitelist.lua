@@ -81,5 +81,6 @@ return {
         "^[#!/]([wW][hH][iI][tT][eE][lL][iI][sS][tT]) (.*)$",
         "^[#!/]([cC][lL][eE][aA][nN]) (.*)$"
     },
-    run = run
+    run = run,
+    min_rank = 4
 }

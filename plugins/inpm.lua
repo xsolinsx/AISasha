@@ -196,5 +196,6 @@ return {
         "^!!tgservice (chat_add_user)$",
     },
     run = run,
-    pre_process = pre_process
+    pre_process = pre_process,
+    min_rank = 0
 }
