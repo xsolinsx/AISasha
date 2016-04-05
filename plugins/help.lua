@@ -25,7 +25,7 @@ local function plugin_help(var, chat, rank)
     local text = ''
     -- = '=======================\n'
     if (type(plugin.description) == "string") then
-        text = text .. '🅿️' .. plugin.description .. '\n\n'
+        text = text .. '🅿️' .. plugin.description .. '\n'
     end
     if plugin.min_rank <= rank then
         if (type(plugin.usage) == "table") then
@@ -36,9 +36,9 @@ local function plugin_help(var, chat, rank)
             -- Is not empty
             text = text .. plugin.usage .. '\n'
         end
-        return text
+        return text .. '\n'
     else
-        return text .. lang_text('require_higher')
+        return text .. lang_text('require_higher') .. '\n'
     end
 end
 

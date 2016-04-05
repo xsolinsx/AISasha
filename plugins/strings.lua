@@ -108,7 +108,7 @@ local function run(msg, matches)
         set_text('helpInfo', 'ℹ️Scrivi "!help <plugin_name>|<plugin_number>" per maggiori informazioni su quel plugin.\nℹ️O "!helpall" per mostrare tutte le informazioni.')
         set_text('errorNoPlugin', 'Questo plugin non esiste o non ha una descrizione.')
         set_text('doYourBusiness', 'Ma una sportina di cazzi tuoi no?')
-        set_text('helpIntro', 'Ogni \'/\' può essere sostituito con i simboli \'!\' o \'#\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n')
+        set_text('helpIntro', 'Ogni \'/\' può essere sostituito con i simboli \'!\' o \'#\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n\n')
 
         -- groups --
         set_text('newDescription', 'Nuova descrizione:\n')
