@@ -61,7 +61,7 @@ local function run(msg, matches)
         end
     end
 
-    if matches[1]:lower() == "clean" and matches[2]:lower() == 'whitelist' and is_admin1(msg) then
+    if matches[1]:lower() == "clean whitelist" and is_admin1(msg) then
         local hash = 'whitelist'
         redis:del(hash)
         return lang_text('whitelistCleaned')
@@ -79,7 +79,7 @@ return {
     {
         "^[#!/]([wW][hH][iI][tT][eE][lL][iI][sS][tT])$",
         "^[#!/]([wW][hH][iI][tT][eE][lL][iI][sS][tT]) (.*)$",
-        "^[#!/]([cC][lL][eE][aA][nN]) (.*)$"
+        "^[#!/]([cC][lL][eE][aA][nN] [wW][hH][iI][tT][eE][lL][iI][sS][tT])$"
     },
     run = run,
     min_rank = 4

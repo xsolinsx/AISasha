@@ -346,13 +346,6 @@ local function run(msg, matches)
         end
     end
 
-    if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
-        if is_momod(msg) then
-            local receiver = get_receiver(msg)
-            chat_info(receiver, kickidsnouser, { receiver = receiver })
-        end
-    end
-
     if matches[1]:lower() == 'ban' or matches[1]:lower() == 'sasha banna' or matches[1]:lower() == 'sasha decompila' or matches[1]:lower() == 'banna' or matches[1]:lower() == 'decompila' or matches[1]:lower() == 'esplodi' or matches[1]:lower() == 'kaboom' then
         -- /ban
         if type(msg.reply_id) ~= "nil" and is_momod(msg) then
@@ -427,6 +420,15 @@ local function run(msg, matches)
             chat_id = matches[2]
         end
         return ban_list(chat_id)
+    end
+
+    if not is_owner(msg) then
+        return
+    end
+
+    if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
+        local receiver = get_receiver(msg)
+        chat_info(receiver, kickidsnouser, { receiver = receiver })
     end
 
     if not is_admin1(msg) and not is_support(support_id) then

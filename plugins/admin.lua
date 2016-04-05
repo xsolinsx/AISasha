@@ -241,7 +241,7 @@ local function run(msg, matches)
             end
         end
         --[[*For Debug*
-	    if matches[1] == "vardumpmsg" and is_admin1(msg) then
+	    if matches[1] == "vardumpmsg" then
 		    local text = serpent.block(msg, {comment=false})
 		    send_large_msg("channel#id"..msg.to.id, text)
 	    end]]
