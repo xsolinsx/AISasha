@@ -16,7 +16,6 @@ local bad = {
     "Allahuakbar.",
     "Muori idiota.",
 }
-
 local function kick_user(user_id, chat_id)
     local chat = 'chat#id' .. chat_id
     local user = 'user#id' .. user_id
@@ -32,7 +31,7 @@ local function kickrandom_chat(cb_extra, success, result)
     while not kickable do
         id = result.members[math.random(#result.members)].id
         print(id)
-        if not(tonumber(id) == tonumber(our_id) or is_mod(chat_id, id)) then
+        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id)) then
             kickable = true
             kick_user(id, chat_id)
         else
@@ -48,15 +47,14 @@ local function kickrandom_channel(extra, success, result)
     while not kickable do
         id = result[math.random(#result)].id
         print(id)
-        if not(tonumber(id) == tonumber(our_id) or is_mod(receiver, id) or tonumber(id) == 202256859) then
+        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or tonumber(id) == 202256859) then
             kickable = true
             kick_user(id, result.id)
         else
             print('403')
         end
     end
-end
-
+end
 local function run(msg, matches)
     if matches[1]:lower() == 'ruleta' then
         if msg.from.id ~= 202256859 then
