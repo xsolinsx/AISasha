@@ -22,7 +22,8 @@ local function plugin_help(var, chat, rank)
         if not plugin then return nil end
     end
     -- '=========================\n'
-    local text = '=======================\n'
+    local text = ''
+    -- = '=======================\n'
     if (type(plugin.description) == "string") then
         text = text .. '🅿️' .. plugin.description .. '\n\n'
     end
