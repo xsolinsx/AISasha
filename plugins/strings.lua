@@ -103,6 +103,7 @@ local function run(msg, matches)
         set_text('stopFlame', 'Si si mi fermo però porca madonna.')
 
         -- help.lua --
+        set_text('require_higher', 'Questo plugin richiede privilegi superiori a quelli che possiedi.\n')
         set_text('pluginListStart', 'ℹ️Lista plugin: \n\n')
         set_text('helpInfo', 'ℹ️Scrivi "!help <plugin_name>|<plugin_number>" per maggiori informazioni su quel plugin.\nℹ️O "!helpall" per mostrare tutte le informazioni.')
         set_text('errorNoPlugin', 'Questo plugin non esiste o non ha una descrizione.')
@@ -311,7 +312,6 @@ local function run(msg, matches)
         set_text('noAutoUnban', 'Non puoi unbannarti da solo.')
 
         -- plugins.lua --
-        set_text('require_higher', 'Questo plugin richiede privilegi superiori a quelli che possiedi.')
         set_text('enabled', ' abilitato.')
         set_text('disabled', ' disabilitato.')
         set_text('notExist', '  non esiste.')
