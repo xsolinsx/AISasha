@@ -136,8 +136,8 @@ return {
     description = "FLAME",
     usage =
     {
-        "(/startflame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l'utente specificato.",
-        "/stopflame|[sasha] stop flame: Sasha smette di flammare"
+        "(#startflame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l'utente specificato.",
+        "#stopflame|[sasha] stop flame: Sasha smette di flammare"
     },
     patterns =
     {

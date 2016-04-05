@@ -108,7 +108,7 @@ local function run(msg, matches)
         set_text('helpInfo', 'ℹ️Scrivi "!help <plugin_name>|<plugin_number>" per maggiori informazioni su quel plugin.\nℹ️O "!helpall" per mostrare tutte le informazioni.')
         set_text('errorNoPlugin', 'Questo plugin non esiste o non ha una descrizione.')
         set_text('doYourBusiness', 'Ma una sportina di cazzi tuoi no?')
-        set_text('helpIntro', 'Ogni \'/\' può essere sostituito con i simboli \'!\' o \'#\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n\n')
+        set_text('helpIntro', 'Ogni \'#\' può essere sostituito con i simboli \'/\' o \'!\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n\n')
 
         -- groups --
         set_text('newDescription', 'Nuova descrizione:\n')
@@ -597,10 +597,14 @@ end
 
 return {
     description = "STRINGS",
-    usage = "/updatestrings|[sasha] aggiorna stringhe: Sasha installa|aggiorna le stringhe di testo.",
+    usage = "#updatestrings|#installstrings|[sasha] installa|aggiorna stringhe: Sasha aggiorna le stringhe di testo.",
     patterns =
     {
+        '[#!/]([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
         '[#!/]([uU][pP][dD][aA][tT][eE][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
+        -- installstrings
+        '([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ss][Tt][Aa][Ll][Ll][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
+        '([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
         -- updatestrings
         '([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
         '([Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',

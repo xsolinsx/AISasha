@@ -32,7 +32,7 @@ end
 
 return {
     description = "GOOGLE",
-    usage = "(/google|[sasha] googla) <terms>: Sasha cerca <terms> su Google e manda i risultati.",
+    usage = "(#google|[sasha] googla) <terms>: Sasha cerca <terms> su Google e manda i risultati.",
     patterns =
     {
         "^[#!/][gG][oO][oO][gG][lL][eE] (.*)$",

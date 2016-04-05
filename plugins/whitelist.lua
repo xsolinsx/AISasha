@@ -72,8 +72,8 @@ return {
     description = "WHITELIST",
     usage =
     {
-        "/whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l'utente specificato alla|dalla whitelist.",
-        "/clean whitelist: Sasha pulisce la whitelist.",
+        "#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l'utente specificato alla|dalla whitelist.",
+        "#clean whitelist: Sasha pulisce la whitelist.",
     },
     patterns =
     {

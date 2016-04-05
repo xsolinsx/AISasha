@@ -17,7 +17,7 @@ end
 
 return {
     description = "TEX",
-    usage = "(/tex|[sasha] equazione) <equation>: Sasha converte <equation> in immagine.",
+    usage = "(#tex|[sasha] equazione) <equation>: Sasha converte <equation> in immagine.",
     patterns =
     {
         "^[#!/][Tt][Ee][Xx] (.+)$",

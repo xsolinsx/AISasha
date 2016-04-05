@@ -64,8 +64,8 @@ return {
     description = "GET",
     usage =
     {
-        "/getlist|/get|sasha lista: Sasha mostra una lista delle variabili settate.",
-        "[/get] <var_name>: Sasha manda il valore di <var_name>.",
+        "#getlist|#get|sasha lista: Sasha mostra una lista delle variabili settate.",
+        "[#get] <var_name>: Sasha manda il valore di <var_name>.",
     },
     patterns =
     {

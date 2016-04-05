@@ -14,7 +14,7 @@ end
 
 return {
     description = "ONSERVICE",
-    usage = "/leave|sasha abbandona: Sasha lascia il gruppo.",
+    usage = "#leave|sasha abbandona: Sasha lascia il gruppo.",
     patterns =
     {
         "^[#!/]([lL][eE][aA][vV][eE])$",

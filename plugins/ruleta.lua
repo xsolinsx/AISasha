@@ -87,8 +87,8 @@ return {
     description = "RULETA",
     usage =
     {
-        "/ruleta: Sasha estrae due numeri casuali da 1 a 5 e se sono uguali rimuove l'utente (se possibile).",
-        "(/kick|[sasha] uccidi|[sasha] spara) random: Sasha sceglie un utente a caso e lo rimuove.",
+        "#ruleta: Sasha estrae due numeri casuali da 1 a 5 e se sono uguali rimuove l'utente (se possibile).",
+        "(#kick|[sasha] uccidi|[sasha] spara) random: Sasha sceglie un utente a caso e lo rimuove.",
     },
     patterns =
     {

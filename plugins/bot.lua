@@ -4,7 +4,7 @@ end
 
 return {
     description = "BOT",
-    usage = "/bot|sasha on|off: Sasha si attiva|disattiva.",
+    usage = "#bot|sasha on|off: Sasha si attiva|disattiva.",
     patterns =
     {
         "^[#!/][Bb][Oo][Tt] ([Oo][Nn])",

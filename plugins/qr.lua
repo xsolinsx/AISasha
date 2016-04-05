@@ -73,7 +73,7 @@ return {
     description = "QR",
     usage =
     {
-        "[/]|[sasha] qr [\"<background_color>\" \"<data_color>\"] <text>: Sasha crea il QR Code di <text>, se specificato colora il QR Code.",
+        "[#]|[sasha] qr [\"<background_color>\" \"<data_color>\"] <text>: Sasha crea il QR Code di <text>, se specificato colora il QR Code.",
         "I colori possono essere specificati come segue:",
         "Testo => red|green|blue|purple|black|white|gray.",
         "Notazione Esadecimale => (\"a56729\" è marrone).",

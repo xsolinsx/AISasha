@@ -210,11 +210,11 @@ return {
     description = "PLUGINS",
     usage =
     {
-        "/plugins|[sasha] lista plugins: Sasha mostra una lista di tutti i plugins.",
+        "#plugins|[sasha] lista plugins: Sasha mostra una lista di tutti i plugins.",
         "[sasha] lista disabilitati|disattivati: Sasha mostra una lista dei plugins disabilitati su questa chat.",
-        "(/[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]: Sasha abilita <plugin>, se specificato solo su questa chat.",
-        "(/[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]: Sasha disabilita <plugin>, se specificato solo su questa chat.",
-        "/[plugin[s]] reload|[sasha] ricarica: Sasha ricarica tutti i plugins.",
+        "(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]: Sasha abilita <plugin>, se specificato solo su questa chat.",
+        "(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]: Sasha disabilita <plugin>, se specificato solo su questa chat.",
+        "#[plugin[s]] reload|[sasha] ricarica: Sasha ricarica tutti i plugins.",
     },
     patterns =
     {

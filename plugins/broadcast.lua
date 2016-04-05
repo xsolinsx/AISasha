@@ -23,8 +23,8 @@ return {
     description = "BROADCAST",
     usage =
     {
-        "/br <group_id> <text>: Sasha invia <text> a <group_id>.",
-        "/broadcast <text>: Sasha invia <text> a tutti i gruppi. Solo SU.",
+        "#br <group_id> <text>: Sasha invia <text> a <group_id>.",
+        "#broadcast <text>: Sasha invia <text> a tutti i gruppi. Solo SU.",
     },
     patterns =
     {

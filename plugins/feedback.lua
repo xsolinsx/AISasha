@@ -17,7 +17,7 @@ end
 
 return {
     description = "FEEDBACK",
-    usage = "/feedback <text>: Sasha invia <text> al creatore del bot",
+    usage = "#feedback <text>: Sasha invia <text> al creatore del bot",
     patterns =
     {
         "^[#!/][Ff][Ee][Ee][Dd][Bb][Aa][Cc][Kk] (.*)$",

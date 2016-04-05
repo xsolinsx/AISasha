@@ -14,7 +14,7 @@ end
 
 return {
     description = "DOGIFY",
-    usage = "(/dogify|[sasha] doge) <your/words/with/slashes>: Sasha crea un'immagine col doge e le parole specificate.",
+    usage = "(#dogify|[sasha] doge) <your/words/with/slashes>: Sasha crea un'immagine col doge e le parole specificate.",
     patterns =
     {
         "^[#!/][Dd][Oo][Gg][Ii][Ff][Yy] (.+)$",

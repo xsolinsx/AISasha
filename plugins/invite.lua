@@ -67,7 +67,7 @@ end
 
 return {
     description = "INVITE",
-    usage = "(/invite|[sasha] invita|[sasha] resuscita|[sasha] [ri]compila) <id>|<username>|<reply>: Sasha invita l'utente specificato.",
+    usage = "(#invite|[sasha] invita|[sasha] resuscita|[sasha] [ri]compila) <id>|<username>|<reply>: Sasha invita l'utente specificato.",
     patterns =
     {
         "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee]) (.*)$",

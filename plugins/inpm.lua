@@ -183,9 +183,9 @@ return {
     description = "INPM",
     usage =
     {
-        "/chats: Sasha mostra un elenco di chat.",
-        "/chatlist: Sasha manda un file con un elenco di chat.",
-        "/join <chat_id> [support]: Sasha tenta di aggiungere l'utente a <chat_id>.",
+        "#chats: Sasha mostra un elenco di chat.",
+        "#chatlist: Sasha manda un file con un elenco di chat.",
+        "#join <chat_id> [support]: Sasha tenta di aggiungere l'utente a <chat_id>.",
     },
     patterns =
     {

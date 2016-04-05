@@ -91,10 +91,10 @@ return {
     description = "WELCOME",
     usage =
     {
-        "/setwelcome <text>: Sasha imposta <text> come benvenuto.",
-        "/getwelcome: Sasha manda il benvenuto.",
-        "/setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole.",
-        "/getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.",
+        "#setwelcome <text>: Sasha imposta <text> come benvenuto.",
+        "#getwelcome: Sasha manda il benvenuto.",
+        "#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole.",
+        "#getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.",
     },
     patterns =
     {
