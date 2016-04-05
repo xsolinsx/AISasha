@@ -21,13 +21,13 @@ local function plugin_help(var, chat, rank)
         plugin = plugins[var]
         if not plugin then return nil end
     end
-    -- '=========================\n'
-    local text = ''
-    -- = '=======================\n'
-    if (type(plugin.description) == "string") then
-        text = text .. '🅿️' .. plugin.description .. '\n'
-    end
     if plugin.min_rank <= rank then
+        -- '=========================\n'
+        local text = ''
+        -- = '=======================\n'
+        if (type(plugin.description) == "string") then
+            text = text .. '🅿️' .. plugin.description .. '\n'
+        end
         if (type(plugin.usage) == "table") then
             for ku, usage in pairs(plugin.usage) do
                 text = text .. usage .. '\n'
@@ -38,7 +38,8 @@ local function plugin_help(var, chat, rank)
         end
         return text .. '\n'
     else
-        return text .. lang_text('require_higher') .. '\n'
+        -- return text .. lang_text('require_higher') .. '\n'
+        return ''
     end
 end
 
