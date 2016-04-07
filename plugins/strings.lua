@@ -70,6 +70,7 @@ local function run(msg, matches)
         set_text('longidUpdate', 'Aggiorna long_ID.')
         set_text('alreadyLog', 'Già un gruppo di log.')
         set_text('notLog', 'Non un gruppo di log.')
+        set_text('backupDone', 'Backup eseguito, ti invio il log in privato.')
 
         -- anti_spam.lua --
         set_text('blockedForSpam', ' bloccato (SPAM).')

@@ -239,6 +239,16 @@ local function run(msg, matches)
                 end
                 return lang_text('gbansSync')
             end
+            if matches[1]:lower() == "backup" or matches[1]:lower() == "sasha esegui backup" then
+                local time = os.time()
+                local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISashaExp'):read('*all')
+                local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
+                file:write(log)
+                file:flush()
+                file:close()
+                send_document("user#id" .. msg.from.id, "/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
+                return lang_text('backupDone')
+            end
         end
         --[[*For Debug*
 	    if matches[1] == "vardumpmsg" then
@@ -297,6 +307,7 @@ return {
         "(#sendcontact|sasha invia contatto) <phone> <name> <surname>: Sasha invia il contatto specificato.",
         "(#mycontact|sasha mio contatto): Sasha invia il contatto del richiedente.",
         "#sync_gbans|sasha sincronizza lista superban: Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.",
+        "#backup|sasha esegui backup: Sasha esegue un backup di se stessa e invia il log al richiedente.",
         "#updateid|sasha aggiorna longid: Sasha salva il long_id.",
         "#addlog|sasha aggiungi log: Sasha aggiunge il log.",
         "#remlog|sasha rimuovi log: Sasha rimuove il log.",
@@ -317,6 +328,7 @@ return {
         "^[#!/]([Ss][Ee][Nn][Dd][Cc][Oo][Nn][Tt][Aa][Cc][Tt]) (.*) (.*) (.*)$",
         "^[#!/]([Mm][Yy][Cc][Oo][Nn][Tt][Aa][Cc][Tt])$",
         "^[#!/]([sS][yY][nN][cC]_[gG][bB][aA][nN][sS])$",
+        "^[#!/]([Bb][Aa][Cc][Kk][Uu][Pp])$",
         -- sync your global bans with seed
         "^[#!/]([uU][pP][dD][aA][tT][eE][iI][dD])$",
         "^[#!/]([aA][dD][dD][lL][oO][gG])$",
@@ -355,6 +367,8 @@ return {
         "^([sS][aA][sS][hH][aA] [Mm][Ii][Oo] [cC][oO][nN][tT][aA][tT][tT][oO])$",
         -- sync_gbans
         "^([sS][aA][sS][hH][aA] [sS][iI][nN][cC][rR][oO][nN][iI][zZ][zZ][aA] [lL][iI][sS][tT][aA] [sS][uU][pP][eE][rR][bB][aA][nN])$",
+        -- backup
+        "^([sS][aA][sS][hH][aA] [Ee][Ss][Ee][Gg][Uu][Ii] [Bb][Aa][Cc][Kk][Uu][Pp])$",
         -- updateid
         "^[sS][aA][sS][hH][aA] ([aA][gG][gG][iI][oO][rR][nN][aA] [lL][oO][nN][gG][iI][dD])$",
         -- addlog
