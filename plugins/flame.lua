@@ -62,8 +62,9 @@ local function pre_process(msg)
             local hashonredis = redis:get(hash)
             print('hashonredis ' .. hashonredis)
             if hashonredis then
-                send_large_msg('chat#id' .. msg.to.id, sashaflamma[tonumber(hashonredis)])
-                send_large_msg('channel#id' .. msg.to.id, sashaflamma[tonumber(hashonredis)])
+                reply_msg(msg.id, sashaflamma[tonumber(hashonredis)], ok_cb, false)
+                -- send_large_msg('chat#id' .. msg.to.id, sashaflamma[tonumber(hashonredis)])
+                -- send_large_msg('channel#id' .. msg.to.id, sashaflamma[tonumber(hashonredis)])
                 print('msg sent')
                 if tonumber(hashonredis) == #sashaflamma then
                     kick_user(redis:get(tokick), msg.to.id)

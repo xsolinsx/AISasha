@@ -1,3 +1,17 @@
+local phrases = {
+    "Ancora ancora ancora! 😍",
+    "الله أَكْبَر",
+    "Datemene un altro dai dai.",
+    "R.I.P.",
+    "Ora dovremmo nascondere il corpo. 🚔",
+    "MUORI MUORI BASTARDO!",
+    "Lalalalalala",
+    "Oh che bel castello marcondirondirondello, oh che bel castello marcondirondironBAN.",
+    "Oddio cos'ho fatto? 😱",
+    "Giro giro tondo, casca il mondo, casca la terra, tutti giù per BAN.",
+    "Tempo presente del verbo Bannare:\nIo banno, Tu vieni bannato.",
+}
+
 -- kick by reply for mods and owner
 local function Kick_by_reply(extra, success, result)
     if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
@@ -344,6 +358,7 @@ local function run(msg, matches)
             local username = string.gsub(matches[2], '@', '')
             resolve_username(username, kick_ban_res, cbres_extra)
         end
+        return phrases[math.random(#phrases)]
     end
 
     if matches[1]:lower() == 'ban' or matches[1]:lower() == 'sasha banna' or matches[1]:lower() == 'sasha decompila' or matches[1]:lower() == 'banna' or matches[1]:lower() == 'decompila' or matches[1]:lower() == 'esplodi' or matches[1]:lower() == 'kaboom' then
@@ -382,6 +397,7 @@ local function run(msg, matches)
             local username = string.gsub(matches[2], '@', '')
             resolve_username(username, kick_ban_res, cbres_extra)
         end
+        return phrases[math.random(#phrases)]
     end
 
     if matches[1]:lower() == 'unban' or matches[1]:lower() == 'sasha sbanna' or matches[1]:lower() == 'sasha ricompila' or matches[1]:lower() == 'sasha compila' or matches[1]:lower() == 'sbanna' or matches[1]:lower() == 'ricompila' or matches[1]:lower() == 'compila' then
@@ -460,6 +476,7 @@ local function run(msg, matches)
             local username = string.gsub(matches[2], '@', '')
             resolve_username(username, kick_ban_res, cbres_extra)
         end
+        return phrases[math.random(#phrases)]
     end
     if matches[1]:lower() == 'ungban' or matches[1]:lower() == 'sasha supersbanna' or matches[1]:lower() == 'supersbanna' then
         -- Global unban
