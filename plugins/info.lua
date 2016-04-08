@@ -77,7 +77,7 @@ local function returnids(extra, success, result)
 end]]
 
 -- OLDINFOFUNCTIONS
-local function get_message_callback_id(extra, success, result)
+local function callback_reply(extra, success, result)
     local text = 'INFO (<reply>)'
     if result.from.first_name then
         text = text .. '\nNome: ' .. result.from.first_name
@@ -99,7 +99,7 @@ local function get_message_callback_id(extra, success, result)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end
 
-local function user_info_callback(cb_extra, success, result)
+local function callback_id(cb_extra, success, result)
     local text = 'INFO (<id>)'
     if result.first_name then
         text = text .. '\nNome: ' .. result.first_name
@@ -121,7 +121,7 @@ local function user_info_callback(cb_extra, success, result)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
 end
 
-local function callbackres(extra, success, result)
+local function callback_username(extra, success, result)
     local text = 'INFO (<username>)'
     if result.first_name then
         text = text .. '\nNome: ' .. result.first_name
@@ -354,7 +354,7 @@ local function run(msg, matches)
         if not matches[2] then
             if type(msg.reply_id) ~= 'nil' then
                 if is_momod(msg) then
-                    return get_message(msg.reply_id, get_message_callback_id, false)
+                    return get_message(msg.reply_id, callback_reply, false)
                 else
                     return lang_text('require_mod')
                 end
@@ -415,10 +415,10 @@ local function run(msg, matches)
                     get_message(msg.reply_id, callback_from, { msg = msg })
                     return
                 elseif string.match(matches[2], '^%d+$') then
-                    user_info('user#id' .. matches[2], user_info_callback, { msg = msg })
+                    user_info('user#id' .. matches[2], callback_id, { msg = msg })
                     return
                 else
-                    resolve_username(matches[2]:gsub("@", ""), callbackres, { chatid = msg.to.id })
+                    resolve_username(matches[2]:gsub("@", ""), callback_username, { chatid = msg.to.id })
                     return
                 end
             else
