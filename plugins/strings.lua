@@ -97,7 +97,19 @@ local function run(msg, matches)
         set_text('feedUsername', '\nUsername: @')
         set_text('feedSent', 'Feedback inviato!')
 
-        -- flamer.lua --
+        -- filemanager.lua --
+        set_text('backHomeFolder', 'Sei tornato alla cartella base: ')
+        set_text('youAreHere', 'Sei qui: ')
+        set_text('folderCreated', 'Cartella \'X\' creata.')
+        set_text('folderDeleted', 'Cartella \'X\' eliminata.')
+        set_text('fileCreatedWithContent', ' creato con \'X\' come contenuto.')
+        set_text('copiedTo', ' copiato in ')
+        set_text('movedTo', ' spostato in ')
+        set_text('sendingYou', 'Ti sto inviando ')
+        set_text('useQuoteOnFile', 'Usa \'rispondi\' sul file che vuoi che scarichi.')
+        set_text('downloaded', ' scaricato.')
+
+        -- flame.lua --
         set_text('cantFlameHigher', 'Non puoi flammare un mod/owner/admin/sudo/!')
         set_text('noAutoFlame', 'Non posso flammarmi da sola trisomico del cazzo!')
         set_text('hereIAm', 'Eccomi qua!')
@@ -333,7 +345,7 @@ local function run(msg, matches)
         -- set.lua --
         set_text('saved', ' salvato.')
 
-        -- spammer.lua --
+        -- spam.lua --
         set_text('msgSet', 'Messaggio impostato.')
         set_text('msgsToSend', 'Messaggi da mandare: ')
         set_text('timeBetweenMsgs', 'Tempo tra ogni messaggio: X secondi.')
