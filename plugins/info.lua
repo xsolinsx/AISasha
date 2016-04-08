@@ -412,7 +412,7 @@ local function run(msg, matches)
         elseif chat_type == 'chat' or chat_type == 'channel' then
             if is_momod(msg) then
                 if matches[2]:lower() == 'from' and type(msg.reply_id) ~= "nil" then
-                    get_message(msg.reply_id, get_message_callback, { msg = msg })
+                    get_message(msg.reply_id, callback_from, { msg = msg })
                     return
                 elseif string.match(matches[2], '^%d+$') then
                     user_info('user#id' .. matches[2], user_info_callback, { msg = msg })
