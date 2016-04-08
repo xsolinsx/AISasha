@@ -69,15 +69,15 @@ end
 local function bot_stats()
 
     local redis_scan = [[
-                                        local cursor = '0'
-                                        local count = 0
+                                                local cursor = '0'
+                                                local count = 0
 
-                                        repeat
-                                        local r = redis.call("SCAN", cursor, "MATCH", KEYS[1])
-                                        cursor = r[1]
-                                        count = count + #r[2]
-                                        until cursor == '0'
-                                        return count]]
+                                                repeat
+                                                local r = redis.call("SCAN", cursor, "MATCH", KEYS[1])
+                                                cursor = r[1]
+                                                count = count + #r[2]
+                                                until cursor == '0'
+                                                return count]]
 
     -- Users
     local hash = 'msgs:*:' .. our_id
@@ -154,15 +154,15 @@ return {
     {
         "^[#!/]([sS][tT][aA][tT][sS])$",
         "^[#!/]([sS][tT][aA][tT][sS][lL][iI][sS][tT])$",
-        "^[#!/]([sS][tT][aA][tT][sS]) ([gG][rR][oO][uU][pP]) (%d+)",
-        "^[#!/]([sS][tT][aA][tT][sS]) ([aA][iI][sS][aA][sS][hH][aA])",-- Put everything you like :)
-        "^[#!/]?([aA][iI][sS][aA][sS][hH][aA])",-- Put everything you like :)
-                                                -- stats
+        "^[#!/]([sS][tT][aA][tT][sS]) ([gG][rR][oO][uU][pP]) (%d+)$",
+        "^[#!/]([sS][tT][aA][tT][sS]) ([aA][iI][sS][aA][sS][hH][aA])$",-- Put everything you like :)
+        "^[#!/]?([aA][iI][sS][aA][sS][hH][aA])$",-- Put everything you like :)
+                                                 -- stats
         "^([sS][aA][sS][hH][aA] [sS][tT][aA][tT][iI][sS][tT][iI][cC][hH][eE])$",
         "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [sS][tT][aA][tT][iI][sS][tT][iI][cC][hH][eE])$",
-        "^([sS][aA][sS][hH][aA] [sS][tT][aA][tT][iI][sS][tT][iI][cC][hH][eE]) ([gG][rR][uU][pP][pP][oO]) (%d+)",
-        "^([sS][aA][sS][hH][aA] [sS][tT][aA][tT][iI][sS][tT][iI][cC][hH][eE]) ([aA][iI][sS][aA][sS][hH][aA])",-- Put everything you like :)
-                                                                                                              -- messages
+        "^([sS][aA][sS][hH][aA] [sS][tT][aA][tT][iI][sS][tT][iI][cC][hH][eE]) ([gG][rR][uU][pP][pP][oO]) (%d+)$",
+        "^([sS][aA][sS][hH][aA] [sS][tT][aA][tT][iI][sS][tT][iI][cC][hH][eE]) ([aA][iI][sS][aA][sS][hH][aA])$",-- Put everything you like :)
+                                                                                                               -- messages
         "^[#!/]([mM][eE][sS][sS][aA][gG][eE][sS])$",
         "^([sS][aA][sS][hH][aA] [mM][eE][sS][sS][aA][gG][gG][iI])$",
     },
