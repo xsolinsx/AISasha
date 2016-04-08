@@ -143,6 +143,28 @@ local function callbackres(extra, success, result)
     send_large_msg('channel#id' .. extra.chatid, text)
 end
 
+local function callback_from(extra, success, result)
+    local text = 'INFO (<from>)'
+    if result.fwd_from.first_name then
+        text = text .. '\nNome: ' .. result.fwd_from.first_name
+    end
+    if result.fwd_from.real_first_name then
+        text = text .. '\nNome: ' .. result.fwd_from.real_first_name
+    end
+    if result.fwd_from.last_name then
+        text = text .. '\nCognome: ' .. result.fwd_from.last_name
+    end
+    if result.fwd_from.real_last_name then
+        text = text .. '\nCognome: ' .. result.fwd_from.real_last_name
+    end
+    if result.fwd_from.username then
+        text = text .. '\nUsername: @' .. result.fwd_from.username
+    end
+    text = text .. '\nId: ' .. result.fwd_from.peer_id
+    send_large_msg('chat#id' .. result.to.peer_id, text)
+    send_large_msg('channel#id' .. result.to.peer_id, text)
+end
+
 local function channel_callback_info(cb_extra, success, result)
     local title = lang_text('infoFor') .. result.title .. "\n"
     local user_num = lang_text('users') .. result.participants_count
@@ -389,7 +411,10 @@ local function run(msg, matches)
             end
         elseif chat_type == 'chat' or chat_type == 'channel' then
             if is_momod(msg) then
-                if string.match(matches[2], '^%d+$') then
+                if matches[2]:lower() == 'from' and type(msg.reply_id) ~= "nil" then
+                    get_message(msg.reply_id, get_message_callback, { msg = msg })
+                    return
+                elseif string.match(matches[2], '^%d+$') then
                     user_info('user#id' .. matches[2], user_info_callback, { msg = msg })
                     return
                 else

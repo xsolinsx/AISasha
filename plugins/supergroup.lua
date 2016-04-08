@@ -634,11 +634,7 @@ function get_message_callback(extra, success, result)
     local data = load_data(_config.moderation.data)
     local print_name = user_print_name(msg.from):gsub("‮", "")
     local name_log = print_name:gsub("_", " ")
-    if get_cmd == "idfrom" then
-        local channel = 'channel#id' .. result.to.peer_id
-        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] obtained id for msg fwd from: [" .. result.fwd_from.peer_id .. "]")
-        id2 = send_large_msg(channel, result.fwd_from.peer_id)
-    elseif get_cmd == 'channel_block' and not result.action then
+    if get_cmd == 'channel_block' and not result.action then
         local member_id = result.from.peer_id
         local channel_id = result.to.peer_id
         if member_id == msg.from.id then
