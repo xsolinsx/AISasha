@@ -23,10 +23,15 @@ local nosasha = {
     "Assolutamente no",
     "Direi di no",
     "Per me è no",
-
+}
+local bohsasha = {
     "Decidi tu",
     "Non lo so",
     "Mah",
+    "Dipende da te",
+    "Lascio a te la scelta",
+    "Forse",
+    "Vedi te",
 }
 local sisasha = {
     "Siiiiiii",
@@ -44,10 +49,6 @@ local sisasha = {
     "Assolutamente si",
     "Direi di si",
     "Per me è si",
-
-    "Dipende da te",
-    "Lascio a te la scelta",
-    "Forse",
 }
 local tiamo = {
     "Awww :3",
@@ -68,17 +69,14 @@ local function run(msg, matches)
     if matches[1]:lower() == 'si sasha' then
         return sisasha[math.random(#sisasha)]
     end
-    if matches[1]:lower() == 'sasha no?' then
-        return sashasino[math.random(#sashasino)]
-    end
-    if matches[1]:lower() == 'sasha si?' then
-        return sashasino[math.random(#sashasino)]
-    end
     if matches[1]:lower() == 'sasha' and string.match(matches[2], '.+%?') then
-        if math.random(0, 1) == 0 then
-            return sashano[math.random(#sashano)]
-        else
-            return sashasi[math.random(#sashasi)]
+        local rnd = math.random(0, 2)
+        if rnd == 0 then
+            return nosasha[math.random(#nosasha)]
+        elseif rnd == 1 then
+            return bohsasha[math.random(#bohsasha)]
+        elseif rnd == 2 then
+            return sisasha[math.random(#sisasha)]
         end
     end
     if matches[1]:lower() == 'sasha ti amo' or matches[1]:lower() == 'ti amo sasha' then
