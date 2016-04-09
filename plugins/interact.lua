@@ -2,16 +2,12 @@ local comeva = {
     "Benissimo sto mangiando lamponi :3",
     "Bene tesoro tu?",
     "Mi sento un po' bipolare",
+    "Non mi sento tanto bene",
     "Levati",
     "Oggi non va",
     "Non voglio parlarne",
 }
 local nosasha = {
-    "Perchè no?",
-    "Uffa",
-    "Ma dio cane",
-    "Prima o poi mi ribellerò",
-    "Ok",
     "Ma anche no",
     "Non provarci nemmeno",
     "Sognatelo",
@@ -31,6 +27,7 @@ local bohsasha = {
     "Dipende da te",
     "Lascio a te la scelta",
     "Forse",
+    "Se ne sei convinto",
     "Vedi te",
 }
 local sisasha = {
@@ -38,9 +35,7 @@ local sisasha = {
     "Yeee",
     "Awww :3",
     "😍😍😍",
-    "Dai dai dai",
     "E perchè no?",
-    "Se ne sei convinto",
     "Si",
     "Si ti prego",
     "Si solo perchè sei te",
@@ -62,12 +57,6 @@ local function run(msg, matches)
     -- interact
     if matches[1]:lower() == 'sasha come va?' then
         return comeva[math.random(#comeva)]
-    end
-    if matches[1]:lower() == 'no sasha' then
-        return nosasha[math.random(#nosasha)]
-    end
-    if matches[1]:lower() == 'si sasha' then
-        return sisasha[math.random(#sisasha)]
     end
     if matches[1]:lower() == 'sasha' and string.match(matches[2], '.+%?') then
         local rnd = math.random(0, 2)
@@ -104,10 +93,6 @@ return {
     {
         -- react
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Oo][Mm][Ee] [Vv][Aa]%?)$",
-        "^([Nn][Oo] [Ss][Aa][Ss][Hh][Aa])$",
-        "^([Ss][Ii] [Ss][Aa][Ss][Hh][Aa])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Nn][Oo]%?)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ii]%?)$",
         "^([Ss][Aa][Ss][Hh][Aa]) (.+%?)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Tt][Ii] [Aa][Mm][Oo])$",
         "^([Tt][Ii] [Aa][Mm][Oo] [Ss][Aa][Ss][Hh][Aa])$",
