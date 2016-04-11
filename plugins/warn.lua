@@ -141,7 +141,7 @@ local function run(msg, matches)
         if get_warn(msg) == lang_text('noWarnSet') then
             return lang_text('noWarnSet')
         else
-            if matches[1]:lower() == 'getuserwarns' then
+            if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, getWarn_by_reply, false)
                 elseif string.match(matches[2], '^%d+$') then
@@ -203,11 +203,14 @@ return {
     {
         "^[#!/]([Ss][Ee][Tt][Ww][Aa][Rr][Nn]) (%d+)$",
         "^[#!/]([Gg][Ee][Tt][Ww][Aa][Rr][Nn])$",
-        "^[#!/]([Gg][Ee][Tt][Uu][Ss][Ee][Rr][Ww][Aa][Rr][Nn])$",
+        "^[#!/]([Gg][Ee][Tt][Uu][Ss][Ee][Rr][Ww][Aa][Rr][Nn][Ss])$",
         "^[#!/]([Ww][Aa][Rr][Nn]) (.*)$",
         "^[#!/]([Ww][Aa][Rr][Nn])$",
         "^[#!/]([Uu][Nn][Ww][Aa][Rr][Nn]) (.*)$",
         "^[#!/]([Uu][Nn][Ww][Aa][Rr][Nn])$",
+        -- getuserwarns
+        "^([Ss][Aa][Ss][Hh][Aa] [Oo][Tt][Tt][Ii][Ee][Nn][Ii] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii])$",
+        "^([Oo][Tt][Tt][Ii][Ee][Nn][Ii] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii])$",
         -- warn
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii])$",
