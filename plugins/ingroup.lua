@@ -1797,7 +1797,6 @@ return {
         "^[#!/]([sS][eE][tT][gG][pP][oO][wW][nN][eE][rR]) (%d+) (%d+)$",-- (group id) (owner id)
         "^[#!/]([uU][nN][lL][oO][cC][kK]) (.*)$",
         "^[#!/]([sS][eE][tT][fF][lL][oO][oO][dD]) (%d+)$",
-        -- "^[#!/]([sS][eE][tT][wW][aA][rR][nN]) (%d+)$",
         "^[#!/]([sS][eE][tT][tT][iI][nN][gG][sS])$",
         "^[#!/]([pP][uU][bB][lL][iI][cC]) (.*)$",
         "^[#!/]([mM][oO][dD][lL][iI][sS][tT])$",

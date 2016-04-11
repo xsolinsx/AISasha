@@ -387,6 +387,15 @@ local function run(msg, matches)
         -- unset.lua --
         set_text('deleted', ' eliminato.')
 
+        -- warn.lua --
+        set_text('errorWarnRange', 'Errore, il range è [1-10].')
+        set_text('warnSet', 'Il warn è stato impostato a ')
+        set_text('noWarnSet', 'Il warn non è ancora stato impostato.')
+        set_text('cantWarnHigher', 'Non puoi avvertire un mod/owner/admin/sudo!')
+        set_text('warned', 'Sei stato avvertito X volte, datti una regolata!')
+        set_text('zeroWarnings', 'I tuoi avvertimenti sono stati azzerati.')
+        set_text('yourWarnings', 'Sei a quota X avvertimenti su un massimo di Y.')
+
         -- welcome.lua --
         set_text('newWelcome', 'Nuovo messaggio di benvenuto:\n')
         set_text('newWelcomeNumber', 'Il benvenuto sarà mandato ogni X membri.')
@@ -397,10 +406,6 @@ local function run(msg, matches)
         set_text('whitelistRemoved', ' rimosso dalla whitelist.')
         set_text('whitelistAdded', ' aggiunto alla whitelist.')
         set_text('whitelistCleaned', 'Whitelist svuotata.')
-
-        -- wiki.lua --
-        set_text('extractNotFound', 'Estratto non trovato per ')
-        set_text('noResult', 'Nessun risultato trovato')
 
         --------------------
         ---- General info --
