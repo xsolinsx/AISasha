@@ -1,9 +1,6 @@
 local data = load_data(_config.moderation.data)
 
 local function set_warn(msg, value)
-    if not is_momod(msg) then
-        return lang_text('require_mod')
-    end
     if tonumber(value) < 1 or tonumber(value) > 10 then
         return lang_text('errorWarnRange')
     end
@@ -15,9 +12,6 @@ local function set_warn(msg, value)
 end
 
 local function get_warn(msg)
-    if not is_momod(msg) then
-        return lang_text('require_mod')
-    end
     local warn_max = data[tostring(msg.to.id)]['settings']['warn_max']
     if not warn_max then
         return lang_text('noWarnSet')
@@ -48,6 +42,7 @@ local function warn_user(user_id, chat_id)
     local channel = 'channel#id' .. chat_id
     local chat = 'chat#id' .. chat_id
     local user = 'user#id' .. user_id
+    print(get_warn( { from = { id = user_id }, to = { id = chat_id } }))
     local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
     local hash = chat_id .. ':warn:' .. user_id
     redis:incr(hash)
