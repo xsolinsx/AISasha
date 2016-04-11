@@ -227,5 +227,5 @@ return {
         "^([Aa][Zz][Zz][Ee][Rr][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii])$",
     },
     run = run,
-    min_rank = 0
+    min_rank = 1
 }
