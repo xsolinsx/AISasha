@@ -68,7 +68,7 @@ local function help_all(chat, rank)
 end
 
 local function run(msg, matches)
-    if msg.to.peer_type == 'user' and not is_admin(msg) then
+    if msg.to.peer_type == 'user' and not is_admin1(msg) then
         return lang_text('doYourBusiness')
     end
 
