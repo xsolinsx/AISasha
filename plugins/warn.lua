@@ -1,3 +1,5 @@
+local data = load_data(_config.moderation.data)
+
 local function warn_user(user_id, chat_id)
     local channel = 'channel#id' .. chat_id
     local chat = 'chat#id' .. chat_id
@@ -91,18 +93,18 @@ local function Unwarn_by_username(extra, success, result)
     unwarn_user(user_id, chat_id)
 end
 
-local function set_warn(msg)
+local function set_warn(msg, value)
     if not is_momod(msg) then
         return lang_text('require_mod')
     end
-    if tonumber(matches[2]) < 1 or tonumber(matches[2]) > 10 then
+    if tonumber(value) < 1 or tonumber(value) > 10 then
         return lang_text('errorWarnRange')
     end
-    local warn_max = matches[2]
+    local warn_max = value
     data[tostring(msg.to.id)]['settings']['warn_max'] = warn_max
     save_data(_config.moderation.data, data)
-    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set warn to [" .. matches[2] .. "]")
-    return lang_text('warnSet') .. matches[2]
+    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set warn to [" .. value .. "]")
+    return lang_text('warnSet') .. value
 end
 
 local function get_warn(msg)
@@ -113,7 +115,7 @@ local function get_warn(msg)
     if not warn_max then
         return lang_text('noWarnSet')
     end
-    return lang_text('warnSet') .. matches[2]
+    return lang_text('warnSet') .. warn_max
 end
 
 local function run(msg, matches)
