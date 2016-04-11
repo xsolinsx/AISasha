@@ -123,10 +123,6 @@ local function run(msg, matches)
         set_text('doYourBusiness', 'Ma una sportina di cazzi tuoi no?')
         set_text('helpIntro', 'Ogni \'#\' può essere sostituito con i simboli \'/\' o \'!\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n\n')
 
-        -- humanside.lua --
-        set_text('live', 'RAISING FROM HELL')
-        set_text('die', 'I WILL COME BACK')
-
         -- groups --
         set_text('newDescription', 'Nuova descrizione:\n')
         set_text('noDescription', 'Nessuna descrizione disponibile.')
