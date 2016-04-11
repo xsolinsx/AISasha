@@ -113,6 +113,23 @@ local function Unwarn_by_username(extra, success, result)
     unwarn_user(user_id, chat_id)
 end
 
+local function getWarn_by_reply(extra, success, result)
+    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
+        get_user_warns(result.from.peer_id, result.to.peer_id)
+    else
+        return lang_text('useYourGroups')
+    end
+end
+
+local function getWarn_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(receiver, lang_text('noUsernameFound'))
+    end
+    local user_id = result.peer_id
+    local chat_id = extra.msg.to.id
+    get_user_warns(user_id, chat_id)
+end
+
 local function run(msg, matches)
     if is_momod(msg) then
         if matches[1]:lower() == 'setwarn' and matches[2] then
@@ -125,7 +142,13 @@ local function run(msg, matches)
             return lang_text('noWarnSet')
         else
             if matches[1]:lower() == 'getuserwarns' then
-                return get_warn_user(msg)
+                if type(msg.reply_id) ~= "nil" then
+                    msgr = get_message(msg.reply_id, getWarn_by_reply, false)
+                elseif string.match(matches[2], '^%d+$') then
+                    return get_warn_user(msg.from.id, msg.to.id)
+                else
+                    resolve_username(string.gsub(matches[2], '@', ''), getWarn_by_username, { msg = msg })
+                end
             end
             if matches[1]:lower() == 'warn' or matches[1]:lower() == 'sasha avverti' or matches[1]:lower() == 'avverti' then
                 if type(msg.reply_id) ~= "nil" then
