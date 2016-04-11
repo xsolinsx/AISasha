@@ -145,7 +145,7 @@ local function run(msg, matches)
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, getWarn_by_reply, false)
                 elseif string.match(matches[2], '^%d+$') then
-                    return get_warn_user(msg.from.id, msg.to.id)
+                    return get_user_warns(msg.from.id, msg.to.id)
                 else
                     resolve_username(string.gsub(matches[2], '@', ''), getWarn_by_username, { msg = msg })
                 end
