@@ -123,6 +123,10 @@ local function run(msg, matches)
         set_text('doYourBusiness', 'Ma una sportina di cazzi tuoi no?')
         set_text('helpIntro', 'Ogni \'#\' può essere sostituito con i simboli \'/\' o \'!\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n\n')
 
+        -- humanside.lua --
+        set_text('live', 'RAISING FROM HELL')
+        set_text('die', 'I WILL COME BACK')
+
         -- groups --
         set_text('newDescription', 'Nuova descrizione:\n')
         set_text('noDescription', 'Nessuna descrizione disponibile.')
@@ -618,14 +622,14 @@ return {
     usage = "#updatestrings|#installstrings|[sasha] installa|aggiorna stringhe: Sasha aggiorna le stringhe di testo.",
     patterns =
     {
-        '[#!/]([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
-        '[#!/]([uU][pP][dD][aA][tT][eE][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
+        '^[#!/]([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
+        '^[#!/]([uU][pP][dD][aA][tT][eE][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
         -- installstrings
-        '([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ss][Tt][Aa][Ll][Ll][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
-        '([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
+        '^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ss][Tt][Aa][Ll][Ll][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
+        '^([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
         -- updatestrings
-        '([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
-        '([Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
+        '^([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
+        '^([Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
     },
     run = run,
     min_rank = 5
