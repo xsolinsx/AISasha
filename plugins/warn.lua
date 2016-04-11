@@ -1,5 +1,49 @@
 local data = load_data(_config.moderation.data)
 
+local function set_warn(msg, value)
+    if not is_momod(msg) then
+        return lang_text('require_mod')
+    end
+    if tonumber(value) < 1 or tonumber(value) > 10 then
+        return lang_text('errorWarnRange')
+    end
+    local warn_max = value
+    data[tostring(msg.to.id)]['settings']['warn_max'] = warn_max
+    save_data(_config.moderation.data, data)
+    savelog(msg.to.id, " [" .. msg.from.id .. "] set warn to [" .. value .. "]")
+    return lang_text('warnSet') .. value
+end
+
+local function get_warn(msg)
+    if not is_momod(msg) then
+        return lang_text('require_mod')
+    end
+    local warn_max = data[tostring(msg.to.id)]['settings']['warn_max']
+    if not warn_max then
+        return lang_text('noWarnSet')
+    end
+    return lang_text('warnSet') .. warn_max
+end
+
+local function get_user_warns(user_id, chat_id)
+    local channel = 'channel#id' .. chat_id
+    local chat = 'chat#id' .. chat_id
+    local hash = chat_id .. ':warn:' .. user_id
+    local hashonredis = redis:get(hash)
+    local warn_msg = lang_text('yourWarnings')
+    local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
+
+    if hashonredis then
+        warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', tostring(hashonredis))
+        send_large_msg(chat, warn_msg, ok_cb, false)
+        send_large_msg(channel, warn_msg, ok_cb, false)
+    else
+        warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', '0')
+        send_large_msg(chat, warn_msg, ok_cb, false)
+        send_large_msg(channel, warn_msg, ok_cb, false)
+    end
+end
+
 local function warn_user(user_id, chat_id)
     local channel = 'channel#id' .. chat_id
     local chat = 'chat#id' .. chat_id
@@ -30,25 +74,6 @@ local function unwarn_user(user_id, chat_id)
     redis:set(hash, 0)
     send_large_msg(chat, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
     send_large_msg(channel, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
-end
-
-local function get_user_warns(user_id, chat_id)
-    local channel = 'channel#id' .. chat_id
-    local chat = 'chat#id' .. chat_id
-    local hash = chat_id .. ':warn:' .. user_id
-    local hashonredis = redis:get(hash)
-    local warn_msg = lang_text('yourWarnings')
-    local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
-
-    if hashonredis then
-        warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', tostring(hashonredis))
-        send_large_msg(chat, warn_msg, ok_cb, false)
-        send_large_msg(channel, warn_msg, ok_cb, false)
-    else
-        warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', '0')
-        send_large_msg(chat, warn_msg, ok_cb, false)
-        send_large_msg(channel, warn_msg, ok_cb, false)
-    end
 end
 
 local function Warn_by_reply(extra, success, result)
@@ -91,31 +116,6 @@ local function Unwarn_by_username(extra, success, result)
     local user_id = result.peer_id
     local chat_id = extra.msg.to.id
     unwarn_user(user_id, chat_id)
-end
-
-local function set_warn(msg, value)
-    if not is_momod(msg) then
-        return lang_text('require_mod')
-    end
-    if tonumber(value) < 1 or tonumber(value) > 10 then
-        return lang_text('errorWarnRange')
-    end
-    local warn_max = value
-    data[tostring(msg.to.id)]['settings']['warn_max'] = warn_max
-    save_data(_config.moderation.data, data)
-    savelog(msg.to.id, " [" .. msg.from.id .. "] set warn to [" .. value .. "]")
-    return lang_text('warnSet') .. value
-end
-
-local function get_warn(msg)
-    if not is_momod(msg) then
-        return lang_text('require_mod')
-    end
-    local warn_max = data[tostring(msg.to.id)]['settings']['warn_max']
-    if not warn_max then
-        return lang_text('noWarnSet')
-    end
-    return lang_text('warnSet') .. warn_max
 end
 
 local function run(msg, matches)
