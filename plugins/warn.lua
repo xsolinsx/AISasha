@@ -103,7 +103,7 @@ local function set_warn(msg, value)
     local warn_max = value
     data[tostring(msg.to.id)]['settings']['warn_max'] = warn_max
     save_data(_config.moderation.data, data)
-    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set warn to [" .. value .. "]")
+    savelog(msg.to.id, " [" .. msg.from.id .. "] set warn to [" .. value .. "]")
     return lang_text('warnSet') .. value
 end
 
