@@ -196,6 +196,7 @@ return {
     {
         "#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>.",
         "#getwarn: Sasha manda il numero di avvertimenti massimi.",
+        "(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>: Sasha manda il numero di avvertimenti ricevuti dall'utente.",
         "(#warn|[sasha] avverti) <id>|<username>|<reply>: Sasha avverte l'utente.",
         "(#unwarn|[sasha] azzera avvertimenti) <id>|<username>|<reply>: Sasha azzera gli avvertimenti dell'utente.",
     },
