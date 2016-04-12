@@ -40,21 +40,17 @@ function run(msg, matches)
             local channel = 'channel#id' .. msg.to.id
             if type(msg.reply_id) ~= "nil" then
                 local msgr = get_message(msg.reply_id, Invite_by_reply, false)
+            elseif string.match(matches[2], '^%d+$') then
+                -- User submitted an id
+                user = 'user#id' .. user
+                -- The message must come from a chat group
+                chat_add_user(chat, user, callback, false)
+                channel_invite(channel, user, callback, false)
             else
-                if matches[2] then
-                    local user = matches[2]
-                    if not string.match(matches[2], '^%d+$') then
-                        -- User submitted a user name
-                        local cbres_extra = { chatid = msg.to.id }
-                        resolve_username(user:gsub("@", ""), callbackres, cbres_extra)
-                    else
-                        -- User submitted an id
-                        user = 'user#id' .. user
-                        -- The message must come from a chat group
-                        chat_add_user(chat, user, callback, false)
-                        channel_invite(channel, user, callback, false)
-                    end
-                end
+                local user = matches[2]
+                -- User submitted a user name
+                local cbres_extra = { chatid = msg.to.id }
+                resolve_username(user:gsub("@", ""), callbackres, cbres_extra)
             end
         else
             return lang_text('useYourGroups')
@@ -67,7 +63,7 @@ end
 
 return {
     description = "INVITE",
-    usage = "(#invite|[sasha] invita|[sasha] resuscita|[sasha] [ri]compila) <id>|<username>|<reply>: Sasha invita l'utente specificato.",
+    usage = "(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invita l'utente specificato.",
     patterns =
     {
         "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee]) (.*)$",
