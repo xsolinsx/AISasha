@@ -35,10 +35,10 @@ return {
     usage = "(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.",
     patterns =
     {
-        "[#!/][sS][eE][tT] ([^%s]+) (.+)$",
+        "^[#!/][sS][eE][tT] ([^%s]+) (.+)$",
         -- set
-        "[sS][aA][sS][hH][aA] [sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
-        "[sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
+        "^[sS][aA][sS][hH][aA] [sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
+        "^[sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
     },
     run = run,
     min_rank = 1
