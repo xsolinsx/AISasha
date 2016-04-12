@@ -123,7 +123,7 @@ return {
     description = "HELP",
     usage =
     {
-        "#help|allcommands|sasha aiuto: Sasha mostra una lista dei plugin disponibili.",
+        "#help|sasha aiuto: Sasha mostra una lista dei plugin disponibili.",
         "#help|commands|sasha aiuto <plugin_name>|<plugin_number>: Sasha mostra l'aiuto per il plugin specificato.",
         "#helpall|allcommands|sasha aiuto tutto: Sasha mostra tutti i comandi di tutti i plugin.",
     },
