@@ -114,6 +114,8 @@ local function run(msg, matches)
         set_text('noAutoFlame', 'Non posso flammarmi da sola trisomico del cazzo!')
         set_text('hereIAm', 'Eccomi qua!')
         set_text('stopFlame', 'Si si mi fermo però porca madonna.')
+        set_text('flaming', 'Sto flammando: ')
+        set_text('errorParameter', 'Errore variabile redis mancante.')
 
         -- help.lua --
         set_text('require_higher', 'Questo plugin richiede privilegi superiori a quelli che possiedi.\n')
