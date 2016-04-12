@@ -465,7 +465,7 @@ local function run(msg, matches)
                 return false
             end
             banall_user(targetuser)
-            return lang_text('user') .. user_id .. lang_text('gbanned')]
+            return lang_text('user') .. user_id .. lang_text('gbanned')
         else
             local cbres_extra = {
                 chat_id = msg.to.id,
