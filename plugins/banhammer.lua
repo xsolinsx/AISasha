@@ -398,7 +398,6 @@ local function run(msg, matches)
             local username = string.gsub(matches[2], '@', '')
             resolve_username(username, kick_ban_res, cbres_extra)
         end
-        return phrases[math.random(#phrases)]
     end
 
     if matches[1]:lower() == 'unban' or matches[1]:lower() == 'sasha sbanna' or matches[1]:lower() == 'sasha ricompila' or matches[1]:lower() == 'sasha compila' or matches[1]:lower() == 'sbanna' or matches[1]:lower() == 'ricompila' or matches[1]:lower() == 'compila' then
