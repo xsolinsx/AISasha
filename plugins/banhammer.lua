@@ -10,6 +10,7 @@ local phrases = {
     "Oddio cos'ho fatto? 😱",
     "Giro giro tondo, casca il mondo, casca la terra, tutti giù per BAN.",
     "Tempo presente del verbo Bannare:\nIo banno, Tu vieni bannato.",
+    "Bim Bum BAN",
 }
 
 -- kick by reply for mods and owner
