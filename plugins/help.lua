@@ -99,7 +99,7 @@ local function telegram_help(receiver)
     local text = lang_text('pluginListStart')
     -- Plugins names
     for name in pairsByKeys(plugins) do
-        if _config.disabled_plugin_on_chat then
+        if _config.disabled_plugin_on_chat[receiver] then
             if not _config.disabled_plugin_on_chat[receiver][name] or _config.disabled_plugin_on_chat[receiver][name] == false then
                 i = i + 1
                 text = text .. '🅿️ ' .. i .. '. ' .. name .. '\n'
