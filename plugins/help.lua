@@ -104,8 +104,7 @@ local function help_all(chat, rank)
     local temp
     for name in pairsByKeys(plugins) do
         temp = plugin_help(name, chat, rank)
-        vardump(temp)
-        if temp ~= "nil" then
+        if temp ~= nil then
             ret = ret .. temp
             i = i + 1
         end
