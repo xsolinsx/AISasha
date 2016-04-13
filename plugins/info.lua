@@ -526,18 +526,18 @@ return {
         "^#[Ii][Dd][Ss]? ([Cc][Hh][Aa][Tt])$",
         "^#[Ii][Dd][Ss]? ([Cc][Hh][Aa][Nn][Nn][Ee][Ll])$",
         "^#([Ww][Hh][Oo][Ii][Ss]) (.*)$",]]
-        "^[!/#]([dD][aA][tT][aA][bB][aA][sS][eE])$",
-        "^[!/#]([gG][rR][oO][uU][pP][iI][nN][fF][oO])$",
-        "^[!/#]([iI][nN][fF][oO])$",
-        "^[!/#]([iI][nN][fF][oO]) (.*)$",
+        "^[!/#]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
+        "^[!/#]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
+        "^[!/#]([Ii][Nn][Ff][Oo])$",
+        "^[!/#]([Ii][Nn][Ff][Oo]) (.*)$",
         -- database
-        "^([sS][aA][sS][hH][aA] [dD][aA][tT][aA][bB][aA][sS][eE])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         -- groupinfo
-        "^([sS][aA][sS][hH][aA] [iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO])$",
-        "^([iI][nN][fF][oO] [gG][rR][uU][pP][pP][oO])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
+        "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
         -- info
-        "^([sS][aA][sS][hH][aA] [iI][nN][fF][oO])$",
-        "^([sS][aA][sS][hH][aA] [iI][nN][fF][oO]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo]) (.*)$",
     },
     run = run,
     min_rank = 0

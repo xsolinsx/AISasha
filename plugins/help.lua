@@ -174,15 +174,15 @@ return {
     },
     patterns =
     {
-        "^[#!/]([hH][eE][lL][pP])$",
-        "^[#!/]([hH][eE][lL][pP][aA][lL][lL])$",
-        "^[#!/]([hH][eE][lL][pP]) (.+)",
-        "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][sS])$",
-        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][sS]) (.+)",
+        "^[#!/]([Hh][Ee][Ll][Pp])$",
+        "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll])$",
+        "^[#!/]([Hh][Ee][Ll][Pp]) (.+)",
+        "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.+)",
         -- help
-        "^([sS][aA][sS][hH][aA] [aA][iI][uU][tT][oO])$",
-        "^([sS][aA][sS][hH][aA] [aA][iI][uU][tT][oO] [tT][uU][tT][tT][oO])$",
-        "^([sS][aA][sS][hH][aA] [aA][iI][uU][tT][oO]) (.+)",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) (.+)",
     },
     run = run,
     min_rank = 0

@@ -39,10 +39,10 @@ return {
     },
     patterns =
     {
-        "^[#!/][sS][eE][tT] ([^%s]+) (.+)$",
+        "^[#!/][Ss][Ee][Tt] ([^%s]+) (.+)$",
         -- set
-        "^[sS][aA][sS][hH][aA] [sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
-        "^[sS][eE][tT][tT][aA] ([^%s]+) (.+)$",
+        "^[Ss][Aa][Ss][Hh][Aa] [Ss][Ee][Tt][Tt][Aa] ([^%s]+) (.+)$",
+        "^[Ss][Ee][Tt][Tt][Aa] ([^%s]+) (.+)$",
     },
     run = run,
     min_rank = 1

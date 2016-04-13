@@ -24,12 +24,13 @@ local function Kick_by_reply(extra, success, result)
         end
         if is_momod2(result.from.peer_id, result.to.peer_id) then
             -- Ignore mods,owner,admin
-            return lang_text('cantKickHigher')
+            send_large_msg(chat, lang_text('cantKickHigher'))
+            send_large_msg(channel, lang_text('cantKickHigher'))
         end
-        chat_del_user(chat, 'user#id' .. result.from.peer_id, ok_cb, false)
-        channel_kick(channel, 'user#id' .. result.from.peer_id, ok_cb, false)
+        kick_user(result.from.peer_id, result.to.peer_id)
     else
-        return lang_text('useYourGroups')
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -46,10 +47,10 @@ local function Kick_by_reply_admins(extra, success, result)
             -- Ignore admins
             return
         end
-        chat_del_user(chat, 'user#id' .. result.from.peer_id, ok_cb, false)
-        channel_kick(channel, 'user#id' .. result.from.peer_id, ok_cb, false)
+        kick_user(result.from.peer_id, result.to.peer_id)
     else
-        return lang_text('useYourGroups')
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -64,13 +65,15 @@ local function ban_by_reply(extra, success, result)
         end
         if is_momod2(result.from.peer_id, result.to.peer_id) then
             -- Ignore mods,owner,admin
-            return lang_text('cantKickHigher')
+            send_large_msg(chat, lang_text('cantKickHigher'))
+            send_large_msg(channel, lang_text(''))
         end
         ban_user(result.from.peer_id, result.to.peer_id)
         send_large_msg(chat, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
         send_large_msg(channel, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
     else
-        return lang_text('useYourGroups')
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -91,7 +94,8 @@ local function ban_by_reply_admins(extra, success, result)
         send_large_msg(chat, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
         send_large_msg(channel, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
     else
-        return lang_text('useYourGroups')
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -110,7 +114,8 @@ local function unban_by_reply(extra, success, result)
         local hash = 'banned:' .. result.to.peer_id
         redis:srem(hash, result.from.peer_id)
     else
-        return lang_text('useYourGroups')
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -132,7 +137,8 @@ local function banall_by_reply(extra, success, result)
         send_large_msg(chat, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('gbanned'))
         send_large_msg(channel, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('gbanned'))
     else
-        return lang_text('useYourGroups')
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -153,7 +159,8 @@ local function unbanall_by_reply(extra, success, result)
         send_large_msg(chat, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('ungbanned'))
         send_large_msg(channel, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('ungbanned'))
     else
-        return
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -288,7 +295,8 @@ local function kick_ban_res(extra, success, result)
         send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('unbanned'))
         local hash = 'banned:' .. chat_id
         redis:srem(hash, member_id)
-        return lang_text('user') .. user_id .. lang_text('unbanned')
+        send_large_msg(receiver, lang_text('user') .. user_id .. lang_text('unbanned'))
+        return
     elseif get_cmd == 'banall' then
         send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('gbanned'))
         banall_user(member_id)
@@ -301,7 +309,6 @@ end
 local function kickidsnouser(cb_extra, success, result)
     for k, v in pairs(result.members) do
         if not v.username then
-            print(v.id .. "gruppo" .. result.id)
             kick_user(v.id, result.id)
         end
     end
@@ -309,15 +316,16 @@ end
 
 local function run(msg, matches)
     local support_id = msg.from.id
-    if (matches[1]:lower() == 'kickme' or matches[1]:lower() == 'uccidimi') and msg.to.type == "chat" then
+    if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'uccidimi' then
         -- /kickme
         local receiver = get_receiver(msg)
-        if msg.to.type == 'chat' then
+        if msg.to.type == 'chat' or msg.to.type == 'channel' then
             local print_name = user_print_name(msg.from):gsub("‮", "")
             local name = print_name:gsub("_", "")
             savelog(msg.to.id, name .. " [" .. msg.from.id .. "] left using kickme ")
             -- Save to logs
             chat_del_user("chat#id" .. msg.to.id, "user#id" .. msg.from.id, ok_cb, false)
+            channel_kick("channel#id" .. msg.to.id, "user#id" .. msg.from.id, ok_cb, false)
         end
     end
 
@@ -534,25 +542,25 @@ return {
     },
     patterns =
     {
-        "^[#!/]([kK][iI][cC][kK][mM][eE])$",
-        "^[#!/]([kK][iI][cC][kK]) (.*)$",
-        "^[#!/]([kK][iI][cC][kK])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Mm][Ee])$",
+        "^[#!/]([Kk][Ii][Cc][Kk]) (.*)$",
+        "^[#!/]([Kk][Ii][Cc][Kk])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Nn][Oo][Uu][Ss][Ee][Rr])$",
         "^[#!/]([Bb][Aa][Nn]) (.*)$",
         "^[#!/]([Bb][Aa][Nn])$",
         "^[#!/]([Uu][Nn][Bb][Aa][Nn]) (.*)$",
         "^[#!/]([Uu][Nn][Bb][Aa][Nn])$",
-        "^[#!/]([Bb][Aa][Nn][lL][iI][sS][tT]) (.*)$",
-        "^[#!/]([Bb][Aa][Nn][lL][iI][sS][tT])$",
+        "^[#!/]([Bb][Aa][Nn][Ll][Ii][Ss][Tt]) (.*)$",
+        "^[#!/]([Bb][Aa][Nn][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Gg][Bb][Aa][Nn]) (.*)$",
         "^[#!/]([Gg][Bb][Aa][Nn])$",
         "^[#!/]([Uu][Nn][Gg][Bb][Aa][Nn]) (.*)$",
         "^[#!/]([Uu][Nn][Gg][Bb][Aa][Nn])$",
-        "^[#!/]([Gg][Bb][Aa][Nn][lL][iI][sS][tT])$",
+        "^[#!/]([Gg][Bb][Aa][Nn][Ll][Ii][Ss][Tt])$",
         "^!!tgservice (.+)$",
         -- kickme
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii][mM][iI])$",
-        "^([uU][cC][cC][iI][dD][iI][mM][iI])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii][Mm][Ii])$",
+        "^([Uu][Cc][Cc][Ii][Dd][Ii][Mm][Ii])$",
         -- kick
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii])$",

@@ -30,8 +30,8 @@ return {
     },
     patterns =
     {
-        "^[#!/]([bB][rR][oO][aA][dD][cC][aA][sS][tT]) +(.+)$",
-        "^[#!/]([bB][rR]) (%d+) (.*)$"
+        "^[#!/]([Bb][Rr][Oo][Aa][Dd][Cc][Aa][Ss][Tt]) +(.+)$",
+        "^[#!/]([Bb][Rr]) (%d+) (.*)$"
     },
     run = run,
     min_rank = 4

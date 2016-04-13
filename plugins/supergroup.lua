@@ -634,35 +634,7 @@ function get_message_callback(extra, success, result)
     local data = load_data(_config.moderation.data)
     local print_name = user_print_name(msg.from):gsub("‮", "")
     local name_log = print_name:gsub("_", " ")
-    if get_cmd == 'channel_block' and not result.action then
-        local member_id = result.from.peer_id
-        local channel_id = result.to.peer_id
-        if member_id == msg.from.id then
-            return send_large_msg("channel#id" .. channel_id, lang_text('leftKickme'))
-        end
-        if is_momod2(member_id, channel_id) and not is_admin2(msg.from.id) then
-            return send_large_msg("channel#id" .. channel_id, lang_text('cantKickHigher'))
-        end
-        if is_admin2(member_id) then
-            return send_large_msg("channel#id" .. channel_id, lang_text('cantKickOtherAdmin'))
-        end
-        -- savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked: ["..user_id.."] by reply")
-        kick_user(member_id, channel_id)
-    elseif get_cmd == 'channel_block' and result.action and result.action.type == 'chat_add_user' then
-        local user_id = result.action.user.peer_id
-        local channel_id = result.to.peer_id
-        if member_id == msg.from.id then
-            return send_large_msg("channel#id" .. channel_id, lang_text('leftKickme'))
-        end
-        if is_momod2(member_id, channel_id) and not is_admin2(msg.from.id) then
-            return send_large_msg("channel#id" .. channel_id, lang_text('cantKickHigher'))
-        end
-        if is_admin2(member_id) then
-            return send_large_msg("channel#id" .. channel_id, lang_text('cantKickOtherAdmin'))
-        end
-        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] kicked: [" .. user_id .. "] by reply to sev. msg.")
-        kick_user(user_id, channel_id)
-    elseif get_cmd == "del" then
+    if get_cmd == "del" then
         delete_msg(result.id, ok_cb, false)
         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted a message by reply")
     elseif get_cmd == "setadmin" then
@@ -817,32 +789,7 @@ local function callbackres(extra, success, result)
     local member_id = result.peer_id
     local member_username = "@" .. result.username
     local get_cmd = extra.get_cmd
-    --[[elseif get_cmd == "channel_block" then
-		local user_id = result.peer_id
-		local channel_id = extra.channelid
-    local sender = extra.sender
-    if member_id == sender then
-      return send_large_msg("channel#id"..channel_id, lang_text('leftKickme'))
-    end
-		if is_momod2(member_id, channel_id) and not is_admin2(sender) then
-			   return send_large_msg("channel#id"..channel_id, lang_text('cantKickHigher'))
-    end
-    if is_admin2(member_id) then
-         return send_large_msg("channel#id"..channel_id, lang_text('cantKickOtherAdmin'))
-    end
-		kick_user(user_id, channel_id)
-	elseif get_cmd == "setadmin" then
-		local user_id = "user#id"..result.peer_id
-		local channel_id = extra.channel
-		channel_set_admin(channel_id, user_id, ok_cb, false)
-		if result.username then
-			text = "@"..result.username..lang_text('promoteSupergroupMod')
-			send_large_msg(channel_id, text)
-		else
-			text = "@"..result.peer_id..lang_text('promoteSupergroupMod')
-			send_large_msg(channel_id, text)
-		end
-	elseif get_cmd == "setowner" then
+    --[[elseif get_cmd == "setowner" then
 		local receiver = extra.channel
 		local channel = string.gsub(receiver, 'channel#id', '')
 		local from_id = extra.from_id
@@ -922,34 +869,7 @@ local function in_channel_cb(cb_extra, success, result)
     else
         text = lang_text('none') .. memberid .. lang_text('inThisSupergroup')
     end
-    if get_cmd == "channel_block" then
-        for k, v in pairs(result) do
-            vusername = v.username
-            vpeer_id = tostring(v.peer_id)
-            if vusername == member or vpeer_id == memberid then
-                local user_id = v.peer_id
-                local channel_id = cb_extra.msg.to.id
-                local sender = cb_extra.msg.from.id
-                if user_id == sender then
-                    return send_large_msg("channel#id" .. channel_id, lang_text('leftKickme'))
-                end
-                if is_momod2(user_id, channel_id) and not is_admin2(sender) then
-                    return send_large_msg("channel#id" .. channel_id, lang_text('cantKickHigher'))
-                end
-                if is_admin2(user_id) then
-                    return send_large_msg("channel#id" .. channel_id, lang_text('cantKickOtherAdmin'))
-                end
-                if v.username then
-                    text = ""
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] kicked: @" .. v.username .. " [" .. v.peer_id .. "]")
-                else
-                    text = ""
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] kicked: [" .. v.peer_id .. "]")
-                end
-                kick_user(user_id, channel_id)
-            end
-        end
-    elseif get_cmd == "setadmin" then
+    if get_cmd == "setadmin" then
         for k, v in pairs(result) do
             vusername = v.username
             vpeer_id = tostring(v.peer_id)
@@ -1093,7 +1013,7 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == "admins" then
+        if matches[1]:lower() == "admins" or matches[1]:lower() == "sasha lista admin" or matches[1]:lower() == "lista admin" then
             if not is_owner(msg) and not is_support(msg.from.id) then
                 return
             end
@@ -1111,25 +1031,25 @@ local function run(msg, matches)
             return lang_text('ownerIs') .. group_owner
         end
 
-        if matches[1]:lower() == "modlist" then
+        if matches[1]:lower() == "modlist" or matches[1]:lower() == "sasha lista mod" or matches[1]:lower() == "lista mod" then
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group modlist")
             return modlist(msg)
             -- channel_get_admins(receiver,callback, {receiver = receiver})
         end
 
-        if matches[1]:lower() == "bots" and is_momod(msg) then
+        if (matches[1]:lower() == "bots" or matches[1]:lower() == "sasha lista bot" or matches[1]:lower() == "lista bot") and is_momod(msg) then
             member_type = 'Bots'
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup bots list")
             channel_get_bots(receiver, callback, { receiver = receiver, msg = msg, member_type = member_type })
         end
 
-        if matches[1]:lower() == "who" and not matches[2] and is_momod(msg) then
+        if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] and is_momod(msg) then
             local user_id = msg.from.peer_id
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup users list")
             channel_get_users(receiver, callback_who, { receiver = receiver })
         end
 
-        if matches[1]:lower() == "kicked" and is_momod(msg) then
+        if (matches[1]:lower() == "kicked" or matches[1]:lower() == "sasha lista rimossi" or matches[1]:lower() == "lista rimossi") and is_momod(msg) then
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested Kicked users list")
             channel_get_kicked(receiver, callback_kicked, { receiver = receiver })
         end
@@ -1145,51 +1065,7 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == 'block' and is_momod(msg) then
-            if type(msg.reply_id) ~= "nil" then
-                local cbreply_extra = {
-                    get_cmd = 'channel_block',
-                    msg = msg
-                }
-                get_message(msg.reply_id, get_message_callback, cbreply_extra)
-            elseif matches[1]:lower() == 'block' and string.match(matches[2], '^%d+$') then
-                --[[local user_id = matches[2]
-				local channel_id = msg.to.id
-				if is_momod2(user_id, channel_id) and not is_admin2(user_id) then
-					return send_large_msg(receiver, lang_text('cantKickHigher'))
-				end
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked: [ user#id"..user_id.." ]")
-				kick_user(user_id, channel_id)]]
-                local get_cmd = 'channel_block'
-                local msg = msg
-                local user_id = matches[2]
-                channel_get_users(receiver, in_channel_cb, { get_cmd = get_cmd, receiver = receiver, msg = msg, user_id = user_id })
-            elseif msg.text:match("@[%a%d]") then
-                --[[local cbres_extra = {
-					channelid = msg.to.id,
-					get_cmd = 'channel_block',
-					sender = msg.from.id
-				}
-			    local username = matches[2]
-				local username = string.gsub(matches[2], '@', '')
-				savelog(msg.to.id, name_log.." ["..msg.from.id.."] kicked: @"..username)
-				resolve_username(username, callbackres, cbres_extra)]]
-                local get_cmd = 'channel_block'
-                local msg = msg
-                local username = matches[2]
-                local username = string.gsub(matches[2], '@', '')
-                channel_get_users(receiver, in_channel_cb, { get_cmd = get_cmd, receiver = receiver, msg = msg, username = username })
-            end
-        end
-
-        if matches[1]:lower() == 'kickme' then
-            if msg.to.type == 'channel' then
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] left via kickme")
-                channel_kick("channel#id" .. msg.to.id, "user#id" .. msg.from.id, ok_cb, false)
-            end
-        end
-
-        if matches[1]:lower() == 'newlink' and is_momod(msg) then
+        if (matches[1]:lower() == 'newlink' or matches[1]:lower() == "sasha crea link" or matches[1]:lower() == "crea link") and is_momod(msg) then
             local function callback_link(extra, success, result)
                 local receiver = get_receiver(msg)
                 if success == 0 then
@@ -1206,7 +1082,7 @@ local function run(msg, matches)
             export_channel_link(receiver, callback_link, false)
         end
 
-        if matches[1]:lower() == 'setlink' and is_owner(msg) then
+        if (matches[1]:lower() == 'setlink' or matches[1]:lower() == "sasha imposta link") and is_owner(msg) then
             data[tostring(msg.to.id)]['settings']['set_link'] = 'waiting'
             save_data(_config.moderation.data, data)
             return lang_text('sendLink')
@@ -1220,7 +1096,7 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == 'link' then
+        if matches[1]:lower() == 'link' or matches[1]:lower() == "sasha link" then
             if not is_momod(msg) then
                 return
             end
@@ -1231,12 +1107,6 @@ local function run(msg, matches)
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
             return lang_text('groupLink') .. group_link
         end
-
-        --[[if matches[1]:lower() == 'kick' and is_momod(msg) then
-			local receiver = channel..matches[3]
-			local user = "user#id"..matches[2]
-			chaannel_kick(receiver, user, ok_cb, false)
-		end]]
 
         if matches[1]:lower() == 'setadmin' then
             if not is_support(msg.from.id) and not is_owner(msg) then
@@ -1337,7 +1207,7 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == 'promote' then
+        if matches[1]:lower() == 'promote' or matches[1]:lower() == "sasha promuovi" or matches[1]:lower() == "promuovi" then
             if not is_momod(msg) then
                 return
             end
@@ -1381,7 +1251,7 @@ local function run(msg, matches)
             return "ok"
         end
 
-        if matches[1]:lower() == 'demote' then
+        if matches[1]:lower() == 'demote' or matches[1]:lower() == "sasha degrada" or matches[1]:lower() == "degrada" then
             if not is_momod(msg) then
                 return
             end
@@ -1412,7 +1282,7 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == "setname" and is_momod(msg) then
+        if (matches[1]:lower() == "setname" or matches[1]:lower() == "setgpname") and is_momod(msg) then
             local receiver = get_receiver(msg)
             local set_name = string.gsub(matches[2], '_', '')
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] renamed SuperGroup to: " .. matches[2])
@@ -1425,7 +1295,7 @@ local function run(msg, matches)
             save_data(_config.moderation.data, data)
         end
 
-        if matches[1]:lower() == "setabout" and is_momod(msg) then
+        if (matches[1]:lower() == "setabout" or matches[1]:lower() == "sasha imposta descrizione") and is_momod(msg) then
             local receiver = get_receiver(msg)
             local about_text = matches[2]
             local data_cat = 'description'
@@ -1450,7 +1320,7 @@ local function run(msg, matches)
             channel_set_username(receiver, username, ok_username_cb, { receiver = receiver })
         end
 
-        if matches[1]:lower() == 'setrules' and is_momod(msg) then
+        if (matches[1]:lower() == 'setrules' or matches[1]:lower() == "sasha imposta regole") and is_momod(msg) then
             rules = matches[2]
             local target = msg.to.id
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] has changed group rules to [" .. matches[2] .. "]")
@@ -1464,7 +1334,7 @@ local function run(msg, matches)
                 return
             end
         end
-        if matches[1]:lower() == 'setphoto' and is_momod(msg) then
+        if (matches[1]:lower() == 'setphoto' or matches[1]:lower() == "setgpphoto") and is_momod(msg) then
             data[tostring(msg.to.id)]['settings']['set_photo'] = 'waiting'
             save_data(_config.moderation.data, data)
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] started setting new SuperGroup photo")
@@ -1529,7 +1399,7 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == 'lock' and is_momod(msg) then
+        if (matches[1]:lower() == 'lock' or matches[1]:lower() == "sasha blocca" or matches[1]:lower() == "blocca") and is_momod(msg) then
             local target = msg.to.id
             if matches[2]:lower() == 'links' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked link posting ")
@@ -1573,7 +1443,7 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == 'unlock' and is_momod(msg) then
+        if (matches[1]:lower() == 'unlock' or matches[1]:lower() == "sasha sblocca" or matches[1]:lower() == "sblocca") and is_momod(msg) then
             local target = msg.to.id
             if matches[2]:lower() == 'links' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked link posting")
@@ -1642,7 +1512,7 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == 'mute' and is_owner(msg) then
+        if (matches[1]:lower() == 'mute' or matches[1]:lower() == "silenzia") and is_owner(msg) then
             local chat_id = msg.to.id
             if matches[2]:lower() == 'audio' then
                 local msg_type = 'Audio'
@@ -1715,7 +1585,7 @@ local function run(msg, matches)
                 end
             end
         end
-        if matches[1]:lower() == 'unmute' and is_momod(msg) then
+        if (matches[1]:lower() == 'unmute' or matches[1]:lower() == "ripristina") and is_owner(msg) then
             local chat_id = msg.to.id
             if matches[2]:lower() == 'audio' then
                 local msg_type = 'Audio'
@@ -1790,7 +1660,7 @@ local function run(msg, matches)
         end
 
 
-        if matches[1]:lower() == "muteuser" and is_momod(msg) then
+        if (matches[1]:lower() == "muteuser" or matches[1]:lower() == "voce") and is_momod(msg) then
             local chat_id = msg.to.id
             local hash = "mute_user" .. chat_id
             local user_id = ""
@@ -1798,7 +1668,7 @@ local function run(msg, matches)
                 local receiver = get_receiver(msg)
                 local get_cmd = "mute_user"
                 muteuser = get_message(msg.reply_id, get_message_callback, { receiver = receiver, get_cmd = get_cmd, msg = msg })
-            elseif matches[1]:lower() == "muteuser" and string.match(matches[2], '^%d+$') then
+            elseif string.match(matches[2], '^%d+$') then
                 local user_id = matches[2]
                 if is_muted_user(chat_id, user_id) then
                     unmute_user(chat_id, user_id)
@@ -1809,7 +1679,7 @@ local function run(msg, matches)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. user_id .. "] to the muted users list")
                     return user_id .. lang_text('muteUserAdd')
                 end
-            elseif matches[1]:lower() == "muteuser" and not string.match(matches[2], '^%d+$') then
+            else
                 local receiver = get_receiver(msg)
                 local get_cmd = "mute_user"
                 local username = matches[2]
@@ -1818,7 +1688,7 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == "muteslist" and is_momod(msg) then
+        if (matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti") and is_momod(msg) then
             local chat_id = msg.to.id
             if not has_mutes(chat_id) then
                 set_mutes(chat_id)
@@ -1827,7 +1697,7 @@ local function run(msg, matches)
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
             return mutes_list(chat_id)
         end
-        if matches[1]:lower() == "mutelist" and is_momod(msg) then
+        if (matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti") and is_momod(msg) then
             local chat_id = msg.to.id
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
             return muted_user_list(chat_id)
@@ -1839,7 +1709,7 @@ local function run(msg, matches)
             return show_supergroup_settingsmod(msg, target)
         end
 
-        if matches[1]:lower() == 'rules' then
+        if matches[1]:lower() == 'rules' or matches[1]:lower() == "sasha regole" then
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
             print('peerid' .. msg.to.id)
             if tonumber(msg.to.id) == 1026492373 then
@@ -1920,40 +1790,38 @@ return {
     usage =
     {
         "#owner: Sasha manda il proprietario.",
-        "#modlist: Sasha manda la lista dei moderatori.",
-        "#kickme: Sasha rimuove l'utente.",
-        "#rules: Sasha manda le regole del gruppo.",
+        "#modlist|[sasha] lista mod: Sasha manda la lista dei moderatori.",
+        "#rules|sasha regole: Sasha manda le regole del gruppo.",
         "MOD",
-        "#bots: Sasha manda la lista dei bot.",
-        "#who: Sasha manda un file contenente la lista degli utenti.",
-        "#kicked: Sasha manda la lista degli utenti rimossi.",
+        "#bots|[sasha] lista bot: Sasha manda la lista dei bot.",
+        "(#(who|members)|[sasha] lista membri): Sasha manda un file contenente la lista degli utenti.",
+        "#kicked|[sasha] lista rimossi: Sasha manda la lista degli utenti rimossi.",
         "#del <reply>: Sasha elimina il messaggio specificato.",
-        "#block <user_id>|<username>|<reply_user>: Sasha rimuove l'utente specificato dal supergruppo e lo blocca.",
-        "#newlink: Sasha crea un nuovo link d'invito.",
-        "#link: Sasha manda il link d'invito.",
-        "#setname <text>: Sasha cambia il nome del gruppo con <text>.",
-        "#setphoto: Sasha cambia la foto del gruppo.",
-        "#setrules <text>: Sasha cambia le regole del gruppo con <text>.",
-        "#setabout <text>: Sasha cambia la descrizione del gruppo con <text>.",
-        "#lock links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha blocca l'opzione specificata.",
-        "#unlock links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha sblocca l'opzione specificata.",
+        "#newlink|[sasha] crea link: Sasha crea un nuovo link d'invito.",
+        "#link|sasha link: Sasha manda il link d'invito.",
+        "#(setname|setgpname) <text>: Sasha cambia il nome del gruppo con <text>.",
+        "#(setphoto|setgpphoto): Sasha cambia la foto del gruppo.",
+        "(#setrules|sasha imposta regole) <text>: Sasha cambia le regole del gruppo con <text>.",
+        "(#setabout|sasha imposta descrizione) <text>: Sasha cambia la descrizione del gruppo con <text>.",
+        "(#lock|[sasha] blocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha blocca l'opzione specificata.",
+        "(#unlock|[sasha] sblocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha sblocca l'opzione specificata.",
         "#setflood <value>: Sasha imposta il flood massimo a <value> che deve essere compreso tra 5 e 20.",
         "#public yes|no: Sasha imposta il gruppo come pubblico|privato.",
-        "#muteuser <user_id>|<username>|<reply_user>: Sasha imposta|toglie il muto sull'utente.",
-        "#muteslist: Sasha manda la lista delle variabili mute della chat.",
-        "#mutelist: Sasha manda la lista degli utenti muti della chat.",
+        "#muteuser|voce <user_id>|<username>|<reply_user>: Sasha imposta|toglie il muto sull'utente.",
+        "#muteslist|lista muti: Sasha manda la lista delle variabili mute della chat.",
+        "#mutelist|lista utenti muti: Sasha manda la lista degli utenti muti della chat.",
         "#settings: Sasha manda le impostazioni del gruppo.",
         "OWNER",
-        "#admins: Sasha manda la lista degli amministratori.",
-        "#setlink: Sasha imposta il link d'invito con quello che le verrà inviato.",
+        "#admins|[sasha] lista admin: Sasha manda la lista degli amministratori.",
+        "#setlink|sasha imposta link: Sasha imposta il link d'invito con quello che le verrà inviato.",
         "#setadmin <user_id>|<username>|<reply_user>: Sasha promuove l'utente specificato ad amministratore (telegram).",
         "#demoteadmin <user_id>|<username>|<reply_user>: Sasha degrada l'utente specificato (telegram).",
         "#setowner <user_id>|<username>|<reply_user>: Sasha imposta l'utente specificato come proprietario.",
-        "#promote <user_id>|<username>|<reply_user>: Sasha promuove l'utente specificato a moderatore.",
-        "#demote <user_id>|<username>|<reply_user>: Sasha degrada l'utente specificato.",
+        "(#promote|[sasha] promuovi) <user_id>|<username>|<reply_user>: Sasha promuove l'utente specificato a moderatore.",
+        "(#demote|[sasha] degrada) <user_id>|<username>|<reply_user>: Sasha degrada l'utente specificato.",
         "#clean rules|about|modlist|mutelist: Sasha azzera la variabile specificata.",
-        "#mute all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.",
-        "#unmute all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.",
+        "#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.",
+        "#unmute|ripristina all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.",
         "SUPPORT",
         "#add: Sasha aggiunge il supergruppo.",
         "#rem: Sasha rimuove il supergruppo.",
@@ -1969,54 +1837,49 @@ return {
     },
     patterns =
     {
-        "^[#!/]([aA][dD][dD])$",
-        "^[#!/]([rR][eE][mM])$",
-        "^[#!/]([mM][oO][vV][eE]) (.*)$",
-        "^[#!/]([aA][dD][mM][iI][nN][sS])$",
-        "^[#!/]([oO][wW][nN][eE][rR])$",
-        "^[#!/]([mM][oO][dD][lL][iI][sS][tT])$",
-        "^[#!/]([bB][oO][tT][sS])$",
-        "^[#!/]([wW][hH][oO])$",
-        "^[#!/]([kK][iI][cC][kK][eE][dD])$",
-        "^[#!/]([bB][lL][oO][cC][kK]) (.*)",
-        "^[#!/]([bB][lL][oO][cC][kK])",
-        "^[#!/]([tT][oO][sS][uU][pP][eE][rR])$",
-        "^[#!/]([kK][iI][cC][kK][mM][eE])$",
-        "^[#!/]([kK][iI][cC][kK]) (.*)$",
-        "^[#!/]([nN][eE][wW][lL][iI][nN][kK])$",
-        "^[#!/]([sS][eE][tT][lL][iI][nN][kK])$",
-        "^[#!/]([lL][iI][nN][kK])$",
-        "^[#!/]([sS][eE][tT][aA][dD][mM][iI][nN]) (.*)$",
-        "^[#!/]([sS][eE][tT][aA][dD][mM][iI][nN])",
-        "^[#!/]([dD][eE][mM][oO][tT][eE][aA][dD][mM][iI][nN]) (.*)$",
-        "^[#!/]([dD][eE][mM][oO][tT][eE][aA][dD][mM][iI][nN])",
-        "^[#!/]([sS][eE][tT][oO][wW][nN][eE][rR]) (%d+)$",
-        "^[#!/]([sS][eE][tT][oO][wW][nN][eE][rR])",
-        "^[#!/]([pP][rR][oO][mM][oO][tT][eE]) (.*)$",
-        "^[#!/]([pP][rR][oO][mM][oO][tT][eE])",
-        "^[#!/]([dD][eE][mM][oO][tT][eE]) (.*)$",
-        "^[#!/]([dD][eE][mM][oO][tT][eE])",
-        "^[#!/]([sS][eE][tT][nN][aA][mM][eE]) (.*)$",
-        "^[#!/]([sS][eE][tT][pP][hH][oO][tT][oO])$",
-        "^[#!/]([sS][eE][tT][aA][bB][oO][uU][tT]) (.*)$",
-        "^[#!/]([sS][eE][tT][rR][uU][lL][eE][sS]) (.*)$",
-        "^[#!/]([sS][eE][tT][uU][sS][eE][rR][nN][aA][mM][eE]) (.*)$",
-        "^[#!/]([dD][eE][lL])$",
-        "^[#!/]([lL][oO][cC][kK]) (.*)$",
-        "^[#!/]([uU][nN][lL][oO][cC][kK]) (.*)$",
-        "^[#!/]([mM][uU][tT][eE]) ([^%s]+)$",
-        "^[#!/]([uU][nN][mM][uU][tT][eE]) ([^%s]+)$",
-        "^[#!/]([mM][uU][tT][eE][uU][sS][eE][rR])$",
-        "^[#!/]([mM][uU][tT][eE][uU][sS][eE][rR]) (.*)$",
-        "^[#!/]([pP][uU][bB][lL][iI][cC]) (.*)$",
-        "^[#!/]([sS][eE][tT][tT][iI][nN][gG][sS])$",
-        "^[#!/]([rR][uU][lL][eE][sS])$",
-        "^[#!/]([sS][eE][tT][fF][lL][oO][oO][dD]) (%d+)$",
-        "^[#!/]([cC][lL][eE][aA][nN]) (.*)$",
-        "^[#!/]([mM][uU][tT][eE][sS][lL][iI][sS][tT])$",
-        "^[#!/]([mM][uU][tT][eE][lL][iI][sS][tT])$",
-        "^[#!/]([mM][pP]) (.*)$",
-        "^[#!/]([mM][dD]) (.*)$",
+        "^[#!/]([Aa][Dd][Dd])$",
+        "^[#!/]([Rr][Ee][Mm])$",
+        "^[#!/]([Aa][Dd][Mm][Ii][Nn][Ss])$",
+        "^[#!/]([Oo][Ww][Nn][Ee][Rr])$",
+        "^[#!/]([Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Bb][Oo][Tt][Ss])$",
+        "^[#!/]([Ww][Hh][Oo])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Ee][Dd])$",
+        "^[#!/]([Tt][Oo][Ss][Uu][Pp][Ee][Rr])$",
+        "^[#!/]([Nn][Ee][Ww][Ll][Ii][Nn][Kk])$",
+        "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk])$",
+        "^[#!/]([Ll][Ii][Nn][Kk])$",
+        "^[#!/]([Ss][Ee][Tt][Aa][Dd][Mm][Ii][Nn]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Aa][Dd][Mm][Ii][Nn])",
+        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
+        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn])",
+        "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr]) (%d+)$",
+        "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr])",
+        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee]) (.*)$",
+        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee])",
+        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee]) (.*)$",
+        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee])",
+        "^[#!/]([Ss][Ee][Tt][Nn][Aa][Mm][Ee]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Pp][Hh][Oo][Tt][Oo])$",
+        "^[#!/]([Ss][Ee][Tt][Aa][Bb][Oo][Uu][Tt]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Rr][Uu][Ll][Ee][Ss]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Uu][Ss][Ee][Rr][Nn][Aa][Mm][Ee]) (.*)$",
+        "^[#!/]([Dd][Ee][Ll])$",
+        "^[#!/]([Ll][Oo][Cc][Kk]) (.*)$",
+        "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (.*)$",
+        "^[#!/]([Mm][Uu][Tt][Ee]) ([^%s]+)$",
+        "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) ([^%s]+)$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr])$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr]) (.*)$",
+        "^[#!/]([Pp][Uu][Bb][Ll][Ii][Cc]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss])$",
+        "^[#!/]([Rr][Uu][Ll][Ee][Ss])$",
+        "^[#!/]([Ss][Ee][Tt][Ff][Ll][Oo][Oo][Dd]) (%d+)$",
+        "^[#!/]([Cc][Ll][Ee][Aa][Nn]) (.*)$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Ss][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Mm][Pp]) (.*)$",
+        "^[#!/]([Mm][Dd]) (.*)$",
         "^(https://telegram.me/joinchat/%S+)$",
         "[Pp][Ee][Ee][Rr]_[Ii][Dd]",
         "[Mm][Ss][Gg].[Tt][Oo].[Ii][Dd]",
@@ -2027,6 +1890,66 @@ return {
         "%[(audio)%]",
         "%[(contact)%]",
         "^!!tgservice (.+)$",
+        -- admins
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Aa][Dd][Mm][Ii][Nn])$",
+        "^([Ll][Ii][Ss][Tt][Aa] [Aa][Dd][Mm][Ii][Nn])$",
+        -- modlist
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Mm][Oo][Dd])$",
+        "^([Ll][Ii][Ss][Tt][Aa] [Mm][Oo][Dd])$",
+        -- bots
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Bb][Oo][Tt])$",
+        "^([Ll][Ii][Ss][Tt][Aa] [Bb][Oo][Tt])$",
+        -- who
+        "^[#!/]([Mm][Ee][Mm][Bb][Ee][Rr][Ss])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Mm][Ee][Mm][Bb][Rr][Ii])$",
+        -- kicked
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Rr][Ii][Mm][Oo][Ss][Ss][Ii])$",
+        "^([Ll][Ii][Ss][Tt][Aa] [Rr][Ii][Mm][Oo][Ss][Ss][Ii])$",
+        -- newlink
+        "^([Ss][Aa][Ss][Hh][Aa] [Cc][Rr][Ee][Aa] [Ll][Ii][Nn][Kk])$",
+        -- setlink
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk])$",
+        -- link
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Nn][Kk])$",
+        -- promote
+        "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])",
+        "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) (.*)$",
+        "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])",
+        -- demote
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa])",
+        "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa]) (.*)$",
+        "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa])",
+        -- setname
+        "^[#!/]([Ss][Ee][Tt][Gg][Pp][Nn][Aa][Mm][Ee]) (.*)$",
+        -- setphoto
+        "^[#!/]([Ss][Ee][Tt][Gg][Pp][Pp][Hh][Oo][Tt][Oo])$",
+        -- setrules
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Rr][Ee][Gg][Oo][Ll][Ee]) (.*)$",
+        -- setabout
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Dd][Ee][Ss][Cc][Rr][Ii][Zz][Ii][Oo][Nn][Ee]) (.*)$",
+        -- lock
+        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
+        "^([Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
+        -- unlock
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
+        "^([Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
+        -- mute
+        "^([Ss][Ii][Ll][Ee][Nn][Zz][Ii][Aa]) ([^%s]+)$",
+        -- unmute
+        "^([Rr][Ii][Pp][Rr][Ii][Ss][Tt][Ii][Nn][Aa]) ([^%s]+)$",
+        -- muteuser
+        "^([Vv][Oo][Cc][Ee])$",
+        "^([Vv][Oo][Cc][Ee]) (.*)$",
+        -- rules
+        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ee][Gg][Oo][Ll][Ee])$",
+        -- about
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Ss][Cc][Rr][Ii][Zz][Ii][Oo][Nn][Ee])$",
+        -- muteslist
+        "^([Ll][Ii][Ss][Tt][Aa] [Mm][Uu][Tt][Ii])$",
+        -- mutelist
+        "^([Ll][Ii][Ss][Tt][Aa] [Uu][Tt][Ee][Nn][Tt][Ii] [Mm][Uu][Tt][Ii])$",
     },
     run = run,
     pre_process = pre_process,

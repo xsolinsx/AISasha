@@ -21,8 +21,8 @@ return {
     },
     patterns =
     {
-        "^[#!/]([lL][eE][aA][vV][eE])$",
-        "^([sS][aA][sS][hH][aA] [aA][bB][bB][aA][nN][dD][oO][nN][aA])$",
+        "^[#!/]([Ll][Ee][Aa][Vv][Ee])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Bb][Bb][Aa][Nn][Dd][Oo][Nn][Aa])$",
         "^!!tgservice (.+)$",
     },
     run = run,

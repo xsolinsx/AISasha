@@ -69,11 +69,11 @@ return {
     },
     patterns =
     {
-        "^[#!/]([gG][eE][tT][lL][iI][sS][tT])$",
-        "^[#!/]([gG][eE][tT]) ([^%s]+)$",
+        "^[#!/]([Gg][Ee][Tt][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Gg][Ee][Tt]) ([^%s]+)$",
         -- getlist
-        "^[#!/]([gG][eE][tT])$",
-        "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA])$",
+        "^[#!/]([Gg][Ee][Tt])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa])$",
         -- get
         "^([^%s]+) (.+)$",
         "^([^%s]+)$",

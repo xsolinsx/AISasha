@@ -1141,7 +1141,7 @@ local function run(msg, matches)
                     return nil
                 end
             end
-            if matches[1]:lower() == 'setname' or matches[1]:lower() == 'setgpname' and is_momod(msg) then
+            if (matches[1]:lower() == 'setname' or matches[1]:lower() == 'setgpname') and is_momod(msg) then
                 local new_name = string.gsub(matches[2], '_', ' ')
                 data[tostring(msg.to.id)]['settings']['set_name'] = new_name
                 save_data(_config.moderation.data, data)
@@ -1151,7 +1151,7 @@ local function run(msg, matches)
 
                 savelog(msg.to.id, "Group { " .. msg.to.print_name .. " }  name changed to [ " .. new_name .. " ] by " .. name_log .. " [" .. msg.from.id .. "]")
             end
-            if matches[1]:lower() == 'setphoto' or matches[1]:lower() == 'setgpphoto' and is_momod(msg) then
+            if (matches[1]:lower() == 'setphoto' or matches[1]:lower() == 'setgpphoto') and is_momod(msg) then
                 data[tostring(msg.to.id)]['settings']['set_photo'] = 'waiting'
                 save_data(_config.moderation.data, data)
                 return lang_text('sendNewGroupPic')
@@ -1582,6 +1582,11 @@ local function run(msg, matches)
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] revoked group link ")
                 return export_chat_link(receiver, callback, true)
             end
+            if matches[1]:lower() == 'setlink' and is_owner(msg) then
+                data[tostring(msg.to.id)]['settings']['set_link'] = 'waiting'
+                save_data(_config.moderation.data, data)
+                return lang_text('sendLink')
+            end
             if matches[1]:lower() == 'link' then
                 if not is_momod(msg) then
                     return lang_text('require_mod')
@@ -1754,10 +1759,11 @@ return {
         "#settings: Sasha mostra le impostazioni del gruppo.",
         "#public yes|no: Sasha imposta il gruppo come pubblico|privato.",
         "#newlink|sasha crea link: Sasha crea il link del gruppo.",
-        "#link: Sasha mostra il link del gruppo.",
+        "#link|sasha link: Sasha mostra il link del gruppo.",
         "#setflood <value>: Sasha imposta il flood massimo del gruppo a <value>.",
         "#kickinactive [<msgs>]|sasha uccidi sotto <msgs> messaggi: Sasha rimuove tutti gli utenti inattivi.",
         "OWNER",
+        "#setlink|[sasha] imposta link: Sasha imposta il link d'invito con quello che le verrà inviato.",
         "(#promote|[sasha] promuovi) <username>|<reply>: Sasha promuove a moderatore l'utente specificato.",
         "(#demote|[sasha] degrada) <username>|<reply>: Sasha degrada l'utente specificato.",
         "#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.",
@@ -1772,94 +1778,96 @@ return {
     },
     patterns =
     {
-        "^[#!/]([aA][dD][dD])$",
-        "^[#!/]([aA][dD][dD]) ([rR][eE][aA][lL][mM])$",
-        "^[#!/]([rR][eE][mM])$",
-        "^[#!/]([rR][eE][mM]) ([rR][eE][aA][lL][mM])$",
-        "^[#!/]([rR][uU][lL][eE][sS])$",
-        "^[#!/]([aA][bB][oO][uU][tT])$",
-        "^[#!/]([sS][eE][tT][nN][aA][mM][eE]) (.*)$",
-        "^[#!/]([sS][eE][tT][pP][hH][oO][tT][oO])$",
-        "^[#!/]([pP][rR][oO][mM][oO][tT][eE]) (.*)$",
-        "^[#!/]([pP][rR][oO][mM][oO][tT][eE])",
-        "^[#!/]([cC][lL][eE][aA][nN]) (.*)$",
-        "^[#!/]([kK][iI][lL][lL]) ([cC][hH][aA][tT])$",
-        "^[#!/]([kK][iI][lL][lL]) ([rR][eE][aA][lL][mM])$",
-        "^[#!/]([dD][eE][mM][oO][tT][eE]) (.*)$",
-        "^[#!/]([dD][eE][mM][oO][tT][eE])",
-        "^[#!/]([sS][eE][tT][rR][uU][lL][eE][sS]) (.*)$",
-        "^[#!/]([sS][eE][tT][aA][bB][oO][uU][tT]) (.*)$",
-        "^[#!/]([lL][oO][cC][kK]) (.*)$",
-        "^[#!/]([sS][eE][tT][oO][wW][nN][eE][rR]) (%d+)$",
-        "^[#!/]([sS][eE][tT][oO][wW][nN][eE][rR])",
-        "^[#!/]([oO][wW][nN][eE][rR])$",
-        "^[#!/]([sS][eE][tT][gG][pP][oO][wW][nN][eE][rR]) (%d+) (%d+)$",-- (group id) (owner id)
-        "^[#!/]([uU][nN][lL][oO][cC][kK]) (.*)$",
-        "^[#!/]([sS][eE][tT][fF][lL][oO][oO][dD]) (%d+)$",
-        "^[#!/]([sS][eE][tT][tT][iI][nN][gG][sS])$",
-        "^[#!/]([pP][uU][bB][lL][iI][cC]) (.*)$",
-        "^[#!/]([mM][oO][dD][lL][iI][sS][tT])$",
-        "^[#!/]([nN][eE][wW][lL][iI][nN][kK])$",
-        "^[#!/]([lL][iI][nN][kK])$",
-        "^[#!/]([mM][uU][tT][eE]) ([^%s]+)$",
-        "^[#!/]([uU][nN][mM][uU][tT][eE]) ([^%s]+)$",
-        "^[#!/]([mM][uU][tT][eE][uU][sS][eE][rR])$",
-        "^[#!/]([mM][uU][tT][eE][uU][sS][eE][rR]) (.*)$",
-        "^[#!/]([mM][uU][tT][eE][sS][lL][iI][sS][tT])$",
-        "^[#!/]([mM][uU][tT][eE][lL][iI][sS][tT])$",
-        "^[#!/]([kK][iI][cC][kK][iI][nN][aA][cC][tT][iI][vV][eE])$",
-        "^[#!/]([kK][iI][cC][kK][iI][nN][aA][cC][tT][iI][vV][eE]) (%d+)$",
+        "^[#!/]([Aa][Dd][Dd])$",
+        "^[#!/]([Aa][Dd][Dd]) ([Rr][Ee][Aa][Ll][Mm])$",
+        "^[#!/]([Rr][Ee][Mm])$",
+        "^[#!/]([Rr][Ee][Mm]) ([Rr][Ee][Aa][Ll][Mm])$",
+        "^[#!/]([Rr][Uu][Ll][Ee][Ss])$",
+        "^[#!/]([Aa][Bb][Oo][Uu][Tt])$",
+        "^[#!/]([Ss][Ee][Tt][Nn][Aa][Mm][Ee]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Pp][Hh][Oo][Tt][Oo])$",
+        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee]) (.*)$",
+        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee])",
+        "^[#!/]([Cc][Ll][Ee][Aa][Nn]) (.*)$",
+        "^[#!/]([Kk][Ii][Ll][Ll]) ([Cc][Hh][Aa][Tt])$",
+        "^[#!/]([Kk][Ii][Ll][Ll]) ([Rr][Ee][Aa][Ll][Mm])$",
+        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee]) (.*)$",
+        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee])",
+        "^[#!/]([Ss][Ee][Tt][Rr][Uu][Ll][Ee][Ss]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Aa][Bb][Oo][Uu][Tt]) (.*)$",
+        "^[#!/]([Ll][Oo][Cc][Kk]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr]) (%d+)$",
+        "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr])",
+        "^[#!/]([Oo][Ww][Nn][Ee][Rr])$",
+        "^[#!/]([Ss][Ee][Tt][Gg][Pp][Oo][Ww][Nn][Ee][Rr]) (%d+) (%d+)$",-- (group id) (owner id)
+        "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Ff][Ll][Oo][Oo][Dd]) (%d+)$",
+        "^[#!/]([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss])$",
+        "^[#!/]([Pp][Uu][Bb][Ll][Ii][Cc]) (.*)$",
+        "^[#!/]([Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Nn][Ee][Ww][Ll][Ii][Nn][Kk])$",
+        "^[#!/]([Ll][Ii][Nn][Kk])$",
+        "^[#!/]([Mm][Uu][Tt][Ee]) ([^%s]+)$",
+        "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) ([^%s]+)$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr])$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr]) (.*)$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Ss][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee]) (%d+)$",
         "%[(document)%]",
         "%[(photo)%]",
         "%[(video)%]",
         "%[(audio)%]",
         "^!!tgservice (.+)$",
         -- rules
-        "^([sS][aA][sS][hH][aA] [rR][eE][gG][oO][lL][eE])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ee][Gg][Oo][Ll][Ee])$",
         -- about
-        "^([sS][aA][sS][hH][aA] [dD][eE][sS][cC][rR][iI][zZ][iI][oO][nN][eE])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Ss][Cc][Rr][Ii][Zz][Ii][Oo][Nn][Ee])$",
         -- setname
-        "^[#!/]([sS][eE][tT][gG][pP][nN][aA][mM][eE]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Gg][Pp][Nn][Aa][Mm][Ee]) (.*)$",
         -- setphoto
-        "^[#!/]([sS][eE][tT][gG][pP][pP][hH][oO][tT][oO])$",
+        "^[#!/]([Ss][Ee][Tt][Gg][Pp][Pp][Hh][Oo][Tt][Oo])$",
         -- promote
-        "^([sS][aA][sS][hH][aA] [pP][rR][oO][mM][uU][oO][vV][iI]) (.*)$",
-        "^([sS][aA][sS][hH][aA] [pP][rR][oO][mM][uU][oO][vV][iI])",
-        "^([pP][rR][oO][mM][uU][oO][vV][iI]) (.*)$",
-        "^([pP][rR][oO][mM][uU][oO][vV][iI])",
+        "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])",
+        "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) (.*)$",
+        "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])",
         -- demote
-        "^([sS][aA][sS][hH][aA] [dD][eE][gG][rR][aA][dD][aA]) (.*)$",
-        "^([sS][aA][sS][hH][aA] [dD][eE][gG][rR][aA][dD][aA])",
-        "^([dD][eE][gG][rR][aA][dD][aA]) (.*)$",
-        "^([dD][eE][gG][rR][aA][dD][aA])",
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa])",
+        "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa]) (.*)$",
+        "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa])",
         -- setrules
-        "^([sS][aA][sS][hH][aA] [iI][mM][pP][oO][sS][tT][aA] [rR][eE][gG][oO][lL][eE]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Rr][Ee][Gg][Oo][Ll][Ee]) (.*)$",
         -- setabout
-        "^([sS][aA][sS][hH][aA] [iI][mM][pP][oO][sS][tT][aA] [dD][eE][sS][cC][rR][iI][zZ][iI][oO][nN][eE]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Dd][Ee][Ss][Cc][Rr][Ii][Zz][Ii][Oo][Nn][Ee]) (.*)$",
         -- lock
-        "^([sS][aA][sS][hH][aA] [bB][lL][oO][cC][cC][aA]) (.*)$",
-        "^([bB][lL][oO][cC][cC][aA]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
+        "^([Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
         -- unlock
-        "^([sS][aA][sS][hH][aA] [sS][bB][lL][oO][cC][cC][aA]) (.*)$",
-        "^([sS][bB][lL][oO][cC][cC][aA]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
+        "^([Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
         -- modlist
-        "^([sS][aA][sS][hH][aA] [lL][iI][sS][tT][aA] [mM][oO][dD])$",
-        "^([lL][iI][sS][tT][aA] [mM][oO][dD])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Mm][Oo][Dd])$",
+        "^([Ll][Ii][Ss][Tt][Aa] [Mm][Oo][Dd])$",
         -- newlink
-        "^([sS][aA][sS][hH][aA] [cC][rR][eE][aA] [lL][iI][nN][kK])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Cc][Rr][Ee][Aa] [Ll][Ii][Nn][Kk])$",
+        -- setlink
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk])$",
         -- mute
-        "^([sS][iI][lL][eE][nN][zZ][iI][aA]) ([^%s]+)$",
+        "^([Ss][Ii][Ll][Ee][Nn][Zz][Ii][Aa]) ([^%s]+)$",
         -- unmute
-        "^([rR][iI][pP][rR][iI][sS][tT][iI][nN][aA]) ([^%s]+)$",
+        "^([Rr][Ii][Pp][Rr][Ii][Ss][Tt][Ii][Nn][Aa]) ([^%s]+)$",
         -- muteuser
-        "^([vV][oO][cC][eE])$",
-        "^([vV][oO][cC][eE]) (.*)$",
+        "^([Vv][Oo][Cc][Ee])$",
+        "^([Vv][Oo][Cc][Ee]) (.*)$",
         -- muteslist
-        "^([lL][iI][sS][tT][aA] [mM][uU][tT][iI])$",
+        "^([Ll][Ii][Ss][Tt][Aa] [Mm][Uu][Tt][Ii])$",
         -- mutelist
-        "^([lL][iI][sS][tT][aA] [uU][tT][eE][nN][tT][iI] [mM][uU][tT][iI])$",
+        "^([Ll][Ii][Ss][Tt][Aa] [Uu][Tt][Ee][Nn][Tt][Ii] [Mm][Uu][Tt][Ii])$",
         -- kickinactive
-        "^([sS][aA][sS][hH][aA] [uU][cC][cC][iI][dD][iI] [sS][oO][tT][tT][oO]) (%d+) ([mM][eE][sS][sS][aA][gG][gG][iI])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
     },
     run = run,
     pre_process = pre_process,

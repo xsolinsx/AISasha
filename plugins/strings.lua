@@ -625,7 +625,7 @@ return {
     patterns =
     {
         '^[#!/]([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
-        '^[#!/]([uU][pP][dD][aA][tT][eE][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
+        '^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
         -- installstrings
         '^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ss][Tt][Aa][Ll][Ll][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
         '^([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',

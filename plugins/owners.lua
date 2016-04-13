@@ -619,13 +619,13 @@ return {
     },
     patterns =
     {
-        -- "^[#!/][oO][wW][nN][eE][rR][sS] (%d+) ([^%s]+) (.*)$",
-        -- "^[#!/][oO][wW][nN][eE][rR][sS] (%d+) ([^%s]+)$",
-        "^[#!/]([cC][hH][aA][nN][gG][eE][aA][bB][oO][uU][tT]) (%d+) (.*)$",
-        "^[#!/]([cC][hH][aA][nN][gG][eE][rR][uU][lL][eE][sS]) (%d+) (.*)$",
-        "^[#!/]([cC][hH][aA][nN][gG][eE][nN][aA][mM][eE]) (%d+) (.*)$",
-        "^[#!/]([vV][iI][eE][wW][sS][eE][tT][tT][iI][nN][gG][sS]) (%d+)$",
-        "^[#!/]([lL][oO][gG][gG][rR][oO][uU][pP]) (%d+)$"
+        -- "^[#!/][Oo][Ww][Nn][Ee][Rr][Ss] (%d+) ([^%s]+) (.*)$",
+        -- "^[#!/][Oo][Ww][Nn][Ee][Rr][Ss] (%d+) ([^%s]+)$",
+        "^[#!/]([Cc][Hh][Aa][Nn][Gg][Ee][Aa][Bb][Oo][Uu][Tt]) (%d+) (.*)$",
+        "^[#!/]([Cc][Hh][Aa][Nn][Gg][Ee][Rr][Uu][Ll][Ee][Ss]) (%d+) (.*)$",
+        "^[#!/]([Cc][Hh][Aa][Nn][Gg][Ee][Nn][Aa][Mm][Ee]) (%d+) (.*)$",
+        "^[#!/]([Vv][Ii][Ee][Ww][Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss]) (%d+)$",
+        "^[#!/]([Ll][Oo][Gg][Gg][Rr][Oo][Uu][Pp]) (%d+)$"
     },
     run = run,
     min_rank = 2

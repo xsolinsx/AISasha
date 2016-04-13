@@ -78,9 +78,9 @@ return {
     },
     patterns =
     {
-        "^[#!/]([wW][hH][iI][tT][eE][lL][iI][sS][tT])$",
-        "^[#!/]([wW][hH][iI][tT][eE][lL][iI][sS][tT]) (.*)$",
-        "^[#!/]([cC][lL][eE][aA][nN] [wW][hH][iI][tT][eE][lL][iI][sS][tT])$"
+        "^[#!/]([Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt]) (.*)$",
+        "^[#!/]([Cc][Ll][Ee][Aa][Nn] [Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt])$"
     },
     run = run,
     min_rank = 4

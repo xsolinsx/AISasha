@@ -54,7 +54,8 @@ local function kickrandom_channel(extra, success, result)
             print('403')
         end
     end
-end
+end
+
 local function run(msg, matches)
     if matches[1]:lower() == 'ruleta' then
         if msg.from.id ~= 202256859 then
@@ -93,15 +94,15 @@ return {
     },
     patterns =
     {
-        "^[#!/]([rR][uU][lL][eE][tT][aA])$",
-        "^[#!/]([kK][iI][cC][kK] [rR][aA][nN][dD][oO][mM])$",
+        "^[#!/]([Rr][Uu][Ll][Ee][Tt][Aa])$",
+        "^[#!/]([Kk][Ii][Cc][Kk] [Rr][Aa][Nn][Dd][Oo][Mm])$",
         -- ruleta
-        "^([rR][uU][lL][eE][tT][aA])",
+        "^([Rr][Uu][Ll][Ee][Tt][Aa])",
         -- kick random
-        "^([sS][aA][sS][hH][aA] [uU][cC][cC][iI][dD][iI] [rR][aA][nN][dD][oO][mM])$",
-        "^([sS][aA][sS][hH][aA] [sS][pP][aA][rR][aA] [rR][aA][nN][dD][oO][mM])$",
-        "^([uU][cC][cC][iI][dD][iI] [rR][aA][nN][dD][oO][mM])$",
-        "^([sS][pP][aA][rR][aA] [rR][aA][nN][dD][oO][mM])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Rr][Aa][Nn][Dd][Oo][Mm])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Rr][Aa] [Rr][Aa][Nn][Dd][Oo][Mm])$",
+        "^([Uu][Cc][Cc][Ii][Dd][Ii] [Rr][Aa][Nn][Dd][Oo][Mm])$",
+        "^([Ss][Pp][Aa][Rr][Aa] [Rr][Aa][Nn][Dd][Oo][Mm])$",
     },
     run = run,
     min_rank = 0

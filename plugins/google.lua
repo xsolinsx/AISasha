@@ -35,9 +35,9 @@ return {
     usage = "(#google|[sasha] googla) <terms>: Sasha cerca <terms> su Google e manda i risultati.",
     patterns =
     {
-        "^[#!/][gG][oO][oO][gG][lL][eE] (.*)$",
-        "^[sS][aA][sS][hH][aA] [gG][oO][oO][gG][lL][aA] (.*)$",
-        "^[gG][oO][oO][gG][lL][aA] (.*)$"
+        "^[#!/][Gg][Oo][Oo][Gg][Ll][Ee] (.*)$",
+        "^[Ss][Aa][Ss][Hh][Aa] [Gg][Oo][Oo][Gg][Ll][Aa] (.*)$",
+        "^[Gg][Oo][Oo][Gg][Ll][Aa] (.*)$"
     },
     run = run,
     min_rank = 0

@@ -189,10 +189,10 @@ return {
     },
     patterns =
     {
-        "^[#!/]([cC][hH][aA][tT][sS])$",
-        "^[#!/]([cC][hH][aA][tT][lL][iI][sS][tT])$",
-        "^[#!/]([jJ][oO][iI][nN]) (%d+)$",
-        "^[#!/]([jJ][oO][iI][nN]) (.*) ([sS][uU][pP][pP][oO][rR][tT])$",
+        "^[#!/]([Cc][Hh][Aa][Tt][Ss])$",
+        "^[#!/]([Cc][Hh][Aa][Tt][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Jj][Oo][Ii][Nn]) (%d+)$",
+        "^[#!/]([Jj][Oo][Ii][Nn]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
         "^!!tgservice (chat_add_user)$",
     },
     run = run,
