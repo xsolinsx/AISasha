@@ -85,27 +85,25 @@ function msg_valid(msg)
         return false
     end
 
-    if msg.from.id == 202256859 then
-        print('\27[36mNot valid: Msg from file manager id\27[39m')
-        return false
-    end
-
     if msg.to.type == 'encr_chat' then
         print('\27[36mNot valid: Encrypted chat\27[39m')
         return false
     end
 
+    -- if message from telegram it will be sent to REALM
     if msg.from.id == 777000 then
-        -- send_large_msg(*group id*, msg.text) *login code will be sent to GroupID*
+        send_large_msg(get_receiver(msg), msg.text)
         return false
     end
 
     if is_owner(msg) then
-        if msg.text:lower() == "#bot on" or msg.text:lower() == "!bot on" or msg.text:lower() == "/bot on" or msg.text:lower() == "sasha on" then
-            enable_channel(receiver, msg.to.id)
-        end
-        if msg.text:lower() == "#bot off" or msg.text:lower() == "!bot off" or msg.text:lower() == "/bot off" or msg.text:lower() == "sasha off" then
-            disable_channel(receiver, msg.to.id)
+        if msg.text then
+            if msg.text:lower() == "#bot on" or msg.text:lower() == "!bot on" or msg.text:lower() == "/bot on" or msg.text:lower() == "sasha on" then
+                enable_channel(receiver, msg.to.id)
+            end
+            if msg.text:lower() == "#bot off" or msg.text:lower() == "!bot off" or msg.text:lower() == "/bot off" or msg.text:lower() == "sasha off" then
+                disable_channel(receiver, msg.to.id)
+            end
         end
     end
 
