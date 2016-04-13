@@ -1862,7 +1862,7 @@ return {
         "^([Ll][Ii][Ss][Tt][Aa] [Mm][Oo][Dd])$",
         -- newlink
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Rr][Ee][Aa] [Ll][Ii][Nn][Kk])$",
-        -- setlink
+        -- link
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Nn][Kk])$",
         -- setlink
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk])$",
