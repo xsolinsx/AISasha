@@ -45,7 +45,7 @@ local function flame_by_username(extra, success, result)
     redis:set(tokick, result.peer_id);
 end
 
-local function info_from_id(cb_extra, success, result)
+local function callback_id(cb_extra, success, result)
     local text = lang_text('flaming')
     if result.first_name then
         text = text .. '\n' .. result.first_name
@@ -156,7 +156,7 @@ local function run(msg, matches)
                 local hashonredis = redis:get(hash)
                 local user = redis:get(tokick)
                 if hashonredis and user then
-                    user_info('user#id' .. matches[2], info_from_id, { msg = msg })
+                    user_info('user#id' .. user, callback_id, { msg = msg })
                 else
                     return lang_text('errorParameter')
                 end
@@ -182,7 +182,7 @@ return {
         "^[#!/]([Ss][Tt][Aa][Rr][Tt][Ff][Ll][Aa][Mm][Ee]) (.*)$",
         "^[#!/]([Ss][Tt][Aa][Rr][Tt][Ff][Ll][Aa][Mm][Ee])$",
         "^[#!/]([Ss][Tt][Oo][Pp][Ff][Ll][Aa][Mm][Ee])$",
-        "^[#!/]([Ii][Nn][Ff][Oo][Ff][Ll][Aa][Mm][Ee])$",
+        "^[#!/]([Ff][Ll][Aa][Mm][Ee][Ii][Nn][Ff][Oo])$",
         -- startflame
         "^([Ss][Aa][Ss][Hh][Aa] [Ff][Ll][Aa][Mm][Mm][Aa]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ff][Ll][Aa][Mm][Mm][Aa])$",
