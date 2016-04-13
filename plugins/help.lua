@@ -32,7 +32,8 @@ local function plugin_help(var, chat, rank)
             plugin = plugins[var]
         end
     end
-    if not plugin then return nil end
+    if not plugin or plugin == "" then return nil end
+    vardump(plugin)
     if plugin.min_rank <= rank then
         local help_permission = true
         -- '=========================\n'
@@ -101,9 +102,13 @@ end]]
 local function help_all(chat, rank)
     local ret = ""
     local i = 0
+    local temp
     for name in pairsByKeys(plugins) do
-        ret = ret .. plugin_help(name, chat, rank)
-        i = i + 1
+        temp = plugin_help(name, chat, rank)
+        if temp ~= "nil" then
+            ret = ret .. temp
+            i = i + 1
+        end
     end
     return ret
 end
