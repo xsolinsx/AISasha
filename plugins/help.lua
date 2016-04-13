@@ -1,10 +1,41 @@
-local permissions_table = {
+local rank_table = {
+    ["USER"] = 0,
     ["MOD"] = 1,
     ["OWNER"] = 2,
     ["SUPPORT"] = 3,
     ["ADMIN"] = 4,
     ["SUDO"] = 5
 }
+
+local function get_rank(msg)
+    if not is_sudo(msg) then
+        if not is_admin1(msg) then
+            if not is_support(msg.from.peer_id) then
+                if not is_owner(msg) then
+                    if not is_momod(msg) then
+                        -- user
+                        return rank_table["USER"]
+                    else
+                        -- mod
+                        return rank_table["MOD"]
+                    end
+                else
+                    -- owner
+                    return rank_table["OWNER"]
+                end
+            else
+                -- support
+                return rank_table["SUPPORT"]
+            end
+        else
+            -- admin
+            return rank_table["ADMIN"]
+        end
+    else
+        -- sudo
+        return rank_table["SUDO"]
+    end
+end
 
 -- Returns true if is not empty
 local function has_usage_data(dict)
@@ -43,11 +74,11 @@ local function plugin_help(var, chat, rank)
         end
         if (type(plugin.usage) == "table") then
             for ku, usage in pairs(plugin.usage) do
-                if not permissions_table[usage] then
+                if not rank_table[usage] then
                     if help_permission then
                         text = text .. usage .. '\n'
                     end
-                elseif permissions_table[usage] > rank then
+                elseif rank_table[usage] > rank then
                     help_permission = false
                 end
             end
@@ -117,34 +148,7 @@ local function run(msg, matches)
         return lang_text('doYourBusiness')
     end
 
-    local rank
-    if not is_sudo(msg) then
-        if not is_admin1(msg) then
-            if not is_support(msg.from.peer_id) then
-                if not is_owner(msg) then
-                    if not is_momod(msg) then
-                        -- user
-                        rank = 0
-                    else
-                        -- mod
-                        rank = 1
-                    end
-                else
-                    -- owner
-                    rank = 2
-                end
-            else
-                -- support
-                rank = 3
-            end
-        else
-            -- admin
-            rank = 4
-        end
-    else
-        -- sudo
-        rank = 5
-    end
+    local rank = get_rank(msg)
 
     local text = lang_text('helpIntro')
     table.sort(plugins)
@@ -156,7 +160,7 @@ local function run(msg, matches)
             text = text .. help_all(get_receiver(msg), rank)
         end
     else
-        text = plugin_help(matches[2], get_receiver(msg), rank)
+        text = text .. plugin_help(matches[2], get_receiver(msg), rank)
         if not text then
             text = text .. telegram_help()
         end
