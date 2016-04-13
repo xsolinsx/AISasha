@@ -447,7 +447,7 @@ local function set_rulesmod(msg, data, target)
     local data_cat = 'rules'
     data[tostring(target)][data_cat] = rules
     save_data(_config.moderation.data, data)
-    return lang_text('newRules')
+    return lang_text('newRules') .. rules
 end
 
 -- 'Get supergroup rules' function
@@ -458,7 +458,7 @@ local function get_rules(msg, data)
     end
     local rules = data[tostring(msg.to.id)][data_cat]
     local group_name = data[tostring(msg.to.id)]['settings']['set_name']
-    local rules = group_name .. lang_text('rules') .. '\n\n' .. rules:gsub("/n", " ")
+    local rules = group_name .. ' ' .. lang_text('rules') .. '\n\n' .. rules:gsub("/n", " ")
     return rules
 end
 
