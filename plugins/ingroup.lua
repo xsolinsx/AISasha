@@ -1863,6 +1863,8 @@ return {
         -- newlink
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Rr][Ee][Aa] [Ll][Ii][Nn][Kk])$",
         -- setlink
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Nn][Kk])$",
+        -- setlink
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk])$",
         -- mute
         "^([Ss][Ii][Ll][Ee][Nn][Zz][Ii][Aa]) ([^%s]+)$",
