@@ -51,7 +51,14 @@ local function plugin_help(var, chat, rank)
     if tonumber(var) then
         local i = 0
         for name in pairsByKeys(plugins) do
-            if not _config.disabled_plugin_on_chat[chat][name] or _config.disabled_plugin_on_chat[chat][name] == false then
+            if _config.disabled_plugin_on_chat[chat] then
+                if not _config.disabled_plugin_on_chat[chat][name] or _config.disabled_plugin_on_chat[chat][name] == false then
+                    i = i + 1
+                    if i == tonumber(var) then
+                        plugin = plugins[name]
+                    end
+                end
+            else
                 i = i + 1
                 if i == tonumber(var) then
                     plugin = plugins[name]
@@ -59,7 +66,11 @@ local function plugin_help(var, chat, rank)
             end
         end
     else
-        if not _config.disabled_plugin_on_chat[chat][var] or _config.disabled_plugin_on_chat[chat][var] == false then
+        if _config.disabled_plugin_on_chat[receiver] then
+            if not _config.disabled_plugin_on_chat[chat][var] or _config.disabled_plugin_on_chat[chat][var] == false then
+                plugin = plugins[var]
+            end
+        else
             plugin = plugins[var]
         end
     end
@@ -113,26 +124,6 @@ local function telegram_help(receiver)
     text = text .. '\n' .. lang_text('helpInfo')
     return text
 end
-
---[[
-local function list_disabled_plugin_on_chat(receiver)
-    if not _config.disabled_plugin_on_chat then
-        return lang_text('noDisabledPlugin')
-    end
-
-    if not _config.disabled_plugin_on_chat[receiver] then
-        return lang_text('noDisabledPlugin')
-    end
-
-    local status = '❌'
-    local text = ''
-    for k in pairs(_config.disabled_plugin_on_chat[receiver]) do
-        if _config.disabled_plugin_on_chat[receiver][k] == true then
-            text = text .. status .. ' ' .. k .. '\n'
-        end
-    end
-    return text
-end]]
 
 -- !helpall command
 local function help_all(chat, rank)
