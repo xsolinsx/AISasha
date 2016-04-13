@@ -28,7 +28,9 @@ local function plugin_help(var, chat, rank)
             end
         end
     else
-        plugin = plugins[var]
+        if not _config.disabled_plugin_on_chat[chat][var] or _config.disabled_plugin_on_chat[chat][var] == false then
+            plugin = plugins[var]
+        end
         if not plugin then return nil end
     end
     if plugin.min_rank <= rank then
