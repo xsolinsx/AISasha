@@ -1582,10 +1582,22 @@ local function run(msg, matches)
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] revoked group link ")
                 return export_chat_link(receiver, callback, true)
             end
-            if matches[1]:lower() == 'setlink' and is_owner(msg) then
+            if (matches[1]:lower() == 'setlink' or matches[1]:lower() == 'sasha imposta link') and is_owner(msg) then
+                print('in')
                 data[tostring(msg.to.id)]['settings']['set_link'] = 'waiting'
+                print('waiting')
                 save_data(_config.moderation.data, data)
+                print('saved')
                 return lang_text('sendLink')
+            end
+            if msg.text then
+                if msg.text:match("^(https://telegram.me/joinchat/%S+)$") and data[tostring(msg.to.id)]['settings']['set_link'] == 'waiting' and is_owner(msg) then
+                    data[tostring(msg.to.id)]['settings']['set_link'] = msg.text
+                    print('link saved')
+                    save_data(_config.moderation.data, data)
+                    print('saved')
+                    return lang_text('linkSaved')
+                end
             end
             if matches[1]:lower() == 'link' then
                 if not is_momod(msg) then
@@ -1806,6 +1818,7 @@ return {
         "^[#!/]([Pp][Uu][Bb][Ll][Ii][Cc]) (.*)$",
         "^[#!/]([Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Nn][Ee][Ww][Ll][Ii][Nn][Kk])$",
+        "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ll][Ii][Nn][Kk])$",
         "^[#!/]([Mm][Uu][Tt][Ee]) ([^%s]+)$",
         "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) ([^%s]+)$",
@@ -1815,6 +1828,7 @@ return {
         "^[#!/]([Mm][Uu][Tt][Ee][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee]) (%d+)$",
+        "^(https://telegram.me/joinchat/%S+)$",
         "%[(document)%]",
         "%[(photo)%]",
         "%[(video)%]",
