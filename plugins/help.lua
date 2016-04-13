@@ -20,7 +20,7 @@ local function plugin_help(var, chat, rank)
     if tonumber(var) then
         local i = 0
         for name in pairsByKeys(plugins) do
-            if not _config.disabled_plugin_on_chat[receiver][name] or _config.disabled_plugin_on_chat[receiver][name] == false then
+            if not _config.disabled_plugin_on_chat[chat][name] or _config.disabled_plugin_on_chat[chat][name] == false then
                 i = i + 1
                 if i == tonumber(var) then
                     plugin = plugins[name]
