@@ -1583,23 +1583,18 @@ local function run(msg, matches)
                 return export_chat_link(receiver, callback, true)
             end
             if (matches[1]:lower() == 'setlink' or matches[1]:lower() == 'sasha imposta link') and is_owner(msg) then
-                print('in')
                 data[tostring(msg.to.id)]['settings']['set_link'] = 'waiting'
-                print('waiting')
                 save_data(_config.moderation.data, data)
-                print('saved')
                 return lang_text('sendLink')
             end
             if msg.text then
                 if msg.text:match("^(https://telegram.me/joinchat/%S+)$") and data[tostring(msg.to.id)]['settings']['set_link'] == 'waiting' and is_owner(msg) then
                     data[tostring(msg.to.id)]['settings']['set_link'] = msg.text
-                    print('link saved')
                     save_data(_config.moderation.data, data)
-                    print('saved')
                     return lang_text('linkSaved')
                 end
             end
-            if matches[1]:lower() == 'link' then
+            if matches[1]:lower() == 'link' or matches[1]:lower() == 'sasha link' then
                 if not is_momod(msg) then
                     return lang_text('require_mod')
                 end
