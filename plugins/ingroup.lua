@@ -1653,9 +1653,6 @@ local function run(msg, matches)
                     return lang_text('require_owner')
                 end
                 if matches[2]:lower() == 'member' then
-                    if not is_owner(msg) then
-                        return lang_text('require_admin')
-                    end
                     local receiver = get_receiver(msg)
                     chat_info(receiver, cleanmember, { receiver = receiver })
                 end
@@ -1740,36 +1737,38 @@ return {
     description = "INGROUP",
     usage =
     {
-        "#add [realm]: Sasha aggiunge il gruppo|reame.",
-        "#rem [realm]: Sasha rimuove il gruppo|reame.",
         "#rules|sasha regole: Sasha mostra le regole del gruppo.",
         "#about|sasha descrizione: Sasha mostra la descrizione del gruppo.",
+        "#modlist|[sasha] lista mod: Sasha mostra la lista dei moderatori.",
+        "#owner: Sasha mostra l'id del proprietario del gruppo.",
+        "MOD",
         "#(setname|setgpname) <group_name>: Sasha imposta il nome del gruppo con <group_name>.",
         "#(setphoto|setgpphoto): Sasha imposta e blocca la foto del gruppo.",
-        "(#promote|[sasha] promuovi) <username>|<reply>: Sasha promuove a moderatore l'utente specificato.",
-        "#clean modlist|rules|about: Sasha pulisce il parametro specificato.",
-        "#kill chat|realm: Sasha elimina ogni utente nel gruppo|reame e poi lo chiude.",
-        "(#demote|[sasha] degrada) <username>|<reply>: Sasha degrada l'utente specificato.",
         "(#setrules|sasha imposta regole) <text>: Sasha imposta <text> come regole.",
         "(#setabout|sasha imposta descrizione) <text>: Sasha imposta <text> come descrizione.",
         "(#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha blocca l'opzione specificata.",
-        "#setowner <id>: Sasha imposta <id> come proprietario.",
-        "#owner: Sasha mostra l'id del proprietario del gruppo.",
-        "#setgpowner <group_id> <user_id>: Sasha imposta <user_id> come proprietario.",
         "(#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha sblocca l'opzione specificata.",
-        "#setflood <value>: Sasha imposta il flood massimo del gruppo a <value>.",
-        -- "#setwarn <value>: Sasha imposta il numero massimo di warn a <value>.",
-        "#settings: Sasha mostra le impostazioni del gruppo.",
-        "#public yes|no: Sasha imposta il gruppo come pubblico|privato.",
-        "#modlist|[sasha] lista mod: Sasha mostra la lista dei moderatori.",
-        "#newlink|sasha crea link: Sasha crea il link del gruppo.",
-        "#link: Sasha mostra il link del gruppo.",
-        "#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.",
-        "#unmute|ripristina all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.",
         "#muteuser|voce <id>|<username>|<reply>: Sasha imposta|toglie il muto sull'utente.",
         "#muteslist|lista muti: Sasha manda la lista delle variabili mute della chat.",
         "#mutelist|lista utenti muti: Sasha manda la lista degli utenti muti della chat.",
+        "#settings: Sasha mostra le impostazioni del gruppo.",
+        "#public yes|no: Sasha imposta il gruppo come pubblico|privato.",
+        "#newlink|sasha crea link: Sasha crea il link del gruppo.",
+        "#link: Sasha mostra il link del gruppo.",
+        "#setflood <value>: Sasha imposta il flood massimo del gruppo a <value>.",
         "#kickinactive [<msgs>]|sasha uccidi sotto <msgs> messaggi: Sasha rimuove tutti gli utenti inattivi.",
+        "OWNER",
+        "(#promote|[sasha] promuovi) <username>|<reply>: Sasha promuove a moderatore l'utente specificato.",
+        "(#demote|[sasha] degrada) <username>|<reply>: Sasha degrada l'utente specificato.",
+        "#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.",
+        "#unmute|ripristina all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.",
+        "#setowner <id>: Sasha imposta <id> come proprietario.",
+        "#clean modlist|rules|about: Sasha pulisce il parametro specificato.",
+        "ADMIN",
+        "#add [realm]: Sasha aggiunge il gruppo|reame.",
+        "#rem [realm]: Sasha rimuove il gruppo|reame.",
+        "#kill chat|realm: Sasha elimina ogni utente nel gruppo|reame e poi lo chiude.",
+        "#setgpowner <group_id> <user_id>: Sasha imposta <user_id> come proprietario.",
     },
     patterns =
     {

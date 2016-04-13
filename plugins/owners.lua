@@ -609,6 +609,7 @@ return {
     description = "OWNERS",
     usage =
     {
+        "OWNER",
         -- "#owners <group_id>: Sasha invia il log di <group_id>.",
         "#changeabout <group_id> <text>: Sasha cambia la descrizione di <group_id> con <text>.",
         "#changerules <group_id> <text>: Sasha cambia le regole di <group_id> con <text>.",

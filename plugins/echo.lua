@@ -7,7 +7,11 @@ end
 
 return {
     description = "ECHO",
-    usage = "(#echo|sasha ripeti) <text>: Sasha ripete <text>.",
+    usage =
+    {
+        "MOD",
+        "(#echo|sasha ripeti) <text>: Sasha ripete <text>.",
+    },
     patterns =
     {
         "^[#!/][Ee][Cc][Hh][Oo] +(.+)$",

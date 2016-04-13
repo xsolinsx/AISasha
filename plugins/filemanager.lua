@@ -108,6 +108,7 @@ return {
     description = "FILEMANAGER",
     usage =
     {
+        "SUDO",
         "#cd [<directory>]: Sasha entra in <directory>, se non è specificata torna alla cartella base.",
         "#ls: Sasha manda la lista di file e cartelle della directory corrente.",
         "#mkdir <directory>: Sasha crea <directory>.",

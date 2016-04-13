@@ -194,6 +194,7 @@ return {
     description = "WARN",
     usage =
     {
+        "MOD",
         "#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>.",
         "#getwarn: Sasha manda il numero di avvertimenti massimi.",
         "(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>: Sasha manda il numero di avvertimenti ricevuti dall'utente.",

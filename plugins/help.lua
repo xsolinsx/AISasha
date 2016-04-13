@@ -1,3 +1,11 @@
+local permissions_table = {
+    ["MOD"] = 1,
+    ["OWNER"] = 2,
+    ["SUPPORT"] = 3,
+    ["ADMIN"] = 4,
+    ["SUDO"] = 5
+}
+
 -- Returns true if is not empty
 local function has_usage_data(dict)
     if (dict.usage == nil or dict.usage == '') then
@@ -22,6 +30,7 @@ local function plugin_help(var, chat, rank)
         if not plugin then return nil end
     end
     if plugin.min_rank <= rank then
+        local help_permission = true
         -- '=========================\n'
         local text = ''
         -- = '=======================\n'
@@ -30,7 +39,13 @@ local function plugin_help(var, chat, rank)
         end
         if (type(plugin.usage) == "table") then
             for ku, usage in pairs(plugin.usage) do
-                text = text .. usage .. '\n'
+                if not permissions_table[usage] then
+                    if help_permission then
+                        text = text .. usage .. '\n'
+                    end
+                elseif permissions_table[usage] > rank then
+                    help_permission = false
+                end
             end
         elseif has_usage_data(plugin) then
             -- Is not empty

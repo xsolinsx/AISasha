@@ -44,7 +44,11 @@ end
 
 return {
     description = "TAGALL",
-    usage = "(#tagall|sasha tagga tutti) <text>: Sasha tagga tutti i membri del gruppo con username e scrive <text>.",
+    usage =
+    {
+        "OWNER",
+        "(#tagall|sasha tagga tutti) <text>: Sasha tagga tutti i membri del gruppo con username e scrive <text>.",
+    },
     patterns =
     {
         "^[#!/][Tt][Aa][Gg][Aa][Ll][Ll] +(.+)$",

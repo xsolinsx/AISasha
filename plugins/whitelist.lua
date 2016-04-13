@@ -72,6 +72,7 @@ return {
     description = "WHITELIST",
     usage =
     {
+        "ADMIN",
         "#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l'utente specificato alla|dalla whitelist.",
         "#clean whitelist: Sasha pulisce la whitelist.",
     },

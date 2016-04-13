@@ -294,12 +294,17 @@ return {
     description = "ADMIN",
     usage =
     {
+        "ADMIN",
         "(#pm|sasha messaggia) <user_id> <msg>: Sasha invia <msg> a <user_id>.",
         "#import <group_link>: Sasha entra nel gruppo tramite <group_link>.",
         "(#block|sasha blocca) <user_id>: Sasha blocca <user_id>.",
         "(#unblock|sasha sblocca) <user_id>: Sasha sblocca <user_id>.",
         "(#markread|sasha segna letto) (on|off): Sasha segna come [non] letti i messaggi ricevuti.",
         "#setbotphoto|sasha cambia foto: Sasha chiede la foto da settare come profilo.",
+        "#updateid|sasha aggiorna longid: Sasha salva il long_id.",
+        "#addlog|sasha aggiungi log: Sasha aggiunge il log.",
+        "#remlog|sasha rimuovi log: Sasha rimuove il log.",
+        "SUDO",
         "(#contactlist|sasha lista contatti) (txt|json): Sasha manda la lista dei contatti.",
         "(#dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.",
         "(#addcontact|sasha aggiungi contatto) <phone> <name> <surname>: Sasha aggiunge il contatto specificato.",
@@ -308,9 +313,6 @@ return {
         "(#mycontact|sasha mio contatto): Sasha invia il contatto del richiedente.",
         "#sync_gbans|sasha sincronizza lista superban: Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.",
         "#backup|sasha esegui backup: Sasha esegue un backup di se stessa e invia il log al richiedente.",
-        "#updateid|sasha aggiorna longid: Sasha salva il long_id.",
-        "#addlog|sasha aggiungi log: Sasha aggiunge il log.",
-        "#remlog|sasha rimuovi log: Sasha rimuove il log.",
     },
     patterns =
     {
@@ -328,8 +330,8 @@ return {
         "^[#!/]([Ss][Ee][Nn][Dd][Cc][Oo][Nn][Tt][Aa][Cc][Tt]) (.*) (.*) (.*)$",
         "^[#!/]([Mm][Yy][Cc][Oo][Nn][Tt][Aa][Cc][Tt])$",
         "^[#!/]([sS][yY][nN][cC]_[gG][bB][aA][nN][sS])$",
-        "^[#!/]([Bb][Aa][Cc][Kk][Uu][Pp])$",
         -- sync your global bans with seed
+        "^[#!/]([Bb][Aa][Cc][Kk][Uu][Pp])$",
         "^[#!/]([uU][pP][dD][aA][tT][eE][iI][dD])$",
         "^[#!/]([aA][dD][dD][lL][oO][gG])$",
         "^[#!/]([rR][eE][mM][lL][oO][gG])$",

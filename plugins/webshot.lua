@@ -50,7 +50,11 @@ end
 
 return {
     description = "WEBSHOT",
-    usage = "[#]|[sasha] webshot <url>: Sasha fa uno screenshot del sito e lo manda.",
+    usage =
+    {
+        "MOD",
+        "[#]|[sasha] webshot <url>: Sasha fa uno screenshot del sito e lo manda.",
+    },
     patterns =
     {
         "^[#!/][Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+)$",

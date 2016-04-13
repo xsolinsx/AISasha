@@ -32,7 +32,11 @@ end
 
 return {
     description = "SET",
-    usage = "(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.",
+    usage =
+    {
+        "MOD",
+        "(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.",
+    },
     patterns =
     {
         "^[#!/][sS][eE][tT] ([^%s]+) (.+)$",

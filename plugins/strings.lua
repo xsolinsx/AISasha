@@ -617,7 +617,11 @@ end
 
 return {
     description = "STRINGS",
-    usage = "#updatestrings|#installstrings|[sasha] installa|aggiorna stringhe: Sasha aggiorna le stringhe di testo.",
+    usage =
+    {
+        "SUDO",
+        "#updatestrings|#installstrings|[sasha] installa|aggiorna stringhe: Sasha aggiorna le stringhe di testo.",
+    },
     patterns =
     {
         '^[#!/]([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
