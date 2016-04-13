@@ -31,8 +31,8 @@ local function plugin_help(var, chat, rank)
         if not _config.disabled_plugin_on_chat[chat][var] or _config.disabled_plugin_on_chat[chat][var] == false then
             plugin = plugins[var]
         end
-        if not plugin then return nil end
     end
+    if not plugin then return nil end
     if plugin.min_rank <= rank then
         local help_permission = true
         -- '=========================\n'
