@@ -20,9 +20,11 @@ local function plugin_help(var, chat, rank)
     if tonumber(var) then
         local i = 0
         for name in pairsByKeys(plugins) do
-            i = i + 1
-            if i == tonumber(var) then
-                plugin = plugins[name]
+            if not _config.disabled_plugin_on_chat[receiver][name] or _config.disabled_plugin_on_chat[receiver][name] == false then
+                i = i + 1
+                if i == tonumber(var) then
+                    plugin = plugins[name]
+                end
             end
         end
     else
@@ -35,7 +37,7 @@ local function plugin_help(var, chat, rank)
         local text = ''
         -- = '=======================\n'
         if (type(plugin.description) == "string") then
-            text = text .. '🅿️' .. plugin.description .. '\n'
+            text = text .. '🅿️ ' .. plugin.description .. '\n'
         end
         if (type(plugin.usage) == "table") then
             for ku, usage in pairs(plugin.usage) do
@@ -59,17 +61,39 @@ local function plugin_help(var, chat, rank)
 end
 
 -- !help command
-local function telegram_help()
+local function telegram_help(receiver)
     local i = 0
     local text = lang_text('pluginListStart')
     -- Plugins names
     for name in pairsByKeys(plugins) do
-        i = i + 1
-        text = text .. '🅿️ ' .. i .. '. ' .. name .. '\n'
+        if not _config.disabled_plugin_on_chat[receiver][name] or _config.disabled_plugin_on_chat[receiver][name] == false then
+            i = i + 1
+            text = text .. '🅿️ ' .. i .. '. ' .. name .. '\n'
+        end
     end
     text = text .. '\n' .. lang_text('helpInfo')
     return text
 end
+
+--[[
+local function list_disabled_plugin_on_chat(receiver)
+    if not _config.disabled_plugin_on_chat then
+        return lang_text('noDisabledPlugin')
+    end
+
+    if not _config.disabled_plugin_on_chat[receiver] then
+        return lang_text('noDisabledPlugin')
+    end
+
+    local status = '❌'
+    local text = ''
+    for k in pairs(_config.disabled_plugin_on_chat[receiver]) do
+        if _config.disabled_plugin_on_chat[receiver][k] == true then
+            text = text .. status .. ' ' .. k .. '\n'
+        end
+    end
+    return text
+end]]
 
 -- !helpall command
 local function help_all(chat, rank)
@@ -120,7 +144,7 @@ local function run(msg, matches)
     table.sort(plugins)
     if not matches[2] then
         if matches[1]:lower() == "help" or matches[1]:lower() == "sasha aiuto" then
-            text = text .. telegram_help()
+            text = text .. telegram_help(get_receiver(msg))
         end
         if matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
             text = text .. help_all(get_receiver(msg), rank)
