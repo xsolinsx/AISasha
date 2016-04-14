@@ -66,7 +66,7 @@ local function plugin_help(var, chat, rank)
             end
         end
     else
-        if _config.disabled_plugin_on_chat[receiver] then
+        if _config.disabled_plugin_on_chat[chat] then
             if not _config.disabled_plugin_on_chat[chat][var] or _config.disabled_plugin_on_chat[chat][var] == false then
                 plugin = plugins[var]
             end
