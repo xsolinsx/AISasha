@@ -11,7 +11,6 @@ local function Invite_by_reply(extra, success, result)
 end
 
 local function callbackres(extra, success, result)
-    -- vardump(result)
     local user = 'user#id' .. result.peer_id
     local chat = 'chat#id' .. extra.chatid
     local channel = 'channel#id' .. extra.chatid
@@ -28,7 +27,7 @@ local function callbackres(extra, success, result)
 end
 function run(msg, matches)
     local data = load_data(_config.moderation.data)
-    -- if is_momod(msg) then
+    -- if is_owner(msg) then
     if is_admin1(msg) then
         if not is_realm(msg) then
             if data[tostring(msg.to.id)]['settings']['lock_member'] == 'yes' and not is_admin1(msg) then
@@ -56,7 +55,7 @@ function run(msg, matches)
             return lang_text('useYourGroups')
         end
     else
-        -- return lang_text('require_mod')
+        -- return lang_text('require_owner')
         return lang_text('require_admin')
     end
 end
@@ -65,6 +64,7 @@ return {
     description = "INVITE",
     usage =
     {
+        -- "OWNER",
         "ADMIN",
         "(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invita l'utente specificato.",
     },
@@ -83,5 +83,6 @@ return {
         "^([Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa])$",
     },
     run = run,
+    -- min_rank = 2
     min_rank = 4
 }

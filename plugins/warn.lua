@@ -42,7 +42,6 @@ local function warn_user(user_id, chat_id)
     local channel = 'channel#id' .. chat_id
     local chat = 'chat#id' .. chat_id
     local user = 'user#id' .. user_id
-    print(get_warn( { from = { id = user_id }, to = { id = chat_id } }))
     local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
     local hash = chat_id .. ':warn:' .. user_id
     redis:incr(hash)
