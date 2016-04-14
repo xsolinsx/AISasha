@@ -75,6 +75,41 @@ local function chat_list(msg)
     return message
 end
 
+local function all_chats(msg)
+    i = 1
+    local data = load_data(_config.moderation.data)
+    local groups = 'groups'
+    if not data[tostring(groups)] then
+        return lang_text('noGroups')
+    end
+    local message = lang_text('groupsJoin')
+    for k, v in pairsByKeys(data[tostring(groups)]) do
+        local group_id = v
+        if data[tostring(group_id)] then
+            settings = data[tostring(group_id)]['settings']
+        end
+        for m, n in pairsByKeys(settings) do
+            if m == 'set_name' then
+                name = n:gsub("", "")
+                chat_name = name:gsub("‮", "")
+                group_name_id = name .. '\n(ID: ' .. group_id .. ')\n\n'
+                if name:match("[\216-\219][\128-\191]") then
+                    group_info = i .. '. \n' .. group_name_id
+                else
+                    group_info = i .. '. ' .. group_name_id
+                end
+                i = i + 1
+            end
+        end
+        message = message .. group_info
+    end
+    local file = io.open("./groups/lists/all_listed_groups.txt", "w")
+    file:write(message)
+    file:flush()
+    file:close()
+    return message
+end
+
 local function run(msg, matches)
     local to = msg.to.type
     local service = msg.service
@@ -166,6 +201,10 @@ local function run(msg, matches)
         return chat_list(msg)
     end
 
+    if matches[1]:lower() == 'allchats' and is_sudo(msg) then
+        return all_chats(msg)
+    end
+
     if matches[1]:lower() == 'chatlist' then
         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] Used /chatlist")
         if is_admin1(msg) and msg.to.type == 'chat' or msg.to.type == 'channel' then
@@ -176,6 +215,12 @@ local function run(msg, matches)
             chat_list(msg)
             send_document("user#id" .. msg.from.id, "./groups/lists/listed_groups.txt", ok_cb, false)
         end
+    end
+
+    if matches[1]:lower() == 'allchatslist' and is_sudo(msg) then
+        all_chats(msg)
+        send_document("chat#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
+        send_document("channel#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
     end
 end
 
@@ -194,6 +239,9 @@ return {
         "^[#!/]([Jj][Oo][Ii][Nn]) (%d+)$",
         "^[#!/]([Jj][Oo][Ii][Nn]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
         "^!!tgservice (chat_add_user)$",
+        -- chats
+        "^[#!/]([Aa][Ll][Ll][Cc][Hh][Aa][Tt][Ss])$",
+        "^[#!/]([Aa][Ll][Ll][Cc][Hh][Aa][Tt][Ss][Ll][Ii][Ss][Tt])$",
     },
     run = run,
     pre_process = pre_process,
