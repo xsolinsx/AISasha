@@ -321,7 +321,7 @@ end
 
 local function run(msg, matches)
     local support_id = msg.from.id
-    if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'uccidimi' then
+    if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' then
         -- /kickme
         local receiver = get_receiver(msg)
         if msg.to.type == 'chat' or msg.to.type == 'channel' then
@@ -532,7 +532,7 @@ return {
     description = "BANHAMMER",
     usage =
     {
-        "#kickme|uccidimi: Sasha rimuove l'utente.",
+        "#kickme|sasha uccidimi: Sasha rimuove l'utente.",
         "MOD",
         "#kick|[sasha] uccidi|spara <id>|<username>|<reply>: Sasha rimuove l'utente specificato.",
         "#ban|[sasha] banna|[sasha] decompila|esplodi|kaboom <id>|<username>|<reply>: Sasha banna l'utente specificato e lo rimuove, se tenta di rientrare viene nuovamente rimosso.",
@@ -565,7 +565,6 @@ return {
         "^!!tgservice (.+)$",
         -- kickme
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii][Mm][Ii])$",
-        "^([Uu][Cc][Cc][Ii][Dd][Ii][Mm][Ii])$",
         -- kick
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii])$",
