@@ -28,6 +28,8 @@ local function Kick_by_reply(extra, success, result)
             send_large_msg(channel, lang_text('cantKickHigher'))
         end
         kick_user(result.from.peer_id, result.to.peer_id)
+        send_large_msg(chat, phrases[math.random(#phrases)])
+        send_large_msg(channel, phrases[math.random(#phrases)])
     else
         send_large_msg(chat, lang_text('useYourGroups'))
         send_large_msg(channel, lang_text('useYourGroups'))
