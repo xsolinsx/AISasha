@@ -48,6 +48,8 @@ local function Kick_by_reply_admins(extra, success, result)
             return
         end
         kick_user(result.from.peer_id, result.to.peer_id)
+        send_large_msg(chat, phrases[math.random(#phrases)])
+        send_large_msg(channel, phrases[math.random(#phrases)])
     else
         send_large_msg(chat, lang_text('useYourGroups'))
         send_large_msg(channel, lang_text('useYourGroups'))
@@ -66,7 +68,7 @@ local function ban_by_reply(extra, success, result)
         if is_momod2(result.from.peer_id, result.to.peer_id) then
             -- Ignore mods,owner,admin
             send_large_msg(chat, lang_text('cantKickHigher'))
-            send_large_msg(channel, lang_text(''))
+            send_large_msg(channel, lang_text('cantKickHigher'))
         end
         ban_user(result.from.peer_id, result.to.peer_id)
         send_large_msg(chat, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
@@ -284,6 +286,7 @@ local function kick_ban_res(extra, success, result)
             return
         end
         kick_user(member_id, chat_id)
+        send_large_msg(receiver, phrases[math.random(#phrases)])
     elseif get_cmd == 'ban' then
         if is_momod2(member_id, chat_id) and not is_admin2(sender) then
             send_large_msg(receiver, lang_text('cantKickHigher'))
@@ -324,8 +327,8 @@ local function run(msg, matches)
             local name = print_name:gsub("_", "")
             savelog(msg.to.id, name .. " [" .. msg.from.id .. "] left using kickme ")
             -- Save to logs
-            chat_del_user("chat#id" .. msg.to.id, "user#id" .. msg.from.id, ok_cb, false)
-            channel_kick("channel#id" .. msg.to.id, "user#id" .. msg.from.id, ok_cb, false)
+            kick_user(msg.from.id, msg.to.id)
+            return phrases[math.random(#phrases)]
         end
     end
 
@@ -357,6 +360,7 @@ local function run(msg, matches)
             local name = print_name:gsub("_", "")
             savelog(msg.to.id, name .. " [" .. msg.from.id .. "] kicked user " .. matches[2])
             kick_user(user_id, chat_id)
+            return phrases[math.random(#phrases)]
         else
             local cbres_extra = {
                 chat_id = msg.to.id,
@@ -367,7 +371,6 @@ local function run(msg, matches)
             local username = string.gsub(matches[2], '@', '')
             resolve_username(username, kick_ban_res, cbres_extra)
         end
-        return phrases[math.random(#phrases)]
     end
 
     if matches[1]:lower() == 'ban' or matches[1]:lower() == 'sasha banna' or matches[1]:lower() == 'sasha decompila' or matches[1]:lower() == 'banna' or matches[1]:lower() == 'decompila' or matches[1]:lower() == 'esplodi' or matches[1]:lower() == 'kaboom' then
