@@ -342,7 +342,6 @@ local function run(msg, matches)
         set_text('pokeName', 'Nome: ')
         set_text('pokeWeight', 'Peso: ')
         set_text('pokeHeight', 'Altezza: ')
-        set_text('pokeSpeed', 'Velocità: ')
 
         -- set.lua --
         set_text('saved', ' salvato.')

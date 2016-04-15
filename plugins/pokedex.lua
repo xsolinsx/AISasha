@@ -30,7 +30,6 @@ local function send_pokemon(query, receiver)
     .. '\n' .. lang_text('pokeName') .. pokemon.name
     .. '\n' .. lang_text('pokeWeight') .. weight .. " kg"
     .. '\n' .. lang_text('pokeHeight') .. height .. " m"
-    .. '\n' .. lang_text('pokeSpeed') .. pokemon.speed
 
     local image = nil
 
