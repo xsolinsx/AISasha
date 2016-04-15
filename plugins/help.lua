@@ -162,7 +162,12 @@ local function run(msg, matches)
             text = text .. telegram_help()
         end
     end
-    send_large_msg(get_receiver(msg), text)
+
+    if text == lang_text('helpIntro') then
+        return lang_text('require_higher')
+    else
+        send_large_msg(get_receiver(msg), text)
+    end
 end
 
 return {

@@ -118,7 +118,7 @@ local function run(msg, matches)
         set_text('errorParameter', 'Errore variabile redis mancante.')
 
         -- help.lua --
-        set_text('require_higher', 'Questo plugin richiede privilegi superiori a quelli che possiedi.\n')
+        set_text('require_higher', '🚫 Questo plugin richiede privilegi superiori a quelli che possiedi.\n')
         set_text('pluginListStart', 'ℹ️Lista plugin: \n\n')
         set_text('helpInfo', 'ℹ️Scrivi "!help <plugin_name>|<plugin_number>" per maggiori informazioni su quel plugin.\nℹ️O "!helpall" per mostrare tutte le informazioni.')
         set_text('errorNoPlugin', 'Questo plugin non esiste o non ha una descrizione.')
