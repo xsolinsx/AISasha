@@ -34,7 +34,7 @@ local function send_pokemon(query, receiver)
     local image = nil
 
     if images_enabled and pokemon.sprites and pokemon.sprites[1] then
-        local sprite = pokemon.sprites[1].resource_uri
+        local sprite = pokemon.sprites['front_default'].resource_uri
         image = get_sprite(sprite)
     end
 
