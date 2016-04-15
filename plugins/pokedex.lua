@@ -14,7 +14,7 @@ local function callback(extra)
 end
 
 local function send_pokemon(query, receiver)
-    local url = "http://pokeapi.co/api/v1/pokemon/" .. query .. "/"
+    local url = "http://pokeapi.co/api/v2/pokemon/" .. query .. "/"
     local b, c = http.request(url)
     local pokemon = json:decode(b)
 
