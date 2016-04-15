@@ -555,7 +555,7 @@ end
 local function promote_admin(receiver, member_username, user_id)
     local data = load_data(_config.moderation.data)
     local group = string.gsub(receiver, 'channel#id', '')
-    local member_tag_username = string.gsub(member_username, '@', '(at)')
+    local member_tag_username = member_username
     if not data[group] then
         return
     end
@@ -582,7 +582,7 @@ end
 local function promote2(receiver, member_username, user_id)
     local data = load_data(_config.moderation.data)
     local group = string.gsub(receiver, 'channel#id', '')
-    local member_tag_username = string.gsub(member_username, '@', '(at)')
+    local member_tag_username = member_username
     if not data[group] then
         return send_large_msg(receiver, lang_text('supergroupNotAdded'))
     end
