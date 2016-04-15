@@ -1118,7 +1118,7 @@ local function run(msg, matches)
                     msg = msg
                 }
                 setadmin = get_message(msg.reply_id, get_message_callback, cbreply_extra)
-            elseif matches[1]:lower() == 'setadmin' and string.match(matches[2], '^%d+$') then
+            elseif string.match(matches[2], '^%d+$') then
                 --[[]	local receiver = get_receiver(msg)
 				local user_id = "user#id"..matches[2]
 				local get_cmd = 'setadmin'
@@ -1127,7 +1127,7 @@ local function run(msg, matches)
                 local msg = msg
                 local user_id = matches[2]
                 channel_get_users(receiver, in_channel_cb, { get_cmd = get_cmd, receiver = receiver, msg = msg, user_id = user_id })
-            elseif matches[1]:lower() == 'setadmin' and not string.match(matches[2], '^%d+$') then
+            else
                 --[[local cbres_extra = {
 					channel = get_receiver(msg),
 					get_cmd = 'setadmin'
@@ -1154,12 +1154,12 @@ local function run(msg, matches)
                     msg = msg
                 }
                 demoteadmin = get_message(msg.reply_id, get_message_callback, cbreply_extra)
-            elseif matches[1]:lower() == 'demoteadmin' and string.match(matches[2], '^%d+$') then
+            elseif string.match(matches[2], '^%d+$') then
                 local receiver = get_receiver(msg)
                 local user_id = "user#id" .. matches[2]
                 local get_cmd = 'demoteadmin'
                 user_info(user_id, cb_user_info, { receiver = receiver, get_cmd = get_cmd })
-            elseif matches[1]:lower() == 'demoteadmin' and not string.match(matches[2], '^%d+$') then
+            else
                 local cbres_extra = {
                     channel = get_receiver(msg),
                     get_cmd = 'demoteadmin'
@@ -1178,7 +1178,7 @@ local function run(msg, matches)
                     msg = msg
                 }
                 setowner = get_message(msg.reply_id, get_message_callback, cbreply_extra)
-            elseif matches[1]:lower() == 'setowner' and string.match(matches[2], '^%d+$') then
+            elseif string.match(matches[2], '^%d+$') then
                 --[[	local group_owner = data[tostring(msg.to.id)]['set_owner']
 				if group_owner then
 					local receiver = get_receiver(msg)
@@ -1198,7 +1198,7 @@ local function run(msg, matches)
                 local msg = msg
                 local user_id = matches[2]
                 channel_get_users(receiver, in_channel_cb, { get_cmd = get_cmd, receiver = receiver, msg = msg, user_id = user_id })
-            elseif matches[1]:lower() == 'setowner' and not string.match(matches[2], '^%d+$') then
+            else
                 local get_cmd = 'setowner'
                 local msg = msg
                 local username = matches[2]
@@ -1220,13 +1220,13 @@ local function run(msg, matches)
                     msg = msg
                 }
                 promote = get_message(msg.reply_id, get_message_callback, cbreply_extra)
-            elseif matches[1]:lower() == 'promote' and string.match(matches[2], '^%d+$') then
+            elseif string.match(matches[2], '^%d+$') then
                 local receiver = get_receiver(msg)
                 local user_id = "user#id" .. matches[2]
                 local get_cmd = 'promote'
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted user#id" .. matches[2])
                 user_info(user_id, cb_user_info, { receiver = receiver, get_cmd = get_cmd })
-            elseif matches[1]:lower() == 'promote' and not string.match(matches[2], '^%d+$') then
+            else
                 local cbres_extra = {
                     channel = get_receiver(msg),
                     get_cmd = 'promote',
@@ -1264,13 +1264,13 @@ local function run(msg, matches)
                     msg = msg
                 }
                 demote = get_message(msg.reply_id, get_message_callback, cbreply_extra)
-            elseif matches[1]:lower() == 'demote' and string.match(matches[2], '^%d+$') then
+            elseif string.match(matches[2], '^%d+$') then
                 local receiver = get_receiver(msg)
                 local user_id = "user#id" .. matches[2]
                 local get_cmd = 'demote'
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted user#id" .. matches[2])
                 user_info(user_id, cb_user_info, { receiver = receiver, get_cmd = get_cmd })
-            elseif not string.match(matches[2], '^%d+$') then
+            else
                 local cbres_extra = {
                     channel = get_receiver(msg),
                     get_cmd = 'demote'
