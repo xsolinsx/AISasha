@@ -26,7 +26,7 @@ local function send_pokemon(query, receiver)
     local height = tonumber(pokemon.height) / 10
     local weight = tonumber(pokemon.weight) / 10
 
-    local text = 'ID Pokédex: ' .. pokemon.pkdx_id
+    local text = 'ID Pokédex: ' .. pokemon.id
     .. '\n' .. lang_text('pokeName') .. pokemon.name
     .. '\n' .. lang_text('pokeWeight') .. weight .. " kg"
     .. '\n' .. lang_text('pokeHeight') .. height .. " m"
