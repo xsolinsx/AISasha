@@ -251,9 +251,9 @@ local function run(msg, matches)
         end
         --[[*For Debug*
 	    if matches[1] == "vardumpmsg" then
-		    local text = serpent.block(msg, {comment=false})
-		    send_large_msg("channel#id"..msg.to.id, text)
-	    end]]
+		local text = serpent.block(msg, {comment=false})
+		send_large_msg("channel#id"..msg.to.id, text)
+	end]]
         if matches[1]:lower() == 'updateid' or matches[1]:lower() == 'sasha aggiorna longid' then
             local data = load_data(_config.moderation.data)
             local long_id = data[tostring(msg.to.id)]['long_id']

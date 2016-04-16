@@ -13,6 +13,7 @@ JSON =(loadfile "./libs/dkjson.lua")()
 http.TIMEOUT = 10
 
 function get_receiver(msg)
+
     if msg.to.type == 'user' then
         return 'user#id' .. msg.from.id
     end
@@ -128,7 +129,7 @@ function download_to_file(url, file_name)
 
     file_name = file_name or get_http_file_name(url, headers)
 
-    local file_path = "/tmp/" .. file_name
+    local file_path = "data/tmp/" .. file_name
     print("Saved to: " .. file_path)
 
     file = io.open(file_path, "w+")
@@ -471,7 +472,7 @@ function send_large_msg_callback(cb_extra, success, result)
     local text_max = 4096
     local destination = cb_extra.destination
     local text = cb_extra.text
-    if not text then
+    if not text or type(text) == 'boolean' then
         return
     end
     local text_len = string.len(text)
@@ -1173,8 +1174,8 @@ function muted_user_list(chat_id)
         else
             text = text .. k .. " - [ " .. v .. " ]\n"
         end
-        return text
     end
-
-    -- End Chat Mutes
+    return text
 end
+
+-- End Chat Mutes
