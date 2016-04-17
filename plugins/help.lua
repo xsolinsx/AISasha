@@ -204,6 +204,7 @@ return {
         "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll])$",
         "^[#!/]([Hh][Ee][Ll][Pp]) (.+)",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
+        "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
         -- help
         "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
         "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.+)",
