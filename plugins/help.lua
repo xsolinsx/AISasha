@@ -145,8 +145,8 @@ end
 
 local function get_rank_by_username(extra, success, result)
     local rank = get_rank(result.peer_id, extra.chat_id)
-    send_large_msg('chat#id' .. extra.chatid, reverse_rank_table[rank + 1])
-    send_large_msg('channel#id' .. extra.chatid, reverse_rank_table[rank + 1])
+    send_large_msg('chat#id' .. extra.chat_id, reverse_rank_table[rank + 1])
+    send_large_msg('channel#id' .. extra.chat_id, reverse_rank_table[rank + 1])
 end
 
 local function run(msg, matches)
