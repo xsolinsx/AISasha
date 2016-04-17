@@ -158,9 +158,9 @@ local function run(msg, matches)
         if type(msg.reply_id) ~= "nil" then
             return get_message(msg.reply_id, get_rank_by_reply, false)
         elseif string.match(matches[2], '^%d+$') then
-            return reverse_rank_table[get_rank(msg.from.id, msg.to.id) + 1]
+            return reverse_rank_table[get_rank(msg.from.id, matches[2]) + 1]
         else
-            return resolve_username(matches[2], get_rank_by_username, { chat_id = msg.to.id })
+            return resolve_username(string.gsub(matches[2], '@', ''), get_rank_by_username, { chat_id = msg.to.id })
         end
     end
 
