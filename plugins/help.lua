@@ -139,14 +139,14 @@ local function get_rank_by_reply(extra, success, result)
     local chat = 'chat#id' .. result.to.peer_id
     local channel = 'channel#id' .. result.to.peer_id
     local rank = get_rank(result.from.peer_id, result.to.peer_id)
-    send_large_msg(chat, rank)
-    send_large_msg(channel, rank)
+    send_large_msg(chat, reverse_rank_table[rank + 1])
+    send_large_msg(channel, reverse_rank_table[rank + 1])
 end
 
 local function get_rank_by_username(extra, success, result)
     local rank = get_rank(result.peer_id, extra.chat_id)
-    send_large_msg('chat#id' .. extra.chatid, rank)
-    send_large_msg('channel#id' .. extra.chatid, rank)
+    send_large_msg('chat#id' .. extra.chatid, reverse_rank_table[rank + 1])
+    send_large_msg('channel#id' .. extra.chatid, reverse_rank_table[rank + 1])
 end
 
 local function run(msg, matches)
@@ -158,11 +158,11 @@ local function run(msg, matches)
 
     if matches[1]:lower() == 'getrank' then
         if type(msg.reply_id) ~= "nil" then
-            get_message(msg.reply_id, get_rank_by_reply, false)
+            return get_message(msg.reply_id, get_rank_by_reply, false)
         elseif string.match(matches[2], '^%d+$') then
             return reverse_rank_table[rank + 1]
         else
-            resolve_username(username, get_rank_by_username, { chat_id = msg.to.id })
+            return resolve_username(username, get_rank_by_username, { chat_id = msg.to.id })
         end
     end
 
