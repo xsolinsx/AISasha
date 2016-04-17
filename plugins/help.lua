@@ -154,17 +154,17 @@ local function run(msg, matches)
         return lang_text('doYourBusiness')
     end
 
-    local rank = get_rank(msg.from.id, msg.to.id)
-
     if matches[1]:lower() == 'getrank' then
         if type(msg.reply_id) ~= "nil" then
             return get_message(msg.reply_id, get_rank_by_reply, false)
         elseif string.match(matches[2], '^%d+$') then
-            return reverse_rank_table[rank + 1]
+            return reverse_rank_table[get_rank(msg.from.id, msg.to.id) + 1]
         else
-            return resolve_username(username, get_rank_by_username, { chat_id = msg.to.id })
+            return resolve_username(matches[2], get_rank_by_username, { chat_id = msg.to.id })
         end
     end
+
+    local rank = get_rank(msg.from.id, msg.to.id)
 
     local text = lang_text('helpIntro')
     table.sort(plugins)
