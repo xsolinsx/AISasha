@@ -1217,9 +1217,6 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'promote' or matches[1]:lower() == "sasha promuovi" or matches[1]:lower() == "promuovi" then
-            if not is_momod(msg) then
-                return
-            end
             if not is_owner(msg) then
                 return lang_text('require_owner')
             end
@@ -1261,9 +1258,6 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'demote' or matches[1]:lower() == "sasha degrada" or matches[1]:lower() == "degrada" then
-            if not is_momod(msg) then
-                return
-            end
             if not is_owner(msg) then
                 return lang_text('require_owner')
             end
@@ -1820,18 +1814,18 @@ return {
         "(#unlock|[sasha] sblocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha sblocca l'opzione specificata.",
         "#setflood <value>: Sasha imposta il flood massimo a <value> che deve essere compreso tra 5 e 20.",
         "#public yes|no: Sasha imposta il gruppo come pubblico|privato.",
-        "#muteuser|voce <user_id>|<username>|<reply_user>: Sasha imposta|toglie il muto sull'utente.",
+        "#muteuser|voce <id>|<username>|<reply>: Sasha imposta|toglie il muto sull'utente.",
         "#muteslist|lista muti: Sasha manda la lista delle variabili mute della chat.",
         "#mutelist|lista utenti muti: Sasha manda la lista degli utenti muti della chat.",
         "#settings: Sasha manda le impostazioni del gruppo.",
         "OWNER",
         "#admins|[sasha] lista admin: Sasha manda la lista degli amministratori.",
         "#setlink|sasha imposta link: Sasha imposta il link d'invito con quello che le verrà inviato.",
-        "#setadmin <user_id>|<username>|<reply_user>: Sasha promuove l'utente specificato ad amministratore (telegram).",
-        "#demoteadmin <user_id>|<username>|<reply_user>: Sasha degrada l'utente specificato (telegram).",
-        "#setowner <user_id>|<username>|<reply_user>: Sasha imposta l'utente specificato come proprietario.",
-        "(#promote|[sasha] promuovi) <user_id>|<username>|<reply_user>: Sasha promuove l'utente specificato a moderatore.",
-        "(#demote|[sasha] degrada) <user_id>|<username>|<reply_user>: Sasha degrada l'utente specificato.",
+        "#setadmin <id>|<username>|<reply>: Sasha promuove l'utente specificato ad amministratore (telegram).",
+        "#demoteadmin <id>|<username>|<reply>: Sasha degrada l'utente specificato (telegram).",
+        "#setowner <id>|<username>|<reply>: Sasha imposta l'utente specificato come proprietario.",
+        "(#promote|[sasha] promuovi) <id>|<username>|<reply>: Sasha promuove l'utente specificato a moderatore.",
+        "(#demote|[sasha] degrada) <id>|<username>|<reply>: Sasha degrada l'utente specificato.",
         "#clean rules|about|modlist|mutelist: Sasha azzera la variabile specificata.",
         "#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.",
         "#unmute|ripristina all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.",

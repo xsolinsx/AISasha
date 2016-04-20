@@ -1156,66 +1156,46 @@ local function run(msg, matches)
                 save_data(_config.moderation.data, data)
                 return lang_text('sendNewGroupPic')
             end
-            if (matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi') and not matches[2] then
-                if not is_momod(msg) then
-                    return
-                end
+            if (matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi') then
                 if not is_owner(msg) then
                     return lang_text('require_owner')
                 end
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, promote_by_reply, false)
+                elseif matches[2] then
+                    local member = matches[2]
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. member)
+                    local cbres_extra = {
+                        chat_id = msg.to.id,
+                        mod_cmd = 'promote',
+                        from_id = msg.from.id
+                    }
+                    local username = matches[2]
+                    local username = string.gsub(matches[2], '@', '')
+                    return resolve_username(username, promote_demote_res, cbres_extra)
                 end
-            end
-            if (matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi') and matches[2] then
-                if not is_momod(msg) then
-                    return
-                end
-                if not is_owner(msg) then
-                    return lang_text('require_owner')
-                end
-                local member = matches[2]
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. member)
-                local cbres_extra = {
-                    chat_id = msg.to.id,
-                    mod_cmd = 'promote',
-                    from_id = msg.from.id
-                }
-                local username = matches[2]
-                local username = string.gsub(matches[2], '@', '')
-                return resolve_username(username, promote_demote_res, cbres_extra)
             end
             if (matches[1]:lower() == 'demote' or matches[1]:lower() == 'sasha degrada' or matches[1]:lower() == 'degrada') and not matches[2] then
-                if not is_momod(msg) then
-                    return
-                end
                 if not is_owner(msg) then
                     return lang_text('require_owner')
                 end
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, demote_by_reply, false)
+                elseif matches[2] then
+                    if string.gsub(matches[2], "@", "") == msg.from.username and not is_owner(msg) then
+                        return lang_text('noAutoDemote')
+                    end
+                    local member = matches[2]
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. member)
+                    local cbres_extra = {
+                        chat_id = msg.to.id,
+                        mod_cmd = 'demote',
+                        from_id = msg.from.id
+                    }
+                    local username = matches[2]
+                    local username = string.gsub(matches[2], '@', '')
+                    return resolve_username(username, promote_demote_res, cbres_extra)
                 end
-            end
-            if (matches[1]:lower() == 'demote' or matches[1]:lower() == 'sasha degrada' or matches[1]:lower() == 'degrada') and matches[2] then
-                if not is_momod(msg) then
-                    return
-                end
-                if not is_owner(msg) then
-                    return lang_text('require_owner')
-                end
-                if string.gsub(matches[2], "@", "") == msg.from.username and not is_owner(msg) then
-                    return lang_text('noAutoDemote')
-                end
-                local member = matches[2]
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. member)
-                local cbres_extra = {
-                    chat_id = msg.to.id,
-                    mod_cmd = 'demote',
-                    from_id = msg.from.id
-                }
-                local username = matches[2]
-                local username = string.gsub(matches[2], '@', '')
-                return resolve_username(username, promote_demote_res, cbres_extra)
             end
             if matches[1]:lower() == 'modlist' or matches[1]:lower() == 'sasha lista mod' or matches[1]:lower() == 'lista mod' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group modlist")
@@ -1609,18 +1589,14 @@ local function run(msg, matches)
                 if not is_owner(msg) then
                     return lang_text('require_owner')
                 end
-                data[tostring(msg.to.id)]['set_owner'] = matches[2]
-                save_data(_config.moderation.data, data)
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
-                local text = matches[2] .. lang_text('setOwner')
-                return text
-            end
-            if matches[1]:lower() == 'setowner' and not matches[2] then
-                if not is_owner(msg) then
-                    return lang_text('require_owner')
-                end
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, setowner_by_reply, false)
+                elseif matches[2] then
+                    data[tostring(msg.to.id)]['set_owner'] = matches[2]
+                    save_data(_config.moderation.data, data)
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
+                    local text = matches[2] .. lang_text('setOwner')
+                    return text
                 end
             end
         end
@@ -1794,17 +1770,17 @@ return {
         "^[#!/]([Ss][Ee][Tt][Nn][Aa][Mm][Ee]) (.*)$",
         "^[#!/]([Ss][Ee][Tt][Pp][Hh][Oo][Tt][Oo])$",
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee]) (.*)$",
-        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee])",
+        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee])$",
         "^[#!/]([Cc][Ll][Ee][Aa][Nn]) (.*)$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Cc][Hh][Aa][Tt])$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Rr][Ee][Aa][Ll][Mm])$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee]) (.*)$",
-        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee])",
+        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee])$",
         "^[#!/]([Ss][Ee][Tt][Rr][Uu][Ll][Ee][Ss]) (.*)$",
         "^[#!/]([Ss][Ee][Tt][Aa][Bb][Oo][Uu][Tt]) (.*)$",
         "^[#!/]([Ll][Oo][Cc][Kk]) (.*)$",
         "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr]) (%d+)$",
-        "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr])",
+        "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr])$",
         "^[#!/]([Oo][Ww][Nn][Ee][Rr])$",
         "^[#!/]([Ss][Ee][Tt][Gg][Pp][Oo][Ww][Nn][Ee][Rr]) (%d+) (%d+)$",-- (group id) (owner id)
         "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (.*)$",
@@ -1839,14 +1815,14 @@ return {
         "^[#!/]([Ss][Ee][Tt][Gg][Pp][Pp][Hh][Oo][Tt][Oo])$",
         -- promote
         "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) (.*)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])",
+        "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])$",
         "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) (.*)$",
-        "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])",
+        "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])$",
         -- demote
         "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa]) (.*)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa])",
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa])$",
         "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa]) (.*)$",
-        "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa])",
+        "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa])$",
         -- setrules
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Rr][Ee][Gg][Oo][Ll][Ee]) (.*)$",
         -- setabout
