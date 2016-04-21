@@ -329,8 +329,8 @@ local function run(msg, matches)
             local name = print_name:gsub("_", "")
             savelog(msg.to.id, name .. " [" .. msg.from.id .. "] left using kickme ")
             -- Save to logs
-            chat_del_user(msg.to.id, msg.from.id, ok_cb, false)
-            channel_kick(msg.to.id, msg.from.id, ok_cb, false)
+            chat_del_user(receiver, 'user#id' .. msg.from.id, ok_cb, false)
+            channel_kick(receiver, 'user#id' .. msg.from.id, ok_cb, false)
             return phrases[math.random(#phrases)]
         end
     end
