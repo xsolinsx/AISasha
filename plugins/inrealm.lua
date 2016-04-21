@@ -413,7 +413,7 @@ local function show_super_group_settings(msg, data, target)
     local settings = data[tostring(target)]['settings']
     local text = lang_text('supergroupSettings') .. target .. ":" ..
     lang_text('linksLock') .. settings.lock_link ..
-    lang_text('flood') .. settings.flood ..
+    lang_text('floodLock') .. settings.flood ..
     lang_text('spamLock') .. settings.lock_spam ..
     lang_text('arabic_lock') .. settings.lock_arabic ..
     lang_text('membersLock') .. settings.lock_member ..
