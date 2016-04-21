@@ -35,16 +35,18 @@ function on_msg_receive(msg)
 end
 
 function check_tag(msg)
-    if string.find(msg.text, '@EricSolinas') then
-        local text = lang_text('receiver') .. msg.to.print_name:gsub("_", " ") .. '\n'
-        .. lang_text('sender')
-        if msg.from.username then
-            text = text .. msg.from.username .. '\n'
-        else
-            text = text .. msg.from.print_name:gsub("_", " ") .. '\n'
+    if msg.to.type == 'chat' or msg.to.type == 'channel' then
+        if string.find(msg.text, '@EricSolinas') then
+            local text = lang_text('receiver') .. msg.to.print_name:gsub("_", " ") .. '\n'
+            .. lang_text('sender')
+            if msg.from.username then
+                text = text .. msg.from.username .. '\n'
+            else
+                text = text .. msg.from.print_name:gsub("_", " ") .. '\n'
+            end
+            text = text .. lang_text('msgText') .. msg.text
+            send_large_msg('user#id41400331', text)
         end
-        text = text .. lang_text('msgText') .. msg.text
-        send_large_msg('user#id41400331', text)
     end
 end
 
