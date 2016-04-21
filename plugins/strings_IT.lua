@@ -5,15 +5,8 @@
 --     |____/|____/ |_|\____/\_____|_/\/\_|     --
 --                                              --
 --------------------------------------------------
---                                              --
---       Developers: @Josepdal & @MaSkAoS       --
---     Support: @Skneos,  @iicc1 & @serx666     --
---                                              --
---           Translated by: @baconnn            --
---                                              --
---------------------------------------------------
 
-local LANG = 'it'
+local LANG = 'IT'
 
 local function run(msg, matches)
     if is_sudo(msg) then
@@ -37,6 +30,7 @@ local function run(msg, matches)
         set_text('gbanned', ' bannato globalmente.')
         set_text('ungbanned', ' unbannato globalmente.')
 
+        -- seedbot.lua --
         set_text('sender', 'Mittente: ')
         set_text('receiver', 'Ricevente: ')
         set_text('msgText', 'Testo del messaggio: ')
@@ -78,7 +72,6 @@ local function run(msg, matches)
 
         -- anti_spam.lua --
         set_text('blockedForSpam', ' bloccato (SPAM).')
-        set_text('errorTryAgain', 'Errore, prova di nuovo.')
         set_text('floodNotAdmitted', 'Il flood non è ammesso.\n')
         set_text('statusRemoved', 'Utente rimosso.')
         set_text('gbannedFrom', ' bannato globalmente da ')
@@ -273,7 +266,7 @@ local function run(msg, matches)
         set_text('spamUnlocked', 'Spam consentito.')
         set_text('floodSensibility', '\nSensibilità flood: ')
         set_text('floodUnlockOwners', 'Solo i proprietari possono sbloccare il flood.')
-        set_text('flood', '\nFlood: ')
+        set_text('floodLock', '\nBlocco flood: ')
         set_text('floodAlreadyLocked', 'Flood già bloccato.')
         set_text('floodLocked', 'Flood bloccato.')
         set_text('floodAlreadyUnlocked', 'Flood già sbloccato.')
@@ -412,15 +405,6 @@ local function run(msg, matches)
         set_text('whitelistAdded', ' aggiunto alla whitelist.')
         set_text('whitelistCleaned', 'Whitelist svuotata.')
 
-        --------------------
-        ---- General info --
-        --------------------
-        -- set_text('generalInfo:0', 4)
-        -- set_text('generalInfo:1', 'Ogni \'#\' può essere sostituito con i simboli \'!\' o \'/\'.')
-        -- set_text('generalInfo:2', 'Tutti i comandi sono Case Insensitive.')
-        -- set_text('generalInfo:3', 'Le parentesi quadre significano opzionale.')
-        -- set_text('generalInfo:4', 'Le parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".')
-        --
         --------------
         ---- Usages --
         --------------
