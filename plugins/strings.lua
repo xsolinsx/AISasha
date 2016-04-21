@@ -37,6 +37,10 @@ local function run(msg, matches)
         set_text('gbanned', ' bannato globalmente.')
         set_text('ungbanned', ' unbannato globalmente.')
 
+        set_text('sender', 'Mittente: ')
+        set_text('receiver', 'Ricevente: ')
+        set_text('msgText', 'Testo del messaggio: ')
+
         -- utils.lua --
         set_text('errorImageDownload', 'Errore nel download dell\'immagine.')
         set_text('banListStart', 'Lista ban:\n\n')

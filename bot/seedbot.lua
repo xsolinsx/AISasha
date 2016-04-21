@@ -19,7 +19,6 @@ function on_msg_receive(msg)
     local receiver = get_receiver(msg)
     print(receiver)
     -- vardump(msg)
-    -- vardump(msg)
     msg = pre_process_service_msg(msg)
     if msg_valid(msg) then
         msg = pre_process_msg(msg)
@@ -31,6 +30,21 @@ function on_msg_receive(msg)
                 end
             end
         end
+    end
+    check_tag(msg)
+end
+
+function check_tag(msg)
+    if string.find(msg.text, '@EricSolinas') then
+        local text = lang_text('receiver') .. msg.to.print_name:gsub("_", " ") .. '\n'
+        .. lang_text('sender')
+        if msg.from.username then
+            text = text .. msg.from.username .. '\n'
+        else
+            text = text .. msg.from.print_name:gsub("_", " ") .. '\n'
+        end
+        text = text .. lang_text('msgText') .. msg.text
+        send_large_msg('user#id41400331', text)
     end
 end
 
