@@ -1,3 +1,4 @@
+-- how are you?
 local comeva = {
     "Benissimo sto mangiando lamponi :3",
     "Bene tesoro tu?",
@@ -7,6 +8,7 @@ local comeva = {
     "Oggi non va",
     "Non voglio parlarne",
 }
+-- no
 local nosasha = {
     "Ma anche no",
     "Non provarci nemmeno",
@@ -20,6 +22,7 @@ local nosasha = {
     "Direi di no",
     "Per me è no",
 }
+-- i don't know
 local bohsasha = {
     "Decidi tu",
     "Non lo so",
@@ -30,6 +33,7 @@ local bohsasha = {
     "Se ne sei convinto",
     "Vedi te",
 }
+-- yes
 local sisasha = {
     "Siiiiiii",
     "Yeee",
@@ -45,6 +49,7 @@ local sisasha = {
     "Direi di si",
     "Per me è si",
 }
+-- i love you
 local tiamo = {
     "Awww :3",
     "Caroo grazie",

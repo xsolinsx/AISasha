@@ -1,3 +1,4 @@
+-- kick sentences
 local phrases = {
     "Ancora ancora ancora! 😍",
     "الله أَكْبَر",

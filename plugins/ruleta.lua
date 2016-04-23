@@ -1,3 +1,4 @@
+-- safe
 local good = {
     "Ti è andata bene.",
     "Fiuu.",
@@ -8,6 +9,7 @@ local good = {
     "Gioca di nuovo.",
     "Mancato.",
 }
+-- killed
 local bad = {
     "BOOM!",
     "Headshot.",
