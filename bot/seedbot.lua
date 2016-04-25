@@ -34,18 +34,24 @@ function on_msg_receive(msg)
     check_tag(msg)
 end
 
+-- send message to sudoers when tagged
 function check_tag(msg)
+    -- exclude private chats
     if msg.to.type == 'chat' or msg.to.type == 'channel' then
         if string.find(msg.text, '@EricSolinas') then
-            local text = lang_text('receiver') .. msg.to.print_name:gsub("_", " ") .. '\n'
-            .. lang_text('sender')
-            if msg.from.username then
-                text = text .. '@' .. msg.from.username .. '\n'
-            else
-                text = text .. msg.from.print_name:gsub("_", " ") .. '\n'
+            -- exclude bot tags
+            if tonumber(msg.from.id) ~= our_id then
+                for v, user in pairs(config.sudo_users) do
+                    local text = lang_text('receiver') .. msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
+                    if msg.from.username then
+                        text = text .. '@' .. msg.from.username .. '\n'
+                    else
+                        text = text .. msg.from.print_name:gsub("_", " ") .. '\n'
+                    end
+                    text = text .. lang_text('msgText') .. msg.text
+                    send_large_msg('user#id' .. user, text)
+                end
             end
-            text = text .. lang_text('msgText') .. msg.text
-            send_large_msg('user#id41400331', text)
         end
     end
 end
