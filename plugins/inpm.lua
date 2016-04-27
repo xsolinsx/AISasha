@@ -129,8 +129,10 @@ local function run(msg, matches)
                 if is_admin1(msg) then
                     user_type = 'admin'
                     local receiver = get_receiver(msg)
-                    local chat = long_id
-                    local channel = long_id
+                    -- local chat = long_id
+                    -- local channel = long_id
+                    local chat = 'chat#id' .. matches[2]
+                    local channel = 'channel#id' .. matches[2]
                     local user = msg.from.peer_id
                     chat_add_user(chat, user, ok_cb, false)
                     channel_invite(channel, user, ok_cb, false)
@@ -139,8 +141,10 @@ local function run(msg, matches)
                 if is_support(msg.from.id) and not is_admin1(msg) and not is_owner2(msg.fom.id, matches[2]) then
                     user_type = "support"
                     local receiver = get_receiver(msg)
-                    local chat = long_id
-                    local channel = long_id
+                    -- local chat = long_id
+                    -- local channel = long_id
+                    local chat = 'chat#id' .. matches[2]
+                    local channel = 'channel#id' .. matches[2]
                     local user = msg.from.peer_id
                     chat_add_user(chat, user, ok_cb, false)
                     channel_invite(channel, user, ok_cb, false)
@@ -154,8 +158,10 @@ local function run(msg, matches)
                 end
                 if not is_support(msg.from.id) and not is_admin1(msg) then
                     user_type = "regular"
-                    local chat = long_id
-                    local channel = long_id
+                    -- local chat = long_id
+                    -- local channel = long_id
+                    local chat = 'chat#id' .. matches[2]
+                    local channel = 'channel#id' .. matches[2]
                     local user = msg.from.peer_id
                     chat_add_user(chat, user, ok_cb, false)
                     channel_invite(channel, user, ok_cb, false)
