@@ -14,7 +14,7 @@
         else
             username = ""
         end
-        text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id .. "\n"
+        text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id
         i = i + 1
     end
     send_large_msg(cb_extra.receiver, text)
@@ -34,7 +34,7 @@ local function callback_supergroup_members(cb_extra, success, result)
         else
             username = ""
         end
-        text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id .. "\n"
+        text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id
         i = i + 1
     end
     send_large_msg(cb_extra.receiver, text)
@@ -55,7 +55,7 @@ local function callback_kicked(cb_extra, success, result)
         else
             username = ""
         end
-        text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id .. "\n"
+        text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id
         i = i + 1
     end
     send_large_msg(cb_extra.receiver, text)
