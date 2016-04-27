@@ -433,7 +433,6 @@ local function run(msg, matches)
     if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] then
         if is_momod(msg) then
             local user_id = msg.from.peer_id
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested users list")
             if chat_type == 'channel' then
                 channel_get_users(receiver, callback_supergroup_members, { receiver = receiver })
             elseif chat_type == 'chat' then
@@ -446,7 +445,6 @@ local function run(msg, matches)
     if matches[1]:lower() == "kicked" or matches[1]:lower() == "sasha lista rimossi" or matches[1]:lower() == "lista rimossi" then
         if chat_type == 'channel' then
             if is_momod(msg) then
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested Kicked users list")
                 channel_get_kicked(receiver, callback_kicked, { receiver = receiver })
             else
                 return lang_text('require_mod')
