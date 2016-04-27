@@ -12,7 +12,7 @@
         if v.username then
             username = "@" .. v.username
         else
-            username = ""
+            username = "NOUSER"
         end
         text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id
         i = i + 1
@@ -32,7 +32,7 @@ local function callback_supergroup_members(cb_extra, success, result)
         if v.username then
             username = "@" .. v.username
         else
-            username = ""
+            username = "NOUSER"
         end
         text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id
         i = i + 1
@@ -53,7 +53,7 @@ local function callback_kicked(cb_extra, success, result)
         if v.username then
             username = "@" .. v.username
         else
-            username = ""
+            username = "NOUSER"
         end
         text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id
         i = i + 1
