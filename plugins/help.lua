@@ -192,6 +192,7 @@ local function run(msg, matches)
                 user_info('user#id' .. user, get_sudo_info, { msg = msg })
             end
         end
+        return
     end
 
     local rank = get_rank(msg.from.id, msg.to.id)
