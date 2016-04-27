@@ -654,17 +654,7 @@ function run(msg, matches)
         send_document(receiver, "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
     end
 
-    if matches[1]:lower() == 'wholist' and msg.to.type == 'chat' and is_momod(msg) then
-        local name = user_print_name(msg.from)
-        savelog(msg.to.id, name .. " [" .. msg.from.id .. "] requested member list ")
-        local receiver = get_receiver(msg)
-        chat_info(receiver, returnids, { receiver = receiver })
-        local file = io.open("./groups/lists/" .. msg.to.id .. "memberlist.txt", "r")
-        text = file:read("*a")
-        send_large_msg(receiver, text)
-        file:close()
-    end
-    if matches[1]:lower() == 'who' and is_momod(msg) then
+    if matches[1]:lower() == 'wholist' and is_momod(msg) then
         local name = user_print_name(msg.from)
         savelog(msg.to.id, name .. " [" .. msg.from.id .. "] requested member list in a file")
         local receiver = get_receiver(msg)
