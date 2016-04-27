@@ -150,9 +150,9 @@ local function get_rank_by_username(extra, success, result)
 end
 
 local function run(msg, matches)
-    if msg.to.peer_type == 'user' and not is_admin1(msg) then
-        return lang_text('doYourBusiness')
-    end
+    -- if msg.to.peer_type == 'user' and not is_admin1(msg) then
+    --    return lang_text('doYourBusiness')
+    -- end
 
     if matches[1]:lower() == 'getrank' then
         if type(msg.reply_id) ~= "nil" then

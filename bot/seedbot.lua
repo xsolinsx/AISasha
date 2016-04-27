@@ -41,8 +41,8 @@ function check_tag(msg)
         -- my username
         if string.find(msg.text, '@EricSolinas') then
             -- exclude bot tags
-            if tonumber(msg.from.id) ~= our_id then
-                for v, user in pairs(_config.sudo_users) do
+            for v, user in pairs(_config.sudo_users) do
+                if tonumber(msg.from.id) ~= our_id and tonumber(msg.from.id) ~= user then
                     local text = lang_text('receiver') .. msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
                     if msg.from.username then
                         text = text .. '@' .. msg.from.username .. '\n'
