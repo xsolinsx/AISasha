@@ -7,10 +7,10 @@
         if v.print_name then
             name = v.print_name:gsub("_", " ")
         else
-            name = " "
+            name = ""
         end
         if v.username then
-            username = " @" .. v.username
+            username = "@" .. v.username
         else
             username = ""
         end
@@ -27,10 +27,10 @@ local function callback_supergroup_members(cb_extra, success, result)
         if v.print_name then
             name = v.print_name:gsub("_", " ")
         else
-            name = " "
+            name = ""
         end
         if v.username then
-            username = " @" .. v.username
+            username = "@" .. v.username
         else
             username = ""
         end
@@ -48,10 +48,10 @@ local function callback_kicked(cb_extra, success, result)
         if v.print_name then
             name = v.print_name:gsub("_", " ")
         else
-            name = " "
+            name = ""
         end
         if v.username then
-            username = " @" .. v.username
+            username = "@" .. v.username
         else
             username = ""
         end
