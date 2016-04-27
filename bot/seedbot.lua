@@ -38,10 +38,11 @@ end
 function check_tag(msg)
     -- exclude private chats
     if msg.to.type == 'chat' or msg.to.type == 'channel' then
+        -- my username
         if string.find(msg.text, '@EricSolinas') then
             -- exclude bot tags
             if tonumber(msg.from.id) ~= our_id then
-                for v, user in pairs(config.sudo_users) do
+                for v, user in pairs(_config.sudo_users) do
                     local text = lang_text('receiver') .. msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
                     if msg.from.username then
                         text = text .. '@' .. msg.from.username .. '\n'
