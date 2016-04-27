@@ -118,7 +118,7 @@ local function run(msg, matches)
         if is_gbanned(msg.from.id) then
             return lang_text('youGbanned')
         end
-        if matches[1]:lower() == 'join' then
+        if matches[1]:lower() == 'join' and is_admin1(msg) then
             local data = load_data(_config.moderation.data)
             if string.match(matches[2], '^%d+$') then
                 local long_id = tostring(data[tostring(matches[2])]['long_id'])
