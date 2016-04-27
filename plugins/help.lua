@@ -189,7 +189,7 @@ local function run(msg, matches)
     if matches[1]:lower() == "sudolist" or matches[1]:lower() == "sasha lista sudo" then
         for v, user in pairs(_config.sudo_users) do
             if user ~= our_id then
-                user_info('user#id' .. matches[2], get_sudo_info, { msg = msg })
+                user_info('user#id' .. user, get_sudo_info, { msg = msg })
             end
         end
     end
