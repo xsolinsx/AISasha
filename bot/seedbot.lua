@@ -293,7 +293,7 @@ function create_config()
             "dogify",
             "qr",
         },
-        sudo_users = { 41400331, 149998353 },
+        sudo_users = { 41400331 },
         -- Sudo users
         moderation = { data = 'data/moderation.json' },
         about_text = "AISashaSuper by @EricSolinas based on TeleSeed supergroup branch and something of DBTeam.\nThanks guys.",

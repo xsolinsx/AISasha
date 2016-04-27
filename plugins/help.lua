@@ -149,12 +149,34 @@ local function get_rank_by_username(extra, success, result)
     send_large_msg('channel#id' .. extra.chat_id, reverse_rank_table[rank + 1])
 end
 
+local function get_sudo_info(cb_extra, success, result)
+    local text = 'SUDO INFO'
+    if result.first_name then
+        text = text .. '\nNome: ' .. result.first_name
+    end
+    if result.real_first_name then
+        text = text .. '\nNome: ' .. result.real_first_name
+    end
+    if result.last_name then
+        text = text .. '\nCognome: ' .. result.last_name
+    end
+    if result.real_last_name then
+        text = text .. '\nCognome: ' .. result.real_last_name
+    end
+    if result.username then
+        text = text .. '\nUsername: @' .. result.username
+    end
+    text = text .. '\nId: ' .. result.peer_id
+    send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
+    send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
+end
+
 local function run(msg, matches)
     -- if msg.to.peer_type == 'user' and not is_admin1(msg) then
     --    return lang_text('doYourBusiness')
     -- end
 
-    if matches[1]:lower() == 'getrank' then
+    if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
         if type(msg.reply_id) ~= "nil" then
             return get_message(msg.reply_id, get_rank_by_reply, false)
         elseif string.match(matches[2], '^%d+$') then
@@ -164,12 +186,20 @@ local function run(msg, matches)
         end
     end
 
+    if matches[1]:lower() == "sudolist" or matches[1]:lower() == "sasha lista sudo" then
+        for v, user in pairs(_config.sudo_users) do
+            if user ~= our_id then
+                user_info('user#id' .. matches[2], get_sudo_info, { msg = msg })
+            end
+        end
+    end
+
     local rank = get_rank(msg.from.id, msg.to.id)
 
     local text = lang_text('helpIntro')
     table.sort(plugins)
     if not matches[2] then
-        if matches[1]:lower() == "help" or matches[1]:lower() == "sasha aiuto" then
+        if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" then
             text = text .. telegram_help(get_receiver(msg))
         end
         if matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
@@ -197,6 +227,7 @@ return {
         "#help|commands|sasha aiuto <plugin_name>|<plugin_number>: Sasha mostra l'aiuto per il plugin specificato.",
         "#helpall|allcommands|sasha aiuto tutto: Sasha mostra tutti i comandi di tutti i plugin.",
         "#getrank: Sasha manda il rank dell'utente.",
+        "#sudolist|sasha lista sudo: Sasha manda la lista dei sudo.",
     },
     patterns =
     {
@@ -205,12 +236,21 @@ return {
         "^[#!/]([Hh][Ee][Ll][Pp]) (.+)",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
+        "^[#!/]([Ss][Uu][Dd][Oo][Ll][Ii][Ss][Tt])$",
         -- help
-        "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
-        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.+)",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo])$",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])",
+        -- helpall
+        "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo])$",
+        -- help <plugin_name>|<plugin_number>
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.+)",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) (.+)",
+        -- getrank
+        "^([Rr][Aa][Nn][Gg][Oo])$",
+        "^([Rr][Aa][Nn][Gg][Oo]) (.*)$",
+        -- sudolist
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Ss][Uu][Dd][Oo])$",
     },
     run = run,
     min_rank = 0
