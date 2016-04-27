@@ -654,7 +654,7 @@ function run(msg, matches)
         send_document(receiver, "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
     end
 
-    if matches[1]:lower() == 'who' and msg.to.type == 'chat' and is_momod(msg) then
+    if matches[1]:lower() == 'wholist' and msg.to.type == 'chat' and is_momod(msg) then
         local name = user_print_name(msg.from)
         savelog(msg.to.id, name .. " [" .. msg.from.id .. "] requested member list ")
         local receiver = get_receiver(msg)
@@ -664,7 +664,7 @@ function run(msg, matches)
         send_large_msg(receiver, text)
         file:close()
     end
-    if matches[1]:lower() == 'wholist' and is_momod(msg) then
+    if matches[1]:lower() == 'who' and is_momod(msg) then
         local name = user_print_name(msg.from)
         savelog(msg.to.id, name .. " [" .. msg.from.id .. "] requested member list in a file")
         local receiver = get_receiver(msg)
@@ -988,8 +988,8 @@ return {
     usage =
     {
         "MOD",
-        "#wholist: Sasha mostra una lista di membri del gruppo/regno.",
-        "#who: Sasha invia un file con una lista di membri del gruppo/regno.",
+        "#who: Sasha mostra una lista di membri del gruppo/regno.",
+        "#wholist: Sasha invia un file con una lista di membri del gruppo/regno.",
         "OWNER",
         "#log: Sasha manda un file contenente il log del gruppo/regno.",
         "ADMIN",

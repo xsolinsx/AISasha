@@ -1,82 +1,66 @@
-﻿--[[local function usernameinfo(user)
-    if user.username then
-        return '@' .. user.username
-    end
-    if user.print_name then
-        return user.print_name
-    end
-    local text = ''
-    if user.first_name then
-        text = user.last_name .. ' '
-    end
-    if user.lastname then
-        text = text .. user.last_name
-    end
-    return text
-end
-
-local function whoisname(cb_extra, success, result)
-    chat_type = cb_extra.chat_type
-    chat_id = cb_extra.chat_id
-    user_id = result.peer_id
-    user_username = result.username
-    if chat_type == 'chat' then
-        send_msg('chat#id' .. chat_id, '👤 ' .. lang_text(chat_id, 'user') .. ' @' .. user_username .. ' (' .. user_id .. ')', ok_cb, false)
-    elseif chat_type == 'channel' then
-        send_msg('channel#id' .. chat_id, '👤 ' .. lang_text(chat_id, 'user') .. ' @' .. user_username .. ' (' .. user_id .. ')', ok_cb, false)
-    end
-end
-
-local function whoisid(cb_extra, success, result)
-    chat_id = cb_extra.chat_id
-    user_id = cb_extra.user_id
-    if cb_extra.chat_type == 'chat' then
-        send_msg('chat#id' .. chat_id, '👤 ' .. lang_text(chat_id, 'user') .. ' @' .. result.username .. ' (' .. user_id .. ')', ok_cb, false)
-    elseif cb_extra.chat_type == 'channel' then
-        send_msg('channel#id' .. chat_id, '👤 ' .. lang_text(chat_id, 'user') .. ' @' .. result.username .. ' (' .. user_id .. ')', ok_cb, false)
-    end
-end
-
-local function channelUserIDs(extra, success, result)
-    local receiver = extra.receiver
-    print('Result')
-    vardump(result)
-    local text = ''
-    for k, user in ipairs(result) do
-        local id = user.peer_id
-        local username = usernameinfo(user)
-        text = text ..("%s - %s\n"):format(username, id)
-    end
-    send_large_msg(receiver, text)
-end
-
-local function get_id_who(extra, success, result)
-    result = backward_msg_format(result)
-    local msg = result
-    local chat = msg.to.id
-    local user = msg.from.id
-    if msg.to.type == 'chat' then
-        send_msg('chat#id' .. msg.to.id, '🆔 ' .. lang_text(chat, 'user') .. ' ID: ' .. msg.from.id, ok_cb, false)
-    elseif msg.to.type == 'channel' then
-        send_msg('channel#id' .. msg.to.id, '🆔 ' .. lang_text(chat, 'user') .. ' ID: ' .. msg.from.id, ok_cb, false)
-    end
-end
-
-local function returnids(extra, success, result)
-    local receiver = extra.receiver
+﻿local function callback_group_members(cb_extra, success, result)
+    local i = 1
+    local chat_id = "chat#id" .. result.peer_id
     local chatname = result.print_name
-    local id = result.peer_id
-    local text =('ID for chat %s (%s):\n'):format(chatname, id)
-    for k, user in ipairs(result.members) do
-        local username = usernameinfo(user)
-        local id = user.peer_id
-        local userinfo =("%s - %s\n"):format(username, id)
-        text = text .. userinfo
+    local text = lang_text('usersIn') .. string.gsub(chatname, "_", " ") .. ' ' .. result.peer_id .. '\n\n'
+    for k, v in pairs(result.members) do
+        if v.print_name then
+            name = v.print_name:gsub("_", " ")
+        else
+            name = " "
+        end
+        if v.username then
+            username = " @" .. v.username
+        else
+            username = ""
+        end
+        text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id .. "\n"
+        i = i + 1
     end
-    send_large_msg(receiver, text)
-end]]
+    send_large_msg(cb_extra.receiver, text)
+end
 
--- OLDINFOFUNCTIONS
+local function callback_supergroup_members(cb_extra, success, result)
+    local text = lang_text('membersOf') .. cb_extra.receiver
+    local i = 1
+    for k, v in pairsByKeys(result) do
+        if v.print_name then
+            name = v.print_name:gsub("_", " ")
+        else
+            name = " "
+        end
+        if v.username then
+            username = " @" .. v.username
+        else
+            username = ""
+        end
+        text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id .. "\n"
+        i = i + 1
+    end
+    send_large_msg(cb_extra.receiver, text)
+end
+
+local function callback_kicked(cb_extra, success, result)
+    -- vardump(result)
+    local text = lang_text('membersKickedFrom') .. cb_extra.receiver .. "\n\n"
+    local i = 1
+    for k, v in pairsByKeys(result) do
+        if v.print_name then
+            name = v.print_name:gsub("_", " ")
+        else
+            name = " "
+        end
+        if v.username then
+            username = " @" .. v.username
+        else
+            username = ""
+        end
+        text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id .. "\n"
+        i = i + 1
+    end
+    send_large_msg(cb_extra.receiver, text)
+end
+
 local function callback_reply(extra, success, result)
     local text = 'INFO (<reply>)'
     if result.from.first_name then
@@ -94,7 +78,7 @@ local function callback_reply(extra, success, result)
     if result.from.username then
         text = text .. lang_text('username') .. '@' .. result.from.username
     end
-    text = text .. '\nId: ' .. result.from.peer_id
+    text = text .. '\n🆔: ' .. result.from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end
@@ -116,7 +100,7 @@ local function callback_id(cb_extra, success, result)
     if result.username then
         text = text .. lang_text('username') .. '@' .. result.username
     end
-    text = text .. '\nId: ' .. result.peer_id
+    text = text .. '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
 end
@@ -138,7 +122,7 @@ local function callback_username(extra, success, result)
     if result.username then
         text = text .. lang_text('username') .. '@' .. result.username
     end
-    text = text .. '\nId: ' .. result.peer_id
+    text = text .. '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. extra.chatid, text)
     send_large_msg('channel#id' .. extra.chatid, text)
 end
@@ -160,7 +144,7 @@ local function callback_from(extra, success, result)
     if result.fwd_from.username then
         text = text .. lang_text('username') .. '@' .. result.fwd_from.username
     end
-    text = text .. '\nId: ' .. result.fwd_from.peer_id
+    text = text .. '\n🆔: ' .. result.fwd_from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end
@@ -170,7 +154,7 @@ local function channel_callback_info(cb_extra, success, result)
     local user_num = lang_text('users') .. result.participants_count
     local admin_num = lang_text('admins') .. result.admins_count
     local kicked_num = lang_text('kickedUsers') .. result.kicked_count
-    local channel_id = "\nID: " .. result.peer_id
+    local channel_id = "\n🆔: " .. result.peer_id
     if result.username then
         channel_username = lang_text('username') .. "@" .. result.username
     else
@@ -183,7 +167,7 @@ end
 local function chat_callback_info(cb_extra, success, result)
     local title = lang_text('infoFor') .. result.title .. "\n"
     local user_num = lang_text('users') .. result.members_num
-    local chat_id = "\nID: " .. result.peer_id
+    local chat_id = "\n🆔: " .. result.peer_id
     local text = title .. user_num .. chat_id
     send_large_msg(cb_extra.receiver, text)
 end
@@ -220,7 +204,6 @@ local function database(cb_extra, success, result)
     send_msg('chat#id' .. result.peer_id, "Data leak.", ok_cb, false)
     post_large_msg('channel#id' .. result.peer_id, "Data leak.")
 end
--- OLDINFOFUNCTIONS
 --[[
 local function get_msgs_user_chat(user_id, chat_id)
     local user_info = { }
@@ -349,7 +332,6 @@ local function run(msg, matches)
     local chat = msg.to.id
     local chat_type = msg.to.type
 
-    -- OLDINFO
     if matches[1]:lower() == 'info' or matches[1]:lower() == 'sasha info' then
         if not matches[2] then
             if type(msg.reply_id) ~= 'nil' then
@@ -376,7 +358,7 @@ local function run(msg, matches)
                 if msg.from.username then
                     text = text .. lang_text('username') .. '@' .. msg.from.username
                 end
-                text = text .. '\nId: ' .. msg.from.id ..
+                text = text .. '\n🆔: ' .. msg.from.id ..
                 lang_text('youAreWriting')
                 if chat_type == 'user' then
                     if msg.to.first_name then
@@ -394,18 +376,18 @@ local function run(msg, matches)
                     if msg.to.username then
                         text = text .. lang_text('username') .. '@' .. msg.to.username
                     end
-                    text = text .. '\nId: ' .. msg.to.id
+                    text = text .. '\n🆔: ' .. msg.to.id
                     return text
                 elseif chat_type == 'chat' then
-                    text = text ..
-                    lang_text('groupName') .. msg.to.print_name:gsub("_", " ") ..
-                    lang_text('members') .. msg.to.members_num ..
-                    '\nId: ' .. math.abs(msg.to.id)
+                    text = text .. '🔠 ' ..
+                    lang_text('groupName') .. msg.to.print_name:gsub("_", " ") .. '👥 ' ..
+                    lang_text('members') .. msg.to.members_num .. '' ..
+                    '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 elseif chat_type == 'channel' then
-                    text = text ..
+                    text = text .. '🔠 ' ..
                     lang_text('supergroupName') .. msg.to.print_name:gsub("_", " ") ..
-                    '\nId: ' .. math.abs(msg.to.id)
+                    '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 end
             end
@@ -448,63 +430,29 @@ local function run(msg, matches)
             return lang_text('require_sudo')
         end
     end
-    -- OLDINFO
-
-    --[[ Id of the user and info about group / channel
-    if matches[1]:lower() == "#id" then
-        if permissions(msg.from.id, msg.to.id, "id") then
-            if msg.to.type == 'channel' then
-                send_msg(msg.to.peer_id, '🔠 ' .. lang_text(chat, 'supergroupName') .. ': ' .. msg.to.print_name:gsub("_", " ") .. '\n👥 ' .. lang_text(chat, 'supergroup') .. ' ID: ' .. msg.to.id .. '\n🆔 ' .. lang_text(chat, 'user') .. ' ID: ' .. msg.from.id, ok_cb, false)
-            elseif msg.to.type == 'chat' then
-                send_msg(msg.to.peer_id, '🔠 ' .. lang_text(chat, 'chatName') .. ': ' .. msg.to.print_name:gsub("_", " ") .. '\n👥 ' .. lang_text(chat, 'chat') .. ' ID: ' .. msg.to.id .. '\n🆔 ' .. lang_text(chat, 'user') .. ' ID: ' .. msg.from.id, ok_cb, false)
-            end
-        end
-    elseif matches[1]:lower() == 'whois' then
-        if permissions(msg.from.id, msg.to.id, "whois") then
-            chat_type = msg.to.type
-            chat_id = msg.to.id
-            if msg.reply_id then
-                get_message(msg.reply_id, get_id_who, { receiver = get_receiver(msg) })
-                return
-            end
-            if is_id(matches[2]) then
-                print(1)
-                user_info('user#id' .. matches[2], whoisid, { chat_type = chat_type, chat_id = chat_id, user_id = matches[2] })
-                return
-            else
-                local member = string.gsub(matches[2], '@', '')
-                resolve_username(member, whoisname, { chat_id = chat_id, member = member, chat_type = chat_type })
-                return
+    if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] then
+        if is_momod(msg) then
+            local user_id = msg.from.peer_id
+            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested users list")
+            if chat_type == 'channel' then
+                channel_get_users(receiver, callback_supergroup_members, { receiver = receiver })
+            elseif chat_type == 'chat' then
+                chat_info(receiver, callback_group_members, { receiver = receiver })
             end
         else
-            return '🚫 ' .. lang_text(msg.to.id, 'require_mod')
+            return lang_text('require_mod')
         end
-    elseif matches[1]:lower() == 'chat' or matches[1]:lower() == 'channel' then
-        if permissions(msg.from.id, msg.to.id, "whois") then
-            local type = matches[1]
-            local chanId = matches[2]
-            -- !ids? (chat) (%d+)
-            if chanId then
-                local chan =("%s#id%s"):format(type, chanId)
-                if type == 'chat' then
-                    chat_info(chan, returnids, { receiver = receiver })
-                else
-                    channel_get_users(chan, channelUserIDs, { receiver = receiver })
-                end
+    end
+    if matches[1]:lower() == "kicked" or matches[1]:lower() == "sasha lista rimossi" or matches[1]:lower() == "lista rimossi" then
+        if chat_type == 'channel' then
+            if is_momod(msg) then
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested Kicked users list")
+                channel_get_kicked(receiver, callback_kicked, { receiver = receiver })
             else
-                -- !id chat/channel
-                local chan =("%s#id%s"):format(msg.to.type, msg.to.id)
-                if msg.to.type == 'channel' then
-                    channel_get_users(chan, channelUserIDs, { receiver = receiver })
-                end
-                if msg.to.type == 'chat' then
-                    chat_info(chan, returnids, { receiver = receiver })
-                end
+                return lang_text('require_mod')
             end
-        else
-            return '🚫 ' .. lang_text(msg.to.id, 'require_mod')
         end
-    end]]
+    end
 end
 
 return {
@@ -514,6 +462,8 @@ return {
         "[#]|[sasha] info: Sasha manda le info dell'utente e della chat o di se stessa",
         "MOD",
         "[#]|[sasha] info <id>|<username>|<reply>|from: Sasha manda le info dell'utente specificato.",
+        "(#(who|members)|[sasha] lista membri): Sasha manda la lista degli utenti.",
+        "(#kicked|[sasha] lista membri): Sasha manda la lista degli utenti rimossi.",
         "OWNER",
         "(#groupinfo|[sasha] info gruppo) [<group_id>]: Sasha manda le info del gruppo specificato.",
         "SUDO",
@@ -521,15 +471,12 @@ return {
     },
     patterns =
     {
-        --[["^#([Ww][Hh][Oo][Ii][Ss])$",
-        "^#[Ii][Dd]$",
-        "^#[Ii][Dd][Ss]? ([Cc][Hh][Aa][Tt])$",
-        "^#[Ii][Dd][Ss]? ([Cc][Hh][Aa][Nn][Nn][Ee][Ll])$",
-        "^#([Ww][Hh][Oo][Ii][Ss]) (.*)$",]]
-        "^[!/#]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
-        "^[!/#]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
-        "^[!/#]([Ii][Nn][Ff][Oo])$",
-        "^[!/#]([Ii][Nn][Ff][Oo]) (.*)$",
+        "^[#!/]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
+        "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
+        "^[#!/]([Ii][Nn][Ff][Oo])$",
+        "^[#!/]([Ii][Nn][Ff][Oo]) (.*)$",
+        "^[#!/]([Ww][Hh][Oo])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Ee][Dd])$",
         -- database
         "^([Ss][Aa][Ss][Hh][Aa] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         -- groupinfo
@@ -538,6 +485,12 @@ return {
         -- info
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo]) (.*)$",
+        -- who
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Mm][Ee][Mm][Bb][Rr][Ii])$",
+        "^([Ll][Ii][Ss][Tt][Aa] [Mm][Ee][Mm][Bb][Rr][Ii])$",
+        -- kicked
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Rr][Ii][Mm][Oo][Ss][Ss][Ii])$",
+        "^([Ll][Ii][Ss][Tt][Aa] [Rr][Ii][Mm][Oo][Ss][Ss][Ii])$",
     },
     run = run,
     min_rank = 0

@@ -1052,13 +1052,13 @@ local function run(msg, matches)
             channel_get_bots(receiver, callback, { receiver = receiver, msg = msg, member_type = member_type })
         end
 
-        if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] and is_momod(msg) then
+        if (matches[1]:lower() == "wholist" or matches[1]:lower() == "memberslist") and not matches[2] and is_momod(msg) then
             local user_id = msg.from.peer_id
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup users list")
             channel_get_users(receiver, callback_who, { receiver = receiver })
         end
 
-        if (matches[1]:lower() == "kicked" or matches[1]:lower() == "sasha lista rimossi" or matches[1]:lower() == "lista rimossi") and is_momod(msg) then
+        if matches[1]:lower() == "kickedlist" and is_momod(msg) then
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested Kicked users list")
             channel_get_kicked(receiver, callback_kicked, { receiver = receiver })
         end
@@ -1801,8 +1801,8 @@ return {
         "#rules|sasha regole: Sasha manda le regole del gruppo.",
         "MOD",
         "#bots|[sasha] lista bot: Sasha manda la lista dei bot.",
-        "(#(who|members)|[sasha] lista membri): Sasha manda un file contenente la lista degli utenti.",
-        "#kicked|[sasha] lista rimossi: Sasha manda la lista degli utenti rimossi.",
+        "#(wholist|memberslist): Sasha manda un file contenente la lista degli utenti.",
+        "#kickedlist: Sasha manda la lista degli utenti rimossi.",
         "#del <reply>: Sasha elimina il messaggio specificato.",
         "#newlink|[sasha] crea link: Sasha crea un nuovo link d'invito.",
         "#link|sasha link: Sasha manda il link d'invito.",
@@ -1850,8 +1850,8 @@ return {
         "^[#!/]([Oo][Ww][Nn][Ee][Rr])$",
         "^[#!/]([Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Bb][Oo][Tt][Ss])$",
-        "^[#!/]([Ww][Hh][Oo])$",
-        "^[#!/]([Kk][Ii][Cc][Kk][Ee][Dd])$",
+        "^[#!/]([Ww][Hh][Oo][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Ee][Dd][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Tt][Oo][Ss][Uu][Pp][Ee][Rr])$",
         "^[#!/]([Nn][Ee][Ww][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk])$",
@@ -1906,12 +1906,8 @@ return {
         -- bots
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Bb][Oo][Tt])$",
         "^([Ll][Ii][Ss][Tt][Aa] [Bb][Oo][Tt])$",
-        -- who
-        "^[#!/]([Mm][Ee][Mm][Bb][Ee][Rr][Ss])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Mm][Ee][Mm][Bb][Rr][Ii])$",
-        -- kicked
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Rr][Ii][Mm][Oo][Ss][Ss][Ii])$",
-        "^([Ll][Ii][Ss][Tt][Aa] [Rr][Ii][Mm][Oo][Ss][Ss][Ii])$",
+        -- wholist
+        "^[#!/]([Mm][Ee][Mm][Bb][Ee][Rr][Ss][Ll][Ii][Ss][Tt])$",
         -- newlink
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Rr][Ee][Aa] [Ll][Ii][Nn][Kk])$",
         -- setlink
