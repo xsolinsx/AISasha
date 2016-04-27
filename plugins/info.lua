@@ -2,7 +2,7 @@
     local i = 1
     local chat_id = "chat#id" .. result.peer_id
     local chatname = result.print_name
-    local text = lang_text('usersIn') .. string.gsub(chatname, "_", " ") .. ' ' .. result.peer_id .. '\n\n'
+    local text = lang_text('usersIn') .. string.gsub(chatname, "_", " ") .. ' ' .. result.peer_id .. '\n'
     for k, v in pairs(result.members) do
         if v.print_name then
             name = v.print_name:gsub("_", " ")
@@ -21,7 +21,7 @@
 end
 
 local function callback_supergroup_members(cb_extra, success, result)
-    local text = lang_text('membersOf') .. cb_extra.receiver
+    local text = lang_text('membersOf') .. cb_extra.receiver .. '\n'
     local i = 1
     for k, v in pairsByKeys(result) do
         if v.print_name then
@@ -42,7 +42,7 @@ end
 
 local function callback_kicked(cb_extra, success, result)
     -- vardump(result)
-    local text = lang_text('membersKickedFrom') .. cb_extra.receiver .. "\n\n"
+    local text = lang_text('membersKickedFrom') .. cb_extra.receiver .. '\n'
     local i = 1
     for k, v in pairsByKeys(result) do
         if v.print_name then
