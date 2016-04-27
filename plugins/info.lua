@@ -80,19 +80,19 @@ end]]
 local function callback_reply(extra, success, result)
     local text = 'INFO (<reply>)'
     if result.from.first_name then
-        text = text .. '\nNome: ' .. result.from.first_name
+        text = text .. lang_text('name') .. result.from.first_name
     end
     if result.from.real_first_name then
-        text = text .. '\nNome: ' .. result.from.real_first_name
+        text = text .. lang_text('name') .. result.from.real_first_name
     end
     if result.from.last_name then
-        text = text .. '\nCognome: ' .. result.from.last_name
+        text = text .. lang_text('surname') .. result.from.last_name
     end
     if result.from.real_last_name then
-        text = text .. '\nCognome: ' .. result.from.real_last_name
+        text = text .. lang_text('surname') .. result.from.real_last_name
     end
     if result.from.username then
-        text = text .. '\nUsername: @' .. result.from.username
+        text = text .. lang_text('username') .. '@' .. result.from.username
     end
     text = text .. '\nId: ' .. result.from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
@@ -102,19 +102,19 @@ end
 local function callback_id(cb_extra, success, result)
     local text = 'INFO (<id>)'
     if result.first_name then
-        text = text .. '\nNome: ' .. result.first_name
+        text = text .. lang_text('name') .. result.first_name
     end
     if result.real_first_name then
-        text = text .. '\nNome: ' .. result.real_first_name
+        text = text .. lang_text('name') .. result.real_first_name
     end
     if result.last_name then
-        text = text .. '\nCognome: ' .. result.last_name
+        text = text .. lang_text('surname') .. result.last_name
     end
     if result.real_last_name then
-        text = text .. '\nCognome: ' .. result.real_last_name
+        text = text .. lang_text('surname') .. result.real_last_name
     end
     if result.username then
-        text = text .. '\nUsername: @' .. result.username
+        text = text .. lang_text('username') .. '@' .. result.username
     end
     text = text .. '\nId: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
@@ -124,19 +124,19 @@ end
 local function callback_username(extra, success, result)
     local text = 'INFO (<username>)'
     if result.first_name then
-        text = text .. '\nNome: ' .. result.first_name
+        text = text .. lang_text('name') .. result.first_name
     end
     if result.real_first_name then
-        text = text .. '\nNome: ' .. result.real_first_name
+        text = text .. lang_text('name') .. result.real_first_name
     end
     if result.last_name then
-        text = text .. '\nCognome: ' .. result.last_name
+        text = text .. lang_text('surname') .. result.last_name
     end
     if result.real_last_name then
-        text = text .. '\nCognome: ' .. result.real_last_name
+        text = text .. lang_text('surname') .. result.real_last_name
     end
     if result.username then
-        text = text .. '\nUsername: @' .. result.username
+        text = text .. lang_text('username') .. '@' .. result.username
     end
     text = text .. '\nId: ' .. result.peer_id
     send_large_msg('chat#id' .. extra.chatid, text)
@@ -146,19 +146,19 @@ end
 local function callback_from(extra, success, result)
     local text = 'INFO (<from>)'
     if result.fwd_from.first_name then
-        text = text .. '\nNome: ' .. result.fwd_from.first_name
+        text = text .. lang_text('name') .. result.fwd_from.first_name
     end
     if result.fwd_from.real_first_name then
-        text = text .. '\nNome: ' .. result.fwd_from.real_first_name
+        text = text .. lang_text('name') .. result.fwd_from.real_first_name
     end
     if result.fwd_from.last_name then
-        text = text .. '\nCognome: ' .. result.fwd_from.last_name
+        text = text .. lang_text('surname') .. result.fwd_from.last_name
     end
     if result.fwd_from.real_last_name then
-        text = text .. '\nCognome: ' .. result.fwd_from.real_last_name
+        text = text .. lang_text('surname') .. result.fwd_from.real_last_name
     end
     if result.fwd_from.username then
-        text = text .. '\nUsername: @' .. result.fwd_from.username
+        text = text .. lang_text('username') .. '@' .. result.fwd_from.username
     end
     text = text .. '\nId: ' .. result.fwd_from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)

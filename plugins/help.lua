@@ -152,19 +152,19 @@ end
 local function get_sudo_info(cb_extra, success, result)
     local text = 'SUDO INFO'
     if result.first_name then
-        text = text .. '\nNome: ' .. result.first_name
+        text = text .. lang_text('name') .. result.first_name
     end
     if result.real_first_name then
-        text = text .. '\nNome: ' .. result.real_first_name
+        text = text .. lang_text('name') .. result.real_first_name
     end
     if result.last_name then
-        text = text .. '\nCognome: ' .. result.last_name
+        text = text .. lang_text('surname') .. result.last_name
     end
     if result.real_last_name then
-        text = text .. '\nCognome: ' .. result.real_last_name
+        text = text .. lang_text('surname') .. result.real_last_name
     end
     if result.username then
-        text = text .. '\nUsername: @' .. result.username
+        text = text .. lang_text('username') .. '@' .. result.username
     end
     text = text .. '\nId: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
