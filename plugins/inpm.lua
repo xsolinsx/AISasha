@@ -133,7 +133,8 @@ local function run(msg, matches)
                     local channel = long_id
                     local user = msg.from.peer_id
                     chat_add_user(chat, user, ok_cb, false)
-                    channel_set_admin(channel, user, ok_cb, false)
+                    channel_invite(channel, user, ok_cb, false)
+                    -- channel_set_admin(channel, user, ok_cb, false)
                 end
                 if is_support(msg.from.id) and not is_admin1(msg) and not is_owner2(msg.fom.id, matches[2]) then
                     user_type = "support"
@@ -142,7 +143,8 @@ local function run(msg, matches)
                     local channel = long_id
                     local user = msg.from.peer_id
                     chat_add_user(chat, user, ok_cb, false)
-                    channel_set_mod(channel, user, ok_cb, false)
+                    channel_invite(channel, user, ok_cb, false)
+                    -- channel_set_mod(channel, user, ok_cb, false)
                 end
                 if is_banned(msg.from.id, matches[2]) then
                     return lang_text('youBanned')
