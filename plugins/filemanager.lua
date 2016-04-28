@@ -3,13 +3,16 @@ local BASE_FOLDER = "/"
 
 local function callback(extra, success, result)
     if success then
-        send_large_msg(extra, lang_text('fileDownloadedTo') .. result)
+        send_large_msg('chat#id' .. extra, lang_text('fileDownloadedTo') .. result)
+        send_large_msg('channel#id' .. extra, lang_text('fileDownloadedTo') .. result)
     else
-        send_large_msg(extra, lang_text('errorDownloading') .. extra)
+        send_large_msg('chat#id' .. extra, lang_text('errorDownloading') .. extra)
+        send_large_msg('channel#id' .. extra, lang_text('errorDownloading') .. extra)
     end
 end
 
 local function callback_reply_file(extra, success, result)
+    print(result.to.peer_id)
     if result.media then
         if result.media.type == 'document' then
             load_document(result.id, callback, result.to.peer_id)
@@ -20,10 +23,12 @@ local function callback_reply_file(extra, success, result)
         elseif result.media.type == 'audio' then
             load_audio(result.id, callback, result.to.peer_id)
         else
-            send_large_msg(result.to.peer_id, lang_text('mediaNotRecognized'))
+            send_large_msg('chat#id' .. result.to.peer_id, lang_text('mediaNotRecognized'))
+            send_large_msg('channel#id' .. result.to.peer_id, lang_text('mediaNotRecognized'))
         end
     else
-        send_large_msg(result.to.peer_id, lang_text('needMedia'))
+        send_large_msg('chat#id' .. result.to.peer_id, lang_text('needMedia'))
+        send_large_msg('channel#id' .. result.to.peer_id, lang_text('needMedia'))
     end
 end
 
