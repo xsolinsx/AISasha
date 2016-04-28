@@ -97,7 +97,6 @@ function run(msg, matches)
                     return lang_text('useQuoteOnFile')
                 else
                     get_message(msg.reply_id, callback_reply_file, false)
-                    return lang_text('downloaded')
                 end
             end
         else
