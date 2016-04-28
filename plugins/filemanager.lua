@@ -1,6 +1,16 @@
 -- Base folder
 local BASE_FOLDER = "/"
 
+local function callback(extra, success, result)
+    vardump(result)
+    vardump(extra)
+    if success then
+        print('File downloaded to:', result)
+    else
+        print('Error downloading: ' .. extra)
+    end
+end
+
 local function callback_reply_file(extra, success, result)
     vardump(result)
     if result.media then
@@ -13,20 +23,12 @@ local function callback_reply_file(extra, success, result)
         elseif result.media.type == 'audio' then
             load_audio(result.id, callback, result.id)
         else
+            print('sendingmsg2')
             send_large_msg(result.to.id, lang_text('mediaNotRecognized'))
         end
     else
+        print('sendingmsg1')
         send_large_msg(result.to.id, lang_text('needMedia'))
-    end
-end
-
-local function callback(extra, success, result)
-    vardump(result)
-    vardump(extra)
-    if success then
-        print('File downloaded to:', result)
-    else
-        print('Error downloading: ' .. extra)
     end
 end
 
