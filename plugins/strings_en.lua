@@ -104,7 +104,9 @@ local function run(msg, matches)
         set_text('movedTo', ' moved to ')
         set_text('sendingYou', 'I\'m sending ')
         set_text('useQuoteOnFile', 'Use \'reply\' on the file you want me to download.')
-        set_text('downloaded', ' downloaded.')
+        set_text('downloaded', 'Downloaded.')
+        set_text('needMedia', 'I need a file.')
+        set_text('mediaNotRecognized', 'File not recognized.')
 
         -- flame.lua --
         set_text('cantFlameHigher', 'You can\'t flame mod/owner/admin/sudo/!')
@@ -339,6 +341,13 @@ local function run(msg, matches)
         set_text('pokeName', 'Name: ')
         set_text('pokeWeight', 'Weight: ')
         set_text('pokeHeight', 'Height: ')
+
+        -- ruleta.lua --
+        set_text('alreadySigned', 'You\'re already registered, use /ruleta to die.')
+        set_text('signed', ' You\'ve been registered, have a nice death.')
+        set_text('requireSignup', 'Before dying you need to be registered.')
+        set_text('errorCapsRange', 'Error, range is [1-X].')
+        set_text('errorCylinderRange', 'Error, range is [5-10].')
 
         -- set.lua --
         set_text('saved', ' saved.')

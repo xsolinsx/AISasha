@@ -3,20 +3,20 @@ local BASE_FOLDER = "/"
 
 local function callback_reply_file(extra, success, result)
     vardump(result)
-    vardump(extra)
     if result.media then
         if result.media.type == 'document' then
             load_document(result.id, callback, result.id)
-        end
-        if msg.media.type == 'photo' then
+        elseif result.media.type == 'photo' then
             load_photo(result.id, callback, result.id)
-        end
-        if msg.media.type == 'video' then
+        elseif result.media.type == 'video' then
             load_video(result.id, callback, result.id)
-        end
-        if msg.media.type == 'audio' then
+        elseif result.media.type == 'audio' then
             load_audio(result.id, callback, result.id)
+        else
+            send_large_msg(result.to.id, lang_text('mediaNotRecognized'))
         end
+    else
+        send_large_msg(result.to.id, lang_text('needMedia'))
     end
 end
 
