@@ -128,7 +128,7 @@ return {
         "#cp <file> <directory>: Sasha copia <file> in <directory>.",
         "#mv <file> <directory>: Sasha sposta <file> in <directory>.",
         "#upload <file>: Sasha manda <file> nella chat.",
-        -- "#download <reply> [<file>]: Sasha scarica il file contenuto in <reply>, se specificato viene rinominato in <file>."
+        "#download <reply> [<file>]: Sasha scarica il file contenuto in <reply>, se specificato viene rinominato in <file>."
     },
     patterns =
     {
@@ -145,8 +145,8 @@ return {
         "^[#!/]([Cc][Pp]) (.*) (.*)$",
         "^[#!/]([Mm][Vv]) (.*) (.*)$",
         "^[#!/]([Uu][Pp][Ll][Oo][Aa][Dd]) (.*)$",
-        -- "^[#!/]([Dd][Oo][Ww][Nn][Ll][Oo][Aa][Dd]) (.*)",
-        -- "^[#!/]([Dd][Oo][Ww][Nn][Ll][Oo][Aa][Dd])"
+        "^[#!/]([Dd][Oo][Ww][Nn][Ll][Oo][Aa][Dd]) (.*)",
+        "^[#!/]([Dd][Oo][Ww][Nn][Ll][Oo][Aa][Dd])"
     },
     run = run,
     min_rank = 5
