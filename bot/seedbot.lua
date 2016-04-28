@@ -296,10 +296,10 @@ function create_config()
         sudo_users = { 41400331 },
         -- Sudo users
         moderation = { data = 'data/moderation.json' },
+        ruleta = { db = 'data/ruletadb.json' },
         about_text = "AISashaSuper by @EricSolinas based on TeleSeed supergroup branch and something of DBTeam.\nThanks guys.",
     }
     serialize_to_file(config, './data/config.lua')
-    update_lang()
     print('saved config into ./data/config.lua')
 end
 
