@@ -41,7 +41,7 @@ function run(msg, matches)
                     return lang_text('backHomeFolder') .. BASE_FOLDER
                 else
                     redis:set('folder', matches[2])
-                    return lang_text('youAreHere') .. BASE_FOLDER .. folder
+                    return lang_text('youAreHere') .. BASE_FOLDER .. matches[2]
                 end
             end
             if matches[1]:lower() == 'ls' then
