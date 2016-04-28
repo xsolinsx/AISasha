@@ -2,33 +2,28 @@
 local BASE_FOLDER = "/"
 
 local function callback(extra, success, result)
-    vardump(result)
-    vardump(extra)
     if success then
-        print('File downloaded to:', result)
+        send_large_msg(extra, lang_text('fileDownloadedTo') .. result)
     else
-        print('Error downloading: ' .. extra)
+        send_large_msg(extra, lang_text('errorDownloading') .. extra)
     end
 end
 
 local function callback_reply_file(extra, success, result)
-    vardump(result)
     if result.media then
         if result.media.type == 'document' then
-            load_document(result.id, callback, result.id)
+            load_document(result.id, callback, result.to.peer_id)
         elseif result.media.type == 'photo' then
-            load_photo(result.id, callback, result.id)
+            load_photo(result.id, callback, result.to.peer_id)
         elseif result.media.type == 'video' then
-            load_video(result.id, callback, result.id)
+            load_video(result.id, callback, result.to.peer_id)
         elseif result.media.type == 'audio' then
-            load_audio(result.id, callback, result.id)
+            load_audio(result.id, callback, result.to.peer_id)
         else
-            print('sendingmsg2')
-            send_large_msg(result.to.id, lang_text('mediaNotRecognized'))
+            send_large_msg(result.to.peer_id, lang_text('mediaNotRecognized'))
         end
     else
-        print('sendingmsg1')
-        send_large_msg(result.to.id, lang_text('needMedia'))
+        send_large_msg(result.to.peer_id, lang_text('needMedia'))
     end
 end
 

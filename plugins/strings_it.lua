@@ -107,6 +107,8 @@ local function run(msg, matches)
         set_text('downloaded', 'Scaricato.')
         set_text('needMedia', 'Mi serve un file.')
         set_text('mediaNotRecognized', 'File non riconosciuto.')
+        set_text('fileDownloadedTo', 'File scaricato in: ')
+        set_text('errorDownloading', 'Errore durante il download: ')
 
         -- flame.lua --
         set_text('cantFlameHigher', 'Non puoi flammare un mod/owner/admin/sudo/!')
