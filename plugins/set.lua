@@ -21,7 +21,7 @@ end
 
 local function run(msg, matches)
     local name = string.sub(matches[1]:lower(), 1, 50)
-    local value = string.sub(matches[2], 1, 1000)
+    local value = string.sub(matches[2], 1, 4096)
 
     if is_momod(msg) then
         return set_value(msg, name, value)

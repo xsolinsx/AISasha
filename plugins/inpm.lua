@@ -110,6 +110,7 @@ local function all_chats(msg)
     return message
 end
 
+-- TODO: add lock and unlock joins
 local function run(msg, matches)
     local to = msg.to.type
     local service = msg.service
