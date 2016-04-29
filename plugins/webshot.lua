@@ -39,7 +39,11 @@ local function run(msg, matches)
     if is_momod(msg) then
         local size = 'X'
         if matches[2] then
-            size = matches[2]
+            if (matches[2] == 'Fmob' or matches[2] == 'F') and is_admin1(msg) then
+                size = matches[2]
+            else
+                size = matches[2]
+            end
         end
         local find = get_webshot_url(matches[1], size)
         if find then
@@ -59,16 +63,17 @@ return {
         "MOD",
         "[#]|[sasha] webshot <url> [<size>]: Sasha fa uno screenshot del sito e lo manda, se <size> è specificato lo manda con quella dimensione altrimenti con dimensione X.",
         "La dimensione può essere:",
-        "'T': (120 x 90px) - tiny",
-        "'S': (200 x 150px) - small",
-        "'E': (320 x 240px) - seminormal",
-        "'N': (400 x 300px) - normal",
-        "'M': (640 x 480px) - medium",
-        "'L': (800 x 600px) - large",
-        "'X': (1024 x 768px) - extra large",
-        "'F': full page, complete page from the top to the bottom (can be pretty long)",
-        "'Nmob': (480 x 800px) - normal",
-        "'Fmob': full page, complete page from the top to the bottom",
+        "'T': (120 x 90px) - molto grande",
+        "'S': (200 x 150px) - piccola",
+        "'E': (320 x 240px) - seminormale",
+        "'N': (400 x 300px) - normale",
+        "'M': (640 x 480px) - media",
+        "'L': (800 x 600px) - grande",
+        "'X': (1024 x 768px) - molto grande",
+        "'Nmob': (480 x 800px) - normale",
+        "ADMIN",
+        "'F': Pagina intera (può essere un processo molto lungo)",
+        "'Fmob': Pagina intera (può essere un processo lungo)",
     },
     patterns =
     {
