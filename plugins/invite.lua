@@ -41,7 +41,7 @@ function run(msg, matches)
                 local msgr = get_message(msg.reply_id, Invite_by_reply, false)
             elseif string.match(matches[2], '^%d+$') then
                 -- User submitted an id
-                user = 'user#id' .. user
+                local user = 'user#id' .. matches[2]
                 -- The message must come from a chat group
                 chat_add_user(chat, user, callback, false)
                 channel_invite(channel, user, callback, false)
