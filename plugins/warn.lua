@@ -65,6 +65,22 @@ local function unwarn_user(user_id, chat_id)
     local channel = 'channel#id' .. chat_id
     local chat = 'chat#id' .. chat_id
     local hash = chat_id .. ':warn:' .. user_id
+    local warns = redis:get(hash)
+    if warns <= 0 then
+        redis:set(hash, 0)
+        send_large_msg(chat, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg(channel, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+    else
+        redis:set(hash, warns - 1)
+        send_large_msg(chat, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg(channel, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
+    end
+end
+
+local function unwarnall_user(user_id, chat_id)
+    local channel = 'channel#id' .. chat_id
+    local chat = 'chat#id' .. chat_id
+    local hash = chat_id .. ':warn:' .. user_id
     redis:set(hash, 0)
     send_large_msg(chat, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
     send_large_msg(channel, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
@@ -110,6 +126,23 @@ local function Unwarn_by_username(extra, success, result)
     local user_id = result.peer_id
     local chat_id = extra.msg.to.id
     unwarn_user(user_id, chat_id)
+end
+
+local function Unwarnall_by_reply(extra, success, result)
+    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
+        unwarnall_user(result.from.peer_id, result.to.peer_id)
+    else
+        return lang_text('useYourGroups')
+    end
+end
+
+local function Unwarnall_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(receiver, lang_text('noUsernameFound'))
+    end
+    local user_id = result.peer_id
+    local chat_id = extra.msg.to.id
+    unwarnall_user(user_id, chat_id)
 end
 
 local function getWarn_by_reply(extra, success, result)
@@ -169,7 +202,7 @@ local function run(msg, matches)
                     resolve_username(string.gsub(matches[2], '@', ''), Warn_by_username, { msg = msg })
                 end
             end
-            if matches[1]:lower() == 'unwarn' or matches[1]:lower() == 'sasha azzera avvertimenti' or matches[1]:lower() == 'azzera avvertimenti' then
+            if matches[1]:lower() == 'unwarn' then
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, Unwarn_by_reply, false)
                 elseif string.match(matches[2], '^%d+$') then
@@ -181,6 +214,20 @@ local function run(msg, matches)
                     unwarn_user(user_id, chat_id)
                 else
                     resolve_username(string.gsub(matches[2], '@', ''), Unwarn_by_username, { msg = msg })
+                end
+            end
+            if matches[1]:lower() == 'unwarnall' or matches[1]:lower() == 'sasha azzera avvertimenti' or matches[1]:lower() == 'azzera avvertimenti' then
+                if type(msg.reply_id) ~= "nil" then
+                    msgr = get_message(msg.reply_id, Unwarnall_by_reply, false)
+                elseif string.match(matches[2], '^%d+$') then
+                    local user_id = matches[2]
+                    local chat_id = msg.to.id
+                    local print_name = user_print_name(msg.from):gsub("‮", "")
+                    local name = print_name:gsub("_", "")
+                    savelog(msg.to.id, name .. " [" .. msg.from.id .. "] unwarned user " .. matches[2])
+                    unwarnall_user(user_id, chat_id)
+                else
+                    resolve_username(string.gsub(matches[2], '@', ''), Unwarnall_by_username, { msg = msg })
                 end
             end
         end
@@ -198,7 +245,8 @@ return {
         "#getwarn: Sasha manda il numero di avvertimenti massimi.",
         "(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>: Sasha manda il numero di avvertimenti ricevuti dall'utente.",
         "(#warn|[sasha] avverti) <id>|<username>|<reply>: Sasha avverte l'utente.",
-        "(#unwarn|[sasha] azzera avvertimenti) <id>|<username>|<reply>: Sasha azzera gli avvertimenti dell'utente.",
+        "#unwarn <id>|<username>|<reply>: Sasha diminuisce di uno gli avvertimenti dell'utente.",
+        "(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>: Sasha azzera gli avvertimenti dell'utente.",
     },
     patterns =
     {
@@ -210,6 +258,8 @@ return {
         "^[#!/]([Ww][Aa][Rr][Nn])$",
         "^[#!/]([Uu][Nn][Ww][Aa][Rr][Nn]) (.*)$",
         "^[#!/]([Uu][Nn][Ww][Aa][Rr][Nn])$",
+        "^[#!/]([Uu][Nn][Ww][Aa][Rr][Nn][Aa][Ll][Ll]) (.*)$",
+        "^[#!/]([Uu][Nn][Ww][Aa][Rr][Nn][Aa][Ll][Ll])$",
         -- getuserwarns
         "^([Ss][Aa][Ss][Hh][Aa] [Oo][Tt][Tt][Ii][Ee][Nn][Ii] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Oo][Tt][Tt][Ii][Ee][Nn][Ii] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii])$",
@@ -220,7 +270,7 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii])$",
         "^([Aa][Vv][Vv][Ee][Rr][Tt][Ii]) (.*)$",
         "^([Aa][Vv][Vv][Ee][Rr][Tt][Ii])$",
-        -- unwarn
+        -- unwarnall
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Zz][Zz][Ee][Rr][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Zz][Zz][Ee][Rr][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii])$",
         "^([Aa][Zz][Zz][Ee][Rr][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii]) (.*)$",

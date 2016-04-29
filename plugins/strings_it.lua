@@ -403,6 +403,8 @@ local function run(msg, matches)
         set_text('noWarnSet', 'Il warn non è ancora stato impostato.')
         set_text('cantWarnHigher', 'Non puoi avvertire un mod/owner/admin/sudo!')
         set_text('warned', 'Sei stato avvertito X volte, datti una regolata!')
+        set_text('unwarned', 'Ti è stato tolto un avvertimento, continua così!')
+        set_text('alreadyZeroWarnings', 'Sei già a zero avvertimenti.')
         set_text('zeroWarnings', 'I tuoi avvertimenti sono stati azzerati.')
         set_text('yourWarnings', 'Sei a quota X avvertimenti su un massimo di Y.')
 
