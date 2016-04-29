@@ -66,7 +66,7 @@ local function unwarn_user(user_id, chat_id)
     local chat = 'chat#id' .. chat_id
     local hash = chat_id .. ':warn:' .. user_id
     local warns = redis:get(hash)
-    if warns <= 0 then
+    if tonumber(warns) <= 0 then
         redis:set(hash, 0)
         send_large_msg(chat, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
         send_large_msg(channel, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
