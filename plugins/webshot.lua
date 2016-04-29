@@ -3,7 +3,7 @@ local helpers = require "OAuth.helpers"
 local base = 'https://screenshotmachine.com/'
 local url = base .. 'processor.php'
 
-local function get_webshot_url(param)
+local function get_webshot_url(param, psize)
     local response_body = { }
     local request_constructor = {
         url = url,
@@ -21,7 +21,7 @@ local function get_webshot_url(param)
 
     local arguments = {
         urlparam = param,
-        size = "FULL"
+        size = psize
     }
 
     request_constructor.url = url .. "?" .. helpers.url_encode_arguments(arguments)
@@ -37,7 +37,11 @@ end
 
 local function run(msg, matches)
     if is_momod(msg) then
-        local find = get_webshot_url(matches[1])
+        local size = 'X'
+        if matches[2] then
+            size = matches[2]
+        end
+        local find = get_webshot_url(matches[1], size)
         if find then
             local imgurl = base .. find
             local receiver = get_receiver(msg)
@@ -53,15 +57,28 @@ return {
     usage =
     {
         "MOD",
-        "[#]|[sasha] webshot <url>: Sasha fa uno screenshot del sito e lo manda.",
+        "[#]|[sasha] webshot <url> [<size>]: Sasha fa uno screenshot del sito e lo manda, se <size> è specificato lo manda con quella dimensione altrimenti con dimensione X.",
+        "La dimensione può essere:",
+        "'T': (120 x 90px) - tiny",
+        "'S': (200 x 150px) - small",
+        "'E': (320 x 240px) - seminormal",
+        "'N': (400 x 300px) - normal",
+        "'M': (640 x 480px) - medium",
+        "'L': (800 x 600px) - large",
+        "'X': (1024 x 768px) - extra large",
+        "'F': full page, complete page from the top to the bottom (can be pretty long)",
+        "'Nmob': (480 x 800px) - normal",
+        "'Fmob': full page, complete page from the top to the bottom",
     },
     patterns =
     {
-        "^[#!/][Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+)$",
-        "^[#!/][Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([%w-_%.%?%.:/%+=&]+)$",
+        "^[#!/][Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+) (.)?$",
+        "^[#!/][Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([%w-_%.%?%.:/%+=&]+) (.)?$",
         -- webshot
-        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+)$",
-        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([%w-_%.%?%.:/%+=&]+)$",
+        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt][Tt][Aa] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+) (.)?$",
+        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt][Tt][Aa] ([%w-_%.%?%.:/%+=&]+) (.)?$",
+        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+) (.)?$",
+        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([%w-_%.%?%.:/%+=&]+) (.)?$",
     },
     run = run,
     min_rank = 1
