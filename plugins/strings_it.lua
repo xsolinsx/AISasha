@@ -329,6 +329,8 @@ local function run(msg, matches)
         -- plugins.lua --
         set_text('enabled', ' abilitato.')
         set_text('disabled', ' disabilitato.')
+        set_text('alreadyEnabled', ' già abilitato.')
+        set_text('alreadyDisabled', ' già disabilitato.')
         set_text('notExist', '  non esiste.')
         set_text('systemPlugin', 'Non è possibile disabilitare questo plugin in quanto è necessario per il corretto funzionamento del sistema.')
         set_text('disabledOnChat', ' disabilitato su questa chat.')

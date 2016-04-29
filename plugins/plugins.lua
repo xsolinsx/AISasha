@@ -49,7 +49,7 @@ local function enable_plugin(plugin_name)
     print('checking if ' .. plugin_name .. ' exists')
     -- Check if plugin is enabled
     if plugin_enabled(plugin_name) then
-        return plugin_name .. lang_text('enabled')
+        return plugin_name .. lang_text('alreadyEnabled')
     end
     -- Checks if plugin exists
     if plugin_exists(plugin_name) then
@@ -58,7 +58,8 @@ local function enable_plugin(plugin_name)
         print(plugin_name .. ' added to _config table')
         save_config()
         -- Reload the plugins
-        return reload_plugins()
+        reload_plugins()
+        return plugin_name .. lang_text('enabled')
     else
         return plugin_name .. lang_text('notExist')
     end
@@ -72,12 +73,13 @@ local function disable_plugin(name, chat)
     local k = plugin_enabled(name)
     -- Check if plugin is enabled
     if not k then
-        return name .. lang_text('disabled')
+        return name .. lang_text('alreadyDisabled')
     end
     -- Disable and reload
     table.remove(_config.enabled_plugins, k)
     save_config()
-    return reload_plugins(true)
+    reload_plugins(true)
+    return plugin_name .. lang_text('disabled')
 end
 
 local function disable_plugin_on_chat(receiver, plugin)
