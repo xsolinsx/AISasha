@@ -49,7 +49,7 @@ local function enable_plugin(plugin_name)
     print('checking if ' .. plugin_name .. ' exists')
     -- Check if plugin is enabled
     if plugin_enabled(plugin_name) then
-        return plugin_name .. lang_text('alreadyEnabled')
+        return '✔️ ' .. plugin_name .. lang_text('alreadyEnabled')
     end
     -- Checks if plugin exists
     if plugin_exists(plugin_name) then
@@ -59,32 +59,32 @@ local function enable_plugin(plugin_name)
         save_config()
         -- Reload the plugins
         reload_plugins()
-        return plugin_name .. lang_text('enabled')
+        return '✅ ' .. plugin_name .. lang_text('enabled')
     else
-        return plugin_name .. lang_text('notExist')
+        return '❔ ' .. plugin_name .. lang_text('notExist')
     end
 end
 
 local function disable_plugin(name, chat)
     -- Check if plugins exists
     if not plugin_exists(name) then
-        return name .. lang_text('notExist')
+        return '❔ ' .. name .. lang_text('notExist')
     end
     local k = plugin_enabled(name)
     -- Check if plugin is enabled
     if not k then
-        return name .. lang_text('alreadyDisabled')
+        return '✖️ ' .. name .. lang_text('alreadyDisabled')
     end
     -- Disable and reload
     table.remove(_config.enabled_plugins, k)
     save_config()
     reload_plugins(true)
-    return name .. lang_text('disabled')
+    return '❌ ' .. name .. lang_text('disabled')
 end
 
 local function disable_plugin_on_chat(receiver, plugin)
     if not plugin_exists(plugin) then
-        return plugin .. lang_text('notExist')
+        return '❔ ' .. plugin .. lang_text('notExist')
     end
 
     if not _config.disabled_plugin_on_chat then
@@ -98,25 +98,25 @@ local function disable_plugin_on_chat(receiver, plugin)
     _config.disabled_plugin_on_chat[receiver][plugin] = true
 
     save_config()
-    return plugin .. lang_text('disabledOnChat')
+    return '❌ ' .. plugin .. lang_text('disabledOnChat')
 end
 
 local function reenable_plugin_on_chat(receiver, plugin)
     if not _config.disabled_plugin_on_chat then
-        return lang_text('noDisabledPlugin')
+        return '❔ ' .. lang_text('noDisabledPlugin')
     end
 
     if not _config.disabled_plugin_on_chat[receiver] then
-        return lang_text('noDisabledPlugin')
+        return '❔ ' .. lang_text('noDisabledPlugin')
     end
 
     if not _config.disabled_plugin_on_chat[receiver][plugin] then
-        return lang_text('pluginNotDisabled')
+        return '✔️ ' .. lang_text('pluginNotDisabled')
     end
 
     _config.disabled_plugin_on_chat[receiver][plugin] = false
     save_config()
-    return plugin .. lang_text('pluginEnabledAgain')
+    return '✅ ' .. plugin .. lang_text('pluginEnabledAgain')
 end
 
 local function list_disabled_plugin_on_chat(receiver)
