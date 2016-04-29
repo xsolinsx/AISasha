@@ -39,8 +39,12 @@ local function run(msg, matches)
     if is_momod(msg) then
         local size = 'X'
         if matches[2] then
-            if (matches[2] == 'Fmob' or matches[2] == 'F') and is_admin1(msg) then
-                size = matches[2]
+            if matches[2] == 'Fmob' or matches[2] == 'F' then
+                if is_admin1(msg) then
+                    size = matches[2]
+                else
+                    return lang_text('require_admin')
+                end
             else
                 size = matches[2]
             end
