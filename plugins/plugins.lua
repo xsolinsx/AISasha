@@ -103,15 +103,15 @@ end
 
 local function reenable_plugin_on_chat(receiver, plugin)
     if not _config.disabled_plugin_on_chat then
-        return '❔ ' .. lang_text('noDisabledPlugin')
+        return lang_text('noDisabledPlugin')
     end
 
     if not _config.disabled_plugin_on_chat[receiver] then
-        return '❔ ' .. lang_text('noDisabledPlugin')
+        return lang_text('noDisabledPlugin')
     end
 
     if not _config.disabled_plugin_on_chat[receiver][plugin] then
-        return '✔️ ' .. lang_text('pluginNotDisabled')
+        return lang_text('pluginNotDisabled')
     end
 
     _config.disabled_plugin_on_chat[receiver][plugin] = false
