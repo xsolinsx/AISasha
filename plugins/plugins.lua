@@ -79,7 +79,7 @@ local function disable_plugin(name, chat)
     table.remove(_config.enabled_plugins, k)
     save_config()
     reload_plugins(true)
-    return plugin_name .. lang_text('disabled')
+    return name .. lang_text('disabled')
 end
 
 local function disable_plugin_on_chat(receiver, plugin)
