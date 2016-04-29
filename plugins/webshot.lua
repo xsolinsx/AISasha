@@ -1,4 +1,4 @@
-local helpers = require "OAuth.helpers"
+ï»¿local helpers = require "OAuth.helpers"
 
 local base = 'https://screenshotmachine.com/'
 local url = base .. 'processor.php'
@@ -65,19 +65,19 @@ return {
     usage =
     {
         "MOD",
-        "[#]|[sasha] webshot <url> [<size>]: Sasha fa uno screenshot del sito e lo manda, se <size> è specificato lo manda con quella dimensione altrimenti con dimensione X.",
-        "La dimensione può essere:",
-        "'T': (120 x 90px) - molto grande",
-        "'S': (200 x 150px) - piccola",
-        "'E': (320 x 240px) - seminormale",
-        "'N': (400 x 300px) - normale",
-        "'M': (640 x 480px) - media",
-        "'L': (800 x 600px) - grande",
-        "'X': (1024 x 768px) - molto grande",
-        "'Nmob': (480 x 800px) - normale",
+        "[#]|[sasha] webshot <url> [<size>]: Sasha esegue uno screenshot di <url> e lo invia, se <size> Ã¨ specificata di quella dimensione.",
+        "La dimensione puÃ² essere:",
+        "T: (120 x 90px)",
+        "S: (200 x 150px)",
+        "E: (320 x 240px)",
+        "N: (400 x 300px)",
+        "M: (640 x 480px)",
+        "L: (800 x 600px)",
+        "X: (1024 x 768px)",
+        "Nmob: (480 x 800px)",
         "ADMIN",
-        "'F': Pagina intera (può essere un processo molto lungo)",
-        "'Fmob': Pagina intera (può essere un processo lungo)",
+        "F: Pagina intera (puÃ² essere un processo molto lungo)",
+        "Fmob: Pagina intera (puÃ² essere un processo lungo)",
     },
     patterns =
     {
