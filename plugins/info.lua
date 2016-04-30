@@ -347,6 +347,39 @@ local function all(msg, target, receiver)
     return
 end]]
 
+local function pre_process(msg)
+    local service = msg.service
+    if msg.to.type == 'user' and msg.fwd_from then
+        if is_support(msg.from.id) or is_admin1(msg) then
+            local text = 'INFO (<private_from>)'
+            if msg.fwd_from.first_name then
+                text = text .. lang_text('name') .. msg.fwd_from.first_name
+            end
+            if msg.fwd_from.real_first_name then
+                text = text .. lang_text('name') .. msg.fwd_from.real_first_name
+            end
+            if msg.fwd_from.last_name then
+                text = text .. lang_text('surname') .. msg.fwd_from.last_name
+            end
+            if msg.fwd_from.real_last_name then
+                text = text .. lang_text('surname') .. msg.fwd_from.real_last_name
+            end
+            if msg.fwd_from.username then
+                text = text .. lang_text('username') .. '@' .. msg.fwd_from.username
+            end
+            if msg.fwd_from.phone then
+                text = text .. lang_text('phone') .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
+            end
+            text = text .. lang_text('date') .. os.date('%c') ..
+            '\n🆔: ' .. msg.fwd_from.peer_id
+            send_large_msg('user#id' .. msg.from.id, text)
+        else
+            return
+        end
+    end
+    return msg
+end
+
 local function run(msg, matches)
     local receiver = get_receiver(msg)
     local chat = msg.to.id
