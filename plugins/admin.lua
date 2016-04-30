@@ -136,7 +136,7 @@ local function get_dialog_list_callback(extra, success, result)
     end
 end
 
-local function table.show(t, name, indent)
+local function tableshow(t, name, indent)
     local cart
     -- a container
     local autoref
@@ -212,21 +212,24 @@ local function table.show(t, name, indent)
     end
     cart, autoref = "", ""
     addtocart(t, name, indent)
+    print(cart)
+    print(autoref)
     return cart .. autoref
 end
 
 local function vardump_msg(extra, success, result)
     local name = 'msg'
-    if extra == 'reply' then
+    if extra.name == 'reply' then
         name = 'VARDUMP (<reply>)'
     end
-    if extra == 'msg_id' then
+    if extra.name == 'msg_id' then
         name = 'VARDUMP (<msg_id>)'
     end
-    local chat = 'chat#id' .. result.to.peer_id
-    local channel = 'channel#id' .. result.to.peer_id
-    send_large_msg(chat, table.show(result, name))
-    send_large_msg(channel, table.show(result, name))
+    print('in')
+    print(extra.name)
+    print(extra.receiver)
+    local text = tableshow(result, name)
+    send_large_msg(extra.receiver, text)
 end
 
 local function run(msg, matches)
@@ -341,6 +344,16 @@ local function run(msg, matches)
                 send_document("user#id" .. msg.from.id, "/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
                 return lang_text('backupDone')
             end
+            if matches[1]:lower() == 'vardump' then
+                if type(msg.reply_id) ~= "nil" then
+                    msgr = get_message(msg.reply_id, vardump_msg, { receiver = get_receiver(msg), name = 'reply' })
+                elseif matches[2] then
+                    msgr = get_message(matches[2], vardump_msg, { receiver = get_receiver(msg), name = 'msg_id' })
+                else
+                    local text = tableshow(msg, 'VARDUMP (<msg>)')
+                    send_large_msg(get_receiver(msg), text)
+                end
+            end
         end
         --[[*For Debug*
 	    if matches[1] == "vardumpmsg" then
@@ -371,15 +384,6 @@ local function run(msg, matches)
             print("Log_SuperGroup " .. msg.to.title .. "(" .. msg.to.id .. ") removed")
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")
             logrem(msg)
-        end
-        if matches[1]:lower() == 'vardump' then
-            if type(msg.reply_id) ~= "nil" then
-                msgr = get_message(msg.reply_id, vardump_msg, 'reply')
-            elseif matches[2] then
-                msgr = get_message(matches[2], vardump_msg, 'msg_id')
-            else
-                send_large_msg(get_receiver(msg), table.show(msg, 'VARDUMP (<msg>)'))
-            end
         end
     end
 end
