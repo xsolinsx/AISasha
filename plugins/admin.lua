@@ -136,6 +136,10 @@ local function get_dialog_list_callback(extra, success, result)
     end
 end
 
+local function vardump_msg(extra, success, result)
+    vardump(result)
+end
+
 local function run(msg, matches)
     local receiver = get_receiver(msg)
     local group = msg.to.id
@@ -279,6 +283,21 @@ local function run(msg, matches)
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")
             logrem(msg)
         end
+        if matches[1]:lower() == 'vardump' then
+            if type(msg.reply_id) ~= "nil" then
+                msgr = get_message(msg.reply_id, vardump_msg, false)
+            elseif matches[2] then
+                msgr = get_message(matches[2], vardump_msg, false)
+            else
+                vardump(msg)
+            end
+            if not is_log_group(msg) then
+                return lang_text('notLog')
+            end
+            print("Log_SuperGroup " .. msg.to.title .. "(" .. msg.to.id .. ") removed")
+            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")
+            logrem(msg)
+        end
     end
 end
 
@@ -299,10 +318,11 @@ return {
         "(#block|sasha blocca) <user_id>: Sasha blocca <user_id>.",
         "(#unblock|sasha sblocca) <user_id>: Sasha sblocca <user_id>.",
         "(#markread|sasha segna letto) (on|off): Sasha segna come [non] letti i messaggi ricevuti.",
-        "#setbotphoto|sasha cambia foto: Sasha chiede la foto da settare come profilo.",
-        "#updateid|sasha aggiorna longid: Sasha salva il long_id.",
-        "#addlog|sasha aggiungi log: Sasha aggiunge il log.",
-        "#remlog|sasha rimuovi log: Sasha rimuove il log.",
+        "(#setbotphoto|sasha cambia foto): Sasha chiede la foto da settare come profilo.",
+        "(#updateid|sasha aggiorna longid): Sasha salva il long_id.",
+        "(#addlog|sasha aggiungi log): Sasha aggiunge il log.",
+        "(#remlog|sasha rimuovi log): Sasha rimuove il log.",
+        "#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.",
         "SUDO",
         "(#contactlist|sasha lista contatti) (txt|json): Sasha manda la lista dei contatti.",
         "(#dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.",
@@ -310,8 +330,8 @@ return {
         "(#delcontact|sasha elimina contatto) <user_id>: Sasha elimina il contatto <user_id>.",
         "(#sendcontact|sasha invia contatto) <phone> <name> <surname>: Sasha invia il contatto specificato.",
         "(#mycontact|sasha mio contatto): Sasha invia il contatto del richiedente.",
-        "#sync_gbans|sasha sincronizza lista superban: Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.",
-        "#backup|sasha esegui backup: Sasha esegue un backup di se stessa e invia il log al richiedente.",
+        "(#sync_gbans|sasha sincronizza superban): Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.",
+        "(#backup|sasha esegui backup): Sasha esegue un backup di se stessa e invia il log al richiedente.",
     },
     patterns =
     {
@@ -334,6 +354,8 @@ return {
         "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Ii][Dd])$",
         "^[#!/]([Aa][Dd][Dd][Ll][Oo][Gg])$",
         "^[#!/]([Rr][Ee][Mm][Ll][Oo][Gg])$",
+        "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp]) (.*)$",
+        "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp])$",
         "%[(photo)%]",
         -- pm
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii][Aa]) (%d+) (.*)$",
@@ -367,7 +389,7 @@ return {
         -- mycontact
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ii][Oo] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Oo])$",
         -- sync_gbans
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ii][Nn][Cc][Rr][Oo][Nn][Ii][Zz][Zz][Aa] [Ll][Ii][Ss][Tt][Aa] [Ss][Uu][Pp][Ee][Rr][Bb][Aa][Nn])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ii][Nn][Cc][Rr][Oo][Nn][Ii][Zz][Zz][Aa] [Ss][Uu][Pp][Ee][Rr][Bb][Aa][Nn])$",
         -- backup
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Bb][Aa][Cc][Kk][Uu][Pp])$",
         -- updateid
