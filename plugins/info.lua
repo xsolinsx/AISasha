@@ -382,7 +382,7 @@ local function run(msg, matches)
                     text = text .. lang_text('phone') .. string.sub(msg.from.phone, 1, 6) .. '****'
                 end
                 text = text .. lang_text('date') .. os.date('%c') ..
-                '\n🆔: ' .. msg.from.peer_id ..
+                '\n🆔: ' .. msg.from.id ..
                 lang_text('youAreWriting')
                 if chat_type == 'user' then
                     if msg.to.first_name then
