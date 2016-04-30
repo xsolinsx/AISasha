@@ -62,7 +62,7 @@ local function callback_kicked(cb_extra, success, result)
 end
 
 local function callback_reply(extra, success, result)
-    local text = 'INFO (<reply>)'
+    local text = lang_text('info') .. ' (<reply>)'
     if result.from.first_name then
         text = text .. lang_text('name') .. result.from.first_name
     end
@@ -88,7 +88,7 @@ local function callback_reply(extra, success, result)
 end
 
 local function callback_id(cb_extra, success, result)
-    local text = 'INFO (<id>)'
+    local text = lang_text('info') .. ' (<id>)'
     if result.first_name then
         text = text .. lang_text('name') .. result.first_name
     end
@@ -114,7 +114,7 @@ local function callback_id(cb_extra, success, result)
 end
 
 local function callback_username(extra, success, result)
-    local text = 'INFO (<username>)'
+    local text = lang_text('info') .. ' (<username>)'
     if result.first_name then
         text = text .. lang_text('name') .. result.first_name
     end
@@ -140,7 +140,7 @@ local function callback_username(extra, success, result)
 end
 
 local function callback_from(extra, success, result)
-    local text = 'INFO (<from>)'
+    local text = lang_text('info') .. ' (<from>)'
     if result.fwd_from.first_name then
         text = text .. lang_text('name') .. result.fwd_from.first_name
     end
@@ -348,10 +348,9 @@ local function all(msg, target, receiver)
 end]]
 
 local function pre_process(msg)
-    local service = msg.service
     if msg.to.type == 'user' and msg.fwd_from then
         if is_support(msg.from.id) or is_admin1(msg) then
-            local text = 'INFO (<private_from>)'
+            local text = lang_text('info') .. ' (<private_from>)'
             if msg.fwd_from.first_name then
                 text = text .. lang_text('name') .. msg.fwd_from.first_name
             end
@@ -555,5 +554,6 @@ return {
         "^([Ll][Ii][Ss][Tt][Aa] [Rr][Ii][Mm][Oo][Ss][Ss][Ii])$",
     },
     run = run,
+    pre_process = pre_process,
     min_rank = 0
 }
