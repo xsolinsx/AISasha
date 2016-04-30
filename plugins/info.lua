@@ -78,7 +78,11 @@ local function callback_reply(extra, success, result)
     if result.from.username then
         text = text .. lang_text('username') .. '@' .. result.from.username
     end
-    text = text .. '\n🆔: ' .. result.from.peer_id
+    if result.from.phone then
+        text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '****'
+    end
+    text = text .. lang_text('date') .. os.date('%c') ..
+    '\n🆔: ' .. result.from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end
@@ -100,7 +104,11 @@ local function callback_id(cb_extra, success, result)
     if result.username then
         text = text .. lang_text('username') .. '@' .. result.username
     end
-    text = text .. '\n🆔: ' .. result.peer_id
+    if result.phone then
+        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
+    end
+    text = text .. lang_text('date') .. os.date('%c') ..
+    '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
 end
@@ -122,7 +130,11 @@ local function callback_username(extra, success, result)
     if result.username then
         text = text .. lang_text('username') .. '@' .. result.username
     end
-    text = text .. '\n🆔: ' .. result.peer_id
+    if result.phone then
+        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
+    end
+    text = text .. lang_text('date') .. os.date('%c') ..
+    '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. extra.chatid, text)
     send_large_msg('channel#id' .. extra.chatid, text)
 end
@@ -144,7 +156,11 @@ local function callback_from(extra, success, result)
     if result.fwd_from.username then
         text = text .. lang_text('username') .. '@' .. result.fwd_from.username
     end
-    text = text .. '\n🆔: ' .. result.fwd_from.peer_id
+    if result.fwd_from.phone then
+        text = text .. lang_text('phone') .. string.sub(result.fwd_from.phone, 1, 6) .. '****'
+    end
+    text = text .. lang_text('date') .. os.date('%c') ..
+    '\n🆔: ' .. result.fwd_from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end
@@ -194,8 +210,12 @@ local function database(cb_extra, success, result)
         if v.username then
             text = text .. ' Username: @' .. v.username
         end
-        text = text .. ' Id: ' .. v.peer_id
-        text = text .. ' Long_id: ' .. v.id
+        if v.phone then
+            text = text .. 'Telefono: ' .. string.sub(v.phone, 1, 6) .. '****'
+        end
+        text = text .. 'Data: ' .. os.date('%c') .. '\n\n'
+        .. '\nId: ' .. v.peer_id
+        .. ' Long_id: ' .. v.id
         id = v.peer_id
         db:write('"' .. id .. '" = "' .. text .. '"\n')
     end
@@ -358,7 +378,11 @@ local function run(msg, matches)
                 if msg.from.username then
                     text = text .. lang_text('username') .. '@' .. msg.from.username
                 end
-                text = text .. '\n🆔: ' .. msg.from.id ..
+                if msg.from.phone then
+                    text = text .. lang_text('phone') .. string.sub(msg.from.phone, 1, 6) .. '****'
+                end
+                text = text .. lang_text('date') .. os.date('%c') ..
+                '\n🆔: ' .. msg.from.peer_id ..
                 lang_text('youAreWriting')
                 if chat_type == 'user' then
                     if msg.to.first_name then
@@ -376,17 +400,23 @@ local function run(msg, matches)
                     if msg.to.username then
                         text = text .. lang_text('username') .. '@' .. msg.to.username
                     end
-                    text = text .. '\n🆔: ' .. msg.to.id
+                    if msg.to.phone then
+                        text = text .. lang_text('phone') .. string.sub(msg.to.phone, 1, 6) .. '****'
+                    end
+                    text = text .. lang_text('date') .. os.date('%c') ..
+                    '\n🆔: ' .. msg.to.id
                     return text
                 elseif chat_type == 'chat' then
                     text = text .. '🔠 ' ..
                     lang_text('groupName') .. msg.to.print_name:gsub("_", " ") .. '👥 ' ..
                     lang_text('members') .. msg.to.members_num .. '' ..
+                    lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 elseif chat_type == 'channel' then
                     text = text .. '🔠 ' ..
                     lang_text('supergroupName') .. msg.to.print_name:gsub("_", " ") ..
+                    lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 end
