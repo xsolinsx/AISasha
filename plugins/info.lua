@@ -385,6 +385,7 @@ local function run(msg, matches)
                 '\n🆔: ' .. msg.from.id ..
                 lang_text('youAreWriting')
                 if chat_type == 'user' then
+                    text = text .. '👤'
                     if msg.to.first_name then
                         text = text .. lang_text('name') .. msg.to.first_name
                     end
@@ -407,14 +408,14 @@ local function run(msg, matches)
                     '\n🆔: ' .. msg.to.id
                     return text
                 elseif chat_type == 'chat' then
-                    text = text .. '🔠 ' ..
-                    lang_text('groupName') .. msg.to.print_name:gsub("_", " ") .. '👥 ' ..
+                    text = text .. '👥' ..
+                    lang_text('groupName') .. msg.to.print_name:gsub("_", " ") ..
                     lang_text('members') .. msg.to.members_num .. '' ..
                     lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 elseif chat_type == 'channel' then
-                    text = text .. '🔠 ' ..
+                    text = text .. '👥' ..
                     lang_text('supergroupName') .. msg.to.print_name:gsub("_", " ") ..
                     lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. math.abs(msg.to.id)
