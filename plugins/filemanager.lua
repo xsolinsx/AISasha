@@ -34,9 +34,12 @@ end
 
 function run(msg, matches)
     if is_sudo(msg) then
-        if redis:get('folder') then
-            local folder = redis:get('folder')
+        local folder = redis:get('folder')
+        if folder then
             receiver = get_receiver(msg)
+            if matches[1]:lower() == 'folder' then
+                return lang_text('youAreHere') .. BASE_FOLDER .. folder
+            end
             if matches[1]:lower() == 'cd' then
                 if not matches[2] then
                     redis:set('folder', '')
@@ -117,6 +120,7 @@ return {
     usage =
     {
         "SUDO",
+        "#folder: Sasha manda la directory attuale.",
         "#cd [<directory>]: Sasha entra in <directory>, se non è specificata torna alla cartella base.",
         "#ls: Sasha manda la lista di file e cartelle della directory corrente.",
         "#mkdir <directory>: Sasha crea <directory>.",
@@ -133,6 +137,7 @@ return {
     },
     patterns =
     {
+        "^[#!/]([Ff][Oo][Ll][Dd][Ee][Rr])$",
         "^[#!/]([Cc][Dd])$",
         "^[#!/]([Cc][Dd]) (.*)$",
         "^[#!/]([Ll][Ss])$",
