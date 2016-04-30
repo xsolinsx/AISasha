@@ -348,11 +348,23 @@ local function run(msg, matches)
         set_text('pokeHeight', 'Altezza: ')
 
         -- ruleta.lua --
+        set_text('ruletadbCreated', 'Database ruleta creato.')
         set_text('alreadySigned', 'Sei già registrato, usa /ruleta per morire.')
         set_text('signed', ' Sei stato registrato, have a nice death.')
         set_text('requireSignup', 'Prima di morire devi registrarti.')
         set_text('errorCapsRange', 'Errore, il range è [1-X].')
         set_text('errorCylinderRange', 'Errore, il range è [5-10].')
+        set_text('cylinderCapacity', 'Capienza tamburo: ')
+        set_text('challengeCylinderCapacity', 'Capienza tamburo sfida: ')
+        set_text('capsNumber', 'Proiettili: ')
+        set_text('challengeCapsNumber', 'Proiettili sfida: ')
+        set_text('deaths', 'Numero morti: ')
+        set_text('duels', 'Sfide totali: ')
+        set_text('wonduels', 'Sfide vinte: ')
+        set_text('lostduels', 'Sfide perse: ')
+        set_text('longeststreak', 'Serie più lunga: ')
+        set_text('attempts', 'Tentativi totali: ')
+        set_text('score', 'Punteggio: ')
 
         -- set.lua --
         set_text('saved', ' salvato.')
