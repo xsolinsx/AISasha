@@ -137,7 +137,10 @@ local function get_dialog_list_callback(extra, success, result)
 end
 
 local function vardump_msg(extra, success, result)
-    vardump(result)
+    local chat = 'chat#id' .. result.to.peer_id
+    local channel = 'channel#id' .. result.to.peer_id
+    send_large_msg(chat, vardump(msg))
+    send_large_msg(channel, vardump(msg))
 end
 
 local function run(msg, matches)
@@ -289,14 +292,8 @@ local function run(msg, matches)
             elseif matches[2] then
                 msgr = get_message(matches[2], vardump_msg, false)
             else
-                vardump(msg)
+                send_large_msg(get_receiver(msg), vardump(msg))
             end
-            if not is_log_group(msg) then
-                return lang_text('notLog')
-            end
-            print("Log_SuperGroup " .. msg.to.title .. "(" .. msg.to.id .. ") removed")
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")
-            logrem(msg)
         end
     end
 end
