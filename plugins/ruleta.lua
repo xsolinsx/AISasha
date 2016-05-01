@@ -473,9 +473,11 @@ local function run(msg, matches)
                     if user == challenger then
                         redis:set('ruletachallenge:' .. chat .. ':player', challenged)
                     elseif user == challenged then
-                        redis:set('ruletachallenge:' .. chat .. ':player', challenged)
+                        redis:set('ruletachallenge:' .. chat .. ':player', challenger)
                     end
+                    print(temp)
                     if math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) == math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) then
+                        print('dead')
                         -- bot destroy challenge on redis
                         reject_challenge(our_id, chat)
                         reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
@@ -497,6 +499,7 @@ local function run(msg, matches)
                         save_data(_config.ruleta.db, ruletadata)
                         kick_user(user, chat)
                     else
+                        print('alive')
                         local message = good[math.random(#good)] .. '\n' ..
                         lang_text('shotsLeft')
                         local shots = ''
@@ -511,6 +514,7 @@ local function run(msg, matches)
                         local notshotted = string.sub(shots, temp, tonumber(groupstats.challengecylinder))
                         print(string.len(notshotted) / 4, notshotted)
                         message = message .. shotted .. notshotted
+                        print(message)
                         reply_msg(msg.id, message, ok_cb, false)
                         -- blu,rosso
                         -- 🔵🔴
