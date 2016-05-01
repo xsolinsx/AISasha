@@ -475,10 +475,9 @@ local function run(msg, matches)
                     elseif user == challenged then
                         redis:set('ruletachallenge:' .. chat .. ':player', challenger)
                     end
-                    redis:set('ruleta:' .. chat .. ':rounds', rounds + 1)
+                    redis:set('ruleta:' .. chat .. ':rounds', rounds - 1)
                     print(temp)
                     if math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) == math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) then
-                        print('dead')
                         -- bot destroy challenge on redis
                         reject_challenge(our_id, chat)
                         reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
@@ -500,20 +499,20 @@ local function run(msg, matches)
                         save_data(_config.ruleta.db, ruletadata)
                         kick_user(user, chat)
                     else
-                        print('alive')
                         local text = good[math.random(#good)] .. '\n' ..
                         lang_text('shotsLeft')
+                        reply_msg(msg.id, text, ok_cb, false)
                         local shots = ''
                         for var = 1, tonumber(groupstats.challengecylinder) do
                             shots = shots .. '🔵'
                             var = var + 1
                         end
-                        print(string.len(shots) / 4, shots)
+                        reply_msg(msg.id, shots, ok_cb, false)
                         local shotted = string.sub(shots, 1, temp)
                         shotted = string.gsub(shotted, '🔵', '🔴')
-                        print(string.len(shotted) / 4, shotted)
+                        reply_msg(msg.id, shotted, ok_cb, false)
                         local notshotted = string.sub(shots, temp, tonumber(groupstats.challengecylinder))
-                        print(string.len(notshotted) / 4, notshotted)
+                        reply_msg(msg.id, notshotted, ok_cb, false)
                         text = text .. shotted .. notshotted
                         print(text)
                         reply_msg(msg.id, text, ok_cb, false)
