@@ -380,10 +380,10 @@ local function run(msg, matches)
         if matches[1]:lower() == 'challengeinfo' and challenge then
             local text = lang_text('challenge') .. '\n' ..
             lang_text('challenger')
-            user_info('user#id' .. challenger, get_user, false)
+            user_info('user#id' .. challenger, get_user, { chat = chat })
             text = text .. redis:get('ruletaplayer:' .. chat) .. '\n' ..
             lang_text('challenged') .. '\n'
-            user_info('user#id' .. challenged, get_user, false)
+            user_info('user#id' .. challenged, get_user, { chat = chat })
             text = text .. redis:get('ruletaplayer:' .. chat)
             if accepted == 0 then
                 text = text .. lang_text('notAccepted') .. '\n'
