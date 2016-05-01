@@ -130,7 +130,7 @@ local function kick_user(user_id, chat_id)
     local channel = 'channel#id' .. chat_id
     chat_del_user(chat, user, ok_cb, true)
     channel_kick(channel, user, ok_cb, true)
-    channel_unblock(channel, user, ok_cb, false)
+    channel_unblock(channel, user, ok_cb, true)
 end
 
 local function kickrandom_chat(cb_extra, success, result)
