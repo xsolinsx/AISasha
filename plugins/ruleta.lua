@@ -1,3 +1,6 @@
+local p1 = ''
+local p2 = ''
+
 -- safe
 local good = {
     "Ti è andata bene.",
@@ -102,8 +105,10 @@ local function get_user(cb_extra, success, result)
         user = string.gsub(result.print_name, '_', ' ')
     end
     if cb_extra.player == 'challenger' then
+        p1 = user
         redis:set('ruletachallenger:' .. cb_extra.chat, user)
     elseif cb_extra.player == 'challenged' then
+        p2 = user
         redis:set('ruletachallenged:' .. cb_extra.chat, user)
     end
 end
@@ -389,10 +394,14 @@ local function run(msg, matches)
             local text = lang_text('challenge') .. '\n' ..
             lang_text('challenger')
             user_info('user#id' .. challenger, get_user, { chat = chat, player = 'challenger' })
-            text = text .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
+            text = text .. p1
+            --[[ redis:get('ruletachallenger:' .. chat) ]]
+            .. '\n' ..
             lang_text('challenged')
             user_info('user#id' .. challenged, get_user, { chat = chat, player = 'challenged' })
-            text = text .. redis:get('ruletachallenged:' .. chat) .. '\n'
+            text = text .. p2
+            --[[ redis:get('ruletachallenged:' .. chat) ]]
+            .. '\n'
             if accepted == 0 then
                 text = text .. lang_text('notAccepted') .. '\n'
             elseif accepted == 1 then
@@ -406,10 +415,13 @@ local function run(msg, matches)
         if matches[1]:lower() == 'accetta' and challenge and accepted == 0 then
             local text = lang_text('challenger')
             user_info('user#id' .. challenger, get_user, { chat = chat, player = 'challenger' })
-            text = text .. redis:get('ruletachallenger:' .. chat) .. '\n'
+            text = text .. p1
+            --[[ redis:get('ruletachallenger:' .. chat) ]]
+            .. '\n'
             lang_text('challenged')
             user_info('user#id' .. challenged, get_user, { chat = chat, player = 'challenged' })
-            text = text .. redis:get('ruletachallenged:' .. chat)
+            text = text .. p2
+            --[[ redis:get('ruletachallenged:' .. chat) ]]
             accept_challenge(user, chat)
             if get_challenge(chat) and get_challenge(chat)[3] == 1 then
                 ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
