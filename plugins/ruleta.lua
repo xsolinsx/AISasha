@@ -366,11 +366,15 @@ local function run(msg, matches)
         end
 
         local challenge = get_challenge(msg.to.id)
+        local challenger
+        local challenged
+        local accepted
+        local rounds
         if challenge then
-            local challenger = challenge[1]
-            local challenged = challenge[2]
-            local accepted = tonumber(challenge[3])
-            local rounds = tonumber(challenge[4])
+            challenger = challenge[1]
+            challenged = challenge[2]
+            accepted = tonumber(challenge[3])
+            rounds = tonumber(challenge[4])
         end
 
         if matches[1]:lower() == 'challengeinfo' and challenge then
