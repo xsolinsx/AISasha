@@ -500,14 +500,15 @@ local function run(msg, matches)
                         kick_user(user, chat)
                     else
                         local text = good[math.random(#good)] .. '\n' ..
-                        lang_text('shotsLeft')
+                        lang_text('shotsLeft') .. groupstats.challengecylinder - temp
+
                         reply_msg(msg.id, text, ok_cb, false)
-                        local shots = ''
+
+                        --[[local shots = ''
                         for var = 1, tonumber(groupstats.challengecylinder) do
                             shots = shots .. '🔵'
                             var = var + 1
-                        end
-                        reply_msg(msg.id, shots, ok_cb, false)
+                        endreply_msg(msg.id, shots, ok_cb, false)
                         local shotted = string.sub(shots, 1, temp)
                         shotted = string.gsub(shotted, '🔵', '🔴')
                         reply_msg(msg.id, shotted, ok_cb, false)
@@ -517,7 +518,8 @@ local function run(msg, matches)
                         print(text)
                         reply_msg(msg.id, text, ok_cb, false)
                         -- blu,rosso
-                        -- 🔵🔴
+                        -- 🔵🔴]]
+
 
                         ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
 
