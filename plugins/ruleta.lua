@@ -500,7 +500,7 @@ local function run(msg, matches)
                         kick_user(user, chat)
                     else
                         print('alive')
-                        local message = good[math.random(#good)] .. '\n' ..
+                        local text = good[math.random(#good)] .. '\n' ..
                         lang_text('shotsLeft')
                         local shots = ''
                         for var = 1, tonumber(groupstats.challengecylinder) do
@@ -513,9 +513,10 @@ local function run(msg, matches)
                         print(string.len(shotted) / 4, shotted)
                         local notshotted = string.sub(shots, temp, tonumber(groupstats.challengecylinder))
                         print(string.len(notshotted) / 4, notshotted)
-                        message = message .. shotted .. notshotted
-                        print(message)
-                        reply_msg(msg.id, message, ok_cb, false)
+                        text = text .. shotted .. notshotted
+                        print(text)
+                        reply_msg(msg.id, text, ok_cb, false)
+                        send_large_msg(get_receiver(msg), text)
                         -- blu,rosso
                         -- 🔵🔴
 
