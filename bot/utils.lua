@@ -958,6 +958,7 @@ function kick_user(user_id, chat_id)
     local user = 'user#id' .. user_id
     chat_del_user(chat, user, ok_cb, false)
     channel_kick(channel, user, ok_cb, false)
+    channel_unblock(channel, user, ok_cb, false)
 end
 
 -- Ban

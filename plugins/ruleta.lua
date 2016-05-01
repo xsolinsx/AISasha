@@ -129,7 +129,8 @@ local function kick_user(user_id, chat_id)
     local user = 'user#id' .. user_id
     local channel = 'channel#id' .. chat_id
     chat_del_user(chat, user, ok_cb, true)
-    channel_kick_user(channel, user, ok_cb, true)
+    channel_kick(channel, user, ok_cb, true)
+    channel_unblock(channel, user, ok_cb, false)
 end
 
 local function kickrandom_chat(cb_extra, success, result)
@@ -509,14 +510,14 @@ local function run(msg, matches)
                     else
                         -- blue red
                         -- 🔵    🔴
-                        local notshotted = ''
                         local shotted = ''
-                        for var = 1, tonumber(groupstats.challengecylinder -(groupstats.challengecylinder - temp)) do
-                            notshotted = notshotted .. '🔵'
+                        local notshotted = ''
+                        for var = 1, tonumber(temp) do
+                            shotted = shotted .. '🔴'
                             var = var + 1
                         end
                         for var = 1, tonumber(groupstats.challengecylinder - temp) do
-                            shotted = shotted .. '🔴'
+                            notshotted = notshotted .. '🔵'
                             var = var + 1
                         end
                         reply_msg(msg.id, good[math.random(#good)] .. '\n' .. lang_text('shotsLeft') .. notshotted .. shotted, ok_cb, false)
