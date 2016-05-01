@@ -47,16 +47,16 @@ local function start_challenge(challenger_id, challenged_id, chat_id)
 
     if get_challenge(chat_id) then
         if tonumber(get_challenge(chat_id)[3]) == 1 then
-            send_large_msg(chat, lang_text('errorOngoingChallenge'), ok_cb, false)
-            send_large_msg(channel, lang_text('errorOngoingChallenge'), ok_cb, false)
+            send_large_msg(chat, lang_text('errorOngoingChallenge'))
+            send_large_msg(channel, lang_text('errorOngoingChallenge'))
         end
     else
         redis:set('ruleta:' .. chat_id .. ':challenger', challenger_id)
         redis:set('ruleta:' .. chat_id .. ':challenged', challenged_id)
         redis:set('ruleta:' .. chat_id .. ':accepted', 0)
         redis:set('ruleta:' .. chat_id .. ':rounds', 0)
-        send_large_msg(chat, lang_text('challengeSet'), ok_cb, false)
-        send_large_msg(channel, lang_text('challengeSet'), ok_cb, false)
+        send_large_msg(chat, lang_text('challengeSet'))
+        send_large_msg(channel, lang_text('challengeSet'))
     end
 end
 
@@ -92,7 +92,7 @@ end
 
 local function Challenge_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
     end
     if tonumber(result.peer_id) == tonumber(our_id) then
         -- Ignore bot
