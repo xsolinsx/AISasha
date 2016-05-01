@@ -65,11 +65,24 @@ local function accept_challenge(challenged_id, chat_id)
 end
 
 local function reject_challenge(challenged_id, chat_id)
-    if redis:get('ruleta:' .. chat_id .. ':challenged') == challenged_id or is_momod2(challenged_id, chat_id) or our_id == challenged_id then
+    local var = false
+    if redis:get('ruleta:' .. chat_id .. ':challenged') == challenged_id then
+        var = true
+    end
+    if is_momod2(challenged_id, chat_id) then
+        var = true
+    end
+    if our_id == challenged_id then
+        var = true
+    end
+
+    if var then
         redis:del('ruleta:' .. chat_id .. ':challenger')
         redis:del('ruleta:' .. chat_id .. ':challenged')
         redis:del('ruleta:' .. chat_id .. ':accepted')
         redis:del('ruleta:' .. chat_id .. ':rounds')
+        redis:del('ruletachallenger:' .. chat_id)
+        redis:del('ruletachallenged:' .. chat_id)
     end
 end
 
@@ -487,6 +500,7 @@ local function run(msg, matches)
                     local shots = ''
                     for var = 1, tonumber(groupstats.challengecylinder) do
                         shots = shots .. '🔵'
+                        var = var + 1
                     end
                     print(string.len(shots))
                     local shotted = string.sub(shots, 1, temp)
