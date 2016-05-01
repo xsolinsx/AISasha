@@ -50,6 +50,7 @@ local function start_challenge(challenger_id, challenged_id, challenger, challen
         redis:set('ruleta:' .. chat_id .. ':challenged', challenged_id)
         redis:set('ruleta:' .. chat_id .. ':accepted', 0)
         redis:set('ruleta:' .. chat_id .. ':rounds', 0)
+        redis:set('ruletachallenge:' .. chat_id .. ':player', challenger)
         redis:set('ruletachallenger:' .. chat_id, challenger)
         redis:set('ruletachallenged:' .. chat_id, challenged)
         send_large_msg(chat, lang_text('challengeSet'))
@@ -74,6 +75,7 @@ local function reject_challenge(challenged_id, chat_id)
         redis:del('ruleta:' .. chat_id .. ':challenged')
         redis:del('ruleta:' .. chat_id .. ':accepted')
         redis:del('ruleta:' .. chat_id .. ':rounds')
+        redis:del('ruletachallenge:' .. chat_id .. ':player')
         redis:del('ruletachallenger:' .. chat_id)
         redis:del('ruletachallenged:' .. chat_id)
     end
@@ -466,50 +468,54 @@ local function run(msg, matches)
             end
 
             if accepted == 1 and(user == challenger or user == challenged) and rounds > 0 then
-                local temp = tonumber(groupstats.challengecylinder) - rounds
-                if math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) == math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) then
-                    -- bot destroy challenge on redis
-                    reject_challenge(our_id, chat)
-                    reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
+                if user == redis:get('ruletachallenge:' .. chat .. ':player') then
+                    local temp = tonumber(groupstats.challengecylinder) - rounds
+                    if math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) == math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) then
+                        -- bot destroy challenge on redis
+                        reject_challenge(our_id, chat)
+                        reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
 
-                    ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
-                    ruletadata['users'][user].actualstreak = tonumber(0)
-                    if user == challenger then
-                        ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - 20)
-                        ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + 20)
-                        ruletadata['users'][challenger].lostduels = tonumber(ruletadata['users'][challenger].lostduels + 1)
-                        ruletadata['users'][challenged].wonduels = tonumber(ruletadata['users'][challenged].wonduels + 1)
-                    elseif user == challenged then
-                        ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + 20)
-                        ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - 20)
-                        ruletadata['users'][challenger].wonduels = tonumber(ruletadata['users'][challenger].wonduels + 1)
-                        ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
+                        ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
+                        ruletadata['users'][user].actualstreak = tonumber(0)
+                        if user == challenger then
+                            ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - 20)
+                            ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + 20)
+                            ruletadata['users'][challenger].lostduels = tonumber(ruletadata['users'][challenger].lostduels + 1)
+                            ruletadata['users'][challenged].wonduels = tonumber(ruletadata['users'][challenged].wonduels + 1)
+                        elseif user == challenged then
+                            ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + 20)
+                            ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - 20)
+                            ruletadata['users'][challenger].wonduels = tonumber(ruletadata['users'][challenger].wonduels + 1)
+                            ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
+                        end
+
+                        save_data(_config.ruleta.db, ruletadata)
+                        kick_user(user, chat)
+                    else
+                        local message = good[math.random(#good)] .. '\n' ..
+                        lang_text('shotsLeft')
+                        local shots = ''
+                        for var = 1, tonumber(groupstats.challengecylinder) do
+                            shots = shots .. '🔵'
+                            var = var + 1
+                        end
+                        print(string.len(shots))
+                        local shotted = string.sub(shots, 1, temp)
+                        shotted = string.gsub(shotted, '🔵', '🔴')
+                        print(string.len(shotted))
+                        local notshotted = string.sub(shots, temp, tonumber(groupstats.challengecylinder))
+                        print(string.len(notshotted))
+                        message = message .. shotted .. notshotted
+                        reply_msg(msg.id, message, ok_cb, false)
+                        -- blu,rosso
+                        -- 🔵🔴
+
+                        ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
+
+                        save_data(_config.ruleta.db, ruletadata)
                     end
-
-                    save_data(_config.ruleta.db, ruletadata)
-                    kick_user(user, chat)
                 else
-                    local message = good[math.random(#good)] .. '\n' ..
-                    lang_text('shotsLeft')
-                    local shots = ''
-                    for var = 1, tonumber(groupstats.challengecylinder) do
-                        shots = shots .. '🔵'
-                        var = var + 1
-                    end
-                    print(string.len(shots))
-                    local shotted = string.sub(shots, 1, temp)
-                    shotted = string.gsub(shotted, '🔵', '🔴')
-                    print(string.len(shotted))
-                    local notshotted = string.sub(shots, temp, tonumber(groupstats.challengecylinder))
-                    print(string.len(notshotted))
-                    message = message .. shotted .. notshotted
-                    reply_msg(msg.id, message, ok_cb, false)
-                    -- blu,rosso
-                    -- 🔵🔴
-
-                    ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
-
-                    save_data(_config.ruleta.db, ruletadata)
+                    reply_msg(msg.id, lang_text('notYourTurn'), ok_cb, false)
                 end
             else
                 if math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) == math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) then
