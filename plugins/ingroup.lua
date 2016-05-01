@@ -1156,7 +1156,7 @@ local function run(msg, matches)
                 save_data(_config.moderation.data, data)
                 return lang_text('sendNewGroupPic')
             end
-            if (matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi') then
+            if matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi' then
                 if not is_owner(msg) then
                     return lang_text('require_owner')
                 end
@@ -1175,7 +1175,7 @@ local function run(msg, matches)
                     return resolve_username(username, promote_demote_res, cbres_extra)
                 end
             end
-            if (matches[1]:lower() == 'demote' or matches[1]:lower() == 'sasha degrada' or matches[1]:lower() == 'degrada') and not matches[2] then
+            if matches[1]:lower() == 'demote' or matches[1]:lower() == 'sasha degrada' or matches[1]:lower() == 'degrada' then
                 if not is_owner(msg) then
                     return lang_text('require_owner')
                 end
