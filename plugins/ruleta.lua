@@ -27,6 +27,10 @@ local bad = {
     "Muori idiota.",
 }
 
+local function wait(n)
+    os.execute("sleep " .. tonumber(n))
+end
+
 local function get_challenge(chat_id)
     local Whashonredis = redis:get('ruleta:' .. chat_id .. ':challenger')
     local Xhashonredis = redis:get('ruleta:' .. chat_id .. ':challenged')
