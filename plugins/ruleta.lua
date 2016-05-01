@@ -470,6 +470,11 @@ local function run(msg, matches)
             if accepted == 1 and(user == challenger or user == challenged) and rounds > 0 then
                 if user == redis:get('ruletachallenge:' .. chat .. ':player') then
                     local temp = tonumber(groupstats.challengecylinder) - rounds
+                    if user == challenger then
+                        redis:set('ruletachallenge:' .. chat .. ':player', challenged)
+                    elseif user == challenged then
+                        redis:set('ruletachallenge:' .. chat .. ':player', challenged)
+                    end
                     if math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) == math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) then
                         -- bot destroy challenge on redis
                         reject_challenge(our_id, chat)
@@ -499,12 +504,12 @@ local function run(msg, matches)
                             shots = shots .. '🔵'
                             var = var + 1
                         end
-                        print(string.len(shots))
+                        print(string.len(shots) / 4, shots)
                         local shotted = string.sub(shots, 1, temp)
                         shotted = string.gsub(shotted, '🔵', '🔴')
-                        print(string.len(shotted))
+                        print(string.len(shotted) / 4, shotted)
                         local notshotted = string.sub(shots, temp, tonumber(groupstats.challengecylinder))
-                        print(string.len(notshotted))
+                        print(string.len(notshotted) / 4, notshotted)
                         message = message .. shotted .. notshotted
                         reply_msg(msg.id, message, ok_cb, false)
                         -- blu,rosso
