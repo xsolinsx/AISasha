@@ -756,7 +756,7 @@ local function promote_by_reply(extra, success, result)
     end
     local member_id = msg.from.peer_id
     if msg.to.peer_type == 'chat' then
-        return promote(get_receiver(msg), member_username, member_id)
+        return promote('chat#id' .. result.to.peer_id, member_username, member_id)
     end
 end
 
@@ -784,7 +784,7 @@ local function demote_by_reply(extra, success, result)
     end
     local member_id = msg.from.peer_id
     if msg.to.peer_type == 'chat' then
-        return demote(get_receiver(msg), member_username, member_id)
+        return demote('chat#id' .. result.to.peer_id, member_username, member_id)
     end
 end
 

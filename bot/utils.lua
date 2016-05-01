@@ -927,7 +927,7 @@ function is_momod2(user_id, group_id)
     end
 
     for v, user in pairs(_config.sudo_users) do
-        if user == usert then
+        if user == tostring(usert) then
             var = true
         end
     end
