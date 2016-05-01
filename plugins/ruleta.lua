@@ -382,7 +382,7 @@ local function run(msg, matches)
             lang_text('challenger')
             user_info('user#id' .. challenger, get_user, { chat = chat })
             text = text .. redis:get('ruletaplayer:' .. chat) .. '\n' ..
-            lang_text('challenged') .. '\n'
+            lang_text('challenged')
             user_info('user#id' .. challenged, get_user, { chat = chat })
             text = text .. redis:get('ruletaplayer:' .. chat) .. '\n'
             if accepted == 0 then
