@@ -417,7 +417,7 @@ local function run(msg, matches)
             if (user == challenger or user == challenged) then
                 if user == challenged and accepted == 0 then
                     reply_msg(msg.id, lang_text('challengeRejected'), ok_cb, false)
-                elseif is_momod(user) then
+                elseif is_momod(msg) then
                     reply_msg(msg.id, lang_text('challengeModTerminated'), ok_cb, false)
                 elseif accepted == 1 then
                     reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
