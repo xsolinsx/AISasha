@@ -1,3 +1,5 @@
+local tmpuser
+
 -- safe
 local good = {
     "Ti è andata bene.",
@@ -97,6 +99,7 @@ local function get_user(cb_extra, success, result)
     else
         user = string.gsub(result.print_name, '_', ' ')
     end
+    tmpuser = user
     redis:set('ruletaplayer:' .. cb_extra.chat, user)
 end
 
@@ -381,10 +384,14 @@ local function run(msg, matches)
             local text = lang_text('challenge') .. '\n' ..
             lang_text('challenger')
             user_info('user#id' .. challenger, get_user, { chat = chat })
-            text = text .. redis:get('ruletaplayer:' .. chat) .. '\n' ..
+            text = text ..
+            --[[ redis:get('ruletaplayer:' .. chat) ]]
+            tmpuser .. '\n' ..
             lang_text('challenged')
             user_info('user#id' .. challenged, get_user, { chat = chat })
-            text = text .. redis:get('ruletaplayer:' .. chat) .. '\n'
+            text = text ..
+            --[[ redis:get('ruletaplayer:' .. chat) ]]
+            tmpuser .. '\n'
             if accepted == 0 then
                 text = text .. lang_text('notAccepted') .. '\n'
             elseif accepted == 1 then
