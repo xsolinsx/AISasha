@@ -93,7 +93,7 @@ end
 local function get_user(cb_extra, success, result)
     local user = ''
     if result.username then
-        user = result.username
+        user = '@' .. result.username
     else
         user = string.gsub(result.print_name, '_', ' ')
     end
@@ -384,7 +384,7 @@ local function run(msg, matches)
             text = text .. redis:get('ruletaplayer:' .. chat) .. '\n' ..
             lang_text('challenged') .. '\n'
             user_info('user#id' .. challenged, get_user, { chat = chat })
-            text = text .. redis:get('ruletaplayer:' .. chat)
+            text = text .. redis:get('ruletaplayer:' .. chat) .. '\n'
             if accepted == 0 then
                 text = text .. lang_text('notAccepted') .. '\n'
             elseif accepted == 1 then
