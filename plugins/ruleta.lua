@@ -327,11 +327,15 @@ local function run(msg, matches)
             reply_msg(msg.id, lang_text('requireSignUp'), ok_cb, false)
             return
         end
-        --
-        if matches[1]:lower() == 'eliminami' and userstats.score >= 0 then
-            ruletadata['users'][user] = false
-            save_data(_config.ruleta.db, ruletadata)
-            reply_msg(msg.id, lang_text('ruletaDeleted'), ok_cb, false)
+
+        if matches[1]:lower() == 'eliminami' then
+            if userstats.score >= 0 then
+                ruletadata['users'][user] = false
+                save_data(_config.ruleta.db, ruletadata)
+                reply_msg(msg.id, lang_text('ruletaDeleted'), ok_cb, false)
+            else
+                reply_msg(msg.id, lang_text('requireZeroPoints'), ok_cb, false)
+            end
             return
         end
 
@@ -401,17 +405,21 @@ local function run(msg, matches)
             rounds = tonumber(challenge[4])
         end
 
-        if matches[1]:lower() == 'challengeinfo' and challenge then
-            local text = lang_text('challenge') .. '\n' ..
-            lang_text('challenger') .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
-            lang_text('challenged') .. redis:get('ruletachallenged:' .. chat) .. '\n'
-            if accepted == 0 then
-                text = text .. lang_text('notAccepted') .. '\n'
-            elseif accepted == 1 then
-                text = text .. lang_text('accepted') .. '\n'
+        if matches[1]:lower() == 'challengeinfo' then
+            if challenge then
+                local text = lang_text('challenge') .. '\n' ..
+                lang_text('challenger') .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
+                lang_text('challenged') .. redis:get('ruletachallenged:' .. chat) .. '\n'
+                if accepted == 0 then
+                    text = text .. lang_text('notAccepted') .. '\n'
+                elseif accepted == 1 then
+                    text = text .. lang_text('accepted') .. '\n'
+                end
+                text = text .. lang_text('roundsLeft') .. rounds
+                reply_msg(msg.id, text, ok_cb, false)
+            else
+                reply_msg(msg.id, lang_text('noChallenge'), ok_cb, false)
             end
-            text = text .. lang_text('roundsLeft') .. rounds
-            reply_msg(msg.id, text, ok_cb, false)
             return
         end
 
@@ -499,27 +507,19 @@ local function run(msg, matches)
                         save_data(_config.ruleta.db, ruletadata)
                         kick_user(user, chat)
                     else
-                        local text = good[math.random(#good)] .. '\n' ..
-                        lang_text('shotsLeft') .. groupstats.challengecylinder - temp
-
-                        reply_msg(msg.id, text, ok_cb, false)
-
-                        --[[local shots = ''
-                        for var = 1, tonumber(groupstats.challengecylinder) do
-                            shots = shots .. '🔵'
+                        -- blue red
+                        -- 🔵    🔴
+                        local notshotted = ''
+                        local shotted = ''
+                        for var = 1, tonumber(groupstats.challengecylinder -(groupstats.challengecylinder - temp)) do
+                            notshotted = notshotted .. '🔵'
                             var = var + 1
-                        endreply_msg(msg.id, shots, ok_cb, false)
-                        local shotted = string.sub(shots, 1, temp)
-                        shotted = string.gsub(shotted, '🔵', '🔴')
-                        reply_msg(msg.id, shotted, ok_cb, false)
-                        local notshotted = string.sub(shots, temp, tonumber(groupstats.challengecylinder))
-                        reply_msg(msg.id, notshotted, ok_cb, false)
-                        text = text .. shotted .. notshotted
-                        print(text)
-                        reply_msg(msg.id, text, ok_cb, false)
-                        -- blu,rosso
-                        -- 🔵🔴]]
-
+                        end
+                        for var = 1, tonumber(groupstats.challengecylinder - temp) do
+                            shotted = shotted .. '🔴'
+                            var = var + 1
+                        end
+                        reply_msg(msg.id, good[math.random(#good)] .. '\n' .. lang_text('shotsLeft') .. notshotted .. shotted, ok_cb, false)
 
                         ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
 
