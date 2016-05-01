@@ -148,9 +148,9 @@ local function run(msg, matches)
         local group_name = string.gsub(msg.to.print_name, '_', ' ')
         savelog(msg.from.id, "Added Support member " .. user_name .. " to chat " .. group_name .. " (ID:" .. msg.to.id .. ")")
         if username then
-            send_large_msg("user#id" .. user_id, lang_text('supportAdded') .. "@" .. username .. " " .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
+            -- send_large_msg("user#id" .. user_id, lang_text('supportAdded') .. "@" .. username .. " " .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         else
-            send_large_msg("user#id" .. user_id, lang_text('supportAdded') .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
+            -- send_large_msg("user#id" .. user_id, lang_text('supportAdded') .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         end
     end
     if msg.service and user_type == "admin" and msg.action.type == "chat_add_user" and msg.from.id == 0 then
@@ -159,9 +159,9 @@ local function run(msg, matches)
         local username = msg.action.user.username
         savelog(msg.from.id, "Added Admin " .. user_name .. "  " .. user_id .. " to chat " .. group_name .. " (ID:" .. msg.to.id .. ")")
         if username then
-            send_large_msg("user#id" .. user_id, lang_text('adminAdded') .. "@" .. username .. " " .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
+            -- send_large_msg("user#id" .. user_id, lang_text('adminAdded') .. "@" .. username .. " " .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         else
-            send_large_msg("user#id" .. user_id, lang_text('adminAdded') .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
+            -- send_large_msg("user#id" .. user_id, lang_text('adminAdded') .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         end
     end
 
@@ -170,7 +170,7 @@ local function run(msg, matches)
         local user_name = msg.action.user.print_name
         print("Added " .. user_id .. " to chat " .. msg.to.print_name .. " (ID:" .. msg.to.id .. ")")
         savelog(msg.from.id, "Added " .. user_name .. " to chat " .. msg.to.print_name .. " ID:" .. msg.to.id)
-        send_large_msg("user#id" .. user_id, lang_text('addedTo') .. group_name .. " ID:" .. msg.to.id)
+        -- send_large_msg("user#id" .. user_id, lang_text('addedTo') .. group_name .. " ID:" .. msg.to.id)
     end
 
     if matches[1]:lower() == 'chats' and is_admin1(msg) then
