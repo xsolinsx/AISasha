@@ -38,15 +38,18 @@ local function get_challenge(chat_id)
     if Whashonredis and Xhashonredis and Yhashonredis and Zhashonredis then
         return { Whashonredis, Xhashonredis, Yhashonredis, Zhashonredis }
     end
+    return false
 end
 
 local function start_challenge(challenger_id, challenged_id, chat_id)
     local channel = 'channel#id' .. chat_id
     local chat = 'chat#id' .. chat_id
 
-    if get_challenge(chat_id) or tonumber(get_challenge(chat_id)[3]) == 1 then
-        send_large_msg(chat, lang_text('errorOngoingChallenge'), ok_cb, false)
-        send_large_msg(channel, lang_text('errorOngoingChallenge'), ok_cb, false)
+    if get_challenge(chat_id) then
+        if tonumber(get_challenge(chat_id)[3]) == 1 then
+            send_large_msg(chat, lang_text('errorOngoingChallenge'), ok_cb, false)
+            send_large_msg(channel, lang_text('errorOngoingChallenge'), ok_cb, false)
+        end
     else
         redis:set('ruleta:' .. chat_id .. ':challenger', challenger_id)
         redis:set('ruleta:' .. chat_id .. ':challenged', challenged_id)
@@ -64,9 +67,6 @@ local function accept_challenge(challenged_id, chat_id)
     if redis:get('ruleta:' .. chat_id .. ':challenged') == challenged_id then
         redis:set('ruleta:' .. chat_id .. ':accepted', 1)
         redis:set('ruleta:' .. chat_id .. ':rounds', load_data(_config.ruleta.db)['groups'][chat_id].challengecylinder)
-    else
-        send_large_msg(chat, lang_text('wrongPlayer'), ok_cb, false)
-        send_large_msg(channel, lang_text('wrongPlayer'), ok_cb, false)
     end
 end
 
@@ -79,9 +79,6 @@ local function reject_challenge(challenged_id, chat_id)
         redis:del('ruleta:' .. chat_id .. ':challenged')
         redis:del('ruleta:' .. chat_id .. ':accepted')
         redis:del('ruleta:' .. chat_id .. ':rounds')
-    else
-        send_large_msg(chat, lang_text('wrongPlayer'), ok_cb, false)
-        send_large_msg(channel, lang_text('wrongPlayer'), ok_cb, false)
     end
 end
 
@@ -374,7 +371,7 @@ local function run(msg, matches)
             if type(msg.reply_id) ~= "nil" and is_momod(msg) then
                 get_message(msg.reply_id, Challenge_by_reply, { challenger = user })
             elseif matches[2] then
-                resolve_username(matches[2], Challenge_by_username, { challenger = user, chat_id = chat })
+                resolve_username(matches[2]:gsub("@", ""), Challenge_by_username, { challenger = user, chat_id = chat })
             end
             return
         end
@@ -412,32 +409,40 @@ local function run(msg, matches)
             lang_text('challenged')
             user_info('user#id' .. challenged, get_user, false)
             text = text .. redis:get('ruletaplayer:' .. chat)
-
-            ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
-            ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
             accept_challenge(user, chat)
+            if get_challenge(chat) and get_challenge(chat)[4] == 1 then
+                ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
+                ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
+            else
+                text = lang_text('wrongPlayer')
+            end
             reply_msg(msg.id, text, ok_cb, false)
             return
         end
 
         if matches[1]:lower() == 'rifiuta' and challenge then
-            if (user == challenger or user == challenged) and accepted == 1 then
-                reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
-                if user == challenger then
-                    ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - 20)
-                    ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + 20)
-                    ruletadata['users'][challenger].lostduels = tonumber(ruletadata['users'][challenger].lostduels + 1)
-                    ruletadata['users'][challenged].wonduels = tonumber(ruletadata['users'][challenged].wonduels + 1)
-                elseif user == challenged then
-                    ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + 20)
-                    ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - 20)
-                    ruletadata['users'][challenger].wonduels = tonumber(ruletadata['users'][challenger].wonduels + 1)
-                    ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
+            if (user == challenger or user == challenged) then
+                if accepted == 0 then
+                    reply_msg(msg.id, lang_text('challengeRejected'), ok_cb, false)
+                elseif accepted == 1 then
+                    reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
+                    if user == challenger then
+                        ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - 20)
+                        ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + 20)
+                        ruletadata['users'][challenger].lostduels = tonumber(ruletadata['users'][challenger].lostduels + 1)
+                        ruletadata['users'][challenged].wonduels = tonumber(ruletadata['users'][challenged].wonduels + 1)
+                    elseif user == challenged then
+                        ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + 20)
+                        ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - 20)
+                        ruletadata['users'][challenger].wonduels = tonumber(ruletadata['users'][challenger].wonduels + 1)
+                        ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
+                    end
+                    save_data(_config.ruleta.db, ruletadata)
+                    kick_user(user, chat)
                 end
-                save_data(_config.ruleta.db, ruletadata)
-                kick_user(user, chat)
-            else
-                reply_msg(msg.id, lang_text('challengeRejected'), ok_cb, false)
+            elseif not is_momod(msg) then
+                reply_msg(msg.id, lang_text('wrongPlayer'), ok_cb, false)
+                return
             end
             reject_challenge(user, chat)
             return
