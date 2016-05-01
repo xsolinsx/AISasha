@@ -391,8 +391,6 @@ local function run(msg, matches)
             challenged = challenge[2]
             accepted = tonumber(challenge[3])
             rounds = tonumber(challenge[4])
-            user_info('user#id' .. challenger, get_user, { chat = chat, player = 'challenger' })
-            user_info('user#id' .. challenged, get_user, { chat = chat, player = 'challenged' })
         end
 
         if matches[1]:lower() == 'challengeinfo' and challenge then
