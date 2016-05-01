@@ -50,7 +50,7 @@ local function start_challenge(challenger_id, challenged_id, challenger, challen
         redis:set('ruleta:' .. chat_id .. ':challenged', challenged_id)
         redis:set('ruleta:' .. chat_id .. ':accepted', 0)
         redis:set('ruleta:' .. chat_id .. ':rounds', 0)
-        redis:set('ruletachallenge:' .. chat_id .. ':player', challenger)
+        redis:set('ruletachallenge:' .. chat_id .. ':player', challenger_id)
         redis:set('ruletachallenger:' .. chat_id, challenger)
         redis:set('ruletachallenged:' .. chat_id, challenged)
         send_large_msg(chat, lang_text('challengeSet'))
