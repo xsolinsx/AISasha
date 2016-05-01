@@ -57,19 +57,12 @@ local function start_challenge(challenger_id, challenged_id, challenger, challen
     end
 end
 
-local function accept_challenge(challenged_id, chat_id)
-    if redis:get('ruleta:' .. chat_id .. ':challenged') == challenged_id then
-        redis:set('ruleta:' .. chat_id .. ':accepted', 1)
-        redis:set('ruleta:' .. chat_id .. ':rounds', load_data(_config.ruleta.db)['groups'][chat_id].challengecylinder)
-    end
-end
-
 local function reject_challenge(challenged_id, chat_id)
     local var = false
     if redis:get('ruleta:' .. chat_id .. ':challenged') == challenged_id then
         var = true
     end
-    if is_momod2(challenged_id, chat_id) then
+    if is_momod( { from = { id = challenged_id }, to = { id = chat_id } }) then
         var = true
     end
     if our_id == challenged_id then
@@ -423,8 +416,9 @@ local function run(msg, matches)
         if matches[1]:lower() == 'accetta' and challenge and accepted == 0 then
             local text = lang_text('challenger') .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
             lang_text('challenged') .. redis:get('ruletachallenged:' .. chat)
-            accept_challenge(user, chat)
-            if get_challenge(chat) and get_challenge(chat)[3] == 1 then
+            if redis:get('ruleta:' .. chat .. ':challenged') == user then
+                redis:set('ruleta:' .. chat .. ':accepted', 1)
+                redis:set('ruleta:' .. chat .. ':rounds', groupstats.challengecylinder)
                 ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
                 ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
             else

@@ -166,7 +166,7 @@ function is_sudo(msg)
     local var = false
     -- Check users id in config
     for v, user in pairs(_config.sudo_users) do
-        if user == msg.from.id then
+        if tostring(user) == tostring(msg.from.id) then
             var = true
         end
     end
@@ -777,7 +777,7 @@ function is_owner(msg)
     end
 
     for v, user in pairs(_config.sudo_users) do
-        if user == msg.from.id then
+        if tostring(user) == tostring(msg.from.id) then
             var = true
         end
     end
@@ -809,7 +809,7 @@ function is_owner2(user_id, group_id)
     end
 
     for v, user in pairs(_config.sudo_users) do
-        if user == user_id then
+        if tostring(user) == tostring(user_id) then
             var = true
         end
     end
@@ -828,7 +828,7 @@ function is_admin1(msg)
         end
     end
     for v, user in pairs(_config.sudo_users) do
-        if user == msg.from.id then
+        if tostring(user) == tostring(msg.from.id) then
             var = true
         end
     end
@@ -846,7 +846,7 @@ function is_admin2(user_id)
         end
     end
     for v, user in pairs(_config.sudo_users) do
-        if user == user_id then
+        if tostring(user) == tostring(user_id) then
             var = true
         end
     end
@@ -887,7 +887,7 @@ function is_momod(msg)
     end
 
     for v, user in pairs(_config.sudo_users) do
-        if user == msg.from.id then
+        if tostring(user) == tostring(msg.from.id) then
             var = true
         end
     end
@@ -927,7 +927,7 @@ function is_momod2(user_id, group_id)
     end
 
     for v, user in pairs(_config.sudo_users) do
-        if user == tostring(usert) then
+        if tostring(user) == tostring(usert) then
             var = true
         end
     end
