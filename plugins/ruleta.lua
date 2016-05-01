@@ -1,6 +1,3 @@
-local p1 = ''
-local p2 = ''
-
 -- safe
 local good = {
     "Ti è andata bene.",
@@ -30,10 +27,6 @@ local bad = {
     "Muori idiota.",
 }
 
-local function wait(n)
-    os.execute("sleep " .. tonumber(n))
-end
-
 local function get_challenge(chat_id)
     local Whashonredis = redis:get('ruleta:' .. chat_id .. ':challenger')
     local Xhashonredis = redis:get('ruleta:' .. chat_id .. ':challenged')
@@ -45,7 +38,7 @@ local function get_challenge(chat_id)
     return false
 end
 
-local function start_challenge(challenger_id, challenged_id, chat_id)
+local function start_challenge(challenger_id, challenged_id, challenger, challenged, chat_id)
     local channel = 'channel#id' .. chat_id
     local chat = 'chat#id' .. chat_id
 
@@ -57,6 +50,8 @@ local function start_challenge(challenger_id, challenged_id, chat_id)
         redis:set('ruleta:' .. chat_id .. ':challenged', challenged_id)
         redis:set('ruleta:' .. chat_id .. ':accepted', 0)
         redis:set('ruleta:' .. chat_id .. ':rounds', 0)
+        redis:set('ruletachallenger:' .. chat_id, challenger)
+        redis:set('ruletachallenged:' .. chat_id, challenged)
         send_large_msg(chat, lang_text('challengeSet'))
         send_large_msg(channel, lang_text('challengeSet'))
     end
@@ -83,7 +78,19 @@ local function Challenge_by_reply(extra, success, result)
         -- Ignore bot
         return
     end
-    start_challenge(extra.challenger, result.from.peer_id, result.to.peer_id)
+    local challenger = ''
+    local challenged = ''
+    if extra.msg.from.username then
+        challenger = '@' .. extra.msg.from.username
+    else
+        challenger = string.gsub(extra.msg.from.print_name, '_', ' ')
+    end
+    if result.from.username then
+        challenged = '@' .. result.from.username
+    else
+        challenged = string.gsub(result.from.print_name, '_', ' ')
+    end
+    start_challenge(extra.challenger, result.from.peer_id, challenger, challenged, result.to.peer_id)
 end
 
 local function Challenge_by_username(extra, success, result)
@@ -94,23 +101,19 @@ local function Challenge_by_username(extra, success, result)
         -- Ignore bot
         return
     end
-    start_challenge(extra.challenger, result.peer_id, extra.chat_id)
-end
-
-local function get_user(cb_extra, success, result)
-    local user = ''
-    if result.username then
-        user = '@' .. result.username
+    local challenger = ''
+    local challenged = ''
+    if extra.msg.from.username then
+        challenger = '@' .. extra.msg.from.username
     else
-        user = string.gsub(result.print_name, '_', ' ')
+        challenger = string.gsub(extra.msg.from.print_name, '_', ' ')
     end
-    if cb_extra.player == 'challenger' then
-        p1 = user
-        redis:set('ruletachallenger:' .. cb_extra.chat, user)
-    elseif cb_extra.player == 'challenged' then
-        p2 = user
-        redis:set('ruletachallenged:' .. cb_extra.chat, user)
+    if result.username then
+        challenged = '@' .. result.username
+    else
+        challenged = string.gsub(result.print_name, '_', ' ')
     end
+    start_challenge(extra.challenger, result.peer_id, challenger, challenged, extra.chat_id)
 end
 
 local function kick_user(user_id, chat_id)
@@ -388,20 +391,14 @@ local function run(msg, matches)
             challenged = challenge[2]
             accepted = tonumber(challenge[3])
             rounds = tonumber(challenge[4])
+            user_info('user#id' .. challenger, get_user, { chat = chat, player = 'challenger' })
+            user_info('user#id' .. challenged, get_user, { chat = chat, player = 'challenged' })
         end
 
         if matches[1]:lower() == 'challengeinfo' and challenge then
             local text = lang_text('challenge') .. '\n' ..
-            lang_text('challenger')
-            user_info('user#id' .. challenger, get_user, { chat = chat, player = 'challenger' })
-            text = text .. p1
-            --[[ redis:get('ruletachallenger:' .. chat) ]]
-            .. '\n' ..
-            lang_text('challenged')
-            user_info('user#id' .. challenged, get_user, { chat = chat, player = 'challenged' })
-            text = text .. p2
-            --[[ redis:get('ruletachallenged:' .. chat) ]]
-            .. '\n'
+            lang_text('challenger') .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
+            lang_text('challenged') .. redis:get('ruletachallenged:' .. chat) .. '\n'
             if accepted == 0 then
                 text = text .. lang_text('notAccepted') .. '\n'
             elseif accepted == 1 then
@@ -413,15 +410,8 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'accetta' and challenge and accepted == 0 then
-            local text = lang_text('challenger')
-            user_info('user#id' .. challenger, get_user, { chat = chat, player = 'challenger' })
-            text = text .. p1
-            --[[ redis:get('ruletachallenger:' .. chat) ]]
-            .. '\n'
-            lang_text('challenged')
-            user_info('user#id' .. challenged, get_user, { chat = chat, player = 'challenged' })
-            text = text .. p2
-            --[[ redis:get('ruletachallenged:' .. chat) ]]
+            local text = lang_text('challenger') .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
+            lang_text('challenged') .. redis:get('ruletachallenged:' .. chat)
             accept_challenge(user, chat)
             if get_challenge(chat) and get_challenge(chat)[3] == 1 then
                 ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
