@@ -97,7 +97,7 @@ local function get_user(cb_extra, success, result)
     else
         user = string.gsub(result.print_name, '_', ' ')
     end
-    redis:set('ruletaplayer:' .. chat_id, user)
+    redis:set('ruletaplayer:' .. cb_extra.chat, user)
 end
 
 local function kick_user(user_id, chat_id)
@@ -397,10 +397,10 @@ local function run(msg, matches)
 
         if matches[1]:lower() == 'accetta' and challenge and accepted == 0 then
             local text = lang_text('challenger')
-            user_info('user#id' .. challenger, get_user, false)
+            user_info('user#id' .. challenger, get_user, { chat = chat })
             text = text .. redis:get('ruletaplayer:' .. chat) .. '\n'
             lang_text('challenged')
-            user_info('user#id' .. challenged, get_user, false)
+            user_info('user#id' .. challenged, get_user, { chat = chat })
             text = text .. redis:get('ruletaplayer:' .. chat)
             accept_challenge(user, chat)
             if get_challenge(chat) and get_challenge(chat)[3] == 1 then
