@@ -43,7 +43,6 @@ end
 local function start_challenge(challenger_id, challenged_id, chat_id)
     local channel = 'channel#id' .. chat_id
     local chat = 'chat#id' .. chat_id
-    local user = 'user#id' .. user_id
 
     if get_challenge(chat_id) or tonumber(get_challenge(chat_id)[3]) == 1 then
         send_large_msg(chat, lang_text('errorOngoingChallenge'), ok_cb, false)
