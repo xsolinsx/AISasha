@@ -475,6 +475,7 @@ local function run(msg, matches)
                     elseif user == challenged then
                         redis:set('ruletachallenge:' .. chat .. ':player', challenger)
                     end
+                    redis:set('ruleta:' .. chat_id .. ':rounds', rounds + 1)
                     print(temp)
                     if math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) == math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) then
                         print('dead')
