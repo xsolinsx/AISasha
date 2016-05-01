@@ -469,7 +469,7 @@ local function run(msg, matches)
 
             if accepted == 1 and(user == challenger or user == challenged) and rounds > 0 then
                 if user == redis:get('ruletachallenge:' .. chat .. ':player') then
-                    local temp = tonumber(groupstats.challengecylinder) - rounds
+                    local temp = tonumber(groupstats.challengecylinder) - rounds + 1
                     if user == challenger then
                         redis:set('ruletachallenge:' .. chat .. ':player', challenged)
                     elseif user == challenged then
@@ -517,7 +517,6 @@ local function run(msg, matches)
                         text = text .. shotted .. notshotted
                         print(text)
                         reply_msg(msg.id, text, ok_cb, false)
-                        send_large_msg(get_receiver(msg), text)
                         -- blu,rosso
                         -- 🔵🔴
 
