@@ -381,10 +381,12 @@ local function run(msg, matches)
         end
 
         local challenge = get_challenge(msg.to.id)
-        local challenger = challenge[1]
-        local challenged = challenge[2]
-        local rounds = tonumber(challenge[3])
-        local accepted = tonumber(challenge[4])
+        if challenge then
+            local challenger = challenge[1]
+            local challenged = challenge[2]
+            local rounds = tonumber(challenge[3])
+            local accepted = tonumber(challenge[4])
+        end
 
         if matches[1]:lower() == 'challengeinfo' and challenge then
             local text = lang_text('challenge') .. '\n' ..
