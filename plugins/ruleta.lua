@@ -28,9 +28,6 @@ local bad = {
 }
 
 local function get_challenge(chat_id)
-    local channel = 'channel#id' .. chat_id
-    local chat = 'chat#id' .. chat_id
-
     local Whashonredis = redis:get('ruleta:' .. chat_id .. ':challenger')
     local Xhashonredis = redis:get('ruleta:' .. chat_id .. ':challenged')
     local Yhashonredis = redis:get('ruleta:' .. chat_id .. ':accepted')
@@ -45,11 +42,9 @@ local function start_challenge(challenger_id, challenged_id, chat_id)
     local channel = 'channel#id' .. chat_id
     local chat = 'chat#id' .. chat_id
 
-    if get_challenge(chat_id) then
-        if tonumber(get_challenge(chat_id)[3]) == 1 then
-            send_large_msg(chat, lang_text('errorOngoingChallenge'))
-            send_large_msg(channel, lang_text('errorOngoingChallenge'))
-        end
+    if get_challenge(chat_id) and tonumber(get_challenge(chat_id)[3]) == 1 then
+        send_large_msg(chat, lang_text('errorOngoingChallenge'))
+        send_large_msg(channel, lang_text('errorOngoingChallenge'))
     else
         redis:set('ruleta:' .. chat_id .. ':challenger', challenger_id)
         redis:set('ruleta:' .. chat_id .. ':challenged', challenged_id)
@@ -61,9 +56,6 @@ local function start_challenge(challenger_id, challenged_id, chat_id)
 end
 
 local function accept_challenge(challenged_id, chat_id)
-    local channel = 'channel#id' .. chat_id
-    local chat = 'chat#id' .. chat_id
-
     if redis:get('ruleta:' .. chat_id .. ':challenged') == challenged_id then
         redis:set('ruleta:' .. chat_id .. ':accepted', 1)
         redis:set('ruleta:' .. chat_id .. ':rounds', load_data(_config.ruleta.db)['groups'][chat_id].challengecylinder)
@@ -71,9 +63,6 @@ local function accept_challenge(challenged_id, chat_id)
 end
 
 local function reject_challenge(challenged_id, chat_id)
-    local channel = 'channel#id' .. chat_id
-    local chat = 'chat#id' .. chat_id
-
     if redis:get('ruleta:' .. chat_id .. ':challenged') == challenged_id or is_momod2(challenged_id, chat_id) or our_id == challenged_id then
         redis:del('ruleta:' .. chat_id .. ':challenger')
         redis:del('ruleta:' .. chat_id .. ':challenged')
@@ -380,8 +369,8 @@ local function run(msg, matches)
         if challenge then
             local challenger = challenge[1]
             local challenged = challenge[2]
-            local rounds = tonumber(challenge[3])
-            local accepted = tonumber(challenge[4])
+            local accepted = tonumber(challenge[3])
+            local rounds = tonumber(challenge[4])
         end
 
         if matches[1]:lower() == 'challengeinfo' and challenge then
@@ -410,7 +399,7 @@ local function run(msg, matches)
             user_info('user#id' .. challenged, get_user, false)
             text = text .. redis:get('ruletaplayer:' .. chat)
             accept_challenge(user, chat)
-            if get_challenge(chat) and get_challenge(chat)[4] == 1 then
+            if get_challenge(chat) and get_challenge(chat)[3] == 1 then
                 ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
                 ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
             else
