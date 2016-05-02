@@ -480,10 +480,10 @@ local function run(msg, matches)
                     local temp = tonumber(groupstats.challengecylinder) - rounds + 1
                     local nextplayeruser = ''
                     if user == challenger then
-                        nextplayeruser = redis:get('ruletachallenged:' .. chat_id)
+                        nextplayeruser = redis:get('ruletachallenged:' .. chat)
                         redis:set('ruletachallenge:' .. chat .. ':player', challenged)
                     elseif user == challenged then
-                        nextplayeruser = redis:get('ruletachallenger:' .. chat_id)
+                        nextplayeruser = redis:get('ruletachallenger:' .. chat)
                         redis:set('ruletachallenge:' .. chat .. ':player', challenger)
                     end
                     redis:set('ruleta:' .. chat .. ':rounds', rounds - 1)
