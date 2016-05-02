@@ -205,8 +205,8 @@ local function run(msg, matches)
     if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" or matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
         local fakerank = ''
         if matches[2] and(matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo") then
-            fakerank = reverse_rank_table[get_rank(matches[2]:upper(), msg.to.id) + 1]
-            if fakerank <= rank then
+            fakerank = get_rank(matches[2]:upper(), msg.to.id)
+            if tonumber(fakerank) <= rank then
                 -- ok
                 rank = fakerank
             else
@@ -215,7 +215,7 @@ local function run(msg, matches)
             end
             text = text .. 'FAKE HELP\n'
         elseif matches[3] and(matches[3]:lower() == "user" or matches[3]:lower() == "mod" or matches[3]:lower() == "owner" or matches[3]:lower() == "support" or matches[3]:lower() == "admin" or matches[3]:lower() == "sudo") then
-            fakerank = reverse_rank_table[get_rank(matches[3]:upper(), msg.to.id) + 1]
+            fakerank = get_rank(matches[3]:upper(), msg.to.id)
             if fakerank <= rank then
                 -- ok
                 rank = fakerank
