@@ -166,7 +166,11 @@ local function get_sudo_info(cb_extra, success, result)
     if result.username then
         text = text .. lang_text('username') .. '@' .. result.username
     end
-    text = text .. '\nId: ' .. result.peer_id
+    if result.phone then
+        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
+    end
+    text = text .. lang_text('date') .. os.date('%c') ..
+    '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
 end
@@ -195,9 +199,34 @@ local function run(msg, matches)
         return
     end
 
+    local text = lang_text('helpIntro')
     local rank = get_rank(msg.from.id, msg.to.id)
 
-    local text = lang_text('helpIntro')
+    if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" or matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
+        local fakerank = ''
+        if matches[2] and(matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo") then
+            fakerank = reverse_rank_table[get_rank(matches[2]:upper(), msg.to.id) + 1]
+            if fakerank <= rank then
+                -- ok
+                rank = fakerank
+            else
+                -- no
+                return lang_text('youTried')
+            end
+            text = text .. 'FAKE HELP\n'
+        elseif matches[3] and(matches[3]:lower() == "user" or matches[3]:lower() == "mod" or matches[3]:lower() == "owner" or matches[3]:lower() == "support" or matches[3]:lower() == "admin" or matches[3]:lower() == "sudo") then
+            fakerank = reverse_rank_table[get_rank(matches[3]:upper(), msg.to.id) + 1]
+            if fakerank <= rank then
+                -- ok
+                rank = fakerank
+            else
+                -- no
+                return lang_text('youTried')
+            end
+            text = text .. 'FAKE HELP\n'
+        end
+    end
+
     table.sort(plugins)
     if not matches[2] then
         if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" then
@@ -234,19 +263,28 @@ return {
     {
         "^[#!/]([Hh][Ee][Ll][Pp])$",
         "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll])$",
-        "^[#!/]([Hh][Ee][Ll][Pp]) (.+)",
+        "^[#!/]([Hh][Ee][Ll][Pp]) (.+)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
         "^[#!/]([Ss][Uu][Dd][Oo][Ll][Ii][Ss][Tt])$",
         -- help
+        "^[#!/]([Hh][Ee][Ll][Pp]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo])$",
-        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) (.*)$",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.*)$",
         -- helpall
+        "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll]) (.*)$",
         "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo])$",
+        "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo]) (.*)$",
         -- help <plugin_name>|<plugin_number>
-        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.+)",
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) (.+)",
+        "^[#!/]([Hh][Ee][Ll][Pp]) (.+) (.*)$",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) (.+)$",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.+) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) (.+) (.*)$",
         -- getrank
         "^([Rr][Aa][Nn][Gg][Oo])$",
         "^([Rr][Aa][Nn][Gg][Oo]) (.*)$",
