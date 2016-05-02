@@ -118,7 +118,6 @@ local function unban_by_reply(extra, success, result)
         -- Save on redis
         local hash = 'banned:' .. result.to.peer_id
         redis:srem(hash, result.from.peer_id)
-        channel_unblock(channel, 'user#id' .. result.from.peer_id, ok_cb, true)
     else
         send_large_msg(chat, lang_text('useYourGroups'))
         send_large_msg(channel, lang_text('useYourGroups'))
@@ -430,7 +429,6 @@ local function run(msg, matches)
             local user_id = targetuser
             local hash = 'banned:' .. chat_id
             redis:srem(hash, user_id)
-            channel_unblock('channel#id' .. msg.to.id, 'user#id' .. msg.from.id, ok_cb, true)
             local print_name = user_print_name(msg.from):gsub("‮", "")
             local name = print_name:gsub("_", "")
             savelog(msg.to.id, name .. " [" .. msg.from.id .. "] unbanned user " .. matches[2])
