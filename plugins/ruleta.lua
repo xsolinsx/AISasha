@@ -455,13 +455,21 @@ local function run(msg, matches)
                 elseif accepted == 1 then
                     reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
                     if user == challenger then
-                        ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - 20)
+                        if tonumber(ruletadata['users'][challenger].score) -20 < 0 then
+                            ruletadata['users'][challenger].score = 0
+                        else
+                            ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - 20)
+                        end
                         ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + 20)
                         ruletadata['users'][challenger].lostduels = tonumber(ruletadata['users'][challenger].lostduels + 1)
                         ruletadata['users'][challenged].wonduels = tonumber(ruletadata['users'][challenged].wonduels + 1)
                     elseif user == challenged then
                         ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + 20)
-                        ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - 20)
+                        if tonumber(ruletadata['users'][challenged].score) -20 < 0 then
+                            ruletadata['users'][challenged].score = 0
+                        else
+                            ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - 20)
+                        end
                         ruletadata['users'][challenger].wonduels = tonumber(ruletadata['users'][challenger].wonduels + 1)
                         ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
                     end
