@@ -364,7 +364,7 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'ruletagod' then
+        if matches[1]:lower() == 'godruleta' then
             if userstats.score > 10 then
                 userstats.attempts = tonumber(userstats.attempts + 1)
                 userstats.actualstreak = tonumber(userstats.actualstreak + 1)
@@ -460,7 +460,7 @@ local function run(msg, matches)
                     reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
                     if user == challenger then
                         if tonumber(ruletadata['users'][challenger].score) -20 < 0 then
-                            ruletadata['users'][challenger].score = 0
+                            ruletadata['users'][challenger].score = tonumber(0)
                         else
                             ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - 20)
                         end
@@ -470,7 +470,7 @@ local function run(msg, matches)
                     elseif user == challenged then
                         ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + 20)
                         if tonumber(ruletadata['users'][challenged].score) -20 < 0 then
-                            ruletadata['users'][challenged].score = 0
+                            ruletadata['users'][challenged].score = tonumber(0)
                         else
                             ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - 20)
                         end
@@ -517,7 +517,7 @@ local function run(msg, matches)
                         ruletadata['users'][user].actualstreak = tonumber(0)
                         if user == challenger then
                             if tonumber(ruletadata['users'][challenger].score) -20 < 0 then
-                                ruletadata['users'][challenger].score = 0
+                                ruletadata['users'][challenger].score = tonumber(0)
                             else
                                 ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - 20)
                             end
@@ -527,7 +527,7 @@ local function run(msg, matches)
                         elseif user == challenged then
                             ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + 20)
                             if tonumber(ruletadata['users'][challenged].score) -20 < 0 then
-                                ruletadata['users'][challenged].score = 0
+                                ruletadata['users'][challenged].score = tonumber(0)
                             else
                                 ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - 20)
                             end
@@ -591,7 +591,7 @@ return {
         "#ruletainfo: Sasha manda le informazioni della roulette.",
         "#mystats: Sasha manda le statistiche dell'utente.",
         "#ruleta: Sasha cerca di ucciderti.",
-        "#ruletagod: Sasha ti dà il 50% di probabilità di guadagnare 70 punti, con l'altro 50% li perdi tutti (richiede almeno 11 punti).",
+        "#godruleta: Sasha ti dà il 50% di probabilità di guadagnare 70 punti, con l'altro 50% li perdi tutti (richiede almeno 11 punti).",
         "#sfida <username>|<reply>: Sasha avvia una sfida tra il mittente e l'utente specificato.",
         "#accetta: Sasha conferma la sfida.",
         "#rifiuta: Sasha cancella la sfida.",
@@ -618,7 +618,7 @@ return {
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
         "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Tt][Aa][Ii][Nn][Ff][Oo])$",
-        "^[#!/]?([Rr][Uu][Ll][Ee][Tt][Aa][Gg][Oo][Dd])$",
+        "^[#!/]?([Gg][Oo][Dd][Rr][Uu][Ll][Ee][Tt][Aa])$",
         "^[#!/]?([Rr][Uu][Ll][Ee][Tt][Aa])",
         "^[#!/]([Ss][Ff][Ii][Dd][Aa]) (.*)$",
         "^[#!/]([Ss][Ff][Ii][Dd][Aa])$",
