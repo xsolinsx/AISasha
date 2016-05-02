@@ -203,6 +203,11 @@ local function run(msg, matches)
             return
         end
 
+        if matches[1]:lower() == 'helpruleta' then
+            local help = [[Ruleta by Sasha, inspired from Leia (/RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c'è il proiettile sei fuori altrimenti rimani.\n/helpruleta: Sasha manda questo aiuto.\n/registrami: Sasha registra l'utente alla roulette.\n/eliminami: Sasha elimina i dati dell'utente.\n/ruletainfo: Sasha manda le informazioni della roulette.\n/mystats: Sasha manda le statistiche dell'utente.\n/ruleta: Sasha cerca di ucciderti.\n/godruleta: Sasha ti dà il 50% di probabilità di guadagnare 70 punti, con l'altro 50% li perdi tutti (richiede almeno 11 punti).\n/sfida <username>|<reply>: Sasha avvia una sfida tra il mittente e l'utente specificato.\n/accetta: Sasha conferma la sfida.\n/rifiuta: Sasha cancella la sfida.\n/challengeinfo: Sasha manda le informazioni della sfida in corso.]]
+            reply_msg(msg.id, help, ok_cb, false)
+        end
+
         local chat = tostring(msg.to.id)
         local user = tostring(msg.from.id)
         local ruletadata = load_data(_config.ruleta.db)
@@ -585,7 +590,8 @@ return {
     description = "RULETA",
     usage =
     {
-        "Ruleta by Sasha, inspired from Leia (#RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c'è il proiettile sei fuori altrimenti rimani. Per sapere capienza del tamburo e proiettili usate /ruletainfo",
+        "Ruleta by Sasha, inspired from Leia (#RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c'è il proiettile sei fuori altrimenti rimani.",
+        "#helpruleta: Sasha manda questo aiuto.",
         "#registrami: Sasha registra l'utente alla roulette.",
         "#eliminami: Sasha elimina i dati dell'utente.",
         "#ruletainfo: Sasha manda le informazioni della roulette.",
