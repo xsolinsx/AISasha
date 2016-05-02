@@ -227,8 +227,15 @@ local function run(msg, matches)
         end
     end
 
+    local flag = false
+    if not matches[2] then
+        flag = true
+    elseif matches[2]:lower() ~= "user" and matches[2]:lower() ~= "mod" and matches[2]:lower() ~= "owner" and matches[2]:lower() ~= "support" and matches[2]:lower() ~= "admin" and matches[2]:lower() ~= "sudo" then
+        flag = true
+    end
+
     table.sort(plugins)
-    if not matches[2] or(matches[2]:lower() ~= "user" and matches[2]:lower() ~= "mod" and matches[2]:lower() ~= "owner" and matches[2]:lower() ~= "support" and matches[2]:lower() ~= "admin" and matches[2]:lower() ~= "sudo") then
+    if flag then
         if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" then
             text = text .. telegram_help(get_receiver(msg))
         end
