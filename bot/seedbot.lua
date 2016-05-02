@@ -255,7 +255,7 @@ function create_config()
     config = {
         enabled_plugins =
         {
-            "admin",
+            "administrator",
             "onservice",
             "strings",
             "bot",

@@ -461,6 +461,7 @@ local function run(msg, matches)
                 redis:set('ruleta:' .. chat .. ':rounds', groupstats.challengecylinder)
                 ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
                 ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
+                save_data(_config.ruleta.db, ruletadata)
             else
                 text = lang_text('wrongPlayer')
             end
