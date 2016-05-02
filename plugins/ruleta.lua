@@ -130,7 +130,6 @@ local function kick_user(user_id, chat_id)
     local channel = 'channel#id' .. chat_id
     chat_del_user(chat, user, ok_cb, true)
     channel_kick(channel, user, ok_cb, true)
-    channel_unblock(channel, user, ok_cb, true)
 end
 
 local function kickrandom_chat(cb_extra, success, result)
@@ -555,6 +554,7 @@ return {
     description = "RULETA",
     usage =
     {
+        "Ruleta by Sasha, inspired from Leia (#RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c'è il proiettile sei fuori altrimenti rimani. Per sapere capienza del tamburo e proiettili usate /ruletainfo",
         "#registrami: Sasha registra l'utente alla roulette.",
         "#eliminami: Sasha elimina i dati dell'utente.",
         "#ruletainfo: Sasha manda le informazioni della roulette.",
@@ -577,6 +577,7 @@ return {
         "#eliminagruppo: Sasha disabilita il gruppo per ruleta.",
         "SUDO",
         "#createdb: Sasha crea il database di ruleta.",
+        "#addpoints <value> <reply>: Sasha aggiunge <value> punti all'utente della risposta"
     },
     patterns =
     {
