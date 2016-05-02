@@ -206,7 +206,7 @@ local function run(msg, matches)
         local fakerank = ''
         if matches[2] and(matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo") then
             fakerank = get_rank(matches[2]:upper(), msg.to.id)
-            if tonumber(fakerank) <= rank then
+            if fakerank <= rank then
                 -- ok
                 rank = fakerank
             else
@@ -228,7 +228,7 @@ local function run(msg, matches)
     end
 
     table.sort(plugins)
-    if not matches[2] or matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo" then
+    if not matches[2] or(matches[2]:lower() ~= "user" and matches[2]:lower() ~= "mod" and matches[2]:lower() ~= "owner" and matches[2]:lower() ~= "support" and matches[2]:lower() ~= "admin" and matches[2]:lower() ~= "sudo") then
         if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" then
             text = text .. telegram_help(get_receiver(msg))
         end
