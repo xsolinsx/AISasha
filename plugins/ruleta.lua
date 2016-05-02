@@ -478,9 +478,12 @@ local function run(msg, matches)
             if accepted == 1 and(user == challenger or user == challenged) and rounds > 0 then
                 if user == redis:get('ruletachallenge:' .. chat .. ':player') then
                     local temp = tonumber(groupstats.challengecylinder) - rounds + 1
+                    local nextplayeruser = ''
                     if user == challenger then
+                        nextplayeruser = redis:get('ruletachallenged:' .. chat_id)
                         redis:set('ruletachallenge:' .. chat .. ':player', challenged)
                     elseif user == challenged then
+                        nextplayeruser = redis:get('ruletachallenger:' .. chat_id)
                         redis:set('ruletachallenge:' .. chat .. ':player', challenger)
                     end
                     redis:set('ruleta:' .. chat .. ':rounds', rounds - 1)
@@ -519,7 +522,7 @@ local function run(msg, matches)
                             notshotted = notshotted .. '🔵'
                             var = var + 1
                         end
-                        reply_msg(msg.id, good[math.random(#good)] .. '\n' .. lang_text('shotsLeft') .. notshotted .. shotted, ok_cb, false)
+                        reply_msg(msg.id, good[math.random(#good)] .. '\n' .. lang_text('shotsLeft') .. notshotted .. shotted .. '\n' .. nextplayeruser .. lang_text('yourTurn'), ok_cb, false)
 
                         ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
 
