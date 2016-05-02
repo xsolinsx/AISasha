@@ -86,7 +86,7 @@ local function Challenge_by_reply(extra, success, result)
         -- Ignore bot
         return
     end
-    if extra.challenger == result.from.peer_id then
+    if tonumber(extra.challenger) == tonumber(result.from.peer_id) then
         reply_msg(extra.msg.id, lang_text('cantChallengeYourself'), ok_cb, false)
         return
     end
@@ -113,7 +113,7 @@ local function Challenge_by_username(extra, success, result)
         -- Ignore bot
         return
     end
-    if extra.msg.from.id == result.peer_id then
+    if tonumber(extra.msg.from.id) == tonumber(result.peer_id) then
         reply_msg(extra.msg.id, lang_text('cantChallengeYourself'), ok_cb, false)
         return
     end
