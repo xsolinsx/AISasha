@@ -191,11 +191,15 @@ local function run(msg, matches)
             end
         end
         -- RULETA
-        if matches[1]:lower() == 'createdb' and is_sudo(msg) then
-            local f = io.open(_config.ruleta.db, 'w+')
-            f:write('{"groups":{},"users":{},"challenges":{}}')
-            f:close()
-            reply_msg(msg.id, lang_text('ruletadbCreated'), ok_cb, false)
+        if matches[1]:lower() == 'createdb' then
+            if is_sudo(msg) then
+                local f = io.open(_config.ruleta.db, 'w+')
+                f:write('{"groups":{},"users":{},"challenges":{}}')
+                f:close()
+                reply_msg(msg.id, lang_text('ruletadbCreated'), ok_cb, false)
+            else
+                return lang_text('require_sudo')
+            end
             return
         end
 
@@ -270,61 +274,61 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'setcaps' and matches[2] then
-            if tonumber(matches[2]) > 0 and tonumber(matches[2]) < groupstats.cylinder then
-                if is_momod(msg) then
+            if is_momod(msg) then
+                if tonumber(matches[2]) > 0 and tonumber(matches[2]) < groupstats.cylinder then
                     ruletadata['groups'][chat].caps = matches[2]
                     save_data(_config.ruleta.db, ruletadata)
                     reply_msg(msg.id, lang_text('capsChanged') .. tonumber(matches[2]), ok_cb, false)
                 else
-                    return lang_text('require_mod')
+                    reply_msg(msg.id, lang_text('errorCapsRange'):gsub('X', groupstats.cylinder - 1), ok_cb, false)
                 end
             else
-                reply_msg(msg.id, lang_text('errorCapsRange'):gsub('X', groupstats.cylinder - 1), ok_cb, false)
+                return lang_text('require_mod')
             end
             return
         end
 
         if matches[1]:lower() == 'setchallengecaps' and matches[2] then
-            if tonumber(matches[2]) > 0 and tonumber(matches[2]) < groupstats.challengecylinder then
-                if is_momod(msg) then
+            if is_momod(msg) then
+                if tonumber(matches[2]) > 0 and tonumber(matches[2]) < groupstats.challengecylinder then
                     ruletadata['groups'][chat].challengecaps = tonumber(matches[2])
                     save_data(_config.ruleta.db, ruletadata)
                     reply_msg(msg.id, lang_text('challengeCapsChanged') .. matches[2], ok_cb, false)
                 else
-                    return lang_text('require_mod')
+                    reply_msg(msg.id, lang_text('errorCapsRange'):gsub('X', groupstats.challengecylinder - 1), ok_cb, false)
                 end
             else
-                reply_msg(msg.id, lang_text('errorCapsRange'):gsub('X', groupstats.challengecylinder - 1), ok_cb, false)
+                return lang_text('require_mod')
             end
             return
         end
 
         if matches[1]:lower() == 'setcylinder' and matches[2] then
-            if tonumber(matches[2]) >= 5 and tonumber(matches[2]) <= 10 then
-                if is_owner(msg) then
+            if is_owner(msg) then
+                if tonumber(matches[2]) >= 5 and tonumber(matches[2]) <= 10 then
                     ruletadata['groups'][chat].cylinder = tonumber(matches[2])
                     save_data(_config.ruleta.db, ruletadata)
                     reply_msg(msg.id, lang_text('cylinderChanged') .. matches[2], ok_cb, false)
                 else
-                    return lang_text('require_owner')
+                    reply_msg(msg.id, lang_text('errorCylinderRange'), ok_cb, false)
                 end
             else
-                reply_msg(msg.id, lang_text('errorCylinderRange'), ok_cb, false)
+                return lang_text('require_owner')
             end
             return
         end
 
         if matches[1]:lower() == 'setchallengecylinder' and matches[2] then
-            if tonumber(matches[2]) >= 5 and tonumber(matches[2]) <= 10 then
-                if is_owner(msg) then
+            if is_owner(msg) then
+                if tonumber(matches[2]) >= 5 and tonumber(matches[2]) <= 10 then
                     ruletadata['groups'][chat].challengecylinder = tonumber(matches[2])
                     save_data(_config.ruleta.db, ruletadata)
                     reply_msg(msg.id, lang_text('challengeCylinderChanged') .. matches[2], ok_cb, false)
                 else
-                    return lang_text('require_owner')
+                    reply_msg(msg.id, lang_text('errorCylinderRange'), ok_cb, false)
                 end
             else
-                reply_msg(msg.id, lang_text('errorCylinderRange'), ok_cb, false)
+                return lang_text('require_owner')
             end
             return
         end
