@@ -534,21 +534,28 @@ local function run(msg, matches)
 
                         ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
                         ruletadata['users'][user].actualstreak = tonumber(0)
+                        local loserpoints = 0
                         if user == challenger then
                             if tonumber(ruletadata['users'][challenger].score) -20 < 0 then
+                                loserpoints = tonumber(ruletadata['users'][challenger].score)
                                 ruletadata['users'][challenger].score = tonumber(0)
+                                ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + loserpoints)
                             else
-                                ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - 20)
+                                loserpoints = 20
+                                ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - loserpoints)
+                                ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + loserpoints)
                             end
-                            ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + 20)
                             ruletadata['users'][challenger].lostduels = tonumber(ruletadata['users'][challenger].lostduels + 1)
                             ruletadata['users'][challenged].wonduels = tonumber(ruletadata['users'][challenged].wonduels + 1)
                         elseif user == challenged then
-                            ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + 20)
                             if tonumber(ruletadata['users'][challenged].score) -20 < 0 then
+                                loserpoints = tonumber(ruletadata['users'][challenged].score)
+                                ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + loserpoints)
                                 ruletadata['users'][challenged].score = tonumber(0)
                             else
-                                ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - 20)
+                                loserpoints = 20
+                                ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + loserpoints)
+                                ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - loserpoints)
                             end
                             ruletadata['users'][challenger].wonduels = tonumber(ruletadata['users'][challenger].wonduels + 1)
                             ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
