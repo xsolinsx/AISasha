@@ -230,7 +230,7 @@ local function run(msg, matches)
     local flag = false
     if not matches[2] then
         flag = true
-    elseif matches[2]:lower() ~= "user" and matches[2]:lower() ~= "mod" and matches[2]:lower() ~= "owner" and matches[2]:lower() ~= "support" and matches[2]:lower() ~= "admin" and matches[2]:lower() ~= "sudo" then
+    elseif matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo" then
         flag = true
     end
 
