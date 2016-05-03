@@ -17,13 +17,13 @@
 
     local jstr, res = https.request(url)
     if res ~= 200 then
-        return lang_text('it:' .. 'opsError')
+        return lang_text('opsError')
     end
 
     local jdat = json:decode(jstr)
 
     if jdat.error then
-        return lang_text('it:' .. 'opsError')
+        return lang_text('opsError')
     end
 
     local img_url = jdat.url

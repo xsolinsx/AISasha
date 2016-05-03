@@ -1,6 +1,6 @@
 ﻿local function unset_var(msg, name)
     if (not name) then
-        return lang_text('it:' .. 'errorTryAgain')
+        return lang_text('errorTryAgain')
     end
 
     local hash = nil
@@ -15,7 +15,7 @@
     end
     if hash then
         redis:hdel(hash, name)
-        return name .. lang_text('it:' .. 'deleted')
+        return name .. lang_text('deleted')
     end
 end
 
@@ -25,7 +25,7 @@ local function run(msg, matches)
     if is_momod(msg) then
         return unset_var(msg, name:lower())
     else
-        return lang_text('it:' .. 'require_mod')
+        return lang_text('require_mod')
     end
 end
 

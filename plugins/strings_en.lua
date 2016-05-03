@@ -14,6 +14,8 @@ local function run(msg, matches)
         -- Plugins --
         -------------
 
+        redis:set('lang', LANG)
+
         -- global --
         set_text(LANG .. 'require_sudo', '🚫 This plugin requires sudo privileges.')
         set_text(LANG .. 'require_admin', '🚫 This plugin requires admin privileges or higher.')
@@ -905,9 +907,9 @@ local function run(msg, matches)
         set_text(LANG .. 'whitelist:2', '#whitelist <id>|<username>|<reply>: Sasha adds|removes specified user to|from whitelist.')
         set_text(LANG .. 'whitelist:3', '#clean whitelist: Sasha cleans whitelist.')
 
-        return lang_text('it:' .. 'langUpdate')
+        return lang_text('langUpdate')
     else
-        return lang_text('it:' .. 'require_sudo')
+        return lang_text('require_sudo')
     end
 end
 

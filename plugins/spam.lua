@@ -11,13 +11,13 @@ local function run(msg, matches)
         if matches[2] then
             if matches[1]:lower() == 'setspam' then
                 text = matches[2]
-                return lang_text('it:' .. 'msgSet')
+                return lang_text('msgSet')
             elseif matches[1]:lower() == 'setmsgs' and tonumber(matches[2]) then
                 num_msg = tonumber(matches[2])
-                return lang_text('it:' .. 'msgsToSend') .. tostring(num_msg)
+                return lang_text('msgsToSend') .. tostring(num_msg)
             elseif matches[1]:lower() == 'setwait' and tonumber(matches[2]) then
                 time_msg = tonumber(matches[2])
-                return string.gsub(lang_text('it:' .. 'timeBetweenMsgs'), 'X', tostring(time_msg))
+                return string.gsub(lang_text('timeBetweenMsgs'), 'X', tostring(time_msg))
             end
         elseif matches[1]:lower() == 'spam' or matches[1]:lower() == 'sasha spamma' or matches[1]:lower() == 'spamma' then
             local i = 0
@@ -44,11 +44,11 @@ local function run(msg, matches)
                     end
                 end
             else
-                return lang_text('it:' .. 'msgNotSet')
+                return lang_text('msgNotSet')
             end
         end
     else
-        return lang_text('it:' .. 'require_owner')
+        return lang_text('require_owner')
     end
 end
 

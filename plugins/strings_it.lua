@@ -13,6 +13,8 @@ local function run(msg, matches)
         -------------
         -- Plugins --
         -------------
+        
+        redis:set('lang', LANG)
 
         -- global --
         set_text(LANG .. 'require_sudo', '🚫 Questo comando richiede i privilegi di sudo.')
@@ -905,9 +907,9 @@ local function run(msg, matches)
         set_text(LANG .. 'whitelist:2', '#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist.')
         set_text(LANG .. 'whitelist:3', '#clean whitelist: Sasha pulisce la whitelist.')
 
-        return lang_text('it:' .. 'langUpdate')
+        return lang_text('langUpdate')
     else
-        return lang_text('it:' .. 'require_sudo')
+        return lang_text('require_sudo')
     end
 end
 

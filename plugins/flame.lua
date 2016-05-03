@@ -46,7 +46,7 @@ local function flame_by_username(extra, success, result)
 end
 
 local function callback_id(cb_extra, success, result)
-    local text = lang_text('it:' .. 'flaming')
+    local text = lang_text('flaming')
     if result.first_name then
         text = text .. '\n' .. result.first_name
     end
@@ -101,11 +101,11 @@ local function run(msg, matches)
             if matches[1]:lower() == 'startflame' or matches[1]:lower() == 'sasha flamma' or matches[1]:lower() == 'flamma' then
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, flame_by_reply, false)
-                    return lang_text('it:' .. 'hereIAm')
+                    return lang_text('hereIAm')
                 elseif matches[2] then
                     if string.match(matches[2], '^%d+$') then
                         if tonumber(matches[2]) == tonumber(our_id) then
-                            return lang_text('it:' .. 'noAutoFlame')
+                            return lang_text('noAutoFlame')
                         end
                         local hash
                         local tokick
@@ -119,13 +119,13 @@ local function run(msg, matches)
                         end
                         redis:set(hash, 0);
                         redis:set(tokick, matches[2]);
-                        return lang_text('it:' .. 'hereIAm')
+                        return lang_text('hereIAm')
                     elseif string.find(matches[2], '@') then
                         if string.gsub(matches[2], '@', ''):lower() == 'aisasha' then
-                            return lang_text('it:' .. 'noAutoFlame')
+                            return lang_text('noAutoFlame')
                         end
                         resolve_username(string.gsub(matches[2], '@', ''), flame_by_username, { msg = msg, })
-                        return lang_text('it:' .. 'hereIAm')
+                        return lang_text('hereIAm')
                     end
                 end
             elseif matches[1]:lower() == 'stopflame' or matches[1]:lower() == 'sasha stop flame' or matches[1]:lower() == 'stop flame' then
@@ -141,7 +141,7 @@ local function run(msg, matches)
                 end
                 redis:del(hash)
                 redis:del(tokick)
-                return lang_text('it:' .. 'stopFlame')
+                return lang_text('stopFlame')
             elseif matches[1]:lower() == 'flameinfo' or matches[1]:lower() == 'sasha info flame' or matches[1]:lower() == 'info flame' then
                 local hash
                 local tokick
@@ -158,14 +158,14 @@ local function run(msg, matches)
                 if hashonredis and user then
                     user_info('user#id' .. user, callback_id, { msg = msg })
                 else
-                    return lang_text('it:' .. 'errorParameter')
+                    return lang_text('errorParameter')
                 end
             end
         else
-            lang_text('it:' .. 'require_mod')
+            lang_text('require_mod')
         end
     else
-        return lang_text('it:' .. 'useYourGroups')
+        return lang_text('useYourGroups')
     end
 end
 

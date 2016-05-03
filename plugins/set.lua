@@ -1,6 +1,6 @@
 ﻿local function set_value(msg, name, value)
     if (not name or not value) then
-        return lang_text('it:' .. 'errorTryAgain')
+        return lang_text('errorTryAgain')
     end
 
     local hash = nil
@@ -15,7 +15,7 @@
     end
     if hash then
         redis:hset(hash, name, value)
-        return name .. lang_text('it:' .. 'saved')
+        return name .. lang_text('saved')
     end
 end
 
@@ -26,7 +26,7 @@ local function run(msg, matches)
     if is_momod(msg) then
         return set_value(msg, name, value)
     else
-        return lang_text('it:' .. 'require_mod')
+        return lang_text('require_mod')
     end
 end
 

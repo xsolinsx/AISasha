@@ -2,7 +2,7 @@
     local i = 1
     local chat_id = "chat#id" .. result.peer_id
     local chatname = result.print_name
-    local text = lang_text('it:' .. 'usersIn') .. string.gsub(chatname, "_", " ") .. ' ' .. result.peer_id .. '\n'
+    local text = lang_text('usersIn') .. string.gsub(chatname, "_", " ") .. ' ' .. result.peer_id .. '\n'
     for k, v in pairs(result.members) do
         if v.print_name then
             name = v.print_name:gsub("_", " ")
@@ -21,7 +21,7 @@
 end
 
 local function callback_supergroup_members(cb_extra, success, result)
-    local text = lang_text('it:' .. 'membersOf') .. cb_extra.receiver .. '\n'
+    local text = lang_text('membersOf') .. cb_extra.receiver .. '\n'
     local i = 1
     for k, v in pairsByKeys(result) do
         if v.print_name then
@@ -42,7 +42,7 @@ end
 
 local function callback_kicked(cb_extra, success, result)
     -- vardump(result)
-    local text = lang_text('it:' .. 'membersKickedFrom') .. cb_extra.receiver .. '\n'
+    local text = lang_text('membersKickedFrom') .. cb_extra.receiver .. '\n'
     local i = 1
     for k, v in pairsByKeys(result) do
         if v.print_name then
@@ -62,117 +62,117 @@ local function callback_kicked(cb_extra, success, result)
 end
 
 local function callback_reply(extra, success, result)
-    local text = lang_text('it:' .. 'info') .. ' (<reply>)'
+    local text = lang_text('info') .. ' (<reply>)'
     if result.from.first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.from.first_name
+        text = text .. lang_text('name') .. result.from.first_name
     end
     if result.from.real_first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.from.real_first_name
+        text = text .. lang_text('name') .. result.from.real_first_name
     end
     if result.from.last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.from.last_name
+        text = text .. lang_text('surname') .. result.from.last_name
     end
     if result.from.real_last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.from.real_last_name
+        text = text .. lang_text('surname') .. result.from.real_last_name
     end
     if result.from.username then
-        text = text .. lang_text('it:' .. 'username') .. '@' .. result.from.username
+        text = text .. lang_text('username') .. '@' .. result.from.username
     end
     if result.from.phone then
-        text = text .. lang_text('it:' .. 'phone') .. string.sub(result.from.phone, 1, 6) .. '****'
+        text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '****'
     end
-    text = text .. lang_text('it:' .. 'date') .. os.date('%c') ..
+    text = text .. lang_text('date') .. os.date('%c') ..
     '\n🆔: ' .. result.from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end
 
 local function callback_id(cb_extra, success, result)
-    local text = lang_text('it:' .. 'info') .. ' (<id>)'
+    local text = lang_text('info') .. ' (<id>)'
     if result.first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.first_name
+        text = text .. lang_text('name') .. result.first_name
     end
     if result.real_first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.real_first_name
+        text = text .. lang_text('name') .. result.real_first_name
     end
     if result.last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.last_name
+        text = text .. lang_text('surname') .. result.last_name
     end
     if result.real_last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.real_last_name
+        text = text .. lang_text('surname') .. result.real_last_name
     end
     if result.username then
-        text = text .. lang_text('it:' .. 'username') .. '@' .. result.username
+        text = text .. lang_text('username') .. '@' .. result.username
     end
     if result.phone then
-        text = text .. lang_text('it:' .. 'phone') .. string.sub(result.phone, 1, 6) .. '****'
+        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
     end
-    text = text .. lang_text('it:' .. 'date') .. os.date('%c') ..
+    text = text .. lang_text('date') .. os.date('%c') ..
     '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
 end
 
 local function callback_username(extra, success, result)
-    local text = lang_text('it:' .. 'info') .. ' (<username>)'
+    local text = lang_text('info') .. ' (<username>)'
     if result.first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.first_name
+        text = text .. lang_text('name') .. result.first_name
     end
     if result.real_first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.real_first_name
+        text = text .. lang_text('name') .. result.real_first_name
     end
     if result.last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.last_name
+        text = text .. lang_text('surname') .. result.last_name
     end
     if result.real_last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.real_last_name
+        text = text .. lang_text('surname') .. result.real_last_name
     end
     if result.username then
-        text = text .. lang_text('it:' .. 'username') .. '@' .. result.username
+        text = text .. lang_text('username') .. '@' .. result.username
     end
     if result.phone then
-        text = text .. lang_text('it:' .. 'phone') .. string.sub(result.phone, 1, 6) .. '****'
+        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
     end
-    text = text .. lang_text('it:' .. 'date') .. os.date('%c') ..
+    text = text .. lang_text('date') .. os.date('%c') ..
     '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. extra.chatid, text)
     send_large_msg('channel#id' .. extra.chatid, text)
 end
 
 local function callback_from(extra, success, result)
-    local text = lang_text('it:' .. 'info') .. ' (<from>)'
+    local text = lang_text('info') .. ' (<from>)'
     if result.fwd_from.first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.fwd_from.first_name
+        text = text .. lang_text('name') .. result.fwd_from.first_name
     end
     if result.fwd_from.real_first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.fwd_from.real_first_name
+        text = text .. lang_text('name') .. result.fwd_from.real_first_name
     end
     if result.fwd_from.last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.fwd_from.last_name
+        text = text .. lang_text('surname') .. result.fwd_from.last_name
     end
     if result.fwd_from.real_last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.fwd_from.real_last_name
+        text = text .. lang_text('surname') .. result.fwd_from.real_last_name
     end
     if result.fwd_from.username then
-        text = text .. lang_text('it:' .. 'username') .. '@' .. result.fwd_from.username
+        text = text .. lang_text('username') .. '@' .. result.fwd_from.username
     end
     if result.fwd_from.phone then
-        text = text .. lang_text('it:' .. 'phone') .. string.sub(result.fwd_from.phone, 1, 6) .. '****'
+        text = text .. lang_text('phone') .. string.sub(result.fwd_from.phone, 1, 6) .. '****'
     end
-    text = text .. lang_text('it:' .. 'date') .. os.date('%c') ..
+    text = text .. lang_text('date') .. os.date('%c') ..
     '\n🆔: ' .. result.fwd_from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end
 
 local function channel_callback_info(cb_extra, success, result)
-    local title = lang_text('it:' .. 'infoFor') .. result.title .. "\n"
-    local user_num = lang_text('it:' .. 'users') .. result.participants_count
-    local admin_num = lang_text('it:' .. 'admins') .. result.admins_count
-    local kicked_num = lang_text('it:' .. 'kickedUsers') .. result.kicked_count
+    local title = lang_text('infoFor') .. result.title .. "\n"
+    local user_num = lang_text('users') .. result.participants_count
+    local admin_num = lang_text('admins') .. result.admins_count
+    local kicked_num = lang_text('kickedUsers') .. result.kicked_count
     local channel_id = "\n🆔: " .. result.peer_id
     if result.username then
-        channel_username = lang_text('it:' .. 'username') .. "@" .. result.username
+        channel_username = lang_text('username') .. "@" .. result.username
     else
         channel_username = ""
     end
@@ -181,8 +181,8 @@ local function channel_callback_info(cb_extra, success, result)
 end
 
 local function chat_callback_info(cb_extra, success, result)
-    local title = lang_text('it:' .. 'infoFor') .. result.title .. "\n"
-    local user_num = lang_text('it:' .. 'users') .. result.members_num
+    local title = lang_text('infoFor') .. result.title .. "\n"
+    local user_num = lang_text('users') .. result.members_num
     local chat_id = "\n🆔: " .. result.peer_id
     local text = title .. user_num .. chat_id
     send_large_msg(cb_extra.receiver, text)
@@ -228,26 +228,26 @@ end
 local function pre_process(msg)
     if msg.to.type == 'user' and msg.fwd_from then
         if is_support(msg.from.id) or is_admin1(msg) then
-            local text = lang_text('it:' .. 'info') .. ' (<private_from>)'
+            local text = lang_text('info') .. ' (<private_from>)'
             if msg.fwd_from.first_name then
-                text = text .. lang_text('it:' .. 'name') .. msg.fwd_from.first_name
+                text = text .. lang_text('name') .. msg.fwd_from.first_name
             end
             if msg.fwd_from.real_first_name then
-                text = text .. lang_text('it:' .. 'name') .. msg.fwd_from.real_first_name
+                text = text .. lang_text('name') .. msg.fwd_from.real_first_name
             end
             if msg.fwd_from.last_name then
-                text = text .. lang_text('it:' .. 'surname') .. msg.fwd_from.last_name
+                text = text .. lang_text('surname') .. msg.fwd_from.last_name
             end
             if msg.fwd_from.real_last_name then
-                text = text .. lang_text('it:' .. 'surname') .. msg.fwd_from.real_last_name
+                text = text .. lang_text('surname') .. msg.fwd_from.real_last_name
             end
             if msg.fwd_from.username then
-                text = text .. lang_text('it:' .. 'username') .. '@' .. msg.fwd_from.username
+                text = text .. lang_text('username') .. '@' .. msg.fwd_from.username
             end
             if msg.fwd_from.phone then
-                text = text .. lang_text('it:' .. 'phone') .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
+                text = text .. lang_text('phone') .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
             end
-            text = text .. lang_text('it:' .. 'date') .. os.date('%c') ..
+            text = text .. lang_text('date') .. os.date('%c') ..
             '\n🆔: ' .. msg.fwd_from.peer_id
             send_large_msg('user#id' .. msg.from.id, text)
         else
@@ -268,66 +268,66 @@ local function run(msg, matches)
                 if is_momod(msg) then
                     return get_message(msg.reply_id, callback_reply, false)
                 else
-                    return lang_text('it:' .. 'require_mod')
+                    return lang_text('require_mod')
                 end
             else
-                local text = lang_text('it:' .. 'info') ..
-                lang_text('it:' .. 'youAre')
+                local text = lang_text('info') ..
+                lang_text('youAre')
                 if msg.from.first_name then
-                    text = text .. lang_text('it:' .. 'name') .. msg.from.first_name
+                    text = text .. lang_text('name') .. msg.from.first_name
                 end
                 if msg.from.real_first_name then
-                    text = text .. lang_text('it:' .. 'name') .. msg.from.real_first_name
+                    text = text .. lang_text('name') .. msg.from.real_first_name
                 end
                 if msg.from.last_name then
-                    text = text .. lang_text('it:' .. 'surname') .. msg.from.last_name
+                    text = text .. lang_text('surname') .. msg.from.last_name
                 end
                 if msg.from.real_last_name then
-                    text = text .. lang_text('it:' .. 'surname') .. msg.from.real_last_name
+                    text = text .. lang_text('surname') .. msg.from.real_last_name
                 end
                 if msg.from.username then
-                    text = text .. lang_text('it:' .. 'username') .. '@' .. msg.from.username
+                    text = text .. lang_text('username') .. '@' .. msg.from.username
                 end
                 if msg.from.phone then
-                    text = text .. lang_text('it:' .. 'phone') .. string.sub(msg.from.phone, 1, 6) .. '****'
+                    text = text .. lang_text('phone') .. string.sub(msg.from.phone, 1, 6) .. '****'
                 end
-                text = text .. lang_text('it:' .. 'date') .. os.date('%c') ..
+                text = text .. lang_text('date') .. os.date('%c') ..
                 '\n🆔: ' .. msg.from.id ..
-                lang_text('it:' .. 'youAreWriting')
+                lang_text('youAreWriting')
                 if chat_type == 'user' then
                     text = text .. ' 👤'
                     if msg.to.first_name then
-                        text = text .. lang_text('it:' .. 'name') .. msg.to.first_name
+                        text = text .. lang_text('name') .. msg.to.first_name
                     end
                     if msg.to.real_first_name then
-                        text = text .. lang_text('it:' .. 'name') .. msg.to.real_first_name
+                        text = text .. lang_text('name') .. msg.to.real_first_name
                     end
                     if msg.to.last_name then
-                        text = text .. lang_text('it:' .. 'surname') .. msg.to.last_name
+                        text = text .. lang_text('surname') .. msg.to.last_name
                     end
                     if msg.to.real_last_name then
-                        text = text .. lang_text('it:' .. 'surname') .. msg.to.real_last_name
+                        text = text .. lang_text('surname') .. msg.to.real_last_name
                     end
                     if msg.to.username then
-                        text = text .. lang_text('it:' .. 'username') .. '@' .. msg.to.username
+                        text = text .. lang_text('username') .. '@' .. msg.to.username
                     end
                     if msg.to.phone then
-                        text = text .. lang_text('it:' .. 'phone') .. string.sub(msg.to.phone, 1, 6) .. '****'
+                        text = text .. lang_text('phone') .. string.sub(msg.to.phone, 1, 6) .. '****'
                     end
-                    text = text .. lang_text('it:' .. 'date') .. os.date('%c') ..
+                    text = text .. lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. msg.to.id
                     return text
                 elseif chat_type == 'chat' then
                     text = text .. ' 👥' ..
-                    lang_text('it:' .. 'groupName') .. msg.to.print_name:gsub("_", " ") ..
-                    lang_text('it:' .. 'members') .. msg.to.members_num .. '' ..
-                    lang_text('it:' .. 'date') .. os.date('%c') ..
+                    lang_text('groupName') .. msg.to.print_name:gsub("_", " ") ..
+                    lang_text('members') .. msg.to.members_num .. '' ..
+                    lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 elseif chat_type == 'channel' then
                     text = text .. ' 👥' ..
-                    lang_text('it:' .. 'supergroupName') .. msg.to.print_name:gsub("_", " ") ..
-                    lang_text('it:' .. 'date') .. os.date('%c') ..
+                    lang_text('supergroupName') .. msg.to.print_name:gsub("_", " ") ..
+                    lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 end
@@ -345,7 +345,7 @@ local function run(msg, matches)
                     return
                 end
             else
-                return lang_text('it:' .. 'require_mod')
+                return lang_text('require_mod')
             end
         end
     end
@@ -357,7 +357,7 @@ local function run(msg, matches)
                 chat_info(receiver, chat_callback_info, { receiver = receiver })
             end
         else
-            return lang_text('it:' .. 'require_owner')
+            return lang_text('require_owner')
         end
     end
     if matches[1]:lower() == 'database' or matches[1]:lower() == 'sasha database' then
@@ -368,7 +368,7 @@ local function run(msg, matches)
                 chat_info(receiver, database, { receiver = receiver })
             end
         else
-            return lang_text('it:' .. 'require_sudo')
+            return lang_text('require_sudo')
         end
     end
     if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] then
@@ -380,7 +380,7 @@ local function run(msg, matches)
                 chat_info(receiver, callback_group_members, { receiver = receiver })
             end
         else
-            return lang_text('it:' .. 'require_mod')
+            return lang_text('require_mod')
         end
     end
     if matches[1]:lower() == "kicked" or matches[1]:lower() == "sasha lista rimossi" or matches[1]:lower() == "lista rimossi" then
@@ -388,7 +388,7 @@ local function run(msg, matches)
             if is_momod(msg) then
                 channel_get_kicked(receiver, callback_kicked, { receiver = receiver })
             else
-                return lang_text('it:' .. 'require_mod')
+                return lang_text('require_mod')
             end
         end
     end

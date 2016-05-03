@@ -4,9 +4,9 @@
     local data = load_data(_config.moderation.data)
     local groups = 'groups'
     if not data[tostring(groups)] then
-        return lang_text('it:' .. 'noGroups')
+        return lang_text('noGroups')
     end
-    local message = lang_text('it:' .. 'groupsJoin')
+    local message = lang_text('groupsJoin')
     for k, v in pairsByKeys(data[tostring(groups)]) do
         local group_id = v
         if data[tostring(group_id)] then
@@ -48,9 +48,9 @@
     i = 1
     local realms = 'realms'
     if not data[tostring(realms)] then
-        return lang_text('it:' .. 'noRealms')
+        return lang_text('noRealms')
     end
-    message = lang_text('it:' .. 'realmsJoin')
+    message = lang_text('realmsJoin')
     for k, v in pairsByKeys(data[tostring(realms)]) do
         local realm_id = v
         if data[tostring(realm_id)] then
@@ -83,9 +83,9 @@ local function all_chats(msg)
     local data = load_data(_config.moderation.data)
     local groups = 'groups'
     if not data[tostring(groups)] then
-        return lang_text('it:' .. 'noGroups')
+        return lang_text('noGroups')
     end
-    local message = lang_text('it:' .. 'groupsJoin')
+    local message = lang_text('groupsJoin')
     for k, v in pairsByKeys(data[tostring(groups)]) do
         local group_id = v
         if data[tostring(group_id)] then
@@ -110,9 +110,9 @@ local function all_chats(msg)
     i = 1
     local realms = 'realms'
     if not data[tostring(realms)] then
-        return lang_text('it:' .. 'noRealms')
+        return lang_text('noRealms')
     end
-    message = message .. '\n\n' .. lang_text('it:' .. 'realmsJoin')
+    message = message .. '\n\n' .. lang_text('realmsJoin')
     for k, v in pairsByKeys(data[tostring(realms)]) do
         local realm_id = v
         if data[tostring(realm_id)] then
@@ -143,13 +143,13 @@ end
 local function set_alias(msg, alias, groupid)
     local hash = 'groupalias'
     redis:hset(hash, alias, groupid)
-    return lang_text('it:' .. 'aliasSaved')
+    return lang_text('aliasSaved')
 end
 
 local function unset_alias(msg, alias)
     local hash = 'groupalias'
     redis:hdel(hash, alias)
-    return lang_text('it:' .. 'aliasDeleted')
+    return lang_text('aliasDeleted')
 end
 
 -- TODO: add lock and unlock joins
@@ -159,7 +159,7 @@ local function run(msg, matches)
     local name_log = user_print_name(msg.from)
     if to == 'user' or service or is_admin1(msg) and to == "chat" or to == "channel" then
         if is_gbanned(msg.from.id) then
-            return lang_text('it:' .. 'youGbanned')
+            return lang_text('youGbanned')
         end
         if matches[1]:lower() == 'join' and is_admin1(msg) then
             if string.match(matches[2], '^%d+$') then
@@ -167,7 +167,7 @@ local function run(msg, matches)
                 if string.match(matches[2], '^%d+$') then
                     local long_id = tostring(data[tostring(matches[2])]['long_id'])
                     if not data[tostring(matches[2])] then
-                        return lang_text('it:' .. 'chatNotFound')
+                        return lang_text('chatNotFound')
                     end
                     group_name = data[tostring(matches[2])]['settings']['set_name']
                     if is_admin1(msg) then
@@ -195,10 +195,10 @@ local function run(msg, matches)
                         -- channel_set_mod(channel, user, ok_cb, false)
                     end
                     if is_banned(msg.from.id, matches[2]) then
-                        return lang_text('it:' .. 'youBanned')
+                        return lang_text('youBanned')
                     end
                     if data[tostring(matches[2])]['settings']['lock_member'] == 'yes' and not is_owner2(msg.from.id, matches[2]) then
-                        return lang_text('it:' .. 'privateGroup')
+                        return lang_text('privateGroup')
                     end
                     if not is_support(msg.from.id) and not is_admin1(msg) then
                         user_type = "regular"
@@ -222,7 +222,7 @@ local function run(msg, matches)
                     channel_invite(channel, user, ok_cb, false)
                     return
                 else
-                    return lang_text('it:' .. 'noAliasFound')
+                    return lang_text('noAliasFound')
                 end
             end
         end
@@ -235,9 +235,9 @@ local function run(msg, matches)
         local group_name = string.gsub(msg.to.print_name, '_', ' ')
         savelog(msg.from.id, "Added Support member " .. user_name .. " to chat " .. group_name .. " (ID:" .. msg.to.id .. ")")
         if username then
-            -- send_large_msg("user#id" .. user_id, lang_text('it:' .. 'supportAdded') .. "@" .. username .. " " .. user_id .. lang_text('it:' .. 'toChat') .. group_name .. " ID:" .. msg.to.id)
+            -- send_large_msg("user#id" .. user_id, lang_text('supportAdded') .. "@" .. username .. " " .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         else
-            -- send_large_msg("user#id" .. user_id, lang_text('it:' .. 'supportAdded') .. user_id .. lang_text('it:' .. 'toChat') .. group_name .. " ID:" .. msg.to.id)
+            -- send_large_msg("user#id" .. user_id, lang_text('supportAdded') .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         end
     end
     if msg.service and user_type == "admin" and msg.action.type == "chat_add_user" and msg.from.id == 0 then
@@ -246,9 +246,9 @@ local function run(msg, matches)
         local username = msg.action.user.username
         savelog(msg.from.id, "Added Admin " .. user_name .. "  " .. user_id .. " to chat " .. group_name .. " (ID:" .. msg.to.id .. ")")
         if username then
-            -- send_large_msg("user#id" .. user_id, lang_text('it:' .. 'adminAdded') .. "@" .. username .. " " .. user_id .. lang_text('it:' .. 'toChat') .. group_name .. " ID:" .. msg.to.id)
+            -- send_large_msg("user#id" .. user_id, lang_text('adminAdded') .. "@" .. username .. " " .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         else
-            -- send_large_msg("user#id" .. user_id, lang_text('it:' .. 'adminAdded') .. user_id .. lang_text('it:' .. 'toChat') .. group_name .. " ID:" .. msg.to.id)
+            -- send_large_msg("user#id" .. user_id, lang_text('adminAdded') .. user_id .. lang_text('toChat') .. group_name .. " ID:" .. msg.to.id)
         end
     end
 
@@ -257,7 +257,7 @@ local function run(msg, matches)
         local user_name = msg.action.user.print_name
         print("Added " .. user_id .. " to chat " .. msg.to.print_name .. " (ID:" .. msg.to.id .. ")")
         savelog(msg.from.id, "Added " .. user_name .. " to chat " .. msg.to.print_name .. " ID:" .. msg.to.id)
-        -- send_large_msg("user#id" .. user_id, lang_text('it:' .. 'addedTo') .. group_name .. " ID:" .. msg.to.id)
+        -- send_large_msg("user#id" .. user_id, lang_text('addedTo') .. group_name .. " ID:" .. msg.to.id)
     end
 
     if matches[1]:lower() == 'chats' and is_admin1(msg) then
@@ -271,7 +271,7 @@ local function run(msg, matches)
         if is_sudo(msg) then
             return all_chats(msg)
         else
-            return lang_text('it:' .. 'require_sudo')
+            return lang_text('require_sudo')
         end
     end
 
@@ -293,7 +293,7 @@ local function run(msg, matches)
             send_document("chat#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
             send_document("channel#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
         else
-            return lang_text('it:' .. 'require_sudo')
+            return lang_text('require_sudo')
         end
     end
 
@@ -301,7 +301,7 @@ local function run(msg, matches)
         if is_sudo(msg) then
             return set_alias(msg, matches[2]:gsub('_', ' '), matches[3])
         else
-            return lang_text('it:' .. 'require_sudo')
+            return lang_text('require_sudo')
         end
     end
 
@@ -309,7 +309,7 @@ local function run(msg, matches)
         if is_sudo(msg) then
             return unset_alias(msg, matches[2])
         else
-            return lang_text('it:' .. 'require_sudo')
+            return lang_text('require_sudo')
         end
     end
 
@@ -324,7 +324,7 @@ local function run(msg, matches)
             end
             return text
         else
-            return lang_text('it:' .. 'require_admin')
+            return lang_text('require_admin')
         end
     end
 end

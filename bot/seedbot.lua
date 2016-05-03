@@ -43,13 +43,13 @@ function check_tag(msg)
             -- exclude bot tags
             for v, user in pairs(_config.sudo_users) do
                 if tonumber(msg.from.id) ~= our_id and tonumber(msg.from.id) ~= user then
-                    local text = lang_text('it:' .. 'receiver') .. msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('it:' .. 'sender')
+                    local text = lang_text('receiver') .. msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
                     if msg.from.username then
                         text = text .. '@' .. msg.from.username .. '\n'
                     else
                         text = text .. msg.from.print_name:gsub("_", " ") .. '\n'
                     end
-                    text = text .. lang_text('it:' .. 'msgText') .. msg.text
+                    text = text .. lang_text('msgText') .. msg.text
                     send_large_msg('user#id' .. user, text)
                 end
             end

@@ -14,10 +14,10 @@
     local is_whitelisted = redis:sismember(hash, user_id)
     if is_whitelisted then
         redis:srem(hash, user_id)
-        send_large_msg(receiver, lang_text('it:' .. 'userBot') .. user_id .. lang_text('it:' .. 'whitelistRemoved'))
+        send_large_msg(receiver, lang_text('userBot') .. user_id .. lang_text('whitelistRemoved'))
     else
         redis:sadd(hash, user_id)
-        send_large_msg(receiver, lang_text('it:' .. 'userBot') .. user_id .. lang_text('it:' .. 'whitelistAdded'))
+        send_large_msg(receiver, lang_text('userBot') .. user_id .. lang_text('whitelistAdded'))
     end
 
 end
@@ -29,10 +29,10 @@ local function whitelist_res(extra, success, result)
     local is_whitelisted = redis:sismember(hash, user_id)
     if is_whitelisted then
         redis:srem(hash, user_id)
-        send_large_msg(receiver, lang_text('it:' .. 'userBot') .. user_id .. lang_text('it:' .. 'whitelistRemoved'))
+        send_large_msg(receiver, lang_text('userBot') .. user_id .. lang_text('whitelistRemoved'))
     else
         redis:sadd(hash, user_id)
-        send_large_msg(receiver, lang_text('it:' .. 'userBot') .. user_id .. lang_text('it:' .. 'whitelistAdded'))
+        send_large_msg(receiver, lang_text('userBot') .. user_id .. lang_text('whitelistAdded'))
     end
 end
 
@@ -48,10 +48,10 @@ local function run(msg, matches)
             local is_whitelisted = redis:sismember(hash, user_id)
             if is_whitelisted then
                 redis:srem(hash, user_id)
-                return lang_text('it:' .. 'userBot') .. user_id .. lang_text('it:' .. 'whitelistRemoved')
+                return lang_text('userBot') .. user_id .. lang_text('whitelistRemoved')
             else
                 redis:sadd(hash, user_id)
-                return lang_text('it:' .. 'userBot') .. user_id .. lang_text('it:' .. 'whitelistAdded')
+                return lang_text('userBot') .. user_id .. lang_text('whitelistAdded')
             end
         else
             local receiver = get_receiver(msg)
@@ -64,7 +64,7 @@ local function run(msg, matches)
     if matches[1]:lower() == "clean whitelist" and is_admin1(msg) then
         local hash = 'whitelist'
         redis:del(hash)
-        return lang_text('it:' .. 'whitelistCleaned')
+        return lang_text('whitelistCleaned')
     end
 end
 

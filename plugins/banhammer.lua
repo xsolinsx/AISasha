@@ -25,15 +25,15 @@ local function Kick_by_reply(extra, success, result)
         end
         if is_momod2(result.from.peer_id, result.to.peer_id) then
             -- Ignore mods,owner,admin
-            send_large_msg(chat, lang_text('it:' .. 'cantKickHigher'))
-            send_large_msg(channel, lang_text('it:' .. 'cantKickHigher'))
+            send_large_msg(chat, lang_text('cantKickHigher'))
+            send_large_msg(channel, lang_text('cantKickHigher'))
         end
         kick_user(result.from.peer_id, result.to.peer_id)
         send_large_msg(chat, phrases[math.random(#phrases)])
         send_large_msg(channel, phrases[math.random(#phrases)])
     else
-        send_large_msg(chat, lang_text('it:' .. 'useYourGroups'))
-        send_large_msg(channel, lang_text('it:' .. 'useYourGroups'))
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -54,8 +54,8 @@ local function Kick_by_reply_admins(extra, success, result)
         send_large_msg(chat, phrases[math.random(#phrases)])
         send_large_msg(channel, phrases[math.random(#phrases)])
     else
-        send_large_msg(chat, lang_text('it:' .. 'useYourGroups'))
-        send_large_msg(channel, lang_text('it:' .. 'useYourGroups'))
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -70,16 +70,16 @@ local function ban_by_reply(extra, success, result)
         end
         if is_momod2(result.from.peer_id, result.to.peer_id) then
             -- Ignore mods,owner,admin
-            send_large_msg(chat, lang_text('it:' .. 'cantKickHigher'))
-            send_large_msg(channel, lang_text('it:' .. 'cantKickHigher'))
+            send_large_msg(chat, lang_text('cantKickHigher'))
+            send_large_msg(channel, lang_text('cantKickHigher'))
             return
         end
         ban_user(result.from.peer_id, result.to.peer_id)
-        send_large_msg(chat, lang_text('it:' .. 'user') .. result.from.peer_id .. lang_text('it:' .. 'banned') .. '\n' .. phrases[math.random(#phrases)])
-        send_large_msg(channel, lang_text('it:' .. 'user') .. result.from.peer_id .. lang_text('it:' .. 'banned') .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(chat, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(channel, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
     else
-        send_large_msg(chat, lang_text('it:' .. 'useYourGroups'))
-        send_large_msg(channel, lang_text('it:' .. 'useYourGroups'))
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -97,11 +97,11 @@ local function ban_by_reply_admins(extra, success, result)
             return
         end
         ban_user(result.from.peer_id, result.to.peer_id)
-        send_large_msg(chat, lang_text('it:' .. 'user') .. result.from.peer_id .. lang_text('it:' .. 'banned') .. '\n' .. phrases[math.random(#phrases)])
-        send_large_msg(channel, lang_text('it:' .. 'user') .. result.from.peer_id .. lang_text('it:' .. 'banned') .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(chat, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(channel, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
     else
-        send_large_msg(chat, lang_text('it:' .. 'useYourGroups'))
-        send_large_msg(channel, lang_text('it:' .. 'useYourGroups'))
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -114,14 +114,14 @@ local function unban_by_reply(extra, success, result)
             -- Ignore bot
             return
         end
-        send_large_msg(chat, lang_text('it:' .. 'user') .. result.from.peer_id .. lang_text('it:' .. 'unbanned'))
-        send_large_msg(channel, lang_text('it:' .. 'user') .. result.from.peer_id .. lang_text('it:' .. 'unbanned'))
+        send_large_msg(chat, lang_text('user') .. result.from.peer_id .. lang_text('unbanned'))
+        send_large_msg(channel, lang_text('user') .. result.from.peer_id .. lang_text('unbanned'))
         -- Save on redis
         local hash = 'banned:' .. result.to.peer_id
         redis:srem(hash, result.from.peer_id)
     else
-        send_large_msg(chat, lang_text('it:' .. 'useYourGroups'))
-        send_large_msg(channel, lang_text('it:' .. 'useYourGroups'))
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -140,11 +140,11 @@ local function banall_by_reply(extra, success, result)
         local name = user_print_name(result.from)
         banall_user(result.from.peer_id)
         kick_user(result.from.peer_id, result.to.peer_id)
-        send_large_msg(chat, lang_text('it:' .. 'user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('it:' .. 'gbanned'))
-        send_large_msg(channel, lang_text('it:' .. 'user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('it:' .. 'gbanned'))
+        send_large_msg(chat, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('gbanned'))
+        send_large_msg(channel, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('gbanned'))
     else
-        send_large_msg(chat, lang_text('it:' .. 'useYourGroups'))
-        send_large_msg(channel, lang_text('it:' .. 'useYourGroups'))
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -162,11 +162,11 @@ local function unbanall_by_reply(extra, success, result)
         end
         local name = user_print_name(result.from)
         unbanall_user(result.from.peer_id)
-        send_large_msg(chat, lang_text('it:' .. 'user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('it:' .. 'ungbanned'))
-        send_large_msg(channel, lang_text('it:' .. 'user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('it:' .. 'ungbanned'))
+        send_large_msg(chat, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('ungbanned'))
+        send_large_msg(channel, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('ungbanned'))
     else
-        send_large_msg(chat, lang_text('it:' .. 'useYourGroups'))
-        send_large_msg(channel, lang_text('it:' .. 'useYourGroups'))
+        send_large_msg(chat, lang_text('useYourGroups'))
+        send_large_msg(channel, lang_text('useYourGroups'))
     end
 end
 
@@ -273,7 +273,7 @@ local function kick_ban_res(extra, success, result)
         receiver = 'channel#id' .. chat_id
     end
     if success == 0 then
-        return send_large_msg(receiver, lang_text('it:' .. 'noUsernameFound'))
+        return send_large_msg(receiver, lang_text('noUsernameFound'))
     end
     local member_id = result.peer_id
     local user_id = member_id
@@ -282,34 +282,34 @@ local function kick_ban_res(extra, success, result)
     local get_cmd = extra.get_cmd
     if get_cmd == "kick" then
         if member_id == from_id then
-            send_large_msg(receiver, lang_text('it:' .. 'noAutoKick'))
+            send_large_msg(receiver, lang_text('noAutoKick'))
             return
         end
         if is_momod2(member_id, chat_id) and not is_admin2(sender) then
-            send_large_msg(receiver, lang_text('it:' .. 'cantKickHigher'))
+            send_large_msg(receiver, lang_text('cantKickHigher'))
             return
         end
         kick_user(member_id, chat_id)
         send_large_msg(receiver, phrases[math.random(#phrases)])
     elseif get_cmd == 'ban' then
         if is_momod2(member_id, chat_id) and not is_admin2(sender) then
-            send_large_msg(receiver, lang_text('it:' .. 'cantKickHigher'))
+            send_large_msg(receiver, lang_text('cantKickHigher'))
             return
         end
-        send_large_msg(receiver, lang_text('it:' .. 'user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('it:' .. 'banned') .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
         ban_user(member_id, chat_id)
     elseif get_cmd == 'unban' then
-        send_large_msg(receiver, lang_text('it:' .. 'user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('it:' .. 'unbanned'))
+        send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('unbanned'))
         local hash = 'banned:' .. chat_id
         redis:srem(hash, member_id)
         channel_unblock(receiver, 'user#id' .. user_id, ok_cb, true)
-        send_large_msg(receiver, lang_text('it:' .. 'user') .. user_id .. lang_text('it:' .. 'unbanned'))
+        send_large_msg(receiver, lang_text('user') .. user_id .. lang_text('unbanned'))
         return
     elseif get_cmd == 'banall' then
-        send_large_msg(receiver, lang_text('it:' .. 'user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('it:' .. 'gbanned'))
+        send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('gbanned'))
         banall_user(member_id)
     elseif get_cmd == 'unbanall' then
-        send_large_msg(receiver, lang_text('it:' .. 'user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('it:' .. 'ungbanned'))
+        send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('ungbanned'))
         unbanall_user(member_id)
     end
 end
@@ -355,10 +355,10 @@ local function run(msg, matches)
                 return
             end
             if not is_admin1(msg) and is_momod2(matches[2], msg.to.id) then
-                return lang_text('it:' .. 'cantKickHigher')
+                return lang_text('cantKickHigher')
             end
             if tonumber(matches[2]) == tonumber(msg.from.id) then
-                return lang_text('it:' .. 'noAutoKick')
+                return lang_text('noAutoKick')
             end
             local user_id = matches[2]
             local chat_id = msg.to.id
@@ -392,10 +392,10 @@ local function run(msg, matches)
                 return
             end
             if not is_admin1(msg) and is_momod2(matches[2], msg.to.id) then
-                return lang_text('it:' .. 'cantKickHigher')
+                return lang_text('cantKickHigher')
             end
             if tonumber(matches[2]) == tonumber(msg.from.id) then
-                return lang_text('it:' .. 'noAutoBan')
+                return lang_text('noAutoBan')
             end
             local user_id = matches[2]
             local chat_id = msg.to.id
@@ -404,7 +404,7 @@ local function run(msg, matches)
             local receiver = get_receiver(msg)
             savelog(msg.to.id, name .. " [" .. msg.from.id .. "] banned user " .. matches[2])
             ban_user(matches[2], msg.to.id)
-            return lang_text('it:' .. 'user') .. matches[2] .. lang_text('it:' .. 'banned') .. '\n' .. phrases[math.random(#phrases)]
+            return lang_text('user') .. matches[2] .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)]
         else
             local cbres_extra = {
                 chat_id = msg.to.id,
@@ -433,7 +433,7 @@ local function run(msg, matches)
             local print_name = user_print_name(msg.from):gsub("‮", "")
             local name = print_name:gsub("_", "")
             savelog(msg.to.id, name .. " [" .. msg.from.id .. "] unbanned user " .. matches[2])
-            return lang_text('it:' .. 'user') .. user_id .. lang_text('it:' .. 'unbanned')
+            return lang_text('user') .. user_id .. lang_text('unbanned')
         else
             local cbres_extra = {
                 chat_id = msg.to.id,
@@ -482,7 +482,7 @@ local function run(msg, matches)
                 return false
             end
             banall_user(targetuser)
-            return lang_text('it:' .. 'user') .. user_id .. lang_text('it:' .. 'gbanned')
+            return lang_text('user') .. user_id .. lang_text('gbanned')
         else
             local cbres_extra = {
                 chat_id = msg.to.id,
@@ -507,7 +507,7 @@ local function run(msg, matches)
                 return false
             end
             unbanall_user(user_id)
-            return lang_text('it:' .. 'user') .. user_id .. lang_text('it:' .. 'ungbanned')
+            return lang_text('user') .. user_id .. lang_text('ungbanned')
         else
             local cbres_extra = {
                 chat_id = msg.to.id,

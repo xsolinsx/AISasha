@@ -6,7 +6,7 @@ local function Invite_by_reply(extra, success, result)
         chat_add_user(chat, 'user#id' .. result.from.peer_id, ok_cb, false)
         channel_invite(channel, 'user#id' .. result.from.peer_id, ok_cb, false)
     else
-        return lang_text('it:' .. 'useYourGroups')
+        return lang_text('useYourGroups')
     end
 end
 
@@ -15,11 +15,11 @@ local function callbackres(extra, success, result)
     local chat = 'chat#id' .. extra.chatid
     local channel = 'channel#id' .. extra.chatid
     if is_banned(result.id, extra.chatid) then
-        send_large_msg(chat, lang_text('it:' .. 'userBanned'))
-        send_large_msg(channel, lang_text('it:' .. 'userBanned'))
+        send_large_msg(chat, lang_text('userBanned'))
+        send_large_msg(channel, lang_text('userBanned'))
     elseif is_gbanned(result.id) then
-        send_large_msg(chat, lang_text('it:' .. 'userGbanned'))
-        send_large_msg(channel, lang_text('it:' .. 'userGbanned'))
+        send_large_msg(chat, lang_text('userGbanned'))
+        send_large_msg(channel, lang_text('userGbanned'))
     else
         chat_add_user(chat, user, ok_cb, false)
         channel_invite(channel, user, ok_cb, false)
@@ -31,7 +31,7 @@ function run(msg, matches)
     if is_admin1(msg) then
         if not is_realm(msg) then
             if data[tostring(msg.to.id)]['settings']['lock_member'] == 'yes' and not is_admin1(msg) then
-                return lang_text('it:' .. 'privateGroup')
+                return lang_text('privateGroup')
             end
         end
         if msg.to.type == 'chat' or msg.to.type == 'channel' then
@@ -52,11 +52,11 @@ function run(msg, matches)
                 resolve_username(user:gsub("@", ""), callbackres, cbres_extra)
             end
         else
-            return lang_text('it:' .. 'useYourGroups')
+            return lang_text('useYourGroups')
         end
     else
-        -- return lang_text('it:' .. 'require_owner')
-        return lang_text('it:' .. 'require_admin')
+        -- return lang_text('require_owner')
+        return lang_text('require_admin')
     end
 end
 

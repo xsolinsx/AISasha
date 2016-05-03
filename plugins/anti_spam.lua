@@ -92,7 +92,7 @@ do
                     print(msgs)
                     if msgs >= max_msg then
                         print("Pass2")
-                        send_large_msg("user#id" .. msg.from.id, lang_text('it:' .. 'user') .. "[" .. msg.from.id .. "]" .. lang_text('it:' .. 'blockedForSpam'))
+                        send_large_msg("user#id" .. msg.from.id, lang_text('user') .. "[" .. msg.from.id .. "]" .. lang_text('blockedForSpam'))
                         savelog(msg.from.id .. " PM", "User [" .. msg.from.id .. "] blocked for spam.")
                         block_user("user#id" .. msg.from.id, ok_cb, false)
                         -- Block user if spammed in private
@@ -109,10 +109,10 @@ do
                 if msg.to.type == 'chat' or msg.to.type == 'channel' then
                     if username then
                         savelog(msg.to.id, name_log .. " @" .. username .. " [" .. msg.from.id .. "] kicked for #spam")
-                        send_large_msg(receiver, lang_text('it:' .. 'floodNotAdmitted') .. "@" .. username .. "[" .. msg.from.id .. "]\n" .. lang_text('it:' .. 'statusRemoved') .. " (SPAM)")
+                        send_large_msg(receiver, lang_text('floodNotAdmitted') .. "@" .. username .. "[" .. msg.from.id .. "]\n" .. lang_text('statusRemoved') .. " (SPAM)")
                     else
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] kicked for #spam")
-                        send_large_msg(receiver, lang_text('it:' .. 'floodNotAdmitted') .. lang_text('it:' .. 'name') .. name_log .. "[" .. msg.from.id .. "]\n" .. lang_text('it:' .. 'statusRemoved') .. " (SPAM)")
+                        send_large_msg(receiver, lang_text('floodNotAdmitted') .. lang_text('name') .. name_log .. "[" .. msg.from.id .. "]\n" .. lang_text('statusRemoved') .. " (SPAM)")
                     end
                 end
                 -- incr it on redis
@@ -136,13 +136,13 @@ do
                         local print_name = user_print_name(msg.from):gsub("‮", "")
                         local name = print_name:gsub("_", "")
                         -- Send this to that chat
-                        send_large_msg("chat#id" .. msg.to.id, lang_text('it:' .. 'user') .. "[ " .. name .. " ]" .. msg.from.id .. lang_text('it:' .. 'gbanned') .. " (SPAM)")
-                        send_large_msg("channel#id" .. msg.to.id, lang_text('it:' .. 'user') .. "[ " .. name .. " ]" .. msg.from.id .. lang_text('it:' .. 'gbanned') .. " (SPAM)")
+                        send_large_msg("chat#id" .. msg.to.id, lang_text('user') .. "[ " .. name .. " ]" .. msg.from.id .. lang_text('gbanned') .. " (SPAM)")
+                        send_large_msg("channel#id" .. msg.to.id, lang_text('user') .. "[ " .. name .. " ]" .. msg.from.id .. lang_text('gbanned') .. " (SPAM)")
                         local GBan_log = 'GBan_log'
                         local GBan_log = data[tostring(GBan_log)]
                         for k, v in pairs(GBan_log) do
                             log_SuperGroup = v
-                            gban_text = lang_text('it:' .. 'user') .. "[ " .. name .. " ] ( @" .. username .. " )" .. msg.from.id .. lang_text('it:' .. 'gbannedFrom') "( " .. msg.to.print_name .. " ) [ " .. msg.to.id .. " ] (SPAM)"
+                            gban_text = lang_text('user') .. "[ " .. name .. " ] ( @" .. username .. " )" .. msg.from.id .. lang_text('gbannedFrom') "( " .. msg.to.print_name .. " ) [ " .. msg.to.id .. " ] (SPAM)"
                             -- send it to log group/channel
                             send_large_msg(log_SuperGroup, gban_text)
                         end

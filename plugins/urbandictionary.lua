@@ -8,12 +8,12 @@
 
     local jstr, res = http.request(url)
     if res ~= 200 then
-        return lang_text('it:' .. 'opsError')
+        return lang_text('opsError')
     end
 
     local jdat = JSON.decode(jstr)
     if jdat.result_type == "no_results" then
-        return lang_text('it:' .. 'opsError')
+        return lang_text('opsError')
     end
 
     local res = '*' .. jdat.list[1].word .. '*\n\n' .. jdat.list[1].definition:trim()

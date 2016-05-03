@@ -51,20 +51,20 @@ local function plugin_help(var, chat, rank)
             text = text .. '🅿️ ' .. plugin.description .. '\n'
         end
         local textHash = plugin.description:lower() .. ':0'
-        if lang_text('it:' .. textHash) then
-            for i = 1, tonumber(lang_text('it:' .. plugin.description:lower() .. ':0')), 1 do
-                if not rank_table[lang_text('it:' .. plugin.description:lower() .. ':' .. i)] then
+        if lang_text(textHash) then
+            for i = 1, tonumber(lang_text(plugin.description:lower() .. ':0')), 1 do
+                if not rank_table[lang_text(plugin.description:lower() .. ':' .. i)] then
                     if help_permission then
-                        text = text .. lang_text('it:' .. plugin.description:lower() .. ':' .. i) .. '\n'
+                        text = text .. lang_text(plugin.description:lower() .. ':' .. i) .. '\n'
                     end
-                elseif rank_table[lang_text('it:' .. plugin.description:lower() .. ':' .. i)] > rank then
+                elseif rank_table[lang_text(plugin.description:lower() .. ':' .. i)] > rank then
                     help_permission = false
                 end
             end
         end
         return text .. '\n'
     else
-        -- return text .. lang_text('it:' .. 'require_higher') .. '\n'
+        -- return text .. lang_text('require_higher') .. '\n'
         return ''
     end
 end
@@ -72,7 +72,7 @@ end
 -- !help command
 local function telegram_help(receiver)
     local i = 0
-    local text = lang_text('it:' .. 'pluginListStart')
+    local text = lang_text('pluginListStart')
     -- Plugins names
     for name in pairsByKeys(plugins) do
         if _config.disabled_plugin_on_chat[receiver] then
@@ -86,7 +86,7 @@ local function telegram_help(receiver)
         end
     end
 
-    text = text .. '\n' .. lang_text('it:' .. 'helpInfo')
+    text = text .. '\n' .. lang_text('helpInfo')
     return text
 end
 
@@ -152,24 +152,24 @@ end
 local function get_sudo_info(cb_extra, success, result)
     local text = 'SUDO INFO'
     if result.first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.first_name
+        text = text .. lang_text('name') .. result.first_name
     end
     if result.real_first_name then
-        text = text .. lang_text('it:' .. 'name') .. result.real_first_name
+        text = text .. lang_text('name') .. result.real_first_name
     end
     if result.last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.last_name
+        text = text .. lang_text('surname') .. result.last_name
     end
     if result.real_last_name then
-        text = text .. lang_text('it:' .. 'surname') .. result.real_last_name
+        text = text .. lang_text('surname') .. result.real_last_name
     end
     if result.username then
-        text = text .. lang_text('it:' .. 'username') .. '@' .. result.username
+        text = text .. lang_text('username') .. '@' .. result.username
     end
     if result.phone then
-        text = text .. lang_text('it:' .. 'phone') .. string.sub(result.phone, 1, 6) .. '****'
+        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
     end
-    text = text .. lang_text('it:' .. 'date') .. os.date('%c') ..
+    text = text .. lang_text('date') .. os.date('%c') ..
     '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
@@ -177,7 +177,7 @@ end
 
 local function run(msg, matches)
     -- if msg.to.peer_type == 'user' and not is_admin1(msg) then
-    --    return lang_text('it:' .. 'doYourBusiness')
+    --    return lang_text('doYourBusiness')
     -- end
 
     if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
@@ -203,7 +203,7 @@ local function run(msg, matches)
         return
     end
 
-    local text = lang_text('it:' .. 'helpIntro')
+    local text = lang_text('helpIntro')
     local rank = get_rank(msg.from.id, msg.to.id)
 
     if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" or matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
@@ -216,7 +216,7 @@ local function run(msg, matches)
                 rank = fakerank
             else
                 -- no
-                return lang_text('it:' .. 'youTried')
+                return lang_text('youTried')
             end
             text = text .. 'FAKE HELP\n'
         elseif matches[3] and(matches[3]:lower() == "user" or matches[3]:lower() == "mod" or matches[3]:lower() == "owner" or matches[3]:lower() == "support" or matches[3]:lower() == "admin" or matches[3]:lower() == "sudo") then
@@ -227,7 +227,7 @@ local function run(msg, matches)
                 rank = fakerank
             else
                 -- no
-                return lang_text('it:' .. 'youTried')
+                return lang_text('youTried')
             end
             text = text .. 'FAKE HELP\n'
         end
@@ -255,8 +255,8 @@ local function run(msg, matches)
         end
     end
 
-    if text == lang_text('it:' .. 'helpIntro') then
-        return lang_text('it:' .. 'require_higher')
+    if text == lang_text('helpIntro') then
+        return lang_text('require_higher')
     else
         send_large_msg(get_receiver(msg), text)
     end
