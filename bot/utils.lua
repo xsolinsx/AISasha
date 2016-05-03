@@ -737,7 +737,7 @@ function user_print_name(user)
     return text
 end
 
-function lang_text('it:' .. keyword)
+function lang_text(keyword)
     local hash = 'lang:' .. keyword
     if redis:get(hash) then
         return redis:get(hash)
