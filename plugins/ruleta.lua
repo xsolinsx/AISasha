@@ -28,24 +28,35 @@ local bad = {
 }
 
 local function bubbleSortScore(users)
-    local itemCount = #users
-    local hasChanged
     local t = { }
     local i = 0
-    for v in users do
+    for k, v in pairs(users) do
         i = i + 1
-        t[i] = v
+        t[i] = k
     end
-    repeat
-        hasChanged = false
-        itemCount = itemCount - 1
-        for k in t do
-            if users[t[k]].score > users[t[k + 1]].score then
-                users[t[k]].score, users[t[k + 1]].score = users[t[k + 1]].score, users[t[k]].score
-                hasChanged = true
+    -- The array that will be returned
+    sortedArray = users
+    -- The variable thatwill tell us if the array is sorted
+    isSorted = false
+    -- Loop until the array is sorted
+    while isSorted == false do
+        movedElements = 0
+        -- Loop through each element in the array(minus the last element)
+        for x = 1, #users - 1, 1 do
+            -- If the element we're on is greater than the element after it
+            -- The swap index of the two elements
+            if users[t[x]] > users[t[x + 1]] then
+                movedElements = movedElements + 1
+                testedElement = users[t[x]]
+                users[t[x]] = users[t[x + 1]]
+                users[t[x + 1]] = testedElement
             end
         end
-    until hasChanged == false
+        if movedElements == 0 then
+            isSorted = true
+        end
+    end
+    return sortedArray
 end
 
 local function get_challenge(chat_id)
@@ -265,10 +276,10 @@ local function run(msg, matches)
 
         if (matches[1]:lower() == 'leaderboard' or matches[1]:lower() == 'classifica') and matches[2] then
             if matches[2]:lower() == 'score' or matches[2]:lower() == 'punti' then
-                bubbleSortScore(ruletadata['users'])
+                local lb = bubbleSortScore(ruletadata['users'])
                 local text = lang_text('scoreLeaderboard')
                 local i = 0
-                for k, v in ruletadata['users'] do
+                for k, v in pairs(lb) do
                     i = i + 1
                     text = text .. i .. '. ' .. k .. v.score
                 end
