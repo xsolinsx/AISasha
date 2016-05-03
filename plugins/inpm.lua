@@ -45,6 +45,7 @@
     file:close()
     text = message
 
+    i = 1
     local realms = 'realms'
     if not data[tostring(realms)] then
         return lang_text('noRealms')
@@ -105,11 +106,13 @@ local function all_chats(msg)
         end
         message = message .. group_info
     end
+
+    i = 1
     local realms = 'realms'
     if not data[tostring(realms)] then
         return lang_text('noRealms')
     end
-    message = message .. '\n\n' .. lang_text('realmsJoin') .. '\n\n'
+    message = message .. '\n\n' .. lang_text('realmsJoin')
     for k, v in pairsByKeys(data[tostring(realms)]) do
         local realm_id = v
         if data[tostring(realm_id)] then
