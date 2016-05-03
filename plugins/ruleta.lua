@@ -646,7 +646,7 @@ return {
         "^[#!/]([Aa][Cc][Cc][Ee][Pp][Tt])$",
         "^[#!/]([Rr][Ee][Jj][Ee][Cc][Tt])$",
         "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee][Ii][Nn][Ff][Oo])$",
-        "^[#!/]([Aa][Dd][Dd][Pp][Oo][Ii][Nn][Tt][Ss]) (%d+)$",
+        "^[#!/]([Aa][Dd][Dd][Pp][Oo][Ii][Nn][Tt][Ss]) (%d+) (%d+)$",
         "^[#!/]?([Rr][Uu][Ll][Ee][Tt][Aa])",
         -- registerme
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Mm][Ii])$",
