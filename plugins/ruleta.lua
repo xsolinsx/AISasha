@@ -28,7 +28,7 @@ local bad = {
 }
 
 local function bubbleSortScore(users)
-    local itemCount = #ids
+    local itemCount = #users
     local hasChanged
     local t = { }
     local i = 0
