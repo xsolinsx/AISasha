@@ -27,6 +27,27 @@ local bad = {
     "Muori idiota.",
 }
 
+local function bubbleSortScore(users)
+    local itemCount = #ids
+    local hasChanged
+    local t = { }
+    local i = 0
+    for v in users do
+        i = i + 1
+        t[i] = v
+    end
+    repeat
+        hasChanged = false
+        itemCount = itemCount - 1
+        for k in t do
+            if users[t[k]].score > users[t[k + 1]].score then
+                users[t[k]].score, users[t[k + 1]].score = users[t[k + 1]].score, users[t[k]].score
+                hasChanged = true
+            end
+        end
+    until hasChanged == false
+end
+
 local function get_challenge(chat_id)
     local Whashonredis = redis:get('ruleta:' .. chat_id .. ':challenger')
     local Xhashonredis = redis:get('ruleta:' .. chat_id .. ':challenged')
@@ -134,6 +155,12 @@ local function Challenge_by_username(extra, success, result)
     start_challenge(extra.challenger, result.peer_id, challenger, challenged, extra.chat_id)
 end
 
+local function callback_id(cb_extra, success, result)
+    local text = result.print_name:gsub("_", " ")
+    send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
+    send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
+end
+
 local function kick_user(user_id, chat_id)
     local chat = 'chat#id' .. chat_id
     local user = 'user#id' .. user_id
@@ -233,6 +260,20 @@ local function run(msg, matches)
 
         if not groupstats then
             reply_msg(msg.id, lang_text('requireGroupSignUp'), ok_cb, false)
+            return
+        end
+
+        if (matches[1]:lower() == 'leaderboard' or matches[1]:lower() == 'classifica') and matches[2] then
+            if matches[2]:lower() == 'score' or matches[2]:lower() == 'punti' then
+                bubbleSortScore(ruletadata['users'])
+                local text = lang_text('scoreLeaderboard')
+                local i = 0
+                for k, v in ruletadata['users'] do
+                    i = i + 1
+                    text = text .. i .. '. ' .. k .. v.score
+                end
+                reply_msg(msg.id, text, ok_cb, false)
+            end
             return
         end
 
@@ -492,8 +533,9 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'addpoints' and matches[2] and matches[3] and is_sudo(msg) then
-            ruletadata['users'][matches[2]].score = tonumber(matches[3])
+            ruletadata['users'][matches[2]].score = tonumber(ruletadata['users'][matches[2]].score + matches[3])
             save_data(_config.ruleta.db, ruletadata)
+            reply_msg(msg.id, lang_text('cheating'), ok_cb, false)
             return
         end
 

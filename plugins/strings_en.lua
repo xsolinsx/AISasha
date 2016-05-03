@@ -396,6 +396,8 @@ local function run(msg, matches)
         set_text('longeststreak', 'Longest streak: ')
         set_text('attempts', 'Total attempts: ')
         set_text('score', 'Score: ')
+        set_text('cheating', 'Cheat used.')
+        set_text('scoreLeaderboard', 'Score leaderboard\n')
 
         -- set.lua --
         set_text('saved', ' saved.')
