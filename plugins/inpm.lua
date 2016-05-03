@@ -109,7 +109,7 @@ local function all_chats(msg)
     if not data[tostring(realms)] then
         return lang_text('noRealms')
     end
-    message = message .. '\n\n' lang_text('realmsJoin')
+    message = message .. '\n\n' .. lang_text('realmsJoin') .. '\n\n'
     for k, v in pairsByKeys(data[tostring(realms)]) do
         local realm_id = v
         if data[tostring(realm_id)] then
