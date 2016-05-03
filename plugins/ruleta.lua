@@ -34,11 +34,12 @@ local function bubbleSortScore(users)
         i = i + 1
         t[i] = k
     end
+    sortedArray = users
     isSorted = false
     while isSorted == false do
         movedElements = 0
         for x = 1, #users - 1, 1 do
-            if tonumber(users[t[x]].score) < tonumber(users[t[x + 1]].score) then
+            if tonumber(users[t[x]].score) > tonumber(users[t[x + 1]].score) then
                 movedElements = movedElements + 1
                 testedElement = users[t[x]]
                 users[t[x]] = users[t[x + 1]]
@@ -49,7 +50,7 @@ local function bubbleSortScore(users)
             isSorted = true
         end
     end
-    return users
+    return sortedArray
 end
 
 local function get_challenge(chat_id)
@@ -272,10 +273,12 @@ local function run(msg, matches)
                 local lb = bubbleSortScore(ruletadata['users'])
                 local text = lang_text('scoreLeaderboard')
                 local i = 0
-                for k, v in pairs(lb) do
+                for j = #lb, limit do
+                    j = j - 1
                     i = i + 1
                     text = text .. i .. '. ' .. k .. ' - ' .. v.score .. '\n'
                 end
+
                 reply_msg(msg.id, text, ok_cb, false)
             end
             return
