@@ -396,7 +396,7 @@ local function pre_process(msg)
 end
 
 return {
-    description = "ADMIN",
+    description = "ADMINISTRATOR",
     usage =
     {
         "ADMIN",

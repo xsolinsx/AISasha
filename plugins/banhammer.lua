@@ -72,6 +72,7 @@ local function ban_by_reply(extra, success, result)
             -- Ignore mods,owner,admin
             send_large_msg(chat, lang_text('cantKickHigher'))
             send_large_msg(channel, lang_text('cantKickHigher'))
+            return
         end
         ban_user(result.from.peer_id, result.to.peer_id)
         send_large_msg(chat, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
