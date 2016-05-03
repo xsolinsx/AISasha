@@ -398,7 +398,7 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'sfida' then
+        if matches[1]:lower() == 'challenge' or matches[1]:lower() == 'sfida' then
             if type(msg.reply_id) ~= "nil" then
                 get_message(msg.reply_id, Challenge_by_reply, { challenger = user, msg = msg })
             elseif matches[2] then
@@ -488,6 +488,12 @@ local function run(msg, matches)
                 return
             end
             reject_challenge(user, chat)
+            return
+        end
+
+        if matches[1]:lower() == 'addpoints' and matches[2] and matches[3] and is_sudo(msg) then
+            ruletadata['users'][matches[2]].score = tonumber(matches[3])
+            save_data(_config.ruleta.db, ruletadata)
             return
         end
 
@@ -618,29 +624,30 @@ return {
         "#deletegroup|#eliminagruppo: Sasha disabilita il gruppo per ruleta.",
         "SUDO",
         "#createdb: Sasha crea il database di ruleta.",
-        -- "#addpoints <reply> <value>: Sasha aggiunge <value> punti all'utente della risposta"
+        "#addpoints <id> <value>: Sasha aggiunge <value> punti all'utente specificato.",
     },
     patterns =
     {
         "^[#!/]([Kk][Ii][Cc][Kk]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Mm][Ee])$",
-        "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Mm][Ee])$",
+        "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Bb])$",
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
         "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Gg][Rr][Oo][Uu][Pp])$",
+        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Mm][Ee])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Tt][Aa][Ii][Nn][Ff][Oo])$",
-        "^[#!/]?([Gg][Oo][Dd][Rr][Uu][Ll][Ee][Tt][Aa])$",
-        "^[#!/]?([Rr][Uu][Ll][Ee][Tt][Aa])",
-        "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee]) (.*)$",
-        "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee])$",
-        "^[#!/]([Aa][Cc][Cc][Ee][Pp][Tt])$",
-        "^[#!/]([Rr][Ee][Jj][Ee][Cc][Tt])$",
-        "^[#!/]([Mm][Yy][Ss][Tt][Aa][Tt][Ss])$",
         "^[#!/]([Ss][Ee][Tt][Cc][Aa][Pp][Ss]) (%d+)$",
         "^[#!/]([Ss][Ee][Tt][Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee][Cc][Aa][Pp][Ss]) (%d+)$",
         "^[#!/]([Ss][Ee][Tt][Cc][Yy][Ll][Ii][Nn][Dd][Ee][Rr]) (%d+)$",
         "^[#!/]([Ss][Ee][Tt][Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee][Cc][Yy][Ll][Ii][Nn][Dd][Ee][Rr]) (%d+)$",
+        "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Mm][Ee])$",
+        "^[#!/]([Mm][Yy][Ss][Tt][Aa][Tt][Ss])$",
+        "^[#!/]?([Gg][Oo][Dd][Rr][Uu][Ll][Ee][Tt][Aa])$",
+        "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee]) (.*)$",
+        "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee])$",
+        "^[#!/]([Aa][Cc][Cc][Ee][Pp][Tt])$",
+        "^[#!/]([Rr][Ee][Jj][Ee][Cc][Tt])$",
         "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee][Ii][Nn][Ff][Oo])$",
-        "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Bb])$",
+        "^[#!/]([Aa][Dd][Dd][Pp][Oo][Ii][Nn][Tt][Ss]) (%d+)$",
+        "^[#!/]?([Rr][Uu][Ll][Ee][Tt][Aa])",
         -- registerme
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Mm][Ii])$",
         -- deleteme
