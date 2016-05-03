@@ -205,7 +205,8 @@ local function run(msg, matches)
     if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" or matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
         local fakerank = ''
         if matches[2] and(matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo") then
-            fakerank = get_rank(matches[2]:upper(), msg.to.id)
+            fakerank = rank_table[matches[2]:upper()]
+            print(rank, fakerank)
             if fakerank <= rank then
                 -- ok
                 rank = fakerank
@@ -215,7 +216,8 @@ local function run(msg, matches)
             end
             text = text .. 'FAKE HELP\n'
         elseif matches[3] and(matches[3]:lower() == "user" or matches[3]:lower() == "mod" or matches[3]:lower() == "owner" or matches[3]:lower() == "support" or matches[3]:lower() == "admin" or matches[3]:lower() == "sudo") then
-            fakerank = get_rank(matches[3]:upper(), msg.to.id)
+            fakerank = rank_table[matches[3]:upper()]
+            print(rank, fakerank)
             if fakerank <= rank then
                 -- ok
                 rank = fakerank
@@ -269,32 +271,31 @@ return {
     patterns =
     {
         "^[#!/]([Hh][Ee][Ll][Pp])$",
+        "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll]) ([^%s]+)$",
         "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll])$",
-        "^[#!/]([Hh][Ee][Ll][Pp]) (.+)$",
-        "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
+        "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+) ([^%s]+)$",
+        "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
+        "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
         "^[#!/]([Ss][Uu][Dd][Oo][Ll][Ii][Ss][Tt])$",
         -- help
-        "^[#!/]([Hh][Ee][Ll][Pp]) (.*)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo])$",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",
         "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) (.*)$",
-        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo])$",
         -- helpall
-        "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll]) (.*)$",
+        "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",
         "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo])$",
-        "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.*)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo]) (.*)$",
         -- help <plugin_name>|<plugin_number>
-        "^[#!/]([Hh][Ee][Ll][Pp]) (.+) (.*)$",
-        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.+)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) (.+)$",
-        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) (.+) (.*)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) (.+) (.*)$",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+) ([^%s]+)$",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+) ([^%s]+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+)$",
         -- getrank
-        "^([Rr][Aa][Nn][Gg][Oo])$",
         "^([Rr][Aa][Nn][Gg][Oo]) (.*)$",
+        "^([Rr][Aa][Nn][Gg][Oo])$",
         -- sudolist
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Ss][Uu][Dd][Oo])$",
     },
