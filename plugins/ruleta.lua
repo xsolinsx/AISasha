@@ -205,27 +205,11 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'helpruleta' then
-            local help = "Ruleta by Sasha, inspired from Leia (/RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c'è il proiettile sei fuori altrimenti rimani.\n" ..
-            "/helpruleta: Sasha manda questo aiuto.\n" ..
-            "/registrami: Sasha registra l'utente alla roulette.\n" ..
-            "/eliminami: Sasha elimina i dati dell'utente.\n" ..
-            "/ruletainfo: Sasha manda le informazioni della roulette.\n" ..
-            "/mystats: Sasha manda le statistiche dell'utente.\n" ..
-            "/ruleta: Sasha cerca di ucciderti.\n" ..
-            "/godruleta: Sasha ti dà il 50% di probabilità di guadagnare 70 punti, con l'altro 50% li perdi tutti (richiede almeno 11 punti).\n" ..
-            "/sfida <username>|<reply>: Sasha avvia una sfida tra il mittente e l'utente specificato.\n" ..
-            "/accetta: Sasha conferma la sfida.\n" ..
-            "/rifiuta: Sasha cancella la sfida.\n" ..
-            "/challengeinfo: Sasha manda le informazioni della sfida in corso."
-            reply_msg(msg.id, help, ok_cb, false)
-        end
-
         local chat = tostring(msg.to.id)
         local user = tostring(msg.from.id)
         local ruletadata = load_data(_config.ruleta.db)
 
-        if matches[1]:lower() == 'registragruppo' then
+        if matches[1]:lower() == 'registergroup' or matches[1]:lower() == 'registragruppo' then
             if is_admin1(msg) then
                 if ruletadata['groups'][chat] then
                     reply_msg(msg.id, lang_text('groupAlreadySignedUp'), ok_cb, false)
@@ -252,7 +236,7 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'eliminagruppo' then
+        if matches[1]:lower() == 'deletegroup' or matches[1]:lower() == 'eliminagruppo' then
             if is_admin1(msg) then
                 ruletadata['groups'][chat] = false
                 save_data(_config.ruleta.db, ruletadata)
@@ -263,7 +247,7 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'registrami' then
+        if matches[1]:lower() == 'registerme' or matches[1]:lower() == 'registrami' then
             if ruletadata['users'][user] then
                 reply_msg(msg.id, lang_text('alreadySignedUp'), ok_cb, false)
             else
@@ -358,7 +342,7 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'eliminami' then
+        if matches[1]:lower() == 'deleteme' or matches[1]:lower() == 'eliminami' then
             if userstats.score >= 0 then
                 ruletadata['users'][user] = false
                 save_data(_config.ruleta.db, ruletadata)
@@ -369,7 +353,7 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'mystats' then
+        if matches[1]:lower() == 'mystats' or matches[1]:lower() == 'punti' then
             local stats = lang_text('attempts') .. userstats.attempts .. '\n' ..
             lang_text('score') .. userstats.score .. '\n' ..
             lang_text('deaths') .. userstats.deaths .. '\n' ..
@@ -453,7 +437,7 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'accetta' and challenge and accepted == 0 then
+        if (matches[1]:lower() == 'accept' or matches[1]:lower() == 'accetta') and challenge and accepted == 0 then
             local text = lang_text('challenger') .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
             lang_text('challenged') .. redis:get('ruletachallenged:' .. chat)
             if redis:get('ruleta:' .. chat .. ':challenged') == user then
@@ -469,7 +453,7 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'rifiuta' and challenge then
+        if (matches[1]:lower() == 'reject' or matches[1]:lower() == 'rifiuta') and challenge then
             if (user == challenger or user == challenged) then
                 if user == challenged and accepted == 0 then
                     reply_msg(msg.id, lang_text('challengeRejected'), ok_cb, false)
@@ -611,48 +595,45 @@ return {
     description = "RULETA",
     usage =
     {
-        "Ruleta by Sasha, inspired from Leia (#RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c'è il proiettile sei fuori altrimenti rimani.",
-        "#helpruleta: Sasha manda questo aiuto.",
-        "#registrami: Sasha registra l'utente alla roulette.",
-        "#eliminami: Sasha elimina i dati dell'utente.",
+        "Ruleta by AISasha, inspired from Leia (#RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c'è il proiettile sei fuori altrimenti rimani.",
+        "#registerme|#registrami: Sasha registra l'utente alla roulette.",
+        "#deleteme|#eliminami: Sasha elimina i dati dell'utente.",
         "#ruletainfo: Sasha manda le informazioni della roulette.",
-        "#mystats: Sasha manda le statistiche dell'utente.",
+        "#mystats|#punti: Sasha manda le statistiche dell'utente.",
         "#ruleta: Sasha cerca di ucciderti.",
         "#godruleta: Sasha ti dà il 50% di probabilità di guadagnare 70 punti, con l'altro 50% li perdi tutti (richiede almeno 11 punti).",
-        "#sfida <username>|<reply>: Sasha avvia una sfida tra il mittente e l'utente specificato.",
-        "#accetta: Sasha conferma la sfida.",
-        "#rifiuta: Sasha cancella la sfida.",
+        "#challenge|#sfida <username>|<reply>: Sasha avvia una sfida tra il mittente e l'utente specificato.",
+        "#accept|#accetta: Sasha conferma la sfida.",
+        "#reject|#rifiuta: Sasha cancella la sfida.",
         "#challengeinfo: Sasha manda le informazioni della sfida in corso.",
         "MOD",
         "#setcaps <value>: Sasha mette <value> proiettili nel tamburo.",
         "#setchallengecaps <value>: Sasha mette <value> proiettili nel tamburo delle sfide.",
-        "(#kick|[sasha] uccidi|[sasha] spara) random: Sasha sceglie un utente a caso e lo rimuove.",
+        "(#kick|spara|[sasha] uccidi) random: Sasha sceglie un utente a caso e lo rimuove.",
         "OWNER",
         "#setcylinder <value>: Sasha imposta un tamburo da <value> colpi nel range [5-10].",
         "#setchallengecylinder <value>: Sasha imposta un tamburo da <value> colpi per le sfide nel range [5-10].",
         "ADMIN",
-        "#registragruppo: Sasha abilita il gruppo a giocare a ruleta.",
-        "#eliminagruppo: Sasha disabilita il gruppo per ruleta.",
+        "#registergroup|#registragruppo: Sasha abilita il gruppo a giocare a ruleta.",
+        "#deletegroup|#eliminagruppo: Sasha disabilita il gruppo per ruleta.",
         "SUDO",
         "#createdb: Sasha crea il database di ruleta.",
-        "#addpoints <value> <reply>: Sasha aggiunge <value> punti all'utente della risposta"
+        -- "#addpoints <reply> <value>: Sasha aggiunge <value> punti all'utente della risposta"
     },
     patterns =
     {
         "^[#!/]([Kk][Ii][Cc][Kk]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Mm][Ii])$",
-        "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Mm][Ii])$",
-        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
-        "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
+        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Mm][Ee])$",
+        "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Mm][Ee])$",
+        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
+        "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Gg][Rr][Oo][Uu][Pp])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Tt][Aa][Ii][Nn][Ff][Oo])$",
-        "^[#!/]([Hh][Ee][Ll][Pp][Rr][Uu][Ll][Ee][Tt][Aa])$",
         "^[#!/]?([Gg][Oo][Dd][Rr][Uu][Ll][Ee][Tt][Aa])$",
         "^[#!/]?([Rr][Uu][Ll][Ee][Tt][Aa])",
-        "^[#!/]([Ss][Ff][Ii][Dd][Aa]) (.*)$",
-        "^[#!/]([Ss][Ff][Ii][Dd][Aa])$",
-        "^[#!/]([Aa][Cc][Cc][Ee][Tt][Tt][Aa])$",
-        "^[#!/]([Rr][Ii][Ff][Ii][Uu][Tt][Aa])$",
-        "^[#!/]([Rr][Ee][Ss][Ee][Tt])$",
+        "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee]) (.*)$",
+        "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee])$",
+        "^[#!/]([Aa][Cc][Cc][Ee][Pp][Tt])$",
+        "^[#!/]([Rr][Ee][Jj][Ee][Cc][Tt])$",
         "^[#!/]([Mm][Yy][Ss][Tt][Aa][Tt][Ss])$",
         "^[#!/]([Ss][Ee][Tt][Cc][Aa][Pp][Ss]) (%d+)$",
         "^[#!/]([Ss][Ee][Tt][Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee][Cc][Aa][Pp][Ss]) (%d+)$",
@@ -660,6 +641,23 @@ return {
         "^[#!/]([Ss][Ee][Tt][Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee][Cc][Yy][Ll][Ii][Nn][Dd][Ee][Rr]) (%d+)$",
         "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee][Ii][Nn][Ff][Oo])$",
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Bb])$",
+        -- registerme
+        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Mm][Ii])$",
+        -- deleteme
+        "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Mm][Ii])$",
+        -- registergroup
+        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
+        -- deletegroup
+        "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
+        -- challenge
+        "^[#!/]([Ss][Ff][Ii][Dd][Aa]) (.*)$",
+        "^[#!/]([Ss][Ff][Ii][Dd][Aa])$",
+        -- accept
+        "^[#!/]([Aa][Cc][Cc][Ee][Tt][Tt][Aa])$",
+        -- reject
+        "^[#!/]([Rr][Ii][Ff][Ii][Uu][Tt][Aa])$",
+        -- mystats
+        "^[#!/]([Pp][Uu][Nn][Tt][Ii])$",
         -- kick random
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Rr][Aa]) [Rr][Aa][Nn][Dd][Oo][Mm]$",

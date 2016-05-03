@@ -69,15 +69,15 @@ end
 local function bot_stats()
 
     local redis_scan = [[
-                                                            local cursor = '0'
-                                                            local count = 0
+                                                                    local cursor = '0'
+                                                                    local count = 0
 
-                                                            repeat
-                                                            local r = redis.call("SCAN", cursor, "MATCH", KEYS[1])
-                                                            cursor = r[1]
-                                                            count = count + #r[2]
-                                                            until cursor == '0'
-                                                            return count]]
+                                                                    repeat
+                                                                    local r = redis.call("SCAN", cursor, "MATCH", KEYS[1])
+                                                                    cursor = r[1]
+                                                                    count = count + #r[2]
+                                                                    until cursor == '0'
+                                                                    return count]]
 
     -- Users
     local hash = 'msgs:*:' .. our_id
@@ -147,10 +147,10 @@ return {
     {
         "[#]aisasha: Sasha invia la propria descrizione.",
         "MOD",
-        "#(stats|statslist|messages)|sasha statistiche|sasha lista statistiche|sasha messaggi: Sasha invia le statistiche della chat.",
+        "(#stats|#statslist|#messages|sasha statistiche|sasha lista statistiche|sasha messaggi): Sasha invia le statistiche della chat.",
         "ADMIN",
-        "(#(stats|statslist|messages)|sasha statistiche|sasha lista statistiche|sasha messaggi) group|gruppo <group_id>: Sasha invia le statistiche relative al gruppo specificato.",
-        "(#(stats|statslist)|sasha statistiche|sasha lista statistiche) aisasha: Sasha invia le proprie statistiche.",
+        "(#stats|#statslist|#messages|sasha statistiche|sasha lista statistiche|sasha messaggi) group|gruppo <group_id>: Sasha invia le statistiche relative al gruppo specificato.",
+        "(#stats|#statslist|sasha statistiche|sasha lista statistiche) aisasha: Sasha invia le proprie statistiche.",
     },
     patterns =
     {
@@ -160,13 +160,12 @@ return {
         "^[#!/]([Ss][Tt][Aa][Tt][Ss]) ([Aa][Ii][Ss][Aa][Ss][Hh][Aa])$",-- Put everything you like :)
         "^[#!/]?([Aa][Ii][Ss][Aa][Ss][Hh][Aa])$",-- Put everything you like :)
                                                  -- stats
+        "^[#!/]([Mm][Ee][Ss][Ss][Aa][Gg][Ee][Ss])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Tt][Aa][Tt][Ii][Ss][Tt][Ii][Cc][Hh][Ee])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Ss][Tt][Aa][Tt][Ii][Ss][Tt][Ii][Cc][Hh][Ee])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Tt][Aa][Tt][Ii][Ss][Tt][Ii][Cc][Hh][Ee]) ([Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Tt][Aa][Tt][Ii][Ss][Tt][Ii][Cc][Hh][Ee]) ([Aa][Ii][Ss][Aa][Ss][Hh][Aa])$",-- Put everything you like :)
-                                                                                                               -- messages
-        "^[#!/]([Mm][Ee][Ss][Ss][Aa][Gg][Ee][Ss])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
     },
     run = run,
     min_rank = 0

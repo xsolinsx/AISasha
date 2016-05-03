@@ -207,9 +207,13 @@ return {
     description = "INPM",
     usage =
     {
-        "#chats: Sasha mostra un elenco di chat.",
-        "#chatlist: Sasha manda un file con un elenco di chat.",
+        "#chats: Sasha mostra un elenco di chat \"pubbliche\".",
+        "#chatlist: Sasha manda un file con un elenco di chat \"pubbliche\".",
+        "ADMIN",
         "#join <chat_id> [support]: Sasha tenta di aggiungere l'utente a <chat_id>.",
+        "SUDO",
+        "#allchats: Sasha mostra l'elenco delle chat.",
+        "#allchatlist: Sasha manda un file con l'elenco delle chat.",
     },
     patterns =
     {

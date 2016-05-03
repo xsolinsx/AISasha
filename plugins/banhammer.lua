@@ -535,18 +535,18 @@ return {
     description = "BANHAMMER",
     usage =
     {
-        "#kickme|sasha uccidimi: Sasha rimuove l'utente.",
+        "(#kickme|sasha uccidimi): Sasha rimuove l'utente.",
         "MOD",
-        "#kick|[sasha] uccidi|spara <id>|<username>|<reply>: Sasha rimuove l'utente specificato.",
-        "#ban|[sasha] banna|[sasha] decompila|esplodi|kaboom <id>|<username>|<reply>: Sasha banna l'utente specificato e lo rimuove, se tenta di rientrare viene nuovamente rimosso.",
+        "(#kick|spara|[sasha] uccidi) <id>|<username>|<reply>: Sasha rimuove l'utente specificato.",
+        "(#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>: Sasha banna l'utente specificato e lo rimuove, se tenta di rientrare viene nuovamente rimosso.",
         "(#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>: Sasha sbanna l'utente specificato.",
         "(#banlist|[sasha] lista ban) [<group_id>]: Sasha mostra la lista di utenti bannati dal gruppo o da <group_id>.",
         "OWNER",
-        "#kicknouser|[sasha] uccidi nouser|spara nouser: Sasha rimuove gli utenti senza username.",
+        "(#kicknouser|[sasha] uccidi nouser|spara nouser): Sasha rimuove gli utenti senza username.",
         "SUPPORT",
         "(#gban|[sasha] superbanna) <id>|<username>|<reply>: Sasha superbanna l'utente specificato e lo rimuove, se tenta di rientrare viene nuovamente rimosso.",
         "(#ungban|[sasha] supersbanna) <id>|<username>|<reply>: Sasha supersbanna l'utente specificato.",
-        "#gbanlist|[sasha] lista superban: Sasha mostra la lista di utenti super bannati.",
+        "(#gbanlist|[sasha] lista superban): Sasha mostra la lista di utenti super bannati.",
     },
     patterns =
     {

@@ -17,7 +17,7 @@ return {
     usage =
     {
         "ADMIN",
-        "#leave|sasha abbandona: Sasha lascia il gruppo.",
+        "(#leave|sasha abbandona): Sasha lascia il gruppo.",
     },
     patterns =
     {

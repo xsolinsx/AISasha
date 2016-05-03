@@ -989,7 +989,7 @@ return {
         "(#setabout|sasha imposta descrizione) <group_id> <text>: Sasha cambia la descrizione di <group_id> in <text>",
         "(#setrules|sasha imposta regole) <group_id> <text>: Sasha cambia le regole di <group_id> in <text>.",
         "#setname <realm_name>: Sasha cambia il nome del regno in <realm_name>.",
-        "#(setname|setgpname) <group_id> <group_name>: Sasha cambia il nome di <group_id> in <group_name>.",
+        "#setname|#setgpname <group_id> <group_name>: Sasha cambia il nome di <group_id> in <group_name>.",
         "(#lock|[sasha] blocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker: Sasha blocca l'impostazione specificata di <group_id>.",
         "(#unlock|[sasha] sblocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker: Sasha sblocca l'impostazione specificata di <group_id>.",
         "#settings <group_id>: Sasha manda le impostazioni di <group_id>.",

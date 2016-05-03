@@ -409,7 +409,6 @@ return {
         "(#updateid|sasha aggiorna longid): Sasha salva il long_id.",
         "(#addlog|sasha aggiungi log): Sasha aggiunge il log.",
         "(#remlog|sasha rimuovi log): Sasha rimuove il log.",
-        "#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.",
         "SUDO",
         "(#contactlist|sasha lista contatti) (txt|json): Sasha manda la lista dei contatti.",
         "(#dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.",
@@ -419,6 +418,7 @@ return {
         "(#mycontact|sasha mio contatto): Sasha invia il contatto del richiedente.",
         "(#sync_gbans|sasha sincronizza superban): Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.",
         "(#backup|sasha esegui backup): Sasha esegue un backup di se stessa e invia il log al richiedente.",
+        "#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.",
     },
     patterns =
     {

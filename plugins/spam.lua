@@ -60,7 +60,7 @@ return {
         "#setspam <text>: Sasha imposta <text> come messaggio da spammare.",
         "#setmsgs <value>: Sasha imposta <value> come numero di messaggi da spammare.",
         "#setwait <seconds>: Sasha imposta <seconds> come intervallo di tempo tra i messaggi.",
-        "#spam|[sasha] spamma: Sasha inizia a spammare.",
+        "(#spam|[sasha] spamma): Sasha inizia a spammare.",
     },
     patterns =
     {
@@ -68,6 +68,7 @@ return {
         "^[#!/]([Ss][Ee][Tt][Ss][Pp][Aa][Mm]) (.+)$",
         "^[#!/]([Ss][Ee][Tt][Mm][Ss][Gg][Ss]) (.+)$",
         "^[#!/]([Ss][Ee][Tt][Ww][Aa][Ii][Tt]) (.+)$",
+        -- spam
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Mm][Mm][Aa])$",
         "^([Ss][Pp][Aa][Mm][Mm][Aa])$",
     },

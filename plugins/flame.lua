@@ -175,8 +175,8 @@ return {
     {
         "MOD",
         "(#startflame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l'utente specificato.",
-        "#stopflame|[sasha] stop flame: Sasha smette di flammare.",
-        "#flameinfo|[sasha] info flame: Sasha manda le info su chi sta flammando."
+        "(#stopflame|[sasha] stop flame): Sasha smette di flammare.",
+        "(#flameinfo|[sasha] info flame): Sasha manda le info su chi sta flammando."
     },
     patterns =
     {

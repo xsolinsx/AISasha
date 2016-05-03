@@ -65,7 +65,7 @@ return {
     usage =
     {
         "MOD",
-        "[#]|[sasha] webshot <url> [<size>]: Sasha esegue uno screenshot di <url> e lo invia, se <size> è specificata di quella dimensione.",
+        "(#webshot|[sasha] webshotta) <url> [<size>]: Sasha esegue uno screenshot di <url> e lo invia, se <size> è specificata di quella dimensione.",
         "La dimensione può essere:",
         "T: (120 x 90px)",
         "S: (200 x 150px)",
@@ -90,10 +90,6 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt][Tt][Aa] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+)$",
         "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt][Tt][Aa] ([%w-_%.%?%.:/%+=&]+) (.*)$",
         "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt][Tt][Aa] ([%w-_%.%?%.:/%+=&]+)$",
-        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+) (.*)$",
-        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+)$",
-        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([%w-_%.%?%.:/%+=&]+) (.*)$",
-        "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([%w-_%.%?%.:/%+=&]+)$",
     },
     run = run,
     min_rank = 1

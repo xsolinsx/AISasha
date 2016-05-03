@@ -520,15 +520,15 @@ return {
     description = "INFO",
     usage =
     {
-        "[#]|[sasha] info: Sasha manda le info dell'utente e della chat o di se stessa",
+        "(#info|[sasha] info): Sasha manda le info dell'utente e della chat o di se stessa",
         "MOD",
-        "[#]|[sasha] info <id>|<username>|<reply>|from: Sasha manda le info dell'utente specificato.",
-        "(#(who|members)|[sasha] lista membri): Sasha manda la lista degli utenti.",
-        "(#kicked|[sasha] lista membri): Sasha manda la lista degli utenti rimossi.",
+        "(#info|[sasha] info) <id>|<username>|<reply>|from: Sasha manda le info dell'utente specificato.",
+        "(#who|#members|[sasha] lista membri): Sasha manda la lista degli utenti.",
+        "(#kicked|[sasha] lista rimossi): Sasha manda la lista degli utenti rimossi.",
         "OWNER",
         "(#groupinfo|[sasha] info gruppo) [<group_id>]: Sasha manda le info del gruppo specificato.",
         "SUDO",
-        "[#]|[sasha] database: Sasha salva i dati di tutti gli utenti.",
+        "(#database|[sasha] database): Sasha salva i dati di tutti gli utenti.",
     },
     patterns =
     {

@@ -26,10 +26,10 @@ end
 
 return {
     description = "SHOUT",
-    usage = "[#]shout|[sasha] grida|[sasha] urla <text>: Sasha \"urla\" <text>.",
+    usage = "(#shout|[sasha] grida|[sasha] urla) <text>: Sasha \"urla\" <text>.",
     patterns =
     {
-        "^[#!/]?[Ss][Hh][Oo][Uu][Tt] (.*)$",
+        "^[#!/][Ss][Hh][Oo][Uu][Tt] (.*)$",
         -- shout
         "^[Ss][Aa][Ss][Hh][Aa] [Gg][Rr][Ii][Dd][Aa] (.*)$",
         "^[Ss][Aa][Ss][Hh][Aa] [Uu][Rr][Ll][Aa] (.*)$",

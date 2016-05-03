@@ -666,7 +666,7 @@ return {
     usage =
     {
         "SUDO",
-        "#updatestrings|#installstrings|[sasha] installa|aggiorna stringhe: Sasha aggiorna le stringhe di testo.",
+        "(#updatestrings|#installstrings|[sasha] installa|[sasha] aggiorna) stringhe: Sasha aggiorna le stringhe di testo.",
     },
     patterns =
     {

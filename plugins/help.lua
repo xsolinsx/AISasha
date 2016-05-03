@@ -183,10 +183,14 @@ local function run(msg, matches)
     if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
         if type(msg.reply_id) ~= "nil" then
             return get_message(msg.reply_id, get_rank_by_reply, false)
-        elseif string.match(matches[2], '^%d+$') then
-            return reverse_rank_table[get_rank(matches[2], msg.to.id) + 1]
+        elseif matches[2] then
+            if string.match(matches[2], '^%d+$') then
+                return reverse_rank_table[get_rank(matches[2], msg.to.id) + 1]
+            else
+                return resolve_username(string.gsub(matches[2], '@', ''), get_rank_by_username, { chat_id = msg.to.id })
+            end
         else
-            return resolve_username(string.gsub(matches[2], '@', ''), get_rank_by_username, { chat_id = msg.to.id })
+            return reverse_rank_table[get_rank(msg.from.id, msg.to.id) + 1]
         end
     end
 
@@ -262,11 +266,12 @@ return {
     description = "HELP",
     usage =
     {
-        "#help|sasha aiuto: Sasha mostra una lista dei plugin disponibili.",
-        "#help|commands|sasha aiuto <plugin_name>|<plugin_number>: Sasha mostra l'aiuto per il plugin specificato.",
-        "#helpall|allcommands|sasha aiuto tutto: Sasha mostra tutti i comandi di tutti i plugin.",
-        "#getrank: Sasha manda il rank dell'utente.",
-        "#sudolist|sasha lista sudo: Sasha manda la lista dei sudo.",
+        "(#sudolist|sasha lista sudo): Sasha manda la lista dei sudo.",
+        "#getrank|rango [<id>|<username>|<reply>]: Sasha manda il rank dell'utente.",
+        "(#help|sasha aiuto): Sasha mostra una lista dei plugin disponibili.",
+        "(#help|commands|sasha aiuto) <plugin_name>|<plugin_number> [<fake_rank>]: Sasha mostra l'aiuto per il plugin specificato.",
+        "(#helpall|allcommands|sasha aiuto tutto) [<fake_rank>]: Sasha mostra tutti i comandi di tutti i plugin.",
+        "Il parametro <fake_rank> serve per mandare l'help di un rango più basso, i ranghi sono: USER, MOD, OWNER, SUPPORT, ADMIN, SUDO.",
     },
     patterns =
     {
