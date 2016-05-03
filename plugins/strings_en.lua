@@ -200,7 +200,8 @@ local function run(msg, matches)
 
         -- inpm.lua --
         set_text('none', 'No one')
-        set_text('groupsJoin', 'Groups:\nUse /join <group_id> to enter\n\n')
+        set_text('groupsJoin', 'Groups:\nUse /join <group_id> to join\n\n')
+        set_text('realmsJoin', 'Realm:\nUse /join <realm_id> to join\n\n')
         set_text('youGbanned', 'You are globally banned.')
         set_text('youBanned', 'You are banned.')
         set_text('chatNotFound', 'Chat not found.')

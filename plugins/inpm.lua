@@ -1,4 +1,5 @@
 ﻿local function chat_list(msg)
+    local text = ''
     i = 1
     local data = load_data(_config.moderation.data)
     local groups = 'groups'
@@ -27,7 +28,7 @@
             elseif m == 'set_name' and public == 'yes' then
                 name = n:gsub("", "")
                 chat_name = name:gsub("‮", "")
-                group_name_id = name .. '\n(ID: ' .. group_id .. ')\n\n'
+                group_name_id = name .. '\n(ID: ' .. group_id .. ')\n'
                 if name:match("[\216-\219][\128-\191]") then
                     group_info = i .. '. \n' .. group_name_id
                 else
@@ -42,7 +43,38 @@
     file:write(message)
     file:flush()
     file:close()
-    return message
+    text = message
+
+    local realms = 'realms'
+    if not data[tostring(realms)] then
+        return lang_text('noRealms')
+    end
+    message = lang_text('realmsJoin')
+    for k, v in pairsByKeys(data[tostring(realms)]) do
+        local realm_id = v
+        if data[tostring(realm_id)] then
+            settings = data[tostring(realm_id)]['settings']
+        end
+        for m, n in pairsByKeys(settings) do
+            if m == 'set_name' then
+                name = n:gsub("", "")
+                chat_name = name:gsub("‮", "")
+                realm_name_id = name .. '\n(ID: ' .. realm_id .. ')\n'
+                if name:match("[\216-\219][\128-\191]") then
+                    realm_info = i .. '. \n' .. realm_name_id
+                else
+                    realm_info = i .. '. ' .. realm_name_id
+                end
+                i = i + 1
+            end
+        end
+        message = message .. realm_info
+    end
+    local file = io.open("./groups/lists/listed_realms.txt", "w")
+    file:write(message)
+    file:flush()
+    file:close()
+    return text
 end
 
 local function all_chats(msg)
@@ -62,7 +94,7 @@ local function all_chats(msg)
             if m == 'set_name' then
                 name = n:gsub("", "")
                 chat_name = name:gsub("‮", "")
-                group_name_id = name .. '\n(ID: ' .. group_id .. ')\n\n'
+                group_name_id = name .. '\n(ID: ' .. group_id .. ')\n'
                 if name:match("[\216-\219][\128-\191]") then
                     group_info = i .. '. \n' .. group_name_id
                 else
@@ -72,6 +104,31 @@ local function all_chats(msg)
             end
         end
         message = message .. group_info
+    end
+    local realms = 'realms'
+    if not data[tostring(realms)] then
+        return lang_text('noRealms')
+    end
+    message = message .. '\n\n' lang_text('realmsJoin')
+    for k, v in pairsByKeys(data[tostring(realms)]) do
+        local realm_id = v
+        if data[tostring(realm_id)] then
+            settings = data[tostring(realm_id)]['settings']
+        end
+        for m, n in pairsByKeys(settings) do
+            if m == 'set_name' then
+                name = n:gsub("", "")
+                chat_name = name:gsub("‮", "")
+                realm_name_id = name .. '\n(ID: ' .. realm_id .. ')\n'
+                if name:match("[\216-\219][\128-\191]") then
+                    realm_info = i .. '. \n' .. realm_name_id
+                else
+                    realm_info = i .. '. ' .. realm_name_id
+                end
+                i = i + 1
+            end
+        end
+        message = message .. realm_info
     end
     local file = io.open("./groups/lists/all_listed_groups.txt", "w")
     file:write(message)
