@@ -83,14 +83,12 @@ end
 local function set_alias(msg, alias, groupid)
     local hash = 'groupalias'
     redis:hset(hash, alias, groupid)
-    --
     return lang_text('aliasSaved')
 end
 
 local function unset_alias(msg, alias)
     local hash = 'groupalias'
     redis:hdel(hash, alias)
-    --
     return lang_text('aliasDeleted')
 end
 
@@ -164,7 +162,6 @@ local function run(msg, matches)
                     channel_invite(channel, user, ok_cb, false)
                     return
                 else
-                    --
                     return lang_text('noAliasFound')
                 end
             end
@@ -270,11 +267,6 @@ local function run(msg, matches)
             return lang_text('require_sudo')
         end
     end
-end
-
-local function run(msg, matches)
-    local groupid = matches[1]
-    local groupname = matches[2]:lower()
 end
 
 return {
