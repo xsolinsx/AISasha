@@ -266,7 +266,7 @@ function send_photo_from_url(receiver, url, cb_function, cb_extra)
     local file_path = download_to_file(url, false)
     if not file_path then
         -- Error
-        send_msg(receiver, lang_text('errorImageDownload'), cb_function, cb_extra)
+        send_msg(receiver, lang_text('it:' .. 'errorImageDownload'), cb_function, cb_extra)
     else
         print("File path: " .. file_path)
         _send_photo(receiver, file_path, cb_function, cb_extra)
@@ -281,7 +281,7 @@ function send_photo_from_url_callback(cb_extra, success, result)
     local file_path = download_to_file(url, false)
     if not file_path then
         -- Error
-        send_msg(receiver, lang_text('errorImageDownload'), ok_cb, false)
+        send_msg(receiver, lang_text('it:' .. 'errorImageDownload'), ok_cb, false)
     else
         print("File path: " .. file_path)
         _send_photo(receiver, file_path, ok_cb, false)
@@ -392,7 +392,7 @@ end
 function warns_user_not_allowed(plugin, msg)
     if not user_allowed(plugin, msg) then
         local receiver = get_receiver(msg)
-        send_msg(receiver, lang_text('require_sudo'), ok_cb, false)
+        send_msg(receiver, lang_text('it:' .. 'require_sudo'), ok_cb, false)
         return true
     else
         return false
@@ -544,13 +544,13 @@ function enable_channel(receiver, to_id)
     end
 
     if _config.disabled_channels[receiver] == nil then
-        return send_large_msg(receiver, lang_text('botOn'))
+        return send_large_msg(receiver, lang_text('it:' .. 'botOn'))
     end
 
     _config.disabled_channels[receiver] = false
 
     save_config()
-    return send_large_msg(receiver, lang_text('botOn'))
+    return send_large_msg(receiver, lang_text('it:' .. 'botOn'))
 end
 
 function disable_channel(receiver, to_id)
@@ -561,7 +561,7 @@ function disable_channel(receiver, to_id)
     _config.disabled_channels[receiver] = true
 
     save_config()
-    return send_large_msg(receiver, lang_text('botOff'))
+    return send_large_msg(receiver, lang_text('it:' .. 'botOff'))
 end
 
 -- Returns a table with matches or nil
@@ -737,7 +737,7 @@ function user_print_name(user)
     return text
 end
 
-function lang_text(keyword)
+function lang_text('it:' .. keyword)
     local hash = 'lang:' .. keyword
     if redis:get(hash) then
         return redis:get(hash)
@@ -1019,7 +1019,7 @@ end
 function ban_list(chat_id)
     local hash = 'banned:' .. chat_id
     local list = redis:smembers(hash)
-    local text = lang_text('banListStart')
+    local text = lang_text('it:' .. 'banListStart')
     for k, v in pairs(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then
@@ -1037,7 +1037,7 @@ end
 function banall_list()
     local hash = 'gbanned'
     local list = redis:smembers(hash)
-    local text = lang_text('gbanListStart')
+    local text = lang_text('it:' .. 'gbanListStart')
     for k, v in pairs(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then
@@ -1153,9 +1153,9 @@ end
 function mutes_list(chat_id)
     local hash = 'mute:' .. chat_id
     local list = redis:smembers(hash)
-    local text = lang_text('mutedTypesStart') .. " [ID: " .. chat_id .. " ]:\n\n"
+    local text = lang_text('it:' .. 'mutedTypesStart') .. " [ID: " .. chat_id .. " ]:\n\n"
     for k, v in pairsByKeys(list) do
-        text = text .. lang_text('mute') .. v .. "\n"
+        text = text .. lang_text('it:' .. 'mute') .. v .. "\n"
     end
     return text
 end
@@ -1164,7 +1164,7 @@ end
 function muted_user_list(chat_id)
     local hash = 'mute_user:' .. chat_id
     local list = redis:smembers(hash)
-    local text = lang_text('mutedUsersStart') .. " [ID: " .. chat_id .. " ]:\n\n"
+    local text = lang_text('it:' .. 'mutedUsersStart') .. " [ID: " .. chat_id .. " ]:\n\n"
     for k, v in pairsByKeys(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then

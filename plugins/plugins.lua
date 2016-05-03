@@ -49,7 +49,7 @@ local function enable_plugin(plugin_name)
     print('checking if ' .. plugin_name .. ' exists')
     -- Check if plugin is enabled
     if plugin_enabled(plugin_name) then
-        return '✔️ ' .. plugin_name .. lang_text('alreadyEnabled')
+        return '✔️ ' .. plugin_name .. lang_text('it:' .. 'alreadyEnabled')
     end
     -- Checks if plugin exists
     if plugin_exists(plugin_name) then
@@ -59,32 +59,32 @@ local function enable_plugin(plugin_name)
         save_config()
         -- Reload the plugins
         reload_plugins()
-        return '✅ ' .. plugin_name .. lang_text('enabled')
+        return '✅ ' .. plugin_name .. lang_text('it:' .. 'enabled')
     else
-        return '❔ ' .. plugin_name .. lang_text('notExist')
+        return '❔ ' .. plugin_name .. lang_text('it:' .. 'notExist')
     end
 end
 
 local function disable_plugin(name, chat)
     -- Check if plugins exists
     if not plugin_exists(name) then
-        return '❔ ' .. name .. lang_text('notExist')
+        return '❔ ' .. name .. lang_text('it:' .. 'notExist')
     end
     local k = plugin_enabled(name)
     -- Check if plugin is enabled
     if not k then
-        return '✖️ ' .. name .. lang_text('alreadyDisabled')
+        return '✖️ ' .. name .. lang_text('it:' .. 'alreadyDisabled')
     end
     -- Disable and reload
     table.remove(_config.enabled_plugins, k)
     save_config()
     reload_plugins(true)
-    return '❌ ' .. name .. lang_text('disabled')
+    return '❌ ' .. name .. lang_text('it:' .. 'disabled')
 end
 
 local function disable_plugin_on_chat(receiver, plugin)
     if not plugin_exists(plugin) then
-        return '❔ ' .. plugin .. lang_text('notExist')
+        return '❔ ' .. plugin .. lang_text('it:' .. 'notExist')
     end
 
     if not _config.disabled_plugin_on_chat then
@@ -98,34 +98,34 @@ local function disable_plugin_on_chat(receiver, plugin)
     _config.disabled_plugin_on_chat[receiver][plugin] = true
 
     save_config()
-    return '❌ ' .. plugin .. lang_text('disabledOnChat')
+    return '❌ ' .. plugin .. lang_text('it:' .. 'disabledOnChat')
 end
 
 local function reenable_plugin_on_chat(receiver, plugin)
     if not _config.disabled_plugin_on_chat then
-        return lang_text('noDisabledPlugin')
+        return lang_text('it:' .. 'noDisabledPlugin')
     end
 
     if not _config.disabled_plugin_on_chat[receiver] then
-        return lang_text('noDisabledPlugin')
+        return lang_text('it:' .. 'noDisabledPlugin')
     end
 
     if not _config.disabled_plugin_on_chat[receiver][plugin] then
-        return lang_text('pluginNotDisabled')
+        return lang_text('it:' .. 'pluginNotDisabled')
     end
 
     _config.disabled_plugin_on_chat[receiver][plugin] = false
     save_config()
-    return '✅ ' .. plugin .. lang_text('pluginEnabledAgain')
+    return '✅ ' .. plugin .. lang_text('it:' .. 'pluginEnabledAgain')
 end
 
 local function list_disabled_plugin_on_chat(receiver)
     if not _config.disabled_plugin_on_chat then
-        return lang_text('noDisabledPlugin')
+        return lang_text('it:' .. 'noDisabledPlugin')
     end
 
     if not _config.disabled_plugin_on_chat[receiver] then
-        return lang_text('noDisabledPlugin')
+        return lang_text('it:' .. 'noDisabledPlugin')
     end
 
     local status = '❌'
@@ -161,7 +161,7 @@ local function run(msg, matches)
                 local plugin = matches[2]
                 local receiver = get_receiver(msg)
                 if check_plugin(plugin) then
-                    return lang_text('systemPlugin')
+                    return lang_text('it:' .. 'systemPlugin')
                 end
                 print("disable " .. plugin .. ' on this chat')
                 return disable_plugin_on_chat(receiver, plugin)
@@ -174,7 +174,7 @@ local function run(msg, matches)
             end
         end
     else
-        return lang_text('require_owner')
+        return lang_text('it:' .. 'require_owner')
     end
     if is_sudo(msg) then
         -- Show the available plugins
@@ -185,7 +185,7 @@ local function run(msg, matches)
         -- Reload all the plugins!
         if matches[1]:lower() == 'reload' or matches[1]:lower() == 'sasha ricarica' or matches[1]:lower() == 'ricarica' then
             print(reload_plugins())
-            return lang_text('pluginsReloaded')
+            return lang_text('it:' .. 'pluginsReloaded')
         end
 
         -- Enable a plugin
@@ -198,13 +198,13 @@ local function run(msg, matches)
         -- Disable a plugin
         if matches[1]:lower() == 'disable' or matches[1]:lower() == 'sasha disabilita' or matches[1]:lower() == 'sasha disattiva' or matches[1]:lower() == 'disabilita' or matches[1]:lower() == 'disattiva' then
             if check_plugin(matches[2]) then
-                return lang_text('systemPlugin')
+                return lang_text('it:' .. 'systemPlugin')
             end
             print("disable: " .. matches[2])
             return disable_plugin(matches[2])
         end
     else
-        return lang_text('require_sudo')
+        return lang_text('it:' .. 'require_sudo')
     end
 end
 

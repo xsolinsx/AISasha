@@ -26,7 +26,7 @@ local function chat_stats(receiver, chat_id)
             return a.msgs > b.msgs
         end
     end )
-    local text = lang_text('usersInChat')
+    local text = lang_text('it:' .. 'usersInChat')
     for k, user in pairs(users_info) do
         text = text .. user.name .. ' = ' .. user.msgs .. '\n'
     end
@@ -59,7 +59,7 @@ local function chat_stats2(chat_id)
         end
     end )
 
-    local text = lang_text('usersInChat')
+    local text = lang_text('it:' .. 'usersInChat')
     for k, user in pairs(users_info) do
         text = text .. user.name .. ' = ' .. user.msgs .. '\n'
     end
@@ -82,11 +82,11 @@ local function bot_stats()
     -- Users
     local hash = 'msgs:*:' .. our_id
     local r = redis:eval(redis_scan, 1, hash)
-    local text = lang_text('users') .. r
+    local text = lang_text('it:' .. 'users') .. r
 
     hash = 'chat:*:users'
     r = redis:eval(redis_scan, 1, hash)
-    text = text .. lang_text('groups') .. r
+    text = text .. lang_text('it:' .. 'groups') .. r
     return text
 end
 local function run(msg, matches)
@@ -100,7 +100,7 @@ local function run(msg, matches)
     --[[ file
         if matches[1]:lower() == "statslist" then
             if not is_momod(msg) then
-                return lang_text('require_mod')
+                return lang_text('it:' .. 'require_mod')
             end
             local chat_id = msg.to.id
             local name = user_print_name(msg.from)
@@ -111,7 +111,7 @@ local function run(msg, matches)
     if matches[1]:lower() == "stats" or matches[1]:lower() == "statslist" or matches[1]:lower() == "messages" or matches[1]:lower() == "sasha statistiche" or matches[1]:lower() == "sasha lista statistiche" or matches[1]:lower() == "sasha messaggi" then
         if not matches[2] then
             if not is_momod(msg) then
-                return lang_text('require_mod')
+                return lang_text('it:' .. 'require_mod')
             end
             if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 local receiver = get_receiver(msg)
@@ -126,14 +126,14 @@ local function run(msg, matches)
         if matches[2]:lower() == "aisasha" and matches[1]:lower() ~= "messages" and matches[1]:lower() ~= "sasha messaggi" then
             -- Put everything you like :)
             if not is_admin1(msg) then
-                return lang_text('require_admin')
+                return lang_text('it:' .. 'require_admin')
             else
                 return bot_stats()
             end
         end
         if matches[2]:lower() == "group" or matches[2]:lower() == "gruppo" then
             if not is_admin1(msg) then
-                return lang_text('require_admin')
+                return lang_text('it:' .. 'require_admin')
             else
                 return chat_stats2(matches[3])
             end

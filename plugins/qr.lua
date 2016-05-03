@@ -42,7 +42,7 @@ local function qr(receiver, text, color, bgcolor)
     local response, code, headers = http.request(url)
 
     if code ~= 200 then
-        return lang_text('opsError') .. code
+        return lang_text('it:' .. 'opsError') .. code
     end
 
     if #response > 0 then
@@ -50,7 +50,7 @@ local function qr(receiver, text, color, bgcolor)
         return
     end
 
-    return lang_text('opsError')
+    return lang_text('it:' .. 'opsError')
 end
 
 local function run(msg, matches)

@@ -26,7 +26,7 @@ local function check_member_autorealm(cb_extra, success, result)
             end
             data[tostring(realms)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
-            return send_large_msg(receiver, lang_text('welcomeNewRealm'))
+            return send_large_msg(receiver, lang_text('it:' .. 'welcomeNewRealm'))
         end
     end
 end
@@ -57,7 +57,7 @@ local function check_member_realm_add(cb_extra, success, result)
             end
             data[tostring(realms)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
-            return send_large_msg(receiver, lang_text('realmAdded'))
+            return send_large_msg(receiver, lang_text('it:' .. 'realmAdded'))
         end
     end
 end
@@ -90,7 +90,7 @@ function check_member_group(cb_extra, success, result)
             end
             data[tostring(groups)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
-            return send_large_msg(receiver, lang_text('promotedOwner'))
+            return send_large_msg(receiver, lang_text('it:' .. 'promotedOwner'))
         end
     end
 end
@@ -124,7 +124,7 @@ local function check_member_modadd(cb_extra, success, result)
             end
             data[tostring(groups)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
-            return send_large_msg(receiver, lang_text('groupAddedOwner'))
+            return send_large_msg(receiver, lang_text('it:' .. 'groupAddedOwner'))
         end
     end
 end
@@ -159,7 +159,7 @@ local function check_member_realmrem(cb_extra, success, result)
             end
             data[tostring(realms)][tostring(msg.to.id)] = nil
             save_data(_config.moderation.data, data)
-            return send_large_msg(receiver, lang_text('realmRemoved'))
+            return send_large_msg(receiver, lang_text('it:' .. 'realmRemoved'))
         end
     end
 end
@@ -180,14 +180,14 @@ local function check_member_modrem(cb_extra, success, result)
             end
             data[tostring(groups)][tostring(msg.to.id)] = nil
             save_data(_config.moderation.data, data)
-            return send_large_msg(receiver, lang_text('groupRemoved'))
+            return send_large_msg(receiver, lang_text('it:' .. 'groupRemoved'))
         end
     end
 end
 -- End Check Member
 function show_group_settingsmod(msg, target)
     if not is_momod(msg) then
-        return lang_text('require_mod')
+        return lang_text('it:' .. 'require_mod')
     end
     local data = load_data(_config.moderation.data)
     if data[tostring(target)] then
@@ -227,17 +227,17 @@ function show_group_settingsmod(msg, target)
         end
     end
     local settings = data[tostring(target)]['settings']
-    local text = lang_text('groupSettings') ..
-    lang_text('nameLock') .. settings.lock_name ..
-    lang_text('photoLock') .. settings.lock_photo ..
-    lang_text('membersLock') .. settings.lock_member ..
-    lang_text('leaveLock') .. leave_ban ..
-    lang_text('floodSensibility') .. NUM_MSG_MAX ..
-    lang_text('botsLock') .. bots_protection ..
-    lang_text('linksLock') .. settings.lock_link ..
-    lang_text('rtlLock') .. settings.lock_rtl ..
-    lang_text('stickersLock') .. settings.lock_sticker ..
-    lang_text('public') .. settings.public
+    local text = lang_text('it:' .. 'groupSettings') ..
+    lang_text('it:' .. 'nameLock') .. settings.lock_name ..
+    lang_text('it:' .. 'photoLock') .. settings.lock_photo ..
+    lang_text('it:' .. 'membersLock') .. settings.lock_member ..
+    lang_text('it:' .. 'leaveLock') .. leave_ban ..
+    lang_text('it:' .. 'floodSensibility') .. NUM_MSG_MAX ..
+    lang_text('it:' .. 'botsLock') .. bots_protection ..
+    lang_text('it:' .. 'linksLock') .. settings.lock_link ..
+    lang_text('it:' .. 'rtlLock') .. settings.lock_rtl ..
+    lang_text('it:' .. 'stickersLock') .. settings.lock_sticker ..
+    lang_text('it:' .. 'public') .. settings.public
     return text
 end
 
@@ -248,16 +248,16 @@ local function set_descriptionmod(msg, data, target, about)
     local data_cat = 'description'
     data[tostring(target)][data_cat] = about
     save_data(_config.moderation.data, data)
-    return lang_text('newDescription') .. about
+    return lang_text('it:' .. 'newDescription') .. about
 end
 local function get_description(msg, data)
     local data_cat = 'description'
     if not data[tostring(msg.to.id)][data_cat] then
-        return lang_text('noDescription')
+        return lang_text('it:' .. 'noDescription')
     end
     local about = data[tostring(msg.to.id)][data_cat]
     local about = string.gsub(msg.to.print_name, "_", " ") .. ':\n\n' .. about
-    return lang_text('description') .. about
+    return lang_text('it:' .. 'description') .. about
 end
 local function lock_group_arabic(msg, data, target)
     if not is_momod(msg) then
@@ -265,11 +265,11 @@ local function lock_group_arabic(msg, data, target)
     end
     local group_arabic_lock = data[tostring(target)]['settings']['lock_arabic']
     if group_arabic_lock == 'yes' then
-        return lang_text('arabicAlreadyLocked')
+        return lang_text('it:' .. 'arabicAlreadyLocked')
     else
         data[tostring(target)]['settings']['lock_arabic'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('arabicLocked')
+        return lang_text('it:' .. 'arabicLocked')
     end
 end
 
@@ -279,11 +279,11 @@ local function unlock_group_arabic(msg, data, target)
     end
     local group_arabic_lock = data[tostring(target)]['settings']['lock_arabic']
     if group_arabic_lock == 'no' then
-        return lang_text('arabicAlreadyUnlocked')
+        return lang_text('it:' .. 'arabicAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['lock_arabic'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('arabicUnlocked')
+        return lang_text('it:' .. 'arabicUnlocked')
     end
 end
 
@@ -293,11 +293,11 @@ local function lock_group_bots(msg, data, target)
     end
     local group_bots_lock = data[tostring(target)]['settings']['lock_bots']
     if group_bots_lock == 'yes' then
-        return lang_text('botsAlreadyLocked')
+        return lang_text('it:' .. 'botsAlreadyLocked')
     else
         data[tostring(target)]['settings']['lock_bots'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('botsLocked')
+        return lang_text('it:' .. 'botsLocked')
     end
 end
 
@@ -307,11 +307,11 @@ local function unlock_group_bots(msg, data, target)
     end
     local group_bots_lock = data[tostring(target)]['settings']['lock_bots']
     if group_bots_lock == 'no' then
-        return lang_text('botsAlreadyUnlocked')
+        return lang_text('it:' .. 'botsAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['lock_bots'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('botsUnlocked')
+        return lang_text('it:' .. 'botsUnlocked')
     end
 end
 
@@ -322,12 +322,12 @@ local function lock_group_namemod(msg, data, target)
     local group_name_set = data[tostring(target)]['settings']['set_name']
     local group_name_lock = data[tostring(target)]['settings']['lock_name']
     if group_name_lock == 'yes' then
-        return lang_text('nameAlreadyLocked')
+        return lang_text('it:' .. 'nameAlreadyLocked')
     else
         data[tostring(target)]['settings']['lock_name'] = 'yes'
         save_data(_config.moderation.data, data)
         rename_chat('chat#id' .. target, group_name_set, ok_cb, false)
-        return lang_text('nameLocked')
+        return lang_text('it:' .. 'nameLocked')
     end
 end
 local function unlock_group_namemod(msg, data, target)
@@ -337,11 +337,11 @@ local function unlock_group_namemod(msg, data, target)
     local group_name_set = data[tostring(target)]['settings']['set_name']
     local group_name_lock = data[tostring(target)]['settings']['lock_name']
     if group_name_lock == 'no' then
-        return lang_text('nameAlreadyUnlocked')
+        return lang_text('it:' .. 'nameAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['lock_name'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('nameUnlocked')
+        return lang_text('it:' .. 'nameUnlocked')
     end
 end
 local function lock_group_floodmod(msg, data, target)
@@ -350,11 +350,11 @@ local function lock_group_floodmod(msg, data, target)
     end
     local group_flood_lock = data[tostring(target)]['settings']['flood']
     if group_flood_lock == 'yes' then
-        return lang_text('floodAlreadyLocked')
+        return lang_text('it:' .. 'floodAlreadyLocked')
     else
         data[tostring(target)]['settings']['flood'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('floodLocked')
+        return lang_text('it:' .. 'floodLocked')
     end
 end
 
@@ -363,15 +363,15 @@ local function unlock_group_floodmod(msg, data, target)
         return
     end
     if not is_owner(msg) then
-        return lang_text('floodUnlockOwners')
+        return lang_text('it:' .. 'floodUnlockOwners')
     end
     local group_flood_lock = data[tostring(target)]['settings']['flood']
     if group_flood_lock == 'no' then
-        return lang_text('floodAlreadyUnlocked')
+        return lang_text('it:' .. 'floodAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['flood'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('floodUnlocked')
+        return lang_text('it:' .. 'floodUnlocked')
     end
 end
 
@@ -381,11 +381,11 @@ local function lock_group_membermod(msg, data, target)
     end
     local group_member_lock = data[tostring(target)]['settings']['lock_member']
     if group_member_lock == 'yes' then
-        return lang_text('membersAlreadyLocked')
+        return lang_text('it:' .. 'membersAlreadyLocked')
     else
         data[tostring(target)]['settings']['lock_member'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('membersLocked')
+        return lang_text('it:' .. 'membersLocked')
     end
 end
 
@@ -395,11 +395,11 @@ local function unlock_group_membermod(msg, data, target)
     end
     local group_member_lock = data[tostring(target)]['settings']['lock_member']
     if group_member_lock == 'no' then
-        return lang_text('membersAlreadyUnlocked')
+        return lang_text('it:' .. 'membersAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['lock_member'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('membersUnlocked')
+        return lang_text('it:' .. 'membersUnlocked')
     end
 end
 
@@ -414,11 +414,11 @@ local function set_public_membermod(msg, data, target)
         save_data(_config.moderation.data, data)
     end
     if group_member_lock == 'yes' then
-        return lang_text('publicAlreadyYes')
+        return lang_text('it:' .. 'publicAlreadyYes')
     else
         data[tostring(target)]['settings']['public'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('publicYes')
+        return lang_text('it:' .. 'publicYes')
     end
 end
 
@@ -433,11 +433,11 @@ local function unset_public_membermod(msg, data, target)
         save_data(_config.moderation.data, data)
     end
     if group_member_lock == 'no' then
-        return lang_text('publicAlreadyNo')
+        return lang_text('it:' .. 'publicAlreadyNo')
     else
         data[tostring(target)]['settings']['public'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('publicNo')
+        return lang_text('it:' .. 'publicNo')
     end
 end
 
@@ -447,11 +447,11 @@ local function lock_group_leave(msg, data, target)
     end
     local leave_ban = data[tostring(target)]['settings']['leave_ban']
     if leave_ban == 'yes' then
-        return lang_text('leaveAlreadyLocked')
+        return lang_text('it:' .. 'leaveAlreadyLocked')
     else
         data[tostring(target)]['settings']['leave_ban'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('leaveLocked')
+        return lang_text('it:' .. 'leaveLocked')
     end
 end
 
@@ -461,11 +461,11 @@ local function unlock_group_leave(msg, data, target)
     end
     local leave_ban = data[tostring(msg.to.id)]['settings']['leave_ban']
     if leave_ban == 'no' then
-        return lang_text('leaveAlreadyUnlocked')
+        return lang_text('it:' .. 'leaveAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['leave_ban'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('leaveUnlocked')
+        return lang_text('it:' .. 'leaveUnlocked')
     end
 end
 
@@ -475,11 +475,11 @@ local function lock_group_photomod(msg, data, target)
     end
     local group_photo_lock = data[tostring(target)]['settings']['lock_photo']
     if group_photo_lock == 'yes' then
-        return lang_text('photoAlreadyLocked')
+        return lang_text('it:' .. 'photoAlreadyLocked')
     else
         data[tostring(target)]['settings']['lock_photo'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('photoLocked')
+        return lang_text('it:' .. 'photoLocked')
     end
 end
 
@@ -489,11 +489,11 @@ local function unlock_group_photomod(msg, data, target)
     end
     local group_photo_lock = data[tostring(target)]['settings']['lock_photo']
     if group_photo_lock == 'no' then
-        return lang_text('photoAlreadyUnlocked')
+        return lang_text('it:' .. 'photoAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['lock_photo'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('photoUnlocked')
+        return lang_text('it:' .. 'photoUnlocked')
     end
 end
 
@@ -503,11 +503,11 @@ local function lock_group_links(msg, data, target)
     end
     local group_link_lock = data[tostring(target)]['settings']['lock_link']
     if group_link_lock == 'yes' then
-        return lang_text('linksAlreadyLocked')
+        return lang_text('it:' .. 'linksAlreadyLocked')
     else
         data[tostring(target)]['settings']['lock_link'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('linksLocked')
+        return lang_text('it:' .. 'linksLocked')
     end
 end
 
@@ -517,11 +517,11 @@ local function unlock_group_links(msg, data, target)
     end
     local group_link_lock = data[tostring(target)]['settings']['lock_link']
     if group_link_lock == 'no' then
-        return lang_text('linksAlreadyUnlocked')
+        return lang_text('it:' .. 'linksAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['lock_link'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('linksUnlocked')
+        return lang_text('it:' .. 'linksUnlocked')
     end
 end
 
@@ -531,11 +531,11 @@ local function lock_group_rtl(msg, data, target)
     end
     local group_rtl_lock = data[tostring(target)]['settings']['lock_rtl']
     if group_rtl_lock == 'yes' then
-        return lang_text('rtlAlreadyLocked')
+        return lang_text('it:' .. 'rtlAlreadyLocked')
     else
         data[tostring(target)]['settings']['lock_rtl'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('rtlLocked')
+        return lang_text('it:' .. 'rtlLocked')
     end
 end
 
@@ -545,11 +545,11 @@ local function unlock_group_rtl(msg, data, target)
     end
     local group_rtl_lock = data[tostring(target)]['settings']['lock_rtl']
     if group_rtl_lock == 'no' then
-        return lang_text('rtlAlreadyUnlocked')
+        return lang_text('it:' .. 'rtlAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['lock_rtl'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('rtlUnlocked')
+        return lang_text('it:' .. 'rtlUnlocked')
     end
 end
 
@@ -559,11 +559,11 @@ local function lock_group_sticker(msg, data, target)
     end
     local group_sticker_lock = data[tostring(target)]['settings']['lock_sticker']
     if group_sticker_lock == 'yes' then
-        return lang_text('stickersAlreadyLocked')
+        return lang_text('it:' .. 'stickersAlreadyLocked')
     else
         data[tostring(target)]['settings']['lock_sticker'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('stickersLocked')
+        return lang_text('it:' .. 'stickersLocked')
     end
 end
 
@@ -573,11 +573,11 @@ local function unlock_group_sticker(msg, data, target)
     end
     local group_sticker_lock = data[tostring(target)]['settings']['lock_sticker']
     if group_sticker_lock == 'no' then
-        return lang_text('stickersAlreadyUnlocked')
+        return lang_text('it:' .. 'stickersAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['lock_sticker'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('stickersUnlocked')
+        return lang_text('it:' .. 'stickersUnlocked')
     end
 end
 
@@ -587,11 +587,11 @@ local function lock_group_contacts(msg, data, target)
     end
     local group_rtl_lock = data[tostring(target)]['settings']['lock_contacts']
     if group_contacts_lock == 'yes' then
-        return lang_text('contactsAlreadyLocked')
+        return lang_text('it:' .. 'contactsAlreadyLocked')
     else
         data[tostring(target)]['settings']['lock_contacts'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('contactsLocked')
+        return lang_text('it:' .. 'contactsLocked')
     end
 end
 
@@ -601,11 +601,11 @@ local function unlock_group_contacts(msg, data, target)
     end
     local group_contacts_lock = data[tostring(target)]['settings']['lock_contacts']
     if group_contacts_lock == 'no' then
-        return lang_text('contactsAlreadyUnlocked')
+        return lang_text('it:' .. 'contactsAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['lock_contacts'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('contactsUnlocked')
+        return lang_text('it:' .. 'contactsUnlocked')
     end
 end
 
@@ -615,11 +615,11 @@ local function enable_strict_rules(msg, data, target)
     end
     local group_rtl_lock = data[tostring(target)]['settings']['strict']
     if strict == 'yes' then
-        return lang_text('strictrulesAlreadyLocked')
+        return lang_text('it:' .. 'strictrulesAlreadyLocked')
     else
         data[tostring(target)]['settings']['strict'] = 'yes'
         save_data(_config.moderation.data, data)
-        return lang_text('strictrulesLocked')
+        return lang_text('it:' .. 'strictrulesLocked')
     end
 end
 
@@ -629,22 +629,22 @@ local function disable_strict_rules(msg, data, target)
     end
     local group_contacts_lock = data[tostring(target)]['settings']['strict']
     if strict == 'no' then
-        return lang_text('strictrulesAlreadyUnlocked')
+        return lang_text('it:' .. 'strictrulesAlreadyUnlocked')
     else
         data[tostring(target)]['settings']['strict'] = 'no'
         save_data(_config.moderation.data, data)
-        return lang_text('strictrulesUnlocked')
+        return lang_text('it:' .. 'strictrulesUnlocked')
     end
 end
 
 local function set_rulesmod(msg, data, target)
     if not is_momod(msg) then
-        return lang_text('require_mod')
+        return lang_text('it:' .. 'require_mod')
     end
     local data_cat = 'rules'
     data[tostring(target)][data_cat] = rules
     save_data(_config.moderation.data, data)
-    return lang_text('newRules') .. rules
+    return lang_text('it:' .. 'newRules') .. rules
 end
 local function modadd(msg)
     -- superuser and admins only (because sudo are always has privilege)
@@ -652,11 +652,11 @@ local function modadd(msg)
         return
     end
     if not is_admin1(msg) then
-        return lang_text('require_admin')
+        return lang_text('it:' .. 'require_admin')
     end
     local data = load_data(_config.moderation.data)
     if is_group(msg) then
-        return lang_text('groupAlreadyAdded')
+        return lang_text('it:' .. 'groupAlreadyAdded')
     end
     receiver = get_receiver(msg)
     chat_info(receiver, check_member_modadd, { receiver = receiver, data = data, msg = msg })
@@ -667,11 +667,11 @@ local function realmadd(msg)
         return
     end
     if not is_admin1(msg) then
-        return lang_text('require_admin')
+        return lang_text('it:' .. 'require_admin')
     end
     local data = load_data(_config.moderation.data)
     if is_realm(msg) then
-        return lang_text('realmAlreadyAdded')
+        return lang_text('it:' .. 'realmAlreadyAdded')
     end
     receiver = get_receiver(msg)
     chat_info(receiver, check_member_realm_add, { receiver = receiver, data = data, msg = msg })
@@ -680,11 +680,11 @@ end
 function modrem(msg)
     -- superuser and admins only (because sudo are always has privilege)
     if not is_admin1(msg) then
-        return lang_text('require_admin')
+        return lang_text('it:' .. 'require_admin')
     end
     local data = load_data(_config.moderation.data)
     if not is_group(msg) then
-        return lang_text('groupNotAdded')
+        return lang_text('it:' .. 'groupNotAdded')
     end
     receiver = get_receiver(msg)
     chat_info(receiver, check_member_modrem, { receiver = receiver, data = data, msg = msg })
@@ -693,11 +693,11 @@ end
 function realmrem(msg)
     -- superuser and admins only (because sudo are always has privilege)
     if not is_admin1(msg) then
-        return lang_text('require_admin')
+        return lang_text('it:' .. 'require_admin')
     end
     local data = load_data(_config.moderation.data)
     if not is_realm(msg) then
-        return lang_text('realmNotAdded')
+        return lang_text('it:' .. 'realmNotAdded')
     end
     receiver = get_receiver(msg)
     chat_info(receiver, check_member_realmrem, { receiver = receiver, data = data, msg = msg })
@@ -705,10 +705,10 @@ end
 local function get_rules(msg, data)
     local data_cat = 'rules'
     if not data[tostring(msg.to.id)][data_cat] then
-        return lang_text('noRules')
+        return lang_text('it:' .. 'noRules')
     end
     local rules = data[tostring(msg.to.id)][data_cat]
-    local rules = lang_text('rules') .. rules
+    local rules = lang_text('it:' .. 'rules') .. rules
     return rules
 end
 
@@ -725,10 +725,10 @@ local function set_group_photo(msg, success, result)
         save_data(_config.moderation.data, data)
         data[tostring(msg.to.id)]['settings']['lock_photo'] = 'yes'
         save_data(_config.moderation.data, data)
-        send_large_msg(receiver, lang_text('photoSaved'), ok_cb, false)
+        send_large_msg(receiver, lang_text('it:' .. 'photoSaved'), ok_cb, false)
     else
         print('Error downloading: ' .. msg.id)
-        send_large_msg(receiver, lang_text('errorTryAgain'), ok_cb, false)
+        send_large_msg(receiver, lang_text('it:' .. 'errorTryAgain'), ok_cb, false)
     end
 end
 
@@ -736,14 +736,14 @@ local function promote(receiver, member_username, member_id)
     local data = load_data(_config.moderation.data)
     local group = string.gsub(receiver, 'chat#id', '')
     if not data[group] then
-        return send_large_msg(receiver, lang_text('groupNotAdded'))
+        return send_large_msg(receiver, lang_text('it:' .. 'groupNotAdded'))
     end
     if data[group]['moderators'][tostring(member_id)] then
-        return send_large_msg(receiver, member_username .. lang_text('alreadyMod'))
+        return send_large_msg(receiver, member_username .. lang_text('it:' .. 'alreadyMod'))
     end
     data[group]['moderators'][tostring(member_id)] = member_username
     save_data(_config.moderation.data, data)
-    return send_large_msg(receiver, member_username .. lang_text('promoteMod'))
+    return send_large_msg(receiver, member_username .. lang_text('it:' .. 'promoteMod'))
 end
 
 local function promote_by_reply(extra, success, result)
@@ -764,14 +764,14 @@ local function demote(receiver, member_username, member_id)
     local data = load_data(_config.moderation.data)
     local group = string.gsub(receiver, 'chat#id', '')
     if not data[group] then
-        return send_large_msg(receiver, lang_text('groupNotAdded'))
+        return send_large_msg(receiver, lang_text('it:' .. 'groupNotAdded'))
     end
     if not data[group]['moderators'][tostring(member_id)] then
-        return send_large_msg(receiver, member_username .. lang_text('notMod'))
+        return send_large_msg(receiver, member_username .. lang_text('it:' .. 'notMod'))
     end
     data[group]['moderators'][tostring(member_id)] = nil
     save_data(_config.moderation.data, data)
-    return send_large_msg(receiver, member_username .. lang_text('demoteMod'))
+    return send_large_msg(receiver, member_username .. lang_text('it:' .. 'demoteMod'))
 end
 
 local function demote_by_reply(extra, success, result)
@@ -796,7 +796,7 @@ local function setowner_by_reply(extra, success, result)
     data[tostring(msg.to.id)]['set_owner'] = tostring(msg.from.id)
     save_data(_config.moderation.data, data)
     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. msg.from.id .. "] as owner")
-    local text = msg.from.print_name:gsub("_", " ") .. lang_text('setOwner')
+    local text = msg.from.print_name:gsub("_", " ") .. lang_text('it:' .. 'setOwner')
     return send_large_msg(receiver, text)
 end
 
@@ -830,10 +830,10 @@ local function mute_user_callback(extra, success, result)
     local chat_id = string.gsub(receiver, 'channel#id', '')
     if is_muted_user(chat_id, user_id) then
         mute_user(chat_id, user_id)
-        send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
+        send_large_msg(receiver, user_id .. lang_text('it:' .. 'muteUserRemove'))
     else
         unmute_user(chat_id, user_id)
-        send_large_msg(receiver, user_id .. lang_text('muteUserAdd'))
+        send_large_msg(receiver, user_id .. lang_text('it:' .. 'muteUserAdd'))
     end
 end
 
@@ -841,15 +841,15 @@ local function modlist(msg)
     local data = load_data(_config.moderation.data)
     local groups = "groups"
     if not data[tostring(groups)][tostring(msg.to.id)] then
-        return lang_text('groupNotAdded')
+        return lang_text('it:' .. 'groupNotAdded')
     end
     -- determine if table is empty
     if next(data[tostring(msg.to.id)]['moderators']) == nil then
         -- fix way
-        return lang_text('noGroupMods')
+        return lang_text('it:' .. 'noGroupMods')
     end
     local i = 1
-    local message = lang_text('modListStart') .. string.gsub(msg.to.print_name, '_', ' ') .. ':\n'
+    local message = lang_text('it:' .. 'modListStart') .. string.gsub(msg.to.print_name, '_', ' ') .. ':\n'
     for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
         message = message .. i .. '. ' .. v .. ' - ' .. k .. '\n'
         i = i + 1
@@ -863,10 +863,10 @@ local function callback_mute_res(extra, success, result)
     local chat_id = string.gsub(receiver, 'chat#id', '')
     if is_muted_user(chat_id, user_id) then
         unmute_user(chat_id, user_id)
-        send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
+        send_large_msg(receiver, user_id .. lang_text('it:' .. 'muteUserRemove'))
     else
         mute_user(chat_id, user_id)
-        send_large_msg(receiver, user_id .. lang_text('muteUserAdd'))
+        send_large_msg(receiver, user_id .. lang_text('it:' .. 'muteUserAdd'))
     end
 end
 
@@ -969,7 +969,7 @@ local function run(msg, matches)
                     return
                 end
                 if is_realm(msg) then
-                    return lang_text('errorAlreadyRealm')
+                    return lang_text('it:' .. 'errorAlreadyRealm')
                 end
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added group [ " .. msg.to.id .. " ]")
                 print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") added")
@@ -982,7 +982,7 @@ local function run(msg, matches)
                     return
                 end
                 if is_group(msg) then
-                    return lang_text('errorAlreadyGroup')
+                    return lang_text('it:' .. 'errorAlreadyGroup')
                 end
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added realm [ " .. msg.to.id .. " ]")
                 print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") added as a realm")
@@ -995,7 +995,7 @@ local function run(msg, matches)
                     return
                 end
                 if not is_group(msg) then
-                    return lang_text('errorNotGroup')
+                    return lang_text('it:' .. 'errorNotGroup')
                 end
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed group [ " .. msg.to.id .. " ]")
                 print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed")
@@ -1008,7 +1008,7 @@ local function run(msg, matches)
                     return
                 end
                 if not is_realm(msg) then
-                    return lang_text('errorNotRealm')
+                    return lang_text('it:' .. 'errorNotRealm')
                 end
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed realm [ " .. msg.to.id .. " ]")
                 print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed as a realm")
@@ -1154,11 +1154,11 @@ local function run(msg, matches)
             if (matches[1]:lower() == 'setphoto' or matches[1]:lower() == 'setgpphoto') and is_momod(msg) then
                 data[tostring(msg.to.id)]['settings']['set_photo'] = 'waiting'
                 save_data(_config.moderation.data, data)
-                return lang_text('sendNewGroupPic')
+                return lang_text('it:' .. 'sendNewGroupPic')
             end
             if matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi' then
                 if not is_owner(msg) then
-                    return lang_text('require_owner')
+                    return lang_text('it:' .. 'require_owner')
                 end
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, promote_by_reply, false)
@@ -1177,13 +1177,13 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == 'demote' or matches[1]:lower() == 'sasha degrada' or matches[1]:lower() == 'degrada' then
                 if not is_owner(msg) then
-                    return lang_text('require_owner')
+                    return lang_text('it:' .. 'require_owner')
                 end
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, demote_by_reply, false)
                 elseif matches[2] then
                     if string.gsub(matches[2], "@", "") == msg.from.username and not is_owner(msg) then
-                        return lang_text('noAutoDemote')
+                        return lang_text('it:' .. 'noAutoDemote')
                     end
                     local member = matches[2]
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. member)
@@ -1343,9 +1343,9 @@ local function run(msg, matches)
                 if not is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
                     mute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('enabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'enabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyEnabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyEnabled')
                 end
             end
             if matches[2]:lower() == 'photo' then
@@ -1353,9 +1353,9 @@ local function run(msg, matches)
                 if not is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
                     mute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('enabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'enabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyEnabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyEnabled')
                 end
             end
             if matches[2]:lower() == 'video' then
@@ -1363,9 +1363,9 @@ local function run(msg, matches)
                 if not is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
                     mute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('enabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'enabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyEnabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyEnabled')
                 end
             end
             if matches[2]:lower() == 'gifs' then
@@ -1373,9 +1373,9 @@ local function run(msg, matches)
                 if not is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
                     mute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('enabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'enabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyEnabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyEnabled')
                 end
             end
             if matches[2]:lower() == 'documents' then
@@ -1383,9 +1383,9 @@ local function run(msg, matches)
                 if not is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
                     mute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('enabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'enabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyEnabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyEnabled')
                 end
             end
             if matches[2]:lower() == 'text' then
@@ -1393,9 +1393,9 @@ local function run(msg, matches)
                 if not is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
                     mute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('enabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'enabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyEnabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyEnabled')
                 end
             end
             if matches[2]:lower() == 'all' then
@@ -1403,9 +1403,9 @@ local function run(msg, matches)
                 if not is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
                     mute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('enabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'enabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyEnabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyEnabled')
                 end
             end
         end
@@ -1416,9 +1416,9 @@ local function run(msg, matches)
                 if is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
                     unmute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('disabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'disabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyDisabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyDisabled')
                 end
             end
             if matches[2]:lower() == 'photo' then
@@ -1426,9 +1426,9 @@ local function run(msg, matches)
                 if is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
                     unmute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('disabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'disabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyDisabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyDisabled')
                 end
             end
             if matches[2]:lower() == 'video' then
@@ -1436,9 +1436,9 @@ local function run(msg, matches)
                 if is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
                     unmute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('disabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'disabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyDisabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyDisabled')
                 end
             end
             if matches[2]:lower() == 'gifs' then
@@ -1446,9 +1446,9 @@ local function run(msg, matches)
                 if is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
                     unmute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('disabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'disabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyDisabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyDisabled')
                 end
             end
             if matches[2]:lower() == 'documents' then
@@ -1456,9 +1456,9 @@ local function run(msg, matches)
                 if is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
                     unmute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('disabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'disabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyDisabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyDisabled')
                 end
             end
             if matches[2]:lower() == 'text' then
@@ -1466,9 +1466,9 @@ local function run(msg, matches)
                 if is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute message")
                     unmute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('disabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'disabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyDisabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyDisabled')
                 end
             end
             if matches[2]:lower() == 'all' then
@@ -1476,9 +1476,9 @@ local function run(msg, matches)
                 if is_muted(chat_id, msg_type .. ': yes') then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
                     unmute(chat_id, msg_type)
-                    return lang_text('mute') .. msg_type .. lang_text('disabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'disabled')
                 else
-                    return lang_text('mute') .. msg_type .. lang_text('alreadyDisabled')
+                    return lang_text('it:' .. 'mute') .. msg_type .. lang_text('it:' .. 'alreadyDisabled')
                 end
             end
         end
@@ -1496,10 +1496,10 @@ local function run(msg, matches)
                 local user_id = matches[2]
                 if is_muted_user(chat_id, user_id) then
                     mute_user(chat_id, user_id)
-                    return user_id .. lang_text('muteUserRemove')
+                    return user_id .. lang_text('it:' .. 'muteUserRemove')
                 else
                     unmute_user(chat_id, user_id)
-                    return user_id .. lang_text('muteUserAdd')
+                    return user_id .. lang_text('it:' .. 'muteUserAdd')
                 end
             elseif (matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce') and not string.match(matches[2], '^%d+$') then
                 local receiver = get_receiver(msg)
@@ -1547,14 +1547,14 @@ local function run(msg, matches)
         if msg.to.type == 'chat' then
             if matches[1]:lower() == 'newlink' and not is_realm(msg) then
                 if not is_momod(msg) then
-                    return lang_text('require_mod')
+                    return lang_text('it:' .. 'require_mod')
                 end
                 local function callback(extra, success, result)
                     local receiver = 'chat#' .. msg.to.id
                     if success == 0 then
-                        return send_large_msg(receiver, lang_text('errorCreateLink'))
+                        return send_large_msg(receiver, lang_text('it:' .. 'errorCreateLink'))
                     end
-                    send_large_msg(receiver, lang_text('linkCreated'))
+                    send_large_msg(receiver, lang_text('it:' .. 'linkCreated'))
                     data[tostring(msg.to.id)]['settings']['set_link'] = result
                     save_data(_config.moderation.data, data)
                 end
@@ -1565,29 +1565,29 @@ local function run(msg, matches)
             if (matches[1]:lower() == 'setlink' or matches[1]:lower() == 'sasha imposta link') and is_owner(msg) then
                 data[tostring(msg.to.id)]['settings']['set_link'] = 'waiting'
                 save_data(_config.moderation.data, data)
-                return lang_text('sendLink')
+                return lang_text('it:' .. 'sendLink')
             end
             if msg.text then
                 if msg.text:match("^(https://telegram.me/joinchat/%S+)$") and data[tostring(msg.to.id)]['settings']['set_link'] == 'waiting' and is_owner(msg) then
                     data[tostring(msg.to.id)]['settings']['set_link'] = msg.text
                     save_data(_config.moderation.data, data)
-                    return lang_text('linkSaved')
+                    return lang_text('it:' .. 'linkSaved')
                 end
             end
             if matches[1]:lower() == 'link' or matches[1]:lower() == 'sasha link' then
                 if not is_momod(msg) then
-                    return lang_text('require_mod')
+                    return lang_text('it:' .. 'require_mod')
                 end
                 local group_link = data[tostring(msg.to.id)]['settings']['set_link']
                 if not group_link then
-                    return lang_text('createLinkInfo')
+                    return lang_text('it:' .. 'createLinkInfo')
                 end
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
-                return lang_text('groupLink') .. group_link
+                return lang_text('it:' .. 'groupLink') .. group_link
             end
             if matches[1]:lower() == 'setowner' and matches[2] then
                 if not is_owner(msg) then
-                    return lang_text('require_owner')
+                    return lang_text('it:' .. 'require_owner')
                 end
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, setowner_by_reply, false)
@@ -1595,7 +1595,7 @@ local function run(msg, matches)
                     data[tostring(msg.to.id)]['set_owner'] = matches[2]
                     save_data(_config.moderation.data, data)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
-                    local text = matches[2] .. lang_text('setOwner')
+                    local text = matches[2] .. lang_text('it:' .. 'setOwner')
                     return text
                 end
             end
@@ -1603,42 +1603,42 @@ local function run(msg, matches)
         if matches[1]:lower() == 'owner' then
             local group_owner = data[tostring(msg.to.id)]['set_owner']
             if not group_owner then
-                return lang_text('noOwnerCallAdmin')
+                return lang_text('it:' .. 'noOwnerCallAdmin')
             end
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] used /owner")
-            return lang_text('ownerIs') .. group_owner
+            return lang_text('it:' .. 'ownerIs') .. group_owner
         end
         if matches[1]:lower() == 'setgpowner' then
             local chat = "chat#id" .. matches[2]
             local channel = "channel#id" .. matches[2]
             if not is_admin1(msg) then
-                return lang_text('require_admin')
+                return lang_text('it:' .. 'require_admin')
             end
             data[tostring(matches[2])]['set_owner'] = matches[3]
             save_data(_config.moderation.data, data)
-            local text = matches[3] .. lang_text('setOwner')
+            local text = matches[3] .. lang_text('it:' .. 'setOwner')
             send_large_msg(chat, text)
             send_large_msg(channel, text)
             return
         end
         if matches[1]:lower() == 'setflood' then
             if not is_momod(msg) then
-                return lang_text('require_mod')
+                return lang_text('it:' .. 'require_mod')
             end
             if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
-                return lang_text('errorFloodRange')
+                return lang_text('it:' .. 'errorFloodRange')
             end
             local flood_max = matches[2]
             data[tostring(msg.to.id)]['settings']['flood_msg_max'] = flood_max
             save_data(_config.moderation.data, data)
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set flood to [" .. matches[2] .. "]")
-            return lang_text('floodSet') .. matches[2]
+            return lang_text('it:' .. 'floodSet') .. matches[2]
         end
 
         if msg.to.type == 'chat' then
             if matches[1]:lower() == 'clean' then
                 if not is_owner(msg) then
-                    return lang_text('require_owner')
+                    return lang_text('it:' .. 'require_owner')
                 end
                 if matches[2]:lower() == 'member' then
                     local receiver = get_receiver(msg)
@@ -1647,9 +1647,9 @@ local function run(msg, matches)
                 if matches[2]:lower() == 'modlist' then
                     if next(data[tostring(msg.to.id)]['moderators']) == nil then
                         -- fix way
-                        return lang_text('noGroupMods')
+                        return lang_text('it:' .. 'noGroupMods')
                     end
-                    local message = lang_text('modListStart') .. string.gsub(msg.to.print_name, '_', ' ') .. ':\n'
+                    local message = lang_text('it:' .. 'modListStart') .. string.gsub(msg.to.print_name, '_', ' ') .. ':\n'
                     for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
                         data[tostring(msg.to.id)]['moderators'][tostring(k)] = nil
                         save_data(_config.moderation.data, data)
@@ -1681,7 +1681,7 @@ local function run(msg, matches)
                     print("Closing Group..."),
                     chat_info(receiver, killchat, { receiver = receiver })
                 else
-                    return lang_text('realmIs')
+                    return lang_text('it:' .. 'realmIs')
                 end
             end
             if matches[1]:lower() == 'kill' and matches[2]:lower() == 'realm' then
@@ -1694,13 +1694,13 @@ local function run(msg, matches)
                     print("Closing Realm..."),
                     chat_info(receiver, killrealm, { receiver = receiver })
                 else
-                    return lang_text('groupIs')
+                    return lang_text('it:' .. 'groupIs')
                 end
             end
             if matches[1]:lower() == 'kickinactive' or(matches[1]:lower() == 'sasha uccidi sotto' and matches[3]:lower() == 'messaggi') then
                 -- send_large_msg('chat#id'..msg.to.id, 'I\'m in matches[1]')
                 if not is_momod(msg) then
-                    return lang_text('require_mod')
+                    return lang_text('it:' .. 'require_mod')
                 end
                 local num = 1
                 if matches[2] then

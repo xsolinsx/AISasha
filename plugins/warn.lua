@@ -2,21 +2,21 @@ local data = load_data(_config.moderation.data)
 
 local function set_warn(msg, value)
     if tonumber(value) < 1 or tonumber(value) > 10 then
-        return lang_text('errorWarnRange')
+        return lang_text('it:' .. 'errorWarnRange')
     end
     local warn_max = value
     data[tostring(msg.to.id)]['settings']['warn_max'] = warn_max
     save_data(_config.moderation.data, data)
     savelog(msg.to.id, " [" .. msg.from.id .. "] set warn to [" .. value .. "]")
-    return lang_text('warnSet') .. value
+    return lang_text('it:' .. 'warnSet') .. value
 end
 
 local function get_warn(msg)
     local warn_max = data[tostring(msg.to.id)]['settings']['warn_max']
     if not warn_max then
-        return lang_text('noWarnSet')
+        return lang_text('it:' .. 'noWarnSet')
     end
-    return lang_text('warnSet') .. warn_max
+    return lang_text('it:' .. 'warnSet') .. warn_max
 end
 
 local function get_user_warns(user_id, chat_id)
@@ -24,7 +24,7 @@ local function get_user_warns(user_id, chat_id)
     local chat = 'chat#id' .. chat_id
     local hash = chat_id .. ':warn:' .. user_id
     local hashonredis = redis:get(hash)
-    local warn_msg = lang_text('yourWarnings')
+    local warn_msg = lang_text('it:' .. 'yourWarnings')
     local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
 
     if hashonredis then
@@ -52,12 +52,12 @@ local function warn_user(user_id, chat_id)
             channel_kick(channel, user, ok_cb, false)
             redis:getset(hash, 0)
         end
-        send_large_msg(chat, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
-        send_large_msg(channel, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg(chat, string.gsub(lang_text('it:' .. 'warned'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg(channel, string.gsub(lang_text('it:' .. 'warned'), 'X', tostring(hashonredis)), ok_cb, false)
     else
         redis:set(hash, 1)
-        send_large_msg(chat, string.gsub(lang_text('warned'), 'X', '1'), ok_cb, false)
-        send_large_msg(channel, string.gsub(lang_text('warned'), 'X', '1'), ok_cb, false)
+        send_large_msg(chat, string.gsub(lang_text('it:' .. 'warned'), 'X', '1'), ok_cb, false)
+        send_large_msg(channel, string.gsub(lang_text('it:' .. 'warned'), 'X', '1'), ok_cb, false)
     end
 end
 
@@ -68,12 +68,12 @@ local function unwarn_user(user_id, chat_id)
     local warns = redis:get(hash)
     if tonumber(warns) <= 0 then
         redis:set(hash, 0)
-        send_large_msg(chat, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
-        send_large_msg(channel, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg(chat, string.gsub(lang_text('it:' .. 'alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg(channel, string.gsub(lang_text('it:' .. 'alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
     else
         redis:set(hash, warns - 1)
-        send_large_msg(chat, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
-        send_large_msg(channel, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg(chat, string.gsub(lang_text('it:' .. 'unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg(channel, string.gsub(lang_text('it:' .. 'unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
     end
 end
 
@@ -82,8 +82,8 @@ local function unwarnall_user(user_id, chat_id)
     local chat = 'chat#id' .. chat_id
     local hash = chat_id .. ':warn:' .. user_id
     redis:set(hash, 0)
-    send_large_msg(chat, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
-    send_large_msg(channel, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+    send_large_msg(chat, string.gsub(lang_text('it:' .. 'zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+    send_large_msg(channel, string.gsub(lang_text('it:' .. 'zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
 end
 
 local function Warn_by_reply(extra, success, result)
@@ -94,17 +94,17 @@ local function Warn_by_reply(extra, success, result)
         end
         if is_momod2(result.from.peer_id, result.to.peer_id) then
             -- Ignore mods,owner,admin
-            return lang_text('cantWarnHigher')
+            return lang_text('it:' .. 'cantWarnHigher')
         end
         warn_user(result.from.peer_id, result.to.peer_id)
     else
-        return lang_text('useYourGroups')
+        return lang_text('it:' .. 'useYourGroups')
     end
 end
 
 local function Warn_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(receiver, lang_text('noUsernameFound'))
+        return send_large_msg(receiver, lang_text('it:' .. 'noUsernameFound'))
     end
     local user_id = result.peer_id
     local chat_id = extra.msg.to.id
@@ -115,13 +115,13 @@ local function Unwarn_by_reply(extra, success, result)
     if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         unwarn_user(result.from.peer_id, result.to.peer_id)
     else
-        return lang_text('useYourGroups')
+        return lang_text('it:' .. 'useYourGroups')
     end
 end
 
 local function Unwarn_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(receiver, lang_text('noUsernameFound'))
+        return send_large_msg(receiver, lang_text('it:' .. 'noUsernameFound'))
     end
     local user_id = result.peer_id
     local chat_id = extra.msg.to.id
@@ -132,13 +132,13 @@ local function Unwarnall_by_reply(extra, success, result)
     if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         unwarnall_user(result.from.peer_id, result.to.peer_id)
     else
-        return lang_text('useYourGroups')
+        return lang_text('it:' .. 'useYourGroups')
     end
 end
 
 local function Unwarnall_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(receiver, lang_text('noUsernameFound'))
+        return send_large_msg(receiver, lang_text('it:' .. 'noUsernameFound'))
     end
     local user_id = result.peer_id
     local chat_id = extra.msg.to.id
@@ -149,13 +149,13 @@ local function getWarn_by_reply(extra, success, result)
     if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         get_user_warns(result.from.peer_id, result.to.peer_id)
     else
-        return lang_text('useYourGroups')
+        return lang_text('it:' .. 'useYourGroups')
     end
 end
 
 local function getWarn_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(receiver, lang_text('noUsernameFound'))
+        return send_large_msg(receiver, lang_text('it:' .. 'noUsernameFound'))
     end
     local user_id = result.peer_id
     local chat_id = extra.msg.to.id
@@ -170,8 +170,8 @@ local function run(msg, matches)
         if matches[1]:lower() == 'getwarn' then
             return get_warn(msg)
         end
-        if get_warn(msg) == lang_text('noWarnSet') then
-            return lang_text('noWarnSet')
+        if get_warn(msg) == lang_text('it:' .. 'noWarnSet') then
+            return lang_text('it:' .. 'noWarnSet')
         else
             if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then
                 if type(msg.reply_id) ~= "nil" then
@@ -190,7 +190,7 @@ local function run(msg, matches)
                         return
                     end
                     if is_momod2(matches[2], msg.to.id) then
-                        return lang_text('cantWarnHigher')
+                        return lang_text('it:' .. 'cantWarnHigher')
                     end
                     local user_id = matches[2]
                     local chat_id = msg.to.id
@@ -232,7 +232,7 @@ local function run(msg, matches)
             end
         end
     else
-        return lang_text('require_mod')
+        return lang_text('it:' .. 'require_mod')
     end
 end
 

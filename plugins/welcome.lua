@@ -3,7 +3,7 @@ local function set_welcome(msg, welcome)
     local data_cat = 'welcome'
     data[tostring(msg.to.id)][data_cat] = welcome
     save_data(_config.moderation.data, data)
-    return lang_text('newWelcome') .. welcome
+    return lang_text('it:' .. 'newWelcome') .. welcome
 end
 
 local function get_welcome(msg)
@@ -21,14 +21,14 @@ local function set_memberswelcome(msg, value)
     local data_cat = 'welcomemembers'
     data[tostring(msg.to.id)][data_cat] = value
     save_data(_config.moderation.data, data)
-    return string.gsub(lang_text('newWelcomeNumber'), 'X', tostring(value))
+    return string.gsub(lang_text('it:' .. 'newWelcomeNumber'), 'X', tostring(value))
 end
 
 local function get_memberswelcome(msg)
     local data = load_data(_config.moderation.data)
     local data_cat = 'welcomemembers'
     if not data[tostring(msg.to.id)][data_cat] then
-        return lang_text('noSetValue')
+        return lang_text('it:' .. 'noSetValue')
     end
     local value = data[tostring(msg.to.id)][data_cat]
     return value
@@ -38,7 +38,7 @@ local function get_rules(msg)
     local data = load_data(_config.moderation.data)
     local data_cat = 'rules'
     if not data[tostring(msg.to.id)][data_cat] then
-        return lang_text('noRules')
+        return lang_text('it:' .. 'noRules')
     end
     local rules = data[tostring(msg.to.id)][data_cat]
     return rules
@@ -66,7 +66,7 @@ local function run(msg, matches)
     if matches[1]:lower() == 'getmemberswelcome' and is_owner(msg) then
         return get_memberswelcome(msg)
     end
-    if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg) ~= lang_text('noSetValue') then
+    if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg) ~= lang_text('it:' .. 'noSetValue') then
         local hash
         if msg.to.type == 'channel' then
             hash = 'channel:welcome' .. msg.to.id

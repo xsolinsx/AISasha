@@ -38,7 +38,7 @@ local function run(msg, matches)
             end
         end
     else
-        return lang_text('require_owner')
+        return lang_text('it:' .. 'require_owner')
     end
 end
 

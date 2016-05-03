@@ -905,9 +905,9 @@ local function run(msg, matches)
         set_text(LANG .. 'whitelist:2', '#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist.')
         set_text(LANG .. 'whitelist:3', '#clean whitelist: Sasha pulisce la whitelist.')
 
-        return lang_text('langUpdate')
+        return lang_text('it:' .. 'langUpdate')
     else
-        return lang_text('require_sudo')
+        return lang_text('it:' .. 'require_sudo')
     end
 end
 
