@@ -239,7 +239,7 @@ local function run(msg, matches)
 
     if matches[1]:lower() == 'setalias' then
         if is_sudo(msg) then
-            return set_alias(msg, matches[2], matches[3])
+            return set_alias(msg, matches[2]:gsub('_', ' '), matches[3])
         else
             return lang_text('require_sudo')
         end
