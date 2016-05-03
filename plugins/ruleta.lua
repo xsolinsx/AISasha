@@ -654,6 +654,7 @@ return {
         "#accept|#accetta: Sasha conferma la sfida.",
         "#reject|#rifiuta: Sasha cancella la sfida.",
         "#challengeinfo: Sasha manda le informazioni della sfida in corso.",
+        "#leaderboard|#classifica score|punti: Sasha manda la classifica.",
         "MOD",
         "#setcaps <value>: Sasha mette <value> proiettili nel tamburo.",
         "#setchallengecaps <value>: Sasha mette <value> proiettili nel tamburo delle sfide.",
@@ -673,6 +674,7 @@ return {
         "^[#!/]([Kk][Ii][Cc][Kk]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Bb])$",
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
+        "^[#!/]([Ll][Ee][Aa][Dd][Ee][Rr][Bb][Oo][Aa][Rr][Dd]) (.*)$",
         "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Gg][Rr][Oo][Uu][Pp])$",
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Mm][Ee])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Tt][Aa][Ii][Nn][Ff][Oo])$",
@@ -690,14 +692,23 @@ return {
         "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee][Ii][Nn][Ff][Oo])$",
         "^[#!/]([Aa][Dd][Dd][Pp][Oo][Ii][Nn][Tt][Ss]) (%d+) (%d+)$",
         "^[#!/]?([Rr][Uu][Ll][Ee][Tt][Aa])",
+        -- kick random
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Rr][Aa]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
+        "^([Uu][Cc][Cc][Ii][Dd][Ii]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
+        "^([Ss][Pp][Aa][Rr][Aa]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
+        -- registergroup
+        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
+        -- leaderboard
+        "^[#!/]([Cc][Ll][Aa][Ss][Ss][Ii][Ff][Ii][Cc][Aa]) (.*)$",
+        -- deletegroup
+        "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
         -- registerme
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Mm][Ii])$",
         -- deleteme
         "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Mm][Ii])$",
-        -- registergroup
-        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
-        -- deletegroup
-        "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
+        -- mystats
+        "^[#!/]([Pp][Uu][Nn][Tt][Ii])$",
         -- challenge
         "^[#!/]([Ss][Ff][Ii][Dd][Aa]) (.*)$",
         "^[#!/]([Ss][Ff][Ii][Dd][Aa])$",
@@ -705,13 +716,6 @@ return {
         "^[#!/]([Aa][Cc][Cc][Ee][Tt][Tt][Aa])$",
         -- reject
         "^[#!/]([Rr][Ii][Ff][Ii][Uu][Tt][Aa])$",
-        -- mystats
-        "^[#!/]([Pp][Uu][Nn][Tt][Ii])$",
-        -- kick random
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Rr][Aa]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        "^([Uu][Cc][Cc][Ii][Dd][Ii]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        "^([Ss][Pp][Aa][Rr][Aa]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
     },
     run = run,
     min_rank = 0
