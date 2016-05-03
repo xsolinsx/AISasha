@@ -357,11 +357,11 @@ local function run(msg, matches)
         set_text('alreadySignedUp', 'Sei già registrato, usa /ruleta per morire.')
         set_text('signedUp', 'Sei stato registrato, have a nice death.')
         set_text('ruletaDeleted', 'Sei stato eliminato dalla ruleta.')
-        set_text('requireSignUp', 'Prima di morire devi registrarti, usa /registrami.')
+        set_text('requireSignUp', 'Prima di morire devi registrarti, usa /registerme.')
         set_text('groupAlreadySignedUp', 'Gruppo già registrato.')
         set_text('groupSignedUp', 'Gruppo registrato con i valori di default (tamburo da 6 con 1 proiettile).')
         set_text('ruletaGroupDeleted', 'Gruppo disabilitato per ruleta.')
-        set_text('requireGroupSignUp', 'Prima di giocare è necessario far registrare il gruppo.')
+        set_text('requireGroupSignUp', 'Prima di giocare è necessario far registrare il gruppo, usa /registergroup.')
         set_text('requirePoints', 'Richiede almeno 11 punti.')
         set_text('requireZeroPoints', 'Non puoi eliminarti se sei in negativo col punteggio.')
         set_text('challenge', 'SFIDA')
@@ -380,7 +380,7 @@ local function run(msg, matches)
         set_text('challengeEnd', 'Morto, Sfida terminata.')
         set_text('noChallenge', 'Nessuna sfida in corso.')
         set_text('errorOngoingChallenge', 'Impossibile avviare più sfide contemporaneamente.')
-        set_text('challengeSet', 'Sfida avviata, lo sfidato può accettare con /accetta o rifiutare con /rifiuta.')
+        set_text('challengeSet', 'Sfida avviata, lo sfidato può accettare con /accept o rifiutare con /reject.')
         set_text('wrongPlayer', 'Non sei tu lo sfidato.')
         set_text('capsChanged', 'Proiettili nella pistola: ')
         set_text('challengeCapsChanged', 'Proiettili nella pistola da sfida: ')
@@ -470,197 +470,441 @@ local function run(msg, matches)
         set_text('whitelistAdded', ' aggiunto alla whitelist.')
         set_text('whitelistCleaned', 'Whitelist svuotata.')
 
-        --------------
-        ---- Usages --
-        --------------
-        ---- bot.lua --
-        -- set_text('bot:0', 2)
-        -- set_text('bot:1', 'BOT')
-        -- set_text('bot:2', '(#bot|sasha) on|off: abilita|disabilita il bot sul gruppo corrente.')
-        --
-        ---- commands.lua --
-        -- set_text('commands:0', 3)
-        -- set_text('commands:1', 'COMMANDS')
-        -- set_text('commands:2', '#(commands|help all)|sasha aiuto tutto: mostra la descrizione di ogni plugin.')
-        -- set_text('commands:3', '(#(commands|help)|sasha aiuto) <plugin>: descrizione di <plugin>.')
-        --
-        ---- giverank.lua --
-        -- set_text('giverank:0', 7)
-        -- set_text('giverank:1', 'GIVE RANK')
-        -- set_text('giverank:2', '(#(rank|promote)|[sasha] promuovi) admin <id>|<username>|<reply>: promuovi ad amministratore.')
-        -- set_text('giverank:3', '(#(rank|promote)|[sasha] promuovi) mod <id>|<username>|<reply>: promuovi a moderatore.')
-        -- set_text('giverank:4', '#rank guest <id>|<username>|<reply>: togli ogni carica all\'utente.')
-        -- set_text('giverank:5', '#admin[s][list]|[sasha] lista admin: lista amministratori del gruppo.')
-        -- set_text('giverank:6', '#mod[s][list]|[sasha] lista mod: lista moderatori del gruppo.')
-        -- set_text('giverank:7', '#member[s][list]|[sasha] lista membri: lista membri del gruppo.')
-        --
-        ---- id.lua --
-        -- set_text('id:0', 7)
-        -- set_text('id:1', 'ID')
-        -- set_text('id:2', '#id: mostra il tuo ID e l\'ID del gruppo se ti trovi in una chat.')
-        -- set_text('id:3', '#ids chat: mostra gli ID dei membri del gruppo.')
-        -- set_text('id:4', '#ids channel: mostra gli ID dei membri del supergruppo.')
-        -- set_text('id:5', '#id <username>: mostra l\'ID dell\'utente in questa chat.')
-        -- set_text('id:6', '#whois <id_utente>|<username>: mostra lo username.')
-        -- set_text('id:7', '#whois (risposta): mostra l\'ID.')
-        --
-        ---- moderation.lua --
-        -- set_text('moderation:0', 14)
-        -- set_text('moderation:1', 'MODERATION')
-        -- set_text('moderation:2', '(#kickme|[sasha] uccidimi): fatti rimuovere.')
-        -- set_text('moderation:3', '(#mute|[sasha] togli voce) <id>|<username>|<reply>: silenzia un utente nel supergruppo, ogni suo messaggio verrà cancellato.')
-        -- set_text('moderation:4', '(#unmute|[sasha] dai voce) <id>|<username>|<reply>: desilenzia un utente nel supergruppo.')
-        -- set_text('moderation:5', '(#mutelist|[sasha] lista muti): manda la lista degli utenti muti.')
-        -- set_text('moderation:6', '#kick|[sasha] uccidi|spara <id>|<username>|<reply>: rimuovi un utente dal gruppo/supergruppo.')
-        -- set_text('moderation:7', '(#kicknouser|[sasha] uccidi nouser|spara nouser): rimuovi tutti gli utenti senza username dal gruppo/supergruppo.')
-        -- set_text('moderation:8', '#ban|[sasha] banna|[sasha] decompila|esplodi|kaboom <id>|<username>|<reply>: banna un utente dal gruppo/supergruppo.')
-        -- set_text('moderation:9', '(#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>: unbanna un utente dal gruppo/supergruppo.')
-        -- set_text('moderation:10', '(#banlist|[sasha] lista ban): manda la lista degli utenti bannati.')
-        -- set_text('moderation:11', '(#gban|[sasha] superbanna) <id>|<username>|<reply>: banna globalmente un utente da ogni gruppo/supergruppo.')
-        -- set_text('moderation:12', '(#ungban|[sasha] supersbanna) <id>|<username>|<reply>: unbanna globalmente un utente da ogni gruppo/supergruppo.')
-        -- set_text('moderation:13', '(#gbanlist|[sasha] lista superban): manda la lista degli utenti bannati globalmente.')
-        -- set_text('moderation:14', '(#add|#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: aggiungi un utente al gruppo/supergruppo.')
-        --
-        ---- settings.lua --
-        -- set_text('settings:0', 23)
-        -- set_text('settings:1', 'SETTINGS')
-        -- set_text('settings:2', '#settings stickers enable|disable: quando abilitato, ogni sticker verrà rimosso.')
-        -- set_text('settings:3', '#settings links enable|disable: quando abilitato, ogni link verrà rimosso.')
-        -- set_text('settings:4', '#settings arabic enable|disable: quando abilitato, ogni messaggio contenente caratteri arabi e persiani verrà rimosso.')
-        -- set_text('settings:5', '#settings bots enable|disable: quando abilitato, ogni ogni bot aggiunto verrà rimosso.')
-        -- set_text('settings:6', '#settings gifs enable|disable: quando abilitato, ogni gif verrà rimossa.')
-        -- set_text('settings:7', '#settings photos enable|disable: quando abilitato, ogni immagine verrà rimossa.')
-        -- set_text('settings:8', '#settings audios enable|disable: quando abilitato, ogni vocale verrà rimosso.')
-        -- set_text('settings:9', '#settings kickme enable|disable: quando abilitato, gli utenti possono kickarsi autonomamente.')
-        -- set_text('settings:10', '#settings spam enable|disable: quando abilitato, ogni link spam verrà rimosso.')
-        -- set_text('settings:11', '#settings setphoto enable|disable: quando abilitato, se un utente cambia icona del gruppo, il bot ripristinerà quella salvata.')
-        -- set_text('settings:12', '#settings setname enable|disable: quando abilitato, se un utente cambia il nome del gruppo, il bot ripristinerà il nome salvato.')
-        -- set_text('settings:13', '#settings lockmembers enable|disable: quando abilitato, il bot rimuoverà ogni utente che etrerà nel gruppo.')
-        -- set_text('settings:14', '#settings floodtime <secondi>: imposta l\'intervallo di monitoraggio del flood.')
-        -- set_text('settings:15', '#settings maxflood <messaggi>: imposta il numero di messaggi inviati nel floodtime affinchè vengano considerati flood.')
-        -- set_text('settings:16', '#setname <name>: cambia il nome della chat.')
-        -- set_text('settings:17', '(#setdescription|sasha imposta descrizione) <text>: cambia la descrizione del supergruppo.')
-        -- set_text('settings:18', '#setphoto <poi invia la foto>: cambia la foto della chat.')
-        -- set_text('settings:19', '#lang <language (en, es...)>: cambia l\'idioma del bot.')
-        -- set_text('settings:20', '(#newlink|sasha crea link) <link>: crea il link del gruppo.')
-        -- set_text('settings:21', '(#setlink|sasha imposta link) <link>: salva il link del gruppo.')
-        -- set_text('settings:22', '[#]link: mostra il link del gruppo.')
-        -- set_text('settings:23', '#rem <reply>: rimuove un messaggio.')
-        --
-        ---- plugins.lua --
-        -- set_text('plugins:0', 5)
-        -- set_text('plugins:1', 'PLUGINS')
-        -- set_text('plugins:2', '(#plugins|[sasha] lista plugins): mostra una lista di tutti i plugin.')
-        -- set_text('plugins:3', '(#[plugin[s]] enable|disable)|([sasha] abilita|attiva|disabilita|disattiva) <plugin>: abilita|disabilita il plugin specificato.')
-        -- set_text('plugins:4', '(#[plugin[s]] enable|disable)|([sasha] abilita|attiva|disabilita|disattiva) <plugin> chat: abilita|disabilita il plugin specificato solo sulla chat corrente.')
-        -- set_text('plugins:5', '(#[plugin[s]] reload)|([sasha] ricarica): ricarica tutti i plugin.')
-        --
-        ---- version.lua --
-        -- set_text('version:0', 2)
-        -- set_text('version:1', 'VERSION')
-        -- set_text('version:2', '#version: mostra la versione del bot.')
-        --
-        ---- rules.lua --
-        -- set_text('rules:0', 4)
-        -- set_text('rules:1', 'RULES')
-        -- set_text('rules:2', '#rules|sasha regole: mostra le regole della chat.')
-        -- set_text('rules:3', '(#setrules|sasha imposta regole) <text>: imposta le regole della chat.')
-        -- set_text('rules:4', '#remrules|sasha rimuovi regole: rimuove le regole della chat.')
-        --
-        ---- get.lua --
-        -- set_text('get:0', 3)
-        -- set_text('get:1', 'GET')
-        -- set_text('get:2', '(#get|#getlist|sasha lista): mostra la lista delle variabili settate.')
-        -- set_text('get:3', '[#get] <var_name>: manda il testo associato a <var_name>.')
-        --
-        ---- set.lua --
-        -- set_text('set:0', 2)
-        -- set_text('set:1', 'SET')
-        -- set_text('set:2', '(#set|[sasha] setta) <var_name> <text>: setta <text> in risposta a <var_name>.')
-        --
-        ---- unset.lua --
-        -- set_text('unset:0', 2)
-        -- set_text('unset:1', 'UNSET')
-        -- set_text('unset:2', '(#unset|[sasha] unsetta) <var_name>: elimina <var_name>.')
-        --
-        ---- tagall.lua --
-        -- set_text('tagall:0', 2)
-        -- set_text('tagall:1', 'TAGALL')
-        -- set_text('tagall:2', '(#tagall|sasha tagga tutti) <text>: tagga tutti gli utenti con username del gruppo/supergruppo.')
-        --
-        ---- shout.lua --
-        -- set_text('shout:0', 2)
-        -- set_text('shout:1', 'SHOUT')
-        -- set_text('shout:2', '([#]shout|[sasha] grida|[sasha] urla) <text>: "urla" <text>.')
-        --
-        ---- ruleta.lua --
-        -- set_text('ruleta:0', 3)
-        -- set_text('ruleta:1', 'RULETA')
-        -- set_text('ruleta:2', '[#]ruleta: estrae un numero casuale tra 0 e 10, se è uguale rimuove l\'utente dal gruppo/supergruppo.')
-        -- set_text('ruleta:3', '#kick|[sasha] uccidi|spara random: sceglie un utente a caso e lo rimuove dal gruppo supergruppo.')
-        --
-        ---- feedback.lua --
-        -- set_text('feedback:0', 2)
-        -- set_text('feedback:1', 'FEEDBACK')
-        -- set_text('feedback:2', '[#]feedback: invia un feedback al creatore del bot.')
-        --
-        ---- echo.lua --
-        -- set_text('echo:0', 2)
-        -- set_text('echo:1', 'ECHO')
-        -- set_text('echo:2', '(#echo|sasha ripeti) <text>: ripete <text>.')
-        --
-        ---- dogify.lua --
-        -- set_text('dogify:0', 2)
-        -- set_text('dogify:1', 'DOGIFY')
-        -- set_text('dogify:2', '(#dogify|[sasha] doge) <your/words/with/slashes>: crea un\'immagine col doge e le parole specificate.')
-        --
-        ---- words.lua --
-        -- set_text('words:0', 2)
-        -- set_text('words:1', 'WORDS')
-        -- set_text('words:2', 'gangbang|maometto|maometo|cancaroman|mohammed|nazi|hitler')
-        --
-        ---- tex.lua --
-        -- set_text('tex:0', 2)
-        -- set_text('tex:1', 'TEX')
-        -- set_text('tex:2', '(#tex|[sasha] equazione) <equation>: converte <equation> in immagine.')
-        --
-        ---- qr.lua --
-        -- set_text('qr:0', 2)
-        -- set_text('qr:1', 'QR')
-        -- set_text('qr:2', '[#]|[sasha] qr ["<background_color>" "<data_color>"] <text>: crea il QR Code di <text> e se specificato lo colora, i colori possono essere specificati come segue:\nTesto => red|green|blue|purple|black|white|gray.\nNotazione Esadecimale => (\"a56729\" è marrone).\nNotazione Decimale => (\"255-192-203\" è rosa).')
-        --
-        ---- apod.lua --
-        -- set_text('apod:0', 4)
-        -- set_text('apod:1', 'APOD')
-        -- set_text('apod:2', '#(apod|astro) [<date>]: manda l\'APOD.')
-        -- set_text('apod:3', '#(apod|astro)hd [<date>]: manda l\'APOD in HD.')
-        -- set_text('apod:4', '#(apod|astro)text [<date>]: manda la spiegazione dell\'APOD.')
-        --
-        ---- google.lua --
-        -- set_text('google:0', 2)
-        -- set_text('google:1', 'GOOGLE')
-        -- set_text('google:2', '(#google|[sasha] googla) <terms>: manda i primi risultati di google.')
-        --
-        ---- pokedex.lua --
-        -- set_text('pokedex:0', 2)
-        -- set_text('pokedex:1', 'POKÉDEX')
-        -- set_text('pokedex:2', '#(pokémon|pokédex) <name>|<id>: manda le informazioni del pokémon.')
-        --
-        ---- urbandictionary.lua --
-        -- set_text('urbandictionary:0', 2)
-        -- set_text('urbandictionary:1', 'URBAN DICTIONARY')
-        -- set_text('urbandictionary:2', '(#urbandictionary|([#]|[sasha] urban)|([#]|[sasha] ud)) <text>: mostra la definizione dell\'urban dictionary di <text>.')
-        --
-        ---- webshot.lua --
-        -- set_text('webshot:0', 2)
-        -- set_text('webshot:1', 'WEBSHOT')
-        -- set_text('webshot:2', '[#]|[sasha] webshot <link>: manda lo screenshot di un sito.')
-        --
-        ---- wiki.lua --
-        -- set_text('wiki:0', 3)
-        -- set_text('wiki:1', 'WIKI')
-        -- set_text('wiki:2', '[#]|[sasha] wiki[lang] <text>: manda un estratto da [lang] Wikipedia.')
-        -- set_text('wiki:3', '[#]|[sasha] wiki[lang] search <text>: manda gli articoli di [lang] Wikipedia.')
+        ------------
+        -- Usages --
+        ------------
+        -- administrator.lua --
+        set_text('administrator:0', 20)
+        set_text('administrator:1', 'ADMIN')
+        set_text('administrator:2', '(#pm|sasha messaggia) <user_id> <msg>: Sasha invia <msg> a <user_id>.')
+        set_text('administrator:3', '#import <group_link>: Sasha entra nel gruppo tramite <group_link>.')
+        set_text('administrator:4', '(#block|sasha blocca) <user_id>: Sasha blocca <user_id>.')
+        set_text('administrator:5', '(#unblock|sasha sblocca) <user_id>: Sasha sblocca <user_id>.')
+        set_text('administrator:6', '(#markread|sasha segna letto) (on|off): Sasha segna come [non] letti i messaggi ricevuti.')
+        set_text('administrator:7', '(#setbotphoto|sasha cambia foto): Sasha chiede la foto da settare come profilo.')
+        set_text('administrator:8', '(#updateid|sasha aggiorna longid): Sasha salva il long_id.')
+        set_text('administrator:9', '(#addlog|sasha aggiungi log): Sasha aggiunge il log.')
+        set_text('administrator:10', '(#remlog|sasha rimuovi log): Sasha rimuove il log.')
+        set_text('administrator:11', 'SUDO')
+        set_text('administrator:12', '(#contactlist|sasha lista contatti) (txt|json): Sasha manda la lista dei contatti.')
+        set_text('administrator:13', '(#dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.')
+        set_text('administrator:14', '(#addcontact|sasha aggiungi contatto) <phone> <name> <surname>: Sasha aggiunge il contatto specificato.')
+        set_text('administrator:15', '(#delcontact|sasha elimina contatto) <user_id>: Sasha elimina il contatto <user_id>.')
+        set_text('administrator:16', '(#sendcontact|sasha invia contatto) <phone> <name> <surname>: Sasha invia il contatto specificato.')
+        set_text('administrator:17', '(#mycontact|sasha mio contatto): Sasha invia il contatto del richiedente.')
+        set_text('administrator:18', '(#sync_gbans|sasha sincronizza superban): Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.')
+        set_text('administrator:19', '(#backup|sasha esegui backup): Sasha esegue un backup di se stessa e invia il log al richiedente.')
+        set_text('administrator:20', '#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.')
+
+        -- anti_spam.lua --
+        set_text('anti_spam:0', 1)
+        set_text('anti_spam:1', 'Sasha rimuove l\'utente che spamma oltre al massimo consentito.')
+
+        -- apod.lua --
+        set_text('apod:0', 4)
+        set_text('apod:1', '#(apod|astro) [<date>]: Sasha manda l\'APOD.')
+        set_text('apod:2', '#(apod|astro)hd [<date>]: Sasha manda l\'APOD in HD.')
+        set_text('apod:3', '#(apod|astro)text [<date>]: Sasha manda la spiegazione dell\'APOD.')
+        set_text('apod:4', 'Se c\'è <date> ed è nel formato AAAA-MM-GG l\'APOD è di <date>.')
+
+        -- arabic_lock.lua --
+        set_text('arabic_lock:0', 1)
+        set_text('arabic_lock:1', 'Sasha blocca l\'arabo nei gruppi.')
+
+        -- banhammer.lua --
+        set_text('banhammer:0', 12)
+        set_text('banhammer:1', '(#kickme|sasha uccidimi): Sasha rimuove l\'utente.')
+        set_text('banhammer:2', 'MOD')
+        set_text('banhammer:3', '(#kick|spara|[sasha] uccidi) <id>|<username>|<reply>: Sasha rimuove l\'utente specificato.')
+        set_text('banhammer:4', '(#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>: Sasha banna l\'utente specificato e lo rimuove, se tenta di rientrare viene nuovamente rimosso.')
+        set_text('banhammer:5', '(#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>: Sasha sbanna l\'utente specificato.')
+        set_text('banhammer:6', '(#banlist|[sasha] lista ban) [<group_id>]: Sasha mostra la lista di utenti bannati dal gruppo o da <group_id>.')
+        set_text('banhammer:7', 'OWNER')
+        set_text('banhammer:8', '(#kicknouser|[sasha] uccidi nouser|spara nouser): Sasha rimuove gli utenti senza username.')
+        set_text('banhammer:9', 'SUPPORT')
+        set_text('banhammer:10', '(#gban|[sasha] superbanna) <id>|<username>|<reply>: Sasha superbanna l\'utente specificato e lo rimuove, se tenta di rientrare viene nuovamente rimosso.')
+        set_text('banhammer:11', '(#ungban|[sasha] supersbanna) <id>|<username>|<reply>: Sasha supersbanna l\'utente specificato.')
+        set_text('banhammer:12', '(#gbanlist|[sasha] lista superban): Sasha mostra la lista di utenti super bannati.')
+
+        -- bot.lua --
+        set_text('bot:0', 2)
+        set_text('bot:1', 'OWNER')
+        set_text('bot:2', '#bot|sasha on|off: Sasha si attiva|disattiva.')
+
+        -- broadcast.lua --
+        set_text('broadcast:0', 4)
+        set_text('broadcast:1', 'ADMIN')
+        set_text('broadcast:2', '#br <group_id> <text>: Sasha invia <text> a <group_id>.')
+        set_text('broadcast:3', 'SUDO')
+        set_text('broadcast:4', '#broadcast <text>: Sasha invia <text> a tutti i gruppi. Solo SU.')
+
+        -- dogify.lua --
+        set_text('dogify:0', 1)
+        set_text('dogify:1', '(#dogify|[sasha] doge) <your/words/with/slashes>: Sasha crea un\'immagine col doge e le parole specificate.')
+
+        -- echo.lua --
+        set_text('echo:0', 2)
+        set_text('echo:1', 'MOD')
+        set_text('echo:2', '(#echo|sasha ripeti) <text>: Sasha ripete <text>.')
+
+        -- feedback.lua --
+        set_text('feedback:0', 1)
+        set_text('feedback:1', '#feedback <text>: Sasha invia <text> al suo creatore.')
+
+        -- filemanager.lua --
+        set_text('filemanager:0', 15)
+        set_text('filemanager:1', 'SUDO')
+        set_text('filemanager:2', '#folder: Sasha manda la directory attuale.')
+        set_text('filemanager:3', '#cd [<directory>]: Sasha entra in <directory>, se non è specificata torna alla cartella base.')
+        set_text('filemanager:4', '#ls: Sasha manda la lista di file e cartelle della directory corrente.')
+        set_text('filemanager:5', '#mkdir <directory>: Sasha crea <directory>.')
+        set_text('filemanager:6', '#rmdir <directory>: Sasha elimina <directory>.')
+        set_text('filemanager:7', '#rm <file>: Sasha elimina <file>.')
+        set_text('filemanager:8', '#touch <file>: Sasha crea <file>.')
+        set_text('filemanager:9', '#cat <file>: Sasha manda il contenuto di <file>.')
+        set_text('filemanager:10', '#tofile <file> <text>: Sasha crea <file> con <text> come contenuto.')
+        set_text('filemanager:11', '#shell <command>: Sasha esegue <command>.')
+        set_text('filemanager:12', '#cp <file> <directory>: Sasha copia <file> in <directory>.')
+        set_text('filemanager:13', '#mv <file> <directory>: Sasha sposta <file> in <directory>.')
+        set_text('filemanager:14', '#upload <file>: Sasha manda <file> nella chat.')
+        set_text('filemanager:15', '#download <reply> [<file>]: Sasha scarica il file contenuto in <reply>, se specificato viene rinominato in <file>.')
+
+        -- flame.lua --
+        set_text('flame:0', 4)
+        set_text('flame:1', 'MOD')
+        set_text('flame:2', '(#startflame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l\'utente specificato.')
+        set_text('flame:3', '(#stopflame|[sasha] stop flame): Sasha smette di flammare.')
+        set_text('flame:4', '(#flameinfo|[sasha] info flame): Sasha manda le info su chi sta flammando.')
+
+        -- get.lua --
+        set_text('get:0', 1)
+        set_text('get:1', '(#getlist|#get|sasha lista): Sasha mostra una lista delle variabili settate.')
+        set_text('get:2', '[#get] <var_name>: Sasha manda il valore di <var_name>.')
+
+        -- google.lua --
+        set_text('google:0', 2)
+        set_text('google:1', '(#google|[sasha] googla) <terms>: Sasha cerca <terms> su Google e manda i risultati.')
+
+        -- help.lua --
+        set_text('help:0', 6)
+        set_text('help:1', '(#sudolist|sasha lista sudo): Sasha manda la lista dei sudo.')
+        set_text('help:2', '#getrank|rango [<id>|<username>|<reply>]: Sasha manda il rank dell\'utente.')
+        set_text('help:3', '(#help|sasha aiuto): Sasha mostra una lista dei plugin disponibili.')
+        set_text('help:4', '(#help|commands|sasha aiuto) <plugin_name>|<plugin_number> [<fake_rank>]: Sasha mostra l\'aiuto per il plugin specificato.')
+        set_text('help:5', '(#helpall|allcommands|sasha aiuto tutto) [<fake_rank>]: Sasha mostra tutti i comandi di tutti i plugin.')
+        set_text('help:6', 'Il parametro <fake_rank> serve per mandare l\'help di un rango più basso, i ranghi sono: USER, MOD, OWNER, SUPPORT, ADMIN, SUDO.')
+
+        -- info.lua --
+        set_text('info:0', 9)
+        set_text('info:1', '(#info|[sasha] info): Sasha manda le info dell\'utente e della chat o di se stessa')
+        set_text('info:2', 'MOD')
+        set_text('info:3', '(#info|[sasha] info) <id>|<username>|<reply>|from: Sasha manda le info dell\'utente specificato.')
+        set_text('info:4', '(#who|#members|[sasha] lista membri): Sasha manda la lista degli utenti.')
+        set_text('info:5', '(#kicked|[sasha] lista rimossi): Sasha manda la lista degli utenti rimossi.')
+        set_text('info:6', 'OWNER')
+        set_text('info:7', '(#groupinfo|[sasha] info gruppo) [<group_id>]: Sasha manda le info del gruppo specificato.')
+        set_text('info:8', 'SUDO')
+        set_text('info:9', '(#database|[sasha] database): Sasha salva i dati di tutti gli utenti.')
+
+        -- ingroup.lua --
+        set_text('ingroup:0', 33)
+        set_text('ingroup:1', '(#rules|sasha regole): Sasha mostra le regole del gruppo.')
+        set_text('ingroup:2', '(#about|sasha descrizione): Sasha mostra la descrizione del gruppo.')
+        set_text('ingroup:3', '(#modlist|[sasha] lista mod): Sasha mostra la lista dei moderatori.')
+        set_text('ingroup:4', '#owner: Sasha mostra l\'id del proprietario del gruppo.')
+        set_text('ingroup:5', 'MOD')
+        set_text('ingroup:6', '#setname|#setgpname <group_name>: Sasha imposta il nome del gruppo con <group_name>.')
+        set_text('ingroup:7', '#setphoto|#setgpphoto: Sasha imposta e blocca la foto del gruppo.')
+        set_text('ingroup:8', '(#setrules|sasha imposta regole) <text>: Sasha imposta <text> come regole.')
+        set_text('ingroup:9', '(#setabout|sasha imposta descrizione) <text>: Sasha imposta <text> come descrizione.')
+        set_text('ingroup:10', '(#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha blocca l\'opzione specificata.')
+        set_text('ingroup:11', '(#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha sblocca l\'opzione specificata.')
+        set_text('ingroup:12', '#muteuser|voce <id>|<username>|<reply>: Sasha imposta|toglie il muto sull\'utente.')
+        set_text('ingroup:13', '(#muteslist|lista muti): Sasha manda la lista delle variabili mute della chat.')
+        set_text('ingroup:14', '(#mutelist|lista utenti muti): Sasha manda la lista degli utenti muti della chat.')
+        set_text('ingroup:15', '#settings: Sasha mostra le impostazioni del gruppo.')
+        set_text('ingroup:16', '#public yes|no: Sasha imposta il gruppo come pubblico|privato.')
+        set_text('ingroup:17', '(#newlink|sasha crea link): Sasha crea il link del gruppo.')
+        set_text('ingroup:18', '(#link|sasha link): Sasha mostra il link del gruppo.')
+        set_text('ingroup:19', '#setflood <value>: Sasha imposta il flood massimo del gruppo a <value>.')
+        set_text('ingroup:20', '(#kickinactive [<msgs>]|sasha uccidi sotto <msgs> messaggi): Sasha rimuove tutti gli utenti inattivi.')
+        set_text('ingroup:21', 'OWNER')
+        set_text('ingroup:22', '(#setlink|[sasha] imposta link): Sasha imposta il link d\'invito con quello che le verrà inviato.')
+        set_text('ingroup:23', '(#promote|[sasha] promuovi) <username>|<reply>: Sasha promuove a moderatore l\'utente specificato.')
+        set_text('ingroup:24', '(#demote|[sasha] degrada) <username>|<reply>: Sasha degrada l\'utente specificato.')
+        set_text('ingroup:25', '#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.')
+        set_text('ingroup:26', '#unmute|ripristina all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.')
+        set_text('ingroup:27', '#setowner <id>: Sasha imposta <id> come proprietario.')
+        set_text('ingroup:28', '#clean modlist|rules|about: Sasha pulisce il parametro specificato.')
+        set_text('ingroup:29', 'ADMIN')
+        set_text('ingroup:30', '#add [realm]: Sasha aggiunge il gruppo|reame.')
+        set_text('ingroup:31', '#rem [realm]: Sasha rimuove il gruppo|reame.')
+        set_text('ingroup:32', '#kill chat|realm: Sasha elimina ogni utente nel gruppo|reame e poi lo chiude.')
+        set_text('ingroup:33', '#setgpowner <group_id> <user_id>: Sasha imposta <user_id> come proprietario.')
+
+        -- inpm.lua --
+        set_text('inpm:0', 10)
+        set_text('inpm:1', '#chats: Sasha mostra un elenco di chat "pubbliche".')
+        set_text('inpm:2', '#chatlist: Sasha manda un file con un elenco di chat "pubbliche".')
+        set_text('inpm:3', 'ADMIN')
+        set_text('inpm:4', '#join <chat_id>|<alias> [support]: Sasha tenta di aggiungere l\'utente a <chat_id>|<alias>.')
+        set_text('inpm:5', '#getaliaslist: Sasha manda la lista degli alias.')
+        set_text('inpm:6', 'SUDO')
+        set_text('inpm:7', '#allchats: Sasha mostra l\'elenco delle chat.')
+        set_text('inpm:8', '#allchatlist: Sasha manda un file con l\'elenco delle chat.')
+        set_text('inpm:9', '#setalias <alias> <group_id>: Sasha imposta <alias> come alias di <group_id>.')
+        set_text('inpm:10', '#unsetalias <alias>: Sasha elimina <alias>.')
+
+        -- inrealm.lua --
+        set_text('inrealm:0', 26)
+        set_text('inrealm:1', 'MOD')
+        set_text('inrealm:2', '#who: Sasha mostra una lista di membri del gruppo/regno.')
+        set_text('inrealm:3', '#wholist: Sasha invia un file con una lista di membri del gruppo/regno.')
+        set_text('inrealm:4', 'OWNER')
+        set_text('inrealm:5', '#log: Sasha manda un file contenente il log del gruppo/regno.')
+        set_text('inrealm:6', 'ADMIN')
+        set_text('inrealm:7', '(#creategroup|sasha crea gruppo) <group_name>: Sasha crea un gruppo col nome specificato.')
+        set_text('inrealm:8', '(#createsuper|sasha crea supergruppo) <group_name>: Sasha crea un supergruppo col nome specificato.')
+        set_text('inrealm:9', '(#createrealm|sasha crea regno) <realm_name>: Sasha crea un regno col nome specificato.')
+        set_text('inrealm:10', '(#setabout|sasha imposta descrizione) <group_id> <text>: Sasha cambia la descrizione di <group_id> in <text>.')
+        set_text('inrealm:11', '(#setrules|sasha imposta regole) <group_id> <text>: Sasha cambia le regole di <group_id> in <text>.')
+        set_text('inrealm:12', '#setname <realm_name>: Sasha cambia il nome del regno in <realm_name>.')
+        set_text('inrealm:13', '#setname|#setgpname <group_id> <group_name>: Sasha cambia il nome di <group_id> in <group_name>.')
+        set_text('inrealm:14', '(#lock|[sasha] blocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker: Sasha blocca l\'impostazione specificata di <group_id>.')
+        set_text('inrealm:15', '(#unlock|[sasha] sblocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker: Sasha sblocca l\'impostazione specificata di <group_id>.')
+        set_text('inrealm:16', '#settings <group_id>: Sasha manda le impostazioni di <group_id>.')
+        set_text('inrealm:17', '#type: Sasha mostra il tipo del gruppo.')
+        set_text('inrealm:18', '#kill chat <group_id>: Sasha rimuove tutti i membri di <group_id> e <group_id>.')
+        set_text('inrealm:19', '#kill realm <realm_id>: Sasha rimuove tutti i membri di <realm_id> e <realm_id>.')
+        set_text('inrealm:20', '#rem <group_id>: Sasha rimuove il gruppo.')
+        set_text('inrealm:21', '#support <user_id>|<username>: Sasha promuove l\'utente specificato a supporto.')
+        set_text('inrealm:22', '#-support <user_id>|<username>: Sasha degrada l\'utente specificato.')
+        set_text('inrealm:23', '#list admins|groups|realms: Sasha mostra una lista della variabile specificata.')
+        set_text('inrealm:24', 'SUDO')
+        set_text('inrealm:25', '#addadmin <user_id>|<username>: Sasha promuove l\'utente specificato ad amminstratore.')
+        set_text('inrealm:26', '#removeadmin <user_id>|<username>: Sasha degrada l\'utente specificato.')
+
+        -- interact.lua --
+        set_text('interact:0', 1)
+        set_text('interact:1', 'Sasha interagisce con gli utenti.')
+
+        -- invite.lua --
+        set_text('invite:0', 2)
+        -- set_text('invite:1','OWNER')
+        set_text('invite:1', 'ADMIN')
+        set_text('invite:2', '(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invita l\'utente specificato.')
+
+        -- leave_ban.lua --
+        set_text('leave_ban:0', 1)
+        set_text('leave_ban:1', 'Sasha banna l\'utente che esce dal gruppo.')
+
+        -- msg_checks.lua --
+        set_text('msg_checks:0', 1)
+        set_text('msg_checks:1', 'Sasha controlla i messaggi che riceve.')
+
+        -- onservice.lua --
+        set_text('onservice:0', 2)
+        set_text('onservice:1', 'ADMIN')
+        set_text('onservice:2', '(#leave|sasha abbandona): Sasha lascia il gruppo.')
+
+        -- owners.lua --
+        set_text('owners:0', 5)
+        -- set_text('owners:1','#owners <group_id>: Sasha invia il log di <group_id>.')
+        set_text('owners:1', '#changeabout <group_id> <text>: Sasha cambia la descrizione di <group_id> con <text>.')
+        set_text('owners:2', '#changerules <group_id> <text>: Sasha cambia le regole di <group_id> con <text>.')
+        set_text('owners:3', '#changename <group_id> <text>: Sasha cambia il nome di <group_id> con <text>.')
+        set_text('owners:4', '#viewsettings <group_id>: Sasha manda le impostazioni di <group_id>.')
+        set_text('owners:5', '#loggroup <group_id>: Sasha invia il log di <group_id>.')
+
+        -- plugins.lua --
+        set_text('plugins:0', 9)
+        set_text('plugins:1', 'OWNER')
+        set_text('plugins:2', '(#disabledlist|([sasha] lista disabilitati|disattivati)): Sasha mostra una lista dei plugins disabilitati su questa chat.')
+        set_text('plugins:3', '(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> chat: Sasha riabilita <plugin> su questa chat.')
+        set_text('plugins:4', '(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat: Sasha disabilita <plugin> su questa chat.')
+        set_text('plugins:5', 'SUDO')
+        set_text('plugins:6', '(#plugins|[sasha] lista plugins): Sasha mostra una lista di tutti i plugins.')
+        set_text('plugins:7', '(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]: Sasha abilita <plugin>, se specificato solo su questa chat.')
+        set_text('plugins:8', '(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]: Sasha disabilita <plugin>, se specificato solo su questa chat.')
+        set_text('plugins:9', '(#[plugin[s]] reload|[sasha] ricarica): Sasha ricarica tutti i plugins.')
+
+        -- pokedex.lua --
+        set_text('pokedex:0', 1)
+        set_text('pokedex:1', '#pokedex|#pokemon <name>|<id>: Sasha cerca il pokémon specificato e ne invia le informazioni.')
+
+        -- qr.lua --
+        set_text('qr:0', 5)
+        set_text('qr:1', '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha crea il QR Code di <text>, se specificato colora il QR Code.')
+        set_text('qr:2', 'I colori possono essere specificati come segue:')
+        set_text('qr:3', 'Testo => red|green|blue|purple|black|white|gray.')
+        set_text('qr:4', 'Notazione Esadecimale => ("a56729" è marrone).')
+        set_text('qr:5', 'Notazione Decimale => ("255-192-203" è rosa).')
+
+        -- ruleta.lua --
+        set_text('ruleta:0', 24)
+        set_text('ruleta:1', 'Ruleta by AISasha, inspired from Leia (#RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c\'è il proiettile sei fuori altrimenti rimani.')
+        set_text('ruleta:2', '#registerme|#registrami: Sasha registra l\'utente alla roulette.')
+        set_text('ruleta:3', '#deleteme|#eliminami: Sasha elimina i dati dell\'utente.')
+        set_text('ruleta:4', '#ruletainfo: Sasha manda le informazioni della roulette.')
+        set_text('ruleta:5', '#mystats|#punti: Sasha manda le statistiche dell\'utente.')
+        set_text('ruleta:6', '#ruleta: Sasha cerca di ucciderti.')
+        set_text('ruleta:7', '#godruleta: Sasha ti dà il 50% di probabilità di guadagnare 70 punti, con l\'altro 50% li perdi tutti (richiede almeno 11 punti).')
+        set_text('ruleta:8', '#challenge|#sfida <username>|<reply>: Sasha avvia una sfida tra il mittente e l\'utente specificato.')
+        set_text('ruleta:9', '#accept|#accetta: Sasha conferma la sfida.')
+        set_text('ruleta:10', '#reject|#rifiuta: Sasha cancella la sfida.')
+        set_text('ruleta:11', '#challengeinfo: Sasha manda le informazioni della sfida in corso.')
+        set_text('ruleta:12', 'MOD')
+        set_text('ruleta:13', '#setcaps <value>: Sasha mette <value> proiettili nel tamburo.')
+        set_text('ruleta:14', '#setchallengecaps <value>: Sasha mette <value> proiettili nel tamburo delle sfide.')
+        set_text('ruleta:15', '(#kick|spara|[sasha] uccidi) random: Sasha sceglie un utente a caso e lo rimuove.')
+        set_text('ruleta:16', 'OWNER')
+        set_text('ruleta:17', '#setcylinder <value>: Sasha imposta un tamburo da <value> colpi nel range [5-10].')
+        set_text('ruleta:18', '#setchallengecylinder <value>: Sasha imposta un tamburo da <value> colpi per le sfide nel range [5-10].')
+        set_text('ruleta:19', 'ADMIN')
+        set_text('ruleta:20', '#registergroup|#registragruppo: Sasha abilita il gruppo a giocare a ruleta.')
+        set_text('ruleta:21', '#deletegroup|#eliminagruppo: Sasha disabilita il gruppo per ruleta.')
+        set_text('ruleta:22', 'SUDO')
+        set_text('ruleta:23', '#createdb: Sasha crea il database di ruleta.')
+        set_text('ruleta:24', '#addpoints <id> <value>: Sasha aggiunge <value> punti all\'utente specificato.')
+
+        -- set.lua --
+        set_text('set:0', 2)
+        set_text('set:1', 'MOD')
+        set_text('set:2', '(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.')
+
+        -- shout.lua --
+        set_text('shout:0', 2)
+        set_text('shout:1', '(#shout|[sasha] grida|[sasha] urla) <text>: Sasha "urla" <text>.')
+
+        -- spam.lua --
+        set_text('spam:0', 5)
+        set_text('spam:1', 'OWNER')
+        set_text('spam:2', '#setspam <text>: Sasha imposta <text> come messaggio da spammare.')
+        set_text('spam:3', '#setmsgs <value>: Sasha imposta <value> come numero di messaggi da spammare.')
+        set_text('spam:4', '#setwait <seconds>: Sasha imposta <seconds> come intervallo di tempo tra i messaggi.')
+        set_text('spam:5', '(#spam|[sasha] spamma): Sasha inizia a spammare.')
+
+        -- stats.lua --
+        set_text('stats:0', 6)
+        set_text('stats:1', '[#]aisasha: Sasha invia la propria descrizione.')
+        set_text('stats:2', 'MOD')
+        set_text('stats:3', '(#stats|#statslist|#messages|sasha statistiche|sasha lista statistiche|sasha messaggi): Sasha invia le statistiche della chat.')
+        set_text('stats:4', 'ADMIN')
+        set_text('stats:5', '(#stats|#statslist|#messages|sasha statistiche|sasha lista statistiche|sasha messaggi) group|gruppo <group_id>: Sasha invia le statistiche relative al gruppo specificato.')
+        set_text('stats:6', '(#stats|#statslist|sasha statistiche|sasha lista statistiche) aisasha: Sasha invia le proprie statistiche.')
+
+        -- strings.lua --
+        set_text('strings:0', 6)
+        set_text('strings:1', 'SUDO')
+        set_text('strings:2', '(#updatestrings|#installstrings|[sasha] installa|[sasha] aggiorna) stringhe: Sasha aggiorna le stringhe di testo.')
+
+        -- supergroup.lua --
+        set_text('supergroup:0', 45)
+        set_text('supergroup:1', '#owner: Sasha manda il proprietario.')
+        set_text('supergroup:2', '(#modlist|[sasha] lista mod): Sasha manda la lista dei moderatori.')
+        set_text('supergroup:3', '(#rules|sasha regole): Sasha manda le regole del gruppo.')
+        set_text('supergroup:4', 'MOD')
+        set_text('supergroup:5', '(#bots|[sasha] lista bot): Sasha manda la lista dei bot.')
+        set_text('supergroup:6', '#wholist|#memberslist: Sasha manda un file contenente la lista degli utenti.')
+        set_text('supergroup:7', '#kickedlist: Sasha manda la lista degli utenti rimossi.')
+        set_text('supergroup:8', '#del <reply>: Sasha elimina il messaggio specificato.')
+        set_text('supergroup:9', '(#newlink|[sasha] crea link): Sasha crea un nuovo link d\'invito.')
+        set_text('supergroup:10', '(#link|sasha link): Sasha manda il link d\'invito.')
+        set_text('supergroup:11', '#setname|setgpname <text>: Sasha cambia il nome del gruppo con <text>.')
+        set_text('supergroup:12', '#setphoto|setgpphoto: Sasha cambia la foto del gruppo.')
+        set_text('supergroup:13', '(#setrules|sasha imposta regole) <text>: Sasha cambia le regole del gruppo con <text>.')
+        set_text('supergroup:14', '(#setabout|sasha imposta descrizione) <text>: Sasha cambia la descrizione del gruppo con <text>.')
+        set_text('supergroup:15', '(#lock|[sasha] blocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha blocca l\'opzione specificata.')
+        set_text('supergroup:16', '(#unlock|[sasha] sblocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha sblocca l\'opzione specificata.')
+        set_text('supergroup:17', '#setflood <value>: Sasha imposta il flood massimo a <value> che deve essere compreso tra 5 e 20.')
+        set_text('supergroup:18', '#public yes|no: Sasha imposta il gruppo come pubblico|privato.')
+        set_text('supergroup:19', '#muteuser|voce <id>|<username>|<reply>: Sasha imposta|toglie il muto sull\'utente.')
+        set_text('supergroup:20', '(#muteslist|lista muti): Sasha manda la lista delle variabili mute della chat.')
+        set_text('supergroup:21', '(#mutelist|lista utenti muti): Sasha manda la lista degli utenti muti della chat.')
+        set_text('supergroup:22', '#settings: Sasha manda le impostazioni del gruppo.')
+        set_text('supergroup:23', 'OWNER')
+        set_text('supergroup:24', '(#admins|[sasha] lista admin): Sasha manda la lista degli amministratori.')
+        set_text('supergroup:25', '(#setlink|sasha imposta link): Sasha imposta il link d\'invito con quello che le verrà inviato.')
+        set_text('supergroup:26', '#setadmin <id>|<username>|<reply>: Sasha promuove l\'utente specificato ad amministratore (telegram).')
+        set_text('supergroup:27', '#demoteadmin <id>|<username>|<reply>: Sasha degrada l\'utente specificato (telegram).')
+        set_text('supergroup:28', '#setowner <id>|<username>|<reply>: Sasha imposta l\'utente specificato come proprietario.')
+        set_text('supergroup:29', '(#promote|[sasha] promuovi) <id>|<username>|<reply>: Sasha promuove l\'utente specificato a moderatore.')
+        set_text('supergroup:30', '(#demote|[sasha] degrada) <id>|<username>|<reply>: Sasha degrada l\'utente specificato.')
+        set_text('supergroup:31', '#clean rules|about|modlist|mutelist: Sasha azzera la variabile specificata.')
+        set_text('supergroup:32', '#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.')
+        set_text('supergroup:33', '#unmute|ripristina all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.')
+        set_text('supergroup:34', 'SUPPORT')
+        set_text('supergroup:35', '#add: Sasha aggiunge il supergruppo.')
+        set_text('supergroup:36', '#rem: Sasha rimuove il supergruppo.')
+        set_text('supergroup:37', 'ADMIN')
+        set_text('supergroup:38', '#tosuper: Sasha aggiorna il gruppo a supergruppo.')
+        set_text('supergroup:39', '#setusername <text>: Sasha cambia l\'username del gruppo con <text>.')
+        set_text('supergroup:40', 'peer_id')
+        set_text('supergroup:41', 'msg.to.id')
+        set_text('supergroup:42', 'msg.to.peer_id')
+        set_text('supergroup:43', 'SUDO')
+        set_text('supergroup:44', '#mp <id>: Sasha promuove <id> a moderatore del gruppo (telegram).')
+        set_text('supergroup:45', '#md <id>: Sasha degrada <id> dal ruolo di moderatore del gruppo (telegram).')
+
+        -- tagall.lua --
+        set_text('tagall:0', 2)
+        set_text('tagall:1', 'OWNER')
+        set_text('tagall:2', '(#tagall|sasha tagga tutti) <text>: Sasha tagga tutti i membri del gruppo con username e scrive <text>.')
+
+        -- tex.lua --
+        set_text('tex:0', 1)
+        set_text('tex:1', '(#tex|[sasha] equazione) <equation>: Sasha converte <equation> in immagine.')
+
+        -- unset.lua --
+        set_text('unset:0', 2)
+        set_text('unset:1', 'MOD')
+        set_text('unset:2', '(#unset|[sasha] unsetta) <var_name>: Sasha elimina <var_name>.')
+
+        -- urbandictionary.lua --
+        set_text('urbandictionary:0', 1)
+        set_text('urbandictionary:1', '(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>: Sasha mostra la definizione di <text> dall\'Urban Dictionary.')
+
+        -- warn.lua --
+        set_text('warn:0', 7)
+        set_text('warn:1', 'MOD')
+        set_text('warn:2', '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>.')
+        set_text('warn:3', '#getwarn: Sasha manda il numero di avvertimenti massimi.')
+        set_text('warn:4', '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>: Sasha manda il numero di avvertimenti ricevuti dall\'utente.')
+        set_text('warn:5', '(#warn|[sasha] avverti) <id>|<username>|<reply>: Sasha avverte l\'utente.')
+        set_text('warn:6', '#unwarn <id>|<username>|<reply>: Sasha diminuisce di uno gli avvertimenti dell\'utente.')
+        set_text('warn:7', '(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>: Sasha azzera gli avvertimenti dell\'utente.')
+
+        -- webshot.lua --
+        set_text('webshot:0', 14)
+        set_text('webshot:1', 'MOD')
+        set_text('webshot:2', '(#webshot|[sasha] webshotta) <url> [<size>]: Sasha esegue uno screenshot di <url> e lo invia, se <size> è specificata di quella dimensione.')
+        set_text('webshot:3', 'La dimensione può essere:')
+        set_text('webshot:4', 'T: (120 x 90px)')
+        set_text('webshot:5', 'S: (200 x 150px)')
+        set_text('webshot:6', 'E: (320 x 240px)')
+        set_text('webshot:7', 'N: (400 x 300px)')
+        set_text('webshot:8', 'M: (640 x 480px)')
+        set_text('webshot:9', 'L: (800 x 600px)')
+        set_text('webshot:10', 'X: (1024 x 768px)')
+        set_text('webshot:11', 'Nmob: (480 x 800px)')
+        set_text('webshot:12', 'ADMIN')
+        set_text('webshot:13', 'F: Pagina intera (può essere un processo molto lungo)')
+        set_text('webshot:14', 'Fmob: Pagina intera (può essere un processo lungo)')
+
+        -- welcome.lua --
+        set_text('welcome:0', 5)
+        set_text('welcome:1', '#getwelcome: Sasha manda il benvenuto.')
+        set_text('welcome:2', 'OWNER')
+        set_text('welcome:3', '#setwelcome <text>: Sasha imposta <text> come benvenuto.')
+        set_text('welcome:4', '#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole.')
+        set_text('welcome:5', '#getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.')
+
+        -- whitelist.lua --
+        set_text('whitelist:0', 3)
+        set_text('whitelist:1', 'ADMIN')
+        set_text('whitelist:2', '#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist.')
+        set_text('whitelist:3', '#clean whitelist: Sasha pulisce la whitelist.')
+
         return lang_text('langUpdate')
     else
         return lang_text('require_sudo')

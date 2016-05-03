@@ -1,4 +1,4 @@
-function run(msg, matches)
+﻿function run(msg, matches)
     local text = lang_text(receiver, 'feedStart')
     if msg.from.first_name then
         text = text .. lang_text(receiver, 'feedName') .. msg.from.first_name
@@ -9,7 +9,7 @@ function run(msg, matches)
     if msg.from.username then
         text = text .. lang_text(receiver, 'feedUsername') .. msg.from.username
     end
-    text = text .. '\nId: ' .. msg.from.id ..
+    text = text .. '\n🆔: ' .. msg.from.id ..
     '\n\nFeedback:\n' .. matches[1]
     send_large_msg('chat#id120307338', text)
     return lang_text(receiver, 'feedSent')

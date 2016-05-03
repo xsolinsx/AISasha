@@ -39,7 +39,9 @@ local function plugin_help(var, chat, rank)
             plugin = plugins[var]
         end
     end
-    if not plugin or plugin == "" then return nil end
+    if not plugin or plugin == "" then
+        return nil
+    end
     if plugin.min_rank <= rank then
         local help_permission = true
         -- '=========================\n'
@@ -48,21 +50,19 @@ local function plugin_help(var, chat, rank)
         if (type(plugin.description) == "string") then
             text = text .. '🅿️ ' .. plugin.description .. '\n'
         end
-        if (type(plugin.usage) == "table") then
-            for ku, usage in pairs(plugin.usage) do
-                if not rank_table[usage] then
+        local textHash = plugin .. ':0'
+        if redis:get(textHash) then
+            for i = 1, tonumber(lang_text(plugin .. ':0')), 1 do
+                if not rank_table[lang_text(plugin .. ':' .. i)] then
                     if help_permission then
-                        text = text .. usage .. '\n'
+                        text = text .. lang_text(plugin .. ':' .. i) .. '\n'
                     end
-                elseif rank_table[usage] > rank then
+                elseif rank_table[lang_text(plugin .. ':' .. i)] > rank then
                     help_permission = false
                 end
             end
-        elseif has_usage_data(plugin) then
-            -- Is not empty
-            text = text .. plugin.usage .. '\n'
         end
-        return text .. '\n'
+        return text
     else
         -- return text .. lang_text('require_higher') .. '\n'
         return ''
