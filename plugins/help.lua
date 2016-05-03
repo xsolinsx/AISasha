@@ -62,7 +62,7 @@ local function plugin_help(var, chat, rank)
                 end
             end
         end
-        return text
+        return text .. '\n'
     else
         -- return text .. lang_text('require_higher') .. '\n'
         return ''
