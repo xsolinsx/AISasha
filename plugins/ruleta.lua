@@ -45,7 +45,7 @@ local function bubbleSortScore(users)
         for x = 1, #users - 1, 1 do
             -- If the element we're on is greater than the element after it
             -- The swap index of the two elements
-            if users[t[x]] > users[t[x + 1]] then
+            if tonumber(users[t[x]].score) > tonumber(users[t[x + 1]].score) then
                 movedElements = movedElements + 1
                 testedElement = users[t[x]]
                 users[t[x]] = users[t[x + 1]]
