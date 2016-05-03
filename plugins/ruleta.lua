@@ -34,18 +34,11 @@ local function bubbleSortScore(users)
         i = i + 1
         t[i] = k
     end
-    -- The array that will be returned
-    sortedArray = users
-    -- The variable thatwill tell us if the array is sorted
     isSorted = false
-    -- Loop until the array is sorted
     while isSorted == false do
         movedElements = 0
-        -- Loop through each element in the array(minus the last element)
         for x = 1, #users - 1, 1 do
-            -- If the element we're on is greater than the element after it
-            -- The swap index of the two elements
-            if tonumber(users[t[x]].score) > tonumber(users[t[x + 1]].score) then
+            if tonumber(users[t[x]].score) < tonumber(users[t[x + 1]].score) then
                 movedElements = movedElements + 1
                 testedElement = users[t[x]]
                 users[t[x]] = users[t[x + 1]]
@@ -56,7 +49,7 @@ local function bubbleSortScore(users)
             isSorted = true
         end
     end
-    return sortedArray
+    return users
 end
 
 local function get_challenge(chat_id)
