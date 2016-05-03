@@ -27,32 +27,6 @@ local bad = {
     "Muori idiota.",
 }
 
-local function bubbleSortScore(users)
-    local t = { }
-    local i = 0
-    for k, v in pairs(users) do
-        i = i + 1
-        t[i] = k
-    end
-    sortedArray = users
-    isSorted = false
-    while isSorted == false do
-        movedElements = 0
-        for x = 1, #users - 1, 1 do
-            if tonumber(users[t[x]].score) > tonumber(users[t[x + 1]].score) then
-                movedElements = movedElements + 1
-                testedElement = users[t[x]]
-                users[t[x]] = users[t[x + 1]]
-                users[t[x + 1]] = testedElement
-            end
-        end
-        if movedElements == 0 then
-            isSorted = true
-        end
-    end
-    return sortedArray
-end
-
 local function get_challenge(chat_id)
     local Whashonredis = redis:get('ruleta:' .. chat_id .. ':challenger')
     local Xhashonredis = redis:get('ruleta:' .. chat_id .. ':challenged')
@@ -265,22 +239,6 @@ local function run(msg, matches)
 
         if not groupstats then
             reply_msg(msg.id, lang_text('requireGroupSignUp'), ok_cb, false)
-            return
-        end
-
-        if (matches[1]:lower() == 'leaderboard' or matches[1]:lower() == 'classifica') and matches[2] then
-            if matches[2]:lower() == 'score' or matches[2]:lower() == 'punti' then
-                local lb = bubbleSortScore(ruletadata['users'])
-                local text = lang_text('scoreLeaderboard')
-                local i = 0
-                for j = #lb, limit do
-                    j = j - 1
-                    i = i + 1
-                    text = text .. i .. '. ' .. k .. ' - ' .. v.score .. '\n'
-                end
-
-                reply_msg(msg.id, text, ok_cb, false)
-            end
             return
         end
 
@@ -661,7 +619,6 @@ return {
         "#accept|#accetta: Sasha conferma la sfida.",
         "#reject|#rifiuta: Sasha cancella la sfida.",
         "#challengeinfo: Sasha manda le informazioni della sfida in corso.",
-        "#leaderboard|#classifica score|punti: Sasha manda la classifica.",
         "MOD",
         "#setcaps <value>: Sasha mette <value> proiettili nel tamburo.",
         "#setchallengecaps <value>: Sasha mette <value> proiettili nel tamburo delle sfide.",
@@ -681,7 +638,6 @@ return {
         "^[#!/]([Kk][Ii][Cc][Kk]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Bb])$",
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
-        "^[#!/]([Ll][Ee][Aa][Dd][Ee][Rr][Bb][Oo][Aa][Rr][Dd]) (.*)$",
         "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Gg][Rr][Oo][Uu][Pp])$",
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Mm][Ee])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Tt][Aa][Ii][Nn][Ff][Oo])$",
@@ -706,8 +662,6 @@ return {
         "^([Ss][Pp][Aa][Rr][Aa]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
         -- registergroup
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
-        -- leaderboard
-        "^[#!/]([Cc][Ll][Aa][Ss][Ss][Ii][Ff][Ii][Cc][Aa]) (.*)$",
         -- deletegroup
         "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
         -- registerme
