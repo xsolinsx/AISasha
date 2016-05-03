@@ -26,7 +26,7 @@ return {
         "ADMIN",
         "#br <group_id> <text>: Sasha invia <text> a <group_id>.",
         "SUDO",
-        "#broadcast <text>: Sasha invia <text> a tutti i gruppi. Solo SU.",
+        "#broadcast <text>: Sasha invia <text> a tutti i gruppi.",
     },
     patterns =
     {

@@ -255,9 +255,10 @@ function create_config()
     config = {
         enabled_plugins =
         {
+            "strings_it",
+            "strings_en",
             "administrator",
             "onservice",
-            "strings",
             "bot",
             "inrealm",
             "ingroup",

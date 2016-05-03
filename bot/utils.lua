@@ -738,16 +738,16 @@ function user_print_name(user)
 end
 
 function lang_text(keyword)
-    local hash = 'lang:it:' .. keyword
+    local hash = 'lang:' .. keyword
     if redis:get(hash) then
         return redis:get(hash)
     else
-        return 'Error while getting language string.'
+        return 'Error while getting language string, try sending /installenstrings.'
     end
 end
 
 function set_text(keyword, text)
-    local hash = 'lang:it:' .. keyword
+    local hash = 'lang:' .. keyword
     redis:set(hash, text)
 end
 
