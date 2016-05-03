@@ -209,6 +209,9 @@ local function run(msg, matches)
         set_text('supportAdded', 'Aggiunto membro di supporto ')
         set_text('adminAdded', 'Aggiunto admin ')
         set_text('toChat', ' a 👥 ')
+        set_text('aliasSaved', 'Alias salvato.')
+        set_text('aliasDeleted', 'Alias eliminato.')
+        set_text('noAliasFound', 'Nessun gruppo trovato con quell\'alias.')
 
         -- inrealm.lua --
         set_text('realm', 'Reame ')

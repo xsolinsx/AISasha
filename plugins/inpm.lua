@@ -80,6 +80,20 @@ local function all_chats(msg)
     return message
 end
 
+local function set_alias(msg, alias, groupid)
+    local hash = 'groupalias'
+    redis:hset(hash, alias, groupid)
+    --
+    return lang_text('aliasSaved')
+end
+
+local function unset_alias(msg, alias)
+    local hash = 'groupalias'
+    redis:hdel(hash, alias)
+    --
+    return lang_text('aliasDeleted')
+end
+
 -- TODO: add lock and unlock joins
 local function run(msg, matches)
     local to = msg.to.type
@@ -90,52 +104,68 @@ local function run(msg, matches)
             return lang_text('youGbanned')
         end
         if matches[1]:lower() == 'join' and is_admin1(msg) then
-            local data = load_data(_config.moderation.data)
             if string.match(matches[2], '^%d+$') then
-                local long_id = tostring(data[tostring(matches[2])]['long_id'])
-                if not data[tostring(matches[2])] then
-                    return lang_text('chatNotFound')
+                local data = load_data(_config.moderation.data)
+                if string.match(matches[2], '^%d+$') then
+                    local long_id = tostring(data[tostring(matches[2])]['long_id'])
+                    if not data[tostring(matches[2])] then
+                        return lang_text('chatNotFound')
+                    end
+                    group_name = data[tostring(matches[2])]['settings']['set_name']
+                    if is_admin1(msg) then
+                        user_type = 'admin'
+                        local receiver = get_receiver(msg)
+                        -- local chat = long_id
+                        -- local channel = long_id
+                        local chat = 'chat#id' .. matches[2]
+                        local channel = 'channel#id' .. matches[2]
+                        local user = msg.from.peer_id
+                        chat_add_user(chat, user, ok_cb, false)
+                        channel_invite(channel, user, ok_cb, false)
+                        -- channel_set_admin(channel, user, ok_cb, false)
+                    end
+                    if is_support(msg.from.id) and not is_admin1(msg) and not is_owner2(msg.fom.id, matches[2]) then
+                        user_type = "support"
+                        local receiver = get_receiver(msg)
+                        -- local chat = long_id
+                        -- local channel = long_id
+                        local chat = 'chat#id' .. matches[2]
+                        local channel = 'channel#id' .. matches[2]
+                        local user = msg.from.peer_id
+                        chat_add_user(chat, user, ok_cb, false)
+                        channel_invite(channel, user, ok_cb, false)
+                        -- channel_set_mod(channel, user, ok_cb, false)
+                    end
+                    if is_banned(msg.from.id, matches[2]) then
+                        return lang_text('youBanned')
+                    end
+                    if data[tostring(matches[2])]['settings']['lock_member'] == 'yes' and not is_owner2(msg.from.id, matches[2]) then
+                        return lang_text('privateGroup')
+                    end
+                    if not is_support(msg.from.id) and not is_admin1(msg) then
+                        user_type = "regular"
+                        -- local chat = long_id
+                        -- local channel = long_id
+                        local chat = 'chat#id' .. matches[2]
+                        local channel = 'channel#id' .. matches[2]
+                        local user = msg.from.peer_id
+                        chat_add_user(chat, user, ok_cb, false)
+                        channel_invite(channel, user, ok_cb, false)
+                    end
                 end
-                group_name = data[tostring(matches[2])]['settings']['set_name']
-                if is_admin1(msg) then
-                    user_type = 'admin'
-                    local receiver = get_receiver(msg)
-                    -- local chat = long_id
-                    -- local channel = long_id
-                    local chat = 'chat#id' .. matches[2]
-                    local channel = 'channel#id' .. matches[2]
+            else
+                local hash = 'groupalias'
+                local value = redis:hget(hash, matches[2]:lower())
+                if value then
+                    local chat = 'chat#id' .. value
+                    local channel = 'channel#id' .. value
                     local user = msg.from.peer_id
                     chat_add_user(chat, user, ok_cb, false)
                     channel_invite(channel, user, ok_cb, false)
-                    -- channel_set_admin(channel, user, ok_cb, false)
-                end
-                if is_support(msg.from.id) and not is_admin1(msg) and not is_owner2(msg.fom.id, matches[2]) then
-                    user_type = "support"
-                    local receiver = get_receiver(msg)
-                    -- local chat = long_id
-                    -- local channel = long_id
-                    local chat = 'chat#id' .. matches[2]
-                    local channel = 'channel#id' .. matches[2]
-                    local user = msg.from.peer_id
-                    chat_add_user(chat, user, ok_cb, false)
-                    channel_invite(channel, user, ok_cb, false)
-                    -- channel_set_mod(channel, user, ok_cb, false)
-                end
-                if is_banned(msg.from.id, matches[2]) then
-                    return lang_text('youBanned')
-                end
-                if data[tostring(matches[2])]['settings']['lock_member'] == 'yes' and not is_owner2(msg.from.id, matches[2]) then
-                    return lang_text('privateGroup')
-                end
-                if not is_support(msg.from.id) and not is_admin1(msg) then
-                    user_type = "regular"
-                    -- local chat = long_id
-                    -- local channel = long_id
-                    local chat = 'chat#id' .. matches[2]
-                    local channel = 'channel#id' .. matches[2]
-                    local user = msg.from.peer_id
-                    chat_add_user(chat, user, ok_cb, false)
-                    channel_invite(channel, user, ok_cb, false)
+                    return
+                else
+                    --
+                    return lang_text('noAliasFound')
                 end
             end
         end
@@ -180,8 +210,12 @@ local function run(msg, matches)
         return chat_list(msg)
     end
 
-    if matches[1]:lower() == 'allchats' and is_sudo(msg) then
-        return all_chats(msg)
+    if matches[1]:lower() == 'allchats' then
+        if is_sudo(msg) then
+            return all_chats(msg)
+        else
+            return lang_text('require_sudo')
+        end
     end
 
     if matches[1]:lower() == 'chatlist' then
@@ -196,11 +230,51 @@ local function run(msg, matches)
         end
     end
 
-    if matches[1]:lower() == 'allchatslist' and is_sudo(msg) then
-        all_chats(msg)
-        send_document("chat#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
-        send_document("channel#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
+    if matches[1]:lower() == 'allchatslist' then
+        if is_sudo(msg) then
+            all_chats(msg)
+            send_document("chat#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
+            send_document("channel#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
+        else
+            return lang_text('require_sudo')
+        end
     end
+
+    if matches[1]:lower() == 'setalias' then
+        if is_sudo(msg) then
+            return set_alias(msg, matches[2], matches[3])
+        else
+            return lang_text('require_sudo')
+        end
+    end
+
+    if matches[1]:lower() == 'unsetalias' then
+        if is_sudo(msg) then
+            return unset_alias(msg, matches[2])
+        else
+            return lang_text('require_sudo')
+        end
+    end
+
+    if matches[1]:lower() == 'getaliaslist' then
+        if is_sudo(msg) then
+            local hash = 'groupalias'
+            local names = redis:hkeys(hash)
+            local ids = redis:hvals(hash)
+            local text = ''
+            for i = 1, #names do
+                text = text .. names[i] .. ' - ' .. ids[i] .. '\n'
+            end
+            return text
+        else
+            return lang_text('require_sudo')
+        end
+    end
+end
+
+local function run(msg, matches)
+    local groupid = matches[1]
+    local groupname = matches[2]:lower()
 end
 
 return {
@@ -210,10 +284,13 @@ return {
         "#chats: Sasha mostra un elenco di chat \"pubbliche\".",
         "#chatlist: Sasha manda un file con un elenco di chat \"pubbliche\".",
         "ADMIN",
-        "#join <chat_id> [support]: Sasha tenta di aggiungere l'utente a <chat_id>.",
+        "#join <chat_id>|<alias> [support]: Sasha tenta di aggiungere l'utente a <chat_id>|<alias>.",
         "SUDO",
         "#allchats: Sasha mostra l'elenco delle chat.",
         "#allchatlist: Sasha manda un file con l'elenco delle chat.",
+        "#setalias <alias> <group_id>: Sasha imposta <alias> come alias di <group_id>.",
+        "#unsetalias <alias>: Sasha elimina <alias>.",
+        "#getaliaslist: Sasha manda la lista degli alias.",
     },
     patterns =
     {
@@ -221,10 +298,14 @@ return {
         "^[#!/]([Cc][Hh][Aa][Tt][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Jj][Oo][Ii][Nn]) (%d+)$",
         "^[#!/]([Jj][Oo][Ii][Nn]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
-        "^!!tgservice (chat_add_user)$",
-        -- chats
         "^[#!/]([Aa][Ll][Ll][Cc][Hh][Aa][Tt][Ss])$",
         "^[#!/]([Aa][Ll][Ll][Cc][Hh][Aa][Tt][Ss][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Ss][Ee][Tt][Aa][Ll][Ii][Aa][Ss]) ([^%s]+) (%d+)$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Aa][Ll][Ii][Aa][Ss]) ([^%s]+)$",
+        "^[#!/]([Gg][Ee][Tt][Aa][Ll][Ii][Aa][Ss][Ll][Ii][Ss][Tt])$",
+        "^!!tgservice (chat_add_user)$",
+        -- join
+        "^[#!/]([Jj][Oo][Ii][Nn]) (.*)$",
     },
     run = run,
     pre_process = pre_process,
