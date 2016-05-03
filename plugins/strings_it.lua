@@ -794,7 +794,7 @@ local function run(msg, matches)
         set_text('stats:6', '(#stats|#statslist|sasha statistiche|sasha lista statistiche) aisasha: Sasha invia le proprie statistiche.')
 
         -- strings.lua --
-        set_text('strings:0', 6)
+        set_text('strings:0', 2)
         set_text('strings:1', 'SUDO')
         set_text('strings:2', '(#updatestrings|#installstrings|[sasha] installa|[sasha] aggiorna) stringhe: Sasha aggiorna le stringhe di testo.')
 

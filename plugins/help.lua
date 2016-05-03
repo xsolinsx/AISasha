@@ -51,7 +51,7 @@ local function plugin_help(var, chat, rank)
             text = text .. '🅿️ ' .. plugin.description .. '\n'
         end
         local textHash = plugin.description:lower() .. ':0'
-        if redis:get(textHash) then
+        if lang_text(textHash) then
             for i = 1, tonumber(lang_text(plugin.description:lower() .. ':0')), 1 do
                 if not rank_table[lang_text(plugin.description:lower() .. ':' .. i)] then
                     if help_permission then
