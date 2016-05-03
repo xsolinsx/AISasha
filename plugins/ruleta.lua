@@ -281,7 +281,7 @@ local function run(msg, matches)
                 local i = 0
                 for k, v in pairs(lb) do
                     i = i + 1
-                    text = text .. i .. '. ' .. k .. v.score
+                    text = text .. i .. '. ' .. k .. ' - ' .. v.score .. '\n'
                 end
                 reply_msg(msg.id, text, ok_cb, false)
             end
