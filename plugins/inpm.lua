@@ -254,7 +254,7 @@ local function run(msg, matches)
     end
 
     if matches[1]:lower() == 'getaliaslist' then
-        if is_sudo(msg) then
+        if is_admin1(msg) then
             local hash = 'groupalias'
             local names = redis:hkeys(hash)
             local ids = redis:hvals(hash)
@@ -264,7 +264,7 @@ local function run(msg, matches)
             end
             return text
         else
-            return lang_text('require_sudo')
+            return lang_text('require_admin')
         end
     end
 end
@@ -277,12 +277,12 @@ return {
         "#chatlist: Sasha manda un file con un elenco di chat \"pubbliche\".",
         "ADMIN",
         "#join <chat_id>|<alias> [support]: Sasha tenta di aggiungere l'utente a <chat_id>|<alias>.",
+        "#getaliaslist: Sasha manda la lista degli alias.",
         "SUDO",
         "#allchats: Sasha mostra l'elenco delle chat.",
         "#allchatlist: Sasha manda un file con l'elenco delle chat.",
         "#setalias <alias> <group_id>: Sasha imposta <alias> come alias di <group_id>.",
         "#unsetalias <alias>: Sasha elimina <alias>.",
-        "#getaliaslist: Sasha manda la lista degli alias.",
     },
     patterns =
     {
