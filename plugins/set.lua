@@ -46,6 +46,7 @@ local function callback(extra, success, result)
         elseif extra.media == 'audio' then
             local file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.ogg'
         end
+        file = file:gsub(':', '.')
         print('File downloaded to:', result)
         os.rename(result, file)
         print('File moved to:', file)
