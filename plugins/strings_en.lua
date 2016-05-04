@@ -407,6 +407,10 @@ local function run(msg, matches)
 
         -- set.lua --
         set_text(LANG .. 'saved', ' saved.')
+        set_text(LANG .. 'sendMedia', 'Send me the media you want to save (audio or picture).')
+        set_text(LANG .. 'cancelled', 'Cancelled.')
+        set_text(LANG .. 'nothingToSet', 'Nothing to set.')
+        set_text(LANG .. 'mediaSaved', 'Media saved.')
 
         -- spam.lua --
         set_text(LANG .. 'msgSet', 'Message set.')
@@ -770,9 +774,11 @@ local function run(msg, matches)
         set_text(LANG .. 'ruleta:24', '#addpoints <id> <value>: Sasha adds <value> points to specified user.')
 
         -- set.lua --
-        set_text(LANG .. 'set:0', 2)
+        set_text(LANG .. 'set:0', 4)
         set_text(LANG .. 'set:1', 'MOD')
         set_text(LANG .. 'set:2', '(#set|[sasha] setta) <var_name> <text>: Sasha saves <text> as answer to <var_name>.')
+        set_text(LANG .. 'set:3', '(#setmedia|[sasha] setta media) <var_name>: Sasha saves the media (audio or picture) that will be sent as answer to <var_name>.')
+        set_text(LANG .. 'set:4', '(#cancel|[sasha] annulla): Sasha cancels #setmedia.')
 
         -- shout.lua --
         set_text(LANG .. 'shout:0', 2)

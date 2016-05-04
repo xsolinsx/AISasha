@@ -1,18 +1,22 @@
-﻿local function unset_var(msg, name)
+﻿local function get_variables_hash(msg)
+    if msg.to.type == 'channel' then
+        return 'channel:' .. msg.to.id .. ':variables'
+    end
+    if msg.to.type == 'chat' then
+        return 'chat:' .. msg.to.id .. ':variables'
+    end
+    if msg.to.type == 'user' then
+        return 'user:' .. msg.from.id .. ':variables'
+    end
+    return false
+end
+
+local function unset_var(msg, name)
     if (not name) then
         return lang_text('errorTryAgain')
     end
 
-    local hash = nil
-    if msg.to.type == 'channel' then
-        hash = 'channel:' .. msg.to.id .. ':variables'
-    end
-    if msg.to.type == 'chat' then
-        hash = 'chat:' .. msg.to.id .. ':variables'
-    end
-    if msg.to.type == 'user' then
-        hash = 'user:' .. msg.from.id .. ':variables'
-    end
+    local hash = get_variables_hash(msg)
     if hash then
         redis:hdel(hash, name)
         return name .. lang_text('deleted')

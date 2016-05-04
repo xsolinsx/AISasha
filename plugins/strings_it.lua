@@ -13,7 +13,7 @@ local function run(msg, matches)
         -------------
         -- Plugins --
         -------------
-        
+
         redis:set('lang', LANG)
 
         -- global --
@@ -407,6 +407,10 @@ local function run(msg, matches)
 
         -- set.lua --
         set_text(LANG .. 'saved', ' salvato.')
+        set_text(LANG .. 'sendMedia', 'Mandami il media che vuoi salvare (audio o foto).')
+        set_text(LANG .. 'cancelled', 'Annullato.')
+        set_text(LANG .. 'nothingToSet', 'Niente da salvare.')
+        set_text(LANG .. 'mediaSaved', 'Media salvato.')
 
         -- spam.lua --
         set_text(LANG .. 'msgSet', 'Messaggio impostato.')
@@ -770,9 +774,11 @@ local function run(msg, matches)
         set_text(LANG .. 'ruleta:24', '#addpoints <id> <value>: Sasha aggiunge <value> punti all\'utente specificato.')
 
         -- set.lua --
-        set_text(LANG .. 'set:0', 2)
+        set_text(LANG .. 'set:0', 4)
         set_text(LANG .. 'set:1', 'MOD')
         set_text(LANG .. 'set:2', '(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.')
+        set_text(LANG .. 'set:3', '(#setmedia|[sasha] setta media) <var_name>: Sasha salva il media (foto o audio) che le verrà inviato come risposta a <var_name>.')
+        set_text(LANG .. 'set:4', '(#cancel|[sasha] annulla): Sasha annulla un #setmedia.')
 
         -- shout.lua --
         set_text(LANG .. 'shout:0', 2)
