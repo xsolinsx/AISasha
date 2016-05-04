@@ -36,8 +36,20 @@ local function set_media(msg, name)
 end
 
 local function callback(extra, success, result)
+    vardump(result)
+    vardump(success)
+    vardump(extra)
     if success then
-        redis:hset(extra.hash, extra.name, result)
+        local file
+        if extra.media == 'photo' then
+            local file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.jpg'
+        elseif extra.media == 'audio' then
+            local file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.ogg'
+        end
+        print('File downloaded to:', result)
+        os.rename(result, file)
+        print('File moved to:', file)
+        redis:hset(extra.hash, extra.name, file)
         send_large_msg(extra.receiver, lang_text('fileDownloadedTo') .. result)
     else
         send_large_msg(extra.receiver, lang_text('errorDownloading') .. extra.hash .. ' - ' .. extra.name .. ' - ' .. extra.receiver)
@@ -52,10 +64,10 @@ local function run(msg, matches)
             if (msg.media.type == 'photo' or msg.media.type == 'audio') and name then
                 if is_momod(msg) then
                     if msg.media.type == 'photo' then
-                        load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name })
+                        load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
                         return lang_text('mediaSaved')
                     elseif msg.media.type == 'audio' then
-                        load_audio(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name })
+                        load_audio(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
                         return lang_text('mediaSaved')
                     end
                 else
