@@ -18,6 +18,11 @@ function on_msg_receive(msg)
 
     local receiver = get_receiver(msg)
     print(receiver)
+    if redis:get('writing') then
+        send_typing(receiver, ok_cb, false)
+    else
+        send_typing_abort(receiver, ok_cb, false)
+    end
     -- vardump(msg)
     msg = pre_process_service_msg(msg)
     if msg_valid(msg) then

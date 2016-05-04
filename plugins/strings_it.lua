@@ -746,6 +746,11 @@ local function run(msg, matches)
         set_text(LANG .. 'qr:4', 'Notazione Esadecimale => ("a56729" è marrone).')
         set_text(LANG .. 'qr:5', 'Notazione Decimale => ("255-192-203" è rosa).')
 
+        -- reactions.lua --
+        set_text(LANG .. 'reactions:0', 2)
+        set_text(LANG .. 'reactions:1', 'SUDO')
+        set_text(LANG .. 'reactions:2', '#writing on|off: Sasha (fa finta|smette di far finta) di scrivere.')
+
         -- ruleta.lua --
         set_text(LANG .. 'ruleta:0', 24)
         set_text(LANG .. 'ruleta:1', 'Ruleta by AISasha, inspired from Leia (#RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c\'è il proiettile sei fuori altrimenti rimani.')
