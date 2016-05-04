@@ -65,7 +65,7 @@ local function run(msg, matches)
                         load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
                         return lang_text('mediaSaved')
                     elseif msg.media.type == 'audio' then
-                        load_audio(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                        load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
                         return lang_text('mediaSaved')
                     end
                 else
