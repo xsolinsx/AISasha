@@ -51,10 +51,10 @@ local function run(msg, matches)
             local name = redis:hget(hash, 'waiting')
             if (msg.media.type == 'photo' or msg.media.type == 'audio') and name then
                 if is_momod(msg) then
-                    if result.media.type == 'photo' then
+                    if msg.media.type == 'photo' then
                         load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name })
                         return lang_text('mediaSaved')
-                    elseif result.media.type == 'audio' then
+                    elseif msg.media.type == 'audio' then
                         load_audio(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name })
                         return lang_text('mediaSaved')
                     end
