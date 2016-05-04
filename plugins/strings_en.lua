@@ -171,7 +171,7 @@ local function run(msg, matches)
         set_text(LANG .. 'username', '\nUsername: ')
         set_text(LANG .. 'phone', '\nPhone: ')
         set_text(LANG .. 'date', '\nDate: ')
-        set_text(LANG .. 'totalMessages', 'Total messages: ')
+        set_text(LANG .. 'totalMessages', '\nTotal messages: ')
         set_text(LANG .. 'youAreWriting', '\n\nYou are writing to')
         set_text(LANG .. 'groupName', '\nGroup name: ')
         set_text(LANG .. 'members', '\nMembers: ')
@@ -807,10 +807,15 @@ local function run(msg, matches)
         set_text(LANG .. 'stats:5', '(#stats|#statslist|#messages|sasha statistiche|sasha lista statistiche|sasha messaggi) group|gruppo <group_id>: Sasha sends <group_id> stats.')
         set_text(LANG .. 'stats:6', '(#stats|#statslist|sasha statistiche|sasha lista statistiche) aisasha: Sasha sends her stats.')
 
-        -- strings.lua --
-        set_text(LANG .. 'strings:0', 2)
-        set_text(LANG .. 'strings:1', 'SUDO')
-        set_text(LANG .. 'strings:2', '(#updateenstrings|#installenstrings|([sasha] installa|[sasha] aggiorna) stringhe en): Sasha updates strings.')
+        -- strings_en.lua --
+        set_text(LANG .. 'strings_en:0', 2)
+        set_text(LANG .. 'strings_en:1', 'SUDO')
+        set_text(LANG .. 'strings_en:2', '(#updateenstrings|#installenstrings|([sasha] installa|[sasha] aggiorna) stringhe en): Sasha updates strings.')
+
+        -- strings_it.lua --
+        set_text(LANG .. 'strings_it:0', 2)
+        set_text(LANG .. 'strings_it:1', 'SUDO')
+        set_text(LANG .. 'strings_it:2', '(#updateitstrings|#installitstrings|([sasha] installa|[sasha] aggiorna) stringhe it): Sasha aggiorna le stringhe di testo.')
 
         -- supergroup.lua --
         set_text(LANG .. 'supergroup:0', 45)
