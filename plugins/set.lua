@@ -51,7 +51,7 @@ local function callback(extra, success, result)
         os.rename(result, file)
         print('File moved to:', file)
         redis:hset(extra.hash, extra.name, file)
-        send_large_msg(extra.receiver, lang_text('fileDownloadedTo') .. result)
+        send_large_msg(extra.receiver, lang_text('fileDownloadedTo') .. file)
     else
         send_large_msg(extra.receiver, lang_text('errorDownloading') .. extra.hash .. ' - ' .. extra.name .. ' - ' .. extra.receiver)
     end

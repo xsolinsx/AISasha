@@ -43,7 +43,7 @@ local function run(msg, matches)
         if vars ~= nil then
             local t = vars:split('\n')
             for i, word in pairs(t) do
-                if io.popen('find ' .. word):read("*all") == '' then
+                if io.popen('find ' .. get_value(msg, word)):read("*all") == '' then
                     local temp = word:lower():gsub("_", " ")
                     if word:lower() ~= 'get' and string.find(msg.text:lower(), temp) then
                         send_large_msg(get_receiver(msg), get_value(msg, word:lower()))
