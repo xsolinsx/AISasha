@@ -36,9 +36,6 @@ local function set_media(msg, name)
 end
 
 local function callback(extra, success, result)
-    vardump(result)
-    vardump(success)
-    vardump(extra)
     if success then
         local file
         if extra.media == 'photo' then
