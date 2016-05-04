@@ -331,13 +331,11 @@ local function run(msg, matches)
                     text = text .. ' 👥' ..
                     lang_text('groupName') .. msg.to.print_name:gsub("_", " ") ..
                     lang_text('members') .. msg.to.members_num .. '' ..
-                    lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 elseif chat_type == 'channel' then
                     text = text .. ' 👥' ..
                     lang_text('supergroupName') .. msg.to.print_name:gsub("_", " ") ..
-                    lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 end
