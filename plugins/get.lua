@@ -50,13 +50,11 @@ local function run(msg, matches)
                         if not string.match(value, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(value, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(value, "^(.*)channel%.(%d+)%.variables(.*)$") then
                             send_large_msg(get_receiver(msg), get_value(msg, word:lower()))
                         else
-                            value = get_photo_value(msg, word:lower())
                             if string.match(value, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(value, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(value, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
                                 if io.popen('find ' .. value):read("*all") ~= '' then
                                     send_photo(get_receiver(msg), value, ok_cb, false)
                                 end
                             else
-                                value = get_audio_value(msg, word:lower())
                                 if string.match(value, "^(.*)user%.(%d+)%.variables(.*)%.ogg$") or string.match(value, "^(.*)chat%.(%d+)%.variables(.*)%.ogg$") or string.match(value, "^(.*)channel%.(%d+)%.variables(.*)%.ogg$") then
                                     if io.popen('find ' .. value):read("*all") ~= '' then
                                         send_audio(get_receiver(msg), value, ok_cb, false)
