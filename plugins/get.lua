@@ -49,7 +49,7 @@ local function run(msg, matches)
                     if io.popen('find ' .. value):read("*all") == '' then
                         send_large_msg(get_receiver(msg), get_value(msg, word:lower()))
                     else
-                        send_document(get_receiver(msg), value, ok_cb, false)
+                        send_photo(get_receiver(msg), value, ok_cb, false)
                     end
                 end
             end
