@@ -747,7 +747,7 @@ function lang_text(keyword)
 end
 
 function set_text(keyword, text)
-    local hash = 'lang:' .. redis:get('lang') .. keyword
+    local hash = 'lang:' .. keyword
     redis:set(hash, text)
 end
 
