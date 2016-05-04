@@ -42,9 +42,9 @@ local function callback(extra, success, result)
     if success then
         local file
         if extra.media == 'photo' then
-            local file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.jpg'
+            file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.jpg'
         elseif extra.media == 'audio' then
-            local file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.ogg'
+            file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.ogg'
         end
         file = file:gsub(':', '.')
         print('File downloaded to:', result)
