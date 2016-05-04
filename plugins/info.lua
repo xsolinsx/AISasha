@@ -81,7 +81,9 @@ local function callback_reply(extra, success, result)
     if result.from.phone then
         text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '****'
     end
+    local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
+    lang_text('totalMessages') .. msgs ..
     '\n🆔: ' .. result.from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
@@ -107,7 +109,9 @@ local function callback_id(cb_extra, success, result)
     if result.phone then
         text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
     end
+    local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. cb_extra.msg.to.id) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
+    lang_text('totalMessages') .. msgs ..
     '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
@@ -133,7 +137,9 @@ local function callback_username(extra, success, result)
     if result.phone then
         text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
     end
+    local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.chatid) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
+    lang_text('totalMessages') .. msgs ..
     '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. extra.chatid, text)
     send_large_msg('channel#id' .. extra.chatid, text)
@@ -159,7 +165,9 @@ local function callback_from(extra, success, result)
     if result.fwd_from.phone then
         text = text .. lang_text('phone') .. string.sub(result.fwd_from.phone, 1, 6) .. '****'
     end
+    local msgs = tonumber(redis:get('msgs:' .. result.fwd_from.peer_id .. ':' .. result.to.peer_id) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
+    lang_text('totalMessages') .. msgs ..
     '\n🆔: ' .. result.fwd_from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
@@ -291,7 +299,9 @@ local function run(msg, matches)
                 if msg.from.phone then
                     text = text .. lang_text('phone') .. string.sub(msg.from.phone, 1, 6) .. '****'
                 end
+                local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
                 text = text .. lang_text('date') .. os.date('%c') ..
+                lang_text('totalMessages') .. msgs ..
                 '\n🆔: ' .. msg.from.id ..
                 lang_text('youAreWriting')
                 if chat_type == 'user' then
