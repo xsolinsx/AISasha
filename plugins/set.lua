@@ -48,6 +48,7 @@ local function callback(extra, success, result)
         os.rename(result, file)
         print('File moved to:', file)
         redis:hset(extra.hash, extra.name, file)
+        redis:hdel(extra.hash, 'waiting')
         print(file)
     else
         send_large_msg(extra.receiver, lang_text('errorDownloading') .. extra.hash .. ' - ' .. extra.name .. ' - ' .. extra.receiver)
@@ -59,13 +60,17 @@ local function run(msg, matches)
     if msg.media then
         if hash then
             local name = redis:hget(hash, 'waiting')
-            if (msg.media.type == 'photo' or msg.media.type == 'audio') and name and is_momod(msg) then
-                if msg.media.type == 'photo' then
-                    load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
-                    return lang_text('mediaSaved')
-                elseif msg.media.type == 'audio' then
-                    load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
-                    return lang_text('mediaSaved')
+            if (msg.media.type == 'photo' or msg.media.type == 'audio') and name then
+                if is_momod(msg) then
+                    if msg.media.type == 'photo' then
+                        load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                        return lang_text('mediaSaved')
+                    elseif msg.media.type == 'audio' then
+                        load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                        return lang_text('mediaSaved')
+                    end
+                else
+                    return lang_text('require_mod')
                 end
             end
             return
