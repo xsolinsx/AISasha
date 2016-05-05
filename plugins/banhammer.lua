@@ -322,6 +322,99 @@ local function kickidsnouser(cb_extra, success, result)
     end
 end
 
+local function user_msgs(user_id, chat_id)
+    local user_info
+    local uhash = 'user:' .. user_id
+    local user = redis:hgetall(uhash)
+    local um_hash = 'msgs:' .. user_id .. ':' .. chat_id
+    user_info = tonumber(redis:get(um_hash) or 0)
+    return user_info
+end
+
+local function kick_zero_chat(cb_extra, success, result)
+    local chat_id = cb_extra.chat_id
+    local ci_user
+    local re_user
+    for k, v in pairs(result.members) do
+        local si = false
+        ci_user = v.peer_id
+        local hash = 'chat:' .. chat_id .. ':users'
+        local users = redis:smembers(hash)
+        for i = 1, #users do
+            re_user = users[i]
+            if tonumber(ci_user) == tonumber(re_user) then
+                si = true
+            end
+        end
+        if not si then
+            if ci_user ~= our_id then
+                if not is_momod2(ci_user, chat_id) then
+                    kick_user(ci_user, chat_id)
+                end
+            end
+        end
+    end
+end
+
+local function kick_zero_channel(cb_extra, success, result)
+    local chat_id = cb_extra.chat_id
+    local ci_user
+    local re_user
+    for k, v in pairs(result.members) do
+        local si = false
+        ci_user = v.peer_id
+        local hash = 'channel:' .. chat_id .. ':users'
+        local users = redis:smembers(hash)
+        for i = 1, #users do
+            re_user = users[i]
+            if tonumber(ci_user) == tonumber(re_user) then
+                si = true
+            end
+        end
+        if not si then
+            if ci_user ~= our_id then
+                if not is_momod2(ci_user, chat_id) then
+                    kick_user(ci_user, chat_id)
+                end
+            end
+        end
+    end
+end
+
+local function kick_inactive_chat(chat_id, num, receiver)
+    local hash = 'chat:' .. chat_id .. ':users'
+    local users = redis:smembers(hash)
+    -- Get user info
+    for i = 1, #users do
+        local user_id = users[i]
+        local user_info = user_msgs(user_id, chat_id)
+        local nmsg = user_info
+        if tonumber(nmsg) < tonumber(num) then
+            if not is_momod2(user_id, chat_id) then
+                kick_user(user_id, chat_id)
+            end
+        end
+    end
+    return chat_info(receiver, kick_zero_chat, { chat_id = chat_id })
+end
+
+local function kick_inactive_channel(chat_id, num, receiver)
+    local hash = 'channel:' .. chat_id .. ':users'
+    local users = redis:smembers(hash)
+    -- Get user info
+    for i = 1, #users do
+        local user_id = users[i]
+        local user_info = user_msgs(user_id, chat_id)
+        local nmsg = user_info
+        if tonumber(nmsg) < tonumber(num) then
+            if not is_momod2(user_id, chat_id) then
+                kick_user(user_id, chat_id)
+            end
+        end
+    end
+    return channel_info(receiver, kick_zero_channel, { chat_id = chat_id })
+end
+
 local function run(msg, matches)
     local support_id = msg.from.id
     if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' then
@@ -344,6 +437,7 @@ local function run(msg, matches)
     end
 
     if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
+        -- /kick
         if type(msg.reply_id) ~= "nil" and is_momod(msg) then
             if is_admin1(msg) then
                 msgr = get_message(msg.reply_id, Kick_by_reply_admins, false)
@@ -447,7 +541,7 @@ local function run(msg, matches)
     end
 
     if matches[1]:lower() == "banlist" or matches[1]:lower() == "sasha lista ban" or matches[1]:lower() == "lista ban" then
-        -- Ban list !
+        -- /banlist
         local chat_id = msg.to.id
         if matches[2] and is_admin1(msg) then
             chat_id = matches[2]
@@ -459,7 +553,21 @@ local function run(msg, matches)
         return
     end
 
+    if matches[1]:lower() == 'kickinactive' or((matches[1]:lower() == 'sasha uccidi sotto' or matches[1]:lower() == 'spara sotto') and matches[3]:lower() == 'messaggi') then
+        -- /kickinactive
+        local num = 1
+        if matches[2] then
+            num = matches[2]
+        end
+        if msg.to.type == 'chat' then
+            return kick_inactive_chat(msg.to.id, num, get_receiver(msg))
+        elseif msg.to.type == 'channel' then
+            return kick_inactive_channel(msg.to.id, num, get_receiver(msg))
+        end
+    end
+
     if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
+        -- /kicknouser
         local receiver = get_receiver(msg)
         chat_info(receiver, kickidsnouser, { receiver = receiver })
     end
@@ -469,7 +577,7 @@ local function run(msg, matches)
     end
 
     if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
-        -- Global ban
+        -- /gban
         if type(msg.reply_id) ~= "nil" and is_admin1(msg) then
             banall = get_message(msg.reply_id, banall_by_reply, false)
             return
@@ -495,7 +603,7 @@ local function run(msg, matches)
         end
     end
     if matches[1]:lower() == 'ungban' or matches[1]:lower() == 'sasha supersbanna' or matches[1]:lower() == 'supersbanna' then
-        -- Global unban
+        -- /ungban
         if type(msg.reply_id) ~= "nil" and is_admin1(msg) then
             unbanall = get_message(msg.reply_id, unbanall_by_reply, false)
             return
@@ -520,7 +628,7 @@ local function run(msg, matches)
         end
     end
     if matches[1]:lower() == 'gbanlist' or matches[1]:lower() == 'sasha lista superban' or matches[1]:lower() == 'lista superban' then
-        -- Global ban list
+        -- /gbanlist
         local list = banall_list()
         local file = io.open("./groups/gbanlist.txt", "w")
         file:write(list)
@@ -540,6 +648,8 @@ return {
         "^[#!/]([Kk][Ii][Cc][Kk]) (.*)$",
         "^[#!/]([Kk][Ii][Cc][Kk])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Nn][Oo][Uu][Ss][Ee][Rr])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee]) (%d+)$",
         "^[#!/]([Bb][Aa][Nn]) (.*)$",
         "^[#!/]([Bb][Aa][Nn])$",
         "^[#!/]([Uu][Nn][Bb][Aa][Nn]) (.*)$",
@@ -564,6 +674,9 @@ return {
         -- kicknouser
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Nn][Oo][Uu][Ss][Ee][Rr])$",
         "^([Ss][Pp][Aa][Rr][Aa] [Nn][Oo][Uu][Ss][Ee][Rr])$",
+        -- kickinactive
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
+        "^([Ss][Pp][Aa][Rr][Aa] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
         -- ban
         "^([Ss][Aa][Ss][Hh][Aa] [Bb][Aa][Nn][Nn][Aa]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Bb][Aa][Nn][Nn][Aa])$",
@@ -621,6 +734,7 @@ return {
     -- (#banlist|[sasha] lista ban) [<group_id>]
     -- OWNER
     -- (#kicknouser|[sasha] uccidi nouser|spara nouser)
+    -- (#kickinactive [<msgs>]|((sasha uccidi)|spara sotto <msgs> messaggi))
     -- SUPPORT
     -- (#gban|[sasha] superbanna) <id>|<username>|<reply>
     -- (#ungban|[sasha] supersbanna) <id>|<username>|<reply>

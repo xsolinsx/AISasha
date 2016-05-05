@@ -897,58 +897,6 @@ local function killrealm(cb_extra, success, result)
     end
 end
 
---[[local function user_msgs(user_id, chat_id)
-  local user_info
-  local uhash = 'user:'..user_id
-  local user = redis:hgetall(uhash)
-  local um_hash = 'msgs:'..user_id..':'..chat_id
-  user_info = tonumber(redis:get(um_hash) or 0)
-  return user_info
-end
-
-local function kick_zero(cb_extra, success, result)
-    local chat_id = cb_extra.chat_id
-    local chat = "chat#id"..chat_id
-    local ci_user
-    local re_user
-    for k,v in pairs(result.members) do
-        local si = false
-        ci_user = v.peer_id
-        local hash = 'chat:'..chat_id..':users'
-        local users = redis:smembers(hash)
-        for i = 1, #users do
-            re_user = users[i]
-            if tonumber(ci_user) == tonumber(re_user) then
-                si = true
-            end
-        end
-        if not si then
-            if ci_user ~= our_id then
-                if not is_momod2(ci_user, chat_id) then
-                  chat_del_user(chat, 'user#id'..ci_user, ok_cb, true)
-                end
-            end
-        end
-    end
-end
-
-local function kick_inactive(chat_id, num, receiver)
-    local hash = 'chat:'..chat_id..':users'
-    local users = redis:smembers(hash)
-    -- Get user info
-    for i = 1, #users do
-        local user_id = users[i]
-        local user_info = user_msgs(user_id, chat_id)
-        local nmsg = user_info
-        if tonumber(nmsg) < tonumber(num) then
-            if not is_momod2(user_id, chat_id) then
-              chat_del_user('chat#id'..chat_id, 'user#id'..user_id, ok_cb, true)
-            end
-        end
-    end
-    return chat_info(receiver, kick_zero, {chat_id = chat_id})
-end]]
-
 local function run(msg, matches)
     local data = load_data(_config.moderation.data)
     local receiver = get_receiver(msg)
@@ -1697,19 +1645,6 @@ local function run(msg, matches)
                     return lang_text('groupIs')
                 end
             end
-            if matches[1]:lower() == 'kickinactive' or(matches[1]:lower() == 'sasha uccidi sotto' and matches[3]:lower() == 'messaggi') then
-                -- send_large_msg('chat#id'..msg.to.id, 'I\'m in matches[1]')
-                if not is_momod(msg) then
-                    return lang_text('require_mod')
-                end
-                local num = 1
-                if matches[2] then
-                    num = matches[2]
-                end
-                local chat_id = msg.to.id
-                local receiver = get_receiver(msg)
-                return kick_inactive(chat_id, num, receiver)
-            end
         end
     end
 end
@@ -1761,8 +1696,6 @@ return {
         "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr]) (.*)$",
         "^[#!/]([Mm][Uu][Tt][Ee][Ss][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Mm][Uu][Tt][Ee][Ll][Ii][Ss][Tt])$",
-        "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee])$",
-        "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee]) (%d+)$",
         "^(https://telegram.me/joinchat/%S+)$",
         "%[(document)%]",
         "%[(photo)%]",
@@ -1817,8 +1750,6 @@ return {
         "^([Ll][Ii][Ss][Tt][Aa] [Mm][Uu][Tt][Ii])$",
         -- mutelist
         "^([Ll][Ii][Ss][Tt][Aa] [Uu][Tt][Ee][Nn][Tt][Ii] [Mm][Uu][Tt][Ii])$",
-        -- kickinactive
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
     },
     run = run,
     pre_process = pre_process,
@@ -1843,7 +1774,6 @@ return {
     -- (#newlink|sasha crea link)
     -- (#link|sasha link)
     -- #setflood <value>
-    -- (#kickinactive [<msgs>]|sasha uccidi sotto <msgs> messaggi)
     -- OWNER
     -- (#setlink|[sasha] imposta link)
     -- (#promote|[sasha] promuovi) <username>|<reply>
