@@ -509,8 +509,12 @@ local function run(msg, matches)
         end
         if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
             -- /kicknouser
-            local receiver = get_receiver(msg)
-            chat_info(receiver, kickidsnouser, { receiver = receiver })
+            if msg.to.type == 'chat' then
+                chat_info(get_receiver(msg), kickidsnouser, { receiver = get_receiver(msg) })
+            elseif msg.to.type == 'channel' then
+                channel_get_users(get_receiver(msg), kickidsnouser, { receiver = get_receiver(msg) })
+            end
+            return
         end
     end
     if is_momod(msg) then
