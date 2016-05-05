@@ -60,18 +60,16 @@ local function run(msg, matches)
     if msg.media then
         if hash then
             local name = redis:hget(hash, 'waiting')
-            if (msg.media.type == 'photo' or msg.media.type == 'audio') and name then
-                if is_momod(msg) then
-                    if msg.media.type == 'photo' then
-                        load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
-                        return lang_text('mediaSaved')
-                    elseif msg.media.type == 'audio' then
-                        load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
-                        return lang_text('mediaSaved')
-                    end
-                else
-                    return lang_text('require_mod')
+            if is_momod(msg) then
+                if msg.media.type == 'photo' and name then
+                    load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                    return lang_text('mediaSaved')
+                elseif msg.media.type == 'audio' and name then
+                    load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                    return lang_text('mediaSaved')
                 end
+            else
+                return lang_text('require_mod')
             end
             return
         else
@@ -112,13 +110,6 @@ end
 
 return {
     description = "SET",
-    usage =
-    {
-        "MOD",
-        "(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.",
-        "(#setmedia|[sasha] setta media) <var_name>: Sasha salva il media (foto o audio) che le verrà inviato come risposta a <var_name>.",
-        "(#cancel|[sasha] annulla): Sasha annulla un #setmedia.",
-    },
     patterns =
     {
         "^[#!/]([Ss][Ee][Tt]) ([^%s]+) (.+)$",
@@ -138,4 +129,9 @@ return {
     },
     run = run,
     min_rank = 1
+    -- usage
+    -- MOD
+    -- (#set|[sasha] setta) <var_name> <text>
+    -- (#setmedia|[sasha] setta media) <var_name>
+    -- (#cancel|[sasha] annulla)
 }

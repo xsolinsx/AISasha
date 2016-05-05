@@ -7,11 +7,6 @@ end
 
 return {
     description = "ECHO",
-    usage =
-    {
-        "MOD",
-        "(#echo|sasha ripeti) <text>: Sasha ripete <text>.",
-    },
     patterns =
     {
         "^[#!/][Ee][Cc][Hh][Oo] +(.+)$",
@@ -20,4 +15,7 @@ return {
     },
     run = run,
     min_rank = 1
+    -- usage
+    -- MOD
+    -- (#echo|sasha ripeti) <text>
 }

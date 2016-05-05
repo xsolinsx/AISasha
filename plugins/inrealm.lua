@@ -975,35 +975,6 @@ end
 
 return {
     description = "INREALM",
-    usage =
-    {
-        "MOD",
-        "#who: Sasha mostra una lista di membri del gruppo/regno.",
-        "#wholist: Sasha invia un file con una lista di membri del gruppo/regno.",
-        "OWNER",
-        "#log: Sasha manda un file contenente il log del gruppo/regno.",
-        "ADMIN",
-        "(#creategroup|sasha crea gruppo) <group_name>: Sasha crea un gruppo col nome specificato.",
-        "(#createsuper|sasha crea supergruppo) <group_name>: Sasha crea un supergruppo col nome specificato.",
-        "(#createrealm|sasha crea regno) <realm_name>: Sasha crea un regno col nome specificato.",
-        "(#setabout|sasha imposta descrizione) <group_id> <text>: Sasha cambia la descrizione di <group_id> in <text>",
-        "(#setrules|sasha imposta regole) <group_id> <text>: Sasha cambia le regole di <group_id> in <text>.",
-        "#setname <realm_name>: Sasha cambia il nome del regno in <realm_name>.",
-        "#setname|#setgpname <group_id> <group_name>: Sasha cambia il nome di <group_id> in <group_name>.",
-        "(#lock|[sasha] blocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker: Sasha blocca l'impostazione specificata di <group_id>.",
-        "(#unlock|[sasha] sblocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker: Sasha sblocca l'impostazione specificata di <group_id>.",
-        "#settings <group_id>: Sasha manda le impostazioni di <group_id>.",
-        "#type: Sasha mostra il tipo del gruppo.",
-        "#kill chat <group_id>: Sasha rimuove tutti i membri di <group_id> e <group_id>.",
-        "#kill realm <realm_id>: Sasha rimuove tutti i membri di <realm_id> e <realm_id>.",
-        "#rem <group_id>: Sasha rimuove il gruppo.",
-        "#support <user_id>|<username>: Sasha promuove l'utente specificato a supporto.",
-        "#-support <user_id>|<username>: Sasha degrada l'utente specificato.",
-        "#list admins|groups|realms: Sasha mostra una lista della variabile specificata.",
-        "SUDO",
-        "#addadmin <user_id>|<username>: Sasha promuove l'utente specificato ad amminstratore.",
-        "#removeadmin <user_id>|<username>: Sasha degrada l'utente specificato.",
-    },
     patterns =
     {
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Gg][Rr][Oo][Uu][Pp]) (.*)$",
@@ -1052,4 +1023,31 @@ return {
     },
     run = run,
     min_rank = 1
+    -- usage
+    -- MOD
+    -- #who
+    -- #wholist
+    -- OWNER
+    -- #log
+    -- ADMIN
+    -- (#creategroup|sasha crea gruppo) <group_name>
+    -- (#createsuper|sasha crea supergruppo) <group_name>
+    -- (#createrealm|sasha crea regno) <realm_name>
+    -- (#setabout|sasha imposta descrizione) <group_id> <text>
+    -- (#setrules|sasha imposta regole) <group_id> <text>
+    -- #setname <realm_name>
+    -- #setname|#setgpname <group_id> <group_name>
+    -- (#lock|[sasha] blocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker
+    -- (#unlock|[sasha] sblocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker
+    -- #settings <group_id>
+    -- #type
+    -- #kill chat <group_id>
+    -- #kill realm <realm_id>
+    -- #rem <group_id>
+    -- #support <user_id>|<username>
+    -- #-support <user_id>|<username>
+    -- #list admins|groups|realms
+    -- SUDO
+    -- #addadmin <user_id>|<username>
+    -- #removeadmin <user_id>|<username>
 }

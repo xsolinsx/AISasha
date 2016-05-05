@@ -19,7 +19,6 @@ end
 
 return {
     description = "LEAVE_BAN",
-    usage = "Sasha banna l'utente che esce dal gruppo.",
     patterns =
     {
         "^!!tgservice (.*)$"

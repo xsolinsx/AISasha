@@ -1794,54 +1794,6 @@ end
 
 return {
     description = "SUPERGROUP",
-    usage =
-    {
-        "#owner: Sasha manda il proprietario.",
-        "(#modlist|[sasha] lista mod): Sasha manda la lista dei moderatori.",
-        "(#rules|sasha regole): Sasha manda le regole del gruppo.",
-        "MOD",
-        "(#bots|[sasha] lista bot): Sasha manda la lista dei bot.",
-        "#wholist|#memberslist: Sasha manda un file contenente la lista degli utenti.",
-        "#kickedlist: Sasha manda la lista degli utenti rimossi.",
-        "#del <reply>: Sasha elimina il messaggio specificato.",
-        "(#newlink|[sasha] crea link): Sasha crea un nuovo link d'invito.",
-        "(#link|sasha link): Sasha manda il link d'invito.",
-        "#setname|setgpname <text>: Sasha cambia il nome del gruppo con <text>.",
-        "#setphoto|setgpphoto: Sasha cambia la foto del gruppo.",
-        "(#setrules|sasha imposta regole) <text>: Sasha cambia le regole del gruppo con <text>.",
-        "(#setabout|sasha imposta descrizione) <text>: Sasha cambia la descrizione del gruppo con <text>.",
-        "(#lock|[sasha] blocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha blocca l'opzione specificata.",
-        "(#unlock|[sasha] sblocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha sblocca l'opzione specificata.",
-        "#setflood <value>: Sasha imposta il flood massimo a <value> che deve essere compreso tra 5 e 20.",
-        "#public yes|no: Sasha imposta il gruppo come pubblico|privato.",
-        "#muteuser|voce <id>|<username>|<reply>: Sasha imposta|toglie il muto sull'utente.",
-        "(#muteslist|lista muti): Sasha manda la lista delle variabili mute della chat.",
-        "(#mutelist|lista utenti muti): Sasha manda la lista degli utenti muti della chat.",
-        "#settings: Sasha manda le impostazioni del gruppo.",
-        "OWNER",
-        "(#admins|[sasha] lista admin): Sasha manda la lista degli amministratori.",
-        "(#setlink|sasha imposta link): Sasha imposta il link d'invito con quello che le verrà inviato.",
-        "#setadmin <id>|<username>|<reply>: Sasha promuove l'utente specificato ad amministratore (telegram).",
-        "#demoteadmin <id>|<username>|<reply>: Sasha degrada l'utente specificato (telegram).",
-        "#setowner <id>|<username>|<reply>: Sasha imposta l'utente specificato come proprietario.",
-        "(#promote|[sasha] promuovi) <id>|<username>|<reply>: Sasha promuove l'utente specificato a moderatore.",
-        "(#demote|[sasha] degrada) <id>|<username>|<reply>: Sasha degrada l'utente specificato.",
-        "#clean rules|about|modlist|mutelist: Sasha azzera la variabile specificata.",
-        "#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.",
-        "#unmute|ripristina all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.",
-        "SUPPORT",
-        "#add: Sasha aggiunge il supergruppo.",
-        "#rem: Sasha rimuove il supergruppo.",
-        "ADMIN",
-        "#tosuper: Sasha aggiorna il gruppo a supergruppo.",
-        "#setusername <text>: Sasha cambia l'username del gruppo con <text>.",
-        "peer_id",
-        "msg.to.id",
-        "msg.to.peer_id",
-        "SUDO",
-        "#mp <id>: Sasha promuove <id> a moderatore del gruppo (telegram).",
-        "#md <id>: Sasha degrada <id> dal ruolo di moderatore del gruppo (telegram).",
-    },
     patterns =
     {
         "^[#!/]([Aa][Dd][Dd])$",
@@ -1957,6 +1909,52 @@ return {
     run = run,
     pre_process = pre_process,
     min_rank = 0
+    -- usage
+    -- #owner
+    -- (#modlist|[sasha] lista mod)
+    -- (#rules|sasha regole)
+    -- MOD
+    -- (#bots|[sasha] lista bot)
+    -- #wholist|#memberslist
+    -- #kickedlist
+    -- #del <reply>
+    -- (#newlink|[sasha] crea link)
+    -- (#link|sasha link)
+    -- #setname|setgpname <text>
+    -- #setphoto|setgpphoto
+    -- (#setrules|sasha imposta regole) <text>
+    -- (#setabout|sasha imposta descrizione) <text>
+    -- (#lock|[sasha] blocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict
+    -- (#unlock|[sasha] sblocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict
+    -- #setflood <value>
+    -- #public yes|no
+    -- #muteuser|voce <id>|<username>|<reply>
+    -- (#muteslist|lista muti)
+    -- (#mutelist|lista utenti muti)
+    -- #settings
+    -- OWNER
+    -- (#admins|[sasha] lista admin)
+    -- (#setlink|sasha imposta link)
+    -- #setadmin <id>|<username>|<reply>
+    -- #demoteadmin <id>|<username>|<reply>
+    -- #setowner <id>|<username>|<reply>
+    -- (#promote|[sasha] promuovi) <id>|<username>|<reply>
+    -- (#demote|[sasha] degrada) <id>|<username>|<reply>
+    -- #clean rules|about|modlist|mutelist
+    -- #mute|silenzia all|text|documents|gifs|video|photo|audio
+    -- #unmute|ripristina all|text|documents|gifs|video|photo|audio
+    -- SUPPORT
+    -- #add
+    -- #rem
+    -- ADMIN
+    -- #tosuper
+    -- #setusername <text>
+    -- peer_id
+    -- msg.to.id
+    -- msg.to.peer_id
+    -- SUDO
+    -- #mp <id>
+    -- #md <id>
 }
 -- End supergrpup.lua
 -- By @Rondoozle

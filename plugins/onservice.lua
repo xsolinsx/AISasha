@@ -14,11 +14,6 @@ end
 
 return {
     description = "ONSERVICE",
-    usage =
-    {
-        "ADMIN",
-        "(#leave|sasha abbandona): Sasha lascia il gruppo.",
-    },
     patterns =
     {
         "^[#!/]([Ll][Ee][Aa][Vv][Ee])$",
@@ -27,4 +22,7 @@ return {
     },
     run = run,
     min_rank = 4
+    -- usage
+    -- ADMIN
+    -- (#leave|sasha abbandona)
 }

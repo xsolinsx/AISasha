@@ -28,7 +28,6 @@ end
 
 return {
     description = 'URBANDICTIONARY',
-    usage = "(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>: Sasha mostra la definizione di <text> dall'Urban Dictionary.",
     patterns =
     {
         "^[#!/][Uu][Rr][Bb][Aa][Nn][Dd][Ii][Cc][Tt][Ii][Oo][Nn][Aa][Rr][Yy] (.+)$",
@@ -40,4 +39,6 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- (#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>
 }

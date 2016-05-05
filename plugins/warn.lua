@@ -238,16 +238,6 @@ end
 
 return {
     description = "WARN",
-    usage =
-    {
-        "MOD",
-        "#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>.",
-        "#getwarn: Sasha manda il numero di avvertimenti massimi.",
-        "(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>: Sasha manda il numero di avvertimenti ricevuti dall'utente.",
-        "(#warn|[sasha] avverti) <id>|<username>|<reply>: Sasha avverte l'utente.",
-        "#unwarn <id>|<username>|<reply>: Sasha diminuisce di uno gli avvertimenti dell'utente.",
-        "(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>: Sasha azzera gli avvertimenti dell'utente.",
-    },
     patterns =
     {
         "^[#!/]([Ss][Ee][Tt][Ww][Aa][Rr][Nn]) (%d+)$",
@@ -278,4 +268,12 @@ return {
     },
     run = run,
     min_rank = 1
+    -- usage
+    -- MOD
+    -- #setwarn <value>
+    -- #getwarn
+    -- (#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>
+    -- (#warn|[sasha] avverti) <id>|<username>|<reply>
+    -- #unwarn <id>|<username>|<reply>
+    -- (#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>
 }

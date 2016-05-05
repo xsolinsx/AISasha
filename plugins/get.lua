@@ -70,11 +70,6 @@ end
 
 return {
     description = "GET",
-    usage =
-    {
-        "(#getlist|#get|sasha lista): Sasha mostra una lista delle variabili settate.",
-        "[#get] <var_name>: Sasha manda il valore di <var_name>.",
-    },
     patterns =
     {
         "^[#!/]([Gg][Ee][Tt][Ll][Ii][Ss][Tt])$",
@@ -88,4 +83,7 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- (#getlist|#get|sasha lista)
+    -- [#get] <var_name>
 }

@@ -331,19 +331,6 @@ end
 
 return {
     description = "INPM",
-    usage =
-    {
-        "#chats: Sasha mostra un elenco di chat \"pubbliche\".",
-        "#chatlist: Sasha manda un file con un elenco di chat \"pubbliche\".",
-        "ADMIN",
-        "#join <chat_id>|<alias> [support]: Sasha tenta di aggiungere l'utente a <chat_id>|<alias>.",
-        "#getaliaslist: Sasha manda la lista degli alias.",
-        "SUDO",
-        "#allchats: Sasha mostra l'elenco delle chat.",
-        "#allchatlist: Sasha manda un file con l'elenco delle chat.",
-        "#setalias <alias> <group_id>: Sasha imposta <alias> come alias di <group_id>.",
-        "#unsetalias <alias>: Sasha elimina <alias>.",
-    },
     patterns =
     {
         "^[#!/]([Cc][Hh][Aa][Tt][Ss])$",
@@ -362,4 +349,15 @@ return {
     run = run,
     pre_process = pre_process,
     min_rank = 0
+    -- usage
+    -- #chats
+    -- #chatlist
+    -- ADMIN
+    -- #join <chat_id>|<alias> [support]
+    -- #getaliaslist
+    -- SUDO
+    -- #allchats
+    -- #allchatlist
+    -- #setalias <alias> <group_id>
+    -- #unsetalias <alias>
 }

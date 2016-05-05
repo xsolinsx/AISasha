@@ -70,12 +70,6 @@ end
 
 return {
     description = "WHITELIST",
-    usage =
-    {
-        "ADMIN",
-        "#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l'utente specificato alla|dalla whitelist.",
-        "#clean whitelist: Sasha pulisce la whitelist.",
-    },
     patterns =
     {
         "^[#!/]([Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt])$",
@@ -84,4 +78,8 @@ return {
     },
     run = run,
     min_rank = 4
+    -- usage
+    -- ADMIN
+    -- #whitelist <id>|<username>|<reply>
+    -- #clean whitelist
 }

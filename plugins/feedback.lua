@@ -17,11 +17,12 @@ end
 
 return {
     description = "FEEDBACK",
-    usage = "#feedback <text>: Sasha invia <text> al suo creatore.",
     patterns =
     {
         "^[#!/][Ff][Ee][Ee][Dd][Bb][Aa][Cc][Kk] (.*)$",
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- #feedback <text>
 }

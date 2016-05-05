@@ -79,7 +79,7 @@ local function callback_reply(extra, success, result)
         text = text .. lang_text('username') .. '@' .. result.from.username
     end
     if result.from.phone then
-        text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '****'
+        text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '******'
     end
     local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
@@ -107,7 +107,7 @@ local function callback_id(cb_extra, success, result)
         text = text .. lang_text('username') .. '@' .. result.username
     end
     if result.phone then
-        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
+        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '******'
     end
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. cb_extra.msg.to.id) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
@@ -135,7 +135,7 @@ local function callback_username(extra, success, result)
         text = text .. lang_text('username') .. '@' .. result.username
     end
     if result.phone then
-        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '****'
+        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '******'
     end
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.chatid) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
@@ -163,7 +163,7 @@ local function callback_from(extra, success, result)
         text = text .. lang_text('username') .. '@' .. result.fwd_from.username
     end
     if result.fwd_from.phone then
-        text = text .. lang_text('phone') .. string.sub(result.fwd_from.phone, 1, 6) .. '****'
+        text = text .. lang_text('phone') .. string.sub(result.fwd_from.phone, 1, 6) .. '******'
     end
     local msgs = tonumber(redis:get('msgs:' .. result.fwd_from.peer_id .. ':' .. result.to.peer_id) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
@@ -219,7 +219,7 @@ local function database(cb_extra, success, result)
             text = text .. ' Username: @' .. v.username
         end
         if v.phone then
-            text = text .. 'Telefono: ' .. string.sub(v.phone, 1, 6) .. '****'
+            text = text .. 'Telefono: ' .. string.sub(v.phone, 1, 6) .. '******'
         end
         text = text .. 'Data: ' .. os.date('%c') .. '\n\n'
         .. '\nId: ' .. v.peer_id
@@ -404,18 +404,6 @@ end
 
 return {
     description = "INFO",
-    usage =
-    {
-        "(#info|[sasha] info): Sasha manda le info dell'utente e della chat o di se stessa",
-        "MOD",
-        "(#info|[sasha] info) <id>|<username>|<reply>|from: Sasha manda le info dell'utente specificato.",
-        "(#who|#members|[sasha] lista membri): Sasha manda la lista degli utenti.",
-        "(#kicked|[sasha] lista rimossi): Sasha manda la lista degli utenti rimossi.",
-        "OWNER",
-        "(#groupinfo|[sasha] info gruppo) [<group_id>]: Sasha manda le info del gruppo specificato.",
-        "SUDO",
-        "(#database|[sasha] database): Sasha salva i dati di tutti gli utenti.",
-    },
     patterns =
     {
         "^[#!/]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
@@ -442,4 +430,14 @@ return {
     run = run,
     pre_process = pre_process,
     min_rank = 0
+    -- usage
+    -- (#info|[sasha] info)
+    -- MOD
+    -- (#info|[sasha] info) <id>|<username>|<reply>|from
+    -- (#who|#members|[sasha] lista membri)
+    -- (#kicked|[sasha] lista rimossi)
+    -- OWNER
+    -- (#groupinfo|[sasha] info gruppo) [<group_id>]
+    -- SUDO
+    -- (#database|[sasha] database)
 }

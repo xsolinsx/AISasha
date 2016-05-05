@@ -39,7 +39,6 @@ end
 
 return {
     description = "ARABIC_LOCK",
-    usage = "Sasha blocca l'arabo nei gruppi.",
     patterns =
     {
         "([\216-\219][\128-\191])"

@@ -606,33 +606,6 @@ end
 
 return {
     description = "RULETA",
-    usage =
-    {
-        "Ruleta by AISasha, inspired from Leia (#RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c'è il proiettile sei fuori altrimenti rimani.",
-        "#registerme|#registrami: Sasha registra l'utente alla roulette.",
-        "#deleteme|#eliminami: Sasha elimina i dati dell'utente.",
-        "#ruletainfo: Sasha manda le informazioni della roulette.",
-        "#mystats|#punti: Sasha manda le statistiche dell'utente.",
-        "#ruleta: Sasha cerca di ucciderti.",
-        "#godruleta: Sasha ti dà il 50% di probabilità di guadagnare 70 punti, con l'altro 50% li perdi tutti (richiede almeno 11 punti).",
-        "#challenge|#sfida <username>|<reply>: Sasha avvia una sfida tra il mittente e l'utente specificato.",
-        "#accept|#accetta: Sasha conferma la sfida.",
-        "#reject|#rifiuta: Sasha cancella la sfida.",
-        "#challengeinfo: Sasha manda le informazioni della sfida in corso.",
-        "MOD",
-        "#setcaps <value>: Sasha mette <value> proiettili nel tamburo.",
-        "#setchallengecaps <value>: Sasha mette <value> proiettili nel tamburo delle sfide.",
-        "(#kick|spara|[sasha] uccidi) random: Sasha sceglie un utente a caso e lo rimuove.",
-        "OWNER",
-        "#setcylinder <value>: Sasha imposta un tamburo da <value> colpi nel range [5-10].",
-        "#setchallengecylinder <value>: Sasha imposta un tamburo da <value> colpi per le sfide nel range [5-10].",
-        "ADMIN",
-        "#registergroup|#registragruppo: Sasha abilita il gruppo a giocare a ruleta.",
-        "#deletegroup|#eliminagruppo: Sasha disabilita il gruppo per ruleta.",
-        "SUDO",
-        "#createdb: Sasha crea il database di ruleta.",
-        "#addpoints <id> <value>: Sasha aggiunge <value> punti all'utente specificato.",
-    },
     patterns =
     {
         "^[#!/]([Kk][Ii][Cc][Kk]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
@@ -680,4 +653,28 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- #registerme|#registrami
+    -- #deleteme|#eliminami
+    -- #ruletainfo
+    -- #mystats|#punti
+    -- #ruleta
+    -- #godruleta
+    -- #challenge|#sfida <username>|<reply>
+    -- #accept|#accetta
+    -- #reject|#rifiuta
+    -- #challengeinfo
+    -- MOD
+    -- #setcaps <value>
+    -- #setchallengecaps <value>
+    -- (#kick|spara|[sasha] uccidi) random
+    -- OWNER
+    -- #setcylinder <value>
+    -- #setchallengecylinder <value>
+    -- ADMIN
+    -- #registergroup|#registragruppo
+    -- #deletegroup|#eliminagruppo
+    -- SUDO
+    -- #createdb
+    -- #addpoints <id> <value>
 }

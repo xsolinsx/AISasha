@@ -93,7 +93,6 @@ end
 
 return {
     description = "INTERACT",
-    usage = "Sasha interagisce con gli utenti.",
     patterns =
     {
         -- react

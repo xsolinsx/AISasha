@@ -45,13 +45,6 @@ end
 
 return {
     description = "APOD",
-    usage =
-    {
-        "#(apod|astro) [<date>]: Sasha manda l'APOD.",
-        "#(apod|astro)hd [<date>]: Sasha manda l'APOD in HD.",
-        "#(apod|astro)text [<date>]: Sasha manda la spiegazione dell'APOD.",
-        "Se c'è <date> ed è nel formato AAAA-MM-GG l'APOD è di <date>.",
-    },
     patterns =
     {
         "^[#!/]([Aa][Pp][Oo][Dd])$",
@@ -72,4 +65,8 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- #(apod|astro) [<date>]
+    -- #(apod|astro)hd [<date>]
+    -- #(apod|astro)text [<date>]
 }

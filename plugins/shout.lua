@@ -26,7 +26,6 @@ end
 
 return {
     description = "SHOUT",
-    usage = "(#shout|[sasha] grida|[sasha] urla) <text>: Sasha \"urla\" <text>.",
     patterns =
     {
         "^[#!/][Ss][Hh][Oo][Uu][Tt] (.*)$",
@@ -38,4 +37,6 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- (#shout|[sasha] grida|[sasha] urla) <text>
 }

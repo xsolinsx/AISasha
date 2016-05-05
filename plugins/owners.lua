@@ -607,16 +607,6 @@ end
 
 return {
     description = "OWNERS",
-    usage =
-    {
-        "OWNER",
-        -- "#owners <group_id>: Sasha invia il log di <group_id>.",
-        "#changeabout <group_id> <text>: Sasha cambia la descrizione di <group_id> con <text>.",
-        "#changerules <group_id> <text>: Sasha cambia le regole di <group_id> con <text>.",
-        "#changename <group_id> <text>: Sasha cambia il nome di <group_id> con <text>.",
-        "#viewsettings <group_id>: Sasha manda le impostazioni di <group_id>.",
-        "#loggroup <group_id>: Sasha invia il log di <group_id>.",
-    },
     patterns =
     {
         -- "^[#!/][Oo][Ww][Nn][Ee][Rr][Ss] (%d+) ([^%s]+) (.*)$",
@@ -629,4 +619,12 @@ return {
     },
     run = run,
     min_rank = 2
+    -- usage
+    -- OWNER
+    ---- "#owners <group_id>
+    -- #changeabout <group_id> <text>
+    -- #changerules <group_id> <text>
+    -- #changename <group_id> <text>
+    -- #viewsettings <group_id>
+    -- #loggroup <group_id>
 }

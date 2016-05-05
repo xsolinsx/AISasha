@@ -1,5 +1,6 @@
 local function run(msg, matches)
     if is_sudo(msg) then
+        -- code for writing is in on_msg_receive(msg) (seedbot.lua)
         if matches[1]:lower() == 'on' then
             redis:set('writing', true)
         elseif matches[1]:lower() == 'off' then
@@ -12,11 +13,6 @@ end
 
 return {
     description = "REACTIONS",
-    usage =
-    {
-        "SUDO",
-        "#writing on|off: Sasha (dà|smette di dare) di matto.",
-    },
     patterns =
     {
         "^[#!/][Ww][Rr][Ii][Tt][Ii][Nn][Gg] ([Oo][Nn])$",
@@ -24,4 +20,7 @@ return {
     },
     run = run,
     min_rank = 5
+    -- usage
+    -- SUDO
+    -- #writing on|off
 }

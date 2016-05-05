@@ -17,7 +17,6 @@ end
 
 return {
     description = "TEX",
-    usage = "(#tex|[sasha] equazione) <equation>: Sasha converte <equation> in immagine.",
     patterns =
     {
         "^[#!/][Tt][Ee][Xx] (.+)$",
@@ -27,4 +26,6 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- (#tex|[sasha] equazione) <equation>
 }

@@ -62,12 +62,6 @@ end
 
 return {
     description = "INVITE",
-    usage =
-    {
-        -- "OWNER",
-        "ADMIN",
-        "(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invita l'utente specificato.",
-    },
     patterns =
     {
         "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee]) (.*)$",
@@ -85,4 +79,8 @@ return {
     run = run,
     -- min_rank = 2
     min_rank = 4
+    -- usage
+    -- OWNER
+    -- ADMIN
+    -- (#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>
 }

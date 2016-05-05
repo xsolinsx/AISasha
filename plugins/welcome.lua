@@ -89,14 +89,6 @@ end
 
 return {
     description = "WELCOME",
-    usage =
-    {
-        "#getwelcome: Sasha manda il benvenuto.",
-        "OWNER",
-        "#setwelcome <text>: Sasha imposta <text> come benvenuto.",
-        "#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole.",
-        "#getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.",
-    },
     patterns =
     {
         "^[#!/]([Ss][Ee][Tt][Ww][Ee][Ll][Cc][Oo][Mm][Ee]) (.*)$",
@@ -107,4 +99,10 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- #getwelcome: Sasha manda il benvenuto.
+    -- OWNER
+    -- #setwelcome <text>: Sasha imposta <text> come benvenuto.
+    -- #setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole.
+    -- #getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.
 }

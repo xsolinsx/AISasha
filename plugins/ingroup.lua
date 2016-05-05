@@ -1723,42 +1723,6 @@ end
 
 return {
     description = "INGROUP",
-    usage =
-    {
-        "(#rules|sasha regole): Sasha mostra le regole del gruppo.",
-        "(#about|sasha descrizione): Sasha mostra la descrizione del gruppo.",
-        "(#modlist|[sasha] lista mod): Sasha mostra la lista dei moderatori.",
-        "#owner: Sasha mostra l'id del proprietario del gruppo.",
-        "MOD",
-        "#setname|#setgpname <group_name>: Sasha imposta il nome del gruppo con <group_name>.",
-        "#setphoto|#setgpphoto: Sasha imposta e blocca la foto del gruppo.",
-        "(#setrules|sasha imposta regole) <text>: Sasha imposta <text> come regole.",
-        "(#setabout|sasha imposta descrizione) <text>: Sasha imposta <text> come descrizione.",
-        "(#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha blocca l'opzione specificata.",
-        "(#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha sblocca l'opzione specificata.",
-        "#muteuser|voce <id>|<username>|<reply>: Sasha imposta|toglie il muto sull'utente.",
-        "(#muteslist|lista muti): Sasha manda la lista delle variabili mute della chat.",
-        "(#mutelist|lista utenti muti): Sasha manda la lista degli utenti muti della chat.",
-        "#settings: Sasha mostra le impostazioni del gruppo.",
-        "#public yes|no: Sasha imposta il gruppo come pubblico|privato.",
-        "(#newlink|sasha crea link): Sasha crea il link del gruppo.",
-        "(#link|sasha link): Sasha mostra il link del gruppo.",
-        "#setflood <value>: Sasha imposta il flood massimo del gruppo a <value>.",
-        "(#kickinactive [<msgs>]|sasha uccidi sotto <msgs> messaggi): Sasha rimuove tutti gli utenti inattivi.",
-        "OWNER",
-        "(#setlink|[sasha] imposta link): Sasha imposta il link d'invito con quello che le verrà inviato.",
-        "(#promote|[sasha] promuovi) <username>|<reply>: Sasha promuove a moderatore l'utente specificato.",
-        "(#demote|[sasha] degrada) <username>|<reply>: Sasha degrada l'utente specificato.",
-        "#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha imposta il muto sulla variabile specificata.",
-        "#unmute|ripristina all|text|documents|gifs|video|photo|audio: Sasha rimuove il muto sulla variabile specificata.",
-        "#setowner <id>: Sasha imposta <id> come proprietario.",
-        "#clean modlist|rules|about: Sasha pulisce il parametro specificato.",
-        "ADMIN",
-        "#add [realm]: Sasha aggiunge il gruppo|reame.",
-        "#rem [realm]: Sasha rimuove il gruppo|reame.",
-        "#kill chat|realm: Sasha elimina ogni utente nel gruppo|reame e poi lo chiude.",
-        "#setgpowner <group_id> <user_id>: Sasha imposta <user_id> come proprietario.",
-    },
     patterns =
     {
         "^[#!/]([Aa][Dd][Dd])$",
@@ -1859,4 +1823,38 @@ return {
     run = run,
     pre_process = pre_process,
     min_rank = 0
+    -- usage
+    -- (#rules|sasha regole)
+    -- (#about|sasha descrizione)
+    -- (#modlist|[sasha] lista mod)
+    -- #owner
+    -- MOD
+    -- #setname|#setgpname <group_name>
+    -- #setphoto|#setgpphoto
+    -- (#setrules|sasha imposta regole) <text>
+    -- (#setabout|sasha imposta descrizione) <text>
+    -- (#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts
+    -- (#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts
+    -- #muteuser|voce <id>|<username>|<reply>
+    -- (#muteslist|lista muti)
+    -- (#mutelist|lista utenti muti)
+    -- #settings
+    -- #public yes|no
+    -- (#newlink|sasha crea link)
+    -- (#link|sasha link)
+    -- #setflood <value>
+    -- (#kickinactive [<msgs>]|sasha uccidi sotto <msgs> messaggi)
+    -- OWNER
+    -- (#setlink|[sasha] imposta link)
+    -- (#promote|[sasha] promuovi) <username>|<reply>
+    -- (#demote|[sasha] degrada) <username>|<reply>
+    -- #mute|silenzia all|text|documents|gifs|video|photo|audio
+    -- #unmute|ripristina all|text|documents|gifs|video|photo|audio
+    -- #setowner <id>
+    -- #clean modlist|rules|about
+    -- ADMIN
+    -- #add [realm]
+    -- #rem [realm]
+    -- #kill chat|realm
+    -- #setgpowner <group_id> <user_id>
 }

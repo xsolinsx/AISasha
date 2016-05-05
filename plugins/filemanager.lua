@@ -14,18 +14,7 @@ end
 local function callback_reply_file(extra, success, result)
     print(result.to.peer_id)
     if result.media then
-        if result.media.type == 'document' then
-            load_document(result.id, callback, result.to.peer_id)
-        elseif result.media.type == 'photo' then
-            load_photo(result.id, callback, result.to.peer_id)
-        elseif result.media.type == 'video' then
-            load_video(result.id, callback, result.to.peer_id)
-        elseif result.media.type == 'audio' then
-            load_audio(result.id, callback, result.to.peer_id)
-        else
-            send_large_msg('chat#id' .. result.to.peer_id, lang_text('mediaNotRecognized'))
-            send_large_msg('channel#id' .. result.to.peer_id, lang_text('mediaNotRecognized'))
-        end
+        load_document(result.id, callback, result.to.peer_id)
     else
         send_large_msg('chat#id' .. result.to.peer_id, lang_text('needMedia'))
         send_large_msg('channel#id' .. result.to.peer_id, lang_text('needMedia'))
@@ -117,24 +106,6 @@ end
 
 return {
     description = "FILEMANAGER",
-    usage =
-    {
-        "SUDO",
-        "#folder: Sasha manda la directory attuale.",
-        "#cd [<directory>]: Sasha entra in <directory>, se non è specificata torna alla cartella base.",
-        "#ls: Sasha manda la lista di file e cartelle della directory corrente.",
-        "#mkdir <directory>: Sasha crea <directory>.",
-        "#rmdir <directory>: Sasha elimina <directory>.",
-        "#rm <file>: Sasha elimina <file>.",
-        "#touch <file>: Sasha crea <file>.",
-        "#cat <file>: Sasha manda il contenuto di <file>.",
-        "#tofile <file> <text>: Sasha crea <file> con <text> come contenuto.",
-        "#shell <command>: Sasha esegue <command>.",
-        "#cp <file> <directory>: Sasha copia <file> in <directory>.",
-        "#mv <file> <directory>: Sasha sposta <file> in <directory>.",
-        "#upload <file>: Sasha manda <file> nella chat.",
-        "#download <reply>: Sasha scarica il file contenuto in <reply>."
-    },
     patterns =
     {
         "^[#!/]([Ff][Oo][Ll][Dd][Ee][Rr])$",
@@ -155,5 +126,21 @@ return {
     },
     run = run,
     min_rank = 5
+    -- usage
+    -- SUDO
+    -- #folder
+    -- #cd [<directory>]
+    -- #ls
+    -- #mkdir <directory>
+    -- #rmdir <directory>
+    -- #rm <file>
+    -- #touch <file>
+    -- #cat <file>
+    -- #tofile <file> <text>
+    -- #shell <command>
+    -- #cp <file> <directory>
+    -- #mv <file> <directory>
+    -- #upload <file>
+    -- #download <reply>
 }
 -- Thanks to @imandaneshi

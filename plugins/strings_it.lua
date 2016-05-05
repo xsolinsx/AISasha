@@ -107,7 +107,6 @@ local function run(msg, matches)
         set_text(LANG .. 'sendingYou', 'Ti sto inviando ')
         set_text(LANG .. 'useQuoteOnFile', 'Usa \'rispondi\' sul file che vuoi che scarichi.')
         set_text(LANG .. 'needMedia', 'Mi serve un file.')
-        set_text(LANG .. 'mediaNotRecognized', 'File non riconosciuto.')
         set_text(LANG .. 'fileDownloadedTo', 'File scaricato in: ')
         set_text(LANG .. 'errorDownloading', 'Errore durante il download: ')
 
@@ -932,11 +931,6 @@ end
 
 return {
     description = "STRINGS",
-    usage =
-    {
-        "SUDO",
-        "(#updateitstrings|#installitstrings|([sasha] installa|[sasha] aggiorna) stringhe it): Sasha aggiorna le stringhe di testo.",
-    },
     patterns =
     {
         '^[#!/]([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Ii][Tt][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
@@ -950,4 +944,7 @@ return {
     },
     run = run,
     min_rank = 5
+    -- usage
+    -- SUDO
+    -- (#updateitstrings|#installitstrings|([sasha] installa|[sasha] aggiorna) stringhe it)
 }

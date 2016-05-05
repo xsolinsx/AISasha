@@ -397,29 +397,6 @@ end
 
 return {
     description = "ADMINISTRATOR",
-    usage =
-    {
-        "ADMIN",
-        "(#pm|sasha messaggia) <user_id> <msg>: Sasha invia <msg> a <user_id>.",
-        "#import <group_link>: Sasha entra nel gruppo tramite <group_link>.",
-        "(#block|sasha blocca) <user_id>: Sasha blocca <user_id>.",
-        "(#unblock|sasha sblocca) <user_id>: Sasha sblocca <user_id>.",
-        "(#markread|sasha segna letto) (on|off): Sasha segna come [non] letti i messaggi ricevuti.",
-        "(#setbotphoto|sasha cambia foto): Sasha chiede la foto da settare come profilo.",
-        "(#updateid|sasha aggiorna longid): Sasha salva il long_id.",
-        "(#addlog|sasha aggiungi log): Sasha aggiunge il log.",
-        "(#remlog|sasha rimuovi log): Sasha rimuove il log.",
-        "SUDO",
-        "(#contactlist|sasha lista contatti) (txt|json): Sasha manda la lista dei contatti.",
-        "(#dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.",
-        "(#addcontact|sasha aggiungi contatto) <phone> <name> <surname>: Sasha aggiunge il contatto specificato.",
-        "(#delcontact|sasha elimina contatto) <user_id>: Sasha elimina il contatto <user_id>.",
-        "(#sendcontact|sasha invia contatto) <phone> <name> <surname>: Sasha invia il contatto specificato.",
-        "(#mycontact|sasha mio contatto): Sasha invia il contatto del richiedente.",
-        "(#sync_gbans|sasha sincronizza superban): Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.",
-        "(#backup|sasha esegui backup): Sasha esegue un backup di se stessa e invia il log al richiedente.",
-        "#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.",
-    },
     patterns =
     {
         "^[#!/]([Pp][Mm]) (%d+) (.*)$",
@@ -489,6 +466,27 @@ return {
     run = run,
     pre_process = pre_process,
     min_rank = 4
+    -- usage
+    -- ADMIN
+    -- (#pm|sasha messaggia) <user_id> <msg>
+    -- #import <group_link>
+    -- (#block|sasha blocca) <user_id>
+    -- (#unblock|sasha sblocca) <user_id>
+    -- (#markread|sasha segna letto) (on|off)
+    -- (#setbotphoto|sasha cambia foto)
+    -- (#updateid|sasha aggiorna longid)
+    -- (#addlog|sasha aggiungi log)
+    -- (#remlog|sasha rimuovi log)
+    -- SUDO
+    -- (#contactlist|sasha lista contatti) (txt|json)
+    -- (#dialoglist|sasha lista chat) (txt|json)
+    -- (#addcontact|sasha aggiungi contatto) <phone> <name> <surname>
+    -- (#delcontact|sasha elimina contatto) <user_id>
+    -- (#sendcontact|sasha invia contatto) <phone> <name> <surname>
+    -- (#mycontact|sasha mio contatto)
+    -- (#sync_gbans|sasha sincronizza superban)
+    -- (#backup|sasha esegui backup)
+    -- #vardump [<reply>|<msg_id>]
 }
 -- By @imandaneshi :)
 -- https://github.com/SEEDTEAM/TeleSeed/blob/test/plugins/admin.lua

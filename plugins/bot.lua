@@ -1,14 +1,10 @@
 local function run(msg, matches)
+    -- code is in function msg_valid(msg) (seedbot.lua)
     return
 end
 
 return {
     description = "BOT",
-    usage =
-    {
-        "OWNER",
-        "#bot|sasha on|off: Sasha si attiva|disattiva.",
-    },
     patterns =
     {
         "^[#!/][Bb][Oo][Tt] ([Oo][Nn])",
@@ -20,4 +16,7 @@ return {
     run = run,
     pre_process = pre_process,
     min_rank = 2
+    -- usage
+    -- OWNER
+    -- #bot|sasha on|off
 }

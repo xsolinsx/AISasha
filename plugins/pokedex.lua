@@ -57,7 +57,6 @@ end
 
 return {
     description = "POKEDEX",
-    usage = "#pokedex|#pokemon <name>|<id>: Sasha cerca il pokémon specificato e ne invia le informazioni.",
     patterns =
     {
         "^[#!/][Pp][Oo][Kk][ÈèÉéEe][Dd][Ee][Xx] (.*)$",
@@ -65,4 +64,6 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- #pokedex|#pokemon <name>|<id>: Sasha cerca il pokémon specificato e ne invia le informazioni.
 }

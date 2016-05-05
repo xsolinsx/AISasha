@@ -54,14 +54,6 @@ end
 
 return {
     description = "SPAM",
-    usage =
-    {
-        "OWNER",
-        "#setspam <text>: Sasha imposta <text> come messaggio da spammare.",
-        "#setmsgs <value>: Sasha imposta <value> come numero di messaggi da spammare.",
-        "#setwait <seconds>: Sasha imposta <seconds> come intervallo di tempo tra i messaggi.",
-        "(#spam|[sasha] spamma): Sasha inizia a spammare.",
-    },
     patterns =
     {
         "^[#!/]([Ss][Pp][Aa][Mm])$",
@@ -74,4 +66,10 @@ return {
     },
     run = run,
     min_rank = 2
+    -- usage
+    -- OWNER
+    -- #setspam <text>
+    -- #setmsgs <value>
+    -- #setwait <seconds>
+    -- (#spam|[sasha] spamma)
 }

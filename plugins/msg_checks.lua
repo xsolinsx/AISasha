@@ -300,7 +300,6 @@ end
 -- End pre_process function
 return {
     description = "MSG_CHECKS",
-    usage = "Sasha controlla i messaggi che riceve.",
     patterns = { },
     pre_process = pre_process,
     min_rank = 0

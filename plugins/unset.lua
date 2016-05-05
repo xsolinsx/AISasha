@@ -35,11 +35,6 @@ end
 
 return {
     description = "UNSET",
-    usage =
-    {
-        "MOD",
-        "(#unset|[sasha] unsetta) <var_name>: Sasha elimina <var_name>.",
-    },
     patterns =
     {
         "^[#!/][Uu][Nn][Ss][Ee][Tt] ([^%s]+)$",
@@ -49,4 +44,7 @@ return {
     },
     run = run,
     min_rank = 1
+    -- usage
+    -- MOD
+    -- (#unset|[sasha] unsetta) <var_name>
 }

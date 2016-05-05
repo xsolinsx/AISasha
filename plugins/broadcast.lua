@@ -21,13 +21,6 @@ end
 
 return {
     description = "BROADCAST",
-    usage =
-    {
-        "ADMIN",
-        "#br <group_id> <text>: Sasha invia <text> a <group_id>.",
-        "SUDO",
-        "#broadcast <text>: Sasha invia <text> a tutti i gruppi.",
-    },
     patterns =
     {
         "^[#!/]([Bb][Rr][Oo][Aa][Dd][Cc][Aa][Ss][Tt]) +(.+)$",
@@ -35,4 +28,9 @@ return {
     },
     run = run,
     min_rank = 4
+    -- usage
+    -- ADMIN
+    -- #br <group_id> <text>: Sasha invia <text> a <group_id>.
+    -- SUDO
+    -- #broadcast <text>: Sasha invia <text> a tutti i gruppi.
 }

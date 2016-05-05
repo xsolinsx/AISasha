@@ -264,15 +264,6 @@ end
 
 return {
     description = "HELP",
-    usage =
-    {
-        "(#sudolist|sasha lista sudo): Sasha manda la lista dei sudo.",
-        "#getrank|rango [<id>|<username>|<reply>]: Sasha manda il rank dell'utente.",
-        "(#help|sasha aiuto): Sasha mostra una lista dei plugin disponibili.",
-        "(#help|commands|sasha aiuto) <plugin_name>|<plugin_number> [<fake_rank>]: Sasha mostra l'aiuto per il plugin specificato.",
-        "(#helpall|allcommands|sasha aiuto tutto) [<fake_rank>]: Sasha mostra tutti i comandi di tutti i plugin.",
-        "Il parametro <fake_rank> serve per mandare l'help di un rango più basso, i ranghi sono: USER, MOD, OWNER, SUPPORT, ADMIN, SUDO.",
-    },
     patterns =
     {
         "^[#!/]([Hh][Ee][Ll][Pp])$",
@@ -306,4 +297,10 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- (#sudolist|sasha lista sudo)
+    -- #getrank|rango [<id>|<username>|<reply>]
+    -- (#help|sasha aiuto)
+    -- (#help|commands|sasha aiuto) <plugin_name>|<plugin_number> [<fake_rank>]
+    -- (#helpall|allcommands|sasha aiuto tutto) [<fake_rank>]
 }

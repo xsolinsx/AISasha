@@ -62,23 +62,6 @@ end
 
 return {
     description = "WEBSHOT",
-    usage =
-    {
-        "MOD",
-        "(#webshot|[sasha] webshotta) <url> [<size>]: Sasha esegue uno screenshot di <url> e lo invia, se <size> è specificata di quella dimensione.",
-        "La dimensione può essere:",
-        "T: (120 x 90px)",
-        "S: (200 x 150px)",
-        "E: (320 x 240px)",
-        "N: (400 x 300px)",
-        "M: (640 x 480px)",
-        "L: (800 x 600px)",
-        "X: (1024 x 768px)",
-        "Nmob: (480 x 800px)",
-        "ADMIN",
-        "F: Pagina intera (può essere un processo molto lungo)",
-        "Fmob: Pagina intera (può essere un processo lungo)",
-    },
     patterns =
     {
         "^[#!/][Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([Hh][Tt][Tt][Pp][Ss]?://[%w-_%.%?%.:/%+=&]+) (.*)$",
@@ -93,4 +76,7 @@ return {
     },
     run = run,
     min_rank = 1
+    -- usage
+    -- MOD
+    -- (#webshot|[sasha] webshotta) <url> [<size>]
 }

@@ -71,14 +71,6 @@ end
 
 return {
     description = "QR",
-    usage =
-    {
-        "(#qr|sasha qr) [\"<background_color>\" \"<data_color>\"] <text>: Sasha crea il QR Code di <text>, se specificato colora il QR Code.",
-        "I colori possono essere specificati come segue:",
-        "Testo => red|green|blue|purple|black|white|gray.",
-        "Notazione Esadecimale => (\"a56729\" è marrone).",
-        "Notazione Decimale => (\"255-192-203\" è rosa).",
-    },
     patterns =
     {
         "^[#!/][Qq][Rr] \"(%w+)\" \"(%w+)\" (.+)$",
@@ -89,4 +81,6 @@ return {
     },
     run = run,
     min_rank = 0
+    -- usage
+    -- (#qr|sasha qr) [\"<background_color>\" \"<data_color>\"] <text>
 }

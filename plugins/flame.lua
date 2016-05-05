@@ -171,13 +171,6 @@ end
 
 return {
     description = "FLAME",
-    usage =
-    {
-        "MOD",
-        "(#startflame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l'utente specificato.",
-        "(#stopflame|[sasha] stop flame): Sasha smette di flammare.",
-        "(#flameinfo|[sasha] info flame): Sasha manda le info su chi sta flammando."
-    },
     patterns =
     {
         "^[#!/]([Ss][Tt][Aa][Rr][Tt][Ff][Ll][Aa][Mm][Ee]) (.*)$",
@@ -199,4 +192,9 @@ return {
     pre_process = pre_process,
     run = run,
     min_rank = 1
+    -- usage
+    -- MOD
+    -- (#startflame|[sasha] flamma) <id>|<username>|<reply>
+    -- (#stopflame|[sasha] stop flame)
+    -- (#flameinfo|[sasha] info flame)
 }

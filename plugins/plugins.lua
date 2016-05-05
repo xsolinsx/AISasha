@@ -210,18 +210,6 @@ end
 
 return {
     description = "PLUGINS",
-    usage =
-    {
-        "OWNER",
-        "(#disabledlist|([sasha] lista disabilitati|disattivati)): Sasha mostra una lista dei plugins disabilitati su questa chat.",
-        "(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> chat: Sasha riabilita <plugin> su questa chat.",
-        "(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat: Sasha disabilita <plugin> su questa chat.",
-        "SUDO",
-        "(#plugins|[sasha] lista plugins): Sasha mostra una lista di tutti i plugins.",
-        "(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]: Sasha abilita <plugin>, se specificato solo su questa chat.",
-        "(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]: Sasha disabilita <plugin>, se specificato solo su questa chat.",
-        "(#[plugin[s]] reload|[sasha] ricarica): Sasha ricarica tutti i plugins.",
-    },
     patterns =
     {
         "^[#!/][Pp][Ll][Uu][Gg][Ii][Nn][Ss]$",
@@ -264,4 +252,14 @@ return {
     },
     run = run,
     min_rank = 2
+    -- usage
+    -- OWNER
+    -- (#disabledlist|([sasha] lista disabilitati|disattivati))
+    -- (#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> chat
+    -- (#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat
+    -- SUDO
+    -- (#plugins|[sasha] lista plugins)
+    -- (#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]
+    -- (#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]
+    -- (#[plugin[s]] reload|[sasha] ricarica)
 }

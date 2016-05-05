@@ -163,7 +163,6 @@ do
 
     return {
         description = "ANTI_SPAM",
-        usage = "Sasha rimuove l'utente che spamma oltre al massimo consentito.",
         patterns = { },
         cron = cron,
         pre_process = pre_process,
