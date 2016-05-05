@@ -302,8 +302,6 @@ local function kick_ban_res(extra, success, result)
         send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('unbanned'))
         local hash = 'banned:' .. chat_id
         redis:srem(hash, member_id)
-        channel_unblock(receiver, 'user#id' .. user_id, ok_cb, true)
-        send_large_msg(receiver, lang_text('user') .. user_id .. lang_text('unbanned'))
         return
     elseif get_cmd == 'banall' then
         send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('gbanned'))
