@@ -9,7 +9,7 @@ local function get_msgs_user_chat(user_id, chat_id)
     return user_info
 end
 
-local function chat_stats(receiver, chat_id)
+local function chat_stats(chat_id)
     -- Users on chat
     local hash = 'chat:' .. chat_id .. ':users'
     local users = redis:smembers(hash)
@@ -34,7 +34,6 @@ local function chat_stats(receiver, chat_id)
     file:write(text)
     file:flush()
     file:close()
-    send_document(receiver, "./groups/lists/" .. chat_id .. "stats.txt", ok_cb, false)
     return
     -- text
 end
@@ -42,6 +41,62 @@ end
 local function chat_stats2(chat_id)
     -- Users on chat
     local hash = 'chat:' .. chat_id .. ':users'
+    local users = redis:smembers(hash)
+    local users_info = { }
+
+    -- Get user info
+    for i = 1, #users do
+        local user_id = users[i]
+        local user_info = get_msgs_user_chat(user_id, chat_id)
+        table.insert(users_info, user_info)
+    end
+
+    -- Sort users by msgs number
+    table.sort(users_info, function(a, b)
+        if a.msgs and b.msgs then
+            return a.msgs > b.msgs
+        end
+    end )
+
+    local text = lang_text('usersInChat')
+    for k, user in pairs(users_info) do
+        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+    end
+    return text
+end
+
+local function channel_stats(chat_id)
+    -- Users on chat
+    local hash = 'channel:' .. chat_id .. ':users'
+    local users = redis:smembers(hash)
+    local users_info = { }
+    -- Get user info
+    for i = 1, #users do
+        local user_id = users[i]
+        local user_info = get_msgs_user_chat(user_id, chat_id)
+        table.insert(users_info, user_info)
+    end
+    -- Sort users by msgs number
+    table.sort(users_info, function(a, b)
+        if a.msgs and b.msgs then
+            return a.msgs > b.msgs
+        end
+    end )
+    local text = lang_text('usersInChat')
+    for k, user in pairs(users_info) do
+        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+    end
+    local file = io.open("./groups/lists/" .. chat_id .. "stats.txt", "w")
+    file:write(text)
+    file:flush()
+    file:close()
+    return
+    -- text
+end
+
+local function channel_stats2(chat_id)
+    -- Users on chat
+    local hash = 'channel:' .. chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
 
@@ -96,47 +151,72 @@ local function run(msg, matches)
         savelog(msg.to.id, name .. " [" .. msg.from.id .. "] used /aisasha ")
         return about
     end
-    --[[ file
-        if matches[1]:lower() == "statslist" then
-            if not is_momod(msg) then
-                return lang_text('require_mod')
-            end
-            local chat_id = msg.to.id
-            local name = user_print_name(msg.from)
-            savelog(msg.to.id, name .. " [" .. msg.from.id .. "] requested group stats ")
-            return chat_stats2(chat_id)
-        end]]
-    -- message
-    if matches[1]:lower() == "stats" or matches[1]:lower() == "statslist" or matches[1]:lower() == "messages" or matches[1]:lower() == "sasha statistiche" or matches[1]:lower() == "sasha lista statistiche" or matches[1]:lower() == "sasha messaggi" then
+    if matches[1]:lower() == "stats" or matches[1]:lower() == "messages" then
         if not matches[2] then
-            if not is_momod(msg) then
+            if is_momod(msg) then
+                if msg.to.type == 'chat' then
+                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested group stats ")
+                    send_large_msg(get_receiver(msg), chat_stats2(msg.to.id))
+                elseif msg.to.type == 'channel' then
+                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested supergroup stats ")
+                    send_large_msg(get_receiver(msg), channel_stats2(msg.to.id))
+                else
+                    return
+                end
+            else
                 return lang_text('require_mod')
             end
-            if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                local receiver = get_receiver(msg)
-                local chat_id = msg.to.id
-                local name = user_print_name(msg.from)
-                savelog(msg.to.id, name .. " [" .. msg.from.id .. "] requested group stats ")
-                send_large_msg(receiver, chat_stats2(chat_id))
-            else
-                return
-            end
-        end
-        if matches[2]:lower() == "aisasha" and matches[1]:lower() ~= "messages" and matches[1]:lower() ~= "sasha messaggi" then
-            -- Put everything you like :)
-            if not is_admin1(msg) then
-                return lang_text('require_admin')
-            else
+        elseif matches[2]:lower() == "aisasha" then
+            if is_admin1(msg) then
                 return bot_stats()
-            end
-        end
-        if matches[2]:lower() == "group" or matches[2]:lower() == "gruppo" then
-            if not is_admin1(msg) then
-                return lang_text('require_admin')
             else
-                send_large_msg(receiver, chat_stats2(matches[3]))
+                return lang_text('require_admin')
+            end
+        elseif matches[2]:lower() == "group" then
+            if is_admin1(msg) then
+                if msg.to.type == 'chat' then
+                    send_large_msg(get_receiver(msg), chat_stats2(matches[3]))
+                elseif msg.to.type == 'channel' then
+                    send_large_msg(get_receiver(msg), channel_stats2(matches[3]))
+                else
+                    return
+                end
+            else
+                return lang_text('require_admin')
             end
         end
+        return
+    elseif matches[1]:lower() == "statslist" or matches[1]:lower() == "messageslist" then
+        if not matches[2] then
+            if is_momod(msg) then
+                if msg.to.type == 'chat' then
+                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested group stats ")
+                    chat_stats(msg.to.id)
+                elseif msg.to.type == 'channel' then
+                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested supergroup stats ")
+                    channel_stats(msg.to.id)
+                else
+                    return
+                end
+                send_document(get_receiver(msg), "./groups/lists/" .. msg.to.id .. "stats.txt", ok_cb, false)
+            else
+                return lang_text('require_mod')
+            end
+        elseif matches[2]:lower() == "group" then
+            if is_admin1(msg) then
+                if msg.to.type == 'chat' then
+                    chat_stats(matches[3])
+                elseif msg.to.type == 'channel' then
+                    channel_stats(matches[3])
+                else
+                    return
+                end
+                send_document(get_receiver(msg), "./groups/lists/" .. matches[3] .. "stats.txt", ok_cb, false)
+            else
+                return lang_text('require_admin')
+            end
+        end
+        return
     end
 end
 
@@ -147,23 +227,21 @@ return {
         "^[#!/]([Ss][Tt][Aa][Tt][Ss])$",
         "^[#!/]([Ss][Tt][Aa][Tt][Ss][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ss][Tt][Aa][Tt][Ss]) ([Gg][Rr][Oo][Uu][Pp]) (%d+)$",
-        "^[#!/]([Ss][Tt][Aa][Tt][Ss]) ([Aa][Ii][Ss][Aa][Ss][Hh][Aa])$",-- Put everything you like :)
-        "^[#!/]?([Aa][Ii][Ss][Aa][Ss][Hh][Aa])$",-- Put everything you like :)
-                                                 -- stats
+        "^[#!/]([Ss][Tt][Aa][Tt][Ss][Ll][Ii][Ss][Tt]) ([Gg][Rr][Oo][Uu][Pp]) (%d+)$",
+        "^[#!/]([Ss][Tt][Aa][Tt][Ss]) ([Aa][Ii][Ss][Aa][Ss][Hh][Aa])$",
+        "^[#!/]?([Aa][Ii][Ss][Aa][Ss][Hh][Aa])$",
+        -- stats
         "^[#!/]([Mm][Ee][Ss][Ss][Aa][Gg][Ee][Ss])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Tt][Aa][Tt][Ii][Ss][Tt][Ii][Cc][Hh][Ee])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Ss][Tt][Aa][Tt][Ii][Ss][Tt][Ii][Cc][Hh][Ee])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Tt][Aa][Tt][Ii][Ss][Tt][Ii][Cc][Hh][Ee]) ([Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Tt][Aa][Tt][Ii][Ss][Tt][Ii][Cc][Hh][Ee]) ([Aa][Ii][Ss][Aa][Ss][Hh][Aa])$",-- Put everything you like :)
+        -- statslist
+        "^[#!/]([Mm][Ee][Ss][Ss][Aa][Gg][Ee][Ss][Ll][Ii][Ss][Tt])$",
     },
     run = run,
     min_rank = 0
     -- usage
     -- [#]aisasha
     -- MOD
-    -- (#stats|#statslist|#messages|sasha statistiche|sasha lista statistiche|sasha messaggi)
+    -- (#stats|#statslist|#messages)
     -- ADMIN
-    -- (#stats|#statslist|#messages|sasha statistiche|sasha lista statistiche|sasha messaggi) group|gruppo <group_id>
-    -- (#stats|#statslist|sasha statistiche|sasha lista statistiche) aisasha
+    -- (#stats|#statslist|#messages) group <group_id>
+    -- (#stats|#statslist) aisasha
 }
