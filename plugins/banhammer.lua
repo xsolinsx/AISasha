@@ -360,7 +360,7 @@ local function kick_zero_channel(cb_extra, success, result)
     local chat_id = cb_extra.chat_id
     local ci_user
     local re_user
-    for k, v in pairs(result.members) do
+    for k, v in pairs(result) do
         local si = false
         ci_user = v.peer_id
         local hash = 'channel:' .. chat_id .. ':users'
