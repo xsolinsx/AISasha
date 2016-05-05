@@ -65,19 +65,17 @@ local function chat_stats2(chat_id)
     end
     return text
 end
--- Save stats, ban user
+
 local function bot_stats()
 
-    local redis_scan = [[
-        local cursor = '0'
-        local count = 0
-
-        repeat
-        local r = redis.call("SCAN", cursor, "MATCH", KEYS[1])
-        cursor = r[1]
-        count = count + #r[2]
-        until cursor == '0'
-        return count]]
+    local redis_scan = "local cursor = '0'" ..
+    "local count = 0" ..
+    "repeat" ..
+    "local r = redis.call(\"SCAN\", cursor, \"MATCH\", KEYS[1])" ..
+    "cursor = r[1]" ..
+    "count = count + #r[2]" ..
+    "until cursor == '0'" ..
+    "return count"
 
     -- Users
     local hash = 'msgs:*:' .. our_id
@@ -89,6 +87,7 @@ local function bot_stats()
     text = text .. lang_text('groups') .. r
     return text
 end
+
 local function run(msg, matches)
     if matches[1]:lower() == 'aisasha' then
         -- Put everything you like :)
@@ -118,7 +117,7 @@ local function run(msg, matches)
                 local chat_id = msg.to.id
                 local name = user_print_name(msg.from)
                 savelog(msg.to.id, name .. " [" .. msg.from.id .. "] requested group stats ")
-                return chat_stats2(receiver, chat_id)
+                send_large_msg(receiver, chat_stats2(chat_id))
             else
                 return
             end
@@ -135,7 +134,7 @@ local function run(msg, matches)
             if not is_admin1(msg) then
                 return lang_text('require_admin')
             else
-                return chat_stats2(matches[3])
+                send_large_msg(receiver, chat_stats2(matches[3]))
             end
         end
     end
