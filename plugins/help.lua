@@ -66,7 +66,7 @@ local function plugin_help(var, chat, rank)
 end
 
 -- !help command
-local function telegram_help(receiver)
+local function telegram_help(receiver, rank)
     local i = 0
     local text = lang_text('pluginListStart')
     -- Plugins names
@@ -74,11 +74,15 @@ local function telegram_help(receiver)
         if _config.disabled_plugin_on_chat[receiver] then
             if not _config.disabled_plugin_on_chat[receiver][name] or _config.disabled_plugin_on_chat[receiver][name] == false then
                 i = i + 1
-                text = text .. '🅿️ ' .. i .. '. ' .. name .. '\n'
+                if plugins[name].min_rank <= rank then
+                    text = text .. '🅿️ ' .. i .. '. ' .. name .. '\n'
+                end
             end
         else
             i = i + 1
-            text = text .. '🅿️ ' .. i .. '. ' .. name .. '\n'
+            if plugins[name].min_rank <= rank then
+                text = text .. '🅿️ ' .. i .. '. ' .. name .. '\n'
+            end
         end
     end
 
@@ -181,15 +185,15 @@ local function run(msg, matches)
     table.sort(plugins)
     if flag then
         if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" then
-            text = text .. telegram_help(get_receiver(msg))
+            text = text .. telegram_help(get_receiver(msg), rank)
         end
         if matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
             text = text .. help_all(get_receiver(msg), rank)
         end
     else
-        text = text .. plugin_help(matches[2], get_receiver(msg), rank)
-        if not text then
-            text = text .. telegram_help()
+        local temp = plugin_help(matches[2], get_receiver(msg), rank)
+        if temp ~= nil then
+            text = text .. temp
         end
     end
 
