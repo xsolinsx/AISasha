@@ -820,7 +820,7 @@ function is_owner2(user_id, group_id)
 end
 
 function get_rank(user_id, chat_id)
-    if not our_id == user_id then
+    if tostring(our_id) ~= tostring(user_id) then
         if not is_sudo( { from = { id = user_id } }) then
             if not is_admin2(user_id) then
                 if not is_support(user_id) then
