@@ -181,7 +181,7 @@ local function callback_from(extra, success, result)
         end
     end
     local msgs = tonumber(redis:get('msgs:' .. result.fwd_from.peer_id .. ':' .. result.to.peer_id) or 0)
-    text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, result.to.peer_id) + 1] ..
+    text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.fwd_from.peer_id, result.to.peer_id) + 1] ..
     lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs ..
     '\n🆔: ' .. result.fwd_from.peer_id
