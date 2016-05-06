@@ -1,3 +1,6 @@
+rank_table = { ["USER"] = 0, ["MOD"] = 1, ["OWNER"] = 2, ["SUPPORT"] = 3, ["ADMIN"] = 4, ["SUDO"] = 5, ["BOT"] = 6 }
+reverse_rank_table = { "USER", "MOD", "OWNER", "SUPPORT", "ADMIN", "SUDO", "BOT" }
+
 URL = require "socket.url"
 http = require "socket.http"
 https = require "ssl.https"
@@ -814,6 +817,55 @@ function is_owner2(user_id, group_id)
         end
     end
     return var
+end
+
+function get_rank(user_id, chat_id)
+    if not our_id == user_id then
+        if not is_sudo( { from = { id = user_id } }) then
+            if not is_admin2(user_id) then
+                if not is_support(user_id) then
+                    if not is_owner2(user_id, chat_id) then
+                        if not is_momod2(user_id, chat_id) then
+                            -- user
+                            return rank_table["USER"]
+                        else
+                            -- mod
+                            return rank_table["MOD"]
+                        end
+                    else
+                        -- owner
+                        return rank_table["OWNER"]
+                    end
+                else
+                    -- support
+                    return rank_table["SUPPORT"]
+                end
+            else
+                -- admin
+                return rank_table["ADMIN"]
+            end
+        else
+            -- sudo
+            return rank_table["SUDO"]
+        end
+    else
+        -- bot
+        return rank_table["BOT"]
+    end
+end
+
+function get_rank_by_reply(extra, success, result)
+    local chat = 'chat#id' .. result.to.peer_id
+    local channel = 'channel#id' .. result.to.peer_id
+    local rank = get_rank(result.from.peer_id, result.to.peer_id)
+    send_large_msg(chat, lang_text('rank') .. reverse_rank_table[rank + 1])
+    send_large_msg(channel, lang_text('rank') .. reverse_rank_table[rank + 1])
+end
+
+function get_rank_by_username(extra, success, result)
+    local rank = get_rank(result.peer_id, extra.chat_id)
+    send_large_msg('chat#id' .. extra.chat_id, lang_text('rank') .. reverse_rank_table[rank + 1])
+    send_large_msg('channel#id' .. extra.chat_id, lang_text('rank') .. reverse_rank_table[rank + 1])
 end
 
 -- Check if user is admin or not

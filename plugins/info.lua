@@ -78,11 +78,15 @@ local function callback_reply(extra, success, result)
     if result.from.username then
         text = text .. lang_text('username') .. '@' .. result.from.username
     end
-    if result.from.phone then
-        text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '******'
+    -- exclude bot phone
+    if our_id ~= result.from.peer_id then
+        if result.from.phone then
+            text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '******'
+        end
     end
     local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
-    text = text .. lang_text('date') .. os.date('%c') ..
+    text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id) + 1] ..
+    lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs ..
     '\n🆔: ' .. result.from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
@@ -106,11 +110,15 @@ local function callback_id(cb_extra, success, result)
     if result.username then
         text = text .. lang_text('username') .. '@' .. result.username
     end
-    if result.phone then
-        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '******'
+    -- exclude bot phone
+    if our_id ~= result.peer_id then
+        if result.phone then
+            text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '******'
+        end
     end
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. cb_extra.msg.to.id) or 0)
-    text = text .. lang_text('date') .. os.date('%c') ..
+    text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.peer_id, cb_extra.msg.to.id) + 1] ..
+    lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs ..
     '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
@@ -134,11 +142,15 @@ local function callback_username(extra, success, result)
     if result.username then
         text = text .. lang_text('username') .. '@' .. result.username
     end
-    if result.phone then
-        text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '******'
+    -- exclude bot phone
+    if our_id ~= result.peer_id then
+        if result.phone then
+            text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '******'
+        end
     end
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.chatid) or 0)
-    text = text .. lang_text('date') .. os.date('%c') ..
+    text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.peer_id, extra.chatid) + 1] ..
+    lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs ..
     '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. extra.chatid, text)
@@ -162,11 +174,15 @@ local function callback_from(extra, success, result)
     if result.fwd_from.username then
         text = text .. lang_text('username') .. '@' .. result.fwd_from.username
     end
-    if result.fwd_from.phone then
-        text = text .. lang_text('phone') .. string.sub(result.fwd_from.phone, 1, 6) .. '******'
+    -- exclude bot phone
+    if our_id ~= result.fwd_from.peer_id then
+        if result.fwd_from.phone then
+            text = text .. lang_text('phone') .. string.sub(result.fwd_from.phone, 1, 6) .. '******'
+        end
     end
     local msgs = tonumber(redis:get('msgs:' .. result.fwd_from.peer_id .. ':' .. result.to.peer_id) or 0)
-    text = text .. lang_text('date') .. os.date('%c') ..
+    text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, result.to.peer_id) + 1] ..
+    lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs ..
     '\n🆔: ' .. result.fwd_from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
@@ -221,7 +237,8 @@ local function database(cb_extra, success, result)
         if v.phone then
             text = text .. 'Telefono: ' .. string.sub(v.phone, 1, 6) .. '******'
         end
-        text = text .. 'Data: ' .. os.date('%c') .. '\n\n'
+        text = text .. 'Rango: ' .. reverse_rank_table[get_rank(v.peer_id, result.peer_id) + 1]
+        .. 'Data: ' .. os.date('%c')
         .. '\nId: ' .. v.peer_id
         .. ' Long_id: ' .. v.id
         id = v.peer_id
@@ -252,10 +269,13 @@ local function pre_process(msg)
             if msg.fwd_from.username then
                 text = text .. lang_text('username') .. '@' .. msg.fwd_from.username
             end
-            if msg.fwd_from.phone then
-                text = text .. lang_text('phone') .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
+            if our_id ~= result.fwd_from.id then
+                if msg.fwd_from.phone then
+                    text = text .. lang_text('phone') .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
+                end
             end
-            text = text .. lang_text('date') .. os.date('%c') ..
+            text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.fwd_from.id, msg.to.id) + 1] ..
+            lang_text('date') .. os.date('%c') ..
             '\n🆔: ' .. msg.fwd_from.peer_id
             send_large_msg('user#id' .. msg.from.id, text)
         else
@@ -270,6 +290,19 @@ local function run(msg, matches)
     local chat = msg.to.id
     local chat_type = msg.to.type
 
+    if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
+        if type(msg.reply_id) ~= "nil" then
+            return get_message(msg.reply_id, get_rank_by_reply, false)
+        elseif matches[2] then
+            if string.match(matches[2], '^%d+$') then
+                return lang_text('rank') .. reverse_rank_table[get_rank(matches[2], chat) + 1]
+            else
+                return resolve_username(string.gsub(matches[2], '@', ''), get_rank_by_username, { chat_id = chat })
+            end
+        else
+            return lang_text('rank') .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
+        end
+    end
     if matches[1]:lower() == 'info' or matches[1]:lower() == 'sasha info' then
         if not matches[2] then
             if type(msg.reply_id) ~= 'nil' then
@@ -300,7 +333,8 @@ local function run(msg, matches)
                     text = text .. lang_text('phone') .. string.sub(msg.from.phone, 1, 6) .. '****'
                 end
                 local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
-                text = text .. lang_text('date') .. os.date('%c') ..
+                text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
+                lang_text('date') .. os.date('%c') ..
                 lang_text('totalMessages') .. msgs ..
                 '\n🆔: ' .. msg.from.id ..
                 lang_text('youAreWriting')
@@ -321,10 +355,14 @@ local function run(msg, matches)
                     if msg.to.username then
                         text = text .. lang_text('username') .. '@' .. msg.to.username
                     end
-                    if msg.to.phone then
-                        text = text .. lang_text('phone') .. string.sub(msg.to.phone, 1, 6) .. '****'
+                    -- exclude bot phone
+                    if our_id ~= msg.to.id then
+                        if msg.to.phone then
+                            text = text .. lang_text('phone') .. string.sub(msg.to.phone, 1, 6) .. '****'
+                        end
                     end
-                    text = text .. lang_text('date') .. os.date('%c') ..
+                    text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.to.id, chat) + 1] ..
+                    lang_text('date') .. os.date('%c') ..
                     '\n🆔: ' .. msg.to.id
                     return text
                 elseif chat_type == 'chat' then
@@ -408,8 +446,10 @@ return {
     {
         "^[#!/]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
-        "^[#!/]([Ii][Nn][Ff][Oo])$",
+        "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
+        "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
         "^[#!/]([Ii][Nn][Ff][Oo]) (.*)$",
+        "^[#!/]([Ii][Nn][Ff][Oo])$",
         "^[#!/]([Ww][Hh][Oo])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ee][Dd])$",
         -- database
@@ -417,6 +457,9 @@ return {
         -- groupinfo
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
         "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
+        -- getrank
+        "^([Rr][Aa][Nn][Gg][Oo]) (.*)$",
+        "^([Rr][Aa][Nn][Gg][Oo])$",
         -- info
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo]) (.*)$",
@@ -431,6 +474,7 @@ return {
     pre_process = pre_process,
     min_rank = 0
     -- usage
+    -- #getrank|rango [<id>|<username>|<reply>]
     -- (#info|[sasha] info)
     -- MOD
     -- (#info|[sasha] info) <id>|<username>|<reply>|from

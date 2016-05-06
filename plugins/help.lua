@@ -1,7 +1,3 @@
-local rank_table = { ["USER"] = 0, ["MOD"] = 1, ["OWNER"] = 2, ["SUPPORT"] = 3, ["ADMIN"] = 4, ["SUDO"] = 5 }
-
-local reverse_rank_table = { "USER", "MOD", "OWNER", "SUPPORT", "ADMIN", "SUDO" }
-
 -- Returns true if is not empty
 local function has_usage_data(dict)
     if (dict.usage == nil or dict.usage == '') then
@@ -105,50 +101,6 @@ local function help_all(chat, rank)
     return ret
 end
 
-local function get_rank(user_id, chat_id)
-    if not is_sudo( { from = { id = user_id } }) then
-        if not is_admin1( { from = { id = user_id } }) then
-            if not is_support(user_id) then
-                if not is_owner2(user_id, chat_id) then
-                    if not is_momod2(user_id, chat_id) then
-                        -- user
-                        return rank_table["USER"]
-                    else
-                        -- mod
-                        return rank_table["MOD"]
-                    end
-                else
-                    -- owner
-                    return rank_table["OWNER"]
-                end
-            else
-                -- support
-                return rank_table["SUPPORT"]
-            end
-        else
-            -- admin
-            return rank_table["ADMIN"]
-        end
-    else
-        -- sudo
-        return rank_table["SUDO"]
-    end
-end
-
-local function get_rank_by_reply(extra, success, result)
-    local chat = 'chat#id' .. result.to.peer_id
-    local channel = 'channel#id' .. result.to.peer_id
-    local rank = get_rank(result.from.peer_id, result.to.peer_id)
-    send_large_msg(chat, reverse_rank_table[rank + 1])
-    send_large_msg(channel, reverse_rank_table[rank + 1])
-end
-
-local function get_rank_by_username(extra, success, result)
-    local rank = get_rank(result.peer_id, extra.chat_id)
-    send_large_msg('chat#id' .. extra.chat_id, reverse_rank_table[rank + 1])
-    send_large_msg('channel#id' .. extra.chat_id, reverse_rank_table[rank + 1])
-end
-
 local function get_sudo_info(cb_extra, success, result)
     local text = 'SUDO INFO'
     if result.first_name then
@@ -179,20 +131,6 @@ local function run(msg, matches)
     -- if msg.to.peer_type == 'user' and not is_admin1(msg) then
     --    return lang_text('doYourBusiness')
     -- end
-
-    if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
-        if type(msg.reply_id) ~= "nil" then
-            return get_message(msg.reply_id, get_rank_by_reply, false)
-        elseif matches[2] then
-            if string.match(matches[2], '^%d+$') then
-                return reverse_rank_table[get_rank(matches[2], msg.to.id) + 1]
-            else
-                return resolve_username(string.gsub(matches[2], '@', ''), get_rank_by_username, { chat_id = msg.to.id })
-            end
-        else
-            return reverse_rank_table[get_rank(msg.from.id, msg.to.id) + 1]
-        end
-    end
 
     if matches[1]:lower() == "sudolist" or matches[1]:lower() == "sasha lista sudo" then
         for v, user in pairs(_config.sudo_users) do
@@ -271,8 +209,6 @@ return {
         "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll])$",
         "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+) ([^%s]+)$",
         "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+)$",
-        "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
-        "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
         "^[#!/]([Ss][Uu][Dd][Oo][Ll][Ii][Ss][Tt])$",
         -- help
         "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",
@@ -289,9 +225,6 @@ return {
         "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+)$",
-        -- getrank
-        "^([Rr][Aa][Nn][Gg][Oo]) (.*)$",
-        "^([Rr][Aa][Nn][Gg][Oo])$",
         -- sudolist
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Ss][Uu][Dd][Oo])$",
     },
@@ -299,7 +232,6 @@ return {
     min_rank = 0
     -- usage
     -- (#sudolist|sasha lista sudo)
-    -- #getrank|rango [<id>|<username>|<reply>]
     -- (#help|sasha aiuto)
     -- (#help|commands|sasha aiuto) <plugin_name>|<plugin_number> [<fake_rank>]
     -- (#helpall|allcommands|sasha aiuto tutto) [<fake_rank>]
