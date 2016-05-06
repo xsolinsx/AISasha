@@ -45,5 +45,5 @@ return {
     },
     run = run,
     cron = cron,
-    min_rank = 0
+    min_rank = 6
 }

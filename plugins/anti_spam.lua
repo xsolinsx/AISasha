@@ -166,6 +166,6 @@ do
         patterns = { },
         cron = cron,
         pre_process = pre_process,
-        min_rank = 0
+        min_rank = 6
     }
 end
