@@ -61,14 +61,14 @@ local function enable_plugin(plugin_name)
         reload_plugins()
         return '✅ ' .. plugin_name .. lang_text('enabled')
     else
-        return '❔ ' .. plugin_name .. lang_text('notExist')
+        return '❔ ' .. plugin_name .. lang_text('notExists')
     end
 end
 
 local function disable_plugin(name, chat)
     -- Check if plugins exists
     if not plugin_exists(name) then
-        return '❔ ' .. name .. lang_text('notExist')
+        return '❔ ' .. name .. lang_text('notExists')
     end
     local k = plugin_enabled(name)
     -- Check if plugin is enabled
@@ -84,7 +84,7 @@ end
 
 local function disable_plugin_on_chat(receiver, plugin)
     if not plugin_exists(plugin) then
-        return '❔ ' .. plugin .. lang_text('notExist')
+        return '❔ ' .. plugin .. lang_text('notExists')
     end
 
     if not _config.disabled_plugin_on_chat then

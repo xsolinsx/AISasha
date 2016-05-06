@@ -194,6 +194,8 @@ local function run(msg, matches)
         local temp = plugin_help(matches[2], get_receiver(msg), rank)
         if temp ~= nil then
             text = text .. temp
+        else
+            return matches[2] .. lang_text('notExists')
         end
     end
 
@@ -208,6 +210,7 @@ return {
     description = "HELP",
     patterns =
     {
+        "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+)$",
         "^[#!/]([Hh][Ee][Ll][Pp])$",
         "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll]) ([^%s]+)$",
         "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll])$",
