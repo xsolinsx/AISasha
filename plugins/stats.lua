@@ -123,14 +123,14 @@ end
 
 local function bot_stats()
 
-    local redis_scan = "local cursor = '0'" ..
-    "local count = 0" ..
-    "repeat" ..
-    "local r = redis.call(\"SCAN\", cursor, \"MATCH\", KEYS[1])" ..
-    "cursor = r[1]" ..
-    "count = count + #r[2]" ..
-    "until cursor == '0'" ..
-    "return count"
+    local redis_scan = "local cursor = '0'\n" ..
+    "local count = 0\n" ..
+    "repeat\n" ..
+    "local r = redis.call(\"SCAN\", cursor, \"MATCH\", KEYS[1])\n" ..
+    "cursor = r[1]\n" ..
+    "count = count + #r[2]\n" ..
+    "until cursor == '0'\n" ..
+    "return count\n"
 
     -- Users
     local hash = 'msgs:*:' .. our_id
