@@ -47,13 +47,15 @@ local function warn_user(user_id, chat_id)
     redis:incr(hash)
     local hashonredis = redis:get(hash)
     if hashonredis then
-        if tonumber(hashonredis) >= tonumber(warn_chat) then
-            chat_del_user(chat, user, ok_cb, false)
-            channel_kick(channel, user, ok_cb, false)
-            redis:getset(hash, 0)
+        if tonumber(warn_chat) ~= 0 then
+            if tonumber(hashonredis) >= tonumber(warn_chat) then
+                chat_del_user(chat, user, ok_cb, false)
+                channel_kick(channel, user, ok_cb, false)
+                redis:getset(hash, 0)
+            end
+            send_large_msg(chat, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
+            send_large_msg(channel, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
         end
-        send_large_msg(chat, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
-        send_large_msg(channel, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
     else
         redis:set(hash, 1)
         send_large_msg(chat, string.gsub(lang_text('warned'), 'X', '1'), ok_cb, false)
@@ -165,7 +167,12 @@ end
 local function run(msg, matches)
     if is_momod(msg) then
         if matches[1]:lower() == 'setwarn' and matches[2] then
-            return set_warn(msg, matches[2])
+            local msg = set_warn(msg, matches[2])
+            if matches[2] ~= '0' then
+                return lang_text('neverWarn')
+            else
+                return msg
+            end
         end
         if matches[1]:lower() == 'getwarn' then
             return get_warn(msg)

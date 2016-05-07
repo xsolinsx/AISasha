@@ -458,6 +458,7 @@ local function run(msg, matches)
         -- warn.lua --
         set_text(LANG .. 'errorWarnRange', 'Errore, il range è [1-10].')
         set_text(LANG .. 'warnSet', 'Il warn è stato impostato a ')
+        set_text(LANG .. 'neverWarn', 'Gli avvertimenti non funzioneranno più.')
         set_text(LANG .. 'noWarnSet', 'Il warn non è ancora stato impostato.')
         set_text(LANG .. 'cantWarnHigher', 'Non puoi avvertire un mod/owner/admin/sudo!')
         set_text(LANG .. 'warned', 'Sei stato avvertito X volte, datti una regolata!')
@@ -469,6 +470,7 @@ local function run(msg, matches)
         -- welcome.lua --
         set_text(LANG .. 'newWelcome', 'Nuovo messaggio di benvenuto:\n')
         set_text(LANG .. 'newWelcomeNumber', 'Il benvenuto sarà mandato ogni X membri.')
+        set_text(LANG .. 'neverWelcome', 'Il messaggio di benvenuto non sarà più mandato.')
         set_text(LANG .. 'noSetValue', 'Nessun valore impostato.')
 
         -- whitelist.lua --
@@ -892,7 +894,7 @@ local function run(msg, matches)
         -- warn.lua --
         set_text(LANG .. 'warn:0', 7)
         set_text(LANG .. 'warn:1', 'MOD')
-        set_text(LANG .. 'warn:2', '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>.')
+        set_text(LANG .. 'warn:2', '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>, se zero gli avvertimenti non funzioneranno più.')
         set_text(LANG .. 'warn:3', '#getwarn: Sasha manda il numero di avvertimenti massimi.')
         set_text(LANG .. 'warn:4', '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>: Sasha manda il numero di avvertimenti ricevuti dall\'utente.')
         set_text(LANG .. 'warn:5', '(#warn|[sasha] avverti) <id>|<username>|<reply>: Sasha avverte l\'utente.')
@@ -921,7 +923,7 @@ local function run(msg, matches)
         set_text(LANG .. 'welcome:1', '#getwelcome: Sasha manda il benvenuto.')
         set_text(LANG .. 'welcome:2', 'OWNER')
         set_text(LANG .. 'welcome:3', '#setwelcome <text>: Sasha imposta <text> come benvenuto.')
-        set_text(LANG .. 'welcome:4', '#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole.')
+        set_text(LANG .. 'welcome:4', '#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.')
         set_text(LANG .. 'welcome:5', '#getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.')
 
         -- whitelist.lua --

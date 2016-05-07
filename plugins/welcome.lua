@@ -61,7 +61,12 @@ local function run(msg, matches)
         return set_welcome(msg, matches[2])
     end
     if matches[1]:lower() == 'setmemberswelcome' and is_owner(msg) then
-        return set_memberswelcome(msg, matches[2])
+        local msg = set_memberswelcome(msg, matches[2])
+        if matches[2] ~= '0' then
+            return lang_text('neverWelcome')
+        else
+            return msg
+        end
     end
     if matches[1]:lower() == 'getmemberswelcome' and is_owner(msg) then
         return get_memberswelcome(msg)
@@ -103,6 +108,6 @@ return {
     -- #getwelcome: Sasha manda il benvenuto.
     -- OWNER
     -- #setwelcome <text>: Sasha imposta <text> come benvenuto.
-    -- #setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole.
+    -- #setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.
     -- #getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.
 }
