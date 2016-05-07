@@ -1,3 +1,4 @@
+-- taken from jack-telegram-bot and translated to LUA
 local function run(msg, matches)
     local url = "http://api.duckduckgo.com/?q=" .. URL.escape(matches[1]) .. "&format=json&pretty=1&no_html=1&skip_disambig=1"
     local jstr, res = https.request(url)
