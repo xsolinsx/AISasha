@@ -1,7 +1,7 @@
 local data = load_data(_config.moderation.data)
 
 local function set_warn(msg, value)
-    if tonumber(value) < 1 or tonumber(value) > 10 then
+    if tonumber(value) < 0 or tonumber(value) > 10 then
         return lang_text('errorWarnRange')
     end
     local warn_max = value
@@ -168,7 +168,7 @@ local function run(msg, matches)
     if is_momod(msg) then
         if matches[1]:lower() == 'setwarn' and matches[2] then
             local msg = set_warn(msg, matches[2])
-            if matches[2] ~= '0' then
+            if matches[2] == '0' then
                 return lang_text('neverWarn')
             else
                 return msg

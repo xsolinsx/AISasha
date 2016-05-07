@@ -62,7 +62,7 @@ local function run(msg, matches)
     end
     if matches[1]:lower() == 'setmemberswelcome' and is_owner(msg) then
         local msg = set_memberswelcome(msg, matches[2])
-        if matches[2] ~= '0' then
+        if matches[2] == '0' then
             return lang_text('neverWelcome')
         else
             return msg
