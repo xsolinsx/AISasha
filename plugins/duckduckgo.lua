@@ -10,7 +10,7 @@ local function run(msg, matches)
         return lang_text('opsError')
     end
     local text = ""
-    local i = 0 + 1
+    local i = 1
     for i, v in ipairs(jdat.RelatedTopics) do
         if jdat.RelatedTopics[i].Result and i <= 6 then
             url = jdat.RelatedTopics[i].FirstURL:gsub('_', '\\_')

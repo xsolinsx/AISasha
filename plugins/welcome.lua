@@ -77,7 +77,7 @@ local function run(msg, matches)
         redis:incr(hash)
         local hashonredis = redis:get(hash)
         if hashonredis then
-            if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg)) then
+            if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg)) and tonumber(get_memberswelcome(msg)) ~= 0 then
                 send_large_msg(get_receiver(msg), get_welcome(msg) .. '\n' .. get_rules(msg), ok_cb, false)
                 redis:getset(hash, 0)
             end

@@ -18,6 +18,7 @@ function on_msg_receive(msg)
 
     local receiver = get_receiver(msg)
     print(receiver)
+    -- reaction writing
     if redis:get('writing') then
         send_typing(receiver, ok_cb, false)
     else
@@ -36,6 +37,7 @@ function on_msg_receive(msg)
             end
         end
     end
+    -- check sudo tag
     check_tag(msg)
 end
 
@@ -124,6 +126,7 @@ function msg_valid(msg)
         return false
     end
 
+    -- bot on or off
     if is_owner(msg) then
         if msg.text then
             if msg.text:lower() == "#bot on" or msg.text:lower() == "!bot on" or msg.text:lower() == "/bot on" or msg.text:lower() == "sasha on" then
