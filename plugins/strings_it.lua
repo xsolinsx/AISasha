@@ -550,6 +550,10 @@ local function run(msg, matches)
         set_text(LANG .. 'dogify:0', 1)
         set_text(LANG .. 'dogify:1', '(#dogify|[sasha] doge) <your/words/with/slashes>: Sasha crea un\'immagine col doge e le parole specificate.')
 
+        -- duckduckgo.lua --
+        set_text(LANG .. 'duckduckgo:0', 1)
+        set_text(LANG .. 'duckduckgo:1', '#duck[duck]go <terms>: Sasha cerca <terms> su DuckDuckGo.')
+
         -- echo.lua --
         set_text(LANG .. 'echo:0', 2)
         set_text(LANG .. 'echo:1', 'MOD')

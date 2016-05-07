@@ -59,8 +59,8 @@ return {
     description = "POKEDEX",
     patterns =
     {
-        "^[#!/][Pp][Oo][Kk][ÈèÉéEe][Dd][Ee][Xx] (.*)$",
-        "^[#!/][Pp][Oo][Kk][ÈèÉéEe][Mm][Oo][Nn] (.+)$"
+        "^[#!/][Pp][Oo][Kk][Ee][Dd][Ee][Xx] (.*)$",
+        "^[#!/][Pp][Oo][Kk][Ee][Mm][Oo][Nn] (.+)$"
     },
     run = run,
     min_rank = 0
