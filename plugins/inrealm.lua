@@ -16,20 +16,19 @@ local function create_realm(msg)
     end
 end
 
-
 local function killchat(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local chat_id = "chat#id" .. result.peer_id
-    local chatname = result.print_name
     for k, v in pairs(result.members) do
         kick_user_any(v.peer_id, result.peer_id)
     end
 end
 
+local function killchannel(cb_extra, success, result)
+    for k, v in pairsByKeys(result) do
+        kick_user_any(v.peer_id, cb_extra.chat_id)
+    end
+end
+
 local function killrealm(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local chat_id = "chat#id" .. result.peer_id
-    local chatname = result.print_name
     for k, v in pairs(result.members) do
         kick_user_any(v.peer_id, result.peer_id)
     end
@@ -826,15 +825,28 @@ function run(msg, matches)
 				return unset_log_group(target, data)
 			end
 		end]]
-    if matches[1]:lower() == 'kill' and matches[2]:lower() == 'chat' and matches[3] then
+    if matches[1]:lower() == 'kill' and matches[2]:lower() == 'group' and matches[3] then
         if not is_admin1(msg) then
             return
         end
         if is_realm(msg) then
             local receiver = 'chat#id' .. matches[3]
-            return modrem(msg),
-            print("Closing Group: " .. receiver),
-            chat_info(receiver, killchat, { receiver = receiver })
+            print("Closing Group: " .. receiver)
+            chat_info(receiver, killchat, false)
+            return modrem(msg)
+        else
+            return lang_text('errorGroup') .. matches[3] .. lang_text('notFound')
+        end
+    end
+    if matches[1]:lower() == 'kill' and matches[2]:lower() == 'supergroup' and matches[3] then
+        if not is_admin1(msg) then
+            return
+        end
+        if is_realm(msg) then
+            local receiver = 'channel#id' .. matches[3]
+            print("Closing Group: " .. receiver)
+            channel_get_users(receiver, killchannel, { chat_id = matches[3] })
+            return modrem(msg)
         else
             return lang_text('errorGroup') .. matches[3] .. lang_text('notFound')
         end
@@ -845,9 +857,9 @@ function run(msg, matches)
         end
         if is_realm(msg) then
             local receiver = 'chat#id' .. matches[3]
-            return realmrem(msg),
-            print("Closing realm: " .. receiver),
-            chat_info(receiver, killrealm, { receiver = receiver })
+            print("Closing realm: " .. receiver)
+            chat_info(receiver, killrealm, false)
+            return realmrem(msg)
         else
             return lang_text('errorRealm') .. matches[3] .. lang_text('notFound')
         end
@@ -993,7 +1005,8 @@ return {
         "^[#!/]([Ww][Hh][Oo][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ww][Hh][Oo])$",
         "^[#!/]([Tt][Yy][Pp][Ee])$",
-        "^[#!/]([Kk][Ii][Ll][Ll]) ([Cc][Hh][Aa][Tt]) (%d+)$",
+        "^[#!/]([Kk][Ii][Ll][Ll]) ([Gg][Rr][Oo][Uu][Pp]) (%d+)$",
+        "^[#!/]([Kk][Ii][Ll][Ll]) ([Ss][Uu][Pp][Ee][Rr][Gg][Rr][Oo][Uu][Pp]) (%d+)$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Rr][Ee][Aa][Ll][Mm]) (%d+)$",
         "^[#!/]([Aa][Dd][Dd][Aa][Dd][Mm][Ii][Nn]) (.*)$",-- sudoers only
         "^[#!/]([Rr][Ee][Mm][Oo][Vv][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",-- sudoers only
@@ -1041,7 +1054,8 @@ return {
     -- (#unlock|[sasha] sblocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker
     -- #settings <group_id>
     -- #type
-    -- #kill chat <group_id>
+    -- #kill group <group_id>
+    -- #kill supergroup <group_id>
     -- #kill realm <realm_id>
     -- #rem <group_id>
     -- #support <user_id>|<username>
