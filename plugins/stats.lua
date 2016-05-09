@@ -11,7 +11,7 @@ local function get_msgs_user_chat(user_id, chat_id)
 end
 
 local function callback_group_members(cb_extra, success, result)
-    local hash = 'chat:' .. result.peer_id .. ':users'
+    local hash = 'chat:' .. cb_extra.chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
     local text = lang_text('usersInChat')
@@ -19,7 +19,7 @@ local function callback_group_members(cb_extra, success, result)
     -- Get user info
     for k, v in pairs(result.members) do
         local user_id = v.peer_id
-        local user_info = get_msgs_user_chat(user_id, result.peer_id)
+        local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
         table.insert(users_info, user_info)
     end
 
@@ -90,7 +90,7 @@ end
 
 local function callback_supergroup_members(cb_extra, success, result)
     -- Users on chat
-    local hash = 'channel:' .. cb_extra.receiver:gsub('channel#id', '') .. ':users'
+    local hash = 'channel:' .. cb_extra.chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
     local text = lang_text('usersInChat')
@@ -98,7 +98,7 @@ local function callback_supergroup_members(cb_extra, success, result)
     -- Get user info
     for k, v in pairsByKeys(result) do
         local user_id = v.peer_id
-        local user_info = get_msgs_user_chat(user_id, cb_extra.receiver:gsub('channel#id', ''))
+        local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
         table.insert(users_info, user_info)
     end
 
@@ -268,10 +268,10 @@ local function run(msg, matches)
             if is_momod(msg) then
                 if msg.to.type == 'chat' then
                     savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested real group stats ")
-                    chat_info(get_receiver(msg), callback_group_members, { receiver = get_receiver(msg) })
+                    chat_info(get_receiver(msg), callback_group_members, { receiver = get_receiver(msg), chat_id = msg.to.id })
                 elseif msg.to.type == 'channel' then
                     savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested real supergroup stats ")
-                    channel_get_users(get_receiver(msg), callback_supergroup_members, { receiver = get_receiver(msg) })
+                    channel_get_users(get_receiver(msg), callback_supergroup_members, { receiver = get_receiver(msg), chat_id = msg.to.id })
                 else
                     return
                 end
@@ -281,9 +281,9 @@ local function run(msg, matches)
         elseif matches[2]:lower() == "group" then
             if is_admin1(msg) then
                 if msg.to.type == 'chat' then
-                    chat_info('chat#id' .. matches[3], callback_group_members, { receiver = get_receiver(msg) })
+                    chat_info('chat#id' .. matches[3], callback_group_members, { receiver = get_receiver(msg), chat_id = matches[3] })
                 elseif msg.to.type == 'channel' then
-                    channel_get_users('channel#id' .. matches[3], callback_supergroup_members, { receiver = get_receiver(msg) })
+                    channel_get_users('channel#id' .. matches[3], callback_supergroup_members, { receiver = get_receiver(msg), chat_id = matches[3] })
                 else
                     return
                 end
