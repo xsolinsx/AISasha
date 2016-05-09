@@ -481,7 +481,7 @@ local function run(msg, matches)
                 elseif chat_type == 'chat' then
                     text = text .. ' 👥' ..
                     lang_text('groupName') .. msg.to.title .. "\n" ..
-                    lang_text('users') .. tostring(msg.to.members_num)
+                    lang_text('users') .. tostring(msg.to.members_num) ..
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 elseif chat_type == 'channel' then
