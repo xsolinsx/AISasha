@@ -486,10 +486,7 @@ local function run(msg, matches)
                     return text
                 elseif chat_type == 'channel' then
                     text = text .. ' 👥' ..
-                    lang_text('supergroupName') .. msg.to.title ..
-                    lang_text('users') .. tostring(msg.to.participants_count) ..
-                    lang_text('admins') .. tostring(msg.to.admins_count) ..
-                    lang_text('kickedUsers') .. tostring(msg.to.kicked_count)
+                    lang_text('supergroupName') .. msg.to.title
                     if msg.to.username then
                         text = text .. lang_text('username') .. "@" .. msg.to.username
                     end
