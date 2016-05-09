@@ -421,6 +421,7 @@ local function run(msg, matches)
         -- stats.lua --
         set_text('usersInChat', 'Utenti in questa chat\n')
         set_text('groups', '\nGruppi: ')
+        set_text('statsCleaned', 'Statistiche azzerate.')
 
         -- strings.lua --
         set_text('langUpdate', 'ℹ️ Stringhe aggiornate.')

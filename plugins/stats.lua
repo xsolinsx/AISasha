@@ -10,6 +10,16 @@ local function get_msgs_user_chat(user_id, chat_id)
     return user_info
 end
 
+local function clean_chat_stats(chat_id)
+    local hash = 'chat:' .. chat_id .. ':users'
+    local users = redis:smembers(hash)
+
+    for i = 1, #users do
+        local user_id = users[i]
+        redis:set('msgs:' .. user_id .. ':' .. chat_id, 0)
+    end
+end
+
 local function callback_group_members(cb_extra, success, result)
     local hash = 'chat:' .. cb_extra.chat_id .. ':users'
     local users = redis:smembers(hash)
@@ -90,6 +100,16 @@ local function chat_stats2(chat_id)
         text = text .. user.name .. ' = ' .. user.msgs .. '\n'
     end
     return text
+end
+
+local function clean_channel_stats(chat_id)
+    local hash = 'channel:' .. chat_id .. ':users'
+    local users = redis:smembers(hash)
+
+    for i = 1, #users do
+        local user_id = users[i]
+        redis:set('msgs:' .. user_id .. ':' .. chat_id, 0)
+    end
 end
 
 local function callback_supergroup_members(cb_extra, success, result)
@@ -228,13 +248,8 @@ local function run(msg, matches)
             end
         elseif matches[2]:lower() == "group" then
             if is_admin1(msg) then
-                if msg.to.type == 'chat' then
-                    send_large_msg(get_receiver(msg), chat_stats2(matches[3]))
-                elseif msg.to.type == 'channel' then
-                    send_large_msg(get_receiver(msg), channel_stats2(matches[3]))
-                else
-                    return
-                end
+                send_large_msg(get_receiver(msg), chat_stats2(matches[3]))
+                send_large_msg(get_receiver(msg), channel_stats2(matches[3]))
             else
                 return lang_text('require_admin')
             end
@@ -258,13 +273,8 @@ local function run(msg, matches)
             end
         elseif matches[2]:lower() == "group" then
             if is_admin1(msg) then
-                if msg.to.type == 'chat' then
-                    chat_stats(matches[3])
-                elseif msg.to.type == 'channel' then
-                    channel_stats(matches[3])
-                else
-                    return
-                end
+                chat_stats(matches[3])
+                channel_stats(matches[3])
                 send_document(get_receiver(msg), "./groups/lists/" .. matches[3] .. "stats.txt", ok_cb, false)
             else
                 return lang_text('require_admin')
@@ -288,13 +298,35 @@ local function run(msg, matches)
             end
         elseif matches[2]:lower() == "group" then
             if is_admin1(msg) then
+                chat_info('chat#id' .. matches[3], callback_group_members, { receiver = get_receiver(msg), chat_id = matches[3] })
+                channel_get_users('channel#id' .. matches[3], callback_supergroup_members, { receiver = get_receiver(msg), chat_id = matches[3] })
+            else
+                return lang_text('require_admin')
+            end
+        end
+        return
+    elseif matches[1]:lower() == "cleanstats" or matches[1]:lower() == "cleanmessages" then
+        if not matches[2] then
+            if is_momod(msg) then
                 if msg.to.type == 'chat' then
-                    chat_info('chat#id' .. matches[3], callback_group_members, { receiver = get_receiver(msg), chat_id = matches[3] })
+                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] cleaned real group stats ")
+                    clean_chat_stats(msg.to.id)
+                    return lang_text('statsCleaned')
                 elseif msg.to.type == 'channel' then
-                    channel_get_users('channel#id' .. matches[3], callback_supergroup_members, { receiver = get_receiver(msg), chat_id = matches[3] })
+                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] cleaned real supergroup stats ")
+                    clean_channel_stats(msg.to.id)
+                    return lang_text('statsCleaned')
                 else
                     return
                 end
+            else
+                return lang_text('require_mod')
+            end
+        elseif matches[2]:lower() == "group" then
+            if is_admin1(msg) then
+                clean_chat_stats(matches[3])
+                clean_channel_stats(matches[3])
+                return lang_text('statsCleaned')
             else
                 return lang_text('require_admin')
             end
@@ -309,6 +341,7 @@ return {
     {
         "^[#!/]([Ss][Tt][Aa][Tt][Ss])$",
         "^[#!/]([Rr][Ee][Aa][Ll][Ss][Tt][Aa][Tt][Ss])$",
+        "^[#!/]([Cc][Ll][Ee][Aa][Nn][Ss][Tt][Aa][Tt][Ss])$",
         "^[#!/]([Ss][Tt][Aa][Tt][Ss][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ss][Tt][Aa][Tt][Ss]) ([Gg][Rr][Oo][Uu][Pp]) (%d+)$",
         "^[#!/]([Rr][Ee][Aa][Ll][Ss][Tt][Aa][Tt][Ss]) ([Gg][Rr][Oo][Uu][Pp]) (%d+)$",
@@ -318,6 +351,7 @@ return {
         -- stats
         "^[#!/]([Mm][Ee][Ss][Ss][Aa][Gg][Ee][Ss])$",
         "^[#!/]([Rr][Ee][Aa][Ll][Mm][Ee][Ss][Ss][Aa][Gg][Ee][Ss])$",
+        "^[#!/]([Cc][Ll][Ee][Aa][Nn][Mm][Ee][Ss][Ss][Aa][Gg][Ee][Ss])$",
         "^[#!/]([Mm][Ee][Ss][Ss][Aa][Gg][Ee][Ss]) ([Gg][Rr][Oo][Uu][Pp]) (%d+)$",
         "^[#!/]([Rr][Ee][Aa][Ll][Mm][Ee][Ss][Ss][Aa][Gg][Ee][Ss]) ([Gg][Rr][Oo][Uu][Pp]) (%d+)$",
         -- statslist
