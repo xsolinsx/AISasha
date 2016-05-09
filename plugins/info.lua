@@ -255,7 +255,7 @@ local function callback_from(extra, success, result)
 end
 
 local function channel_callback_info(cb_extra, success, result)
-    local title = lang_text('supergroupName') .. result.title .. "\n"
+    local title = lang_text('supergroupName') .. result.title
     local user_num = lang_text('users') .. tostring(result.participants_count)
     local admin_num = lang_text('admins') .. tostring(result.admins_count)
     local kicked_num = lang_text('kickedUsers') .. tostring(result.kicked_count)
@@ -270,7 +270,7 @@ local function channel_callback_info(cb_extra, success, result)
 end
 
 local function chat_callback_info(cb_extra, success, result)
-    local title = lang_text('groupName') .. result.title .. "\n"
+    local title = lang_text('groupName') .. result.title
     local user_num = lang_text('users') .. tostring(result.members_num)
     local chat_id = "\n🆔: " .. result.peer_id
     local text = title .. user_num .. chat_id
@@ -480,13 +480,13 @@ local function run(msg, matches)
                     return text
                 elseif chat_type == 'chat' then
                     text = text .. ' 👥' ..
-                    lang_text('groupName') .. msg.to.title .. "\n" ..
+                    lang_text('groupName') .. msg.to.title ..
                     lang_text('users') .. tostring(msg.to.members_num) ..
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 elseif chat_type == 'channel' then
                     text = text .. ' 👥' ..
-                    lang_text('supergroupName') .. msg.to.title .. "\n" ..
+                    lang_text('supergroupName') .. msg.to.title ..
                     lang_text('users') .. tostring(msg.to.participants_count) ..
                     lang_text('admins') .. tostring(msg.to.admins_count) ..
                     lang_text('kickedUsers') .. tostring(msg.to.kicked_count)
