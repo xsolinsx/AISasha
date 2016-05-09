@@ -11,17 +11,15 @@ local function get_msgs_user_chat(user_id, chat_id)
 end
 
 local function callback_group_members(cb_extra, success, result)
-    local hash = 'chat:' .. chat_id .. ':users'
+    local hash = 'chat:' .. result.peer_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
-    local chat_id = "chat#id" .. result.peer_id
-    local chatname = result.print_name
-    local text = lang_text('usersIn') .. string.gsub(chatname, "_", " ") .. ' ' .. result.peer_id .. '\n'
+    local text = lang_text('usersInChat')
 
     -- Get user info
     for k, v in pairs(result.members) do
         local user_id = v.peer_id
-        local user_info = get_msgs_user_chat(user_id, chat_id)
+        local user_info = get_msgs_user_chat(user_id, result.peer_id)
         table.insert(users_info, user_info)
     end
 
@@ -92,7 +90,7 @@ end
 
 local function callback_supergroup_members(cb_extra, success, result)
     -- Users on chat
-    local hash = 'channel:' .. chat_id .. ':users'
+    local hash = 'channel:' .. cb_extra.receiver:gsub('channel#id', '') .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
     local text = lang_text('usersInChat')
@@ -100,7 +98,7 @@ local function callback_supergroup_members(cb_extra, success, result)
     -- Get user info
     for k, v in pairsByKeys(result) do
         local user_id = v.peer_id
-        local user_info = get_msgs_user_chat(user_id, chat_id)
+        local user_info = get_msgs_user_chat(user_id, cb_extra.receiver:gsub('channel#id', ''))
         table.insert(users_info, user_info)
     end
 
