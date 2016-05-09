@@ -1,5 +1,14 @@
 local function run(msg, matches)
-    -- code is in function msg_valid(msg) (seedbot.lua)
+    if is_owner(msg) then
+        if matches[1]:lower() == 'on' then
+            enable_channel(receiver, msg.to.id)
+        end
+        if matches[1]:lower() == 'off' then
+            disable_channel(receiver, msg.to.id)
+        end
+    else
+        return lang_text('require_owner')
+    end
     return
 end
 

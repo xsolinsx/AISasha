@@ -126,19 +126,7 @@ function msg_valid(msg)
         return false
     end
 
-    -- bot on or off
-    if is_owner(msg) then
-        if msg.text then
-            if msg.text:lower() == "#bot on" or msg.text:lower() == "!bot on" or msg.text:lower() == "/bot on" or msg.text:lower() == "sasha on" then
-                enable_channel(receiver, msg.to.id)
-            end
-            if msg.text:lower() == "#bot off" or msg.text:lower() == "!bot off" or msg.text:lower() == "/bot off" or msg.text:lower() == "sasha off" then
-                disable_channel(receiver, msg.to.id)
-            end
-        end
-    end
-
-    if is_channel_disabled(receiver) then
+    if is_channel_disabled(receiver) and not is_momod(msg) then
         print('\27[36mNot valid: Channel disabled\27[39m')
         return false
     end
