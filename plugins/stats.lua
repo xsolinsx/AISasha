@@ -363,7 +363,11 @@ return {
     -- [#]aisasha
     -- MOD
     -- (#stats|#statslist|#messages)
+    -- (#realstats|#realmessages)
+    -- (#cleanstats|#cleanmessages)
     -- ADMIN
     -- (#stats|#statslist|#messages) group <group_id>
+    -- (#realstats|#realmessages) group <group_id>
+    -- (#cleanstats|#cleanmessages) group <group_id>
     -- (#stats|#statslist) aisasha
 }
