@@ -31,7 +31,7 @@ sudo apt-get update; sudo apt-get upgrade -y --force-yes; sudo apt-get dist-upgr
 
 # Realm configuration
 
-After you run the bot for first time, send it `!id`. Get your ID and stop the bot.
+After you run the bot for first time, send it `!info`. Get your ID and stop the bot.
 
 Open ./data/config.lua and add your ID to the "sudo_users" section in the following format:
 ```
