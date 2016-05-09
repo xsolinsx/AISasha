@@ -63,6 +63,9 @@ end
 
 local function callback_reply(extra, success, result)
     local text = lang_text('info') .. ' (<reply>)'
+    if result.from.title then
+        text = text .. lang_text('name') .. result.from.title
+    end
     if result.from.first_name then
         text = text .. lang_text('name') .. result.from.first_name
     end
@@ -88,13 +91,29 @@ local function callback_reply(extra, success, result)
     text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id) + 1] ..
     lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs ..
-    '\n🆔: ' .. result.from.peer_id
+    lang_text('otherInfo')
+    if is_whitelisted(result.from.peer_id) then
+        text = text .. 'WHITELISTED, '
+    end
+    if is_gbanned(result.from.peer_id) then
+        text = text .. 'GBANNED, '
+    end
+    if is_banned(result.from.peer_id, result.to.peer_id) then
+        text = text .. 'BANNED, '
+    end
+    if is_muted_user(result.to.peer_id, result.from.peer_id) then
+        text = text .. 'MUTED, '
+    end
+    text = text .. '\n🆔: ' .. result.from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end
 
 local function callback_id(cb_extra, success, result)
     local text = lang_text('info') .. ' (<id>)'
+    if result.title then
+        text = text .. lang_text('name') .. result.title
+    end
     if result.first_name then
         text = text .. lang_text('name') .. result.first_name
     end
@@ -120,6 +139,20 @@ local function callback_id(cb_extra, success, result)
     text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.peer_id, cb_extra.msg.to.id) + 1] ..
     lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs ..
+    lang_text('otherInfo')
+    if is_whitelisted(result.peer_id) then
+        text = text .. 'WHITELISTED, '
+    end
+    if is_gbanned(result.peer_id) then
+        text = text .. 'GBANNED, '
+    end
+    if is_banned(result.peer_id, cb_extra.msg.to.id) then
+        text = text .. 'BANNED, '
+    end
+    if is_muted_user(cb_extra.msg.to.id, result.peer_id) then
+        text = text .. 'MUTED, '
+    end
+    text = text .. '\n🆔: ' .. result.peer_id
     '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
@@ -127,6 +160,9 @@ end
 
 local function callback_username(extra, success, result)
     local text = lang_text('info') .. ' (<username>)'
+    if result.title then
+        text = text .. lang_text('name') .. result.title
+    end
     if result.first_name then
         text = text .. lang_text('name') .. result.first_name
     end
@@ -152,13 +188,29 @@ local function callback_username(extra, success, result)
     text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.peer_id, extra.chatid) + 1] ..
     lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs ..
-    '\n🆔: ' .. result.peer_id
+    lang_text('otherInfo')
+    if is_whitelisted(result.peer_id) then
+        text = text .. 'WHITELISTED, '
+    end
+    if is_gbanned(result.peer_id) then
+        text = text .. 'GBANNED, '
+    end
+    if is_banned(result.peer_id, extra.chatid) then
+        text = text .. 'BANNED, '
+    end
+    if is_muted_user(extra.chatid, result.peer_id) then
+        text = text .. 'MUTED, '
+    end
+    text = text .. '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. extra.chatid, text)
     send_large_msg('channel#id' .. extra.chatid, text)
 end
 
 local function callback_from(extra, success, result)
     local text = lang_text('info') .. ' (<from>)'
+    if result.fwd_from.title then
+        text = text .. lang_text('name') .. result.fwd_from.title
+    end
     if result.fwd_from.first_name then
         text = text .. lang_text('name') .. result.fwd_from.first_name
     end
@@ -184,13 +236,26 @@ local function callback_from(extra, success, result)
     text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.fwd_from.peer_id, result.to.peer_id) + 1] ..
     lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs ..
-    '\n🆔: ' .. result.fwd_from.peer_id
+    lang_text('otherInfo')
+    if is_whitelisted(result.fwd_from.peer_id) then
+        text = text .. 'WHITELISTED, '
+    end
+    if is_gbanned(result.fwd_from.peer_id) then
+        text = text .. 'GBANNED, '
+    end
+    if is_banned(result.fwd_from.peer_id, result.to.peer_id) then
+        text = text .. 'BANNED, '
+    end
+    if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
+        text = text .. 'MUTED, '
+    end
+    text = text .. '\n🆔: ' .. result.fwd_from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end
 
 local function channel_callback_info(cb_extra, success, result)
-    local title = lang_text('infoFor') .. result.title .. "\n"
+    local title = lang_text('supergroupName') .. result.title .. "\n"
     local user_num = lang_text('users') .. result.participants_count
     local admin_num = lang_text('admins') .. result.admins_count
     local kicked_num = lang_text('kickedUsers') .. result.kicked_count
@@ -205,7 +270,7 @@ local function channel_callback_info(cb_extra, success, result)
 end
 
 local function chat_callback_info(cb_extra, success, result)
-    local title = lang_text('infoFor') .. result.title .. "\n"
+    local title = lang_text('groupName') .. result.title .. "\n"
     local user_num = lang_text('users') .. result.members_num
     local chat_id = "\n🆔: " .. result.peer_id
     local text = title .. user_num .. chat_id
@@ -219,6 +284,9 @@ local function database(cb_extra, success, result)
     for k, v in pairs(result.members) do
         text = ''
         id = ''
+        if v.title then
+            text = text .. ' Nome: ' .. v.title
+        end
         if v.first_name then
             text = text .. ' Nome: ' .. v.first_name
         end
@@ -239,7 +307,20 @@ local function database(cb_extra, success, result)
         end
         text = text .. 'Rango: ' .. reverse_rank_table[get_rank(v.peer_id, result.peer_id) + 1]
         .. 'Data: ' .. os.date('%c')
-        .. '\nId: ' .. v.peer_id
+        .. 'Altre informazioni:  '
+        if is_whitelisted(v.peer_id) then
+            text = text .. 'WHITELISTED, '
+        end
+        if is_gbanned(v.peer_id) then
+            text = text .. 'GBANNED, '
+        end
+        if is_banned(v.peer_id, result.peer_id) then
+            text = text .. 'BANNED, '
+        end
+        if is_muted_user(result.peer_id, v.peer_id) then
+            text = text .. 'MUTED, '
+        end
+        text = text .. '\nId: ' .. v.peer_id
         .. ' Long_id: ' .. v.id
         id = v.peer_id
         db:write('"' .. id .. '" = "' .. text .. '"\n')
@@ -254,6 +335,9 @@ local function pre_process(msg)
     if msg.to.type == 'user' and msg.fwd_from then
         if is_support(msg.from.id) or is_admin1(msg) then
             local text = lang_text('info') .. ' (<private_from>)'
+            if msg.fwd_from.title then
+                text = text .. lang_text('name') .. msg.fwd_from.title
+            end
             if msg.fwd_from.first_name then
                 text = text .. lang_text('name') .. msg.fwd_from.first_name
             end
@@ -269,14 +353,27 @@ local function pre_process(msg)
             if msg.fwd_from.username then
                 text = text .. lang_text('username') .. '@' .. msg.fwd_from.username
             end
-            if our_id ~= result.fwd_from.id then
+            if our_id ~= result.fwd_from.peer_id then
                 if msg.fwd_from.phone then
                     text = text .. lang_text('phone') .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
                 end
             end
-            text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.fwd_from.id, msg.to.id) + 1] ..
+            text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, msg.to.id) + 1] ..
             lang_text('date') .. os.date('%c') ..
-            '\n🆔: ' .. msg.fwd_from.peer_id
+            lang_text('otherInfo')
+            if is_whitelisted(msg.fwd_from.peer_id) then
+                text = text .. 'WHITELISTED, '
+            end
+            if is_gbanned(msg.fwd_from.peer_id) then
+                text = text .. 'GBANNED, '
+            end
+            if is_banned(msg.fwd_from.peer_id, msg.to.id) then
+                text = text .. 'BANNED, '
+            end
+            if is_muted_user(msg.to.id, msg.fwd_from.peer_id) then
+                text = text .. 'MUTED, '
+            end
+            text = text .. '\n🆔: ' .. msg.fwd_from.peer_id
             send_large_msg('user#id' .. msg.from.id, text)
         else
             return
@@ -314,6 +411,9 @@ local function run(msg, matches)
             else
                 local text = lang_text('info') ..
                 lang_text('youAre')
+                if msg.from.title then
+                    text = text .. lang_text('name') .. msg.from.title
+                end
                 if msg.from.first_name then
                     text = text .. lang_text('name') .. msg.from.first_name
                 end
@@ -336,7 +436,20 @@ local function run(msg, matches)
                 text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
                 lang_text('date') .. os.date('%c') ..
                 lang_text('totalMessages') .. msgs ..
-                '\n🆔: ' .. msg.from.id ..
+                lang_text('otherInfo')
+                if is_whitelisted(msg.from.id) then
+                    text = text .. 'WHITELISTED, '
+                end
+                if is_gbanned(msg.from.id) then
+                    text = text .. 'GBANNED, '
+                end
+                if is_banned(msg.from.id, chat) then
+                    text = text .. 'BANNED, '
+                end
+                if is_muted_user(chat, msg.from.id) then
+                    text = text .. 'MUTED, '
+                end
+                text = text .. '\n🆔: ' .. msg.from.id ..
                 lang_text('youAreWriting')
                 if chat_type == 'user' then
                     text = text .. ' 👤'
@@ -367,14 +480,21 @@ local function run(msg, matches)
                     return text
                 elseif chat_type == 'chat' then
                     text = text .. ' 👥' ..
-                    lang_text('groupName') .. msg.to.print_name:gsub("_", " ") ..
-                    lang_text('members') .. msg.to.members_num .. '' ..
+                    lang_text('groupName') .. msg.to.title .. "\n" ..
+                    lang_text('users') .. msg.to.members_num
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 elseif chat_type == 'channel' then
                     text = text .. ' 👥' ..
-                    lang_text('supergroupName') .. msg.to.print_name:gsub("_", " ") ..
-                    '\n🆔: ' .. math.abs(msg.to.id)
+                    lang_text('supergroupName') .. msg.to.title .. "\n" ..
+                    lang_text('users') .. msg.to.participants_count ..
+                    lang_text('admins') .. msg.to.admins_count ..
+                    lang_text('kickedUsers') .. msg.to.kicked_count
+                    if msg.to.username then
+                        text = text .. lang_text('username') .. "@" .. msg.to.username
+                    end
+                    local text = title .. admin_num .. user_num .. kicked_num .. channel_id .. channel_username
+                    "\n🆔: " .. math.abs(msg.to.id)
                     return text
                 end
             end
@@ -395,12 +515,12 @@ local function run(msg, matches)
             end
         end
     end
-    if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' then
+    if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' and matches[2] then
         if is_owner(msg) then
             if chat_type == 'channel' then
-                channel_info(receiver, channel_callback_info, { receiver = receiver, msg = msg })
+                channel_info('channel#id' .. matches[2], channel_callback_info, { receiver = receiver, msg = msg })
             elseif chat_type == 'chat' then
-                chat_info(receiver, chat_callback_info, { receiver = receiver })
+                chat_info('chat#id' .. matches[2], chat_callback_info, { receiver = receiver })
             end
         else
             return lang_text('require_owner')
@@ -445,7 +565,7 @@ return {
     patterns =
     {
         "^[#!/]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
-        "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
+        "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo]) (%d+)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
         "^[#!/]([Ii][Nn][Ff][Oo]) (.*)$",
@@ -455,8 +575,8 @@ return {
         -- database
         "^([Ss][Aa][Ss][Hh][Aa] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         -- groupinfo
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
-        "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
+        "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
         -- getrank
         "^([Rr][Aa][Nn][Gg][Oo]) (.*)$",
         "^([Rr][Aa][Nn][Gg][Oo])$",
@@ -481,7 +601,7 @@ return {
     -- (#who|#members|[sasha] lista membri)
     -- (#kicked|[sasha] lista rimossi)
     -- OWNER
-    -- (#groupinfo|[sasha] info gruppo) [<group_id>]
+    -- (#groupinfo|[sasha] info gruppo) <group_id>
     -- SUDO
     -- (#database|[sasha] database)
 }
