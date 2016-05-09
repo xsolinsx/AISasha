@@ -880,20 +880,20 @@ local function cleanmember(cb_extra, success, result)
 end
 
 local function killchat(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local chat_id = "chat#id" .. result.id
-    local chatname = result.print_name
     for k, v in pairs(result.members) do
-        kick_user_any(v.id, result.peer_id)
+        kick_user_any(v.peer_id, result.peer_id)
+    end
+end
+
+local function killchannel(cb_extra, success, result)
+    for k, v in pairsByKeys(result) do
+        kick_user_any(v.peer_id, cb_extra.chat_id)
     end
 end
 
 local function killrealm(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local chat_id = "chat#id" .. result.id
-    local chatname = result.print_name
     for k, v in pairs(result.members) do
-        kick_user_any(v.id, result.peer_id)
+        kick_user_any(v.peer_id, result.peer_id)
     end
 end
 
@@ -1618,29 +1618,42 @@ local function run(msg, matches)
                 end
             end
         end
-        if msg.to.type == 'chat' then
-            if matches[1]:lower() == 'kill' and matches[2]:lower() == 'chat' then
+        if msg.to.type == 'chat' or msg.to.type == 'channel' then
+            if matches[1]:lower() == 'kill' and matches[2]:lower() == 'group' then
                 if not is_admin1(msg) then
-                    return nil
+                    return
                 end
                 if not is_realm(msg) then
-                    local receiver = get_receiver(msg)
-                    return modrem(msg),
-                    print("Closing Group..."),
-                    chat_info(receiver, killchat, { receiver = receiver })
+                    local receiver = 'chat#id' .. msg.to.id
+                    print("Closing Group: " .. receiver)
+                    chat_info(receiver, killchat, false)
+                    return modrem(msg)
+                else
+                    return lang_text('realmIs')
+                end
+            end
+            if matches[1]:lower() == 'kill' and matches[2]:lower() == 'supergroup' then
+                if not is_admin1(msg) then
+                    return
+                end
+                if not is_realm(msg) then
+                    local receiver = 'channel#id' .. msg.to.id
+                    print("Closing Group: " .. receiver)
+                    channel_get_users(receiver, killchannel, { chat_id = msg.to.id })
+                    return modrem(msg)
                 else
                     return lang_text('realmIs')
                 end
             end
             if matches[1]:lower() == 'kill' and matches[2]:lower() == 'realm' then
                 if not is_admin1(msg) then
-                    return nil
+                    return
                 end
-                if not is_group(msg) then
-                    local receiver = get_receiver(msg)
-                    return realmrem(msg),
-                    print("Closing Realm..."),
-                    chat_info(receiver, killrealm, { receiver = receiver })
+                if is_realm(msg) then
+                    local receiver = 'chat#id' .. msg.to.id
+                    print("Closing realm: " .. receiver)
+                    chat_info(receiver, killrealm, false)
+                    return realmrem(msg)
                 else
                     return lang_text('groupIs')
                 end
@@ -1671,7 +1684,8 @@ return {
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee]) (.*)$",
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee])$",
         "^[#!/]([Cc][Ll][Ee][Aa][Nn]) (.*)$",
-        "^[#!/]([Kk][Ii][Ll][Ll]) ([Cc][Hh][Aa][Tt])$",
+        "^[#!/]([Kk][Ii][Ll][Ll]) ([Gg][Rr][Oo][Uu][Pp])$",
+        "^[#!/]([Kk][Ii][Ll][Ll]) ([Ss][Uu][Pp][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Rr][Ee][Aa][Ll][Mm])$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee]) (.*)$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee])$",
@@ -1785,6 +1799,6 @@ return {
     -- ADMIN
     -- #add [realm]
     -- #rem [realm]
-    -- #kill chat|realm
+    -- #kill group|supergroup|realm
     -- #setgpowner <group_id> <user_id>
 }

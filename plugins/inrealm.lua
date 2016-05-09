@@ -1054,9 +1054,7 @@ return {
     -- (#unlock|[sasha] sblocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker
     -- #settings <group_id>
     -- #type
-    -- #kill group <group_id>
-    -- #kill supergroup <group_id>
-    -- #kill realm <realm_id>
+    -- #kill group|supergroup|realm <group_id>
     -- #rem <group_id>
     -- #support <user_id>|<username>
     -- #-support <user_id>|<username>
