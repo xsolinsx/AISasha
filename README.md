@@ -43,7 +43,7 @@ Open ./data/config.lua and add your ID to the "sudo_users" section in the follow
 ```
 Then restart the bot.
 
-Write in pm to your bot /installenstrings (or /installitstrings if you are Italian), with that command the bot will install the text to interact, otherwise will send an error saying that it can't find the string of text
+Write in pm to your bot `/installenstrings` (or `/installitstrings` if you are Italian), with that command the bot will install the text to interact, otherwise will send an error saying that it can't find the string of text
 
 Create a realm using the `!createrealm` command.
 
