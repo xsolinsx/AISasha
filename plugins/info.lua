@@ -353,7 +353,7 @@ local function pre_process(msg)
             if msg.fwd_from.username then
                 text = text .. lang_text('username') .. '@' .. msg.fwd_from.username
             end
-            if our_id ~= result.fwd_from.peer_id then
+            if our_id ~= msg.fwd_from.peer_id then
                 if msg.fwd_from.phone then
                     text = text .. lang_text('phone') .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
                 end
