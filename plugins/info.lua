@@ -256,9 +256,9 @@ end
 
 local function channel_callback_info(cb_extra, success, result)
     local title = lang_text('supergroupName') .. result.title .. "\n"
-    local user_num = lang_text('users') .. result.participants_count
-    local admin_num = lang_text('admins') .. result.admins_count
-    local kicked_num = lang_text('kickedUsers') .. result.kicked_count
+    local user_num = lang_text('users') .. tostring(result.participants_count)
+    local admin_num = lang_text('admins') .. tostring(result.admins_count)
+    local kicked_num = lang_text('kickedUsers') .. tostring(result.kicked_count)
     local channel_id = "\n🆔: " .. result.peer_id
     if result.username then
         channel_username = lang_text('username') .. "@" .. result.username
@@ -271,7 +271,7 @@ end
 
 local function chat_callback_info(cb_extra, success, result)
     local title = lang_text('groupName') .. result.title .. "\n"
-    local user_num = lang_text('users') .. result.members_num
+    local user_num = lang_text('users') .. tostring(result.members_num)
     local chat_id = "\n🆔: " .. result.peer_id
     local text = title .. user_num .. chat_id
     send_large_msg(cb_extra.receiver, text)
@@ -481,20 +481,19 @@ local function run(msg, matches)
                 elseif chat_type == 'chat' then
                     text = text .. ' 👥' ..
                     lang_text('groupName') .. msg.to.title .. "\n" ..
-                    lang_text('users') .. msg.to.members_num
+                    lang_text('users') .. tostring(msg.to.members_num)
                     '\n🆔: ' .. math.abs(msg.to.id)
                     return text
                 elseif chat_type == 'channel' then
                     text = text .. ' 👥' ..
                     lang_text('supergroupName') .. msg.to.title .. "\n" ..
-                    lang_text('users') .. msg.to.participants_count ..
-                    lang_text('admins') .. msg.to.admins_count ..
-                    lang_text('kickedUsers') .. msg.to.kicked_count
+                    lang_text('users') .. tostring(msg.to.participants_count) ..
+                    lang_text('admins') .. tostring(msg.to.admins_count) ..
+                    lang_text('kickedUsers') .. tostring(msg.to.kicked_count)
                     if msg.to.username then
                         text = text .. lang_text('username') .. "@" .. msg.to.username
                     end
-                    local text = title .. admin_num .. user_num .. kicked_num .. channel_id .. channel_username
-                    "\n🆔: " .. math.abs(msg.to.id)
+                    text = text .. "\n🆔: " .. math.abs(msg.to.id)
                     return text
                 end
             end
