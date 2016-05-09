@@ -19,8 +19,8 @@ local function callback_group_members(cb_extra, success, result)
     local text = lang_text('usersIn') .. string.gsub(chatname, "_", " ") .. ' ' .. result.peer_id .. '\n'
 
     -- Get user info
-    for i = 1, #users do
-        local user_id = users[i]
+    for k, v in pairs(result.members) do
+        local user_id = v.peer_id
         local user_info = get_msgs_user_chat(user_id, chat_id)
         table.insert(users_info, user_info)
     end
@@ -31,14 +31,6 @@ local function callback_group_members(cb_extra, success, result)
             return a.msgs > b.msgs
         end
     end )
-
-    for k, v in pairs(result.members) do
-        for kuser, user in pairs(users_info) do
-            if user.id == v.peer_id then
-                text = text .. user.name .. ' = ' .. user.msgs .. '\n'
-            end
-        end
-    end
     send_large_msg(cb_extra.receiver, text)
 end
 
@@ -106,8 +98,8 @@ local function callback_supergroup_members(cb_extra, success, result)
     local text = lang_text('usersInChat')
 
     -- Get user info
-    for i = 1, #users do
-        local user_id = users[i]
+    for k, v in pairsByKeys(result) do
+        local user_id = v.peer_id
         local user_info = get_msgs_user_chat(user_id, chat_id)
         table.insert(users_info, user_info)
     end
@@ -118,14 +110,6 @@ local function callback_supergroup_members(cb_extra, success, result)
             return a.msgs > b.msgs
         end
     end )
-
-    for k, v in pairsByKeys(result) do
-        for kuser, user in pairs(users_info) do
-            if user.id == v.peer_id then
-                text = text .. user.name .. ' = ' .. user.msgs .. '\n'
-            end
-        end
-    end
     send_large_msg(cb_extra.receiver, text)
 end
 
