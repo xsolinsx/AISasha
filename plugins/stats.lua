@@ -29,6 +29,10 @@ local function callback_group_members(cb_extra, success, result)
             return a.msgs > b.msgs
         end
     end )
+
+    for kuser, user in pairs(users_info) do
+        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+    end
     send_large_msg(cb_extra.receiver, text)
 end
 
@@ -108,6 +112,10 @@ local function callback_supergroup_members(cb_extra, success, result)
             return a.msgs > b.msgs
         end
     end )
+
+    for kuser, user in pairs(users_info) do
+        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+    end
     send_large_msg(cb_extra.receiver, text)
 end
 
