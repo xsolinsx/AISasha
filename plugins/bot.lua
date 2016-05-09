@@ -1,10 +1,10 @@
 local function run(msg, matches)
     if is_owner(msg) then
         if matches[1]:lower() == 'on' then
-            enable_channel(receiver, msg.to.id)
+            enable_channel(get_receiver(msg), msg.to.id)
         end
         if matches[1]:lower() == 'off' then
-            disable_channel(receiver, msg.to.id)
+            disable_channel(get_receiver(msg), msg.to.id)
         end
     else
         return lang_text('require_owner')
