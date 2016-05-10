@@ -84,11 +84,11 @@ end
 local function Challenge_by_reply(extra, success, result)
     if tonumber(result.from.peer_id) == tonumber(our_id) then
         -- Ignore bot
-        reply_msg(extra.msg.id, lang_text('cantChallengeYourself'), ok_cb, false)
+        reply_msg(extra.msg.id, lang_text('cantChallengeMe'), ok_cb, false)
         return
     end
     if tonumber(extra.challenger) == tonumber(result.from.peer_id) then
-        reply_msg(extra.msg.id, lang_text('cantChallengeMe'), ok_cb, false)
+        reply_msg(extra.msg.id, lang_text('cantChallengeYourself'), ok_cb, false)
         return
     end
     local challenger = ''
