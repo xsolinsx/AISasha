@@ -561,7 +561,7 @@ local function run(msg, matches)
                             shotted = shotted .. '🔴'
                             var = var + 1
                         end
-                        for var = 1, tonumber(groupstats.challengecylinder - temp + 1) do
+                        for var = 1, tonumber(groupstats.challengecylinder - temp - 1) do
                             notshotted = notshotted .. '🔵'
                             var = var + 1
                         end
