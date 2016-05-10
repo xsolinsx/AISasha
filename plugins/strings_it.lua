@@ -591,13 +591,9 @@ local function run(msg, matches)
         set_text('flame:4', '(#flameinfo|[sasha] info flame): Sasha manda le info su chi sta flammando.')
 
         -- get.lua --
-        set_text('get:0', 1)
+        set_text('get:0', 2)
         set_text('get:1', '(#getlist|#get|sasha lista): Sasha mostra una lista delle variabili settate.')
         set_text('get:2', '[#get] <var_name>: Sasha manda il valore di <var_name>.')
-
-        -- google.lua --
-        set_text('google:0', 2)
-        set_text('google:1', '(#google|[sasha] googla) <terms>: Sasha cerca <terms> su Google e manda i risultati.')
 
         -- help.lua --
         set_text('help:0', 5)
@@ -669,7 +665,7 @@ local function run(msg, matches)
         set_text('inpm:10', '#unsetalias <alias>: Sasha elimina <alias>.')
 
         -- inrealm.lua --
-        set_text('inrealm:0', 26)
+        set_text('inrealm:0', 27)
         set_text('inrealm:1', 'MOD')
         set_text('inrealm:2', '#who: Sasha mostra una lista di membri del gruppo/regno.')
         set_text('inrealm:3', '#wholist: Sasha invia un file con una lista di membri del gruppo/regno.')
@@ -758,7 +754,7 @@ local function run(msg, matches)
         set_text('reactions:2', '#writing on|off: Sasha (fa finta|smette di far finta) di scrivere.')
 
         -- ruleta.lua --
-        set_text('ruleta:0', 24)
+        set_text('ruleta:0', 25)
         set_text('ruleta:1', 'Ruleta by AISasha, inspired from Leia (#RIP) and Arya. Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si gira il tamburo e se c\'è il proiettile sei fuori altrimenti rimani.')
         set_text('ruleta:2', '#registerme|#registrami: Sasha registra l\'utente alla roulette.')
         set_text('ruleta:3', '#deleteme|#eliminami: Sasha elimina i dati dell\'utente.')
@@ -783,6 +779,7 @@ local function run(msg, matches)
         set_text('ruleta:22', 'SUDO')
         set_text('ruleta:23', '#createdb: Sasha crea il database di ruleta.')
         set_text('ruleta:24', '#addpoints <id> <value>: Sasha aggiunge <value> punti all\'utente specificato.')
+        set_text('ruleta:25', '#rempoints <id> <value>: Sasha sottrae <value> punti all\'utente specificato.')
 
         -- set.lua --
         set_text('set:0', 4)
@@ -792,7 +789,7 @@ local function run(msg, matches)
         set_text('set:4', '(#cancel|[sasha] annulla): Sasha annulla un #setmedia.')
 
         -- shout.lua --
-        set_text('shout:0', 2)
+        set_text('shout:0', 1)
         set_text('shout:1', '(#shout|[sasha] grida|[sasha] urla) <text>: Sasha "urla" <text>.')
 
         -- spam.lua --
@@ -804,7 +801,7 @@ local function run(msg, matches)
         set_text('spam:5', '(#spam|[sasha] spamma): Sasha inizia a spammare.')
 
         -- stats.lua --
-        set_text('stats:0', 8)
+        set_text('stats:0', 12)
         set_text('stats:1', '[#]aisasha: Sasha invia la propria descrizione.')
         set_text('stats:2', 'MOD')
         set_text('stats:3', '(#stats|#messages): Sasha invia le statistiche della chat.')

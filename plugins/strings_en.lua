@@ -591,7 +591,7 @@ local function run(msg, matches)
         set_text('flame:4', '(#flameinfo|[sasha] info flame): Sasha sends flamed user info.')
 
         -- get.lua --
-        set_text('get:0', 1)
+        set_text('get:0', 2)
         set_text('get:1', '(#getlist|#get|sasha lista): Sasha sends a list of saved variables.')
         set_text('get:2', '[#get] <var_name>: Sasha sends value of <var_name>.')
 
@@ -669,7 +669,7 @@ local function run(msg, matches)
         set_text('inpm:10', '#unsetalias <alias>: Sasha deletes <alias>.')
 
         -- inrealm.lua --
-        set_text('inrealm:0', 26)
+        set_text('inrealm:0', 25)
         set_text('inrealm:1', 'MOD')
         set_text('inrealm:2', '#who: Sasha sends a list of all group|realm members.')
         set_text('inrealm:3', '#wholist: Sasha sends a file with a list of all group/realm members.')
@@ -783,6 +783,7 @@ local function run(msg, matches)
         set_text('ruleta:22', 'SUDO')
         set_text('ruleta:23', '#createdb: Sasha creates ruleta database.')
         set_text('ruleta:24', '#addpoints <id> <value>: Sasha adds <value> points to specified user.')
+        set_text('ruleta:25', '#rempoints <id> <value>: Sasha subtracts <value> points to specified user.')
 
         -- set.lua --
         set_text('set:0', 4)
@@ -792,7 +793,7 @@ local function run(msg, matches)
         set_text('set:4', '(#cancel|[sasha] annulla): Sasha cancels #setmedia.')
 
         -- shout.lua --
-        set_text('shout:0', 2)
+        set_text('shout:0', 1)
         set_text('shout:1', '(#shout|[sasha] grida|[sasha] urla) <text>: Sasha "shouts" <text>.')
 
         -- spam.lua --
@@ -804,7 +805,7 @@ local function run(msg, matches)
         set_text('spam:5', '(#spam|[sasha] spamma): Sasha starts spamming.')
 
         -- stats.lua --
-        set_text('stats:0', 8)
+        set_text('stats:0', 12)
         set_text('stats:1', '[#]aisasha: Sasha sends her description.')
         set_text('stats:2', 'MOD')
         set_text('stats:3', '(#stats|#messages): Sasha sends chat\'s stats.')

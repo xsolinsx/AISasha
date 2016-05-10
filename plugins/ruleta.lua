@@ -490,11 +490,14 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'addpoints' and matches[2] and matches[3] and is_sudo(msg) then
-            if string.find(msg.text, '%-') then
-                ruletadata['users'][matches[2]].score = tonumber(ruletadata['users'][matches[2]].score - matches[3])
-            else
-                ruletadata['users'][matches[2]].score = tonumber(ruletadata['users'][matches[2]].score + matches[3])
-            end
+            ruletadata['users'][matches[2]].score = tonumber(ruletadata['users'][matches[2]].score + matches[3])
+            save_data(_config.ruleta.db, ruletadata)
+            reply_msg(msg.id, lang_text('cheating'), ok_cb, false)
+            return
+        end
+
+        if matches[1]:lower() == 'rempoints' and matches[2] and matches[3] and is_sudo(msg) then
+            ruletadata['users'][matches[2]].score = tonumber(ruletadata['users'][matches[2]].score - matches[3])
             save_data(_config.ruleta.db, ruletadata)
             reply_msg(msg.id, lang_text('cheating'), ok_cb, false)
             return
@@ -622,7 +625,8 @@ return {
         "^[#!/]([Aa][Cc][Cc][Ee][Pp][Tt])$",
         "^[#!/]([Rr][Ee][Jj][Ee][Cc][Tt])$",
         "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee][Ii][Nn][Ff][Oo])$",
-        "^[#!/]([Aa][Dd][Dd][Pp][Oo][Ii][Nn][Tt][Ss]) (%d+) [%-]?(%d+)$",
+        "^[#!/]([Aa][Dd][Dd][Pp][Oo][Ii][Nn][Tt][Ss]) (%d+) (%d+)$",
+        "^[#!/]([Rr][Ee][Mm][Pp][Oo][Ii][Nn][Tt][Ss]) (%d+) (%d+)$",
         "^[#!/]?([Rr][Uu][Ll][Ee][Tt][Aa])",
         -- kick random
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
@@ -673,4 +677,5 @@ return {
     -- SUDO
     -- #createdb
     -- #addpoints <id> <value>
+    -- #rempoints <id> <value>
 }
