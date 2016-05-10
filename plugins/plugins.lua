@@ -147,6 +147,11 @@ end
 
 local function run(msg, matches)
     if is_owner(msg) then
+        -- Show the available plugins
+        if matches[1]:lower() == '#plugins' or matches[1]:lower() == '!plugins' or matches[1]:lower() == '/plugins' or matches[1]:lower() == 'sasha lista plugins' or matches[1]:lower() == 'lista plugins' then
+            return list_plugins()
+        end
+
         if matches[3] then
             -- Re-enable a plugin for this chat
             if (matches[1]:lower() == 'enable' or matches[1]:lower() == 'sasha abilita' or matches[1]:lower() == 'sasha attiva' or matches[1]:lower() == 'abilita' or matches[1]:lower() == 'attiva') and matches[3]:lower() == 'chat' then
@@ -177,11 +182,6 @@ local function run(msg, matches)
         return lang_text('require_owner')
     end
     if is_sudo(msg) then
-        -- Show the available plugins
-        if matches[1]:lower() == '#plugins' or matches[1]:lower() == '!plugins' or matches[1]:lower() == '/plugins' or matches[1]:lower() == 'sasha lista plugins' or matches[1]:lower() == 'lista plugins' then
-            return list_plugins()
-        end
-
         -- Reload all the plugins!
         if matches[1]:lower() == 'reload' or matches[1]:lower() == 'sasha ricarica' or matches[1]:lower() == 'ricarica' then
             print(reload_plugins())
