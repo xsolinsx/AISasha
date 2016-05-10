@@ -988,11 +988,13 @@ end
 
 -- Returns the name of the sender
 function kick_user_any(user_id, chat_id)
-    local channel = 'channel#id' .. chat_id
-    local chat = 'chat#id' .. chat_id
-    local user = 'user#id' .. user_id
-    chat_del_user(chat, user, ok_cb, true)
-    channel_kick(channel, user, ok_cb, false)
+    if tonumber(user_id) ~= tonumber(our_id) then
+        local channel = 'channel#id' .. chat_id
+        local chat = 'chat#id' .. chat_id
+        local user = 'user#id' .. user_id
+        chat_del_user(chat, user, ok_cb, true)
+        channel_kick(channel, user, ok_cb, false)
+    end
 end
 
 -- Returns the name of the sender

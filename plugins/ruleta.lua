@@ -140,14 +140,6 @@ local function callback_id(cb_extra, success, result)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
 end
 
-local function kick_user(user_id, chat_id)
-    local chat = 'chat#id' .. chat_id
-    local user = 'user#id' .. user_id
-    local channel = 'channel#id' .. chat_id
-    chat_del_user(chat, user, ok_cb, true)
-    channel_kick(channel, user, ok_cb, true)
-end
-
 local function kickrandom_chat(cb_extra, success, result)
     local chat_id = cb_extra.chat_id
     local kickable = false
@@ -158,7 +150,7 @@ local function kickrandom_chat(cb_extra, success, result)
         if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
             kickable = true
             send_large_msg('chat#id' .. chat_id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
-            kick_user(id, chat_id)
+            kick_user_any(id, chat_id)
         else
             print('403')
         end
@@ -175,7 +167,7 @@ local function kickrandom_channel(extra, success, result)
         if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
             kickable = true
             send_large_msg('channel#id' .. result.id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
-            kick_user(id, result.id)
+            kick_user_any(id, result.id)
         else
             print('403')
         end
@@ -389,7 +381,7 @@ local function run(msg, matches)
                     ruletadata['users'][user] = userstats
 
                     save_data(_config.ruleta.db, ruletadata)
-                    kick_user(user, chat)
+                    kick_user_any(user, chat)
                 else
                     reply_msg(msg.id, godgood[math.random(#godgood)], ok_cb, false)
 
@@ -487,7 +479,7 @@ local function run(msg, matches)
                         ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
                     end
                     save_data(_config.ruleta.db, ruletadata)
-                    kick_user(user, chat)
+                    kick_user_any(user, chat)
                 end
             elseif not is_momod(msg) then
                 reply_msg(msg.id, lang_text('wrongPlayer'), ok_cb, false)
@@ -559,7 +551,7 @@ local function run(msg, matches)
                         end
 
                         save_data(_config.ruleta.db, ruletadata)
-                        kick_user(user, chat)
+                        kick_user_any(user, chat)
                     else
                         -- blue red
                         -- 🔵    🔴
@@ -590,7 +582,7 @@ local function run(msg, matches)
                     ruletadata['users'][user].actualstreak = tonumber(0)
 
                     save_data(_config.ruleta.db, ruletadata)
-                    kick_user(user, chat)
+                    kick_user_any(user, chat)
                 else
                     reply_msg(msg.id, good[math.random(#good)], ok_cb, false)
 
