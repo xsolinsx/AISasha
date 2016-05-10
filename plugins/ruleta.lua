@@ -505,7 +505,7 @@ local function run(msg, matches)
 
             if accepted == 1 and(user == challenger or user == challenged) and rounds > 0 then
                 if user == redis:get('ruletachallenge:' .. chat .. ':player') then
-                    local temp = tonumber(groupstats.challengecylinder) - rounds + 1
+                    local temp = tonumber(groupstats.challengecylinder) - rounds
                     local nextplayeruser = ''
                     if user == challenger then
                         nextplayeruser = redis:get('ruletachallenged:' .. chat)
@@ -557,11 +557,11 @@ local function run(msg, matches)
                         -- 🔵    🔴
                         local shotted = ''
                         local notshotted = ''
-                        for var = 1, tonumber(temp) do
+                        for var = 1, tonumber(temp + 1) do
                             shotted = shotted .. '🔴'
                             var = var + 1
                         end
-                        for var = 1, tonumber(groupstats.challengecylinder - temp) do
+                        for var = 1, tonumber(groupstats.challengecylinder - temp + 1) do
                             notshotted = notshotted .. '🔵'
                             var = var + 1
                         end
