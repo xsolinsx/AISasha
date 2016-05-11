@@ -84,6 +84,7 @@ local function run(msg, matches)
                     fwd_msg('user#id' .. bot, msg.id, ok_cb, false)
                 end
             end
+            redis:del(msg.to.id)
         else
             return lang_text('require_mod')
         end
