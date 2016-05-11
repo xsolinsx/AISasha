@@ -91,6 +91,7 @@ local function run(msg, matches)
 
         -- botinteract.lua --
         set_text('botSet', ' has been saved to interact with chat.')
+        set_text('botUnset', ' has been removed from bots to interact with.')
         set_text('mediaNotSupported', 'Media not supported yet.')
 
         -- feedback.lua --
@@ -548,11 +549,13 @@ local function run(msg, matches)
         set_text('bot:2', '#bot|sasha on|off: Sasha goes on|off on the group.')
 
         -- botinteract.lua --
-        set_text('botinteract:0', 2)
+        set_text('botinteract:0', 6)
         set_text('botinteract:1', 'MOD')
         set_text('botinteract:2', '§§<text>: Sasha sends <text> to the bot.')
-        set_text('botinteract:3', 'ADMIN')
-        set_text('botinteract:4', '#setbot <username>: Sasha will interact with <username>.')
+        set_text('botinteract:3', 'OWNER')
+        set_text('botinteract:4', '#unsetbot <username>: Sasha will stop the interaction with <username>.')
+        set_text('botinteract:5', 'ADMIN')
+        set_text('botinteract:6', '#setbot <username>: Sasha will interact with <username>.')
 
         -- broadcast.lua --
         set_text('broadcast:0', 4)

@@ -1,4 +1,4 @@
-local function callback_bot(extra, success, result)
+local function callback_setbot(extra, success, result)
     if success == 0 then
         send_large_msg('chat#id' .. extra.chatid, lang_text('noUsernameFound'))
         send_large_msg('channel#id' .. extra.chatid, lang_text('noUsernameFound'))
@@ -8,6 +8,18 @@ local function callback_bot(extra, success, result)
     redis:sadd(hash, extra.chatid .. ':' .. result.peer_id)
     send_large_msg('chat#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. lang_text('botSet'))
     send_large_msg('channel#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. lang_text('botSet'))
+end
+
+local function callback_unsetbot(extra, success, result)
+    if success == 0 then
+        send_large_msg('chat#id' .. extra.chatid, lang_text('noUsernameFound'))
+        send_large_msg('channel#id' .. extra.chatid, lang_text('noUsernameFound'))
+        return
+    end
+    local hash = 'botinteract'
+    redis:srem(hash, extra.chatid .. ':' .. result.peer_id)
+    send_large_msg('chat#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. lang_text('botUnset'))
+    send_large_msg('channel#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. lang_text('botUnset'))
 end
 
 local function list_botinteract(msg)
@@ -23,7 +35,15 @@ end
 local function run(msg, matches)
     if matches[1]:lower() == "setbot" or matches[1]:lower() == "sasha imposta bot" and string.sub(matches[2]:lower(), -3) == 'bot' then
         if is_admin1(msg) then
-            resolve_username(matches[2]:gsub("@", ""), callback_bot, { chatid = msg.to.id })
+            resolve_username(matches[2]:gsub("@", ""), callback_setbot, { chatid = msg.to.id })
+            return
+        else
+            return lang_text('require_admin')
+        end
+    end
+    if matches[1]:lower() == "unsetbot" or matches[1]:lower() == "sasha rimuovi bot" and string.sub(matches[2]:lower(), -3) == 'bot' then
+        if is_owner(msg) then
+            resolve_username(matches[2]:gsub("@", ""), callback_unsetbot, { chatid = msg.to.id })
             return
         else
             return lang_text('require_owner')
@@ -79,6 +99,8 @@ return {
     -- usage
     -- MOD
     -- §§<text>
+    -- OWNER
+    -- (#unsetbot|sasha rimuovi bot)
     -- ADMIN
     -- (#setbot|sasha imposta bot)
 }
