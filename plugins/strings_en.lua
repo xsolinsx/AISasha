@@ -93,6 +93,7 @@ local function run(msg, matches)
         set_text('botSet', ' has been saved to interact with chat.')
         set_text('botUnset', ' has been removed from bots to interact with.')
         set_text('sendMeMedia', 'Send me the media you want me to forward.')
+        set_text('mediaForwarded', 'Media forwarded.')
 
         -- feedback.lua --
         set_text('feedStart', '@EricSolinas you received a feedback: #newfeedback\n\nSender')

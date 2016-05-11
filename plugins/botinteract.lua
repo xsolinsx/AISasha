@@ -85,6 +85,7 @@ local function run(msg, matches)
                 end
             end
             redis:del(msg.to.id)
+            return lang_text('mediaForwarded')
         else
             return lang_text('require_mod')
         end
