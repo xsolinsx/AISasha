@@ -19,7 +19,6 @@
         redis:sadd(hash, user_id)
         send_large_msg(receiver, lang_text('userBot') .. user_id .. lang_text('whitelistAdded'))
     end
-
 end
 
 local function whitelist_res(extra, success, result)

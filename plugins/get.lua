@@ -36,11 +36,12 @@ local function list_variables(msg)
 end
 
 local function run(msg, matches)
+    local vars = list_variables(msg)
+
     if (matches[1]:lower() == 'get' or matches[1]:lower() == 'getlist' or matches[1]:lower() == 'sasha lista') and not matches[2] then
-        return list_variables(msg)
+        return vars
     end
 
-    local vars = list_variables(msg)
     if vars ~= nil then
         local t = vars:split('\n')
         for i, word in pairs(t) do

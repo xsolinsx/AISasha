@@ -159,6 +159,11 @@ local function callback_id(cb_extra, success, result)
 end
 
 local function callback_username(extra, success, result)
+    if success == 0 then
+        send_large_msg('chat#id' .. extra.chatid, lang_text('noUsernameFound'))
+        send_large_msg('channel#id' .. extra.chatid, lang_text('noUsernameFound'))
+        return
+    end
     local text = lang_text('info') .. ' (<username>)'
     if result.title then
         text = text .. lang_text('name') .. result.title

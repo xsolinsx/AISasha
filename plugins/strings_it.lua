@@ -89,6 +89,10 @@ local function run(msg, matches)
         set_text('botOn', 'Sono tornata. 😏')
         set_text('botOff', 'Nulla da fare qui. 🚀')
 
+        -- botinteract.lua --
+        set_text('botSet', ' è stato salvato per l\'interazione con la chat.')
+        set_text('mediaNotSupported', 'Media non ancora supportati.')
+
         -- feedback.lua --
         set_text('feedStart', '@EricSolinas hai ricevuto un feedback: #newfeedback\n\nMittente')
         set_text('feedName', '\nNome: ')
@@ -542,6 +546,13 @@ local function run(msg, matches)
         set_text('bot:0', 2)
         set_text('bot:1', 'OWNER')
         set_text('bot:2', '#bot|sasha on|off: Sasha si attiva|disattiva.')
+
+        -- botinteract.lua --
+        set_text('botinteract:0', 2)
+        set_text('botinteract:1', 'MOD')
+        set_text('botinteract:2', '§§<text>: Sasha manda <text> al bot.')
+        set_text('botinteract:3', 'ADMIN')
+        set_text('botinteract:4', '#setbot <username>: Sasha interagirà con <username>.')
 
         -- broadcast.lua --
         set_text('broadcast:0', 4)
