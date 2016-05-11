@@ -1967,6 +1967,7 @@ return {
     -- ADMIN
     -- #tosuper
     -- #setusername <text>
+    -- #kill supergroup
     -- peer_id
     -- msg.to.id
     -- msg.to.peer_id
@@ -1974,5 +1975,5 @@ return {
     -- #mp <id>
     -- #md <id>
 }
--- End supergrpup.lua
+-- End supergroup.lua
 -- By @Rondoozle
