@@ -886,13 +886,6 @@ local function killchat(cb_extra, success, result)
     chat_del_user('chat#id' .. result.peer_id, 'user#id' .. our_id, ok_cb, true)
 end
 
-local function killchannel(cb_extra, success, result)
-    for k, v in pairsByKeys(result) do
-        kick_user_any(v.peer_id, cb_extra.chat_id)
-    end
-    channel_kick('channel#id' .. cb_extra.chat_id, 'user#id' .. our_id, ok_cb, false)
-end
-
 local function killrealm(cb_extra, success, result)
     for k, v in pairs(result.members) do
         kick_user_any(v.peer_id, result.peer_id)
@@ -1634,19 +1627,6 @@ local function run(msg, matches)
                     return lang_text('realmIs')
                 end
             end
-            if matches[1]:lower() == 'kill' and matches[2]:lower() == 'supergroup' then
-                if not is_admin1(msg) then
-                    return
-                end
-                if not is_realm(msg) then
-                    local receiver = 'channel#id' .. msg.to.id
-                    print("Closing Group: " .. receiver)
-                    channel_get_users(receiver, killchannel, { chat_id = msg.to.id })
-                    return modrem(msg)
-                else
-                    return lang_text('realmIs')
-                end
-            end
             if matches[1]:lower() == 'kill' and matches[2]:lower() == 'realm' then
                 if not is_admin1(msg) then
                     return
@@ -1687,7 +1667,6 @@ return {
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee])$",
         "^[#!/]([Cc][Ll][Ee][Aa][Nn]) (.*)$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Gg][Rr][Oo][Uu][Pp])$",
-        "^[#!/]([Kk][Ii][Ll][Ll]) ([Ss][Uu][Pp][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Rr][Ee][Aa][Ll][Mm])$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee]) (.*)$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee])$",
@@ -1803,6 +1782,6 @@ return {
     -- ADMIN
     -- #add [realm]
     -- #rem [realm]
-    -- #kill group|supergroup|realm
+    -- #kill group|realm
     -- #setgpowner <group_id> <user_id>
 }

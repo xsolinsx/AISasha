@@ -971,6 +971,13 @@ local function set_supergroup_photo(msg, success, result)
     end
 end
 
+local function killchannel(cb_extra, success, result)
+    for k, v in pairsByKeys(result) do
+        kick_user_any(v.peer_id, cb_extra.chat_id)
+    end
+    channel_kick('channel#id' .. cb_extra.chat_id, 'user#id' .. our_id, ok_cb, false)
+end
+
 -- Run function
 local function run(msg, matches)
     if msg.to.type == 'chat' then
@@ -1730,6 +1737,19 @@ local function run(msg, matches)
                 return get_rules(msg, data)
             end
         end
+        if matches[1]:lower() == 'kill' and matches[2]:lower() == 'supergroup' then
+            if not is_admin1(msg) then
+                return
+            end
+            if not is_realm(msg) then
+                local receiver = 'channel#id' .. msg.to.id
+                print("Closing Group: " .. receiver)
+                channel_get_users(receiver, killchannel, { chat_id = msg.to.id })
+                return modrem(msg)
+            else
+                return lang_text('realmIs')
+            end
+        end
 
         if matches[1]:lower() == 'peer_id' and is_admin1(msg) then
             text = msg.to.peer_id
@@ -1836,6 +1856,7 @@ return {
         "^[#!/]([Mm][Uu][Tt][Ee][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Mm][Pp]) (.*)$",
         "^[#!/]([Mm][Dd]) (.*)$",
+        "^[#!/]([Kk][Ii][Ll][Ll]) ([Ss][Uu][Pp][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
         "[Pp][Ee][Ee][Rr]_[Ii][Dd]",
         "[Mm][Ss][Gg].[Tt][Oo].[Ii][Dd]",
         "[Mm][Ss][Gg].[Tt][Oo].[Pp][Ee][Ee][Rr]_[Ii][Dd]",
