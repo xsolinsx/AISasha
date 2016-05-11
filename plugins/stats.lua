@@ -28,9 +28,11 @@ local function callback_group_members(cb_extra, success, result)
 
     -- Get user info
     for k, v in pairs(result.members) do
-        local user_id = v.peer_id
-        local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
-        table.insert(users_info, user_info)
+        if tonumber(v.peer_id) ~= tonumber(our_id) then
+            local user_id = v.peer_id
+            local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
+            table.insert(users_info, user_info)
+        end
     end
 
     -- Sort users by msgs number
@@ -53,9 +55,11 @@ local function chat_stats(chat_id)
     local users_info = { }
     -- Get user info
     for i = 1, #users do
-        local user_id = users[i]
-        local user_info = get_msgs_user_chat(user_id, chat_id)
-        table.insert(users_info, user_info)
+        if tonumber(users[i]) ~= tonumber(our_id) then
+            local user_id = users[i]
+            local user_info = get_msgs_user_chat(user_id, chat_id)
+            table.insert(users_info, user_info)
+        end
     end
     -- Sort users by msgs number
     table.sort(users_info, function(a, b)
@@ -83,9 +87,11 @@ local function chat_stats2(chat_id)
 
     -- Get user info
     for i = 1, #users do
-        local user_id = users[i]
-        local user_info = get_msgs_user_chat(user_id, chat_id)
-        table.insert(users_info, user_info)
+        if tonumber(users[i]) ~= tonumber(our_id) then
+            local user_id = users[i]
+            local user_info = get_msgs_user_chat(user_id, chat_id)
+            table.insert(users_info, user_info)
+        end
     end
 
     -- Sort users by msgs number
@@ -121,9 +127,11 @@ local function callback_supergroup_members(cb_extra, success, result)
 
     -- Get user info
     for k, v in pairsByKeys(result) do
-        local user_id = v.peer_id
-        local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
-        table.insert(users_info, user_info)
+        if tonumber(v.peer_id) ~= tonumber(our_id) then
+            local user_id = v.peer_id
+            local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
+            table.insert(users_info, user_info)
+        end
     end
 
     -- Sort users by msgs number
@@ -146,9 +154,11 @@ local function channel_stats(chat_id)
     local users_info = { }
     -- Get user info
     for i = 1, #users do
-        local user_id = users[i]
-        local user_info = get_msgs_user_chat(user_id, chat_id)
-        table.insert(users_info, user_info)
+        if tonumber(users[i]) ~= tonumber(our_id) then
+            local user_id = users[i]
+            local user_info = get_msgs_user_chat(user_id, chat_id)
+            table.insert(users_info, user_info)
+        end
     end
     -- Sort users by msgs number
     table.sort(users_info, function(a, b)
@@ -176,9 +186,11 @@ local function channel_stats2(chat_id)
 
     -- Get user info
     for i = 1, #users do
-        local user_id = users[i]
-        local user_info = get_msgs_user_chat(user_id, chat_id)
-        table.insert(users_info, user_info)
+        if tonumber(users[i]) ~= tonumber(our_id) then
+            local user_id = users[i]
+            local user_info = get_msgs_user_chat(user_id, chat_id)
+            table.insert(users_info, user_info)
+        end
     end
 
     -- Sort users by msgs number
