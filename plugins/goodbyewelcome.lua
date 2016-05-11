@@ -16,6 +16,14 @@ local function get_welcome(msg)
     return welcome
 end
 
+local function unset_welcome(msg)
+    local data = load_data(_config.moderation.data)
+    local data_cat = 'welcome'
+    data[tostring(msg.to.id)][data_cat] = ''
+    save_data(_config.moderation.data, data)
+    return lang_text('welcomeRemoved')
+end
+
 local function set_memberswelcome(msg, value)
     local data = load_data(_config.moderation.data)
     local data_cat = 'welcomemembers'
@@ -52,6 +60,14 @@ local function get_goodbye(msg)
     return goodbye
 end
 
+local function unset_goodbye(msg)
+    local data = load_data(_config.moderation.data)
+    local data_cat = 'goodbye'
+    data[tostring(msg.to.id)][data_cat] = ''
+    save_data(_config.moderation.data, data)
+    return lang_text('goodbyeRemoved')
+end
+
 local function get_rules(msg)
     local data = load_data(_config.moderation.data)
     local data_cat = 'rules'
@@ -75,9 +91,6 @@ local function run(msg, matches)
             return get_welcome(msg)
         end
     end
-    if matches[1]:lower() == 'setwelcome' and is_momod(msg) then
-        return set_welcome(msg, matches[2])
-    end
     if matches[1]:lower() == 'getgoodbye' then
         if tonumber(msg.to.id) == 1026492373 then
             if is_momod(msg) then
@@ -90,8 +103,17 @@ local function run(msg, matches)
             return get_goodbye(msg)
         end
     end
+    if matches[1]:lower() == 'setwelcome' and is_momod(msg) then
+        return set_welcome(msg, matches[2])
+    end
     if matches[1]:lower() == 'setgoodbye' and is_momod(msg) then
         return set_goodbye(msg, matches[2])
+    end
+    if matches[1]:lower() == 'unsetwelcome' and is_momod(msg) then
+        return unset_welcome(msg)
+    end
+    if matches[1]:lower() == 'unsetgoodbye' and is_momod(msg) then
+        return unset_goodbye(msg)
     end
     if matches[1]:lower() == 'setmemberswelcome' and is_momod(msg) then
         local msg = set_memberswelcome(msg, matches[2])
@@ -134,8 +156,10 @@ return {
     {
         "^[#!/]([Ss][Ee][Tt][Ww][Ee][Ll][Cc][Oo][Mm][Ee]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Ww][Ee][Ll][Cc][Oo][Mm][Ee])$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Ww][Ee][Ll][Cc][Oo][Mm][Ee])$",
         "^[#!/]([Ss][Ee][Tt][Gg][Oo][Oo][Dd][Bb][Yy][Ee]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Gg][Oo][Oo][Dd][Bb][Yy][Ee])$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Gg][Oo][Oo][Dd][Bb][Yy][Ee])$",
         "^[#!/]([Ss][Ee][Tt][Mm][Ee][Mm][Bb][Ee][Rr][Ss][Ww][Ee][Ll][Cc][Oo][Mm][Ee]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Mm][Ee][Mm][Bb][Ee][Rr][Ss][Ww][Ee][Ll][Cc][Oo][Mm][Ee])$",
         "^!!tgservice (.+)$",
@@ -148,6 +172,8 @@ return {
     -- MOD
     -- #setwelcome <text>: Sasha imposta <text> come benvenuto.
     -- #setgoodbye <text>: Sasha imposta <text> come addio.
+    -- #unsetwelcome: Sasha elimina il benvenuto
+    -- #unsetgoodbye: Sasha elimina l'addio
     -- #setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.
     -- #getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.
 }

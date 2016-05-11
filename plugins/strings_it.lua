@@ -130,6 +130,8 @@ local function run(msg, matches)
         -- goodbyewelcome.lua --
         set_text('newWelcome', 'Nuovo messaggio di benvenuto:\n')
         set_text('newGoodbye', 'Nuovo messaggio di addio:\n')
+        set_text('welcomeRemoved', 'Benvenuto rimosso.')
+        set_text('goodbyeRemoved', 'Addio rimosso.')
         set_text('newWelcomeNumber', 'Il benvenuto sarà mandato ogni X membri.')
         set_text('neverWelcome', 'Il messaggio di benvenuto non sarà più mandato.')
         set_text('noSetValue', 'Nessun valore impostato.')
@@ -596,14 +598,16 @@ local function run(msg, matches)
         set_text('get:2', '[#get] <var_name>: Sasha manda il valore di <var_name>.')
 
         -- goodbyewelcome.lua --
-        set_text('goodbyewelcome:0', 7)
+        set_text('goodbyewelcome:0', 9)
         set_text('goodbyewelcome:1', '#getwelcome: Sasha manda il benvenuto.')
         set_text('goodbyewelcome:2', '#getgoodbye: Sasha manda l\'addio.')
         set_text('goodbyewelcome:3', 'MOD')
         set_text('goodbyewelcome:4', '#setwelcome <text>: Sasha imposta <text> come benvenuto.')
         set_text('goodbyewelcome:5', '#setgoodbye <text>: Sasha imposta <text> come addio.')
-        set_text('goodbyewelcome:6', '#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.')
-        set_text('goodbyewelcome:7', '#getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.')
+        set_text('goodbyewelcome:6', '#unsetwelcome: Sasha rimuove il benvenuto.')
+        set_text('goodbyewelcome:7', '#unsetgoodbye: Sasha rimuove l\'addio.')
+        set_text('goodbyewelcome:8', '#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.')
+        set_text('goodbyewelcome:9', '#getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.')
 
         -- help.lua --
         set_text('help:0', 5)
