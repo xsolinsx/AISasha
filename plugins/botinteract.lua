@@ -65,9 +65,35 @@ local function run(msg, matches)
             return lang_text('require_mod')
         end
     end
+    if matches[1] == 'sendmedia' then
+        if is_momod(msg) then
+            redis:set(msg.to.id, 'waiting')
+            return lang_text('sendMeMedia')
+        else
+            return lang_text('require_mod')
+        end
+    end
+    if (matches[1] == '[photo]' or matches[1] == '[document]' or matches[1] == '[video]' or matches[1] == '[audio]' or matches[1] == '[contact]' or matches[1] == '[geo]') and redis:get(msg.to.id) then
+        if is_momod(msg) then
+            local chat = ''
+            local bot = ''
+            local t = list_botinteract(msg):split('\n')
+            for i, v in pairs(t) do
+                chat, bot = v:match("(%d+):(%d+)")
+                if tonumber(msg.to.id) == tonumber(chat) then
+                    fwd_msg('user#id' .. bot, msg.id, ok_cb, false)
+                end
+            end
+        else
+            return lang_text('require_mod')
+        end
+    end
 end
 
 local function pre_process(msg)
+    if not msg.text and msg.media then
+        msg.text = '[' .. msg.media.type .. ']'
+    end
     if msg.to.type == 'user' then
         local chat = ''
         local bot = ''
@@ -75,8 +101,13 @@ local function pre_process(msg)
         for i, v in pairs(t) do
             chat, bot = v:match("(%d+):(%d+)")
             if tonumber(msg.from.id) == tonumber(bot) then
-                send_large_msg('chat#id' .. chat, msg.text)
-                send_large_msg('channel#id' .. chat, msg.text)
+                if not msg.media then
+                    send_large_msg('chat#id' .. chat, msg.text)
+                    send_large_msg('channel#id' .. chat, msg.text)
+                else
+                    fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
+                    fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
+                end
             end
         end
     end
@@ -91,6 +122,12 @@ return {
         "^[#!/]([Ss][Ee][Nn][Dd][Mm][Ee][Dd][Ii][Aa])$",
         "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
         "^[#!/]([Uu][Nn][Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
+        "(%[(document)%])",
+        "(%[(photo)%])",
+        "(%[(video)%])",
+        "(%[(audio)%])",
+        "(%[(contact)%])",
+        "(%[(geo)%])",
     },
     run = run,
     pre_process = pre_process,
@@ -98,6 +135,7 @@ return {
     -- usage
     -- MOD
     -- §§<text>
+    -- #sendmedia
     -- OWNER
     -- (#unsetbot|sasha rimuovi bot)
     -- ADMIN
