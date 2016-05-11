@@ -87,11 +87,10 @@ return {
     description = "BOTINTERACT",
     patterns =
     {
-        -- MOD
         "^(§§).*$",
         "^[#!/]([Ss][Ee][Nn][Dd][Mm][Ee][Dd][Ii][Aa])$",
-        -- ADMIN
         "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
     },
     run = run,
     pre_process = pre_process,
