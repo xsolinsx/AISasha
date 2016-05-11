@@ -1513,18 +1513,17 @@ local function run(msg, matches)
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] revoked group link ")
                 return export_chat_link(receiver, callback, true)
             end
-            if (matches[1]:lower() == 'setlink' or matches[1]:lower() == 'sasha imposta link') and is_owner(msg) then
-                data[tostring(msg.to.id)]['settings']['set_link'] = 'waiting'
-                save_data(_config.moderation.data, data)
-                return lang_text('sendLink')
-            end
-            if msg.text then
-                if msg.text:match("^(https://telegram.me/joinchat/%S+)$") and data[tostring(msg.to.id)]['settings']['set_link'] == 'waiting' and is_owner(msg) then
-                    data[tostring(msg.to.id)]['settings']['set_link'] = msg.text
+
+            if (matches[1]:lower() == 'setlink' or matches[1]:lower() == "sasha imposta link") and matches[2] then
+                if is_owner(msg) then
+                    data[tostring(msg.to.id)]['settings']['set_link'] = matches[2]
                     save_data(_config.moderation.data, data)
                     return lang_text('linkSaved')
+                else
+                    return lang_text('require_owner')
                 end
             end
+
             if matches[1]:lower() == 'link' or matches[1]:lower() == 'sasha link' then
                 if not is_momod(msg) then
                     return lang_text('require_mod')
@@ -1705,7 +1704,8 @@ return {
         "^[#!/]([Pp][Uu][Bb][Ll][Ii][Cc]) (.*)$",
         "^[#!/]([Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Nn][Ee][Ww][Ll][Ii][Nn][Kk])$",
-        "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk])$",
+        "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
+        "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         "^[#!/]([Ll][Ii][Nn][Kk])$",
         "^[#!/]([Mm][Uu][Tt][Ee]) ([^%s]+)$",
         "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) ([^%s]+)$",
@@ -1755,7 +1755,8 @@ return {
         -- link
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Nn][Kk])$",
         -- setlink
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         -- mute
         "^([Ss][Ii][Ll][Ee][Nn][Zz][Ii][Aa]) ([^%s]+)$",
         -- unmute
@@ -1792,7 +1793,7 @@ return {
     -- (#link|sasha link)
     -- #setflood <value>
     -- OWNER
-    -- (#setlink|[sasha] imposta link)
+    -- (#setlink|[sasha] imposta link) <link>
     -- (#promote|[sasha] promuovi) <username>|<reply>
     -- (#demote|[sasha] degrada) <username>|<reply>
     -- #mute|silenzia all|text|documents|gifs|video|photo|audio
