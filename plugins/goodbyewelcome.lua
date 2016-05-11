@@ -34,6 +34,24 @@ local function get_memberswelcome(msg)
     return value
 end
 
+local function set_goodbye(msg, goodbye)
+    local data = load_data(_config.moderation.data)
+    local data_cat = 'goodbye'
+    data[tostring(msg.to.id)][data_cat] = goodbye
+    save_data(_config.moderation.data, data)
+    return lang_text('newGoodbye') .. goodbye
+end
+
+local function get_goodbye(msg)
+    local data = load_data(_config.moderation.data)
+    local data_cat = 'goodbye'
+    if not data[tostring(msg.to.id)][data_cat] then
+        return ''
+    end
+    local goodbye = data[tostring(msg.to.id)][data_cat]
+    return goodbye
+end
+
 local function get_rules(msg)
     local data = load_data(_config.moderation.data)
     local data_cat = 'rules'
@@ -57,10 +75,25 @@ local function run(msg, matches)
             return get_welcome(msg)
         end
     end
-    if matches[1]:lower() == 'setwelcome' and is_owner(msg) then
+    if matches[1]:lower() == 'setwelcome' and is_momod(msg) then
         return set_welcome(msg, matches[2])
     end
-    if matches[1]:lower() == 'setmemberswelcome' and is_owner(msg) then
+    if matches[1]:lower() == 'getgoodbye' then
+        if tonumber(msg.to.id) == 1026492373 then
+            if is_momod(msg) then
+                -- moderatore del canile abusivo usa getgoodbye allora ok altrimenti return
+                return get_goodbye(msg)
+            else
+                return
+            end
+        else
+            return get_goodbye(msg)
+        end
+    end
+    if matches[1]:lower() == 'setgoodbye' and is_momod(msg) then
+        return set_goodbye(msg, matches[2])
+    end
+    if matches[1]:lower() == 'setmemberswelcome' and is_momod(msg) then
         local msg = set_memberswelcome(msg, matches[2])
         if matches[2] == '0' then
             return lang_text('neverWelcome')
@@ -68,7 +101,7 @@ local function run(msg, matches)
             return msg
         end
     end
-    if matches[1]:lower() == 'getmemberswelcome' and is_owner(msg) then
+    if matches[1]:lower() == 'getmemberswelcome' and is_momod(msg) then
         return get_memberswelcome(msg)
     end
     if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg) ~= lang_text('noSetValue') then
@@ -90,14 +123,19 @@ local function run(msg, matches)
             redis:set(hash, 0)
         end
     end
+    if msg.action.type == "chat_del_user" and get_goodbye(msg) ~= '' then
+        send_large_msg(get_receiver(msg), get_goodbye(msg), ok_cb, false)
+    end
 end
 
 return {
-    description = "WELCOME",
+    description = "GOODBYEWELCOME",
     patterns =
     {
         "^[#!/]([Ss][Ee][Tt][Ww][Ee][Ll][Cc][Oo][Mm][Ee]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Ww][Ee][Ll][Cc][Oo][Mm][Ee])$",
+        "^[#!/]([Ss][Ee][Tt][Gg][Oo][Oo][Dd][Bb][Yy][Ee]) (.*)$",
+        "^[#!/]([Gg][Ee][Tt][Gg][Oo][Oo][Dd][Bb][Yy][Ee])$",
         "^[#!/]([Ss][Ee][Tt][Mm][Ee][Mm][Bb][Ee][Rr][Ss][Ww][Ee][Ll][Cc][Oo][Mm][Ee]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Mm][Ee][Mm][Bb][Ee][Rr][Ss][Ww][Ee][Ll][Cc][Oo][Mm][Ee])$",
         "^!!tgservice (.+)$",
@@ -106,8 +144,10 @@ return {
     min_rank = 0
     -- usage
     -- #getwelcome: Sasha manda il benvenuto.
-    -- OWNER
+    -- #getgoodbye: Sasha manda l'addio.
+    -- MOD
     -- #setwelcome <text>: Sasha imposta <text> come benvenuto.
+    -- #setgoodbye <text>: Sasha imposta <text> come addio.
     -- #setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.
     -- #getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.
 }

@@ -127,6 +127,13 @@ local function run(msg, matches)
         set_text('helpIntro', 'Ogni \'#\' può essere sostituito con i simboli \'/\' o \'!\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n\n')
         set_text('youTried', 'Ci hai provato, non avrai un help più dettagliato di quello che ti spetta, pezzente.')
 
+        -- goodbyewelcome.lua --
+        set_text('newWelcome', 'Nuovo messaggio di benvenuto:\n')
+        set_text('newGoodbye', 'Nuovo messaggio di addio:\n')
+        set_text('newWelcomeNumber', 'Il benvenuto sarà mandato ogni X membri.')
+        set_text('neverWelcome', 'Il messaggio di benvenuto non sarà più mandato.')
+        set_text('noSetValue', 'Nessun valore impostato.')
+
         -- groups --
         set_text('newDescription', 'Nuova descrizione:\n')
         set_text('noDescription', 'Nessuna descrizione disponibile.')
@@ -466,12 +473,6 @@ local function run(msg, matches)
         set_text('zeroWarnings', 'I tuoi avvertimenti sono stati azzerati.')
         set_text('yourWarnings', 'Sei a quota X avvertimenti su un massimo di Y.')
 
-        -- welcome.lua --
-        set_text('newWelcome', 'Nuovo messaggio di benvenuto:\n')
-        set_text('newWelcomeNumber', 'Il benvenuto sarà mandato ogni X membri.')
-        set_text('neverWelcome', 'Il messaggio di benvenuto non sarà più mandato.')
-        set_text('noSetValue', 'Nessun valore impostato.')
-
         -- whitelist.lua --
         set_text('userBot', 'Utente/Bot ')
         set_text('whitelistRemoved', ' rimosso dalla whitelist.')
@@ -593,6 +594,16 @@ local function run(msg, matches)
         set_text('get:0', 2)
         set_text('get:1', '(#getlist|#get|sasha lista): Sasha mostra una lista delle variabili settate.')
         set_text('get:2', '[#get] <var_name>: Sasha manda il valore di <var_name>.')
+
+        -- goodbyewelcome.lua --
+        set_text('goodbyewelcome:0', 7)
+        set_text('goodbyewelcome:1', '#getwelcome: Sasha manda il benvenuto.')
+        set_text('goodbyewelcome:2', '#getgoodbye: Sasha manda l\'addio.')
+        set_text('goodbyewelcome:3', 'MOD')
+        set_text('goodbyewelcome:4', '#setwelcome <text>: Sasha imposta <text> come benvenuto.')
+        set_text('goodbyewelcome:5', '#setgoodbye <text>: Sasha imposta <text> come addio.')
+        set_text('goodbyewelcome:6', '#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.')
+        set_text('goodbyewelcome:7', '#getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.')
 
         -- help.lua --
         set_text('help:0', 5)
@@ -916,14 +927,6 @@ local function run(msg, matches)
         set_text('webshot:12', 'ADMIN')
         set_text('webshot:13', 'F: Pagina intera (può essere un processo molto lungo)')
         set_text('webshot:14', 'Fmob: Pagina intera (può essere un processo lungo)')
-
-        -- welcome.lua --
-        set_text('welcome:0', 5)
-        set_text('welcome:1', '#getwelcome: Sasha manda il benvenuto.')
-        set_text('welcome:2', 'OWNER')
-        set_text('welcome:3', '#setwelcome <text>: Sasha imposta <text> come benvenuto.')
-        set_text('welcome:4', '#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.')
-        set_text('welcome:5', '#getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.')
 
         -- whitelist.lua --
         set_text('whitelist:0', 3)
