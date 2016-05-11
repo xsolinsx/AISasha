@@ -65,6 +65,13 @@ local function run(msg, matches)
             return lang_text('require_mod')
         end
     end
+    if matches[1] == 'getchar' then
+        if is_momod(msg) then
+            return '§§'
+        else
+            return lang_text('require_mod')
+        end
+    end
     if matches[1] == 'sendmedia' then
         if is_momod(msg) then
             redis:set(msg.to.id, 'waiting')
@@ -121,6 +128,7 @@ return {
     patterns =
     {
         "^(§§).*$",
+        "^[#!/]([Gg][Ee][Tt][Cc][Hh][Aa][Rr])$",
         "^[#!/]([Ss][Ee][Nn][Dd][Mm][Ee][Dd][Ii][Aa])$",
         "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
         "^[#!/]([Uu][Nn][Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
@@ -136,6 +144,7 @@ return {
     min_rank = 1
     -- usage
     -- MOD
+    -- #getchar
     -- §§<text>
     -- #sendmedia
     -- OWNER

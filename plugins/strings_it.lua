@@ -550,14 +550,15 @@ local function run(msg, matches)
         set_text('bot:2', '#bot|sasha on|off: Sasha si attiva|disattiva.')
 
         -- botinteract.lua --
-        set_text('botinteract:0', 7)
+        set_text('botinteract:0', 8)
         set_text('botinteract:1', 'MOD')
-        set_text('botinteract:2', '§§<text>: Sasha manda <text> al bot.')
-        set_text('botinteract:3', '#sendmedia: Sasha manderà il media che verrà inviato nella chat al bot.')
-        set_text('botinteract:4', 'OWNER')
-        set_text('botinteract:5', '#unsetbot <username>: Sasha smetterà di interagire con <username>.')
-        set_text('botinteract:6', 'ADMIN')
-        set_text('botinteract:7', '#setbot <username>: Sasha interagirà con <username>.')
+        set_text('botinteract:2', '#getchar: Sasha manda i caratteri necessari per l\'interazione con i bot.')
+        set_text('botinteract:3', '§§<text>: Sasha manda <text> al bot.')
+        set_text('botinteract:4', '#sendmedia: Sasha manderà il media che verrà inviato nella chat al bot.')
+        set_text('botinteract:5', 'OWNER')
+        set_text('botinteract:6', '#unsetbot <username>: Sasha smetterà di interagire con <username>.')
+        set_text('botinteract:7', 'ADMIN')
+        set_text('botinteract:8', '#setbot <username>: Sasha interagirà con <username>.')
 
         -- broadcast.lua --
         set_text('broadcast:0', 4)
