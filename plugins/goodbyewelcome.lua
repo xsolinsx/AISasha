@@ -124,7 +124,7 @@ local function run(msg, matches)
         end
     end
     if msg.action.type == "chat_del_user" and get_goodbye(msg) ~= '' then
-        send_large_msg(get_receiver(msg), get_goodbye(msg), ok_cb, false)
+        send_large_msg(get_receiver(msg), get_goodbye(msg) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)
     end
 end
 
