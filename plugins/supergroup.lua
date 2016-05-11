@@ -1114,7 +1114,7 @@ local function run(msg, matches)
                 return lang_text('errorCreateSuperLink')
             end
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
-            return lang_text('groupLink') .. group_link
+            return msg.to.title .. '\n' .. group_link
         end
 
         if matches[1]:lower() == 'setadmin' then

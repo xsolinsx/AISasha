@@ -1534,7 +1534,7 @@ local function run(msg, matches)
                     return lang_text('createLinkInfo')
                 end
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
-                return lang_text('groupLink') .. group_link
+                return msg.to.title .. '\n' .. group_link
             end
             if matches[1]:lower() == 'setowner' and matches[2] then
                 if not is_owner(msg) then
