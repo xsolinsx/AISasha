@@ -195,6 +195,7 @@ local function run(msg, matches)
         set_text('admins', '\nAdmins: ')
         set_text('kickedUsers', '\nUtenti rimossi: ')
         set_text('userInfo', 'Info utente:')
+        set_text('peerTypeUnknown', 'Tipo sconosciuto.')
 
         -- ingroup.lua --
         set_text('welcomeNewRealm', 'Benvenuto nel tuo nuovo regno.')
