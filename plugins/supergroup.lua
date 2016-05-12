@@ -740,7 +740,7 @@ function get_message_callback(extra, success, result)
         if is_muted_user(chat_id, user_id) then
             unmute_user(chat_id, user_id)
             send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
-        elseif is_momod(msg) then
+        else
             mute_user(chat_id, user_id)
             send_large_msg(receiver, user_id .. lang_text('muteUserAdd'))
         end
@@ -855,7 +855,7 @@ local function callbackres(extra, success, result)
         if is_muted_user(chat_id, user_id) then
             unmute_user(chat_id, user_id)
             send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
-        elseif is_owner(extra.msg) then
+        else
             mute_user(chat_id, user_id)
             send_large_msg(receiver, user_id .. lang_text('muteUserAdd'))
         end
@@ -1684,7 +1684,7 @@ local function run(msg, matches)
                     unmute_user(chat_id, user_id)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. user_id .. "] from the muted users list")
                     return user_id .. lang_text('muteUserRemove')
-                elseif is_momod(msg) then
+                else
                     mute_user(chat_id, user_id)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. user_id .. "] to the muted users list")
                     return user_id .. lang_text('muteUserAdd')
@@ -1692,7 +1692,6 @@ local function run(msg, matches)
             else
                 local receiver = get_receiver(msg)
                 local get_cmd = "mute_user"
-                local username = matches[2]
                 local username = string.gsub(matches[2], '@', '')
                 resolve_username(username, callbackres, { receiver = receiver, get_cmd = get_cmd, msg = msg })
             end
