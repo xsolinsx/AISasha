@@ -1436,7 +1436,7 @@ local function run(msg, matches)
                 local receiver = get_receiver(msg)
                 local get_cmd = "mute_user"
                 get_message(msg.reply_id, mute_user_callback, { receiver = receiver, get_cmd = get_cmd })
-            elseif (matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce') and string.match(matches[2], '^%d+$') then
+            elseif string.match(matches[2], '^%d+$') then
                 local user_id = matches[2]
                 if is_muted_user(chat_id, user_id) then
                     mute_user(chat_id, user_id)
@@ -1445,7 +1445,7 @@ local function run(msg, matches)
                     unmute_user(chat_id, user_id)
                     return user_id .. lang_text('muteUserAdd')
                 end
-            elseif (matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce') and not string.match(matches[2], '^%d+$') then
+            else
                 local receiver = get_receiver(msg)
                 local get_cmd = "mute_user"
                 local username = matches[2]
