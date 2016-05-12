@@ -41,24 +41,29 @@ function on_msg_receive(msg)
     check_tag(msg)
 end
 
+local function callback_sudo_ids(cb_extra, success, result)
+    if result.username then
+        if string.find(cb_extra.msg.text, '@' .. result.username) then
+            local text = lang_text('receiver') .. cb_extra.msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
+            if cb_extra.msg.from.username then
+                text = text .. '@' .. cb_extra.msg.from.username .. '\n'
+            else
+                text = text .. cb_extra.msg.from.print_name:gsub("_", " ") .. '\n'
+            end
+            text = text .. lang_text('msgText') .. cb_extra.msg.text
+            send_large_msg('user#id' .. cb_extra.user, text)
+        end
+    end
+end
+
 -- send message to sudoers when tagged
 function check_tag(msg)
     -- exclude private chats
     if msg.to.type == 'chat' or msg.to.type == 'channel' then
-        -- my username
-        if string.find(msg.text, '@EricSolinas') then
-            -- exclude bot tags
-            for v, user in pairs(_config.sudo_users) do
-                if tonumber(msg.from.id) ~= our_id and tonumber(msg.from.id) ~= user then
-                    local text = lang_text('receiver') .. msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
-                    if msg.from.username then
-                        text = text .. '@' .. msg.from.username .. '\n'
-                    else
-                        text = text .. msg.from.print_name:gsub("_", " ") .. '\n'
-                    end
-                    text = text .. lang_text('msgText') .. msg.text
-                    send_large_msg('user#id' .. user, text)
-                end
+        -- exclude bot tags
+        for v, user in pairs(_config.sudo_users) do
+            if tonumber(msg.from.id) ~= our_id and tonumber(msg.from.id) ~= user then
+                user_info('user#id' .. user, callback_sudo_ids, { msg = msg, user = user })
             end
         end
     end
