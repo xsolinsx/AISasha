@@ -347,10 +347,6 @@ local function run(msg, matches)
         -- onservice.lua --
         set_text('notMyGroup', 'This is not one of my groups, bye.')
 
-        -- owners.lua --
-        set_text('notTheOwner', 'You are not the owner of this group.')
-        set_text('noAutoUnban', 'You can\'t unban yourself.')
-
         -- plugins.lua --
         set_text('enabled', ' enabled.')
         set_text('disabled', ' disabled.')
@@ -746,15 +742,6 @@ local function run(msg, matches)
         set_text('onservice:0', 2)
         set_text('onservice:1', 'ADMIN')
         set_text('onservice:2', '(#leave|sasha abbandona): Sasha leaves group.')
-
-        -- owners.lua --
-        set_text('owners:0', 5)
-        -- set_text('owners:1','#owners <group_id>: Sasha sends <group_id>\'s log.')
-        set_text('owners:1', '#changeabout <group_id> <text>: Sasha changes <group_id>\'s about with <text>.')
-        set_text('owners:2', '#changerules <group_id> <text>: Sasha changes <group_id>\'s rules with <text>.')
-        set_text('owners:3', '#changename <group_id> <text>: Sasha changes <group_id>\'s name with <text>.')
-        set_text('owners:4', '#viewsettings <group_id>: Sasha sends <group_id>\'s settings.')
-        set_text('owners:5', '#loggroup <group_id>: Sasha sends <group_id>\'s log.')
 
         -- plugins.lua --
         set_text('plugins:0', 9)
