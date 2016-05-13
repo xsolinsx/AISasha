@@ -871,13 +871,13 @@ local function run(msg, matches)
 
         -- strings_en.lua --
         set_text('strings_en:0', 3)
-        set_text('strings_en:1', '🇬🇧 STRINGS_EN')
+        set_text('strings_en:1', '🅿️ STRINGS_EN')
         set_text('strings_en:2', 'SUDO')
         set_text('strings_en:3', '(#updateenstrings|#installenstrings|([sasha] installa|[sasha] aggiorna) stringhe en): Sasha updates strings.')
 
         -- strings_it.lua --
         set_text('strings_it:0', 3)
-        set_text('strings_it:1', '🇮🇹 STRINGS_IT')
+        set_text('strings_it:1', '🅿️ STRINGS_IT')
         set_text('strings_it:2', 'SUDO')
         set_text('strings_it:3', '(#updateitstrings|#installitstrings|([sasha] installa|[sasha] aggiorna) stringhe it): Sasha aggiorna le stringhe di testo.')
 
