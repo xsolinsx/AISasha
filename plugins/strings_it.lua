@@ -996,7 +996,7 @@ local function run(msg, matches)
 end
 
 return {
-    description = "STRINGS",
+    description = "STRINGS_IT",
     patterns =
     {
         '^[#!/]([Ii][Nn][Ss][Tt][Aa][Ll][Ll][Ii][Tt][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
