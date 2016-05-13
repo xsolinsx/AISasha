@@ -871,7 +871,7 @@ local function run(msg, matches)
         set_text('stats:13', '(#stats|#messages) aisasha: Sasha invia le proprie statistiche.')
 
         -- strings_en.lua --
-        set_text('strings_en:0', 2)
+        set_text('strings_en:0', 3)
         set_text('strings_en:1', '🅿️ STRINGS_EN')
         set_text('strings_en:1', 'SUDO')
         set_text('strings_en:2', '(#updateenstrings|#installenstrings|([sasha] installa|[sasha] aggiorna) stringhe en): Sasha updates strings.')
@@ -933,7 +933,7 @@ local function run(msg, matches)
         set_text('supergroup:47', '#md <id>: Sasha degrada <id> dal ruolo di moderatore del gruppo (telegram).')
 
         -- tagall.lua --
-        set_text('tagall:0', 2)
+        set_text('tagall:0', 3)
         set_text('tagall:1', '🅿️ TAGALL')
         set_text('tagall:2', 'OWNER')
         set_text('tagall:3', '(#tagall|sasha tagga tutti) <text>: Sasha tagga tutti i membri del gruppo con username e scrive <text>.')
@@ -985,9 +985,10 @@ local function run(msg, matches)
 
         -- whitelist.lua --
         set_text('whitelist:0', 3)
-        set_text('whitelist:1', 'ADMIN')
-        set_text('whitelist:2', '#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist.')
-        set_text('whitelist:3', '#clean whitelist: Sasha pulisce la whitelist.')
+        set_text('whitelist:1', '🅿️ WHITELIST')
+        set_text('whitelist:2', 'ADMIN')
+        set_text('whitelist:3', '#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist.')
+        set_text('whitelist:4', '#clean whitelist: Sasha pulisce la whitelist.')
 
         return lang_text('langUpdate')
     else
