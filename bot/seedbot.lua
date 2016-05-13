@@ -43,6 +43,7 @@ end
 
 local function callback_sudo_ids(cb_extra, success, result)
     if result.username then
+        -- check if username is in message
         if string.find(cb_extra.msg.text, '@' .. result.username) then
             local text = lang_text('receiver') .. cb_extra.msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
             if cb_extra.msg.from.username then
@@ -58,9 +59,9 @@ end
 
 -- send message to sudoers when tagged
 function check_tag(msg)
-    -- exclude private chats
-    if msg.to.type == 'chat' or msg.to.type == 'channel' then
-        -- exclude bot tags
+    -- exclude private chats and messages without '@'
+    if (msg.to.type == 'chat' or msg.to.type == 'channel') and string.find(msg.text, '@') then
+        -- exclude bot tags and autotags
         for v, user in pairs(_config.sudo_users) do
             if tonumber(msg.from.id) ~= our_id and tonumber(msg.from.id) ~= user then
                 user_info('user#id' .. user, callback_sudo_ids, { msg = msg, user = user })
