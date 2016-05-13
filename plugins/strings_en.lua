@@ -787,7 +787,7 @@ local function run(msg, matches)
 
         -- ruleta.lua --
         set_text('ruleta:0', 24)
-        set_text('ruleta:1', 'Ruleta by AISasha, inspired from Leia (#RIP) and Arya. Ruleta is the russian roulette with gun, cylinder and bullets, the cylinder rotates and if there\'s the bullet Sasha kicks you.')
+        set_text('ruleta:1', 'Ruleta by AISasha, inspired from Leia (#RIP) and Arya (#RIP). Ruleta is the russian roulette with gun, cylinder and bullets, the cylinder rotates and if there\'s the bullet Sasha kicks you.')
         set_text('ruleta:2', '#registerme|#registrami: Sasha registers user to the game.')
         set_text('ruleta:3', '#deleteme|#eliminami: Sasha deletes user from the game.')
         set_text('ruleta:4', '#ruletainfo: Sasha sends gun\'s info.')
