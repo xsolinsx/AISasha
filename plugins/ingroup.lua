@@ -827,7 +827,7 @@ local function mute_user_callback(extra, success, result)
         user_id = result.from.peer_id
     end
     local receiver = extra.receiver
-    local chat_id = string.gsub(receiver, 'channel#id', '')
+    local chat_id = string.gsub(receiver, 'chat#id', '')
     if is_muted_user(chat_id, user_id) then
         mute_user(chat_id, user_id)
         send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
