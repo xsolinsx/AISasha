@@ -43,9 +43,6 @@ local function plugin_help(var, chat, rank)
         -- '=========================\n'
         local text = ''
         -- = '=======================\n'
-        if (type(plugin.description) == "string") then
-            text = text .. '🅿️ ' .. plugin.description .. '\n'
-        end
         local textHash = plugin.description:lower() .. ':0'
         if lang_text(textHash) then
             for i = 1, tonumber(lang_text(plugin.description:lower() .. ':0')), 1 do
