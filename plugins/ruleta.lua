@@ -247,7 +247,7 @@ local function leaderboard_streak(users)
     return text
 end
 
-local function leaderboard_duels(users)
+local function leaderboard_challenges(users)
     local users_info = { }
 
     -- Get user name and deaths
@@ -440,8 +440,8 @@ local function run(msg, matches)
                 leaderboard = leaderboard_deaths(ruletadata['users'])
             elseif matches[2]:lower() == 'streak' or matches[2]:lower() == 'serie' then
                 leaderboard = leaderboard_streak(ruletadata['users'])
-            elseif matches[2]:lower() == 'duels' or matches[2]:lower() == 'challenges' or matches[2]:lower() == 'duelli' or matches[2]:lower() == 'sfide' then
-                leaderboard = leaderboard_duels(ruletadata['users'])
+            elseif matches[2]:lower() == 'challenges' or matches[2]:lower() == 'sfide' then
+                leaderboard = leaderboard_challenges(ruletadata['users'])
             elseif matches[2]:lower() == 'victories' or matches[2]:lower() == 'vittorie' then
                 leaderboard = leaderboard_victories(ruletadata['users'])
             elseif matches[2]:lower() == 'defeats' or matches[2]:lower() == 'sconfitte' then
