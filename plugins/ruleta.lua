@@ -144,7 +144,6 @@ local function get_name(user_id)
 end
 
 local function leaderboard_score(users)
-    -- Users on chat
     local users_info = { }
 
     -- Get user name and score
@@ -154,19 +153,174 @@ local function leaderboard_score(users)
         table.insert(users_info, user_info)
     end
 
-    -- Sort users by msgs number
+    -- Sort users by score
     table.sort(users_info, function(a, b)
         if a.score and b.score then
             return a.score > b.score
         end
     end )
 
-    -- leaderboardscore
     local text = lang_text('scoreLeaderboard')
     local i = 0
     for k, user in pairs(users_info) do
         i = i + 1
         text = text .. i .. '. ' .. user.name .. ' => ' .. user.score .. '\n'
+    end
+    return text
+end
+
+local function leaderboard_attempts(users)
+    local users_info = { }
+
+    -- Get user name and deaths
+    for k, user in pairs(users) do
+        local user_info = get_name(k)
+        user_info.attempts = user.attempts
+        table.insert(users_info, user_info)
+    end
+
+    -- Sort users by deaths
+    table.sort(users_info, function(a, b)
+        if a.attempts and b.attempts then
+            return a.attempts > b.attempts
+        end
+    end )
+
+    local text = lang_text('attemptsLeaderboard')
+    local i = 0
+    for k, user in pairs(users_info) do
+        i = i + 1
+        text = text .. i .. '. ' .. user.name .. ' => ' .. user.attempts .. '\n'
+    end
+    return text
+end
+
+local function leaderboard_deaths(users)
+    local users_info = { }
+
+    -- Get user name and deaths
+    for k, user in pairs(users) do
+        local user_info = get_name(k)
+        user_info.deaths = user.deaths
+        table.insert(users_info, user_info)
+    end
+
+    -- Sort users by deaths
+    table.sort(users_info, function(a, b)
+        if a.deaths and b.deaths then
+            return a.deaths > b.deaths
+        end
+    end )
+
+    local text = lang_text('deathsLeaderboard')
+    local i = 0
+    for k, user in pairs(users_info) do
+        i = i + 1
+        text = text .. i .. '. ' .. user.name .. ' => ' .. user.deaths .. '\n'
+    end
+    return text
+end
+
+local function leaderboard_streak(users)
+    local users_info = { }
+
+    -- Get user name and deaths
+    for k, user in pairs(users) do
+        local user_info = get_name(k)
+        user_info.longeststreak = user.longeststreak
+        table.insert(users_info, user_info)
+    end
+
+    -- Sort users by deaths
+    table.sort(users_info, function(a, b)
+        if a.longeststreak and b.longeststreak then
+            return a.longeststreak > b.longeststreak
+        end
+    end )
+
+    local text = lang_text('streakLeaderboard')
+    local i = 0
+    for k, user in pairs(users_info) do
+        i = i + 1
+        text = text .. i .. '. ' .. user.name .. ' => ' .. user.longeststreak .. '\n'
+    end
+    return text
+end
+
+local function leaderboard_duels(users)
+    local users_info = { }
+
+    -- Get user name and deaths
+    for k, user in pairs(users) do
+        local user_info = get_name(k)
+        user_info.duels = user.duels
+        table.insert(users_info, user_info)
+    end
+
+    -- Sort users by deaths
+    table.sort(users_info, function(a, b)
+        if a.duels and b.duels then
+            return a.duels > b.duels
+        end
+    end )
+
+    local text = lang_text('duelsLeaderboard')
+    local i = 0
+    for k, user in pairs(users_info) do
+        i = i + 1
+        text = text .. i .. '. ' .. user.name .. ' => ' .. user.duels .. '\n'
+    end
+    return text
+end
+
+local function leaderboard_victories(users)
+    local users_info = { }
+
+    -- Get user name and deaths
+    for k, user in pairs(users) do
+        local user_info = get_name(k)
+        user_info.wonduels = user.wonduels
+        table.insert(users_info, user_info)
+    end
+
+    -- Sort users by deaths
+    table.sort(users_info, function(a, b)
+        if a.wonduels and b.wonduels then
+            return a.wonduels > b.wonduels
+        end
+    end )
+
+    local text = lang_text('victoriesLeaderboard')
+    local i = 0
+    for k, user in pairs(users_info) do
+        i = i + 1
+        text = text .. i .. '. ' .. user.name .. ' => ' .. user.wonduels .. '\n'
+    end
+    return text
+end
+
+local function leaderboard_defeats(users)
+    local users_info = { }
+
+    -- Get user name and deaths
+    for k, user in pairs(users) do
+        local user_info = get_name(k)
+        user_info.lostduels = user.lostduels
+        table.insert(users_info, user_info)
+    end
+
+    -- Sort users by deaths
+    table.sort(users_info, function(a, b)
+        if a.lostduels and b.lostduels then
+            return a.lostduels > b.lostduels
+        end
+    end )
+
+    local text = lang_text('defeatsLeaderboard')
+    local i = 0
+    for k, user in pairs(users_info) do
+        i = i + 1
+        text = text .. i .. '. ' .. user.name .. ' => ' .. user.lostduels .. '\n'
     end
     return text
 end
@@ -276,8 +430,23 @@ local function run(msg, matches)
             return
         end
 
-        if (matches[1]:lower() == 'leaderboard' or matches[1]:lower() == 'classifica') and not matches[2] then
-            local leaderboard = leaderboard_score(ruletadata['users'])
+        if (matches[1]:lower() == 'leaderboard' or matches[1]:lower() == 'classifica') then
+            local leaderboard = ''
+            if not matches[2] then
+                leaderboard = leaderboard_score(ruletadata['users'])
+            elseif matches[2]:lower() == 'attempts' or matches[2]:lower() == 'tentativi' then
+                leaderboard = leaderboard_attempts(ruletadata['users'])
+            elseif matches[2]:lower() == 'deaths' or matches[2]:lower() == 'morti' then
+                leaderboard = leaderboard_deaths(ruletadata['users'])
+            elseif matches[2]:lower() == 'streak' or matches[2]:lower() == 'serie' then
+                leaderboard = leaderboard_streak(ruletadata['users'])
+            elseif matches[2]:lower() == 'duels' or matches[2]:lower() == 'challenges' or matches[2]:lower() == 'duelli' or matches[2]:lower() == 'sfide' then
+                leaderboard = leaderboard_duels(ruletadata['users'])
+            elseif matches[2]:lower() == 'victories' or matches[2]:lower() == 'vittorie' then
+                leaderboard = leaderboard_victories(ruletadata['users'])
+            elseif matches[2]:lower() == 'defeats' or matches[2]:lower() == 'sconfitte' then
+                leaderboard = leaderboard_defeats(ruletadata['users'])
+            end
             send_large_msg(get_receiver(msg), leaderboard)
             return
         end
