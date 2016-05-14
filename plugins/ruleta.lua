@@ -134,10 +134,41 @@ local function Challenge_by_username(extra, success, result)
     start_challenge(extra.challenger, result.peer_id, challenger, challenged, extra.chat_id)
 end
 
-local function callback_id(cb_extra, success, result)
-    local text = result.print_name:gsub("_", " ")
-    send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
-    send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
+-- Returns a table with `name`
+local function get_name(user_id)
+    local user_info = { }
+    local uhash = 'user:' .. user_id
+    local user = redis:hgetall(uhash)
+    user_info.name = user_print_name(user)
+    return user_info
+end
+
+local function leaderboard_score(users)
+    -- Users on chat
+    local users_info = { }
+
+    -- Get user name and score
+    for k, user in pairs(users) do
+        local user_info = get_name(k)
+        user_info.score = user.score
+        table.insert(users_info, user_info)
+    end
+
+    -- Sort users by msgs number
+    table.sort(users_info, function(a, b)
+        if a.score and b.score then
+            return a.score > b.score
+        end
+    end )
+
+    -- leaderboardscore
+    local text = lang_text('scoreLeaderboard')
+    local i = 0
+    for k, user in pairs(users_info) do
+        i = i + 1
+        text = text .. i .. '. ' .. user.name .. ' => ' .. user.score .. '\n'
+    end
+    return text
 end
 
 local function kickrandom_chat(cb_extra, success, result)
@@ -242,6 +273,12 @@ local function run(msg, matches)
             else
                 return lang_text('require_admin')
             end
+            return
+        end
+
+        if (matches[1]:lower() == 'leaderboard' or matches[1]:lower() == 'classifica') and not matches[2] then
+            local leaderboard = leaderboard_score(ruletadata['users'])
+            send_large_msg(get_receiver(msg), leaderboard)
             return
         end
 
@@ -611,6 +648,8 @@ return {
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Bb])$",
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
         "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Gg][Rr][Oo][Uu][Pp])$",
+        "^[#!/]([Ll][Ee][Aa][Dd][Ee][Rr][Bb][Oo][Aa][Rr][Dd]) (.*)$",
+        "^[#!/]([Ll][Ee][Aa][Dd][Ee][Rr][Bb][Oo][Aa][Rr][Dd])$",
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Mm][Ee])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Tt][Aa][Ii][Nn][Ff][Oo])$",
         "^[#!/]([Ss][Ee][Tt][Cc][Aa][Pp][Ss]) (%d+)$",
@@ -637,6 +676,9 @@ return {
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
         -- deletegroup
         "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
+        -- leaderboard
+        "^[#!/]([Cc][Ll][Aa][Ss][Ss][Ii][Ff][Ii][Cc][Aa]) (.*)$",
+        "^[#!/]([Cc][Ll][Aa][Ss][Ss][Ii][Ff][Ii][Cc][Aa])$",
         -- registerme
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Mm][Ii])$",
         -- deleteme
@@ -664,6 +706,7 @@ return {
     -- #accept|#accetta
     -- #reject|#rifiuta
     -- #challengeinfo
+    -- #leaderboard
     -- MOD
     -- #setcaps <value>
     -- #setchallengecaps <value>
