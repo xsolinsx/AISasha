@@ -63,7 +63,7 @@ end
 
 local function callback_reply(extra, success, result)
     local text = lang_text('info') .. ' (<reply>)'
-    if result.action.user then
+    if result.action then
         if result.action.user.first_name then
             text = text .. lang_text('name') .. result.action.user.first_name
         end
