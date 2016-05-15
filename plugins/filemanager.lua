@@ -11,16 +11,6 @@ local function callback(extra, success, result)
     end
 end
 
-local function callback_reply_file(extra, success, result)
-    print(result.to.peer_id)
-    if result.media then
-        load_document(result.id, callback, result.to.peer_id)
-    else
-        send_large_msg('chat#id' .. result.to.peer_id, lang_text('needMedia'))
-        send_large_msg('channel#id' .. result.to.peer_id, lang_text('needMedia'))
-    end
-end
-
 function run(msg, matches)
     if is_sudo(msg) then
         local folder = redis:get('folder')
@@ -93,7 +83,7 @@ function run(msg, matches)
                 if type(msg.reply_id) == "nil" then
                     return lang_text('useQuoteOnFile')
                 else
-                    get_message(msg.reply_id, callback_reply_file, false)
+                    load_document(msg.reply_id, callback, msg.to.id)
                 end
             end
         else
