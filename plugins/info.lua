@@ -63,45 +63,94 @@ end
 
 local function callback_reply(extra, success, result)
     local text = lang_text('info') .. ' (<reply>)'
-    if result.from.first_name then
-        text = text .. lang_text('name') .. result.from.first_name
-    end
-    if result.from.real_first_name then
-        text = text .. lang_text('name') .. result.from.real_first_name
-    end
-    if result.from.last_name then
-        text = text .. lang_text('surname') .. result.from.last_name
-    end
-    if result.from.real_last_name then
-        text = text .. lang_text('surname') .. result.from.real_last_name
-    end
-    if result.from.username then
-        text = text .. lang_text('username') .. '@' .. result.from.username
-    end
-    -- exclude bot phone
-    if our_id ~= result.from.peer_id then
-        if result.from.phone then
-            text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '******'
+    local action = false
+    if result.action then
+        if result.action.type ~= 'chat_add_user_link' then
+            action = true
         end
     end
-    local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
-    text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id) + 1] ..
-    lang_text('date') .. os.date('%c') ..
-    lang_text('totalMessages') .. msgs ..
-    lang_text('otherInfo')
-    if is_whitelisted(result.from.peer_id) then
-        text = text .. 'WHITELISTED, '
+
+    if action and result.action.user then
+        if result.action.user.first_name then
+            text = text .. lang_text('name') .. result.action.user.first_name
+        end
+        if result.action.user.real_first_name then
+            text = text .. lang_text('name') .. result.action.user.real_first_name
+        end
+        if result.action.user.last_name then
+            text = text .. lang_text('surname') .. result.action.user.last_name
+        end
+        if result.action.user.real_last_name then
+            text = text .. lang_text('surname') .. result.action.user.real_last_name
+        end
+        if result.action.user.username then
+            text = text .. lang_text('username') .. '@' .. result.action.user.username
+        end
+        -- exclude bot phone
+        if our_id ~= result.action.user.peer_id then
+            if result.action.user.phone then
+                text = text .. lang_text('phone') .. string.sub(result.action.user.phone, 1, 6) .. '******'
+            end
+        end
+        local msgs = tonumber(redis:get('msgs:' .. result.action.user.peer_id .. ':' .. result.to.peer_id) or 0)
+        text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.action.user.peer_id, result.to.peer_id) + 1] ..
+        lang_text('date') .. os.date('%c') ..
+        lang_text('totalMessages') .. msgs ..
+        lang_text('otherInfo')
+        if is_whitelisted(result.action.user.peer_id) then
+            text = text .. 'WHITELISTED, '
+        end
+        if is_gbanned(result.action.user.peer_id) then
+            text = text .. 'GBANNED, '
+        end
+        if is_banned(result.action.user.peer_id, result.to.peer_id) then
+            text = text .. 'BANNED, '
+        end
+        if is_muted_user(result.to.peer_id, result.action.user.peer_id) then
+            text = text .. 'MUTED, '
+        end
+        text = text .. '\n🆔: ' .. result.action.user.peer_id
+    else
+        if result.from.first_name then
+            text = text .. lang_text('name') .. result.from.first_name
+        end
+        if result.from.real_first_name then
+            text = text .. lang_text('name') .. result.from.real_first_name
+        end
+        if result.from.last_name then
+            text = text .. lang_text('surname') .. result.from.last_name
+        end
+        if result.from.real_last_name then
+            text = text .. lang_text('surname') .. result.from.real_last_name
+        end
+        if result.from.username then
+            text = text .. lang_text('username') .. '@' .. result.from.username
+        end
+        -- exclude bot phone
+        if our_id ~= result.from.peer_id then
+            if result.from.phone then
+                text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '******'
+            end
+        end
+        local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
+        text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id) + 1] ..
+        lang_text('date') .. os.date('%c') ..
+        lang_text('totalMessages') .. msgs ..
+        lang_text('otherInfo')
+        if is_whitelisted(result.from.peer_id) then
+            text = text .. 'WHITELISTED, '
+        end
+        if is_gbanned(result.from.peer_id) then
+            text = text .. 'GBANNED, '
+        end
+        if is_banned(result.from.peer_id, result.to.peer_id) then
+            text = text .. 'BANNED, '
+        end
+        if is_muted_user(result.to.peer_id, result.from.peer_id) then
+            text = text .. 'MUTED, '
+        end
+        text = text .. '\n🆔: ' .. result.from.peer_id
     end
-    if is_gbanned(result.from.peer_id) then
-        text = text .. 'GBANNED, '
-    end
-    if is_banned(result.from.peer_id, result.to.peer_id) then
-        text = text .. 'BANNED, '
-    end
-    if is_muted_user(result.to.peer_id, result.from.peer_id) then
-        text = text .. 'MUTED, '
-    end
-    text = text .. '\n🆔: ' .. result.from.peer_id
     send_large_msg('chat#id' .. result.to.peer_id, text)
     send_large_msg('channel#id' .. result.to.peer_id, text)
 end

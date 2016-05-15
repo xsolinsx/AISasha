@@ -28,47 +28,45 @@ function run(msg, matches)
                     return lang_text('youAreHere') .. BASE_FOLDER .. matches[2]
                 end
             end
+            local action = ''
             if matches[1]:lower() == 'ls' then
-                local action = io.popen('ls "' .. BASE_FOLDER .. folder .. '"'):read("*all")
-                send_large_msg(receiver, action)
+                action = io.popen('ls "' .. BASE_FOLDER .. folder .. '"'):read("*all")
             end
             if matches[1]:lower() == 'mkdir' and matches[2] then
-                local action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && mkdir \'' .. matches[2] .. '\''):read("*all")
+                action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && mkdir \'' .. matches[2] .. '\''):read("*all")
                 return lang_text('folderCreated'):gsub("X", matches[2])
             end
             if matches[1]:lower() == 'rm' and matches[2] then
-                local action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && rm -f \'' .. matches[2] .. '\''):read("*all")
+                action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && rm -f \'' .. matches[2] .. '\''):read("*all")
                 return matches[2] .. lang_text('deleted')
             end
             if matches[1]:lower() == 'cat' and matches[2] then
-                local action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && cat \'' .. matches[2] .. '\''):read("*all")
-                send_large_msg(receiver, action)
+                action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && cat \'' .. matches[2] .. '\''):read("*all")
             end
             if matches[1]:lower() == 'rmdir' and matches[2] then
-                local action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && rmdir \'' .. matches[2] .. '\''):read("*all")
+                action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && rmdir \'' .. matches[2] .. '\''):read("*all")
                 return lang_text('folderDeleted'):gsub("X", matches[2])
             end
             if matches[1]:lower() == 'touch' and matches[2] then
-                local action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && touch \'' .. matches[2] .. '\''):read("*all")
+                action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && touch \'' .. matches[2] .. '\''):read("*all")
                 return matches[2] .. lang_text('created')
             end
             if matches[1]:lower() == 'tofile' and matches[2] and matches[3] then
-                local file = io.open(BASE_FOLDER .. folder .. matches[2], "w")
+                file = io.open(BASE_FOLDER .. folder .. matches[2], "w")
                 file:write(matches[3])
                 file:flush()
                 file:close()
                 send_large_msg(receiver, lang_text('fileCreatedWithContent'):gsub("X", matches[3]))
             end
             if matches[1]:lower() == 'shell' and matches[2] then
-                local text = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && ' .. matches[2]:gsub('—', '--')):read('*all')
-                send_large_msg(receiver, text)
+                action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && ' .. matches[2]:gsub('—', '--')):read('*all')
             end
             if matches[1]:lower() == 'cp' and matches[2] and matches[3] then
-                local action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && cp -r \'' .. matches[2] .. '\' \'' .. matches[3] .. '\''):read("*all")
+                action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && cp -r \'' .. matches[2] .. '\' \'' .. matches[3] .. '\''):read("*all")
                 return matches[2] .. lang_text('copiedTo') .. matches[3]
             end
             if matches[1]:lower() == 'mv' and matches[2] and matches[3] then
-                local action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && mv \'' .. matches[2] .. '\' \'' .. matches[3] .. '\''):read("*all")
+                action = io.popen('cd "' .. BASE_FOLDER .. folder .. '" && mv \'' .. matches[2] .. '\' \'' .. matches[3] .. '\''):read("*all")
                 return matches[2] .. lang_text('movedTo') .. matches[3]
             end
             if matches[1]:lower() == 'upload' and matches[2] then
@@ -86,6 +84,7 @@ function run(msg, matches)
                     load_document(msg.reply_id, callback, msg.to.id)
                 end
             end
+            send_large_msg(receiver, action)
         else
             redis:set('folder', '')
         end
