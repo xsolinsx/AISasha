@@ -42,60 +42,44 @@ local function run(msg, matches)
         end
     end
     if matches[1]:lower() == "unsetbot" or matches[1]:lower() == "sasha rimuovi bot" and string.sub(matches[2]:lower(), -3) == 'bot' then
-        if is_owner(msg) then
+        if is_momod(msg) then
             resolve_username(matches[2]:gsub("@", ""), callback_unsetbot, { chatid = msg.to.id })
             return
         else
             return lang_text('require_owner')
         end
     end
-    if matches[1] == '§§' then
-        if is_momod(msg) then
-            local chat = ''
-            local bot = ''
-            local t = list_botinteract(msg):split('\n')
-            for i, v in pairs(t) do
-                chat, bot = v:match("(%d+):(%d+)")
-                if tonumber(msg.to.id) == tonumber(chat) then
-                    msg.text = msg.text:gsub('§§', '')
-                    send_large_msg('user#id' .. bot, msg.text)
-                end
+    if matches[1] == '$' then
+        local chat = ''
+        local bot = ''
+        local t = list_botinteract(msg):split('\n')
+        for i, v in pairs(t) do
+            chat, bot = v:match("(%d+):(%d+)")
+            if tonumber(msg.to.id) == tonumber(chat) then
+                msg.text = msg.text:gsub('§§', '')
+                send_large_msg('user#id' .. bot, msg.text)
             end
-        else
-            return lang_text('require_mod')
         end
     end
     if matches[1] == 'getchar' then
-        if is_momod(msg) then
-            return '§§'
-        else
-            return lang_text('require_mod')
-        end
+        return '$'
     end
     if matches[1] == 'sendmedia' then
-        if is_momod(msg) then
-            redis:set(msg.to.id, 'waiting')
-            return lang_text('sendMeMedia')
-        else
-            return lang_text('require_mod')
-        end
+        redis:set(msg.to.id, 'waiting')
+        return lang_text('sendMeMedia')
     end
     if (matches[1] == '[photo]' or matches[1] == '[document]' or matches[1] == '[video]' or matches[1] == '[audio]' or matches[1] == '[contact]' or matches[1] == '[geo]') and redis:get(msg.to.id) then
-        if is_momod(msg) then
-            local chat = ''
-            local bot = ''
-            local t = list_botinteract(msg):split('\n')
-            for i, v in pairs(t) do
-                chat, bot = v:match("(%d+):(%d+)")
-                if tonumber(msg.to.id) == tonumber(chat) then
-                    fwd_msg('user#id' .. bot, msg.id, ok_cb, false)
-                end
+        local chat = ''
+        local bot = ''
+        local t = list_botinteract(msg):split('\n')
+        for i, v in pairs(t) do
+            chat, bot = v:match("(%d+):(%d+)")
+            if tonumber(msg.to.id) == tonumber(chat) then
+                fwd_msg('user#id' .. bot, msg.id, ok_cb, false)
             end
-            redis:del(msg.to.id)
-            return lang_text('mediaForwarded')
-        else
-            return lang_text('require_mod')
         end
+        redis:del(msg.to.id)
+        return lang_text('mediaForwarded')
     end
 end
 
@@ -127,7 +111,7 @@ return {
     description = "BOTINTERACT",
     patterns =
     {
-        "^(§§).*$",
+        "^(%$).*$",
         "^[#!/]([Gg][Ee][Tt][Cc][Hh][Aa][Rr])$",
         "^[#!/]([Ss][Ee][Nn][Dd][Mm][Ee][Dd][Ii][Aa])$",
         "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
@@ -143,11 +127,10 @@ return {
     pre_process = pre_process,
     min_rank = 1
     -- usage
-    -- MOD
     -- #getchar
-    -- §§<text>
+    -- $<text>
     -- #sendmedia
-    -- OWNER
+    -- MOD
     -- (#unsetbot|sasha rimuovi bot)
     -- ADMIN
     -- (#setbot|sasha imposta bot)
