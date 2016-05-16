@@ -53,8 +53,8 @@ local function start_challenge(challenger_id, challenged_id, challenger, challen
         redis:set('ruletachallenge:' .. chat_id .. ':player', challenger_id)
         redis:set('ruletachallenger:' .. chat_id, challenger)
         redis:set('ruletachallenged:' .. chat_id, challenged)
-        send_large_msg(chat, lang_text('challengeSet'))
-        send_large_msg(channel, lang_text('challengeSet'))
+        send_large_msg(chat, lang_text('challengeSet'):gsub('X', challenged))
+        send_large_msg(channel, lang_text('challengeSet'):gsub('X', challenged))
     end
 end
 
@@ -651,7 +651,7 @@ local function run(msg, matches)
                 ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
                 save_data(_config.ruleta.db, ruletadata)
             else
-                text = lang_text('wrongPlayer')
+                text = lang_text('wrongPlayer'):gsub('X', redis:get('ruletachallenged:' .. chat))
             end
             reply_msg(msg.id, text, ok_cb, false)
             return
@@ -660,7 +660,7 @@ local function run(msg, matches)
         if (matches[1]:lower() == 'reject' or matches[1]:lower() == 'rifiuta') and challenge then
             if (user == challenger or user == challenged) then
                 if user == challenged and accepted == 0 then
-                    reply_msg(msg.id, lang_text('challengeRejected'), ok_cb, false)
+                    reply_msg(msg.id, lang_text('challengeRejected'):gsub('X', redis:get('ruletachallenged:' .. chat)), ok_cb, false)
                 elseif is_momod(msg) then
                     reply_msg(msg.id, lang_text('challengeModTerminated'), ok_cb, false)
                 elseif accepted == 1 then
@@ -688,7 +688,7 @@ local function run(msg, matches)
                     kick_user_any(user, chat)
                 end
             elseif not is_momod(msg) then
-                reply_msg(msg.id, lang_text('wrongPlayer'), ok_cb, false)
+                reply_msg(msg.id, lang_text('wrongPlayer'):gsub('X', redis:get('ruletachallenged:' .. chat)), ok_cb, false)
                 return
             end
             reject_challenge(user, chat)
