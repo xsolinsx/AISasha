@@ -29,7 +29,7 @@ local function list_variables(msg)
         local names = redis:hkeys(hash)
         local text = ''
         for i = 1, #names do
-            text = text .. names[i] .. '\n'
+            text = text .. names[i]:gsub('_', ' ') .. '\n'
         end
         return text
     end
@@ -45,7 +45,7 @@ local function run(msg, matches)
     if vars ~= nil then
         local t = vars:split('\n')
         for i, word in pairs(t) do
-            local temp = word:lower():gsub("_", " ")
+            local temp = word:lower()
             if word:lower() ~= 'get' and string.find(msg.text:lower(), temp) then
                 local value = get_value(msg, word:lower())
                 if value then
