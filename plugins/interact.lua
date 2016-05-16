@@ -97,7 +97,7 @@ return {
     {
         -- react
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Oo][Mm][Ee] [Vv][Aa]%?)$",
-        "^([Ss][Aa][Ss][Hh][Aa]) (.+%?)$",
+        "^([Ss][Aa][Ss][Hh][Aa])(.+%?)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Tt][Ii] [Aa][Mm][Oo])$",
         "^([Tt][Ii] [Aa][Mm][Oo] [Ss][Aa][Ss][Hh][Aa])$",
         -- words
