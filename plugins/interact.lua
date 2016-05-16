@@ -86,7 +86,7 @@ local function run(msg, matches)
     if matches[1]:lower() == 'mohammed' then
         reply_msg(msg.id, "☁️☀️    ☁️         ☁️  ☁️\n       ☁️                🚁   ☁️\n\n_🌵_🌻________🌵_____\n                 /  |   \\\n        🌴  / 🚔    \\ 🌴\n             /      |       \\\n    🌴   /      🚔      \\ 🌴\n         /          |    🚔  \\\n⛽️  /  🚔     |   🚔     \\ 🌴\n     /            🚔             \\ 🌴\n   /                |                \\\n /                  |        👳🏿      \\\n", ok_cb, false)
     end
-    if matches[1]:lower() == 'nazi' or matches[1]:lower() == 'hitler' then
+    if matches[1]:lower() == 'nazismo' or matches[1]:lower() == 'nazista' or matches[1]:lower() == 'hitler' then
         reply_msg(msg.id, "❤️❤️❤️❤️❤️❤️❤️❤️❤️\n❤️⚫️❤️❤️⚫️⚫️⚫️⚫️❤️\n❤️⚫️❤️❤️⚫️❤️❤️❤️❤️\n❤️⚫️❤️❤️⚫️❤️❤️❤️❤️\n❤️⚫️⚫️⚫️⚫️⚫️⚫️⚫️❤️\n❤️❤️❤️❤️⚫️❤️❤️⚫️❤️\n❤️❤️❤️❤️⚫️❤️❤️⚫️❤️\n❤️⚫️⚫️⚫️⚫️❤️❤️⚫️❤️\n❤️❤️❤️❤️❤️❤️❤️❤️❤️", ok_cb, false)
     end
 end
@@ -106,7 +106,8 @@ return {
         "([Mm][Aa][Oo][Mm][Ee][Tt][Oo])",
         "([Cc][Aa][Nn][Cc][Aa][Rr][Oo][Mm][Aa][Nn])",
         "([Mm][Oo][Hh][Aa][Mm][Mm][Ee][Dd])",
-        "([Nn][Aa][Zz][Ii])",
+        "([Nn][Aa][Zz][Ii][Ss][Mm][Oo])",
+        "([Nn][Aa][Zz][Ii][Ss][Tt][Aa])",
         "([Hh][Ii][Tt][Ll][Ee][Rr])",
     },
     run = run,
