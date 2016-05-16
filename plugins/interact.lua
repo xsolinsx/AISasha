@@ -61,33 +61,33 @@ local tiamo = {
 local function run(msg, matches)
     -- interact
     if matches[1]:lower() == 'sasha come va?' then
-        return comeva[math.random(#comeva)]
+        reply_msg(msg.id, comeva[math.random(#comeva)], ok_cb, false)
     end
     if matches[1]:lower() == 'sasha' and string.match(matches[2], '.+%?') then
         local rnd = math.random(0, 2)
         if rnd == 0 then
-            return nosasha[math.random(#nosasha)]
+            reply_msg(msg.id, nosasha[math.random(#nosasha)], ok_cb, false)
         elseif rnd == 1 then
-            return bohsasha[math.random(#bohsasha)]
+            reply_msg(msg.id, bohsasha[math.random(#bohsasha)], ok_cb, false)
         elseif rnd == 2 then
-            return sisasha[math.random(#sisasha)]
+            reply_msg(msg.id, sisasha[math.random(#sisasha)], ok_cb, false)
         end
     end
     if matches[1]:lower() == 'sasha ti amo' or matches[1]:lower() == 'ti amo sasha' then
-        return tiamo[math.random(#tiamo)]
+        reply_msg(msg.id, tiamo[math.random(#tiamo)], ok_cb, false)
     end
     -- words
     if matches[1]:lower() == 'gangbang' then
-        return ".    👇🏿\n👉🏾👌🏻👈🏾\n      👆🏿"
+        reply_msg(msg.id, ".    👇🏿\n👉🏾👌🏻👈🏾\n      👆🏿", ok_cb, false)
     end
     if matches[1]:lower() == 'maometto' or matches[1]:lower() == 'maometo' or matches[1]:lower() == 'cancaroman' then
-        return "D\n  I\n    O\n     o\n     o\n      o\n     o\n     。\n    。\n   .\n   .\n    .\n    .\nC \nA\n  N\n    C\n  A\n    R\n      o\n       o\n      o\n     。\n    。\n   .\n   .\n    .\n    .\n🚴"
+        reply_msg(msg.id, "D\n  I\n    O\n     o\n     o\n      o\n     o\n     。\n    。\n   .\n   .\n    .\n    .\nC \nA\n  N\n    C\n  A\n    R\n      o\n       o\n      o\n     。\n    。\n   .\n   .\n    .\n    .\n🚴", ok_cb, false)
     end
     if matches[1]:lower() == 'mohammed' then
-        return "☁️☀️    ☁️         ☁️  ☁️\n       ☁️                🚁   ☁️\n\n_🌵_🌻________🌵_____\n                 /  |   \\\n        🌴  / 🚔    \\ 🌴\n             /      |       \\\n    🌴   /      🚔      \\ 🌴\n         /          |    🚔  \\\n⛽️  /  🚔     |   🚔     \\ 🌴\n     /            🚔             \\ 🌴\n   /                |                \\\n /                  |        👳🏿      \\\n"
+        reply_msg(msg.id, "☁️☀️    ☁️         ☁️  ☁️\n       ☁️                🚁   ☁️\n\n_🌵_🌻________🌵_____\n                 /  |   \\\n        🌴  / 🚔    \\ 🌴\n             /      |       \\\n    🌴   /      🚔      \\ 🌴\n         /          |    🚔  \\\n⛽️  /  🚔     |   🚔     \\ 🌴\n     /            🚔             \\ 🌴\n   /                |                \\\n /                  |        👳🏿      \\\n", ok_cb, false)
     end
     if matches[1]:lower() == 'nazi' or matches[1]:lower() == 'hitler' then
-        return "❤️❤️❤️❤️❤️❤️❤️❤️❤️\n❤️⚫️❤️❤️⚫️⚫️⚫️⚫️❤️\n❤️⚫️❤️❤️⚫️❤️❤️❤️❤️\n❤️⚫️❤️❤️⚫️❤️❤️❤️❤️\n❤️⚫️⚫️⚫️⚫️⚫️⚫️⚫️❤️\n❤️❤️❤️❤️⚫️❤️❤️⚫️❤️\n❤️❤️❤️❤️⚫️❤️❤️⚫️❤️\n❤️⚫️⚫️⚫️⚫️❤️❤️⚫️❤️\n❤️❤️❤️❤️❤️❤️❤️❤️❤️"
+        reply_msg(msg.id, "❤️❤️❤️❤️❤️❤️❤️❤️❤️\n❤️⚫️❤️❤️⚫️⚫️⚫️⚫️❤️\n❤️⚫️❤️❤️⚫️❤️❤️❤️❤️\n❤️⚫️❤️❤️⚫️❤️❤️❤️❤️\n❤️⚫️⚫️⚫️⚫️⚫️⚫️⚫️❤️\n❤️❤️❤️❤️⚫️❤️❤️⚫️❤️\n❤️❤️❤️❤️⚫️❤️❤️⚫️❤️\n❤️⚫️⚫️⚫️⚫️❤️❤️⚫️❤️\n❤️❤️❤️❤️❤️❤️❤️❤️❤️", ok_cb, false)
     end
 end
 
