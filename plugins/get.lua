@@ -12,8 +12,9 @@ end
 
 local function get_value(msg, var_name)
     local hash = get_variables_hash(msg)
+    var_name = var_name:gsub(' ', '_')
     if hash then
-        local value = redis:hget(hash, var_name:gsub(' ', '_'))
+        local value = redis:hget(hash, var_name)
         if value then
             return value
         else
