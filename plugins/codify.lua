@@ -5,6 +5,12 @@ local function callback_reply(extra, success, result)
     elseif extra == 'bold' then
         send_large_msg('chat#id' .. result.to.peer_id, "<b>" .. result.text .. "</b>")
         send_large_msg('channel#id' .. result.to.peer_id, "<b>" .. result.text .. "</b>")
+    elseif extra == 'italic' then
+        send_large_msg('chat#id' .. result.to.peer_id, "<i>" .. result.text .. "</i>")
+        send_large_msg('channel#id' .. result.to.peer_id, "<i>" .. result.text .. "</i>")
+    elseif extra == 'underline' then
+        send_large_msg('chat#id' .. result.to.peer_id, "<u>" .. result.text .. "</u>")
+        send_large_msg('channel#id' .. result.to.peer_id, "<u>" .. result.text .. "</u>")
     end
 end
 
@@ -35,6 +41,28 @@ local function run(msg, matches)
             return lang_text('require_mod')
         end
     end
+    if matches[1]:lower() == 'italify' then
+        if is_momod(msg) then
+            if type(msg.reply_id) ~= 'nil' then
+                return get_message(msg.reply_id, callback_reply, 'italic')
+            else
+                send_large_msg(receiver, "<i>" .. matches[2] .. "</i>")
+            end
+        else
+            return lang_text('require_mod')
+        end
+    end
+    if matches[1]:lower() == 'underify' then
+        if is_momod(msg) then
+            if type(msg.reply_id) ~= 'nil' then
+                return get_message(msg.reply_id, callback_reply, 'underline')
+            else
+                send_large_msg(receiver, "<u>" .. matches[2] .. "</u>")
+            end
+        else
+            return lang_text('require_mod')
+        end
+    end
 end
 
 return {
@@ -45,6 +73,10 @@ return {
         "^[#!/]([Cc][Oo][Dd][Ii][Ff][Yy]) (.+)$",
         "^[#!/]([Bb][Oo][Ll][Dd][Ii][Ff][Yy])$",
         "^[#!/]([Bb][Oo][Ll][Dd][Ii][Ff][Yy]) (.+)$",
+        "^[#!/]([Ii][Tt][Aa][Ll][Ii][Ff][Yy])$",
+        "^[#!/]([Ii][Tt][Aa][Ll][Ii][Ff][Yy]) (.+)$",
+        "^[#!/]([Uu][Nn][Dd][Ee][Rr][Ii][Ff][Yy])$",
+        "^[#!/]([Uu][Nn][Dd][Ee][Rr][Ii][Ff][Yy]) (.+)$",
     },
     run = run,
     min_rank = 1
