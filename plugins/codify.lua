@@ -1,4 +1,4 @@
--- modify lua-tg.c, search for case lq_msg and replace 0 with TGLMF_HTML, save and make
+﻿-- modify lua-tg.c, search for case lq_msg and replace 0 with TGLMF_HTML, save and make
 local function callback_reply(extra, success, result)
     send_large_msg('chat#id' .. result.to.peer_id, "<code>" .. result.text .. "</code>")
     send_large_msg('channel#id' .. result.to.peer_id, "<code>" .. result.text .. "</code>")
