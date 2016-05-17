@@ -9,12 +9,14 @@ local function run(msg, matches)
     local chat_type = msg.to.type
 
     if matches[1]:lower() == 'codify' then
-        if type(msg.reply_id) ~= 'nil' then
-            if is_momod(msg) then
+        if is_momod(msg) then
+            if type(msg.reply_id) ~= 'nil' then
                 return get_message(msg.reply_id, callback_reply, false)
             else
-                return lang_text('require_mod')
+                send_msg(receiver, "<code>" .. matches[1] .. "</code>", ok_cb, false)
             end
+        else
+            return lang_text('require_mod')
         end
     end
 end
@@ -24,6 +26,7 @@ return {
     patterns =
     {
         "^[#!/]([Cc][Oo][Dd][Ii][Ff][Yy])$",
+        "^[#!/]([Cc][Oo][Dd][Ii][Ff][Yy]) (.+)$",
     },
     run = run,
     min_rank = 1
