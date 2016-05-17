@@ -1,6 +1,6 @@
 local function callback_reply(extra, success, result)
-    send_large_msg('chat#id' .. result.to.peer_id, "<code>" .. result.text .. "</code>")
-    send_large_msg('channel#id' .. result.to.peer_id, "<code>" .. result.text .. "</code>")
+    send_msg('chat#id' .. result.to.peer_id, "<code>" .. result.text .. "</code>", ok_cb, false)
+    send_msg('channel#id' .. result.to.peer_id, "<code>" .. result.text .. "</code>", ok_cb, false)
 end
 
 local function run(msg, matches)
