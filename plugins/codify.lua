@@ -13,7 +13,7 @@ local function run(msg, matches)
             if type(msg.reply_id) ~= 'nil' then
                 return get_message(msg.reply_id, callback_reply, false)
             else
-                send_msg(receiver, "<code>" .. matches[1] .. "</code>", ok_cb, false)
+                send_msg(receiver, "<code>" .. matches[2] .. "</code>", ok_cb, false)
             end
         else
             return lang_text('require_mod')
