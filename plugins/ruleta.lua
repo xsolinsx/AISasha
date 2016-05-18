@@ -165,8 +165,10 @@ local function leaderboard_score(users)
     local text = lang_text('scoreLeaderboard')
     local i = 0
     for k, user in pairs(users_info) do
-        i = i + 1
-        text = text .. i .. '. ' .. user.name .. ' => ' .. user.score .. '\n'
+        if user.name and user.score then
+            i = i + 1
+            text = text .. i .. '. ' .. user.name .. ' => ' .. user.score .. '\n'
+        end
     end
     return text
 end
@@ -193,8 +195,10 @@ local function leaderboard_attempts(users)
     local text = lang_text('attemptsLeaderboard')
     local i = 0
     for k, user in pairs(users_info) do
-        i = i + 1
-        text = text .. i .. '. ' .. user.name .. ' => ' .. user.attempts .. '\n'
+        if user.name and user.attempts then
+            i = i + 1
+            text = text .. i .. '. ' .. user.name .. ' => ' .. user.attempts .. '\n'
+        end
     end
     return text
 end
@@ -221,8 +225,10 @@ local function leaderboard_deaths(users)
     local text = lang_text('deathsLeaderboard')
     local i = 0
     for k, user in pairs(users_info) do
-        i = i + 1
-        text = text .. i .. '. ' .. user.name .. ' => ' .. user.deaths .. '\n'
+        if user.name and user.deaths then
+            i = i + 1
+            text = text .. i .. '. ' .. user.name .. ' => ' .. user.deaths .. '\n'
+        end
     end
     return text
 end
@@ -249,8 +255,10 @@ local function leaderboard_streak(users)
     local text = lang_text('streakLeaderboard')
     local i = 0
     for k, user in pairs(users_info) do
-        i = i + 1
-        text = text .. i .. '. ' .. user.name .. ' => ' .. user.longeststreak .. '\n'
+        if user.name and user.longeststreak then
+            i = i + 1
+            text = text .. i .. '. ' .. user.name .. ' => ' .. user.longeststreak .. '\n'
+        end
     end
     return text
 end
@@ -277,8 +285,10 @@ local function leaderboard_challenges(users)
     local text = lang_text('duelsLeaderboard')
     local i = 0
     for k, user in pairs(users_info) do
-        i = i + 1
-        text = text .. i .. '. ' .. user.name .. ' => ' .. user.duels .. '\n'
+        if user.name and user.duels then
+            i = i + 1
+            text = text .. i .. '. ' .. user.name .. ' => ' .. user.duels .. '\n'
+        end
     end
     return text
 end
@@ -305,8 +315,10 @@ local function leaderboard_victories(users)
     local text = lang_text('victoriesLeaderboard')
     local i = 0
     for k, user in pairs(users_info) do
-        i = i + 1
-        text = text .. i .. '. ' .. user.name .. ' => ' .. user.wonduels .. '\n'
+        if user.name and user.wonduels then
+            i = i + 1
+            text = text .. i .. '. ' .. user.name .. ' => ' .. user.wonduels .. '\n'
+        end
     end
     return text
 end
@@ -333,8 +345,10 @@ local function leaderboard_defeats(users)
     local text = lang_text('defeatsLeaderboard')
     local i = 0
     for k, user in pairs(users_info) do
-        i = i + 1
-        text = text .. i .. '. ' .. user.name .. ' => ' .. user.lostduels .. '\n'
+        if user.name and user.lostduels then
+            i = i + 1
+            text = text .. i .. '. ' .. user.name .. ' => ' .. user.lostduels .. '\n'
+        end
     end
     return text
 end
