@@ -736,6 +736,7 @@ local function run(msg, matches)
 
                         ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
                         ruletadata['users'][user].actualstreak = tonumber(0)
+                        ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
                         local loserpoints = 0
                         if user == challenger then
                             if tonumber(ruletadata['users'][challenger].score) -20 < 0 then
