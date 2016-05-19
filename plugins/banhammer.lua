@@ -441,7 +441,7 @@ local function run(msg, matches)
             savelog(msg.to.id, name .. " [" .. msg.from.id .. "] left using kickme ")
             -- Save to logs
             local function post_kick()
-                kick_user(msg.from.id, msg.to.id)
+                kick_user_any(msg.from.id, msg.to.id)
             end
             postpone(post_kick, false, 3)
             return phrases[math.random(#phrases)]
