@@ -615,7 +615,12 @@ local function run(msg, matches)
                     ruletadata['users'][user] = userstats
 
                     save_data(_config.ruleta.db, ruletadata)
-                    kick_user_any(user, chat)
+                    local function post_kick()
+                        kick_user_any(user, chat)
+                        redis:del(hash)
+                        redis:del(tokick)
+                    end
+                    postpone(post_kick, false, 3)
                 else
                     reply_msg(msg.id, godgood[math.random(#godgood)], ok_cb, false)
 
@@ -793,7 +798,12 @@ local function run(msg, matches)
                         end
 
                         save_data(_config.ruleta.db, ruletadata)
-                        kick_user_any(user, chat)
+                        local function post_kick()
+                            kick_user_any(user, chat)
+                            redis:del(hash)
+                            redis:del(tokick)
+                        end
+                        postpone(post_kick, false, 3)
                     else
                         -- blue red
                         -- 🔵    🔴
@@ -824,7 +834,12 @@ local function run(msg, matches)
                     ruletadata['users'][user].actualstreak = tonumber(0)
 
                     save_data(_config.ruleta.db, ruletadata)
-                    kick_user_any(user, chat)
+                    local function post_kick()
+                        kick_user_any(user, chat)
+                        redis:del(hash)
+                        redis:del(tokick)
+                    end
+                    postpone(post_kick, false, 3)
                 else
                     reply_msg(msg.id, good[math.random(#good)], ok_cb, false)
 
