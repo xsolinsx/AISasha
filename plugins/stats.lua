@@ -64,8 +64,8 @@ local function chat_stats(chat_id)
     local users_info = { }
 
     -- Get total messages
-    for k, v in pairsByKeys(result) do
-        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. chat_id) or 0)
+    for i = 1, #users do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. users[i] .. ':' .. chat_id) or 0)
     end
 
     -- Get user info
@@ -104,8 +104,8 @@ local function chat_stats2(chat_id)
     local users_info = { }
 
     -- Get total messages
-    for k, v in pairsByKeys(result) do
-        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. chat_id) or 0)
+    for i = 1, #users do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. users[i] .. ':' .. chat_id) or 0)
     end
 
     -- Get user info
@@ -188,8 +188,8 @@ local function channel_stats(chat_id)
     local users_info = { }
 
     -- Get total messages
-    for k, v in pairsByKeys(result) do
-        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. chat_id) or 0)
+    for i = 1, #users do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. users[i] .. ':' .. chat_id) or 0)
     end
 
     -- Get user info
@@ -228,8 +228,8 @@ local function channel_stats2(chat_id)
     local users_info = { }
 
     -- Get total messages
-    for k, v in pairsByKeys(result) do
-        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. chat_id) or 0)
+    for i = 1, #users do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. users[i] .. ':' .. chat_id) or 0)
     end
 
     -- Get user info
