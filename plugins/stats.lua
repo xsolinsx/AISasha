@@ -27,7 +27,7 @@ local function callback_group_members(cb_extra, success, result)
     local users_info = { }
 
     -- Get total messages
-    for k, v in pairsByKeys(result) do
+    for k, v in pairs(result.members) do
         chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. cb_extra.chat_id) or 0)
     end
 
