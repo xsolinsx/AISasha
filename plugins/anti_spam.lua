@@ -102,7 +102,10 @@ do
                     return
                 end
                 delete_msg(msg.id, ok_cb, false)
-                kick_user(user, chat)
+                local function post_kick()
+                    kick_user(user, chat)
+                end
+                postpone(post_kick, false, 3)
                 local username = msg.from.username
                 local print_name = user_print_name(msg.from):gsub("‮", "")
                 local name_log = print_name:gsub("_", "")

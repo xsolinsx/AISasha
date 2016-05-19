@@ -88,7 +88,7 @@ local function pre_process(msg)
                     local function post_kick()
                         kick_user_any(redis:get(tokick), msg.to.id)
                     end
-                    postpone(post_kick, false, 2)
+                    postpone(post_kick, false, 3)
                     redis:del(hash)
                     redis:del(tokick)
                 end

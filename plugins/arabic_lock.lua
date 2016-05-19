@@ -24,7 +24,10 @@ local function run(msg, matches)
                     savelog(msg.to.id, name .. " [" .. msg.from.id .. "] kicked (arabic was locked) ")
                     local chat_id = msg.to.id
                     local user_id = msg.from.id
-                    kick_user(user_id, chat_id)
+                    local function post_kick()
+                        kick_user(user_id, chat_id)
+                    end
+                    postpone(post_kick, false, 3)
                 end
                 antiarabic[msg.from.id] = true
             end
