@@ -337,6 +337,14 @@ local function kickidsnouser(cb_extra, success, result)
     end
 end
 
+local function kickidsdeleted(cb_extra, success, result)
+    for k, v in pairs(result.members) do
+        if result.first_name:match("Deleted") and result.first_name:match("Name") then
+            kick_user(v.id, result.id)
+        end
+    end
+end
+
 local function user_msgs(user_id, chat_id)
     local user_info
     local uhash = 'user:' .. user_id
@@ -448,7 +456,7 @@ local function run(msg, matches)
         end
     end
     if is_momod(msg) then
-        if matches[1]:lower() ~= 'sasha uccidi sotto' and matches[1]:lower() ~= 'sasha uccidi nouser' and matches[1]:lower() ~= 'spara sotto' and matches[1]:lower() ~= 'spara nouser' then
+        if matches[1]:lower() ~= 'sasha uccidi sotto' and matches[1]:lower() ~= 'sasha uccidi nouser' and matches[1]:lower() ~= 'sasha uccidi eliminati' and matches[1]:lower() ~= 'spara sotto' and matches[1]:lower() ~= 'spara nouser' and matches[1]:lower() ~= 'spara eliminati' then
             -- if not kickinactive and not kicknouser
             if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
                 -- /kick
@@ -566,6 +574,15 @@ local function run(msg, matches)
             end
             return ban_list(chat_id)
         end
+        if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'sasha uccidi eliminati' or matches[1]:lower() == 'spara eliminati' then
+            -- /kickdeleted
+            if msg.to.type == 'chat' then
+                chat_info(get_receiver(msg), kickidsnouser, { receiver = get_receiver(msg) })
+            elseif msg.to.type == 'channel' then
+                channel_get_users(get_receiver(msg), kickidsnouser, { receiver = get_receiver(msg) })
+            end
+            return
+        end
     end
     if is_owner(msg) then
         if matches[1]:lower() == 'kickinactive' or((matches[1]:lower() == 'sasha uccidi sotto' or matches[1]:lower() == 'spara sotto') and matches[3]:lower() == 'messaggi') then
@@ -666,6 +683,7 @@ return {
         "^[#!/]([Kk][Ii][Cc][Kk][Nn][Oo][Uu][Ss][Ee][Rr])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee]) (%d+)$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Dd][Ee][Ll][Ee][Tt][Ee][Dd])$",
         "^[#!/]([Bb][Aa][Nn]) (.*)$",
         "^[#!/]([Bb][Aa][Nn])$",
         "^[#!/]([Uu][Nn][Bb][Aa][Nn]) (.*)$",
@@ -693,6 +711,9 @@ return {
         -- kickinactive
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
         "^([Ss][Pp][Aa][Rr][Aa] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
+        -- kickdeleted
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
+        "^([Ss][Pp][Aa][Rr][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
         -- ban
         "^([Ss][Aa][Ss][Hh][Aa] [Bb][Aa][Nn][Nn][Aa]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Bb][Aa][Nn][Nn][Aa])$",
