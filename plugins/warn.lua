@@ -49,8 +49,11 @@ local function warn_user(user_id, chat_id)
     if hashonredis then
         if tonumber(warn_chat) ~= 0 then
             if tonumber(hashonredis) >= tonumber(warn_chat) then
-                chat_del_user(chat, user, ok_cb, false)
-                channel_kick(channel, user, ok_cb, false)
+                local function post_kick()
+                    chat_del_user(chat, user, ok_cb, false)
+                    channel_kick(channel, user, ok_cb, false)
+                end
+                postpone(post_kick, false, 3)
                 redis:getset(hash, 0)
             end
             send_large_msg(chat, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)

@@ -617,8 +617,6 @@ local function run(msg, matches)
                     save_data(_config.ruleta.db, ruletadata)
                     local function post_kick()
                         kick_user_any(user, chat)
-                        redis:del(hash)
-                        redis:del(tokick)
                     end
                     postpone(post_kick, false, 3)
                 else
@@ -800,8 +798,6 @@ local function run(msg, matches)
                         save_data(_config.ruleta.db, ruletadata)
                         local function post_kick()
                             kick_user_any(user, chat)
-                            redis:del(hash)
-                            redis:del(tokick)
                         end
                         postpone(post_kick, false, 3)
                     else
@@ -836,8 +832,6 @@ local function run(msg, matches)
                     save_data(_config.ruleta.db, ruletadata)
                     local function post_kick()
                         kick_user_any(user, chat)
-                        redis:del(hash)
-                        redis:del(tokick)
                     end
                     postpone(post_kick, false, 3)
                 else

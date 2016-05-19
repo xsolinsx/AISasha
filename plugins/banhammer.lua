@@ -28,7 +28,10 @@ local function Kick_by_reply(extra, success, result)
             send_large_msg(chat, lang_text('cantKickHigher'))
             send_large_msg(channel, lang_text('cantKickHigher'))
         end
-        kick_user(result.from.peer_id, result.to.peer_id)
+        local function post_kick()
+            kick_user(result.from.peer_id, result.to.peer_id)
+        end
+        postpone(post_kick, false, 3)
         send_large_msg(chat, phrases[math.random(#phrases)])
         send_large_msg(channel, phrases[math.random(#phrases)])
     else
@@ -50,7 +53,10 @@ local function Kick_by_reply_admins(extra, success, result)
             -- Ignore admins
             return
         end
-        kick_user(result.from.peer_id, result.to.peer_id)
+        local function post_kick()
+            kick_user(result.from.peer_id, result.to.peer_id)
+        end
+        postpone(post_kick, false, 3)
         send_large_msg(chat, phrases[math.random(#phrases)])
         send_large_msg(channel, phrases[math.random(#phrases)])
     else
@@ -74,7 +80,10 @@ local function ban_by_reply(extra, success, result)
             send_large_msg(channel, lang_text('cantKickHigher'))
             return
         end
-        ban_user(result.from.peer_id, result.to.peer_id)
+        local function post_kick()
+            ban_user(result.from.peer_id, result.to.peer_id)
+        end
+        postpone(post_kick, false, 3)
         send_large_msg(chat, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
         send_large_msg(channel, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
     else
@@ -96,7 +105,10 @@ local function ban_by_reply_admins(extra, success, result)
             -- Ignore admins
             return
         end
-        ban_user(result.from.peer_id, result.to.peer_id)
+        local function post_kick()
+            ban_user(result.from.peer_id, result.to.peer_id)
+        end
+        postpone(post_kick, false, 3)
         send_large_msg(chat, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
         send_large_msg(channel, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
     else
@@ -139,7 +151,6 @@ local function banall_by_reply(extra, success, result)
         end
         local name = user_print_name(result.from)
         banall_user(result.from.peer_id)
-        kick_user(result.from.peer_id, result.to.peer_id)
         send_large_msg(chat, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('gbanned'))
         send_large_msg(channel, lang_text('user') .. name .. "[" .. result.from.peer_id .. "]" .. lang_text('gbanned'))
     else
@@ -289,7 +300,10 @@ local function kick_ban_res(extra, success, result)
             send_large_msg(receiver, lang_text('cantKickHigher'))
             return
         end
-        kick_user(member_id, chat_id)
+        local function post_kick()
+            kick_user(member_id, chat_id)
+        end
+        postpone(post_kick, false, 3)
         send_large_msg(receiver, phrases[math.random(#phrases)])
     elseif get_cmd == 'ban' then
         if is_momod2(member_id, chat_id) and not is_admin2(sender) then
@@ -297,7 +311,10 @@ local function kick_ban_res(extra, success, result)
             return
         end
         send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
-        ban_user(member_id, chat_id)
+        local function post_kick()
+            ban_user(member_id, chat_id)
+        end
+        postpone(post_kick, false, 3)
     elseif get_cmd == 'unban' then
         send_large_msg(receiver, lang_text('user') .. '@' .. member .. ' [' .. member_id .. ']' .. lang_text('unbanned'))
         local hash = 'banned:' .. chat_id
@@ -423,8 +440,10 @@ local function run(msg, matches)
             local name = print_name:gsub("_", "")
             savelog(msg.to.id, name .. " [" .. msg.from.id .. "] left using kickme ")
             -- Save to logs
-            chat_del_user(receiver, 'user#id' .. msg.from.id, ok_cb, false)
-            channel_kick(receiver, 'user#id' .. msg.from.id, ok_cb, false)
+            local function post_kick()
+                kick_user(msg.from.id, msg.to.id)
+            end
+            postpone(post_kick, false, 3)
             return phrases[math.random(#phrases)]
         end
     end
@@ -454,7 +473,10 @@ local function run(msg, matches)
                     local print_name = user_print_name(msg.from):gsub("‮", "")
                     local name = print_name:gsub("_", "")
                     savelog(msg.to.id, name .. " [" .. msg.from.id .. "] kicked user " .. matches[2])
-                    kick_user(user_id, chat_id)
+                    local function post_kick()
+                        kick_user(user_id, chat_id)
+                    end
+                    postpone(post_kick, false, 3)
                     return phrases[math.random(#phrases)]
                 else
                     local cbres_extra = {
@@ -492,7 +514,10 @@ local function run(msg, matches)
                 local name = print_name:gsub("_", "")
                 local receiver = get_receiver(msg)
                 savelog(msg.to.id, name .. " [" .. msg.from.id .. "] banned user " .. matches[2])
-                ban_user(matches[2], msg.to.id)
+                local function post_kick()
+                    ban_user(matches[2], msg.to.id)
+                end
+                postpone(post_kick, false, 3)
                 return lang_text('user') .. matches[2] .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)]
             else
                 local cbres_extra = {

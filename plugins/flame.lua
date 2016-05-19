@@ -87,10 +87,10 @@ local function pre_process(msg)
                 if tonumber(hashonredis) == #sashaflamma then
                     local function post_kick()
                         kick_user_any(redis:get(tokick), msg.to.id)
-                        redis:del(hash)
-                        redis:del(tokick)
                     end
                     postpone(post_kick, false, 2)
+                    redis:del(hash)
+                    redis:del(tokick)
                 end
             end
         end
