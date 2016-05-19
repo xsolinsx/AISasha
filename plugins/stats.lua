@@ -37,7 +37,7 @@ local function callback_group_members(cb_extra, success, result)
             local user_id = v.peer_id
             local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
             local percentage =(user_info.msgs * 100) / chattotal
-            user_info.percentage = percentage
+            user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
         end
     end
@@ -74,7 +74,7 @@ local function chat_stats(chat_id)
             local user_id = users[i]
             local user_info = get_msgs_user_chat(user_id, chat_id)
             local percentage =(user_info.msgs * 100) / chattotal
-            user_info.percentage = percentage
+            user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
         end
     end
@@ -114,7 +114,7 @@ local function chat_stats2(chat_id)
             local user_id = users[i]
             local user_info = get_msgs_user_chat(user_id, chat_id)
             local percentage =(user_info.msgs * 100) / chattotal
-            user_info.percentage = percentage
+            user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
         end
     end
@@ -161,7 +161,7 @@ local function callback_supergroup_members(cb_extra, success, result)
             local user_id = v.peer_id
             local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
             local percentage =(user_info.msgs * 100) / chattotal
-            user_info.percentage = percentage
+            user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
         end
     end
@@ -198,7 +198,7 @@ local function channel_stats(chat_id)
             local user_id = users[i]
             local user_info = get_msgs_user_chat(user_id, chat_id)
             local percentage =(user_info.msgs * 100) / chattotal
-            user_info.percentage = percentage
+            user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
         end
     end
@@ -238,7 +238,7 @@ local function channel_stats2(chat_id)
             local user_id = users[i]
             local user_info = get_msgs_user_chat(user_id, chat_id)
             local percentage =(user_info.msgs * 100) / chattotal
-            user_info.percentage = percentage
+            user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
         end
     end
