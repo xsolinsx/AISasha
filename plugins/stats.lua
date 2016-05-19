@@ -21,16 +21,23 @@ local function clean_chat_stats(chat_id)
 end
 
 local function callback_group_members(cb_extra, success, result)
+    local chattotal = 0
     local hash = 'chat:' .. cb_extra.chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
-    local text = lang_text('usersInChat')
+
+    -- Get total messages
+    for k, v in pairsByKeys(result) do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. cb_extra.chat_id) or 0)
+    end
 
     -- Get user info
     for k, v in pairs(result.members) do
         if tonumber(v.peer_id) ~= tonumber(our_id) then
             local user_id = v.peer_id
             local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
+            local percentage =(user_info.msgs * 100) / chattotal
+            user_info.percentage = percentage
             table.insert(users_info, user_info)
         end
     end
@@ -42,22 +49,32 @@ local function callback_group_members(cb_extra, success, result)
         end
     end )
 
+    local text = lang_text('usersInChat') .. lang_text('totalChatMessages') .. chattotal .. '\n'
     for kuser, user in pairs(users_info) do
-        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+        text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
     send_large_msg(cb_extra.receiver, text)
 end
 
 local function chat_stats(chat_id)
     -- Users on chat
+    local chattotal = 0
     local hash = 'chat:' .. chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
+
+    -- Get total messages
+    for k, v in pairsByKeys(result) do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. chat_id) or 0)
+    end
+
     -- Get user info
     for i = 1, #users do
         if tonumber(users[i]) ~= tonumber(our_id) then
             local user_id = users[i]
             local user_info = get_msgs_user_chat(user_id, chat_id)
+            local percentage =(user_info.msgs * 100) / chattotal
+            user_info.percentage = percentage
             table.insert(users_info, user_info)
         end
     end
@@ -67,9 +84,9 @@ local function chat_stats(chat_id)
             return a.msgs > b.msgs
         end
     end )
-    local text = lang_text('usersInChat')
+    local text = lang_text('usersInChat') .. lang_text('totalChatMessages') .. chattotal .. '\n'
     for k, user in pairs(users_info) do
-        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+        text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
     local file = io.open("./groups/lists/" .. chat_id .. "stats.txt", "w")
     file:write(text)
@@ -81,15 +98,23 @@ end
 
 local function chat_stats2(chat_id)
     -- Users on chat
+    local chattotal = 0
     local hash = 'chat:' .. chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
+
+    -- Get total messages
+    for k, v in pairsByKeys(result) do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. chat_id) or 0)
+    end
 
     -- Get user info
     for i = 1, #users do
         if tonumber(users[i]) ~= tonumber(our_id) then
             local user_id = users[i]
             local user_info = get_msgs_user_chat(user_id, chat_id)
+            local percentage =(user_info.msgs * 100) / chattotal
+            user_info.percentage = percentage
             table.insert(users_info, user_info)
         end
     end
@@ -101,9 +126,9 @@ local function chat_stats2(chat_id)
         end
     end )
 
-    local text = lang_text('usersInChat')
+    local text = lang_text('usersInChat') .. lang_text('totalChatMessages') .. chattotal .. '\n'
     for k, user in pairs(users_info) do
-        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+        text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
     return text
 end
@@ -120,19 +145,27 @@ end
 
 local function callback_supergroup_members(cb_extra, success, result)
     -- Users on chat
+    local chattotal = 0
     local hash = 'channel:' .. cb_extra.chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
-    local text = lang_text('usersInChat')
+
+    -- Get total messages
+    for k, v in pairsByKeys(result) do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. cb_extra.chat_id) or 0)
+    end
 
     -- Get user info
     for k, v in pairsByKeys(result) do
         if tonumber(v.peer_id) ~= tonumber(our_id) then
             local user_id = v.peer_id
             local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
+            local percentage =(user_info.msgs * 100) / chattotal
+            user_info.percentage = percentage
             table.insert(users_info, user_info)
         end
     end
+    local text = lang_text('usersInChat') .. lang_text('totalChatMessages') .. chattotal .. '\n'
 
     -- Sort users by msgs number
     table.sort(users_info, function(a, b)
@@ -142,21 +175,30 @@ local function callback_supergroup_members(cb_extra, success, result)
     end )
 
     for kuser, user in pairs(users_info) do
-        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+        text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
     send_large_msg(cb_extra.receiver, text)
 end
 
 local function channel_stats(chat_id)
     -- Users on chat
+    local chattotal = 0
     local hash = 'channel:' .. chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
+
+    -- Get total messages
+    for k, v in pairsByKeys(result) do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. chat_id) or 0)
+    end
+
     -- Get user info
     for i = 1, #users do
         if tonumber(users[i]) ~= tonumber(our_id) then
             local user_id = users[i]
             local user_info = get_msgs_user_chat(user_id, chat_id)
+            local percentage =(user_info.msgs * 100) / chattotal
+            user_info.percentage = percentage
             table.insert(users_info, user_info)
         end
     end
@@ -166,9 +208,9 @@ local function channel_stats(chat_id)
             return a.msgs > b.msgs
         end
     end )
-    local text = lang_text('usersInChat')
+    local text = lang_text('usersInChat') .. lang_text('totalChatMessages') .. chattotal .. '\n'
     for k, user in pairs(users_info) do
-        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+        text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
     local file = io.open("./groups/lists/" .. chat_id .. "stats.txt", "w")
     file:write(text)
@@ -180,15 +222,23 @@ end
 
 local function channel_stats2(chat_id)
     -- Users on chat
+    local chattotal = 0
     local hash = 'channel:' .. chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
+
+    -- Get total messages
+    for k, v in pairsByKeys(result) do
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. chat_id) or 0)
+    end
 
     -- Get user info
     for i = 1, #users do
         if tonumber(users[i]) ~= tonumber(our_id) then
             local user_id = users[i]
             local user_info = get_msgs_user_chat(user_id, chat_id)
+            local percentage =(user_info.msgs * 100) / chattotal
+            user_info.percentage = percentage
             table.insert(users_info, user_info)
         end
     end
@@ -200,9 +250,9 @@ local function channel_stats2(chat_id)
         end
     end )
 
-    local text = lang_text('usersInChat')
+    local text = lang_text('usersInChat') .. lang_text('totalChatMessages') .. chattotal .. '\n'
     for k, user in pairs(users_info) do
-        text = text .. user.name .. ' = ' .. user.msgs .. '\n'
+        text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
     return text
 end

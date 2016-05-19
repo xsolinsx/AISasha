@@ -438,6 +438,7 @@ local function run(msg, matches)
 
         -- stats.lua --
         set_text('usersInChat', 'Utenti in questa chat\n')
+        set_text('totalChatMessages', 'Messaggi totali della chat: ')
         set_text('groups', '\nGruppi: ')
         set_text('statsCleaned', 'Statistiche azzerate.')
 
