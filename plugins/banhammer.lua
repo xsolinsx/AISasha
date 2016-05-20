@@ -329,7 +329,7 @@ local function kick_ban_res(extra, success, result)
     end
 end
 
-local function kickidsnouser(cb_extra, success, result)
+local function kick_nouser_chat(cb_extra, success, result)
     for k, v in pairs(result.members) do
         if not v.username then
             kick_user(v.id, result.id)
@@ -337,10 +337,26 @@ local function kickidsnouser(cb_extra, success, result)
     end
 end
 
-local function kickidsdeleted(cb_extra, success, result)
+local function kick_nouser_channel(cb_extra, success, result)
+    for k, v in pairs(result) do
+        if not v.username then
+            kick_user(v.id, cb_extra.chat_id)
+        end
+    end
+end
+
+local function kick_deleted_chat(cb_extra, success, result)
     for k, v in pairs(result.members) do
-        if result.first_name:match("Deleted") and result.first_name:match("Name") then
+        if v.first_name:match("Deleted") and v.first_name:match("Name") then
             kick_user(v.id, result.id)
+        end
+    end
+end
+
+local function kick_deleted_channel(cb_extra, success, result)
+    for k, v in pairs(result) do
+        if v.first_name:match("Deleted") and v.first_name:match("Name") then
+            kick_user(v.id, cb_extra.chat_id)
         end
     end
 end
@@ -439,7 +455,6 @@ local function kick_inactive_channel(chat_id, num, receiver)
 end
 
 local function run(msg, matches)
-    local support_id = msg.from.id
     if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' then
         -- /kickme
         local receiver = get_receiver(msg)
@@ -476,13 +491,11 @@ local function run(msg, matches)
                     if tonumber(matches[2]) == tonumber(msg.from.id) then
                         return lang_text('noAutoKick')
                     end
-                    local user_id = matches[2]
-                    local chat_id = msg.to.id
                     local print_name = user_print_name(msg.from):gsub("‮", "")
                     local name = print_name:gsub("_", "")
                     savelog(msg.to.id, name .. " [" .. msg.from.id .. "] kicked user " .. matches[2])
                     local function post_kick()
-                        kick_user(user_id, chat_id)
+                        kick_user(matches[2], msg.to.id)
                     end
                     postpone(post_kick, false, 3)
                     return phrases[math.random(#phrases)]
@@ -516,8 +529,6 @@ local function run(msg, matches)
                 if tonumber(matches[2]) == tonumber(msg.from.id) then
                     return lang_text('noAutoBan')
                 end
-                local user_id = matches[2]
-                local chat_id = msg.to.id
                 local print_name = user_print_name(msg.from):gsub("‮", "")
                 local name = print_name:gsub("_", "")
                 local receiver = get_receiver(msg)
@@ -544,17 +555,13 @@ local function run(msg, matches)
                 msgr = get_message(msg.reply_id, unban_by_reply, false)
                 return
             end
-            local user_id = matches[2]
-            local chat_id = msg.to.id
-            local targetuser = matches[2]
-            if string.match(targetuser, '^%d+$') then
-                local user_id = targetuser
-                local hash = 'banned:' .. chat_id
-                redis:srem(hash, user_id)
+            if string.match(matches[2], '^%d+$') then
+                local hash = 'banned:' .. msg.to.id
+                redis:srem(hash, matches[2])
                 local print_name = user_print_name(msg.from):gsub("‮", "")
                 local name = print_name:gsub("_", "")
                 savelog(msg.to.id, name .. " [" .. msg.from.id .. "] unbanned user " .. matches[2])
-                return lang_text('user') .. user_id .. lang_text('unbanned')
+                return lang_text('user') .. matches[2] .. lang_text('unbanned')
             else
                 local cbres_extra = {
                     chat_id = msg.to.id,
@@ -577,9 +584,9 @@ local function run(msg, matches)
         if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'sasha uccidi eliminati' or matches[1]:lower() == 'spara eliminati' then
             -- /kickdeleted
             if msg.to.type == 'chat' then
-                chat_info(get_receiver(msg), kickidsnouser, { receiver = get_receiver(msg) })
+                chat_info(get_receiver(msg), kick_deleted_chat, { receiver = get_receiver(msg) })
             elseif msg.to.type == 'channel' then
-                channel_get_users(get_receiver(msg), kickidsnouser, { receiver = get_receiver(msg) })
+                channel_get_users(get_receiver(msg), kick_deleted_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
             end
             return
         end
@@ -600,29 +607,26 @@ local function run(msg, matches)
         if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
             -- /kicknouser
             if msg.to.type == 'chat' then
-                chat_info(get_receiver(msg), kickidsnouser, { receiver = get_receiver(msg) })
+                chat_info(get_receiver(msg), kick_nouser_chat, { receiver = get_receiver(msg) })
             elseif msg.to.type == 'channel' then
-                channel_get_users(get_receiver(msg), kickidsnouser, { receiver = get_receiver(msg) })
+                channel_get_users(get_receiver(msg), kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
             end
             return
         end
     end
-    if is_admin1(msg) or is_support(support_id) then
+    if is_admin1(msg) or is_support(msg.from.id) then
         if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
             -- /gban
             if type(msg.reply_id) ~= "nil" and is_admin1(msg) then
                 banall = get_message(msg.reply_id, banall_by_reply, false)
                 return
             end
-            local user_id = matches[2]
-            local chat_id = msg.to.id
-            local targetuser = matches[2]
-            if string.match(targetuser, '^%d+$') then
+            if string.match(matches[2], '^%d+$') then
                 if tonumber(matches[2]) == tonumber(our_id) then
                     return false
                 end
-                banall_user(targetuser)
-                return lang_text('user') .. user_id .. lang_text('gbanned')
+                banall_user(matches[2])
+                return lang_text('user') .. matches[2] .. lang_text('gbanned')
             else
                 local cbres_extra = {
                     chat_id = msg.to.id,
@@ -640,14 +644,12 @@ local function run(msg, matches)
                 unbanall = get_message(msg.reply_id, unbanall_by_reply, false)
                 return
             end
-            local user_id = matches[2]
-            local chat_id = msg.to.id
             if string.match(matches[2], '^%d+$') then
                 if tonumber(matches[2]) == tonumber(our_id) then
                     return false
                 end
-                unbanall_user(user_id)
-                return lang_text('user') .. user_id .. lang_text('ungbanned')
+                unbanall_user(matches[2])
+                return lang_text('user') .. matches[2] .. lang_text('ungbanned')
             else
                 local cbres_extra = {
                     chat_id = msg.to.id,
