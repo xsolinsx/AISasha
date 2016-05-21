@@ -161,7 +161,7 @@ local function run(msg, matches)
         if is_gbanned(msg.from.id) then
             return lang_text('youGbanned')
         end
-        if matches[1]:lower() == 'join' and is_admin1(msg) then
+        if (matches[1]:lower() == 'join' or matches[1]:lower() == 'inviteme' or matches[1]:lower() == 'sasha invitami' or matches[1]:lower() == 'invitami') and is_admin1(msg) then
             if string.match(matches[2], '^%d+$') then
                 local data = load_data(_config.moderation.data)
                 if string.match(matches[2], '^%d+$') then
@@ -345,6 +345,15 @@ return {
         "^!!tgservice (chat_add_user)$",
         -- join
         "^[#!/]([Jj][Oo][Ii][Nn]) (.*)$",
+        "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee][Mm][Ee]) (%d+)$",
+        "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee][Mm][Ee]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
+        "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee][Mm][Ee]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (%d+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*)$",
+        "^([Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (%d+)$",
+        "^([Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
+        "^([Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*)$",
     },
     run = run,
     pre_process = pre_process,

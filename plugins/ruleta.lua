@@ -711,98 +711,22 @@ local function run(msg, matches)
             end
             postpone(post_kick, false, 3)
             reply_msg(msg.id, lang_text('forwardingRuleta'), ok_cb, false)
-            return
-        end
-
-        if matches[1]:lower() == 'godruleta' then
-            if userstats.score > 10 then
-                userstats.attempts = tonumber(userstats.attempts + 1)
-                userstats.actualstreak = tonumber(userstats.actualstreak + 1)
-                if userstats.actualstreak > userstats.longeststreak then
-                    userstats.longeststreak = tonumber(userstats.actualstreak)
-                end
-
-                if math.random(1, 2) == math.random(1, 2) then
-                    reply_msg(msg.id, bad[math.random(#bad)], ok_cb, false)
-
-                    userstats.score = tonumber(0)
-                    userstats.deaths = tonumber(userstats.deaths + 1)
-                    userstats.actualstreak = tonumber(0)
-                    ruletadata['users'][user] = userstats
-
-                    save_data(_config.ruleta.db, ruletadata)
-                    local function post_kick()
-                        kick_user_any(user, chat)
+        else
+            if matches[1]:lower() == 'godruleta' then
+                if userstats.score > 10 then
+                    userstats.attempts = tonumber(userstats.attempts + 1)
+                    userstats.actualstreak = tonumber(userstats.actualstreak + 1)
+                    if userstats.actualstreak > userstats.longeststreak then
+                        userstats.longeststreak = tonumber(userstats.actualstreak)
                     end
-                    postpone(post_kick, false, 3)
-                else
-                    reply_msg(msg.id, godgood[math.random(#godgood)], ok_cb, false)
 
-                    userstats.score = tonumber(userstats.score + 70)
-                    ruletadata['users'][user] = userstats
+                    if math.random(1, 2) == math.random(1, 2) then
+                        reply_msg(msg.id, bad[math.random(#bad)], ok_cb, false)
 
-                    save_data(_config.ruleta.db, ruletadata)
-                end
-            else
-                reply_msg(msg.id, lang_text('requirePoints'), ok_cb, false)
-            end
-            return
-        end
-
-        if matches[1]:lower() == 'ruleta' then
-            ruletadata['users'][user].attempts = tonumber(ruletadata['users'][user].attempts + 1)
-            ruletadata['users'][user].actualstreak = tonumber(ruletadata['users'][user].actualstreak + 1)
-            if tonumber(ruletadata['users'][user].actualstreak) > tonumber(ruletadata['users'][user].longeststreak) then
-                ruletadata['users'][user].longeststreak = tonumber(ruletadata['users'][user].actualstreak)
-            end
-
-            if accepted == 1 and(user == challenger or user == challenged) and rounds > 0 then
-                if user == redis:get('ruletachallenge:' .. chat .. ':player') then
-                    local temp = tonumber(groupstats.challengecylinder) - rounds
-                    local nextplayeruser = ''
-                    if user == challenger then
-                        nextplayeruser = redis:get('ruletachallenged:' .. chat)
-                        redis:set('ruletachallenge:' .. chat .. ':player', challenged)
-                    elseif user == challenged then
-                        nextplayeruser = redis:get('ruletachallenger:' .. chat)
-                        redis:set('ruletachallenge:' .. chat .. ':player', challenger)
-                    end
-                    redis:set('ruleta:' .. chat .. ':rounds', rounds - 1)
-                    print(temp)
-                    if math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) == math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) then
-                        -- bot destroy challenge on redis
-                        reject_challenge(our_id, chat)
-                        reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
-
-                        ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
-                        ruletadata['users'][user].actualstreak = tonumber(0)
-                        ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
-                        local loserpoints = 0
-                        if user == challenger then
-                            if tonumber(ruletadata['users'][challenger].score) -20 < 0 then
-                                loserpoints = tonumber(ruletadata['users'][challenger].score)
-                                ruletadata['users'][challenger].score = tonumber(0)
-                                ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + loserpoints)
-                            else
-                                loserpoints = 20
-                                ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - loserpoints)
-                                ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + loserpoints)
-                            end
-                            ruletadata['users'][challenger].lostduels = tonumber(ruletadata['users'][challenger].lostduels + 1)
-                            ruletadata['users'][challenged].wonduels = tonumber(ruletadata['users'][challenged].wonduels + 1)
-                        elseif user == challenged then
-                            if tonumber(ruletadata['users'][challenged].score) -20 < 0 then
-                                loserpoints = tonumber(ruletadata['users'][challenged].score)
-                                ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + loserpoints)
-                                ruletadata['users'][challenged].score = tonumber(0)
-                            else
-                                loserpoints = 20
-                                ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + loserpoints)
-                                ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - loserpoints)
-                            end
-                            ruletadata['users'][challenger].wonduels = tonumber(ruletadata['users'][challenger].wonduels + 1)
-                            ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
-                        end
+                        userstats.score = tonumber(0)
+                        userstats.deaths = tonumber(userstats.deaths + 1)
+                        userstats.actualstreak = tonumber(0)
+                        ruletadata['users'][user] = userstats
 
                         save_data(_config.ruleta.db, ruletadata)
                         local function post_kick()
@@ -810,48 +734,122 @@ local function run(msg, matches)
                         end
                         postpone(post_kick, false, 3)
                     else
-                        -- blue red
-                        -- 🔵    🔴
-                        local shotted = ''
-                        local notshotted = ''
-                        for var = 1, tonumber(temp + 1) do
-                            shotted = shotted .. '🔴'
-                            var = var + 1
+                        reply_msg(msg.id, godgood[math.random(#godgood)], ok_cb, false)
+
+                        userstats.score = tonumber(userstats.score + 70)
+                        ruletadata['users'][user] = userstats
+
+                        save_data(_config.ruleta.db, ruletadata)
+                    end
+                else
+                    reply_msg(msg.id, lang_text('requirePoints'), ok_cb, false)
+                end
+                return
+            end
+
+            if matches[1]:lower() == 'ruleta' then
+                ruletadata['users'][user].attempts = tonumber(ruletadata['users'][user].attempts + 1)
+                ruletadata['users'][user].actualstreak = tonumber(ruletadata['users'][user].actualstreak + 1)
+                if tonumber(ruletadata['users'][user].actualstreak) > tonumber(ruletadata['users'][user].longeststreak) then
+                    ruletadata['users'][user].longeststreak = tonumber(ruletadata['users'][user].actualstreak)
+                end
+
+                if accepted == 1 and(user == challenger or user == challenged) and rounds > 0 then
+                    if user == redis:get('ruletachallenge:' .. chat .. ':player') then
+                        local temp = tonumber(groupstats.challengecylinder) - rounds
+                        local nextplayeruser = ''
+                        if user == challenger then
+                            nextplayeruser = redis:get('ruletachallenged:' .. chat)
+                            redis:set('ruletachallenge:' .. chat .. ':player', challenged)
+                        elseif user == challenged then
+                            nextplayeruser = redis:get('ruletachallenger:' .. chat)
+                            redis:set('ruletachallenge:' .. chat .. ':player', challenger)
                         end
-                        for var = 1, tonumber(groupstats.challengecylinder - temp - 1) do
-                            notshotted = notshotted .. '🔵'
-                            var = var + 1
+                        redis:set('ruleta:' .. chat .. ':rounds', rounds - 1)
+                        print(temp)
+                        if math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) == math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) then
+                            -- bot destroy challenge on redis
+                            reject_challenge(our_id, chat)
+                            reply_msg(msg.id, lang_text('challengeEnd'), ok_cb, false)
+
+                            ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
+                            ruletadata['users'][user].actualstreak = tonumber(0)
+                            ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
+                            local loserpoints = 0
+                            if user == challenger then
+                                if tonumber(ruletadata['users'][challenger].score) -20 < 0 then
+                                    loserpoints = tonumber(ruletadata['users'][challenger].score)
+                                    ruletadata['users'][challenger].score = tonumber(0)
+                                    ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + loserpoints)
+                                else
+                                    loserpoints = 20
+                                    ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score - loserpoints)
+                                    ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score + loserpoints)
+                                end
+                                ruletadata['users'][challenger].lostduels = tonumber(ruletadata['users'][challenger].lostduels + 1)
+                                ruletadata['users'][challenged].wonduels = tonumber(ruletadata['users'][challenged].wonduels + 1)
+                            elseif user == challenged then
+                                if tonumber(ruletadata['users'][challenged].score) -20 < 0 then
+                                    loserpoints = tonumber(ruletadata['users'][challenged].score)
+                                    ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + loserpoints)
+                                    ruletadata['users'][challenged].score = tonumber(0)
+                                else
+                                    loserpoints = 20
+                                    ruletadata['users'][challenger].score = tonumber(ruletadata['users'][challenger].score + loserpoints)
+                                    ruletadata['users'][challenged].score = tonumber(ruletadata['users'][challenged].score - loserpoints)
+                                end
+                                ruletadata['users'][challenger].wonduels = tonumber(ruletadata['users'][challenger].wonduels + 1)
+                                ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
+                            end
+
+                            save_data(_config.ruleta.db, ruletadata)
+                            local function post_kick()
+                                kick_user_any(user, chat)
+                            end
+                            postpone(post_kick, false, 3)
+                        else
+                            -- blue red
+                            -- 🔵    🔴
+                            local shotted = ''
+                            local notshotted = ''
+                            for var = 1, tonumber(temp + 1) do
+                                shotted = shotted .. '🔴'
+                                var = var + 1
+                            end
+                            for var = 1, tonumber(groupstats.challengecylinder - temp - 1) do
+                                notshotted = notshotted .. '🔵'
+                                var = var + 1
+                            end
+                            reply_msg(msg.id, good[math.random(#good)] .. '\n' .. lang_text('shotsLeft') .. notshotted .. shotted .. '\n' .. nextplayeruser .. lang_text('yourTurn'), ok_cb, false)
+
+                            ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
+
+                            save_data(_config.ruleta.db, ruletadata)
                         end
-                        reply_msg(msg.id, good[math.random(#good)] .. '\n' .. lang_text('shotsLeft') .. notshotted .. shotted .. '\n' .. nextplayeruser .. lang_text('yourTurn'), ok_cb, false)
+                    else
+                        reply_msg(msg.id, lang_text('notYourTurn'), ok_cb, false)
+                    end
+                else
+                    if math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) == math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) then
+                        reply_msg(msg.id, bad[math.random(#bad)], ok_cb, false)
+
+                        ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
+                        ruletadata['users'][user].actualstreak = tonumber(0)
+
+                        save_data(_config.ruleta.db, ruletadata)
+                        local function post_kick()
+                            kick_user_any(user, chat)
+                        end
+                        postpone(post_kick, false, 3)
+                    else
+                        reply_msg(msg.id, good[math.random(#good)], ok_cb, false)
 
                         ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
 
                         save_data(_config.ruleta.db, ruletadata)
                     end
-                else
-                    reply_msg(msg.id, lang_text('notYourTurn'), ok_cb, false)
-                end
-            else
-                if math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) == math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) then
-                    reply_msg(msg.id, bad[math.random(#bad)], ok_cb, false)
-
-                    ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
-                    ruletadata['users'][user].actualstreak = tonumber(0)
-
-                    save_data(_config.ruleta.db, ruletadata)
-                    local function post_kick()
-                        kick_user_any(user, chat)
-                    end
-                    postpone(post_kick, false, 3)
-                else
-                    reply_msg(msg.id, good[math.random(#good)], ok_cb, false)
-
-                    ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
-
-                    save_data(_config.ruleta.db, ruletadata)
                 end
             end
-            return
         end
     end
 end
