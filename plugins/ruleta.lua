@@ -176,11 +176,11 @@ local function leaderboard_score(users)
 
     -- Get user name and score
     for k, user in pairs(users) do
-        local user_info = get_name(k)
         if user then
+            local user_info = get_name(k)
             user_info.score = tonumber(user.score)
+            table.insert(users_info, user_info)
         end
-        table.insert(users_info, user_info)
     end
 
     -- Sort users by score
@@ -206,11 +206,11 @@ local function leaderboard_attempts(users)
 
     -- Get user name and deaths
     for k, user in pairs(users) do
-        local user_info = get_name(k)
         if user then
+            local user_info = get_name(k)
             user_info.attempts = tonumber(user.attempts)
+            table.insert(users_info, user_info)
         end
-        table.insert(users_info, user_info)
     end
 
     -- Sort users by deaths
@@ -236,11 +236,11 @@ local function leaderboard_deaths(users)
 
     -- Get user name and deaths
     for k, user in pairs(users) do
-        local user_info = get_name(k)
         if user then
+            local user_info = get_name(k)
             user_info.deaths = tonumber(user.deaths)
+            table.insert(users_info, user_info)
         end
-        table.insert(users_info, user_info)
     end
 
     -- Sort users by deaths
@@ -266,11 +266,11 @@ local function leaderboard_streak(users)
 
     -- Get user name and deaths
     for k, user in pairs(users) do
-        local user_info = get_name(k)
         if user then
+            local user_info = get_name(k)
             user_info.longeststreak = tonumber(user.longeststreak)
+            table.insert(users_info, user_info)
         end
-        table.insert(users_info, user_info)
     end
 
     -- Sort users by deaths
@@ -296,11 +296,11 @@ local function leaderboard_challenges(users)
 
     -- Get user name and deaths
     for k, user in pairs(users) do
-        local user_info = get_name(k)
         if user then
+            local user_info = get_name(k)
             user_info.duels = tonumber(user.duels)
+            table.insert(users_info, user_info)
         end
-        table.insert(users_info, user_info)
     end
 
     -- Sort users by deaths
@@ -326,11 +326,11 @@ local function leaderboard_victories(users)
 
     -- Get user name and deaths
     for k, user in pairs(users) do
-        local user_info = get_name(k)
         if user then
+            local user_info = get_name(k)
             user_info.wonduels = tonumber(user.wonduels)
+            table.insert(users_info, user_info)
         end
-        table.insert(users_info, user_info)
     end
 
     -- Sort users by deaths
@@ -356,11 +356,11 @@ local function leaderboard_defeats(users)
 
     -- Get user name and deaths
     for k, user in pairs(users) do
-        local user_info = get_name(k)
         if user then
+            local user_info = get_name(k)
             user_info.lostduels = tonumber(user.lostduels)
+            table.insert(users_info, user_info)
         end
-        table.insert(users_info, user_info)
     end
 
     -- Sort users by deaths
