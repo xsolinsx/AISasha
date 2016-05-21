@@ -706,8 +706,12 @@ local function run(msg, matches)
         end
 
         if msg.fwd_from then
-            kick_user_any(msg.from.id, msg.to.id)
-            return lang_text('forwardingRuleta')
+            local function post_kick()
+                kick_user_any(user, chat)
+            end
+            postpone(post_kick, false, 3)
+            reply_msg(msg.id, lang_text('forwardingRuleta'), ok_cb, false)
+            return
         end
 
         if matches[1]:lower() == 'godruleta' then
