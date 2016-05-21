@@ -8,6 +8,16 @@ local good = {
     "Fortunello.",
     "Gioca di nuovo.",
     "Mancato.",
+    "Salvo.",
+    "Forse la prossima volta non ti andrà così bene.",
+    "Riproviamo?",
+    "Meh.",
+    "Muoviti riprova.",
+    "Di più di più.",
+    "Se non continui ti passo un kick gratis.",
+    "Argh.",
+    "Ti sei cagato addosso eh?",
+    "Continua a provare che prima o poi riesci a suicidarti.",
 }
 -- safe ruletagod
 local godgood = {
@@ -16,6 +26,10 @@ local godgood = {
     "Mi riprenderò quei punti.",
     "Non hai le palle di rifarlo.",
     "No io non ci posso credere.",
+    "Come hai fatto??",
+    "La prossima volta non sarò così clemente.",
+    "Hai fegato. Ti premierò.",
+    "(╯°□°）╯︵ ┻━┻",
 }
 -- killed
 local bad = {
@@ -25,6 +39,21 @@ local bad = {
     "Bye Bye.",
     "Allahuakbar.",
     "Muori idiota.",
+    "Sei stato terminato.",
+    "Ecco che se ne va.",
+    "Come dici? Vuoi un kick? Ecco a te, attento che brucia.",
+    "Saluta tutti.",
+    "Ciaoooooo.",
+    "( ͡° ͜ʖ ͡°)",
+    "BLOOD.",
+    "Killed",
+    "Porca POOHtana.",
+    "¯\_(ツ)_/¯",
+    "̿ ̿̿'̿'\̵͇̿̿\=(•̪●)=/̵͇̿̿/'̿̿ ̿ ̿ ̿",
+    "Fine.",
+    "😊",
+    ":3",
+    "Shake that bottle and make it [BANG]",
 }
 
 local function get_challenge(chat_id)
