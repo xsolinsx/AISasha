@@ -178,7 +178,7 @@ local function leaderboard_score(users)
     for k, user in pairs(users) do
         local user_info = get_name(k)
         if user then
-            user_info.score = user.score
+            user_info.score = tonumber(user.score)
         end
         table.insert(users_info, user_info)
     end
@@ -208,7 +208,7 @@ local function leaderboard_attempts(users)
     for k, user in pairs(users) do
         local user_info = get_name(k)
         if user then
-            user_info.attempts = user.attempts
+            user_info.attempts = tonumber(user.attempts)
         end
         table.insert(users_info, user_info)
     end
@@ -238,7 +238,7 @@ local function leaderboard_deaths(users)
     for k, user in pairs(users) do
         local user_info = get_name(k)
         if user then
-            user_info.deaths = user.deaths
+            user_info.deaths = tonumber(user.deaths)
         end
         table.insert(users_info, user_info)
     end
@@ -268,7 +268,7 @@ local function leaderboard_streak(users)
     for k, user in pairs(users) do
         local user_info = get_name(k)
         if user then
-            user_info.longeststreak = user.longeststreak
+            user_info.longeststreak = tonumber(user.longeststreak)
         end
         table.insert(users_info, user_info)
     end
@@ -298,7 +298,7 @@ local function leaderboard_challenges(users)
     for k, user in pairs(users) do
         local user_info = get_name(k)
         if user then
-            user_info.duels = user.duels
+            user_info.duels = tonumber(user.duels)
         end
         table.insert(users_info, user_info)
     end
@@ -328,7 +328,7 @@ local function leaderboard_victories(users)
     for k, user in pairs(users) do
         local user_info = get_name(k)
         if user then
-            user_info.wonduels = user.wonduels
+            user_info.wonduels = tonumber(user.wonduels)
         end
         table.insert(users_info, user_info)
     end
@@ -358,7 +358,7 @@ local function leaderboard_defeats(users)
     for k, user in pairs(users) do
         local user_info = get_name(k)
         if user then
-            user_info.lostduels = user.lostduels
+            user_info.lostduels = tonumber(user.lostduels)
         end
         table.insert(users_info, user_info)
     end
