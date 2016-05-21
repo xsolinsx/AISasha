@@ -422,6 +422,7 @@ local function run(msg, matches)
         set_text('duelsLeaderboard', 'Duels leaderboard\n')
         set_text('victoriesLeaderboard', 'Victories leaderboard\n')
         set_text('defeatsLeaderboard', 'Defeats leaderboard\n')
+        set_text('forwardingRuleta', 'Forwarding in ruleta is not allowed.')
 
         -- set.lua --
         set_text('saved', ' saved.')

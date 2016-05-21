@@ -598,41 +598,6 @@ local function run(msg, matches)
             return
         end
 
-        if matches[1]:lower() == 'godruleta' then
-            if userstats.score > 10 then
-                userstats.attempts = tonumber(userstats.attempts + 1)
-                userstats.actualstreak = tonumber(userstats.actualstreak + 1)
-                if userstats.actualstreak > userstats.longeststreak then
-                    userstats.longeststreak = tonumber(userstats.actualstreak)
-                end
-
-                if math.random(1, 2) == math.random(1, 2) then
-                    reply_msg(msg.id, bad[math.random(#bad)], ok_cb, false)
-
-                    userstats.score = tonumber(0)
-                    userstats.deaths = tonumber(userstats.deaths + 1)
-                    userstats.actualstreak = tonumber(0)
-                    ruletadata['users'][user] = userstats
-
-                    save_data(_config.ruleta.db, ruletadata)
-                    local function post_kick()
-                        kick_user_any(user, chat)
-                    end
-                    postpone(post_kick, false, 3)
-                else
-                    reply_msg(msg.id, godgood[math.random(#godgood)], ok_cb, false)
-
-                    userstats.score = tonumber(userstats.score + 70)
-                    ruletadata['users'][user] = userstats
-
-                    save_data(_config.ruleta.db, ruletadata)
-                end
-            else
-                reply_msg(msg.id, lang_text('requirePoints'), ok_cb, false)
-            end
-            return
-        end
-
         if matches[1]:lower() == 'challenge' or matches[1]:lower() == 'sfida' then
             if type(msg.reply_id) ~= "nil" then
                 get_message(msg.reply_id, Challenge_by_reply, { challenger = user, msg = msg })
@@ -737,6 +702,46 @@ local function run(msg, matches)
             ruletadata['users'][matches[2]].score = tonumber(ruletadata['users'][matches[2]].score - matches[3])
             save_data(_config.ruleta.db, ruletadata)
             reply_msg(msg.id, lang_text('cheating'), ok_cb, false)
+            return
+        end
+
+        if msg.fwd_from then
+            kick_user_any(msg.from.id, msg.to.id)
+            return lang_text('forwardingRuleta')
+        end
+
+        if matches[1]:lower() == 'godruleta' then
+            if userstats.score > 10 then
+                userstats.attempts = tonumber(userstats.attempts + 1)
+                userstats.actualstreak = tonumber(userstats.actualstreak + 1)
+                if userstats.actualstreak > userstats.longeststreak then
+                    userstats.longeststreak = tonumber(userstats.actualstreak)
+                end
+
+                if math.random(1, 2) == math.random(1, 2) then
+                    reply_msg(msg.id, bad[math.random(#bad)], ok_cb, false)
+
+                    userstats.score = tonumber(0)
+                    userstats.deaths = tonumber(userstats.deaths + 1)
+                    userstats.actualstreak = tonumber(0)
+                    ruletadata['users'][user] = userstats
+
+                    save_data(_config.ruleta.db, ruletadata)
+                    local function post_kick()
+                        kick_user_any(user, chat)
+                    end
+                    postpone(post_kick, false, 3)
+                else
+                    reply_msg(msg.id, godgood[math.random(#godgood)], ok_cb, false)
+
+                    userstats.score = tonumber(userstats.score + 70)
+                    ruletadata['users'][user] = userstats
+
+                    save_data(_config.ruleta.db, ruletadata)
+                end
+            else
+                reply_msg(msg.id, lang_text('requirePoints'), ok_cb, false)
+            end
             return
         end
 
