@@ -861,7 +861,7 @@ local function run(msg, matches)
                                 notshotted = notshotted .. '🔵'
                                 var = var + 1
                             end
-                            local percentage =(groupstats.challengecaps * 100) / #notshotted
+                            local percentage =(groupstats.challengecaps * 100) /(groupstats.challengecylinder - temp - 1)
                             percentage = string.format('%d', percentage)
                             reply_msg(msg.id, good[math.random(#good)] .. '\n' .. lang_text('shotsLeft') .. notshotted .. shotted .. '\n' .. lang_text('deathPercentage') .. percentage .. '%\n' .. nextplayeruser .. lang_text('yourTurn'), ok_cb, false)
 
