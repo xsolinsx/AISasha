@@ -391,7 +391,10 @@ local function kickrandom_chat(cb_extra, success, result)
         if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
             kickable = true
             send_large_msg('chat#id' .. chat_id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
-            kick_user_any(id, chat_id)
+            local function post_kick()
+                kick_user_any(id, chat_id)
+            end
+            postpone(post_kick, false, 1)
         else
             print('403')
         end
@@ -408,7 +411,10 @@ local function kickrandom_channel(extra, success, result)
         if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
             kickable = true
             send_large_msg('channel#id' .. result.id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
-            kick_user_any(id, result.id)
+            local function post_kick()
+                kick_user_any(id, result.id)
+            end
+            postpone(post_kick, false, 1)
         else
             print('403')
         end
@@ -709,7 +715,10 @@ local function run(msg, matches)
                         ruletadata['users'][challenged].lostduels = tonumber(ruletadata['users'][challenged].lostduels + 1)
                     end
                     save_data(_config.ruleta.db, ruletadata)
-                    kick_user_any(user, chat)
+                    local function post_kick()
+                        kick_user_any(user, chat)
+                    end
+                    postpone(post_kick, false, 1)
                 end
             elseif not is_momod(msg) then
                 reply_msg(msg.id, lang_text('wrongPlayer'):gsub('X', redis:get('ruletachallenged:' .. chat)), ok_cb, false)
@@ -737,7 +746,7 @@ local function run(msg, matches)
             local function post_kick()
                 kick_user_any(user, chat)
             end
-            postpone(post_kick, false, 3)
+            postpone(post_kick, false, 1)
             reply_msg(msg.id, lang_text('forwardingRuleta'), ok_cb, false)
         else
             if matches[1]:lower() == 'godruleta' then
@@ -760,7 +769,7 @@ local function run(msg, matches)
                         local function post_kick()
                             kick_user_any(user, chat)
                         end
-                        postpone(post_kick, false, 3)
+                        postpone(post_kick, false, 1)
                     else
                         reply_msg(msg.id, godgood[math.random(#godgood)], ok_cb, false)
 
@@ -834,7 +843,7 @@ local function run(msg, matches)
                             local function post_kick()
                                 kick_user_any(user, chat)
                             end
-                            postpone(post_kick, false, 3)
+                            postpone(post_kick, false, 1)
                         else
                             -- blue red
                             -- 🔵    🔴
@@ -868,7 +877,7 @@ local function run(msg, matches)
                         local function post_kick()
                             kick_user_any(user, chat)
                         end
-                        postpone(post_kick, false, 3)
+                        postpone(post_kick, false, 1)
                     else
                         reply_msg(msg.id, good[math.random(#good)], ok_cb, false)
 
