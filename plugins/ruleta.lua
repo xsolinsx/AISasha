@@ -534,9 +534,12 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'ruletainfo' then
+            local percentage =(groupstats.caps * 100) / groupstats.cylinder
+            percentage = string.format('%d', percentage)
+
             local info = lang_text('cylinderCapacity') .. groupstats.cylinder .. '\n' ..
             lang_text('capsNumber') .. groupstats.caps .. '\n' ..
-            lang_text('deathPercentage') .. tostring(tonumber(groupstats.caps) * 100 / tonumber(groupstats.cylinder)) ..
+            lang_text('deathPercentage') .. percentage .. '%\n' ..
             lang_text('challengeCylinderCapacity') .. groupstats.challengecylinder .. '\n' ..
             lang_text('challengeCapsNumber') .. groupstats.challengecaps .. '\n'
             return info
@@ -858,7 +861,9 @@ local function run(msg, matches)
                                 notshotted = notshotted .. '🔵'
                                 var = var + 1
                             end
-                            reply_msg(msg.id, good[math.random(#good)] .. '\n' .. lang_text('shotsLeft') .. notshotted .. shotted .. '\n' .. lang_text('deathPercentage') .. tostring(tonumber(groupstats.challengecaps) * 100 / var) .. '\n' .. nextplayeruser .. lang_text('yourTurn'), ok_cb, false)
+                            local percentage =(groupstats.challengecaps * 100) / var
+                            percentage = string.format('%d', percentage)
+                            reply_msg(msg.id, good[math.random(#good)] .. '\n' .. lang_text('shotsLeft') .. notshotted .. shotted .. '\n' .. lang_text('deathPercentage') .. percentage .. '%\n' .. nextplayeruser .. lang_text('yourTurn'), ok_cb, false)
 
                             ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
 
