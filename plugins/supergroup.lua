@@ -973,7 +973,10 @@ end
 
 local function killchannel(cb_extra, success, result)
     for k, v in pairsByKeys(result) do
-        kick_user_any(v.peer_id, cb_extra.chat_id)
+        local function post_kick()
+            kick_user_any(v.peer_id, cb_extra.chat_id)
+        end
+        postpone(post_kick, false, 1)
     end
     channel_kick('channel#id' .. cb_extra.chat_id, 'user#id' .. our_id, ok_cb, false)
 end

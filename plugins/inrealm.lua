@@ -18,21 +18,30 @@ end
 
 local function killchat(cb_extra, success, result)
     for k, v in pairs(result.members) do
-        kick_user_any(v.peer_id, result.peer_id)
+        local function post_kick()
+            kick_user_any(v.peer_id, result.peer_id)
+        end
+        postpone(post_kick, false, 1)
     end
     chat_del_user('chat#id' .. result.peer_id, 'user#id' .. our_id, ok_cb, true)
 end
 
 local function killchannel(cb_extra, success, result)
     for k, v in pairsByKeys(result) do
-        kick_user_any(v.peer_id, cb_extra.chat_id)
+        local function post_kick()
+            kick_user_any(v.peer_id, cb_extra.chat_id)
+        end
+        postpone(post_kick, false, 1)
     end
     channel_kick('channel#id' .. cb_extra.chat_id, 'user#id' .. our_id, ok_cb, false)
 end
 
 local function killrealm(cb_extra, success, result)
     for k, v in pairs(result.members) do
-        kick_user_any(v.peer_id, result.peer_id)
+        local function post_kick()
+            kick_user_any(v.peer_id, result.peer_id)
+        end
+        postpone(post_kick, false, 1)
     end
     chat_del_user('chat#id' .. result.peer_id, 'user#id' .. our_id, ok_cb, true)
 end

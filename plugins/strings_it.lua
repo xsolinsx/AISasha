@@ -528,9 +528,9 @@ local function run(msg, matches)
         -- apod.lua --
         set_text('apod:0', 5)
         set_text('apod:1', '🅿️ APOD')
-        set_text('apod:2', '#(apod|astro) [<date>]: Sasha manda l\'APOD.')
-        set_text('apod:3', '#(apod|astro)hd [<date>]: Sasha manda l\'APOD in HD.')
-        set_text('apod:4', '#(apod|astro)text [<date>]: Sasha manda la spiegazione dell\'APOD.')
+        set_text('apod:2', '#apod|#astro [<date>]: Sasha manda l\'APOD.')
+        set_text('apod:3', '(#apod|#astro)hd [<date>]: Sasha manda l\'APOD in HD.')
+        set_text('apod:4', '(#apod|#astro)text [<date>]: Sasha manda la spiegazione dell\'APOD.')
         set_text('apod:5', 'Se c\'è <date> ed è nel formato AAAA-MM-GG l\'APOD è di <date>.')
 
         -- arabic_lock.lua --
@@ -658,8 +658,8 @@ local function run(msg, matches)
         set_text('help:1', '🅿️ HELP')
         set_text('help:2', '(#sudolist|sasha lista sudo): Sasha manda la lista dei sudo.')
         set_text('help:3', '(#help|sasha aiuto): Sasha mostra una lista dei plugin disponibili.')
-        set_text('help:4', '(#help|commands|sasha aiuto) <plugin_name>|<plugin_number> [<fake_rank>]: Sasha mostra l\'aiuto per il plugin specificato.')
-        set_text('help:5', '(#helpall|allcommands|sasha aiuto tutto) [<fake_rank>]: Sasha mostra tutti i comandi di tutti i plugin.')
+        set_text('help:4', '(#help|#commands|sasha aiuto) <plugin_name>|<plugin_number> [<fake_rank>]: Sasha mostra l\'aiuto per il plugin specificato.')
+        set_text('help:5', '(#helpall|#allcommands|sasha aiuto tutto) [<fake_rank>]: Sasha mostra tutti i comandi di tutti i plugin.')
         set_text('help:6', 'Il parametro <fake_rank> serve per mandare l\'help di un rango più basso, i ranghi sono: USER, MOD, OWNER, SUPPORT, ADMIN, SUDO.')
 
         -- info.lua --
