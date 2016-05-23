@@ -225,9 +225,8 @@ local function vardump_msg(extra, success, result)
     if extra.name == 'msg_id' then
         name = 'VARDUMP (<msg_id>)'
     end
-    print('in')
-    print(extra.name)
-    print(extra.receiver)
+    result.to.phone = ''
+    result.from.phone = ''
     local text = tableshow(result, name)
     send_large_msg(extra.receiver, text)
 end
@@ -350,6 +349,8 @@ local function run(msg, matches)
                 elseif matches[2] then
                     msgr = get_message(matches[2], vardump_msg, { receiver = get_receiver(msg), name = 'msg_id' })
                 else
+                    msg.to.phone = ''
+                    msg.from.phone = ''
                     local text = tableshow(msg, 'VARDUMP (<msg>)')
                     send_large_msg(get_receiver(msg), text)
                 end
