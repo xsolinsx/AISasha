@@ -52,7 +52,7 @@ local function run(msg, matches)
                 if value then
                     if not string.match(value, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(value, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(value, "^(.*)channel%.(%d+)%.variables(.*)$") then
                         -- if not media
-                        send_large_msg(get_receiver(msg), get_value(msg, word:lower()))
+                        reply_msg(get_receiver(msg), get_value(msg, word:lower()), ok_cb, false)
                     elseif string.match(value, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(value, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(value, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
                         -- if picture
                         if io.popen('find ' .. value):read("*all") ~= '' then
