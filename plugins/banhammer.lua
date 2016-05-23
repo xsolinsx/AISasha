@@ -400,10 +400,7 @@ local function kick_zero_chat(cb_extra, success, result)
         if not si then
             if ci_user ~= our_id then
                 if not is_momod2(ci_user, chat_id) then
-                    local function post_kick()
-                        kick_user(ci_user, chat_id)
-                    end
-                    postpone(post_kick, false, 1)
+                    kick_user(ci_user, chat_id)
                 end
             end
         end
@@ -428,10 +425,7 @@ local function kick_zero_channel(cb_extra, success, result)
         if not si then
             if ci_user ~= our_id then
                 if not is_momod2(ci_user, chat_id) then
-                    local function post_kick()
-                        kick_user(ci_user, chat_id)
-                    end
-                    postpone(post_kick, false, 1)
+                    kick_user(ci_user, chat_id)
                 end
             end
         end
@@ -448,10 +442,7 @@ local function kick_inactive_chat(chat_id, num, receiver)
         local nmsg = user_info
         if tonumber(nmsg) < tonumber(num) then
             if not is_momod2(user_id, chat_id) then
-                local function post_kick()
-                    kick_user(user_id, chat_id)
-                end
-                postpone(post_kick, false, 1)
+                kick_user(user_id, chat_id)
             end
         end
     end
@@ -468,10 +459,7 @@ local function kick_inactive_channel(chat_id, num, receiver)
         local nmsg = user_info
         if tonumber(nmsg) < tonumber(num) then
             if not is_momod2(user_id, chat_id) then
-                local function post_kick()
-                    kick_user(user_id, chat_id)
-                end
-                postpone(post_kick, false, 1)
+                kick_user(user_id, chat_id)
             end
         end
     end
