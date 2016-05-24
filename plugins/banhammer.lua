@@ -353,7 +353,7 @@ end
 
 local function kick_deleted_chat(cb_extra, success, result)
     for k, v in pairs(result.members) do
-        if v.first_name:match("Deleted") and v.first_name:match("Name") then
+        if v.first_name:match("Account Eliminato") and v.print_name:match("Account_Eliminato") and not v.last_name then
             local function post_kick()
                 kick_user(v.id, result.id)
             end
@@ -364,7 +364,7 @@ end
 
 local function kick_deleted_channel(cb_extra, success, result)
     for k, v in pairs(result) do
-        if v.first_name:match("Deleted") and v.first_name:match("Name") then
+        if v.first_name:match("Account Eliminato") and v.print_name:match("Account_Eliminato") and not v.last_name then
             local function post_kick()
                 kick_user(v.id, cb_extra.chat_id)
             end
