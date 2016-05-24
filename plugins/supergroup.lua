@@ -784,7 +784,9 @@ local function cb_user_info(extra, success, result)
         end
         promote2(receiver, member_username, user_id)
     elseif get_cmd == "demote" then
-        if result.username then
+        if not result then
+            member_username = 'NORESULT'
+        elseif result.username then
             member_username = "@" .. result.username
         else
             member_username = string.gsub(result.print_name, '_', ' ')
