@@ -382,33 +382,79 @@ local function user_msgs(user_id, chat_id)
     return user_info
 end
 
-local function kick_inactive_chat(chat_id, num)
-    local hash = 'chat:' .. chat_id .. ':users'
-    local users = redis:smembers(hash)
-    -- Get user info
-    for i = 1, #users do
-        local user_id = users[i]
-        local user_info = user_msgs(user_id, chat_id)
-        if tonumber(user_info) < tonumber(num) then
-            if not is_momod2(user_id, chat_id) then
-                kick_user(user_id, chat_id)
+local function kick_inactive_chat(cb_extra, success, result)
+    local chat_id = cb_extra.chat_id
+    local num = cb_extra.num
+    local receiver = cb_extra.receiver
+    local ci_user
+    local re_user
+    local a = true
+    local kicked = 0
+    for k, v in pairs(result.members) do
+        local si = false
+        ci_user = v.peer_id
+        local hash = 'chat:' .. chat_id .. ':users'
+        local users = redis:smembers(hash)
+        for i = 1, #users do
+            re_user = users[i]
+            local user_info = user_msgs(re_user, chat_id)
+            if tonumber(ci_user) == tonumber(re_user) then
+                si = true
+            end
+            if a and tonumber(user_info) < tonumber(num) then
+                if not is_momod2(re_user, chat_id) then
+                    kick_user(re_user, chat_id)
+                    kicked = kicked + 1
+                end
             end
         end
+        if not si then
+            if ci_user ~= our_id then
+                if not is_momod2(ci_user, chat_id) then
+                    kick_user(ci_user, chat_id)
+                    kicked = kicked + 1
+                end
+            end
+        end
+        a = false
     end
 end
 
-local function kick_inactive_channel(chat_id, num)
-    local hash = 'channel:' .. chat_id .. ':users'
-    local users = redis:smembers(hash)
-    -- Get user info
-    for i = 1, #users do
-        local user_id = users[i]
-        local user_info = user_msgs(user_id, chat_id)
-        if tonumber(user_info) < tonumber(num) then
-            if not is_momod2(user_id, chat_id) then
-                kick_user(user_id, chat_id)
+local function kick_inactive_channel(cb_extra, success, result)
+    local chat_id = cb_extra.chat_id
+    local num = cb_extra.num
+    local receiver = cb_extra.receiver
+    local ci_user
+    local re_user
+    local a = true
+    local kicked = 0
+    for k, v in pairs(result) do
+        local si = false
+        ci_user = v.peer_id
+        local hash = 'channel:' .. chat_id .. ':users'
+        local users = redis:smembers(hash)
+        for i = 1, #users do
+            re_user = users[i]
+            local user_info = user_msgs(re_user, chat_id)
+            if tonumber(ci_user) == tonumber(re_user) then
+                si = true
+            end
+            if a and tonumber(user_info) < tonumber(num) then
+                if not is_momod2(re_user, chat_id) then
+                    kick_user(re_user, chat_id)
+                    kicked = kicked + 1
+                end
             end
         end
+        if not si then
+            if ci_user ~= our_id then
+                if not is_momod2(ci_user, chat_id) then
+                    kick_user(ci_user, chat_id)
+                    kicked = kicked + 1
+                end
+            end
+        end
+        a = false
     end
 end
 
@@ -557,9 +603,9 @@ local function run(msg, matches)
                 num = matches[2]
             end
             if msg.to.type == 'chat' then
-                return kick_inactive_chat(msg.to.id, num)
+                chat_info(get_receiver(msg), kick_inactive_chat, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
             elseif msg.to.type == 'channel' then
-                return kick_inactive_channel(msg.to.id, num)
+                channel_get_users(get_receiver(msg), kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
             end
         end
         if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
