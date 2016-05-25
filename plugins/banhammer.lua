@@ -332,10 +332,7 @@ end
 local function kick_nouser_chat(cb_extra, success, result)
     for k, v in pairs(result.members) do
         if not v.username then
-            local function post_kick()
-                kick_user(v.id, result.id)
-            end
-            postpone(post_kick, false, 1)
+            kick_user(v.id, result.id)
         end
     end
 end
@@ -343,14 +340,11 @@ end
 local function kick_nouser_channel(cb_extra, success, result)
     for k, v in pairs(result) do
         if not v.username then
-            local function post_kick()
-                kick_user(v.id, cb_extra.chat_id)
-            end
-            postpone(post_kick, false, 1)
+            kick_user(v.id, cb_extra.chat_id)
         end
     end
 end
-
+--[[
 local function kick_deleted_chat(cb_extra, success, result)
     for k, v in pairs(result.members) do
         if v.first_name:match("Account Eliminato") and v.print_name:match("Account_Eliminato") and not v.last_name then
@@ -372,7 +366,7 @@ local function kick_deleted_channel(cb_extra, success, result)
         end
     end
 end
-
+]]
 local function user_msgs(user_id, chat_id)
     local user_info
     local uhash = 'user:' .. user_id
@@ -418,6 +412,7 @@ local function kick_inactive_chat(cb_extra, success, result)
         end
         a = false
     end
+    send_large_msg(receiver, lang_text('massacre'):gsub('X', kicked))
 end
 
 local function kick_inactive_channel(cb_extra, success, result)
@@ -456,6 +451,7 @@ local function kick_inactive_channel(cb_extra, success, result)
         end
         a = false
     end
+    send_large_msg(receiver, lang_text('massacre'):gsub('X', kicked))
 end
 
 local function run(msg, matches)

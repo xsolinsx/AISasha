@@ -84,6 +84,7 @@ local function run(msg, matches)
 
         -- banhammer.lua --
         set_text('noUsernameFound', 'Can\'t find a user with that username.')
+        set_text('massacre', 'Massacre => X')
 
         -- bot.lua --
         set_text('botOn', 'I\'m back. 😏')
