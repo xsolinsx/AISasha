@@ -382,88 +382,34 @@ local function user_msgs(user_id, chat_id)
     return user_info
 end
 
-local function kick_zero_chat(cb_extra, success, result)
-    local chat_id = cb_extra.chat_id
-    local ci_user
-    local re_user
-    for k, v in pairs(result.members) do
-        local si = false
-        ci_user = v.peer_id
-        local hash = 'chat:' .. chat_id .. ':users'
-        local users = redis:smembers(hash)
-        for i = 1, #users do
-            re_user = users[i]
-            if tonumber(ci_user) == tonumber(re_user) then
-                si = true
-            end
-        end
-        if not si then
-            if ci_user ~= our_id then
-                if not is_momod2(ci_user, chat_id) then
-                    kick_user(ci_user, chat_id)
-                end
-            end
-        end
-    end
-end
-
-local function kick_zero_channel(cb_extra, success, result)
-    local chat_id = cb_extra.chat_id
-    local ci_user
-    local re_user
-    for k, v in pairs(result) do
-        local si = false
-        ci_user = v.peer_id
-        local hash = 'channel:' .. chat_id .. ':users'
-        local users = redis:smembers(hash)
-        for i = 1, #users do
-            re_user = users[i]
-            if tonumber(ci_user) == tonumber(re_user) then
-                si = true
-            end
-        end
-        if not si then
-            if ci_user ~= our_id then
-                if not is_momod2(ci_user, chat_id) then
-                    kick_user(ci_user, chat_id)
-                end
-            end
-        end
-    end
-end
-
-local function kick_inactive_chat(chat_id, num, receiver)
+local function kick_inactive_chat(chat_id, num)
     local hash = 'chat:' .. chat_id .. ':users'
     local users = redis:smembers(hash)
     -- Get user info
     for i = 1, #users do
         local user_id = users[i]
         local user_info = user_msgs(user_id, chat_id)
-        local nmsg = user_info
-        if tonumber(nmsg) < tonumber(num) then
+        if tonumber(user_info) < tonumber(num) then
             if not is_momod2(user_id, chat_id) then
                 kick_user(user_id, chat_id)
             end
         end
     end
-    return chat_info(receiver, kick_zero_chat, { chat_id = chat_id })
 end
 
-local function kick_inactive_channel(chat_id, num, receiver)
+local function kick_inactive_channel(chat_id, num)
     local hash = 'channel:' .. chat_id .. ':users'
     local users = redis:smembers(hash)
     -- Get user info
     for i = 1, #users do
         local user_id = users[i]
         local user_info = user_msgs(user_id, chat_id)
-        local nmsg = user_info
-        if tonumber(nmsg) < tonumber(num) then
+        if tonumber(user_info) < tonumber(num) then
             if not is_momod2(user_id, chat_id) then
                 kick_user(user_id, chat_id)
             end
         end
     end
-    return channel_get_users(receiver, kick_zero_channel, { chat_id = chat_id })
 end
 
 local function run(msg, matches)
@@ -611,9 +557,9 @@ local function run(msg, matches)
                 num = matches[2]
             end
             if msg.to.type == 'chat' then
-                return kick_inactive_chat(msg.to.id, num, get_receiver(msg))
+                return kick_inactive_chat(msg.to.id, num)
             elseif msg.to.type == 'channel' then
-                return kick_inactive_channel(msg.to.id, num, get_receiver(msg))
+                return kick_inactive_channel(msg.to.id, num)
             end
         end
         if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
