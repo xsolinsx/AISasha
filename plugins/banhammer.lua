@@ -380,37 +380,16 @@ local function kick_inactive_chat(cb_extra, success, result)
     local chat_id = cb_extra.chat_id
     local num = cb_extra.num
     local receiver = cb_extra.receiver
-    local ci_user
-    local re_user
-    local a = true
     local kicked = 0
+
     for k, v in pairs(result.members) do
-        local si = false
-        ci_user = v.peer_id
-        local hash = 'chat:' .. chat_id .. ':users'
-        local users = redis:smembers(hash)
-        for i = 1, #users do
-            re_user = users[i]
-            local user_info = user_msgs(re_user, chat_id)
-            if tonumber(ci_user) == tonumber(re_user) then
-                si = true
-            end
-            if a and tonumber(user_info) < tonumber(num) then
-                if not is_momod2(re_user, chat_id) then
-                    kick_user(re_user, chat_id)
-                    kicked = kicked + 1
-                end
+        if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, chat_id) then
+            local user_info = user_msgs(v.peer_id, chat_id)
+            if user_info < num then
+                kick_user(v.peer_id, chat_id)
+                kicked = kicked + 1
             end
         end
-        if not si then
-            if ci_user ~= our_id then
-                if not is_momod2(ci_user, chat_id) then
-                    kick_user(ci_user, chat_id)
-                    kicked = kicked + 1
-                end
-            end
-        end
-        a = false
     end
     send_large_msg(receiver, lang_text('massacre'):gsub('X', kicked))
 end
@@ -419,37 +398,16 @@ local function kick_inactive_channel(cb_extra, success, result)
     local chat_id = cb_extra.chat_id
     local num = cb_extra.num
     local receiver = cb_extra.receiver
-    local ci_user
-    local re_user
-    local a = true
     local kicked = 0
+
     for k, v in pairs(result) do
-        local si = false
-        ci_user = v.peer_id
-        local hash = 'channel:' .. chat_id .. ':users'
-        local users = redis:smembers(hash)
-        for i = 1, #users do
-            re_user = users[i]
-            local user_info = user_msgs(re_user, chat_id)
-            if tonumber(ci_user) == tonumber(re_user) then
-                si = true
-            end
-            if a and tonumber(user_info) < tonumber(num) then
-                if not is_momod2(re_user, chat_id) then
-                    kick_user(re_user, chat_id)
-                    kicked = kicked + 1
-                end
+        if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, chat_id) then
+            local user_info = user_msgs(v.peer_id, chat_id)
+            if user_info < num then
+                kick_user(v.peer_id, chat_id)
+                kicked = kicked + 1
             end
         end
-        if not si then
-            if ci_user ~= our_id then
-                if not is_momod2(ci_user, chat_id) then
-                    kick_user(ci_user, chat_id)
-                    kicked = kicked + 1
-                end
-            end
-        end
-        a = false
     end
     send_large_msg(receiver, lang_text('massacre'):gsub('X', kicked))
 end
