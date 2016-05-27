@@ -344,10 +344,10 @@ local function kick_nouser_channel(cb_extra, success, result)
         end
     end
 end
---[[
+
 local function kick_deleted_chat(cb_extra, success, result)
     for k, v in pairs(result.members) do
-        if v.first_name:match("Account Eliminato") and v.print_name:match("Account_Eliminato") and not v.last_name then
+        if not v.print_name then
             local function post_kick()
                 kick_user(v.id, result.id)
             end
@@ -358,7 +358,7 @@ end
 
 local function kick_deleted_channel(cb_extra, success, result)
     for k, v in pairs(result) do
-        if v.first_name:match("Account Eliminato") and v.print_name:match("Account_Eliminato") and not v.last_name then
+        if not v.print_name then
             local function post_kick()
                 kick_user(v.id, cb_extra.chat_id)
             end
@@ -366,7 +366,7 @@ local function kick_deleted_channel(cb_extra, success, result)
         end
     end
 end
-]]
+
 local function user_msgs(user_id, chat_id)
     local user_info
     local uhash = 'user:' .. user_id
