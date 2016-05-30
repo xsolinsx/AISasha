@@ -1,5 +1,5 @@
 ﻿-- invite by reply
-local function Invite_by_reply(extra, success, result)
+local function invite_by_reply(extra, success, result)
     if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
         local chat = 'chat#id' .. result.to.peer_id
         local channel = 'channel#id' .. result.to.peer_id
@@ -8,6 +8,11 @@ local function Invite_by_reply(extra, success, result)
     else
         return lang_text('useYourGroups')
     end
+end
+
+local function invite_from(extra, success, result)
+    chat_add_user('chat#id' .. result.to.peer_id, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
+    channel_invite('channel#id' .. result.to.peer_id, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
 end
 
 local function callbackres(extra, success, result)
@@ -25,6 +30,7 @@ local function callbackres(extra, success, result)
         channel_invite(channel, user, ok_cb, false)
     end
 end
+
 function run(msg, matches)
     local data = load_data(_config.moderation.data)
     -- if is_owner(msg) then
@@ -38,7 +44,16 @@ function run(msg, matches)
             local chat = 'chat#id' .. msg.to.id
             local channel = 'channel#id' .. msg.to.id
             if type(msg.reply_id) ~= "nil" then
-                local msgr = get_message(msg.reply_id, Invite_by_reply, false)
+                if matches[2] then
+                    if matches[2]:lower() == 'from' then
+                        get_message(msg.reply_id, invite_from, { msg = msg })
+                        return
+                    else
+                        local msgr = get_message(msg.reply_id, invite_by_reply, false)
+                    end
+                else
+                    local msgr = get_message(msg.reply_id, invite_by_reply, false)
+                end
             elseif string.match(matches[2], '^%d+$') then
                 -- User submitted an id
                 local user = 'user#id' .. matches[2]
