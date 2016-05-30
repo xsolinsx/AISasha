@@ -1686,14 +1686,13 @@ local function run(msg, matches)
             end
         end
 
-
         if (matches[1]:lower() == "muteuser" or matches[1]:lower() == "voce") and is_momod(msg) then
             local chat_id = msg.to.id
             local hash = "mute_user" .. chat_id
             local user_id = ""
             if type(msg.reply_id) ~= "nil" then
                 if matches[2] then
-                    if matches[2] == 'from' then
+                    if matches[2]:lower() == 'from' then
                         get_message(msg.reply_id, muteuser_from, false)
                         return
                     else

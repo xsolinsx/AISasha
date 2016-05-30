@@ -528,7 +528,7 @@ local function run(msg, matches)
                 -- /kick
                 if type(msg.reply_id) ~= "nil" then
                     if matches[2] then
-                        if matches[2] == 'from' then
+                        if matches[2]:lower() == 'from' then
                             get_message(msg.reply_id, kick_from, { msg = msg })
                             return
                         elseif is_admin1(msg) then
@@ -575,7 +575,7 @@ local function run(msg, matches)
             -- /ban
             if type(msg.reply_id) ~= "nil" then
                 if matches[2] then
-                    if matches[2] == 'from' then
+                    if matches[2]:lower() == 'from' then
                         get_message(msg.reply_id, ban_from, { msg = msg })
                         return
                     elseif is_admin1(msg) then
@@ -625,7 +625,7 @@ local function run(msg, matches)
             -- /unban
             if type(msg.reply_id) ~= "nil" then
                 if matches[2] then
-                    if matches[2] == 'from' then
+                    if matches[2]:lower() == 'from' then
                         get_message(msg.reply_id, unban_from, { msg = msg })
                         return
                     else
@@ -700,7 +700,7 @@ local function run(msg, matches)
             -- /gban
             if type(msg.reply_id) ~= "nil" then
                 if matches[2] then
-                    if matches[2] == 'from' then
+                    if matches[2]:lower() == 'from' then
                         get_message(msg.reply_id, banall_from, { msg = msg })
                         return
                     else
@@ -732,7 +732,7 @@ local function run(msg, matches)
             -- /ungban
             if type(msg.reply_id) ~= "nil" then
                 if matches[2] then
-                    if matches[2] == 'from' then
+                    if matches[2]:lower() == 'from' then
                         get_message(msg.reply_id, unbanall_from, { msg = msg })
                         return
                     else
