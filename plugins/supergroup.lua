@@ -1273,7 +1273,7 @@ local function run(msg, matches)
                 local user_id = "user#id" .. matches[2]
                 local get_cmd = 'demote'
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted user#id" .. matches[2])
-                demote2(receiver, matches[2], user_id)
+                demote2(receiver, matches[2], matches[2])
             else
                 local cbres_extra = {
                     channel = get_receiver(msg),
