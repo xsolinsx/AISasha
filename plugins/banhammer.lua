@@ -348,10 +348,7 @@ end
 local function kick_deleted_chat(cb_extra, success, result)
     for k, v in pairs(result.members) do
         if not v.print_name then
-            local function post_kick()
-                kick_user(v.id, result.id)
-            end
-            postpone(post_kick, false, 1)
+            kick_user(v.id, result.id)
         end
     end
 end
@@ -359,10 +356,7 @@ end
 local function kick_deleted_channel(cb_extra, success, result)
     for k, v in pairs(result) do
         if not v.print_name then
-            local function post_kick()
-                kick_user(v.id, cb_extra.chat_id)
-            end
-            postpone(post_kick, false, 1)
+            kick_user(v.id, cb_extra.chat_id)
         end
     end
 end
