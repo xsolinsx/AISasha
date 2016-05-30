@@ -751,11 +751,9 @@ end
 local function muteuser_from(extra, success, result)
     if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
         unmute_user(result.to.peer_id, result.fwd_from.peer_id)
-        send_large_msg('chat#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserRemove'))
         send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserRemove'))
     else
         mute_user(result.to.peer_id, result.fwd_from.peer_id)
-        send_large_msg('chat#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserAdd'))
         send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserAdd'))
     end
 end
