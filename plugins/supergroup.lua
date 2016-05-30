@@ -773,35 +773,13 @@ local function cb_user_info(extra, success, result)
 			text = "[ "..result.peer_id.." ] has been set as an admin"
 		end
 			send_large_msg(receiver, text)]]
-    if get_cmd == "demoteadmin" then
-        if is_admin2(result.peer_id) then
-            return send_large_msg(receiver, lang_text('cantDemoteOtherAdmin'))
-        end
-        local user_id = "user#id" .. result.peer_id
-        channel_demote(receiver, user_id, ok_cb, false)
-        if result.username then
-            text = "@" .. result.username .. lang_text('demoteSupergroupMod')
-            send_large_msg(receiver, text)
-        else
-            text = result.peer_id .. lang_text('demoteSupergroupMod')
-            send_large_msg(receiver, text)
-        end
-    elseif get_cmd == "promote" then
+    if get_cmd == "promote" then
         if result.username then
             member_username = "@" .. result.username
         else
             member_username = string.gsub(result.print_name, '_', ' ')
         end
         promote2(receiver, member_username, user_id)
-    elseif get_cmd == "demote" then
-        if not result then
-            member_username = 'NORESULT'
-        elseif result.username then
-            member_username = "@" .. result.username
-        else
-            member_username = string.gsub(result.print_name, '_', ' ')
-        end
-        demote2(receiver, member_username, user_id)
     end
 end
 
@@ -1185,7 +1163,12 @@ local function run(msg, matches)
                 local receiver = get_receiver(msg)
                 local user_id = "user#id" .. matches[2]
                 local get_cmd = 'demoteadmin'
-                user_info(user_id, cb_user_info, { receiver = receiver, get_cmd = get_cmd })
+                if is_admin2(matches[2]) then
+                    return send_large_msg(receiver, lang_text('cantDemoteOtherAdmin'))
+                end
+                channel_demote(receiver, user_id, ok_cb, false)
+                local text = result.peer_id .. lang_text('demoteSupergroupMod')
+                send_large_msg(receiver, text)
             else
                 local cbres_extra = {
                     channel = get_receiver(msg),
@@ -1290,7 +1273,7 @@ local function run(msg, matches)
                 local user_id = "user#id" .. matches[2]
                 local get_cmd = 'demote'
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted user#id" .. matches[2])
-                user_info(user_id, cb_user_info, { receiver = receiver, get_cmd = get_cmd })
+                demote2(receiver, matches[2], user_id)
             else
                 local cbres_extra = {
                     channel = get_receiver(msg),
