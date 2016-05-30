@@ -572,11 +572,20 @@ function match_pattern(pattern, text, lower_case)
     if text then
         local matches = { }
         if lower_case then
-            matches = { string.match(text:lower(), pattern) or string.match(text:lower(), "^@[Aa][Ii][Ss][Aa][Ss][Hh][Aa] " .. pattern:gsub('%^', '')) }
+            matches = { string.match(text:lower(), pattern) }
         else
-            matches = { string.match(text, pattern) or string.match(text, "^@[Aa][Ii][Ss][Aa][Ss][Hh][Aa] " .. pattern:gsub('%^', '')) }
+            matches = { string.match(text, pattern) }
         end
-        if next(matches) then
+        if not next(matches) then
+            if lower_case then
+                matches = { string.match(text:lower(), "^@[Aa][Ii][Ss][Aa][Ss][Hh][Aa] " .. pattern:gsub('%^', '')) }
+            else
+                matches = { string.match(text, "^@[Aa][Ii][Ss][Aa][Ss][Hh][Aa] " .. pattern:gsub('%^', '')) }
+            end
+            if next(matches) then
+                return matches
+            end
+        else
             return matches
         end
     end
