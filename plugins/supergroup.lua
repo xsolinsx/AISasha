@@ -748,6 +748,18 @@ function get_message_callback(extra, success, result)
 end
 -- End by reply actions
 
+local function muteuser_from(extra, success, result)
+    if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
+        unmute_user(result.to.peer_id, result.fwd_from.peer_id)
+        send_large_msg('chat#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserRemove'))
+        send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserRemove'))
+    else
+        mute_user(result.to.peer_id, result.fwd_from.peer_id)
+        send_large_msg('chat#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserAdd'))
+        send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserAdd'))
+    end
+end
+
 -- By ID actions
 local function cb_user_info(extra, success, result)
     local receiver = extra.receiver
@@ -1680,9 +1692,22 @@ local function run(msg, matches)
             local hash = "mute_user" .. chat_id
             local user_id = ""
             if type(msg.reply_id) ~= "nil" then
-                local receiver = get_receiver(msg)
-                local get_cmd = "mute_user"
-                muteuser = get_message(msg.reply_id, get_message_callback, { receiver = receiver, get_cmd = get_cmd, msg = msg })
+                if matches[2] then
+                    if matches[2] == 'from' then
+                        get_message(msg.reply_id, muteuser_from, false)
+                        return
+                    else
+                        local receiver = get_receiver(msg)
+                        local get_cmd = "mute_user"
+                        muteuser = get_message(msg.reply_id, get_message_callback, { receiver = receiver, get_cmd = get_cmd, msg = msg })
+                        return
+                    end
+                else
+                    local receiver = get_receiver(msg)
+                    local get_cmd = "mute_user"
+                    muteuser = get_message(msg.reply_id, get_message_callback, { receiver = receiver, get_cmd = get_cmd, msg = msg })
+                    return
+                end
             elseif string.match(matches[2], '^%d+$') then
                 local user_id = matches[2]
                 if is_muted_user(chat_id, user_id) then
