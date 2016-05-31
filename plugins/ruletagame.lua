@@ -904,7 +904,7 @@ local function run(msg, matches)
 end
 
 return {
-    description = "RULETA",
+    description = "RULETAGAME",
     patterns =
     {
         "^[#!/]([Kk][Ii][Cc][Kk]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
