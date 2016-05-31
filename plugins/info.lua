@@ -91,24 +91,6 @@ local function chat_callback_ishere(cb_extra, success, result)
     send_large_msg(cb_extra.receiver, text)
 end
 
-local function ishere_get_id_reply(extra, success, result)
-    local receiver = get_receiver(result)
-    if result.to.peer_type == 'channel' then
-        channel_info(receiver, channel_callback_ishere, { receiver = receiver, user = result.from.peer_id })
-    elseif result.to.peer_type == 'chat' then
-        chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = result.from.peer_id })
-    end
-end
-
-local function ishere_get_id_from(extra, success, result)
-    local receiver = get_receiver(result)
-    if result.to.peer_type == 'channel' then
-        channel_info(receiver, channel_callback_ishere, { receiver = receiver, user = result.fwd_from.peer_id })
-    elseif result.to.peer_type == 'chat' then
-        chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = result.fwd_from.peer_id })
-    end
-end
-
 local function callback_reply(extra, success, result)
     local text = lang_text('info') .. ' (<reply>)'
     local action = false
@@ -524,35 +506,22 @@ local function run(msg, matches)
             return lang_text('rank') .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
         end
     end
-    --
-    if matches[1]:lower() == 'ishere' then
-        if type(msg.reply_id) ~= "nil" then
-            if matches[2] then
-                if matches[2]:lower() == 'from' then
-                    return get_message(msg.reply_id, ishere_get_id_from, false)
-                else
-                    return get_message(msg.reply_id, ishere_get_id_reply, false)
-                end
-            else
-                return get_message(msg.reply_id, ishere_get_id_reply, false)
-            end
-        elseif string.match(matches[2], '^%d+$') then
+    if matches[1]:lower() == 'ishere' and matches[2] then
+        if string.match(matches[2], '^%d+$') then
             if chat_type == 'channel' then
                 channel_info(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2] })
             elseif chat_type == 'chat' then
                 chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2] })
             end
-            return
         else
             if chat_type == 'channel' then
                 channel_info(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
             elseif chat_type == 'chat' then
                 chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
             end
-            return
         end
+        return
     end
-    --
     if matches[1]:lower() == 'info' or matches[1]:lower() == 'sasha info' then
         if type(msg.reply_id) ~= 'nil' then
             if is_momod(msg) then
@@ -719,7 +688,6 @@ return {
         "^[#!/]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo]) (%d+)$",
         "^[#!/]([Ii][Ss][Hh][Ee][Rr][Ee]) (.*)$",
-        "^[#!/]([Ii][Ss][Hh][Ee][Rr][Ee])$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
         "^[#!/]([Ii][Nn][Ff][Oo]) (.*)$",
@@ -750,7 +718,7 @@ return {
     -- usage
     -- #getrank|rango [<id>|<username>|<reply>]
     -- (#info|[sasha] info)
-    -- #ishere <id>|<username>|<reply>|from
+    -- #ishere <id>|<username>
     -- MOD
     -- (#info|[sasha] info) <id>|<username>|<reply>|from
     -- (#who|#members|[sasha] lista membri)
