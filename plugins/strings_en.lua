@@ -19,6 +19,7 @@ local function run(msg, matches)
         -- global --
         set_text('require_sudo', '🚫 This plugin requires sudo privileges.')
         set_text('require_admin', '🚫 This plugin requires admin privileges or higher.')
+        set_text('require_support', '🚫 This plugin requires support privileges or higher.')
         set_text('require_owner', '🚫 This plugin requires owner privileges or higher.')
         set_text('require_mod', '🚫 This plugin requires mod privileges or higher.')
         set_text('errorTryAgain', 'Error, try again.')

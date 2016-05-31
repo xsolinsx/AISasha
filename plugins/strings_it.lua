@@ -19,6 +19,7 @@ local function run(msg, matches)
         -- global --
         set_text('require_sudo', '🚫 Questo comando richiede i privilegi di sudo.')
         set_text('require_admin', '🚫 Questo comando richiede privilegi da admin o superiori.')
+        set_text('require_support', '🚫 Questo comando richiede privilegi da support o superiori.')
         set_text('require_owner', '🚫 Questo comando richiede privilegi da owner o superiori.')
         set_text('require_mod', '🚫 Questo comando richiede privilegi da moderatore o superiori.')
         set_text('errorTryAgain', 'Errore, prova di nuovo.')

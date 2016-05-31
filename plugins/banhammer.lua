@@ -520,10 +520,30 @@ local function run(msg, matches)
             postpone(post_kick, false, 3)
             return phrases[math.random(#phrases)]
         end
+        return
     end
     if is_momod(msg) then
-        if matches[1]:lower() ~= 'sasha uccidi sotto' and matches[1]:lower() ~= 'sasha uccidi nouser' and matches[1]:lower() ~= 'sasha uccidi eliminati' and matches[1]:lower() ~= 'spara sotto' and matches[1]:lower() ~= 'spara nouser' and matches[1]:lower() ~= 'spara eliminati' then
-            -- if not kickinactive and not kicknouser
+        local kickmore = false
+        if matches[1]:lower() ~= 'sasha uccidi sotto' then
+            kickmore = true
+        end
+        if matches[1]:lower() ~= 'sasha uccidi nouser' then
+            kickmore = true
+        end
+        if matches[1]:lower() ~= 'sasha uccidi eliminati' then
+            kickmore = true
+        end
+        if matches[1]:lower() ~= 'spara sotto' then
+            kickmore = true
+        end
+        if matches[1]:lower() ~= 'spara nouser' then
+            kickmore = true
+        end
+        if matches[1]:lower() ~= 'spara eliminati' then
+            kickmore = true
+        end
+        if not kickmore then
+            -- if not kickinactive and not kicknouser and not kickdeleted
             if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
                 -- /kick
                 if type(msg.reply_id) ~= "nil" then
@@ -570,6 +590,7 @@ local function run(msg, matches)
                     resolve_username(username, kick_ban_res, cbres_extra)
                 end
             end
+            return
         end
         if matches[1]:lower() == 'ban' or matches[1]:lower() == 'sasha banna' or matches[1]:lower() == 'sasha decompila' or matches[1]:lower() == 'banna' or matches[1]:lower() == 'decompila' or matches[1]:lower() == 'esplodi' or matches[1]:lower() == 'kaboom' then
             -- /ban
@@ -620,6 +641,7 @@ local function run(msg, matches)
                 local username = string.gsub(matches[2], '@', '')
                 resolve_username(username, kick_ban_res, cbres_extra)
             end
+            return
         end
         if matches[1]:lower() == 'unban' or matches[1]:lower() == 'sasha sbanna' or matches[1]:lower() == 'sasha ricompila' or matches[1]:lower() == 'sasha compila' or matches[1]:lower() == 'sbanna' or matches[1]:lower() == 'ricompila' or matches[1]:lower() == 'compila' then
             -- /unban
@@ -653,6 +675,7 @@ local function run(msg, matches)
                 local username = string.gsub(matches[2], '@', '')
                 resolve_username(username, kick_ban_res, cbres_extra)
             end
+            return
         end
         if matches[1]:lower() == "banlist" or matches[1]:lower() == "sasha lista ban" or matches[1]:lower() == "lista ban" then
             -- /banlist
@@ -671,106 +694,115 @@ local function run(msg, matches)
             end
             return
         end
-    end
-    if is_owner(msg) then
-        if matches[1]:lower() == 'kickinactive' or((matches[1]:lower() == 'sasha uccidi sotto' or matches[1]:lower() == 'spara sotto') and matches[3]:lower() == 'messaggi') then
-            -- /kickinactive
-            local num = 1
-            if matches[2] then
-                num = matches[2]
-            end
-            if msg.to.type == 'chat' then
-                chat_info(get_receiver(msg), kick_inactive_chat, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
-            elseif msg.to.type == 'channel' then
-                channel_get_users(get_receiver(msg), kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
-            end
-        end
-        if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
-            -- /kicknouser
-            if msg.to.type == 'chat' then
-                chat_info(get_receiver(msg), kick_nouser_chat, { receiver = get_receiver(msg) })
-            elseif msg.to.type == 'channel' then
-                channel_get_users(get_receiver(msg), kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
-            end
-            return
-        end
-    end
-    if is_admin1(msg) or is_support(msg.from.id) then
-        if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
-            -- /gban
-            if type(msg.reply_id) ~= "nil" then
+        if is_owner(msg) then
+            if matches[1]:lower() == 'kickinactive' or((matches[1]:lower() == 'sasha uccidi sotto' or matches[1]:lower() == 'spara sotto') and matches[3]:lower() == 'messaggi') then
+                -- /kickinactive
+                local num = 1
                 if matches[2] then
-                    if matches[2]:lower() == 'from' then
-                        get_message(msg.reply_id, banall_from, { msg = msg })
-                        return
+                    num = matches[2]
+                end
+                if msg.to.type == 'chat' then
+                    chat_info(get_receiver(msg), kick_inactive_chat, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
+                elseif msg.to.type == 'channel' then
+                    channel_get_users(get_receiver(msg), kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
+                end
+                return
+            end
+            if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
+                -- /kicknouser
+                if msg.to.type == 'chat' then
+                    chat_info(get_receiver(msg), kick_nouser_chat, { receiver = get_receiver(msg) })
+                elseif msg.to.type == 'channel' then
+                    channel_get_users(get_receiver(msg), kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                end
+                return
+            end
+            if is_admin1(msg) or is_support(msg.from.id) then
+                if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
+                    -- /gban
+                    if type(msg.reply_id) ~= "nil" then
+                        if matches[2] then
+                            if matches[2]:lower() == 'from' then
+                                get_message(msg.reply_id, banall_from, { msg = msg })
+                                return
+                            else
+                                msgr = get_message(msg.reply_id, banall_by_reply, false)
+                                return
+                            end
+                        else
+                            msgr = get_message(msg.reply_id, banall_by_reply, false)
+                            return
+                        end
+                    elseif string.match(matches[2], '^%d+$') then
+                        if tonumber(matches[2]) == tonumber(our_id) then
+                            return false
+                        end
+                        banall_user(matches[2])
+                        return lang_text('user') .. matches[2] .. lang_text('gbanned')
                     else
-                        msgr = get_message(msg.reply_id, banall_by_reply, false)
-                        return
+                        local cbres_extra = {
+                            chat_id = msg.to.id,
+                            get_cmd = 'banall',
+                            from_id = msg.from.id,
+                            chat_type = msg.to.type
+                        }
+                        local username = string.gsub(matches[2], '@', '')
+                        resolve_username(username, kick_ban_res, cbres_extra)
                     end
-                else
-                    msgr = get_message(msg.reply_id, banall_by_reply, false)
                     return
                 end
-            elseif string.match(matches[2], '^%d+$') then
-                if tonumber(matches[2]) == tonumber(our_id) then
-                    return false
-                end
-                banall_user(matches[2])
-                return lang_text('user') .. matches[2] .. lang_text('gbanned')
-            else
-                local cbres_extra = {
-                    chat_id = msg.to.id,
-                    get_cmd = 'banall',
-                    from_id = msg.from.id,
-                    chat_type = msg.to.type
-                }
-                local username = string.gsub(matches[2], '@', '')
-                resolve_username(username, kick_ban_res, cbres_extra)
-            end
-        end
-        if matches[1]:lower() == 'ungban' or matches[1]:lower() == 'sasha supersbanna' or matches[1]:lower() == 'supersbanna' then
-            -- /ungban
-            if type(msg.reply_id) ~= "nil" then
-                if matches[2] then
-                    if matches[2]:lower() == 'from' then
-                        get_message(msg.reply_id, unbanall_from, { msg = msg })
-                        return
+                if matches[1]:lower() == 'ungban' or matches[1]:lower() == 'sasha supersbanna' or matches[1]:lower() == 'supersbanna' then
+                    -- /ungban
+                    if type(msg.reply_id) ~= "nil" then
+                        if matches[2] then
+                            if matches[2]:lower() == 'from' then
+                                get_message(msg.reply_id, unbanall_from, { msg = msg })
+                                return
+                            else
+                                msgr = get_message(msg.reply_id, unbanall_by_reply, false)
+                                return
+                            end
+                        else
+                            msgr = get_message(msg.reply_id, unbanall_by_reply, false)
+                            return
+                        end
+                    elseif string.match(matches[2], '^%d+$') then
+                        if tonumber(matches[2]) == tonumber(our_id) then
+                            return false
+                        end
+                        unbanall_user(matches[2])
+                        return lang_text('user') .. matches[2] .. lang_text('ungbanned')
                     else
-                        msgr = get_message(msg.reply_id, unbanall_by_reply, false)
-                        return
+                        local cbres_extra = {
+                            chat_id = msg.to.id,
+                            get_cmd = 'unbanall',
+                            from_id = msg.from.id,
+                            chat_type = msg.to.type
+                        }
+                        local username = string.gsub(matches[2], '@', '')
+                        resolve_username(username, kick_ban_res, cbres_extra)
                     end
-                else
-                    msgr = get_message(msg.reply_id, unbanall_by_reply, false)
                     return
                 end
-            elseif string.match(matches[2], '^%d+$') then
-                if tonumber(matches[2]) == tonumber(our_id) then
-                    return false
+                if matches[1]:lower() == 'gbanlist' or matches[1]:lower() == 'sasha lista superban' or matches[1]:lower() == 'lista superban' then
+                    -- /gbanlist
+                    local list = banall_list()
+                    local file = io.open("./groups/gbanlist.txt", "w")
+                    file:write(list)
+                    file:flush()
+                    file:close()
+                    send_document(get_receiver(msg), "./groups/gbanlist.txt", ok_cb, false)
+                    send_large_msg(get_receiver(msg), list)
+                    return list
                 end
-                unbanall_user(matches[2])
-                return lang_text('user') .. matches[2] .. lang_text('ungbanned')
             else
-                local cbres_extra = {
-                    chat_id = msg.to.id,
-                    get_cmd = 'unbanall',
-                    from_id = msg.from.id,
-                    chat_type = msg.to.type
-                }
-                local username = string.gsub(matches[2], '@', '')
-                resolve_username(username, kick_ban_res, cbres_extra)
+                return lang_text('require_support')
             end
+        else
+            return lang_text('require_owner')
         end
-        if matches[1]:lower() == 'gbanlist' or matches[1]:lower() == 'sasha lista superban' or matches[1]:lower() == 'lista superban' then
-            -- /gbanlist
-            local list = banall_list()
-            local file = io.open("./groups/gbanlist.txt", "w")
-            file:write(list)
-            file:flush()
-            file:close()
-            send_document(get_receiver(msg), "./groups/gbanlist.txt", ok_cb, false)
-            send_large_msg(get_receiver(msg), list)
-            return list
-        end
+    else
+        return lang_text('require_mod')
     end
 end
 
@@ -870,6 +902,7 @@ return {
     -- (#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>
     -- (#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>
     -- (#banlist|[sasha] lista ban) [<group_id>]
+    -- (#kickdeleted|[sasha] uccidi eliminati|spara eliminati)
     -- OWNER
     -- (#kicknouser|[sasha] uccidi nouser|spara nouser)
     -- (#kickinactive [<msgs>]|((sasha uccidi)|spara sotto <msgs> messaggi))
