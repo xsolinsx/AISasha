@@ -526,72 +526,50 @@ local function run(msg, matches)
         return
     end
     if is_momod(msg) then
-        local kickmore = false
-        if matches[1]:lower() == 'sasha uccidi sotto' then
-            kickmore = true
-        end
-        if matches[1]:lower() == 'sasha uccidi nouser' then
-            kickmore = true
-        end
-        if matches[1]:lower() == 'sasha uccidi eliminati' then
-            kickmore = true
-        end
-        if matches[1]:lower() == 'spara sotto' then
-            kickmore = true
-        end
-        if matches[1]:lower() == 'spara nouser' then
-            kickmore = true
-        end
-        if matches[1]:lower() == 'spara eliminati' then
-            kickmore = true
-        end
-        if not kickmore then
-            -- if not kickinactive and not kicknouser and not kickdeleted
-            if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
-                -- /kick
-                if type(msg.reply_id) ~= "nil" then
-                    if matches[2] then
-                        if matches[2]:lower() == 'from' then
-                            get_message(msg.reply_id, kick_from, { msg = msg })
-                            return
-                        elseif is_admin1(msg) then
-                            msgr = get_message(msg.reply_id, kick_by_reply_admins, false)
-                        else
-                            msgr = get_message(msg.reply_id, kick_by_reply, false)
-                        end
+        if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
+            -- /kick
+            if type(msg.reply_id) ~= "nil" then
+                if matches[2] then
+                    if matches[2]:lower() == 'from' then
+                        get_message(msg.reply_id, kick_from, { msg = msg })
+                        return
                     elseif is_admin1(msg) then
                         msgr = get_message(msg.reply_id, kick_by_reply_admins, false)
                     else
                         msgr = get_message(msg.reply_id, kick_by_reply, false)
                     end
-                elseif string.match(matches[2], '^%d+$') then
-                    if tonumber(matches[2]) == tonumber(our_id) then
-                        return
-                    end
-                    if not is_admin1(msg) and is_momod2(matches[2], msg.to.id) then
-                        return lang_text('cantKickHigher')
-                    end
-                    if tonumber(matches[2]) == tonumber(msg.from.id) then
-                        return lang_text('noAutoKick')
-                    end
-                    local print_name = user_print_name(msg.from):gsub("‮", "")
-                    local name = print_name:gsub("_", "")
-                    savelog(msg.to.id, name .. " [" .. msg.from.id .. "] kicked user " .. matches[2])
-                    local function post_kick()
-                        kick_user(matches[2], msg.to.id)
-                    end
-                    postpone(post_kick, false, 3)
-                    return phrases[math.random(#phrases)]
+                elseif is_admin1(msg) then
+                    msgr = get_message(msg.reply_id, kick_by_reply_admins, false)
                 else
-                    local cbres_extra = {
-                        chat_id = msg.to.id,
-                        get_cmd = 'kick',
-                        from_id = msg.from.id,
-                        chat_type = msg.to.type
-                    }
-                    local username = string.gsub(matches[2], '@', '')
-                    resolve_username(username, kick_ban_res, cbres_extra)
+                    msgr = get_message(msg.reply_id, kick_by_reply, false)
                 end
+            elseif string.match(matches[2], '^%d+$') then
+                if tonumber(matches[2]) == tonumber(our_id) then
+                    return
+                end
+                if not is_admin1(msg) and is_momod2(matches[2], msg.to.id) then
+                    return lang_text('cantKickHigher')
+                end
+                if tonumber(matches[2]) == tonumber(msg.from.id) then
+                    return lang_text('noAutoKick')
+                end
+                local print_name = user_print_name(msg.from):gsub("‮", "")
+                local name = print_name:gsub("_", "")
+                savelog(msg.to.id, name .. " [" .. msg.from.id .. "] kicked user " .. matches[2])
+                local function post_kick()
+                    kick_user(matches[2], msg.to.id)
+                end
+                postpone(post_kick, false, 3)
+                return phrases[math.random(#phrases)]
+            else
+                local cbres_extra = {
+                    chat_id = msg.to.id,
+                    get_cmd = 'kick',
+                    from_id = msg.from.id,
+                    chat_type = msg.to.type
+                }
+                local username = string.gsub(matches[2], '@', '')
+                resolve_username(username, kick_ban_res, cbres_extra)
             end
             return
         end
@@ -905,9 +883,9 @@ return {
     -- (#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>
     -- (#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>
     -- (#banlist|[sasha] lista ban) [<group_id>]
-    -- (#kickdeleted|[sasha] uccidi eliminati|spara eliminati)
+    -- (#kickdeleted|sasha uccidi eliminati|spara eliminati)
     -- OWNER
-    -- (#kicknouser|[sasha] uccidi nouser|spara nouser)
+    -- (#kicknouser|sasha uccidi nouser|spara nouser)
     -- (#kickinactive [<msgs>]|((sasha uccidi)|spara sotto <msgs> messaggi))
     -- SUPPORT
     -- (#gban|[sasha] superbanna) <id>|<username>|<reply>
