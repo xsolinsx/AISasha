@@ -524,22 +524,22 @@ local function run(msg, matches)
     end
     if is_momod(msg) then
         local kickmore = false
-        if matches[1]:lower() ~= 'sasha uccidi sotto' then
+        if matches[2]:lower() == 'sotto' then
             kickmore = true
         end
-        if matches[1]:lower() ~= 'sasha uccidi nouser' then
+        if matches[2]:lower() == 'nouser' then
             kickmore = true
         end
-        if matches[1]:lower() ~= 'sasha uccidi eliminati' then
+        if matches[2]:lower() == 'eliminati' then
             kickmore = true
         end
-        if matches[1]:lower() ~= 'spara sotto' then
+        if matches[2]:lower() == 'sotto' then
             kickmore = true
         end
-        if matches[1]:lower() ~= 'spara nouser' then
+        if matches[2]:lower() == 'nouser' then
             kickmore = true
         end
-        if matches[1]:lower() ~= 'spara eliminati' then
+        if matches[2]:lower() == 'eliminati' then
             kickmore = true
         end
         if not kickmore then
