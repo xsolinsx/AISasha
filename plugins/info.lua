@@ -123,7 +123,7 @@ local function callback_reply(extra, success, result)
         -- exclude bot phone
         if our_id ~= result.action.user.peer_id then
             if result.action.user.phone then
-                text = text .. lang_text('phone') .. string.sub(result.action.user.phone, 1, 6) .. '******'
+                text = text .. lang_text('phone') .. '+' .. string.sub(result.action.user.phone, 1, 6) .. '******'
             end
         end
         local msgs = tonumber(redis:get('msgs:' .. result.action.user.peer_id .. ':' .. result.to.peer_id) or 0)
@@ -163,7 +163,7 @@ local function callback_reply(extra, success, result)
         -- exclude bot phone
         if our_id ~= result.from.peer_id then
             if result.from.phone then
-                text = text .. lang_text('phone') .. string.sub(result.from.phone, 1, 6) .. '******'
+                text = text .. lang_text('phone') .. '+' .. string.sub(result.from.phone, 1, 6) .. '******'
             end
         end
         local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
@@ -209,7 +209,7 @@ local function callback_id(cb_extra, success, result)
     -- exclude bot phone
     if our_id ~= result.peer_id then
         if result.phone then
-            text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '******'
+            text = text .. lang_text('phone') .. '+' .. string.sub(result.phone, 1, 6) .. '******'
         end
     end
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. cb_extra.msg.to.id) or 0)
@@ -269,7 +269,7 @@ local function callback_username(extra, success, result)
         -- exclude bot phone
         if our_id ~= result.peer_id then
             if result.phone then
-                text = text .. lang_text('phone') .. string.sub(result.phone, 1, 6) .. '******'
+                text = text .. lang_text('phone') .. '+' .. string.sub(result.phone, 1, 6) .. '******'
             end
         end
         local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.chatid) or 0)
@@ -327,7 +327,7 @@ local function callback_from(extra, success, result)
         -- exclude bot phone
         if our_id ~= result.fwd_from.peer_id then
             if result.fwd_from.phone then
-                text = text .. lang_text('phone') .. string.sub(result.fwd_from.phone, 1, 6) .. '******'
+                text = text .. lang_text('phone') .. '+' .. string.sub(result.fwd_from.phone, 1, 6) .. '******'
             end
         end
         local msgs = tonumber(redis:get('msgs:' .. result.fwd_from.peer_id .. ':' .. result.to.peer_id) or 0)
@@ -404,7 +404,7 @@ local function database(cb_extra, success, result)
             text = text .. ' Username: @' .. v.username
         end
         if v.phone then
-            text = text .. 'Telefono: ' .. string.sub(v.phone, 1, 6) .. '******'
+            text = text .. 'Telefono: ' .. '+' .. string.sub(v.phone, 1, 6) .. '******'
         end
         text = text .. 'Rango: ' .. reverse_rank_table[get_rank(v.peer_id, result.peer_id) + 1]
         .. 'Data: ' .. os.date('%c')
@@ -463,7 +463,7 @@ local function pre_process(msg)
                 end
                 if our_id ~= msg.fwd_from.peer_id then
                     if msg.fwd_from.phone then
-                        text = text .. lang_text('phone') .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
+                        text = text .. lang_text('phone') .. '+' .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
                     end
                 end
                 text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, msg.to.id) + 1] ..
@@ -574,7 +574,7 @@ local function run(msg, matches)
                 text = text .. lang_text('username') .. '@' .. msg.from.username
             end
             if msg.from.phone then
-                text = text .. lang_text('phone') .. string.sub(msg.from.phone, 1, 6) .. '****'
+                text = text .. lang_text('phone') .. '+' .. string.sub(msg.from.phone, 1, 6) .. '****'
             end
             local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
             text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
@@ -615,7 +615,7 @@ local function run(msg, matches)
                 -- exclude bot phone
                 if our_id ~= msg.to.id then
                     if msg.to.phone then
-                        text = text .. lang_text('phone') .. string.sub(msg.to.phone, 1, 6) .. '****'
+                        text = text .. lang_text('phone') .. '+' .. string.sub(msg.to.phone, 1, 6) .. '****'
                     end
                 end
                 text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.to.id, chat) + 1] ..

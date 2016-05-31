@@ -119,6 +119,9 @@ local function get_sudo_info(cb_extra, success, result)
     if result.username then
         text = text .. lang_text('username') .. '@' .. result.username
     end
+    if result.phone then
+        text = text .. lang_text('phone') .. '+' .. string.sub(result.phone, 1, 6) .. '****'
+    end
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. cb_extra.msg.to.id) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs
