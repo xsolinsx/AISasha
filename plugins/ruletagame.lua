@@ -18,6 +18,8 @@ local good = {
     "Argh.",
     "Ti sei cagato addosso eh?",
     "Continua a provare che prima o poi riesci a suicidarti.",
+    "Cilecca.",
+    "Merda, si è inceppata.",
 }
 -- safe ruletagod
 local godgood = {
@@ -35,7 +37,7 @@ local godgood = {
 local bad = {
     "BOOM!",
     "Headshot.",
-    "BANG!",
+    "BANG! 🔫",
     "Bye Bye.",
     "Allahuakbar.",
     "Muori idiota.",
@@ -53,6 +55,10 @@ local bad = {
     "😊",
     ":3",
     "Shake that bottle and make it [BANG]",
+    "Tieni 💣",
+    "Centro 🎯",
+    "💥",
+    "☠",
 }
 
 local function get_challenge(chat_id)
