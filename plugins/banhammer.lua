@@ -506,6 +506,9 @@ local function kick_inactive_channel(cb_extra, success, result)
 end
 
 local function run(msg, matches)
+    if msg.action and msg.action.type then
+        return
+    end
     if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' then
         -- /kickme
         local receiver = get_receiver(msg)
