@@ -65,8 +65,10 @@ local function channel_callback_ishere(cb_extra, success, result)
     local user = cb_extra.user
     local text = lang_text('ishereNo')
     for k, v in pairsByKeys(result) do
-        if tonumber(v.peer_id) == tonumber(user) then
-            text = lang_text('ishereYes')
+        if tonumber(user) then
+            if tonumber(v.peer_id) == tonumber(user) then
+                text = lang_text('ishereYes')
+            end
         elseif v.username then
             if v.username:lower() == user:lower() then
                 text = lang_text('ishereYes')
@@ -80,8 +82,10 @@ local function chat_callback_ishere(cb_extra, success, result)
     local user = cb_extra.user
     local text = lang_text('ishereNo')
     for k, v in pairs(result.members) do
-        if tonumber(v.peer_id) == tonumber(user) then
-            text = lang_text('ishereYes')
+        if tonumber(user) then
+            if tonumber(v.peer_id) == tonumber(user) then
+                text = lang_text('ishereYes')
+            end
         elseif v.username then
             if v.username:lower() == user:lower() then
                 text = lang_text('ishereYes')
