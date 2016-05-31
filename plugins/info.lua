@@ -463,7 +463,7 @@ local function pre_process(msg)
                 end
                 if our_id ~= msg.fwd_from.peer_id then
                     if msg.fwd_from.phone then
-                        text = text .. lang_text('phone') .. '+' .. string.sub(msg.fwd_from.phone, 1, 6) .. '****'
+                        text = text .. lang_text('phone') .. '+' .. string.sub(msg.fwd_from.phone, 1, 6) .. '******'
                     end
                 end
                 text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, msg.to.id) + 1] ..
@@ -574,7 +574,7 @@ local function run(msg, matches)
                 text = text .. lang_text('username') .. '@' .. msg.from.username
             end
             if msg.from.phone then
-                text = text .. lang_text('phone') .. '+' .. string.sub(msg.from.phone, 1, 6) .. '****'
+                text = text .. lang_text('phone') .. '+' .. string.sub(msg.from.phone, 1, 6) .. '******'
             end
             local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
             text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
@@ -615,7 +615,7 @@ local function run(msg, matches)
                 -- exclude bot phone
                 if our_id ~= msg.to.id then
                     if msg.to.phone then
-                        text = text .. lang_text('phone') .. '+' .. string.sub(msg.to.phone, 1, 6) .. '****'
+                        text = text .. lang_text('phone') .. '+' .. string.sub(msg.to.phone, 1, 6) .. '******'
                     end
                 end
                 text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.to.id, chat) + 1] ..
