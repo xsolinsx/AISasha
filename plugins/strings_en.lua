@@ -557,10 +557,12 @@ local function run(msg, matches)
         set_text('banhammer:14', '(#gbanlist|[sasha] lista superban): Sasha sends gbans list.')
 
         -- bot.lua --
-        set_text('bot:0', 3)
+        set_text('bot:0', 5)
         set_text('bot:1', '🅿️ BOT')
         set_text('bot:2', 'OWNER')
         set_text('bot:3', '#bot|sasha on|off: Sasha goes on|off on the group.')
+        set_text('bot:4', 'ADMIN')
+        set_text('bot:5', '#bot|sasha [<group_id>] on|off: Sasha goes on|off on the specified group.')
 
         -- botinteract.lua --
         set_text('botinteract:0', 8)

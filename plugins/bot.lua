@@ -43,4 +43,6 @@ return {
     -- usage
     -- OWNER
     -- #bot|sasha on|off
+    -- ADMIN
+    -- #bot|sasha [<group_id>] on|off
 }

@@ -557,10 +557,12 @@ local function run(msg, matches)
         set_text('banhammer:14', '(#gbanlist|[sasha] lista superban): Sasha mostra la lista di utenti super bannati.')
 
         -- bot.lua --
-        set_text('bot:0', 3)
+        set_text('bot:0', 5)
         set_text('bot:1', '🅿️ BOT')
         set_text('bot:2', 'OWNER')
         set_text('bot:3', '#bot|sasha on|off: Sasha si attiva|disattiva.')
+        set_text('bot:4', 'ADMIN')
+        set_text('bot:5', '#bot|sasha [<group_id>] on|off: Sasha si attiva|disattiva nel gruppo specificato.')
 
         -- botinteract.lua --
         set_text('botinteract:0', 8)
