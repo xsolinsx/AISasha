@@ -149,7 +149,7 @@ local function run(msg, matches)
         local fakerank = ''
         if matches[2] and(matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo" or string.match(matches[2], '^%d+$')) then
             if string.match(matches[2], '^%d+$') then
-                fakerank = matches[2]
+                fakerank = tonumber(matches[2])
             else
                 fakerank = rank_table[matches[2]:upper()]
             end
@@ -164,7 +164,7 @@ local function run(msg, matches)
             text = text .. 'FAKE HELP\n'
         elseif matches[3] and(matches[3]:lower() == "user" or matches[3]:lower() == "mod" or matches[3]:lower() == "owner" or matches[3]:lower() == "support" or matches[3]:lower() == "admin" or matches[3]:lower() == "sudo" or string.match(matches[3], '^%d+$')) then
             if string.match(matches[3], '^%d+$') then
-                fakerank = matches[3]
+                fakerank = tonumber(matches[3])
             else
                 fakerank = rank_table[matches[3]:upper()]
             end
