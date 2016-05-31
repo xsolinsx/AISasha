@@ -524,22 +524,22 @@ local function run(msg, matches)
     end
     if is_momod(msg) then
         local kickmore = false
-        if matches[2]:lower() == 'sotto' then
+        if matches[1]:lower() == 'sasha uccidi sotto' then
             kickmore = true
         end
-        if matches[2]:lower() == 'nouser' then
+        if matches[1]:lower() == 'sasha uccidi nouser' then
             kickmore = true
         end
-        if matches[2]:lower() == 'eliminati' then
+        if matches[1]:lower() == 'sasha uccidi eliminati' then
             kickmore = true
         end
-        if matches[2]:lower() == 'sotto' then
+        if matches[1]:lower() == 'spara sotto' then
             kickmore = true
         end
-        if matches[2]:lower() == 'nouser' then
+        if matches[1]:lower() == 'spara nouser' then
             kickmore = true
         end
-        if matches[2]:lower() == 'eliminati' then
+        if matches[1]:lower() == 'spara eliminati' then
             kickmore = true
         end
         if not kickmore then
@@ -831,13 +831,6 @@ return {
         "^!!tgservice (.+)$",
         -- kickme
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii][Mm][Ii])$",
-        -- kick
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) (.*)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii])$",
-        "^([Uu][Cc][Cc][Ii][Dd][Ii]) (.*)$",
-        "^([Uu][Cc][Cc][Ii][Dd][Ii])$",
-        "^([Ss][Pp][Aa][Rr][Aa]) (.*)$",
-        "^([Ss][Pp][Aa][Rr][Aa])$",
         -- kicknouser
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Nn][Oo][Uu][Ss][Ee][Rr])$",
         "^([Ss][Pp][Aa][Rr][Aa] [Nn][Oo][Uu][Ss][Ee][Rr])$",
@@ -847,6 +840,13 @@ return {
         -- kickdeleted
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
         "^([Ss][Pp][Aa][Rr][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
+        -- kick
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii])$",
+        "^([Uu][Cc][Cc][Ii][Dd][Ii]) (.*)$",
+        "^([Uu][Cc][Cc][Ii][Dd][Ii])$",
+        "^([Ss][Pp][Aa][Rr][Aa]) (.*)$",
+        "^([Ss][Pp][Aa][Rr][Aa])$",
         -- ban
         "^([Ss][Aa][Ss][Hh][Aa] [Bb][Aa][Nn][Nn][Aa]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Bb][Aa][Nn][Nn][Aa])$",
