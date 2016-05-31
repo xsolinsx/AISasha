@@ -1557,7 +1557,7 @@ local function run(msg, matches)
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
                 return msg.to.title .. '\n' .. group_link
             end
-            if matches[1]:lower() == 'setowner' and matches[2] then
+            if matches[1]:lower() == 'setowner' then
                 if not is_owner(msg) then
                     return lang_text('require_owner')
                 end
@@ -1806,7 +1806,7 @@ return {
     -- (#demote|[sasha] degrada) <username>|<reply>
     -- #mute|silenzia all|text|documents|gifs|video|photo|audio
     -- #unmute|ripristina all|text|documents|gifs|video|photo|audio
-    -- #setowner <id>
+    -- #setowner <id>|<reply>
     -- #clean modlist|rules|about
     -- ADMIN
     -- #add [realm]
