@@ -513,13 +513,13 @@ local function run(msg, matches)
     if matches[1]:lower() == 'ishere' and matches[2] then
         if string.match(matches[2], '^%d+$') then
             if chat_type == 'channel' then
-                channel_info(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2] })
+                channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2] })
             elseif chat_type == 'chat' then
                 chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2] })
             end
         else
             if chat_type == 'channel' then
-                channel_info(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
+                channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
             elseif chat_type == 'chat' then
                 chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
             end
