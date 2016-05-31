@@ -230,7 +230,6 @@ local function callback_id(cb_extra, success, result)
         text = text .. 'MUTED, '
     end
     text = text .. '\n🆔: ' .. result.peer_id
-    '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
     send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
 end
