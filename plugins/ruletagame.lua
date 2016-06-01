@@ -387,64 +387,9 @@ local function leaderboard_defeats(users)
     return text
 end
 
-local function kickrandom_chat(cb_extra, success, result)
-    local chat_id = cb_extra.chat_id
-    local kickable = false
-    local id
-    while not kickable do
-        id = result.members[math.random(#result.members)].id
-        print(id)
-        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
-            kickable = true
-            send_large_msg('chat#id' .. chat_id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
-            local function post_kick()
-                kick_user_any(id, chat_id)
-            end
-            postpone(post_kick, false, 1)
-        else
-            print('403')
-        end
-    end
-end
-
-local function kickrandom_channel(extra, success, result)
-    local chat_id = extra.chat_id
-    local kickable = false
-    local id
-    while not kickable do
-        id = result[math.random(#result)].id
-        print(id)
-        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
-            kickable = true
-            send_large_msg('channel#id' .. result.id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
-            local function post_kick()
-                kick_user_any(id, result.id)
-            end
-            postpone(post_kick, false, 1)
-        else
-            print('403')
-        end
-    end
-end
-
 local function run(msg, matches)
     if msg.to.type ~= 'user' then
-        if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
-            if is_momod(msg) then
-                if msg.to.type == 'chat' then
-                    local chat = 'chat#id' .. msg.to.id
-                    chat_info(chat, kickrandom_chat, { chat_id = msg.to.id })
-                elseif msg.to.type == 'channel' then
-                    local channel = 'channel#id' .. msg.to.id
-                    channel_get_users(channel, kickrandom_channel, { chat_id = msg.to.id })
-                end
-                return
-            else
-                return lang_text('require_mod')
-            end
-        end
-        -- RULETA
-        if matches[1]:lower() == 'createdb' then
+        if matches[1]:lower() == 'createruletadb' then
             if is_sudo(msg) then
                 local f = io.open(_config.ruleta.db, 'w+')
                 f:write('{"groups":{},"users":{},"challenges":{}}')
@@ -460,7 +405,7 @@ local function run(msg, matches)
         local user = tostring(msg.from.id)
         local ruletadata = load_data(_config.ruleta.db)
 
-        if matches[1]:lower() == 'registergroup' or matches[1]:lower() == 'registragruppo' then
+        if matches[1]:lower() == 'registergroupruleta' or matches[1]:lower() == 'registra gruppo ruleta' then
             if is_admin1(msg) then
                 if ruletadata['groups'][chat] then
                     reply_msg(msg.id, lang_text('groupAlreadySignedUp'), ok_cb, false)
@@ -483,11 +428,11 @@ local function run(msg, matches)
         local groupstats = ruletadata['groups'][chat]
 
         if not groupstats then
-            reply_msg(msg.id, lang_text('requireGroupSignUp'), ok_cb, false)
+            -- reply_msg(msg.id, lang_text('requireGroupSignUp'), ok_cb, false)
             return
         end
 
-        if matches[1]:lower() == 'deletegroup' or matches[1]:lower() == 'eliminagruppo' then
+        if matches[1]:lower() == 'deletegroup' or matches[1]:lower() == 'elimina gruppo' then
             if is_admin1(msg) then
                 ruletadata['groups'][chat] = false
                 save_data(_config.ruleta.db, ruletadata)
@@ -521,7 +466,7 @@ local function run(msg, matches)
 
         if matches[1]:lower() == 'registerme' or matches[1]:lower() == 'registrami' then
             if ruletadata['users'][user] then
-                reply_msg(msg.id, lang_text('alreadySignedUp'), ok_cb, false)
+                reply_msg(msg.id, lang_text('ruletaAlreadySignedUp'), ok_cb, false)
             else
                 ruletadata['users'][user] = {
                     attempts = tonumber(0),
@@ -534,7 +479,7 @@ local function run(msg, matches)
                     longeststreak = tonumber(0),
                 }
                 save_data(_config.ruleta.db, ruletadata)
-                reply_msg(msg.id, lang_text('signedUp'), ok_cb, false)
+                reply_msg(msg.id, lang_text('ruletaSignedUp'), ok_cb, false)
             end
             return
         end
@@ -614,7 +559,7 @@ local function run(msg, matches)
         local userstats = ruletadata['users'][user]
 
         if not userstats then
-            reply_msg(msg.id, lang_text('requireSignUp'), ok_cb, false)
+            reply_msg(msg.id, lang_text('ruletaRequireSignUp'), ok_cb, false)
             return
         end
 
@@ -624,7 +569,7 @@ local function run(msg, matches)
                 save_data(_config.ruleta.db, ruletadata)
                 reply_msg(msg.id, lang_text('ruletaDeleted'), ok_cb, false)
             else
-                reply_msg(msg.id, lang_text('requireZeroPoints'), ok_cb, false)
+                reply_msg(msg.id, lang_text('ruletaRequireZeroPoints'), ok_cb, false)
             end
             return
         end
@@ -789,7 +734,7 @@ local function run(msg, matches)
                         save_data(_config.ruleta.db, ruletadata)
                     end
                 else
-                    reply_msg(msg.id, lang_text('requirePoints'), ok_cb, false)
+                    reply_msg(msg.id, lang_text('ruletaRequirePoints'), ok_cb, false)
                 end
                 return
             end
@@ -907,9 +852,8 @@ return {
     description = "RULETAGAME",
     patterns =
     {
-        "^[#!/]([Kk][Ii][Cc][Kk]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Bb])$",
-        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
+        "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Rr][Uu][Ll][Ee][Tt][Aa][Dd][Bb])$",
+        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Gg][Rr][Oo][Uu][Pp][Rr][Uu][Ll][Ee][Tt][Aa])$",
         "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Gg][Rr][Oo][Uu][Pp])$",
         "^[#!/]([Ll][Ee][Aa][Dd][Ee][Rr][Bb][Oo][Aa][Rr][Dd]) (.*)$",
         "^[#!/]([Ll][Ee][Aa][Dd][Ee][Rr][Bb][Oo][Aa][Rr][Dd])$",
@@ -930,15 +874,10 @@ return {
         "^[#!/]([Aa][Dd][Dd][Pp][Oo][Ii][Nn][Tt][Ss]) (%d+) (%d+)$",
         "^[#!/]([Rr][Ee][Mm][Pp][Oo][Ii][Nn][Tt][Ss]) (%d+) (%d+)$",
         "^[#!/]?([Rr][Uu][Ll][Ee][Tt][Aa])",
-        -- kick random
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Rr][Aa]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        "^([Uu][Cc][Cc][Ii][Dd][Ii]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        "^([Ss][Pp][Aa][Rr][Aa]) [Rr][Aa][Nn][Dd][Oo][Mm]$",
-        -- registergroup
-        "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
+        -- registergroupruleta
+        "^([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa] [Gg][Rr][Uu][Pp][Pp][Oo] [Rr][Uu][Ll][Ee][Tt][Aa])$",
         -- deletegroup
-        "^[#!/]([Ee][Ll][Ii][Mm][Ii][Nn][Aa][Gg][Rr][Uu][Pp][Pp][Oo])$",
+        "^([Ee][Ll][Ii][Mm][Ii][Nn][Aa] [Gg][Rr][Uu][Pp][Pp][Oo])$",
         -- leaderboard
         "^[#!/]([Cc][Ll][Aa][Ss][Ss][Ii][Ff][Ii][Cc][Aa]) (.*)$",
         "^[#!/]([Cc][Ll][Aa][Ss][Ss][Ii][Ff][Ii][Cc][Aa])$",
@@ -973,15 +912,14 @@ return {
     -- MOD
     -- #setcaps <value>
     -- #setchallengecaps <value>
-    -- (#kick|spara|[sasha] uccidi) random
     -- OWNER
     -- #setcylinder <value>
     -- #setchallengecylinder <value>
     -- ADMIN
-    -- #registergroup|#registragruppo
-    -- #deletegroup|#eliminagruppo
+    -- #registergroupruleta|#registra gruppo ruleta
+    -- #deletegroup|#elimina gruppo
     -- SUDO
-    -- #createdb
+    -- #createruletadb
     -- #addpoints <id> <value>
     -- #rempoints <id> <value>
 }

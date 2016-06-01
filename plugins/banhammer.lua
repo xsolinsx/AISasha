@@ -428,6 +428,46 @@ local function kick_ban_res(extra, success, result)
     end
 end
 
+local function kickrandom_chat(cb_extra, success, result)
+    local chat_id = cb_extra.chat_id
+    local kickable = false
+    local id
+    while not kickable do
+        id = result.members[math.random(#result.members)].id
+        print(id)
+        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
+            kickable = true
+            send_large_msg('chat#id' .. chat_id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
+            local function post_kick()
+                kick_user_any(id, chat_id)
+            end
+            postpone(post_kick, false, 1)
+        else
+            print('403')
+        end
+    end
+end
+
+local function kickrandom_channel(extra, success, result)
+    local chat_id = extra.chat_id
+    local kickable = false
+    local id
+    while not kickable do
+        id = result[math.random(#result)].id
+        print(id)
+        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
+            kickable = true
+            send_large_msg('channel#id' .. result.id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
+            local function post_kick()
+                kick_user_any(id, result.id)
+            end
+            postpone(post_kick, false, 1)
+        else
+            print('403')
+        end
+    end
+end
+
 local function kick_nouser_chat(cb_extra, success, result)
     for k, v in pairs(result.members) do
         if not v.username then
@@ -570,6 +610,16 @@ local function run(msg, matches)
                 }
                 local username = string.gsub(matches[2], '@', '')
                 resolve_username(username, kick_ban_res, cbres_extra)
+            end
+            return
+        end
+        if matches[1]:lower() == 'kickrandom' or matches[1]:lower() == 'sasha uccidi random' or matches[1]:lower() == 'spara random' then
+            if msg.to.type == 'chat' then
+                local chat = 'chat#id' .. msg.to.id
+                chat_info(chat, kickrandom_chat, { chat_id = msg.to.id })
+            elseif msg.to.type == 'channel' then
+                local channel = 'channel#id' .. msg.to.id
+                channel_get_users(channel, kickrandom_channel, { chat_id = msg.to.id })
             end
             return
         end
@@ -794,6 +844,7 @@ return {
         "^[#!/]([Kk][Ii][Cc][Kk][Mm][Ee])$",
         "^[#!/]([Kk][Ii][Cc][Kk]) (.*)$",
         "^[#!/]([Kk][Ii][Cc][Kk])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Rr][Aa][Nn][Dd][Oo][Mm])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Nn][Oo][Uu][Ss][Ee][Rr])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee]) (%d+)$",
@@ -812,6 +863,9 @@ return {
         "^!!tgservice (.+)$",
         -- kickme
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii][Mm][Ii])$",
+        -- kick random
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Rr][Aa][Nn][Dd][Oo][Mm])$",
+        "^([Ss][Pp][Aa][Rr][Aa] [Rr][Aa][Nn][Dd][Oo][Mm])$",
         -- kicknouser
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Nn][Oo][Uu][Ss][Ee][Rr])$",
         "^([Ss][Pp][Aa][Rr][Aa] [Nn][Oo][Uu][Ss][Ee][Rr])$",
@@ -883,6 +937,7 @@ return {
     -- (#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>
     -- (#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>
     -- (#banlist|[sasha] lista ban) [<group_id>]
+    -- (#kickrandom|sasha uccidi random|spara random)
     -- (#kickdeleted|sasha uccidi eliminati|spara eliminati)
     -- OWNER
     -- (#kicknouser|sasha uccidi nouser|spara nouser)
