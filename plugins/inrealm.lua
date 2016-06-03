@@ -789,12 +789,12 @@ function run(msg, matches)
         end
     end
 
-    if matches[1]:lower() == 'settings' and matches[2]:lower() == 'group' and data[tostring(matches[3])]['settings'] then
+    if matches[1]:lower() == 'settings' and data[tostring(matches[2])]['settings'] then
         local target = matches[3]
         text = show_group_settingsmod(msg, target)
         return text .. "\nID: " .. target .. "\n"
     end
-    if matches[1]:lower() == 'settings' and matches[2]:lower() == 'sgroup' and data[tostring(matches[3])]['settings'] then
+    if matches[1]:lower() == 'supersettings' and data[tostring(matches[2])]['settings'] then
         local target = matches[3]
         text = show_supergroup_settingsmod(msg, target)
         return text .. "\nID: " .. target .. "\n"
@@ -1013,6 +1013,7 @@ return {
         "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (%d+) (.*)$",
         -- "^[#!/]([Mm][Uu][Tt][Ee]) (%d+)$",
         -- "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) (%d+)$",
+        "^[#!/]([Ss][Uu][Pp][Ee][Rr][Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss]) (%d+)$",
         "^[#!/]([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss]) (%d+)$",
         "^[#!/]([Ww][Hh][Oo][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ww][Hh][Oo])$",
