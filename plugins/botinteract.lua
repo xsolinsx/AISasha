@@ -68,6 +68,10 @@ local function run(msg, matches)
         redis:set(msg.to.id, 'waiting')
         return lang_text('sendMeMedia')
     end
+    if matches[1]:lower() == 'undo' then
+        redis:del(msg.to.id)
+        return lang_text('cancelled')
+    end
     if (matches[1] == '[photo]' or matches[1] == '[document]' or matches[1] == '[video]' or matches[1] == '[audio]' or matches[1] == '[contact]' or matches[1] == '[geo]') and redis:get(msg.to.id) then
         local chat = ''
         local bot = ''
@@ -116,6 +120,7 @@ return {
         "^[#!/]([Ss][Ee][Nn][Dd][Mm][Ee][Dd][Ii][Aa])$",
         "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
         "^[#!/]([Uu][Nn][Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
+        "^[#!/]([Uu][Nn][Dd][Oo])$",
         "(%[(document)%])",
         "(%[(photo)%])",
         "(%[(video)%])",
