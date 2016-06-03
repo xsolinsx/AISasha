@@ -661,11 +661,8 @@ local function run(msg, matches)
     end
     if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' and matches[2] then
         if is_owner(msg) then
-            if chat_type == 'channel' then
-                channel_info('channel#id' .. matches[2], channel_callback_info, { receiver = receiver, msg = msg })
-            elseif chat_type == 'chat' then
-                chat_info('chat#id' .. matches[2], chat_callback_info, { receiver = receiver })
-            end
+            channel_info('channel#id' .. matches[2], channel_callback_info, { receiver = receiver })
+            chat_info('chat#id' .. matches[2], chat_callback_info, { receiver = receiver })
         else
             return lang_text('require_owner')
         end
