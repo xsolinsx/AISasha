@@ -57,7 +57,7 @@ local function get_contact_list_callback(cb_extra, success, result)
     local text = " "
     for k, v in pairs(result) do
         if v.print_name and v.id and v.phone then
-            text = text .. string.gsub(v.print_name, "_", " ") .. " [" .. v.id .. "] = " .. v.phone .. "\n"
+            text = text .. string.gsub(v.print_name, "_", " ") .. " [" .. v.peer_id .. "] = " .. v.phone .. "\n"
         end
     end
     if (cb_extra.filetype == "txt") then
