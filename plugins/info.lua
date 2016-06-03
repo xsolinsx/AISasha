@@ -659,12 +659,20 @@ local function run(msg, matches)
             end
         end
     end
-    if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' and matches[2] then
-        if is_owner(msg) then
-            channel_info('channel#id' .. matches[2], channel_callback_info, { receiver = receiver })
-            chat_info('chat#id' .. matches[2], chat_callback_info, { receiver = receiver })
+    if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' then
+        if not matches[2] then
+            if chat_type == 'channel' then
+                channel_info('channel#id' .. matches[2], channel_callback_info, { receiver = receiver })
+            elseif chat_type == 'chat' then
+                chat_info('chat#id' .. matches[2], chat_callback_info, { receiver = receiver })
+            end
         else
-            return lang_text('require_owner')
+            if is_admin1(msg) then
+                channel_info('channel#id' .. matches[2], channel_callback_info, { receiver = receiver })
+                chat_info('chat#id' .. matches[2], chat_callback_info, { receiver = receiver })
+            else
+                return lang_text('require_admin')
+            end
         end
     end
     if matches[1]:lower() == 'database' or matches[1]:lower() == 'sasha database' then
@@ -707,6 +715,7 @@ return {
     {
         "^[#!/]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo]) (%d+)$",
+        "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
         "^[#!/]([Ii][Ss][Hh][Ee][Rr][Ee]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
@@ -718,7 +727,9 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         -- groupinfo
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
         "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
+        "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
         -- getrank
         "^([Rr][Aa][Nn][Gg][Oo]) (.*)$",
         "^([Rr][Aa][Nn][Gg][Oo])$",
@@ -739,11 +750,12 @@ return {
     -- #getrank|rango [<id>|<username>|<reply>]
     -- (#info|[sasha] info)
     -- #ishere <id>|<username>
+    -- (#groupinfo|[sasha] info gruppo)
     -- MOD
     -- (#info|[sasha] info) <id>|<username>|<reply>|from
     -- (#who|#members|[sasha] lista membri)
     -- (#kicked|[sasha] lista rimossi)
-    -- OWNER
+    -- ADMIN
     -- (#groupinfo|[sasha] info gruppo) <group_id>
     -- SUDO
     -- (#database|[sasha] database)
