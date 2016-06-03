@@ -790,12 +790,12 @@ function run(msg, matches)
     end
 
     if matches[1]:lower() == 'settings' and data[tostring(matches[2])]['settings'] then
-        local target = matches[3]
+        local target = matches[2]
         text = show_group_settingsmod(msg, target)
         return text .. "\nID: " .. target .. "\n"
     end
     if matches[1]:lower() == 'supersettings' and data[tostring(matches[2])]['settings'] then
-        local target = matches[3]
+        local target = matches[2]
         text = show_supergroup_settingsmod(msg, target)
         return text .. "\nID: " .. target .. "\n"
     end
