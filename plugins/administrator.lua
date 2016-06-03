@@ -54,15 +54,15 @@ local function parsed_url(link)
 end
 
 local function get_contact_list_callback(cb_extra, success, result)
-    local text = ""
+    local text = " "
     for k, v in pairs(result) do
         if v.print_name and v.id and v.phone then
             text = text .. string.gsub(v.print_name, "_", " ") .. " [" .. v.id .. "] = " .. v.phone .. "\n"
         end
     end
-    if (cb_filetype == "txt") then
+    if (cb_extra.filetype == "txt") then
         local file = io.open("contact_list.txt", "w")
-        file:write(result)
+        file:write(text)
         file:flush()
         file:close()
         send_document("user#id" .. cb_extra.target, "contact_list.txt", ok_cb, false)
