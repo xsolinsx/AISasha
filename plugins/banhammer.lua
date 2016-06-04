@@ -519,6 +519,9 @@ local function kick_inactive_chat(cb_extra, success, result)
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, chat_id) then
             local user_info = user_msgs(v.peer_id, chat_id)
             if tonumber(user_info) < tonumber(num) then
+                if kicked == 20 then
+                    break
+                end
                 kick_user(v.peer_id, chat_id)
                 kicked = kicked + 1
             end
@@ -537,6 +540,9 @@ local function kick_inactive_channel(cb_extra, success, result)
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, chat_id) then
             local user_info = user_msgs(v.peer_id, chat_id)
             if tonumber(user_info) < tonumber(num) then
+                if kicked == 20 then
+                    break
+                end
                 kick_user(v.peer_id, chat_id)
                 kicked = kicked + 1
             end
