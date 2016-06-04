@@ -819,7 +819,7 @@ local function run(msg, matches)
         set_text('onservice:0', 3)
         set_text('onservice:1', '🅿️ ONSERVICE')
         set_text('onservice:2', 'ADMIN')
-        set_text('onservice:3', '(#leave|sasha abbandona): Sasha leaves group.')
+        set_text('onservice:3', '(#leave|sasha abbandona) [<group_id>]: Sasha leaves the group.')
 
         -- plugins.lua --
         set_text('plugins:0', 10)
