@@ -56,7 +56,7 @@ local function run(msg, matches)
         for i, v in pairs(t) do
             chat, bot = v:match("(%d+):(%d+)")
             if tonumber(msg.to.id) == tonumber(chat) then
-                msg.text = msg.text:gsub('§§', '')
+                msg.text = msg.text:gsub('$', '')
                 send_large_msg('user#id' .. bot, msg.text)
             end
         end
@@ -99,8 +99,8 @@ local function pre_process(msg)
             chat, bot = v:match("(%d+):(%d+)")
             if tonumber(msg.from.id) == tonumber(bot) then
                 if not msg.media then
-                    send_large_msg('chat#id' .. chat, msg.text)
-                    send_large_msg('channel#id' .. chat, msg.text)
+                    fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
+                    fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
                 else
                     fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
                     fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
