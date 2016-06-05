@@ -79,7 +79,7 @@ local function ban_by_username(extra, success, result)
                 ban_user(result.peer_id, extra.chat_id)
             end
             postpone(post_kick, false, 3)
-            send_large_msg(extra.receiver, phrases[math.random(#phrases)])
+            send_large_msg(extra.receiver, lang_text('user') .. result.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
             savelog(extra.chat_id, "[" .. extra.executer .. "] banned user " .. result.peer_id .. " Y")
         else
             send_large_msg(extra.receiver, lang_text('require_rank'))
