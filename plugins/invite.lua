@@ -1,4 +1,7 @@
 ﻿local function invite_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+    end
     chat_add_user(extra.receiver, 'user#id' .. result.peer_id, ok_cb, false)
     channel_invite(extra.receiver, 'user#id' .. result.peer_id, ok_cb, false)
 end

@@ -863,20 +863,6 @@ function get_rank(user_id, chat_id)
     end
 end
 
-function get_rank_by_reply(extra, success, result)
-    local chat = 'chat#id' .. result.to.peer_id
-    local channel = 'channel#id' .. result.to.peer_id
-    local rank = get_rank(result.from.peer_id, result.to.peer_id)
-    send_large_msg(chat, lang_text('rank') .. reverse_rank_table[rank + 1])
-    send_large_msg(channel, lang_text('rank') .. reverse_rank_table[rank + 1])
-end
-
-function get_rank_by_username(extra, success, result)
-    local rank = get_rank(result.peer_id, extra.chat_id)
-    send_large_msg('chat#id' .. extra.chat_id, lang_text('rank') .. reverse_rank_table[rank + 1])
-    send_large_msg('channel#id' .. extra.chat_id, lang_text('rank') .. reverse_rank_table[rank + 1])
-end
-
 function compare_ranks(executer, target, chat_id)
     local executer_rank = get_rank(executer, chat_id)
     local target_rank = get_rank(target, chat_id)

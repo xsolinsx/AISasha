@@ -20,229 +20,236 @@ local function get_warn(msg)
 end
 
 local function get_user_warns(user_id, chat_id)
-    local channel = 'channel#id' .. chat_id
-    local chat = 'chat#id' .. chat_id
-    local hash = chat_id .. ':warn:' .. user_id
-    local hashonredis = redis:get(hash)
+    local hashonredis = redis:get(chat_id .. ':warn:' .. user_id)
     local warn_msg = lang_text('yourWarnings')
     local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
 
     if hashonredis then
         warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', tostring(hashonredis))
-        send_large_msg(chat, warn_msg, ok_cb, false)
-        send_large_msg(channel, warn_msg, ok_cb, false)
+        send_large_msg('chat#id' .. chat_id, warn_msg, ok_cb, false)
+        send_large_msg('channel#id' .. chat_id, warn_msg, ok_cb, false)
     else
         warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', '0')
-        send_large_msg(chat, warn_msg, ok_cb, false)
-        send_large_msg(channel, warn_msg, ok_cb, false)
+        send_large_msg('chat#id' .. chat_id, warn_msg, ok_cb, false)
+        send_large_msg('channel#id' .. chat_id, warn_msg, ok_cb, false)
     end
 end
 
 local function warn_user(user_id, chat_id)
-    local channel = 'channel#id' .. chat_id
-    local chat = 'chat#id' .. chat_id
-    local user = 'user#id' .. user_id
     local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
-    local hash = chat_id .. ':warn:' .. user_id
-    redis:incr(hash)
-    local hashonredis = redis:get(hash)
+    redis:incr(chat_id .. ':warn:' .. user_id)
+    local hashonredis = redis:get(chat_id .. ':warn:' .. user_id)
     if hashonredis then
         if tonumber(warn_chat) ~= 0 then
             if tonumber(hashonredis) >= tonumber(warn_chat) then
                 local function post_kick()
-                    chat_del_user(chat, user, ok_cb, false)
-                    channel_kick(channel, user, ok_cb, false)
+                    chat_del_user('chat#id' .. chat_id, 'user#id' .. user_id, ok_cb, false)
+                    channel_kick('channel#id' .. chat_id, 'user#id' .. user_id, ok_cb, false)
                 end
                 postpone(post_kick, false, 3)
                 redis:getset(hash, 0)
             end
-            send_large_msg(chat, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
-            send_large_msg(channel, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
+            send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
+            send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
         end
     else
-        redis:set(hash, 1)
-        send_large_msg(chat, string.gsub(lang_text('warned'), 'X', '1'), ok_cb, false)
-        send_large_msg(channel, string.gsub(lang_text('warned'), 'X', '1'), ok_cb, false)
+        redis:set(chat_id .. ':warn:' .. user_id, 1)
+        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', '1'), ok_cb, false)
+        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', '1'), ok_cb, false)
     end
 end
 
 local function unwarn_user(user_id, chat_id)
-    local channel = 'channel#id' .. chat_id
-    local chat = 'chat#id' .. chat_id
-    local hash = chat_id .. ':warn:' .. user_id
-    local warns = redis:get(hash)
+    local warns = redis:get(chat_id .. ':warn:' .. user_id)
     if tonumber(warns) <= 0 then
         redis:set(hash, 0)
-        send_large_msg(chat, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
-        send_large_msg(channel, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
     else
         redis:set(hash, warns - 1)
-        send_large_msg(chat, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
-        send_large_msg(channel, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
     end
 end
 
 local function unwarnall_user(user_id, chat_id)
-    local channel = 'channel#id' .. chat_id
-    local chat = 'chat#id' .. chat_id
-    local hash = chat_id .. ':warn:' .. user_id
-    redis:set(hash, 0)
-    send_large_msg(chat, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
-    send_large_msg(channel, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+    redis:set(chat_id .. ':warn:' .. user_id, 0)
+    send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+    send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
 end
 
-local function Warn_by_reply(extra, success, result)
-    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
-        if tonumber(result.from.peer_id) == tonumber(our_id) then
-            -- Ignore bot
-            return
-        end
-        if is_momod2(result.from.peer_id, result.to.peer_id) then
-            -- Ignore mods,owner,admin
-            return lang_text('cantWarnHigher')
-        end
+local function warn_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+    end
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
+        warn_user(result.peer_id, extra.chat_id)
+        savelog(extra.chat_id, "[" .. extra.executer .. "] warned user " .. result.peer_id .. " Y")
+    else
+        send_large_msg(extra.receiver, lang_text('require_rank'))
+        savelog(extra.chat_id, "[" .. extra.executer .. "] warned user " .. result.peer_id .. " N")
+    end
+end
+
+local function warn_by_reply(extra, success, result)
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
         warn_user(result.from.peer_id, result.to.peer_id)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.from.peer_id .. " Y")
     else
-        return lang_text('useYourGroups')
+        send_large_msg(extra.receiver, lang_text('require_rank'))
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.from.peer_id .. " N")
     end
 end
 
-local function Warn_by_username(extra, success, result)
+local function unwarn_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
     end
-    local user_id = result.peer_id
-    local chat_id = extra.msg.to.id
-    warn_user(user_id, chat_id)
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
+        unwarn_user(result.peer_id, extra.chat_id)
+        savelog(extra.chat_id, "[" .. extra.executer .. "] unwarned user " .. result.peer_id .. " Y")
+    else
+        send_large_msg(extra.receiver, lang_text('require_rank'))
+        savelog(extra.chat_id, "[" .. extra.executer .. "] unwarned user " .. result.peer_id .. " N")
+    end
 end
 
-local function Unwarn_by_reply(extra, success, result)
-    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
+local function unwarn_by_reply(extra, success, result)
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
         unwarn_user(result.from.peer_id, result.to.peer_id)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.from.peer_id .. " Y")
     else
-        return lang_text('useYourGroups')
+        send_large_msg(extra.receiver, lang_text('require_rank'))
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.from.peer_id .. " N")
     end
 end
 
-local function Unwarn_by_username(extra, success, result)
+local function unwarnall_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
     end
-    local user_id = result.peer_id
-    local chat_id = extra.msg.to.id
-    unwarn_user(user_id, chat_id)
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
+        unwarnall_user(result.peer_id, extra.chat_id)
+        savelog(extra.chat_id, "[" .. extra.executer .. "] unwarnedall user " .. result.peer_id .. " Y")
+    else
+        send_large_msg(extra.receiver, lang_text('require_rank'))
+        savelog(extra.chat_id, "[" .. extra.executer .. "] unwarnedall user " .. result.peer_id .. " N")
+    end
 end
 
-local function Unwarnall_by_reply(extra, success, result)
-    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
+local function unwarnall_by_reply(extra, success, result)
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
         unwarnall_user(result.from.peer_id, result.to.peer_id)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.from.peer_id .. " Y")
     else
-        return lang_text('useYourGroups')
-    end
-end
-
-local function Unwarnall_by_username(extra, success, result)
-    if success == 0 then
-        return send_large_msg(receiver, lang_text('noUsernameFound'))
-    end
-    local user_id = result.peer_id
-    local chat_id = extra.msg.to.id
-    unwarnall_user(user_id, chat_id)
-end
-
-local function getWarn_by_reply(extra, success, result)
-    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
-        get_user_warns(result.from.peer_id, result.to.peer_id)
-    else
-        return lang_text('useYourGroups')
+        send_large_msg(extra.receiver, lang_text('require_rank'))
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.from.peer_id .. " N")
     end
 end
 
 local function getWarn_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
     end
-    local user_id = result.peer_id
-    local chat_id = extra.msg.to.id
-    get_user_warns(user_id, chat_id)
+    get_user_warns(result.peer_id, extra.chat_id)
+    savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.peer_id .. " Y")
+end
+
+local function getWarn_by_reply(extra, success, result)
+    get_user_warns(result.from.peer_id, result.to.peer_id)
+    savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.from.peer_id .. " Y")
 end
 
 local function run(msg, matches)
-    if is_momod(msg) then
-        if matches[1]:lower() == 'setwarn' and matches[2] then
-            local msg = set_warn(msg, matches[2])
-            if matches[2] == '0' then
-                return lang_text('neverWarn')
+    if msg.to.type == 'chat' or msg.to.type == 'channel' then
+        if is_momod(msg) then
+            if matches[1]:lower() == 'setwarn' and matches[2] then
+                local txt = set_warn(msg, matches[2])
+                if matches[2] == '0' then
+                    return lang_text('neverWarn')
+                else
+                    return txt
+                end
+            end
+            if matches[1]:lower() == 'getwarn' then
+                return get_warn(msg)
+            end
+            if get_warn(msg) == lang_text('noWarnSet') then
+                return lang_text('noWarnSet')
             else
-                return msg
+                if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then
+                    if type(msg.reply_id) ~= "nil" then
+                        get_message(msg.reply_id, getWarn_by_reply, { executer = msg.from.id })
+                    elseif string.match(matches[2], '^%d+$') then
+                        get_user_warns(msg.from.id, msg.to.id)
+                    else
+                        resolve_username(string.gsub(matches[2], '@', ''), getWarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                    end
+                    return
+                end
+                if matches[1]:lower() == 'warn' or matches[1]:lower() == 'sasha avverti' or matches[1]:lower() == 'avverti' then
+                    if type(msg.reply_id) ~= "nil" then
+                        get_message(msg.reply_id, warn_by_reply, { receiver = receiver, executer = msg.from.id })
+                    elseif string.match(matches[2], '^%d+$') then
+                        -- ignore higher or same rank
+                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                            warn_user(matches[2], msg.to.id)
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
+                        else
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
+                            return lang_text('require_rank')
+                        end
+                    else
+                        resolve_username(string.gsub(matches[2], '@', ''), warn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                    end
+                    return
+                end
+                if matches[1]:lower() == 'unwarn' then
+                    if type(msg.reply_id) ~= "nil" then
+                        get_message(msg.reply_id, unwarn_by_reply, { receiver = receiver, executer = msg.from.id })
+                    elseif string.match(matches[2], '^%d+$') then
+                        -- ignore higher or same rank
+                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                            unwarn_user(matches[2], msg.to.id)
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
+                            return
+                        else
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
+                            return lang_text('require_rank')
+                        end
+                    else
+                        resolve_username(string.gsub(matches[2], '@', ''), unwarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                    end
+                end
+                if matches[1]:lower() == 'unwarnall' or matches[1]:lower() == 'sasha azzera avvertimenti' or matches[1]:lower() == 'azzera avvertimenti' then
+                    if type(msg.reply_id) ~= "nil" then
+                        get_message(msg.reply_id, unwarnall_by_reply, { receiver = receiver, executer = msg.from.id })
+                    elseif string.match(matches[2], '^%d+$') then
+                        -- ignore higher or same rank
+                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                            unwarnall_user(matches[2], msg.to.id)
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
+                            return
+                        else
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
+                            return lang_text('require_rank')
+                        end
+                    else
+                        resolve_username(string.gsub(matches[2], '@', ''), unwarnall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                    end
+                end
             end
-        end
-        if matches[1]:lower() == 'getwarn' then
-            return get_warn(msg)
-        end
-        if get_warn(msg) == lang_text('noWarnSet') then
-            return lang_text('noWarnSet')
         else
-            if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then
-                if type(msg.reply_id) ~= "nil" then
-                    msgr = get_message(msg.reply_id, getWarn_by_reply, false)
-                elseif string.match(matches[2], '^%d+$') then
-                    return get_user_warns(msg.from.id, msg.to.id)
-                else
-                    resolve_username(string.gsub(matches[2], '@', ''), getWarn_by_username, { msg = msg })
-                end
-            end
-            if matches[1]:lower() == 'warn' or matches[1]:lower() == 'sasha avverti' or matches[1]:lower() == 'avverti' then
-                if type(msg.reply_id) ~= "nil" then
-                    msgr = get_message(msg.reply_id, Warn_by_reply, false)
-                elseif string.match(matches[2], '^%d+$') then
-                    if tonumber(matches[2]) == tonumber(our_id) then
-                        return
-                    end
-                    if is_momod2(matches[2], msg.to.id) then
-                        return lang_text('cantWarnHigher')
-                    end
-                    local user_id = matches[2]
-                    local chat_id = msg.to.id
-                    local print_name = user_print_name(msg.from):gsub("‮", "")
-                    local name = print_name:gsub("_", "")
-                    savelog(msg.to.id, name .. " [" .. msg.from.id .. "] warned user " .. matches[2])
-                    warn_user(user_id, chat_id)
-                else
-                    resolve_username(string.gsub(matches[2], '@', ''), Warn_by_username, { msg = msg })
-                end
-            end
-            if matches[1]:lower() == 'unwarn' then
-                if type(msg.reply_id) ~= "nil" then
-                    msgr = get_message(msg.reply_id, Unwarn_by_reply, false)
-                elseif string.match(matches[2], '^%d+$') then
-                    local user_id = matches[2]
-                    local chat_id = msg.to.id
-                    local print_name = user_print_name(msg.from):gsub("‮", "")
-                    local name = print_name:gsub("_", "")
-                    savelog(msg.to.id, name .. " [" .. msg.from.id .. "] unwarned user " .. matches[2])
-                    unwarn_user(user_id, chat_id)
-                else
-                    resolve_username(string.gsub(matches[2], '@', ''), Unwarn_by_username, { msg = msg })
-                end
-            end
-            if matches[1]:lower() == 'unwarnall' or matches[1]:lower() == 'sasha azzera avvertimenti' or matches[1]:lower() == 'azzera avvertimenti' then
-                if type(msg.reply_id) ~= "nil" then
-                    msgr = get_message(msg.reply_id, Unwarnall_by_reply, false)
-                elseif string.match(matches[2], '^%d+$') then
-                    local user_id = matches[2]
-                    local chat_id = msg.to.id
-                    local print_name = user_print_name(msg.from):gsub("‮", "")
-                    local name = print_name:gsub("_", "")
-                    savelog(msg.to.id, name .. " [" .. msg.from.id .. "] unwarned user " .. matches[2])
-                    unwarnall_user(user_id, chat_id)
-                else
-                    resolve_username(string.gsub(matches[2], '@', ''), Unwarnall_by_username, { msg = msg })
-                end
-            end
+            return lang_text('require_mod')
         end
     else
-        return lang_text('require_mod')
+        return lang_text('useYourGroups')
     end
 end
 

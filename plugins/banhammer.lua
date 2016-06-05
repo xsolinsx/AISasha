@@ -15,6 +15,9 @@ local phrases = {
 }
 
 local function kick_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+    end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
         local function post_kick()
@@ -60,6 +63,9 @@ local function kick_from(extra, success, result)
 end
 
 local function ban_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+    end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
         local function post_kick()
@@ -105,6 +111,9 @@ local function ban_from(extra, success, result)
 end
 
 local function unban_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+    end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
         local hash = 'banned:' .. extra.chat_id
@@ -144,6 +153,9 @@ local function unban_from(extra, success, result)
 end
 
 local function banall_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+    end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
         banall_user(result.peer_id)
@@ -183,6 +195,9 @@ local function banall_from(extra, success, result)
 end
 
 local function unbanall_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+    end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
         unbanall_user(result.peer_id)
