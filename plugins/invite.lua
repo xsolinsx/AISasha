@@ -1,70 +1,45 @@
-﻿-- invite by reply
+﻿local function invite_by_username(extra, success, result)
+    chat_add_user(extra.receiver, 'user#id' .. result.peer_id, ok_cb, false)
+    channel_invite(extra.receiver, 'user#id' .. result.peer_id, ok_cb, false)
+end
+
 local function invite_by_reply(extra, success, result)
-    if result.to.peer_type == 'chat' or result.to.peer_type == 'channel' then
-        local chat = 'chat#id' .. result.to.peer_id
-        local channel = 'channel#id' .. result.to.peer_id
-        chat_add_user(chat, 'user#id' .. result.from.peer_id, ok_cb, false)
-        channel_invite(channel, 'user#id' .. result.from.peer_id, ok_cb, false)
-    else
-        return lang_text('useYourGroups')
-    end
+    chat_add_user(extra.receiver, 'user#id' .. result.from.peer_id, ok_cb, false)
+    channel_invite(extra.receiver, 'user#id' .. result.from.peer_id, ok_cb, false)
 end
 
 local function invite_from(extra, success, result)
-    chat_add_user('chat#id' .. result.to.peer_id, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
-    channel_invite('channel#id' .. result.to.peer_id, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
-end
-
-local function callbackres(extra, success, result)
-    local user = 'user#id' .. result.peer_id
-    local chat = 'chat#id' .. extra.chatid
-    local channel = 'channel#id' .. extra.chatid
-    if is_banned(result.id, extra.chatid) then
-        send_large_msg(chat, lang_text('userBanned'))
-        send_large_msg(channel, lang_text('userBanned'))
-    elseif is_gbanned(result.id) then
-        send_large_msg(chat, lang_text('userGbanned'))
-        send_large_msg(channel, lang_text('userGbanned'))
-    else
-        chat_add_user(chat, user, ok_cb, false)
-        channel_invite(channel, user, ok_cb, false)
-    end
+    chat_add_user(extra.receiver, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
+    channel_invite(extra.receiver, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
 end
 
 function run(msg, matches)
-    local data = load_data(_config.moderation.data)
     -- if is_owner(msg) then
     if is_admin1(msg) then
+        local data = load_data(_config.moderation.data)
+        local receiver = get_receiver(msg)
         if not is_realm(msg) then
             if data[tostring(msg.to.id)]['settings']['lock_member'] == 'yes' and not is_admin1(msg) then
                 return lang_text('privateGroup')
             end
         end
         if msg.to.type == 'chat' or msg.to.type == 'channel' then
-            local chat = 'chat#id' .. msg.to.id
-            local channel = 'channel#id' .. msg.to.id
             if type(msg.reply_id) ~= "nil" then
                 if matches[2] then
                     if matches[2]:lower() == 'from' then
-                        get_message(msg.reply_id, invite_from, { msg = msg })
+                        get_message(msg.reply_id, invite_from, { receiver = receiver })
                         return
                     else
-                        local msgr = get_message(msg.reply_id, invite_by_reply, false)
+                        get_message(msg.reply_id, invite_by_reply, { receiver = receiver })
                     end
                 else
-                    local msgr = get_message(msg.reply_id, invite_by_reply, false)
+                    get_message(msg.reply_id, invite_by_reply, { receiver = receiver })
                 end
             elseif string.match(matches[2], '^%d+$') then
-                -- User submitted an id
-                local user = 'user#id' .. matches[2]
-                -- The message must come from a chat group
-                chat_add_user(chat, user, callback, false)
-                channel_invite(channel, user, callback, false)
+                chat_add_user(receiver, 'user#id' .. matches[2], ok_cb, false)
+                channel_invite(receiver, 'user#id' .. matches[2], ok_cb, false)
             else
-                local user = matches[2]
-                -- User submitted a user name
-                local cbres_extra = { chatid = msg.to.id }
-                resolve_username(user:gsub("@", ""), callbackres, cbres_extra)
+                resolve_username(matches[2]:gsub('@', ''), invite_by_username, { receiver = receiver })
             end
         else
             return lang_text('useYourGroups')
