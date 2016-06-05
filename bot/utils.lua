@@ -877,6 +877,16 @@ function get_rank_by_username(extra, success, result)
     send_large_msg('channel#id' .. extra.chat_id, lang_text('rank') .. reverse_rank_table[rank + 1])
 end
 
+function compare_ranks(executer, target, chat_id)
+    local executer_rank = get_rank(executer, chat_id)
+    local target_rank = get_rank(target, chat_id)
+    if executer_rank > target_rank then
+        return true
+    elseif executer_rank <= target_rank then
+        return false
+    end
+end
+
 -- Check if user is admin or not
 function is_admin1(msg)
     local var = false
