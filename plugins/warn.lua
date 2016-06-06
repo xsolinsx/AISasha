@@ -51,6 +51,7 @@ local function warn_user(user_id, chat_id)
             local function post_kick()
                 kick_user_any(user_id, chat_id)
             end
+            postpone(post_kick, false, 3)
         end
         send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
         send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
