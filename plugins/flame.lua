@@ -26,23 +26,38 @@ local function flame_by_reply(extra, success, result)
         hash = 'chat:flame' .. result.to.peer_id
         tokick = 'chat:tokick' .. result.to.peer_id
     end
-    redis:set(hash, 0);
-    redis:set(tokick, result.from.peer_id);
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
+        redis:set(hash, 0);
+        redis:set(tokick, result.from.peer_id);
+        send_large_msg(extra.receiver, lang_text('hereIAm'))
+    else
+        send_large_msg(extra.receiver, lang_text('require_rank'))
+    end
 end
 
 local function flame_by_username(extra, success, result)
+    if success == 0 then
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+    end
     local hash
     local tokick
-    if extra.msg.to.type == 'channel' then
-        hash = 'channel:flame' .. extra.msg.to.id
-        tokick = 'channel:tokick' .. extra.msg.to.id
+    if extra.chat_type == 'channel' then
+        hash = 'channel:flame' .. extra.chat_id
+        tokick = 'channel:tokick' .. extra.chat_id
     end
-    if extra.msg.to.type == 'chat' then
-        hash = 'chat:flame' .. extra.msg.to.id
-        tokick = 'chat:tokick' .. extra.msg.to.id
+    if extra.chat_type == 'chat' then
+        hash = 'chat:flame' .. extra.chat_id
+        tokick = 'chat:tokick' .. extra.chat_id
     end
-    redis:set(hash, 0);
-    redis:set(tokick, result.peer_id);
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
+        redis:set(hash, 0);
+        redis:set(tokick, result.peer_id);
+        send_large_msg(extra.receiver, lang_text('hereIAm'))
+    else
+        send_large_msg(extra.receiver, lang_text('require_rank'))
+    end
 end
 
 local function callback_id(extra, success, result)
@@ -103,13 +118,9 @@ local function run(msg, matches)
         if is_momod(msg) then
             if matches[1]:lower() == 'startflame' or matches[1]:lower() == 'sasha flamma' or matches[1]:lower() == 'flamma' then
                 if type(msg.reply_id) ~= "nil" then
-                    msgr = get_message(msg.reply_id, flame_by_reply, false)
-                    return lang_text('hereIAm')
+                    get_message(msg.reply_id, flame_by_reply, { receiver = receiver, executer = msg.from.id })
                 elseif matches[2] then
                     if string.match(matches[2], '^%d+$') then
-                        if tonumber(matches[2]) == tonumber(our_id) then
-                            return lang_text('noAutoFlame')
-                        end
                         local hash
                         local tokick
                         if msg.to.type == 'channel' then
@@ -120,15 +131,19 @@ local function run(msg, matches)
                             hash = 'chat:flame' .. msg.to.id
                             tokick = 'chat:tokick' .. msg.to.id
                         end
-                        redis:set(hash, 0);
-                        redis:set(tokick, matches[2]);
-                        return lang_text('hereIAm')
+                        -- ignore higher or same rank
+                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                            redis:set(hash, 0);
+                            redis:set(tokick, matches[2]);
+                            return lang_text('hereIAm')
+                        else
+                            send_large_msg(extra.receiver, lang_text('require_rank'))
+                        end
                     elseif string.find(matches[2], '@') then
                         if string.gsub(matches[2], '@', ''):lower() == 'aisasha' then
                             return lang_text('noAutoFlame')
                         end
-                        resolve_username(string.gsub(matches[2], '@', ''), flame_by_username, { msg = msg, })
-                        return lang_text('hereIAm')
+                        resolve_username(string.gsub(matches[2], '@', ''), flame_by_username, { executer = msg.from.id, chat_id = msg.to.id, chat_type = msg.to.type, receiver = receiver })
                     end
                 end
             elseif matches[1]:lower() == 'stopflame' or matches[1]:lower() == 'sasha stop flame' or matches[1]:lower() == 'stop flame' then
@@ -142,9 +157,14 @@ local function run(msg, matches)
                     hash = 'chat:flame' .. msg.to.id
                     tokick = 'chat:tokick' .. msg.to.id
                 end
-                redis:del(hash)
-                redis:del(tokick)
-                return lang_text('stopFlame')
+                -- ignore higher or same rank
+                if compare_ranks(msg.from.id, redis:get(tokick), msg.to.id) then
+                    redis:del(hash)
+                    redis:del(tokick)
+                    return lang_text('stopFlame')
+                else
+                    send_large_msg(extra.receiver, lang_text('require_rank'))
+                end
             elseif matches[1]:lower() == 'flameinfo' or matches[1]:lower() == 'sasha info flame' or matches[1]:lower() == 'info flame' then
                 local hash
                 local tokick
