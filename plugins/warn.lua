@@ -1,18 +1,18 @@
 ﻿local data = load_data(_config.moderation.data)
 
-local function set_warn(msg, value)
+local function set_warn(user_id, chat_id, value)
     if tonumber(value) < 0 or tonumber(value) > 10 then
         return lang_text('errorWarnRange')
     end
     local warn_max = value
-    data[tostring(msg.to.id)]['settings']['warn_max'] = warn_max
+    data[tostring(chat_id)]['settings']['warn_max'] = warn_max
     save_data(_config.moderation.data, data)
-    savelog(msg.to.id, " [" .. msg.from.id .. "] set warn to [" .. value .. "]")
+    savelog(chat_id, " [" .. user_id .. "] set warn to [" .. value .. "]")
     return lang_text('warnSet') .. value
 end
 
-local function get_warn(msg)
-    local warn_max = data[tostring(msg.to.id)]['settings']['warn_max']
+local function get_warn(chat_id)
+    local warn_max = data[tostring(chat_id)]['settings']['warn_max']
     if not warn_max then
         return lang_text('noWarnSet')
     end
@@ -22,7 +22,7 @@ end
 local function get_user_warns(user_id, chat_id)
     local hashonredis = redis:get(chat_id .. ':warn:' .. user_id)
     local warn_msg = lang_text('yourWarnings')
-    local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
+    local warn_chat = string.match(get_warn(chat_id), "%d+")
 
     if hashonredis then
         warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', tostring(hashonredis))
@@ -36,7 +36,7 @@ local function get_user_warns(user_id, chat_id)
 end
 
 local function warn_user(user_id, chat_id)
-    local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
+    local warn_chat = string.match(get_warn(chat_id), "%d+")
     redis:incr(chat_id .. ':warn:' .. user_id)
     local hashonredis = redis:get(chat_id .. ':warn:' .. user_id)
     if not hashonredis then
@@ -47,32 +47,33 @@ local function warn_user(user_id, chat_id)
     end
     if tonumber(warn_chat) ~= 0 then
         if tonumber(hashonredis) >= tonumber(warn_chat) then
-            redis:getset(hash, 0)
-            return true
+            redis:getset(chat_id .. ':warn:' .. user_id, 0)
+            local function post_kick()
+                kick_user_any(user_id, chat_id)
+            end
         end
         send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
         send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
     end
-    return false
 end
 
 local function unwarn_user(user_id, chat_id)
     local warns = redis:get(chat_id .. ':warn:' .. user_id)
     if tonumber(warns) <= 0 then
-        redis:set(hash, 0)
-        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)))
-        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)))
+        redis:set(chat_id .. ':warn:' .. user_id, 0)
+        send_large_msg('chat#id' .. chat_id, lang_text('alreadyZeroWarnings'))
+        send_large_msg('channel#id' .. chat_id, lang_text('alreadyZeroWarnings'))
     else
-        redis:set(hash, warns - 1)
-        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)))
-        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)))
+        redis:set(chat_id .. ':warn:' .. user_id, warns - 1)
+        send_large_msg('chat#id' .. chat_id, lang_text('unwarned'))
+        send_large_msg('channel#id' .. chat_id, lang_text('unwarned'))
     end
 end
 
 local function unwarnall_user(user_id, chat_id)
     redis:set(chat_id .. ':warn:' .. user_id, 0)
-    send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)))
-    send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('zeroWarnings'), tostring(hashonredis)))
+    send_large_msg('chat#id' .. chat_id, lang_text('zeroWarnings'))
+    send_large_msg('channel#id' .. chat_id, lang_text('zeroWarnings'))
 end
 
 local function warn_by_username(extra, success, result)
@@ -81,9 +82,7 @@ local function warn_by_username(extra, success, result)
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
-        if warn_user(result.peer_id, extra.chat_id) then
-            kick_user_any(result.peer_id, extra.chat_id)
-        end
+        warn_user(result.peer_id, extra.chat_id)
         savelog(extra.chat_id, "[" .. extra.executer .. "] warned user " .. result.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, lang_text('require_rank'))
@@ -94,9 +93,7 @@ end
 local function warn_by_reply(extra, success, result)
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
-        if warn_user(result.from.peer_id, result.to.peer_id) then
-            kick_user_any(result.from.peer_id, result.to.peer_id)
-        end
+        warn_user(result.from.peer_id, result.to.peer_id)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.from.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, lang_text('require_rank'))
@@ -171,7 +168,7 @@ local function run(msg, matches)
     if msg.to.type == 'chat' or msg.to.type == 'channel' then
         if is_momod(msg) then
             if matches[1]:lower() == 'setwarn' and matches[2] then
-                local txt = set_warn(msg, matches[2])
+                local txt = set_warn(msg.from.id, msg.to.id, matches[2])
                 if matches[2] == '0' then
                     return lang_text('neverWarn')
                 else
@@ -179,9 +176,9 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == 'getwarn' then
-                return get_warn(msg)
+                return get_warn(msg.to.id)
             end
-            if get_warn(msg) == lang_text('noWarnSet') then
+            if get_warn(msg.to.id) == lang_text('noWarnSet') then
                 return lang_text('noWarnSet')
             else
                 if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then

@@ -53,7 +53,7 @@ local function callback_supergroup_members(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
-local function callback_kicked(cb_extra, success, result)
+local function callback_kicked(extra, success, result)
     -- vardump(result)
     local text = lang_text('membersKickedFrom') .. extra.receiver .. '\n'
     local i = 1
@@ -75,7 +75,7 @@ local function callback_kicked(cb_extra, success, result)
 end
 
 local function channel_callback_ishere(extra, success, result)
-    local user = cb_extra.user
+    local user = extra.user
     local text = lang_text('ishereNo')
     for k, v in pairsByKeys(result) do
         if tonumber(user) then
@@ -92,7 +92,7 @@ local function channel_callback_ishere(extra, success, result)
 end
 
 local function chat_callback_ishere(extra, success, result)
-    local user = cb_extra.user
+    local user = extra.user
     local text = lang_text('ishereNo')
     for k, v in pairs(result.members) do
         if tonumber(user) then
