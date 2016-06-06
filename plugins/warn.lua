@@ -155,7 +155,7 @@ local function getWarn_by_username(extra, success, result)
         return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
     end
     get_user_warns(result.peer_id, extra.chat_id)
-    savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.peer_id .. " Y")
+    savelog(extra.chat_id, "[" .. extra.executer .. "] get warns of " .. result.peer_id .. " Y")
 end
 
 local function getWarn_by_reply(extra, success, result)
