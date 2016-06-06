@@ -59,6 +59,17 @@ local tiamo = {
 }
 
 local function run(msg, matches)
+    if matches[1]:lower() == 'echo' or matches[1]:lower() == 'sasha ripeti' and matches[2] then
+        if is_momod(msg) then
+            if type(msg.reply_id) ~= "nil" then
+                reply_msg(msg.reply_id, matches[2], ok_cb, false)
+            else
+                return matches[2]
+            end
+        else
+            return lang_text('require_mod')
+        end
+    end
     -- interact
     if matches[1]:lower() == 'sasha come va?' then
         reply_msg(msg.id, comeva[math.random(#comeva)], ok_cb, false)
@@ -95,6 +106,9 @@ return {
     description = "INTERACT",
     patterns =
     {
+        "^[#!/]([Ee][Cc][Hh][Oo]) +(.+)$",
+        -- echo
+        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Pp][Ee][Tt][Ii]) +(.+)$",
         -- react
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Oo][Mm][Ee] [Vv][Aa]%?)$",
         "^([Ss][Aa][Ss][Hh][Aa])(.+%?)$",
@@ -113,3 +127,6 @@ return {
     run = run,
     min_rank = 0
 }
+-- usage
+-- MOD
+-- (#echo|sasha ripeti) <text>

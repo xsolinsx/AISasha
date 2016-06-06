@@ -607,12 +607,6 @@ local function run(msg, matches)
         set_text('duckduckgo:1', '🅿️ DUCKDUCKGO')
         set_text('duckduckgo:2', '#duck[duck]go <terms>: Sasha searches <terms> on DuckDuckGo.')
 
-        -- echo.lua --
-        set_text('echo:0', 3)
-        set_text('echo:1', '🅿️ ECHO')
-        set_text('echo:2', 'MOD')
-        set_text('echo:3', '(#echo|sasha ripeti) <text>: Sasha repeat <text>.')
-
         -- feedback.lua --
         set_text('feedback:0', 2)
         set_text('feedback:1', '🅿️ FEEDBACK')
@@ -769,9 +763,11 @@ local function run(msg, matches)
         set_text('inrealm:26', '#removeadmin <user_id>|<username>: Sasha demotes specified user from administrator.')
 
         -- interact.lua --
-        set_text('interact:0', 2)
+        set_text('interact:0', 4)
         set_text('interact:1', '🅿️ INTERACT')
         set_text('interact:2', 'Sasha interacts with users.')
+        set_text('interact:3', 'MOD')
+        set_text('interact:4', '(#echo|sasha ripeti) [<reply>]<text>: Sasha repeat <text>, if in reply of a message she replies to that message.')
 
         -- invite.lua --
         set_text('invite:0', 3)
