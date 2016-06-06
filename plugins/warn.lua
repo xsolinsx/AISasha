@@ -1,4 +1,4 @@
-local data = load_data(_config.moderation.data)
+﻿local data = load_data(_config.moderation.data)
 
 local function set_warn(msg, value)
     if tonumber(value) < 0 or tonumber(value) > 10 then
