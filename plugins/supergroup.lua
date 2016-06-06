@@ -737,24 +737,35 @@ function get_message_callback(extra, success, result)
         local chat_id = msg.to.id
         print(user_id)
         print(chat_id)
-        if is_muted_user(chat_id, user_id) then
-            unmute_user(chat_id, user_id)
-            send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
+
+        -- ignore higher or same rank
+        if compare_ranks(msg.from.id, user_id, chat_id) then
+            if is_muted_user(chat_id, user_id) then
+                unmute_user(chat_id, user_id)
+                send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
+            else
+                mute_user(chat_id, user_id)
+                send_large_msg(receiver, user_id .. lang_text('muteUserAdd'))
+            end
         else
-            mute_user(chat_id, user_id)
-            send_large_msg(receiver, user_id .. lang_text('muteUserAdd'))
+            send_large_msg(receiver, lang_text('require_rank'))
         end
     end
 end
 -- End by reply actions
 
 local function muteuser_from(extra, success, result)
-    if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
-        unmute_user(result.to.peer_id, result.fwd_from.peer_id)
-        send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserRemove'))
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+        if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
+            unmute_user(result.to.peer_id, result.fwd_from.peer_id)
+            send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserRemove'))
+        else
+            mute_user(result.to.peer_id, result.fwd_from.peer_id)
+            send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserAdd'))
+        end
     else
-        mute_user(result.to.peer_id, result.fwd_from.peer_id)
-        send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. lang_text('muteUserAdd'))
+        send_large_msg(extra.receiver, lang_text('require_rank'))
     end
 end
 
@@ -810,6 +821,9 @@ local function callbackres(extra, success, result)
 		end
 		send_large_msg(receiver, text)
   end]]
+    if success == 0 then
+        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+    end
     if get_cmd == "promote" then
         local receiver = extra.channel
         local user_id = result.peer_id
@@ -842,12 +856,18 @@ local function callbackres(extra, success, result)
         local user_id = result.peer_id
         local receiver = extra.receiver
         local chat_id = string.gsub(receiver, 'channel#id', '')
-        if is_muted_user(chat_id, user_id) then
-            unmute_user(chat_id, user_id)
-            send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
+
+        -- ignore higher or same rank
+        if compare_ranks(extra.executer, user_id, chat_id) then
+            if is_muted_user(chat_id, user_id) then
+                unmute_user(chat_id, user_id)
+                send_large_msg(receiver, user_id .. lang_text('muteUserRemove'))
+            else
+                mute_user(chat_id, user_id)
+                send_large_msg(receiver, user_id .. lang_text('muteUserAdd'))
+            end
         else
-            mute_user(chat_id, user_id)
-            send_large_msg(receiver, user_id .. lang_text('muteUserAdd'))
+            send_large_msg(receiver, lang_text('require_rank'))
         end
     end
 end
@@ -1674,7 +1694,7 @@ local function run(msg, matches)
             if type(msg.reply_id) ~= "nil" then
                 if matches[2] then
                     if matches[2]:lower() == 'from' then
-                        get_message(msg.reply_id, muteuser_from, false)
+                        get_message(msg.reply_id, muteuser_from, { receiver = receiver, executer = msg.from.id })
                         return
                     else
                         local receiver = get_receiver(msg)
@@ -1690,20 +1710,25 @@ local function run(msg, matches)
                 end
             elseif string.match(matches[2], '^%d+$') then
                 local user_id = matches[2]
-                if is_muted_user(chat_id, user_id) then
-                    unmute_user(chat_id, user_id)
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. user_id .. "] from the muted users list")
-                    return user_id .. lang_text('muteUserRemove')
+                -- ignore higher or same rank
+                if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                    if is_muted_user(msg.to.id, matches[2]) then
+                        unmute_user(msg.to.id, matches[2])
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
+                        return matches[2] .. lang_text('muteUserRemove')
+                    else
+                        mute_user(msg.to.id, matches[2])
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
+                        return matches[2] .. lang_text('muteUserAdd')
+                    end
                 else
-                    mute_user(chat_id, user_id)
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. user_id .. "] to the muted users list")
-                    return user_id .. lang_text('muteUserAdd')
+                    return lang_text('require_rank')
                 end
             else
                 local receiver = get_receiver(msg)
                 local get_cmd = "mute_user"
                 local username = string.gsub(matches[2], '@', '')
-                resolve_username(username, callbackres, { receiver = receiver, get_cmd = get_cmd, msg = msg })
+                resolve_username(username, callbackres, { receiver = receiver, get_cmd = get_cmd, executer = msg.from.id })
             end
         end
 
