@@ -26,12 +26,12 @@ local function get_user_warns(user_id, chat_id)
 
     if hashonredis then
         warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', tostring(hashonredis))
-        send_large_msg('chat#id' .. chat_id, warn_msg, ok_cb, false)
-        send_large_msg('channel#id' .. chat_id, warn_msg, ok_cb, false)
+        send_large_msg('chat#id' .. chat_id, warn_msg)
+        send_large_msg('channel#id' .. chat_id, warn_msg)
     else
         warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', '0')
-        send_large_msg('chat#id' .. chat_id, warn_msg, ok_cb, false)
-        send_large_msg('channel#id' .. chat_id, warn_msg, ok_cb, false)
+        send_large_msg('chat#id' .. chat_id, warn_msg)
+        send_large_msg('channel#id' .. chat_id, warn_msg)
     end
 end
 
@@ -46,13 +46,13 @@ local function warn_user(user_id, chat_id)
                 channel_kick('channel#id' .. chat_id, 'user#id' .. user_id, ok_cb, false)
                 redis:getset(hash, 0)
             end
-            send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
-            send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)), ok_cb, false)
+            send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
+            send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
         end
     else
         redis:set(chat_id .. ':warn:' .. user_id, 1)
-        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', '1'), ok_cb, false)
-        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', '1'), ok_cb, false)
+        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', '1'))
+        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', '1'))
     end
 end
 
@@ -60,19 +60,19 @@ local function unwarn_user(user_id, chat_id)
     local warns = redis:get(chat_id .. ':warn:' .. user_id)
     if tonumber(warns) <= 0 then
         redis:set(hash, 0)
-        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
-        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)))
+        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('alreadyZeroWarnings'), 'X', tostring(hashonredis)))
     else
         redis:set(hash, warns - 1)
-        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
-        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)), ok_cb, false)
+        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)))
+        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('unwarned'), 'X', tostring(hashonredis)))
     end
 end
 
 local function unwarnall_user(user_id, chat_id)
     redis:set(chat_id .. ':warn:' .. user_id, 0)
-    send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
-    send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)), ok_cb, false)
+    send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('zeroWarnings'), 'X', tostring(hashonredis)))
+    send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('zeroWarnings'), tostring(hashonredis)))
 end
 
 local function warn_by_username(extra, success, result)
