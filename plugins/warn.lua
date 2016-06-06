@@ -39,21 +39,21 @@ local function warn_user(user_id, chat_id)
     local warn_chat = string.match(get_warn( { from = { id = user_id }, to = { id = chat_id } }), "%d+")
     redis:incr(chat_id .. ':warn:' .. user_id)
     local hashonredis = redis:get(chat_id .. ':warn:' .. user_id)
-    if hashonredis then
-        if tonumber(warn_chat) ~= 0 then
-            if tonumber(hashonredis) >= tonumber(warn_chat) then
-                chat_del_user('chat#id' .. chat_id, 'user#id' .. user_id, ok_cb, false)
-                channel_kick('channel#id' .. chat_id, 'user#id' .. user_id, ok_cb, false)
-                redis:getset(hash, 0)
-            end
-            send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
-            send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
-        end
-    else
+    if not hashonredis then
         redis:set(chat_id .. ':warn:' .. user_id, 1)
         send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', '1'))
         send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', '1'))
+        hashonredis = 1
     end
+    if tonumber(warn_chat) ~= 0 then
+        if tonumber(hashonredis) >= tonumber(warn_chat) then
+            redis:getset(hash, 0)
+            return true
+        end
+        send_large_msg('chat#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
+        send_large_msg('channel#id' .. chat_id, string.gsub(lang_text('warned'), 'X', tostring(hashonredis)))
+    end
+    return false
 end
 
 local function unwarn_user(user_id, chat_id)
@@ -81,7 +81,9 @@ local function warn_by_username(extra, success, result)
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
-        warn_user(result.peer_id, extra.chat_id)
+        if warn_user(result.peer_id, extra.chat_id) then
+            kick_user_any(result.peer_id, extra.chat_id)
+        end
         savelog(extra.chat_id, "[" .. extra.executer .. "] warned user " .. result.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, lang_text('require_rank'))
@@ -92,7 +94,9 @@ end
 local function warn_by_reply(extra, success, result)
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
-        warn_user(result.from.peer_id, result.to.peer_id)
+        if warn_user(result.from.peer_id, result.to.peer_id) then
+            kick_user_any(result.from.peer_id, result.to.peer_id)
+        end
         savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.from.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, lang_text('require_rank'))
