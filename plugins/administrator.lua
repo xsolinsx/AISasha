@@ -53,27 +53,27 @@ local function parsed_url(link)
     return parsed_path[2]
 end
 
-local function get_contact_list_callback(cb_extra, success, result)
+local function get_contact_list_callback(extra, success, result)
     local text = " "
     for k, v in pairs(result) do
         if v.print_name and v.id and v.phone then
             text = text .. string.gsub(v.print_name, "_", " ") .. " [" .. v.peer_id .. "] = " .. v.phone .. "\n"
         end
     end
-    if (cb_extra.filetype == "txt") then
+    if (extra.filetype == "txt") then
         local file = io.open("contact_list.txt", "w")
         file:write(text)
         file:flush()
         file:close()
-        send_document("user#id" .. cb_extra.target, "contact_list.txt", ok_cb, false)
+        send_document("user#id" .. extra.target, "contact_list.txt", ok_cb, false)
         -- .txt format
     end
-    if (cb_extra.filetype == "json") then
+    if (extra.filetype == "json") then
         local file = io.open("contact_list.json", "w")
         file:write(json:encode_pretty(result))
         file:flush()
         file:close()
-        send_document("user#id" .. cb_extra.target, "contact_list.json", ok_cb, false)
+        send_document("user#id" .. extra.target, "contact_list.json", ok_cb, false)
         -- json format
     end
 end

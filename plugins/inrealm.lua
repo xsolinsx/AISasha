@@ -16,7 +16,7 @@ local function create_realm(msg)
     end
 end
 
-local function killchat(cb_extra, success, result)
+local function killchat(extra, success, result)
     for k, v in pairs(result.members) do
         local function post_kick()
             kick_user_any(v.peer_id, result.peer_id)
@@ -26,17 +26,17 @@ local function killchat(cb_extra, success, result)
     chat_del_user('chat#id' .. result.peer_id, 'user#id' .. our_id, ok_cb, true)
 end
 
-local function killchannel(cb_extra, success, result)
+local function killchannel(extra, success, result)
     for k, v in pairsByKeys(result) do
         local function post_kick()
-            kick_user_any(v.peer_id, cb_extra.chat_id)
+            kick_user_any(v.peer_id, extra.chat_id)
         end
         postpone(post_kick, false, 1)
     end
-    channel_kick('channel#id' .. cb_extra.chat_id, 'user#id' .. our_id, ok_cb, false)
+    channel_kick('channel#id' .. extra.chat_id, 'user#id' .. our_id, ok_cb, false)
 end
 
-local function killrealm(cb_extra, success, result)
+local function killrealm(extra, success, result)
     for k, v in pairs(result.members) do
         local function post_kick()
             kick_user_any(v.peer_id, result.peer_id)
@@ -435,9 +435,9 @@ local function show_super_group_settings(msg, data, target)
     return text
 end
 
-local function returnids(cb_extra, success, result)
+local function returnids(extra, success, result)
     local i = 1
-    local receiver = cb_extra.receiver
+    local receiver = extra.receiver
     local chat_id = "chat#id" .. result.peer_id
     local chatname = result.print_name
     local text = lang_text('usersIn') .. string.gsub(chatname, "_", " ") .. ' ID: ' .. result.peer_id .. '\n\n'
@@ -596,10 +596,10 @@ local function admin_user_demote(receiver, member_username, member_id)
     send_large_msg(receiver, '@' .. member_username .. lang_text('demoteAdmin'))
 end
 
-local function username_id(cb_extra, success, result)
-    local mod_cmd = cb_extra.mod_cmd
-    local receiver = cb_extra.receiver
-    local member = cb_extra.member
+local function username_id(extra, success, result)
+    local mod_cmd = extra.mod_cmd
+    local receiver = extra.receiver
+    local member = extra.member
     local text = lang_text('none') .. '@' .. member .. lang_text('inGroup')
     for k, v in pairs(result.members) do
         vusername = v.username
@@ -616,9 +616,9 @@ local function username_id(cb_extra, success, result)
     send_large_msg(receiver, text)
 end
 
-local function res_user_support(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local get_cmd = cb_extra.get_cmd
+local function res_user_support(extra, success, result)
+    local receiver = extra.receiver
+    local get_cmd = extra.get_cmd
     local support_id = result.peer_id
     if get_cmd == 'addsupport' then
         support_add(support_id)

@@ -1,6 +1,6 @@
-﻿local function send_title(cb_extra, success, result)
+﻿local function send_title(extra, success, result)
     if success then
-        send_msg(cb_extra[1], cb_extra[2], ok_cb, false)
+        send_msg(extra[1], extra[2], ok_cb, false)
     end
 end
 

@@ -20,22 +20,22 @@ local function clean_chat_stats(chat_id)
     end
 end
 
-local function callback_group_members(cb_extra, success, result)
+local function callback_group_members(extra, success, result)
     local chattotal = 0
-    local hash = 'chat:' .. cb_extra.chat_id .. ':users'
+    local hash = 'chat:' .. extra.chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
 
     -- Get total messages
     for k, v in pairs(result.members) do
-        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. cb_extra.chat_id) or 0)
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. extra.chat_id) or 0)
     end
 
     -- Get user info
     for k, v in pairs(result.members) do
         if tonumber(v.peer_id) ~= tonumber(our_id) then
             local user_id = v.peer_id
-            local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
+            local user_info = get_msgs_user_chat(user_id, extra.chat_id)
             local percentage =(user_info.msgs * 100) / chattotal
             user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
@@ -53,7 +53,7 @@ local function callback_group_members(cb_extra, success, result)
     for kuser, user in pairs(users_info) do
         text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
-    send_large_msg(cb_extra.receiver, text)
+    send_large_msg(extra.receiver, text)
 end
 
 local function chat_stats(chat_id)
@@ -143,23 +143,23 @@ local function clean_channel_stats(chat_id)
     end
 end
 
-local function callback_supergroup_members(cb_extra, success, result)
+local function callback_supergroup_members(extra, success, result)
     -- Users on chat
     local chattotal = 0
-    local hash = 'channel:' .. cb_extra.chat_id .. ':users'
+    local hash = 'channel:' .. extra.chat_id .. ':users'
     local users = redis:smembers(hash)
     local users_info = { }
 
     -- Get total messages
     for k, v in pairsByKeys(result) do
-        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. cb_extra.chat_id) or 0)
+        chattotal = chattotal + tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. extra.chat_id) or 0)
     end
 
     -- Get user info
     for k, v in pairsByKeys(result) do
         if tonumber(v.peer_id) ~= tonumber(our_id) then
             local user_id = v.peer_id
-            local user_info = get_msgs_user_chat(user_id, cb_extra.chat_id)
+            local user_info = get_msgs_user_chat(user_id, extra.chat_id)
             local percentage =(user_info.msgs * 100) / chattotal
             user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
@@ -177,7 +177,7 @@ local function callback_supergroup_members(cb_extra, success, result)
     for kuser, user in pairs(users_info) do
         text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
-    send_large_msg(cb_extra.receiver, text)
+    send_large_msg(extra.receiver, text)
 end
 
 local function channel_stats(chat_id)

@@ -1,8 +1,8 @@
 ﻿-- Check Member
-local function check_member_autorealm(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local data = cb_extra.data
-    local msg = cb_extra.msg
+local function check_member_autorealm(extra, success, result)
+    local receiver = extra.receiver
+    local data = extra.data
+    local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
         if member_id ~= our_id then
@@ -30,10 +30,10 @@ local function check_member_autorealm(cb_extra, success, result)
         end
     end
 end
-local function check_member_realm_add(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local data = cb_extra.data
-    local msg = cb_extra.msg
+local function check_member_realm_add(extra, success, result)
+    local receiver = extra.receiver
+    local data = extra.data
+    local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
         if member_id ~= our_id then
@@ -61,10 +61,10 @@ local function check_member_realm_add(cb_extra, success, result)
         end
     end
 end
-function check_member_group(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local data = cb_extra.data
-    local msg = cb_extra.msg
+function check_member_group(extra, success, result)
+    local receiver = extra.receiver
+    local data = extra.data
+    local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
         if member_id ~= our_id then
@@ -94,10 +94,10 @@ function check_member_group(cb_extra, success, result)
         end
     end
 end
-local function check_member_modadd(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local data = cb_extra.data
-    local msg = cb_extra.msg
+local function check_member_modadd(extra, success, result)
+    local receiver = extra.receiver
+    local data = extra.data
+    local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
         if member_id ~= our_id then
@@ -142,10 +142,10 @@ local function autorealmadd(msg)
         chat_info(receiver, check_member_autorealm, { receiver = receiver, data = data, msg = msg })
     end
 end
-local function check_member_realmrem(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local data = cb_extra.data
-    local msg = cb_extra.msg
+local function check_member_realmrem(extra, success, result)
+    local receiver = extra.receiver
+    local data = extra.data
+    local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.id
         if member_id ~= our_id then
@@ -163,10 +163,10 @@ local function check_member_realmrem(cb_extra, success, result)
         end
     end
 end
-local function check_member_modrem(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local data = cb_extra.data
-    local msg = cb_extra.msg
+local function check_member_modrem(extra, success, result)
+    local receiver = extra.receiver
+    local data = extra.data
+    local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
         if member_id ~= our_id then
@@ -880,8 +880,8 @@ local function callback_mute_res(extra, success, result)
     end
 end
 
-local function cleanmember(cb_extra, success, result)
-    local receiver = cb_extra.receiver
+local function cleanmember(extra, success, result)
+    local receiver = extra.receiver
     local chat_id = "chat#id" .. result.id
     local chatname = result.print_name
     for k, v in pairs(result.members) do
@@ -889,7 +889,7 @@ local function cleanmember(cb_extra, success, result)
     end
 end
 
-local function killchat(cb_extra, success, result)
+local function killchat(extra, success, result)
     for k, v in pairs(result.members) do
         local function post_kick()
             kick_user_any(v.peer_id, result.peer_id)
@@ -899,7 +899,7 @@ local function killchat(cb_extra, success, result)
     chat_del_user('chat#id' .. result.peer_id, 'user#id' .. our_id, ok_cb, true)
 end
 
-local function killrealm(cb_extra, success, result)
+local function killrealm(extra, success, result)
     for k, v in pairs(result.members) do
         local function post_kick()
             kick_user_any(v.peer_id, result.peer_id)

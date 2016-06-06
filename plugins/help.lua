@@ -102,7 +102,7 @@ local function help_all(chat, rank)
     return ret
 end
 
-local function get_sudo_info(cb_extra, success, result)
+local function get_sudo_info(extra, success, result)
     local text = 'SUDO INFO'
     if result.first_name then
         text = text .. lang_text('name') .. result.first_name
@@ -122,12 +122,12 @@ local function get_sudo_info(cb_extra, success, result)
     if result.phone then
         text = text .. lang_text('phone') .. '+' .. string.sub(result.phone, 1, 6) .. '******'
     end
-    local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. cb_extra.msg.to.id) or 0)
+    local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.msg.to.id) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs
     text = text .. '\n🆔: ' .. result.peer_id
-    send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
-    send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
+    send_large_msg('chat#id' .. extra.msg.to.id, text)
+    send_large_msg('channel#id' .. extra.msg.to.id, text)
 end
 
 local function run(msg, matches)

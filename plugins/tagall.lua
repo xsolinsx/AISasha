@@ -1,5 +1,5 @@
-local function tagall_chat(cb_extra, success, result)
-    local chat_id = cb_extra.chat_id
+local function tagall_chat(extra, success, result)
+    local chat_id = extra.chat_id
     local text = ""
     for k, v in pairs(result.members) do
         if v.username then
@@ -8,7 +8,7 @@ local function tagall_chat(cb_extra, success, result)
             end
         end
     end
-    text = text .. "\n" .. cb_extra.msg_text
+    text = text .. "\n" .. extra.msg_text
     return send_large_msg('chat#id' .. chat_id, text, ok_cb, true)
 end
 

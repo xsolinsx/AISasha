@@ -45,7 +45,7 @@ local function flame_by_username(extra, success, result)
     redis:set(tokick, result.peer_id);
 end
 
-local function callback_id(cb_extra, success, result)
+local function callback_id(extra, success, result)
     local text = lang_text('flaming')
     if result.first_name then
         text = text .. '\n' .. result.first_name
@@ -63,8 +63,8 @@ local function callback_id(cb_extra, success, result)
         text = text .. '\n@' .. result.username
     end
     text = text .. '\n' .. result.peer_id
-    send_large_msg('chat#id' .. cb_extra.msg.to.id, text)
-    send_large_msg('channel#id' .. cb_extra.msg.to.id, text)
+    send_large_msg('chat#id' .. extra.msg.to.id, text)
+    send_large_msg('channel#id' .. extra.msg.to.id, text)
 end
 
 local function pre_process(msg)

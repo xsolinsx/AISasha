@@ -41,18 +41,18 @@ function on_msg_receive(msg)
     check_tag(msg)
 end
 
-local function callback_sudo_ids(cb_extra, success, result)
+local function callback_sudo_ids(extra, success, result)
     if result.username then
         -- check if username is in message
-        if string.find(cb_extra.msg.text, '@' .. result.username) then
-            local text = lang_text('receiver') .. cb_extra.msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
-            if cb_extra.msg.from.username then
-                text = text .. '@' .. cb_extra.msg.from.username .. '\n'
+        if string.find(extra.msg.text, '@' .. result.username) then
+            local text = lang_text('receiver') .. extra.msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
+            if extra.msg.from.username then
+                text = text .. '@' .. extra.msg.from.username .. '\n'
             else
-                text = text .. cb_extra.msg.from.print_name:gsub("_", " ") .. '\n'
+                text = text .. extra.msg.from.print_name:gsub("_", " ") .. '\n'
             end
-            text = text .. lang_text('msgText') .. cb_extra.msg.text
-            send_large_msg('user#id' .. cb_extra.user, text)
+            text = text .. lang_text('msgText') .. extra.msg.text
+            send_large_msg('user#id' .. extra.user, text)
         end
     end
 end

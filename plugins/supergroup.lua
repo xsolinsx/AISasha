@@ -1,9 +1,9 @@
 ﻿-- Begin supergroup.lua
 -- Check members #Add supergroup
-local function check_member_super(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local data = cb_extra.data
-    local msg = cb_extra.msg
+local function check_member_super(extra, success, result)
+    local receiver = extra.receiver
+    local data = extra.data
+    local msg = extra.msg
     if success == 0 then
         send_large_msg(receiver, lang_text('promoteBotAdmin'))
     end
@@ -47,10 +47,10 @@ local function check_member_super(cb_extra, success, result)
 end
 
 -- Check Members #rem supergroup
-local function check_member_superrem(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local data = cb_extra.data
-    local msg = cb_extra.msg
+local function check_member_superrem(extra, success, result)
+    local receiver = extra.receiver
+    local data = extra.data
+    local msg = extra.msg
     for k, v in pairs(result) do
         local member_id = v.id
         if member_id ~= our_id then
@@ -85,10 +85,10 @@ local function superrem(msg)
 end
 
 -- Get and output admins and bots in supergroup
-local function callback(cb_extra, success, result)
+local function callback(extra, success, result)
     local i = 1
-    local chat_name = string.gsub(cb_extra.msg.to.print_name, "_", " ")
-    local member_type = cb_extra.member_type
+    local chat_name = string.gsub(extra.msg.to.print_name, "_", " ")
+    local member_type = extra.member_type
     local text = member_type .. " " .. chat_name .. ":\n"
     for k, v in pairsByKeys(result) do
         if not v.first_name then
@@ -100,7 +100,7 @@ local function callback(cb_extra, success, result)
         text = text .. "\n" .. i .. ". " .. name .. " " .. v.peer_id
         i = i + 1
     end
-    send_large_msg(cb_extra.receiver, text)
+    send_large_msg(extra.receiver, text)
 end
 
 local function callback_clean_bots(extra, success, result)
@@ -113,8 +113,8 @@ local function callback_clean_bots(extra, success, result)
     end
 end
 -- Get and output members of supergroup
-local function callback_who(cb_extra, success, result)
-    local text = lang_text('membersOf') .. cb_extra.receiver
+local function callback_who(extra, success, result)
+    local text = lang_text('membersOf') .. extra.receiver
     local i = 1
     for k, v in pairsByKeys(result) do
         if not v.print_name then
@@ -132,18 +132,18 @@ local function callback_who(cb_extra, success, result)
         -- text = text.."\n"..username
         i = i + 1
     end
-    local file = io.open("./groups/lists/supergroups/" .. cb_extra.receiver .. ".txt", "w")
+    local file = io.open("./groups/lists/supergroups/" .. extra.receiver .. ".txt", "w")
     file:write(text)
     file:flush()
     file:close()
-    send_document(cb_extra.receiver, "./groups/lists/supergroups/" .. cb_extra.receiver .. ".txt", ok_cb, false)
-    post_msg(cb_extra.receiver, text, ok_cb, false)
+    send_document(extra.receiver, "./groups/lists/supergroups/" .. extra.receiver .. ".txt", ok_cb, false)
+    post_msg(extra.receiver, text, ok_cb, false)
 end
 
 -- Get and output list of kicked users for supergroup
-local function callback_kicked(cb_extra, success, result)
+local function callback_kicked(extra, success, result)
     -- vardump(result)
-    local text = lang_text('membersKickedFrom') .. cb_extra.receiver .. "\n\n"
+    local text = lang_text('membersKickedFrom') .. extra.receiver .. "\n\n"
     local i = 1
     for k, v in pairsByKeys(result) do
         if not v.print_name then
@@ -158,12 +158,12 @@ local function callback_kicked(cb_extra, success, result)
         text = text .. "\n" .. i .. ". " .. name .. " " .. v.peer_id .. "\n"
         i = i + 1
     end
-    local file = io.open("./groups/lists/supergroups/kicked/" .. cb_extra.receiver .. ".txt", "w")
+    local file = io.open("./groups/lists/supergroups/kicked/" .. extra.receiver .. ".txt", "w")
     file:write(text)
     file:flush()
     file:close()
-    send_document(cb_extra.receiver, "./groups/lists/supergroups/kicked/" .. cb_extra.receiver .. ".txt", ok_cb, false)
-    -- send_large_msg(cb_extra.receiver, text)
+    send_document(extra.receiver, "./groups/lists/supergroups/kicked/" .. extra.receiver .. ".txt", ok_cb, false)
+    -- send_large_msg(extra.receiver, text)
 end
 
 -- Begin supergroup locks
@@ -854,15 +854,15 @@ end
 -- End resolve username actions
 
 -- Begin non-channel_invite username actions
-local function in_channel_cb(cb_extra, success, result)
-    local get_cmd = cb_extra.get_cmd
-    local receiver = cb_extra.receiver
-    local msg = cb_extra.msg
+local function in_channel_cb(extra, success, result)
+    local get_cmd = extra.get_cmd
+    local receiver = extra.receiver
+    local msg = extra.msg
     local data = load_data(_config.moderation.data)
-    local print_name = user_print_name(cb_extra.msg.from):gsub("‮", "")
+    local print_name = user_print_name(extra.msg.from):gsub("‮", "")
     local name_log = print_name:gsub("_", " ")
-    local member = cb_extra.username
-    local memberid = cb_extra.user_id
+    local member = extra.username
+    local memberid = extra.user_id
     if member then
         text = lang_text('none') .. '@' .. member .. lang_text('inThisSupergroup')
     else
@@ -874,7 +874,7 @@ local function in_channel_cb(cb_extra, success, result)
             vpeer_id = tostring(v.peer_id)
             if vusername == member or vpeer_id == memberid then
                 local user_id = "user#id" .. v.peer_id
-                local channel_id = "channel#id" .. cb_extra.msg.to.id
+                local channel_id = "channel#id" .. extra.msg.to.id
                 channel_set_admin(channel_id, user_id, ok_cb, false)
                 if v.username then
                     text = "@" .. v.username .. " " .. v.peer_id .. lang_text('promoteSupergroupMod')
@@ -900,7 +900,7 @@ local function in_channel_cb(cb_extra, success, result)
             vpeer_id = tostring(v.peer_id)
             if vusername == member or vpeer_id == memberid then
                 local channel = string.gsub(receiver, 'channel#id', '')
-                local from_id = cb_extra.msg.from.id
+                local from_id = extra.msg.from.id
                 local group_owner = data[tostring(channel)]['set_owner']
                 if group_owner then
                     if not is_admin2(tonumber(group_owner)) and not is_support(tonumber(group_owner)) then
@@ -920,7 +920,7 @@ local function in_channel_cb(cb_extra, success, result)
                 end
             elseif memberid and vusername ~= member and vpeer_id ~= memberid then
                 local channel = string.gsub(receiver, 'channel#id', '')
-                local from_id = cb_extra.msg.from.id
+                local from_id = extra.msg.from.id
                 local group_owner = data[tostring(channel)]['set_owner']
                 if group_owner then
                     if not is_admin2(tonumber(group_owner)) and not is_support(tonumber(group_owner)) then
@@ -961,14 +961,14 @@ local function set_supergroup_photo(msg, success, result)
     end
 end
 
-local function killchannel(cb_extra, success, result)
+local function killchannel(extra, success, result)
     for k, v in pairsByKeys(result) do
         local function post_kick()
-            kick_user_any(v.peer_id, cb_extra.chat_id)
+            kick_user_any(v.peer_id, extra.chat_id)
         end
         postpone(post_kick, false, 1)
     end
-    channel_kick('channel#id' .. cb_extra.chat_id, 'user#id' .. our_id, ok_cb, false)
+    channel_kick('channel#id' .. extra.chat_id, 'user#id' .. our_id, ok_cb, false)
 end
 
 -- Run function

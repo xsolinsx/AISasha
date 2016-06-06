@@ -327,8 +327,8 @@ local function pre_process(msg)
     return msg
 end
 
-local function kickrandom_chat(cb_extra, success, result)
-    local chat_id = cb_extra.chat_id
+local function kickrandom_chat(extra, success, result)
+    local chat_id = extra.chat_id
     local kickable = false
     local id
     while not kickable do
@@ -367,7 +367,7 @@ local function kickrandom_channel(extra, success, result)
     end
 end
 
-local function kick_nouser_chat(cb_extra, success, result)
+local function kick_nouser_chat(extra, success, result)
     for k, v in pairs(result.members) do
         if not v.username then
             kick_user(v.id, result.id)
@@ -375,15 +375,15 @@ local function kick_nouser_chat(cb_extra, success, result)
     end
 end
 
-local function kick_nouser_channel(cb_extra, success, result)
+local function kick_nouser_channel(extra, success, result)
     for k, v in pairs(result) do
         if not v.username then
-            kick_user(v.id, cb_extra.chat_id)
+            kick_user(v.id, extra.chat_id)
         end
     end
 end
 
-local function kick_deleted_chat(cb_extra, success, result)
+local function kick_deleted_chat(extra, success, result)
     for k, v in pairs(result.members) do
         if not v.print_name then
             kick_user(v.id, result.id)
@@ -391,10 +391,10 @@ local function kick_deleted_chat(cb_extra, success, result)
     end
 end
 
-local function kick_deleted_channel(cb_extra, success, result)
+local function kick_deleted_channel(extra, success, result)
     for k, v in pairs(result) do
         if not v.print_name then
-            kick_user(v.id, cb_extra.chat_id)
+            kick_user(v.id, extra.chat_id)
         end
     end
 end
@@ -408,10 +408,10 @@ local function user_msgs(user_id, chat_id)
     return user_info
 end
 
-local function kick_inactive_chat(cb_extra, success, result)
-    local chat_id = cb_extra.chat_id
-    local num = cb_extra.num
-    local receiver = cb_extra.receiver
+local function kick_inactive_chat(extra, success, result)
+    local chat_id = extra.chat_id
+    local num = extra.num
+    local receiver = extra.receiver
     local kicked = 0
 
     for k, v in pairs(result.members) do
@@ -429,10 +429,10 @@ local function kick_inactive_chat(cb_extra, success, result)
     send_large_msg(receiver, lang_text('massacre'):gsub('X', kicked))
 end
 
-local function kick_inactive_channel(cb_extra, success, result)
-    local chat_id = cb_extra.chat_id
-    local num = cb_extra.num
-    local receiver = cb_extra.receiver
+local function kick_inactive_channel(extra, success, result)
+    local chat_id = extra.chat_id
+    local num = extra.num
+    local receiver = extra.receiver
     local kicked = 0
 
     for k, v in pairs(result) do

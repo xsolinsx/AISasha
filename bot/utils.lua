@@ -248,38 +248,38 @@ function string:starts(text)
 end
 
 -- Send image to user and delete it when finished.
--- cb_function and cb_extra are optionals callback
-function _send_photo(receiver, file_path, cb_function, cb_extra)
-    local cb_extra = {
+-- cb_function and extra are optionals callback
+function _send_photo(receiver, file_path, cb_function, extra)
+    local extra = {
         file_path = file_path,
         cb_function = cb_function,
-        cb_extra = cb_extra
+        extra = extra
     }
     -- Call to remove with optional callback
-    send_photo(receiver, file_path, cb_function, cb_extra)
+    send_photo(receiver, file_path, cb_function, extra)
 end
 
 -- Download the image and send to receiver, it will be deleted.
--- cb_function and cb_extra are optionals callback
-function send_photo_from_url(receiver, url, cb_function, cb_extra)
+-- cb_function and extra are optionals callback
+function send_photo_from_url(receiver, url, cb_function, extra)
     -- If callback not provided
     cb_function = cb_function or ok_cb
-    cb_extra = cb_extra or false
+    extra = extra or false
 
     local file_path = download_to_file(url, false)
     if not file_path then
         -- Error
-        send_msg(receiver, lang_text('errorImageDownload'), cb_function, cb_extra)
+        send_msg(receiver, lang_text('errorImageDownload'), cb_function, extra)
     else
         print("File path: " .. file_path)
-        _send_photo(receiver, file_path, cb_function, cb_extra)
+        _send_photo(receiver, file_path, cb_function, extra)
     end
 end
 
 -- Same as send_photo_from_url but as callback function
-function send_photo_from_url_callback(cb_extra, success, result)
-    local receiver = cb_extra.receiver
-    local url = cb_extra.url
+function send_photo_from_url_callback(extra, success, result)
+    local receiver = extra.receiver
+    local url = extra.url
 
     local file_path = download_to_file(url, false)
     if not file_path then
@@ -294,21 +294,21 @@ end
 --  Send multiple images asynchronous.
 -- param urls must be a table.
 function send_photos_from_url(receiver, urls)
-    local cb_extra = {
+    local extra = {
         receiver = receiver,
         urls = urls,
         remove_path = nil
     }
-    send_photos_from_url_callback(cb_extra)
+    send_photos_from_url_callback(extra)
 end
 
 -- Use send_photos_from_url.
 -- This function might be difficult to understand.
-function send_photos_from_url_callback(cb_extra, success, result)
-    -- cb_extra is a table containing receiver, urls and remove_path
-    local receiver = cb_extra.receiver
-    local urls = cb_extra.urls
-    local remove_path = cb_extra.remove_path
+function send_photos_from_url_callback(extra, success, result)
+    -- extra is a table containing receiver, urls and remove_path
+    local receiver = extra.receiver
+    local urls = extra.urls
+    local remove_path = extra.remove_path
 
     -- The previously image to remove
     if remove_path ~= nil then
@@ -325,48 +325,48 @@ function send_photos_from_url_callback(cb_extra, success, result)
     local head = table.remove(urls, 1)
 
     local file_path = download_to_file(head, false)
-    local cb_extra = {
+    local extra = {
         receiver = receiver,
         urls = urls,
         remove_path = file_path
     }
 
     -- Send first and postpone the others as callback
-    send_photo(receiver, file_path, send_photos_from_url_callback, cb_extra)
+    send_photo(receiver, file_path, send_photos_from_url_callback, extra)
 end
 
 -- Callback to remove a file
-function rmtmp_cb(cb_extra, success, result)
-    local file_path = cb_extra.file_path
-    local cb_function = cb_extra.cb_function or ok_cb
-    local cb_extra = cb_extra.cb_extra
+function rmtmp_cb(extra, success, result)
+    local file_path = extra.file_path
+    local cb_function = extra.cb_function or ok_cb
+    local extra = extra.extra
 
     if file_path ~= nil then
         os.remove(file_path)
         print("Deleted: " .. file_path)
     end
     -- Finally call the callback
-    cb_function(cb_extra, success, result)
+    cb_function(extra, success, result)
 end
 
 -- Send document to user and delete it when finished.
--- cb_function and cb_extra are optionals callback
-function _send_document(receiver, file_path, cb_function, cb_extra)
-    local cb_extra = {
+-- cb_function and extra are optionals callback
+function _send_document(receiver, file_path, cb_function, extra)
+    local extra = {
         file_path = file_path,
         cb_function = cb_function or ok_cb,
-        cb_extra = cb_extra or false
+        extra = extra or false
     }
     -- Call to remove with optional callback
-    send_document(receiver, file_path, rmtmp_cb, cb_extra)
+    send_document(receiver, file_path, rmtmp_cb, extra)
 end
 
 -- Download the image and send to receiver, it will be deleted.
--- cb_function and cb_extra are optionals callback
-function send_document_from_url(receiver, url, cb_function, cb_extra)
+-- cb_function and extra are optionals callback
+function send_document_from_url(receiver, url, cb_function, extra)
     local file_path = download_to_file(url, false)
     print("File path: " .. file_path)
-    _send_document(receiver, file_path, cb_function, cb_extra)
+    _send_document(receiver, file_path, cb_function, extra)
 end
 
 -- Parameters in ?a=1&b=2 style
@@ -412,17 +412,17 @@ end
 
 
 function send_order_msg(destination, msgs)
-    local cb_extra = {
+    local extra = {
         destination = destination,
         msgs = msgs
     }
-    send_order_msg_callback(cb_extra, true)
+    send_order_msg_callback(extra, true)
 end
 
-function send_order_msg_callback(cb_extra, success, result)
-    local destination = cb_extra.destination
-    local msgs = cb_extra.msgs
-    local file_path = cb_extra.file_path
+function send_order_msg_callback(extra, success, result)
+    local destination = extra.destination
+    local msgs = extra.msgs
+    local file_path = extra.file_path
     if file_path ~= nil then
         os.remove(file_path)
         print("Deleted: " .. file_path)
@@ -436,45 +436,45 @@ function send_order_msg_callback(cb_extra, success, result)
         return
     end
     local msg = table.remove(msgs, 1)
-    local new_cb_extra = {
+    local new_extra = {
         destination = destination,
         msgs = msgs
     }
     if type(msg) == 'string' then
-        send_msg(destination, msg, send_order_msg_callback, new_cb_extra)
+        send_msg(destination, msg, send_order_msg_callback, new_extra)
     elseif type(msg) == 'table' then
         local typ = msg[1]
         local nmsg = msg[2]
-        new_cb_extra.file_path = nmsg
+        new_extra.file_path = nmsg
         if typ == 'document' then
-            send_document(destination, nmsg, send_order_msg_callback, new_cb_extra)
+            send_document(destination, nmsg, send_order_msg_callback, new_extra)
         elseif typ == 'image' or typ == 'photo' then
-            send_photo(destination, nmsg, send_order_msg_callback, new_cb_extra)
+            send_photo(destination, nmsg, send_order_msg_callback, new_extra)
         elseif typ == 'audio' then
-            send_audio(destination, nmsg, send_order_msg_callback, new_cb_extra)
+            send_audio(destination, nmsg, send_order_msg_callback, new_extra)
         elseif typ == 'video' then
-            send_video(destination, nmsg, send_order_msg_callback, new_cb_extra)
+            send_video(destination, nmsg, send_order_msg_callback, new_extra)
         else
-            send_file(destination, nmsg, send_order_msg_callback, new_cb_extra)
+            send_file(destination, nmsg, send_order_msg_callback, new_extra)
         end
     end
 end
 
 -- Same as send_large_msg_callback but friendly params
 function send_large_msg(destination, text)
-    local cb_extra = {
+    local extra = {
         destination = destination,
         text = text
     }
-    send_large_msg_callback(cb_extra, true)
+    send_large_msg_callback(extra, true)
 end
 
 -- If text is longer than 4096 chars, send multiple msg.
 -- https://core.telegram.org/method/messages.sendMessage
-function send_large_msg_callback(cb_extra, success, result)
+function send_large_msg_callback(extra, success, result)
     local text_max = 4096
-    local destination = cb_extra.destination
-    local text = cb_extra.text
+    local destination = extra.destination
+    local text = extra.text
     if not text or type(text) == 'boolean' then
         return
     end
@@ -488,28 +488,28 @@ function send_large_msg_callback(cb_extra, success, result)
         local my_text = string.sub(text, 1, 4096)
         local rest = string.sub(text, 4096, text_len)
 
-        local cb_extra = {
+        local extra = {
             destination = destination,
             text = rest
         }
 
-        send_msg(destination, my_text, send_large_msg_callback, cb_extra)
+        send_msg(destination, my_text, send_large_msg_callback, extra)
     end
 end
 
 function post_large_msg(destination, text)
-    local cb_extra = {
+    local extra = {
         destination = destination,
         text = text
     }
-    post_large_msg_callback(cb_extra, true)
+    post_large_msg_callback(extra, true)
 end
 
-function post_large_msg_callback(cb_extra, success, result)
+function post_large_msg_callback(extra, success, result)
     local text_max = 4096
 
-    local destination = cb_extra.destination
-    local text = cb_extra.text
+    local destination = extra.destination
+    local text = extra.text
     local text_len = string.len(text)
     local num_msg = math.ceil(text_len / text_max)
 
@@ -520,12 +520,12 @@ function post_large_msg_callback(cb_extra, success, result)
         local my_text = string.sub(text, 1, 4096)
         local rest = string.sub(text, 4096, text_len)
 
-        local cb_extra = {
+        local extra = {
             destination = destination,
             text = rest
         }
 
-        post_msg(destination, my_text, post_large_msg_callback, cb_extra)
+        post_msg(destination, my_text, post_large_msg_callback, extra)
     end
 end
 
