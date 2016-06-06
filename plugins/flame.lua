@@ -118,7 +118,7 @@ local function run(msg, matches)
         if is_momod(msg) then
             if matches[1]:lower() == 'startflame' or matches[1]:lower() == 'sasha flamma' or matches[1]:lower() == 'flamma' then
                 if type(msg.reply_id) ~= "nil" then
-                    get_message(msg.reply_id, flame_by_reply, { receiver = receiver, executer = msg.from.id })
+                    get_message(msg.reply_id, flame_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
                 elseif matches[2] then
                     if string.match(matches[2], '^%d+$') then
                         local hash
@@ -137,13 +137,13 @@ local function run(msg, matches)
                             redis:set(tokick, matches[2]);
                             return lang_text('hereIAm')
                         else
-                            send_large_msg(extra.receiver, lang_text('require_rank'))
+                            send_large_msg(get_receiver(msg), lang_text('require_rank'))
                         end
                     elseif string.find(matches[2], '@') then
                         if string.gsub(matches[2], '@', ''):lower() == 'aisasha' then
                             return lang_text('noAutoFlame')
                         end
-                        resolve_username(string.gsub(matches[2], '@', ''), flame_by_username, { executer = msg.from.id, chat_id = msg.to.id, chat_type = msg.to.type, receiver = receiver })
+                        resolve_username(string.gsub(matches[2], '@', ''), flame_by_username, { executer = msg.from.id, chat_id = msg.to.id, chat_type = msg.to.type, receiver = get_receiver(msg) })
                     end
                 end
             elseif matches[1]:lower() == 'stopflame' or matches[1]:lower() == 'sasha stop flame' or matches[1]:lower() == 'stop flame' then
@@ -163,7 +163,7 @@ local function run(msg, matches)
                     redis:del(tokick)
                     return lang_text('stopFlame')
                 else
-                    send_large_msg(extra.receiver, lang_text('require_rank'))
+                    send_large_msg(get_receiver(msg), lang_text('require_rank'))
                 end
             elseif matches[1]:lower() == 'flameinfo' or matches[1]:lower() == 'sasha info flame' or matches[1]:lower() == 'info flame' then
                 local hash
