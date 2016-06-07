@@ -112,24 +112,25 @@ local function callback_sudo_ids(extra, success, result)
         else
             text = text .. extra.msg.from.print_name:gsub("_", " ") .. ' [' .. extra.msg.from.id .. ']\n'
         end
+        text = text .. lang_text('msgText')
 
         if extra.msg.text then
-            text = text .. lang_text('msgText') .. extra.msg.text .. ' '
+            text = text .. extra.msg.text .. ' '
         end
         if extra.msg.media then
             if extra.msg.media.title then
-                text = text .. lang_text('msgText') .. extra.msg.media.title
+                text = text .. extra.msg.media.title
             end
             if extra.msg.media.description then
-                text = text .. lang_text('msgText') .. extra.msg.media.description
+                text = text .. extra.msg.media.description
             end
             if extra.msg.media.caption then
-                text = text .. lang_text('msgText') .. extra.msg.media.caption
+                text = text .. extra.msg.media.caption
             end
         end
         if extra.msg.fwd_from then
             if extra.msg.fwd_from.title then
-                text = text .. lang_text('msgText') .. extra.msg.fwd_from.title
+                text = text .. extra.msg.fwd_from.title
             end
         end
         send_large_msg('user#id' .. extra.user, text)
