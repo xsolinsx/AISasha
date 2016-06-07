@@ -38,7 +38,7 @@ local function plugin_help(var, chat, rank)
     if not plugin or plugin == "" then
         return nil
     end
-    if plugin.min_rank <= rank then
+    if plugin.min_rank <= tonumber(rank) then
         local help_permission = true
         -- '=========================\n'
         local text = ''
@@ -71,13 +71,13 @@ local function telegram_help(receiver, rank)
         if _config.disabled_plugin_on_chat[receiver] then
             if not _config.disabled_plugin_on_chat[receiver][name] or _config.disabled_plugin_on_chat[receiver][name] == false then
                 i = i + 1
-                if plugins[name].min_rank <= rank then
+                if plugins[name].min_rank <= tonumber(rank) then
                     text = text .. '🅿️ ' .. i .. '. ' .. name .. '\n'
                 end
             end
         else
             i = i + 1
-            if plugins[name].min_rank <= rank then
+            if plugins[name].min_rank <= tonumber(rank) then
                 text = text .. '🅿️ ' .. i .. '. ' .. name .. '\n'
             end
         end
@@ -119,9 +119,11 @@ local function get_sudo_info(extra, success, result)
     if result.username then
         text = text .. lang_text('username') .. '@' .. result.username
     end
+    --[[
     if result.phone then
         text = text .. lang_text('phone') .. '+' .. string.sub(result.phone, 1, 6) .. '******'
     end
+    ]]
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.msg.to.id) or 0)
     text = text .. lang_text('date') .. os.date('%c') ..
     lang_text('totalMessages') .. msgs
