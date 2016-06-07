@@ -167,6 +167,11 @@ local function run(msg, matches)
                 return disable_plugin_on_chat(receiver, plugin)
             end
         else
+            -- Show the available plugins
+            if matches[1]:lower() == '#plugins' or matches[1]:lower() == '!plugins' or matches[1]:lower() == '/plugins' or matches[1]:lower() == 'sasha lista plugins' or matches[1]:lower() == 'lista plugins' then
+                return list_plugins()
+            end
+
             -- Show on chat disabled plugin
             if matches[1]:lower() == 'disabledlist' or matches[1]:lower() == 'sasha lista disabilitati' or matches[1]:lower() == 'sasha lista disattivati' or matches[1]:lower() == 'lista disabilitati' or matches[1]:lower() == 'lista disattivati' then
                 local receiver = get_receiver(msg)
@@ -177,11 +182,6 @@ local function run(msg, matches)
         return lang_text('require_owner')
     end
     if is_sudo(msg) then
-        -- Show the available plugins
-        if matches[1]:lower() == '#plugins' or matches[1]:lower() == '!plugins' or matches[1]:lower() == '/plugins' or matches[1]:lower() == 'sasha lista plugins' or matches[1]:lower() == 'lista plugins' then
-            return list_plugins()
-        end
-
         -- Reload all the plugins!
         if matches[1]:lower() == 'reload' or matches[1]:lower() == 'sasha ricarica' or matches[1]:lower() == 'ricarica' then
             print(reload_plugins())
@@ -254,11 +254,11 @@ return {
     min_rank = 2
     -- usage
     -- OWNER
+    -- (#plugins|[sasha] lista plugins)
     -- (#disabledlist|([sasha] lista disabilitati|disattivati))
     -- (#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> chat
     -- (#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat
     -- SUDO
-    -- (#plugins|[sasha] lista plugins)
     -- (#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]
     -- (#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]
     -- (#[plugin[s]] reload|[sasha] ricarica)

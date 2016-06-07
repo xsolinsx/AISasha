@@ -225,8 +225,17 @@ local function vardump_msg(extra, success, result)
     if extra.name == 'msg_id' then
         name = 'VARDUMP (<msg_id>)'
     end
-    result.to.phone = ''
-    result.from.phone = ''
+    if result.to.phone then
+        result.to.phone = ''
+    end
+    if result.from.phone then
+        result.from.phone = ''
+    end
+    if result.fwd_from then
+        if result.fwd_from.phone then
+            result.fwd_from.phone = ''
+        end
+    end
     local text = tableshow(result, name)
     send_large_msg(extra.receiver, text)
 end

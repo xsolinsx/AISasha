@@ -429,6 +429,7 @@ local function run(msg, matches)
 
         if not groupstats then
             -- reply_msg(msg.id, lang_text('requireGroupSignUp'), ok_cb, false)
+            print('group not registered')
             return
         end
 
