@@ -151,7 +151,7 @@ local function run(msg, matches)
 
     if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" or matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
         local fakerank = ''
-        if matches[2] and(matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo" or string.match(matches[2], '^%d+$')) then
+        if matches[2] and(matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo" or string.match(matches[2], '^%d+$')) and not matches[3]then
             if string.match(matches[2], '^%d+$') then
                 fakerank = tonumber(matches[2])
             else
