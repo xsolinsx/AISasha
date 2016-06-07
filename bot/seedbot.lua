@@ -49,21 +49,25 @@ local function callback_sudo_ids(extra, success, result)
             if string.find(extra.msg.text, '@' .. result.username) or string.find(extra.msg.text, result.print_name:gsub('_', ' ')) then
                 tagged = true
             end
-        elseif extra.msg.media then
+        end
+        if extra.msg.media then
             if extra.msg.media.title then
                 if string.find(extra.msg.media.title, '@' .. result.username) or string.find(extra.msg.media.title, result.print_name:gsub('_', ' ')) then
                     tagged = true
                 end
-            elseif extra.msg.media.description then
+            end
+            if extra.msg.media.description then
                 if string.find(extra.msg.media.description, '@' .. result.username) or string.find(extra.msg.media.description, result.print_name:gsub('_', ' ')) then
                     tagged = true
                 end
-            elseif extra.msg.media.caption then
+            end
+            if extra.msg.media.caption then
                 if string.find(extra.msg.media.caption, '@' .. result.username) or string.find(extra.msg.media.caption, result.print_name:gsub('_', ' ')) then
                     tagged = true
                 end
             end
-        elseif extra.msg.fwd_from then
+        end
+        if extra.msg.fwd_from then
             if extra.msg.fwd_from.title then
                 if string.find(extra.msg.fwd_from.title, '@' .. result.username) or string.find(extra.msg.fwd_from.title, result.print_name:gsub('_', ' ')) then
                     tagged = true
@@ -75,21 +79,25 @@ local function callback_sudo_ids(extra, success, result)
             if string.find(extra.msg.text, result.print_name:gsub('_', ' ')) then
                 tagged = true
             end
-        elseif extra.msg.media then
+        end
+        if extra.msg.media then
             if extra.msg.media.title then
                 if string.find(extra.msg.media.title, result.print_name:gsub('_', ' ')) then
                     tagged = true
                 end
-            elseif extra.msg.media.description then
+            end
+            if extra.msg.media.description then
                 if string.find(extra.msg.media.description, result.print_name:gsub('_', ' ')) then
                     tagged = true
                 end
-            elseif extra.msg.media.caption then
+            end
+            if extra.msg.media.caption then
                 if string.find(extra.msg.media.caption, result.print_name:gsub('_', ' ')) then
                     tagged = true
                 end
             end
-        elseif extra.msg.fwd_from then
+        end
+        if extra.msg.fwd_from then
             if extra.msg.fwd_from.title then
                 if string.find(extra.msg.fwd_from.title, result.print_name:gsub('_', ' ')) then
                     tagged = true
@@ -104,17 +112,22 @@ local function callback_sudo_ids(extra, success, result)
         else
             text = text .. extra.msg.from.print_name:gsub("_", " ") .. '[' .. extra.msg.from.id .. ']\n'
         end
+
         if extra.msg.text then
             text = text .. lang_text('msgText') .. extra.msg.text
-        elseif extra.msg.media then
+        end
+        if extra.msg.media then
             if extra.msg.media.title then
                 text = text .. lang_text('msgText') .. extra.msg.media.title
-            elseif extra.msg.media.description then
+            end
+            if extra.msg.media.description then
                 text = text .. lang_text('msgText') .. extra.msg.media.description
-            elseif extra.msg.media.caption then
+            end
+            if extra.msg.media.caption then
                 text = text .. lang_text('msgText') .. extra.msg.media.caption
             end
-        elseif extra.msg.fwd_from then
+        end
+        if extra.msg.fwd_from then
             if extra.msg.fwd_from.title then
                 text = text .. lang_text('msgText') .. extra.msg.fwd_from.title
             end
@@ -125,8 +138,8 @@ end
 
 -- send message to sudoers when tagged
 function check_tag(msg)
-    -- exclude private chats and messages without '@'
-    if (msg.to.type == 'chat' or msg.to.type == 'channel') and string.find(msg.text, '@') then
+    -- exclude private chats with bot
+    if (msg.to.type == 'chat' or msg.to.type == 'channel') then
         -- exclude bot tags and autotags
         for v, user in pairs(_config.sudo_users) do
             if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) then
