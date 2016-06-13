@@ -211,11 +211,8 @@ return {
     description = "HELP",
     patterns =
     {
-        "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+)$",
         "^[#!/]([Hh][Ee][Ll][Pp])$",
-        "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll]) ([^%s]+)$",
         "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll])$",
-        "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+) ([^%s]+)$",
         "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+)$",
         "^[#!/]([Ss][Uu][Dd][Oo][Ll][Ii][Ss][Tt])$",
         -- help
@@ -224,11 +221,13 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo])$",
         -- helpall
+        "^[#!/]([Hh][Ee][Ll][Pp][Aa][Ll][Ll]) ([^%s]+)$",
         "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",
         "^[#!/]([Aa][Ll][Ll][Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo])$",
         -- help <plugin_name>|<plugin_number>
+        "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+) ([^%s]+)$",
         "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+) ([^%s]+)$",
         "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+) ([^%s]+)$",

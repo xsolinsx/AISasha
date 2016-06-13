@@ -59,7 +59,7 @@ local tiamo = {
 }
 
 local function run(msg, matches)
-    if matches[1]:lower() == 'echo' or matches[1]:lower() == 'sasha ripeti' and matches[2] then
+    if (matches[1]:lower() == 'echo' or matches[1]:lower() == 'sasha ripeti') and matches[2] then
         if is_momod(msg) then
             if type(msg.reply_id) ~= "nil" then
                 reply_msg(msg.reply_id, matches[2], ok_cb, false)
@@ -74,7 +74,7 @@ local function run(msg, matches)
     if matches[1]:lower() == 'sasha come va?' then
         reply_msg(msg.id, comeva[math.random(#comeva)], ok_cb, false)
     end
-    if matches[1]:lower() == 'sasha' and string.match(matches[2], '.+%?') then
+    if matches[1]:lower() == 'sasha' and string.match(matches[2], '.*%?') then
         local rnd = math.random(0, 2)
         if rnd == 0 then
             reply_msg(msg.id, nosasha[math.random(#nosasha)], ok_cb, false)
@@ -111,7 +111,7 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Pp][Ee][Tt][Ii]) +(.+)$",
         -- react
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Oo][Mm][Ee] [Vv][Aa]%?)$",
-        "^([Ss][Aa][Ss][Hh][Aa])(.+%?)$",
+        "^([Ss][Aa][Ss][Hh][Aa])(.*%?)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Tt][Ii] [Aa][Mm][Oo])$",
         "^([Tt][Ii] [Aa][Mm][Oo] [Ss][Aa][Ss][Hh][Aa])$",
         -- words
