@@ -150,9 +150,8 @@ local function run(msg, matches)
     local rank = get_rank(msg.from.id, msg.to.id)
 
     if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" or matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
-        local fakerank = rank_table[matches[2]:upper()]
         if matches[2] and(matches[2]:lower() == "user" or matches[2]:lower() == "mod" or matches[2]:lower() == "owner" or matches[2]:lower() == "support" or matches[2]:lower() == "admin" or matches[2]:lower() == "sudo") then
-            fakerank = rank_table[matches[2]:upper()]
+            local fakerank = rank_table[matches[2]:upper()]
             print(rank, fakerank)
             if fakerank <= rank then
                 -- ok
@@ -163,7 +162,7 @@ local function run(msg, matches)
             end
             text = text .. 'FAKE HELP\n'
         elseif matches[3] and(matches[3]:lower() == "user" or matches[3]:lower() == "mod" or matches[3]:lower() == "owner" or matches[3]:lower() == "support" or matches[3]:lower() == "admin" or matches[3]:lower() == "sudo") then
-            fakerank = rank_table[matches[3]:upper()]
+            local fakerank = rank_table[matches[3]:upper()]
             print(rank, fakerank)
             if fakerank <= rank then
                 -- ok
