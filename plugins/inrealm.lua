@@ -46,6 +46,19 @@ local function killrealm(extra, success, result)
     chat_del_user('chat#id' .. result.peer_id, 'user#id' .. our_id, ok_cb, true)
 end
 
+-- Support Team
+local function support_add(support_id)
+    -- Save to redis
+    local hash = 'support'
+    redis:sadd(hash, support_id)
+end
+
+local function support_remove(support_id)
+    -- Save on redis
+    local hash = 'support'
+    redis:srem(hash, support_id)
+end
+
 local function get_group_type(msg)
     local data = load_data(_config.moderation.data)
     if data[tostring(msg.to.id)] then

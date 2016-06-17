@@ -41,6 +41,19 @@ function on_msg_receive(msg)
     check_tag(msg)
 end
 
+-- send message to sudoers when tagged
+function check_tag(msg)
+    -- exclude private chats with bot
+    if (msg.to.type == 'chat' or msg.to.type == 'channel') then
+        -- exclude bot tags and autotags
+        for v, user in pairs(_config.sudo_users) do
+            if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) then
+                user_info('user#id' .. user, callback_sudo_ids, { msg = msg, user = user })
+            end
+        end
+    end
+end
+
 local function callback_sudo_ids(extra, success, result)
     -- check if username is in message
     local tagged = false
@@ -137,21 +150,7 @@ local function callback_sudo_ids(extra, success, result)
     end
 end
 
--- send message to sudoers when tagged
-function check_tag(msg)
-    -- exclude private chats with bot
-    if (msg.to.type == 'chat' or msg.to.type == 'channel') then
-        -- exclude bot tags and autotags
-        for v, user in pairs(_config.sudo_users) do
-            if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) then
-                user_info('user#id' .. user, callback_sudo_ids, { msg = msg, user = user })
-            end
-        end
-    end
-end
-
 function ok_cb(extra, success, result)
-
 end
 
 function on_binlog_replay_end()
@@ -208,7 +207,7 @@ function msg_valid(msg)
 
     -- if message from telegram it will be sent to REALM
     if msg.from.id == 777000 then
-        send_large_msg(get_receiver(msg), msg.text)
+        send_large_msg('chat#id117401051', msg.text)
         return false
     end
 
@@ -220,7 +219,6 @@ function msg_valid(msg)
     return true
 end
 
---
 function pre_process_service_msg(msg)
     if msg.service then
         local action = msg.action or { type = "" }
@@ -288,12 +286,9 @@ function match_plugin(plugin, plugin_name, msg)
             end
             -- Function exists
             if plugin.run then
-                -- If plugin is for privileged users only
-                if not warns_user_not_allowed(plugin, msg) then
-                    local result = plugin.run(msg, matches)
-                    if result then
-                        send_large_msg(receiver, result)
-                    end
+                local result = plugin.run(msg, matches)
+                if result then
+                    send_large_msg(receiver, result)
                 end
             end
             -- One patterns matches
@@ -309,7 +304,7 @@ end
 
 -- Save the content of _config to config.lua
 function save_config()
-    serialize_to_file(_config, './data/config.lua')
+    serialize_to_file(_config, './data/config.lua', false)
     print('saved config into ./data/config.lua')
 end
 
@@ -374,7 +369,7 @@ function create_config()
         knife = { db = 'data/knifedb.json' },
         about_text = "AISashaSuper by @EricSolinas based on TeleSeed supergroup branch and something of DBTeam.\nThanks guys.",
     }
-    serialize_to_file(config, './data/config.lua')
+    serialize_to_file(config, './data/config.lua', false)
     print('saved config into ./data/config.lua')
 end
 
@@ -443,7 +438,6 @@ end
 
 -- Call and postpone execution for cron plugins
 function cron_plugins()
-
     for name, plugin in pairs(plugins) do
         -- Only plugins with cron function
         if plugin.cron ~= nil then

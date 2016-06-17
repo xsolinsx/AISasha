@@ -47,15 +47,6 @@ function string.random(length)
     return str;
 end
 
-function string.random(length)
-    local str = "";
-    for i = 1, length do
-        math.random(97, 122)
-        str = str .. string.char(math.random(97, 122));
-    end
-    return str;
-end
-
 function string:split(sep)
     local sep, fields = sep or ":", { }
     local pattern = string.format("([^%s]+)", sep)
@@ -162,18 +153,6 @@ function run_command(str)
     local result = cmd:read('*all')
     cmd:close()
     return result
-end
-
--- User has privileges
-function is_sudo(msg)
-    local var = false
-    -- Check users id in config
-    for v, user in pairs(_config.sudo_users) do
-        if tostring(user) == tostring(msg.from.id) then
-            var = true
-        end
-    end
-    return var
 end
 
 -- Returns the name of the sender
@@ -390,27 +369,6 @@ function format_http_params(params, is_get)
     return str
 end
 
--- Check if user can use the plugin and warns user
--- Returns true if user was warned and false if not warned (is allowed)
-function warns_user_not_allowed(plugin, msg)
-    if not user_allowed(plugin, msg) then
-        local receiver = get_receiver(msg)
-        send_msg(receiver, lang_text('require_sudo'), ok_cb, false)
-        return true
-    else
-        return false
-    end
-end
-
--- Check if user can use the plugin
-function user_allowed(plugin, msg)
-    if plugin.privileged and not is_sudo(msg) then
-        return false
-    end
-    return true
-end
-
-
 function send_order_msg(destination, msgs)
     local extra = {
         destination = destination,
@@ -599,7 +557,7 @@ function load_from_file(file, default_data)
     if f == nil then
         -- Create a new empty table
         default_data = default_data or { }
-        serialize_to_file(default_data, file)
+        serialize_to_file(default_data, file, false)
         print('Created file', file)
     else
         print('Data loaded from file', file)
@@ -725,14 +683,11 @@ function is_log_group(msg)
 end
 
 function savelog(group, logtxt)
-
     local text =(os.date("[ %c ]=>  " .. logtxt .. "\n \n"))
     local file = io.open("./groups/logs/" .. group .. "log.txt", "a")
 
     file:write(text)
-
     file:close()
-
 end
 
 function user_print_name(user)
@@ -761,6 +716,106 @@ end
 function set_text(keyword, text)
     local hash = 'lang:' .. redis:get('lang') .. keyword
     redis:set(hash, text)
+end
+
+function get_rank(user_id, chat_id)
+    if tostring(our_id) ~= tostring(user_id) then
+        if not is_sudo( { from = { id = user_id } }) then
+            if not is_admin2(user_id) then
+                if not is_support(user_id) then
+                    if not is_owner2(user_id, chat_id) then
+                        if not is_momod2(user_id, chat_id) then
+                            -- user
+                            return rank_table["USER"]
+                        else
+                            -- mod
+                            return rank_table["MOD"]
+                        end
+                    else
+                        -- owner
+                        return rank_table["OWNER"]
+                    end
+                else
+                    -- support
+                    return rank_table["SUPPORT"]
+                end
+            else
+                -- admin
+                return rank_table["ADMIN"]
+            end
+        else
+            -- sudo
+            return rank_table["SUDO"]
+        end
+    else
+        -- bot
+        return rank_table["BOT"]
+    end
+end
+
+function compare_ranks(executer, target, chat_id)
+    local executer_rank = get_rank(executer, chat_id)
+    local target_rank = get_rank(target, chat_id)
+    if executer_rank > target_rank then
+        return true
+    elseif executer_rank <= target_rank then
+        return false
+    end
+end
+
+-- User has privileges
+function is_sudo(msg)
+    local var = false
+    -- Check users id in config
+    for v, user in pairs(_config.sudo_users) do
+        if tostring(user) == tostring(msg.from.id) then
+            var = true
+        end
+    end
+    return var
+end
+
+-- Check if user is admin or not
+function is_admin1(msg)
+    local var = false
+    local data = load_data(_config.moderation.data)
+    local user = msg.from.id
+    local admins = 'admins'
+    if data[tostring(admins)] then
+        if data[tostring(admins)][tostring(user)] then
+            var = true
+        end
+    end
+    for v, user in pairs(_config.sudo_users) do
+        if tostring(user) == tostring(msg.from.id) then
+            var = true
+        end
+    end
+    return var
+end
+
+function is_admin2(user_id)
+    local var = false
+    local data = load_data(_config.moderation.data)
+    local user = user_id
+    local admins = 'admins'
+    if data[tostring(admins)] then
+        if data[tostring(admins)][tostring(user)] then
+            var = true
+        end
+    end
+    for v, user in pairs(_config.sudo_users) do
+        if tostring(user) == tostring(user_id) then
+            var = true
+        end
+    end
+    return var
+end
+
+function is_support(support_id)
+    local hash = 'support'
+    local support = redis:sismember(hash, support_id)
+    return support or false
 end
 
 -- Check if user is the owner of that group or not
@@ -820,88 +875,6 @@ function is_owner2(user_id, group_id)
         end
     end
 
-    for v, user in pairs(_config.sudo_users) do
-        if tostring(user) == tostring(user_id) then
-            var = true
-        end
-    end
-    return var
-end
-
-function get_rank(user_id, chat_id)
-    if tostring(our_id) ~= tostring(user_id) then
-        if not is_sudo( { from = { id = user_id } }) then
-            if not is_admin2(user_id) then
-                if not is_support(user_id) then
-                    if not is_owner2(user_id, chat_id) then
-                        if not is_momod2(user_id, chat_id) then
-                            -- user
-                            return rank_table["USER"]
-                        else
-                            -- mod
-                            return rank_table["MOD"]
-                        end
-                    else
-                        -- owner
-                        return rank_table["OWNER"]
-                    end
-                else
-                    -- support
-                    return rank_table["SUPPORT"]
-                end
-            else
-                -- admin
-                return rank_table["ADMIN"]
-            end
-        else
-            -- sudo
-            return rank_table["SUDO"]
-        end
-    else
-        -- bot
-        return rank_table["BOT"]
-    end
-end
-
-function compare_ranks(executer, target, chat_id)
-    local executer_rank = get_rank(executer, chat_id)
-    local target_rank = get_rank(target, chat_id)
-    if executer_rank > target_rank then
-        return true
-    elseif executer_rank <= target_rank then
-        return false
-    end
-end
-
--- Check if user is admin or not
-function is_admin1(msg)
-    local var = false
-    local data = load_data(_config.moderation.data)
-    local user = msg.from.id
-    local admins = 'admins'
-    if data[tostring(admins)] then
-        if data[tostring(admins)][tostring(user)] then
-            var = true
-        end
-    end
-    for v, user in pairs(_config.sudo_users) do
-        if tostring(user) == tostring(msg.from.id) then
-            var = true
-        end
-    end
-    return var
-end
-
-function is_admin2(user_id)
-    local var = false
-    local data = load_data(_config.moderation.data)
-    local user = user_id
-    local admins = 'admins'
-    if data[tostring(admins)] then
-        if data[tostring(admins)][tostring(user)] then
-            var = true
-        end
-    end
     for v, user in pairs(_config.sudo_users) do
         if tostring(user) == tostring(user_id) then
             var = true
@@ -1110,26 +1083,6 @@ function banall_list()
     return text
 end
 
--- Support Team
-function support_add(support_id)
-    -- Save to redis
-    local hash = 'support'
-    redis:sadd(hash, support_id)
-end
-
-function is_support(support_id)
-    -- Save on redis
-    local hash = 'support'
-    local support = redis:sismember(hash, support_id)
-    return support or false
-end
-
-function support_remove(support_id)
-    -- Save on redis
-    local hash = 'support'
-    redis:srem(hash, support_id)
-end
-
 -- Whitelist
 function is_whitelisted(user_id)
     -- Save on redis
@@ -1236,5 +1189,4 @@ function muted_user_list(chat_id)
     end
     return text
 end
-
 -- End Chat Mutes
