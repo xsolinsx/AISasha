@@ -61,9 +61,6 @@ local function run(msg, matches)
             end
         end
     end
-    if matches[1] == 'getchar' then
-        return '$'
-    end
     if matches[1] == 'sendmedia' then
         redis:set(msg.to.id, 'waiting')
         return lang_text('sendMeMedia')
@@ -116,7 +113,6 @@ return {
     patterns =
     {
         "^(%$).*$",
-        "^[#!/]([Gg][Ee][Tt][Cc][Hh][Aa][Rr])$",
         "^[#!/]([Ss][Ee][Nn][Dd][Mm][Ee][Dd][Ii][Aa])$",
         "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
         "^[#!/]([Uu][Nn][Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
@@ -132,9 +128,9 @@ return {
     pre_process = pre_process,
     min_rank = 0
     -- usage
-    -- #getchar
     -- $<text>
     -- #sendmedia
+    -- #undo
     -- MOD
     -- (#unsetbot|sasha rimuovi bot)
     -- ADMIN
