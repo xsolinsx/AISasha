@@ -46,13 +46,13 @@ local function callback_sudo_ids(extra, success, result)
     local tagged = false
     if result.username then
         if extra.msg.text then
-            if string.find(extra.msg.text:lower(), '@' .. result.username:lower()) or string.find(extra.msg.text, result.first_name:gsub('_', ' ')) then
+            if string.find(extra.msg.text:lower(), '@' .. result.username:lower()) or string.find(extra.msg.text, result.first_name) then
                 tagged = true
             end
         end
         if extra.msg.media then
             if extra.msg.media.title then
-                if string.find(extra.msg.media.title:lower(), '@' .. result.username:lower()) or string.find(extra.msg.media.title, result.first_name:gsub('_', ' ')) then
+                if string.find(extra.msg.media.title:lower(), '@' .. result.username:lower()) or string.find(extra.msg.media.title, result.first_name) then
                     tagged = true
                 end
             end
