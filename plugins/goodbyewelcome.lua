@@ -138,7 +138,10 @@ local function run(msg, matches)
         local hashonredis = redis:get(hash)
         if hashonredis then
             if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg)) and tonumber(get_memberswelcome(msg)) ~= 0 then
-                send_large_msg(get_receiver(msg), get_welcome(msg) .. '\n' .. get_rules(msg), ok_cb, false)
+                local function post_msg()
+                    send_large_msg(get_receiver(msg), get_welcome(msg) .. '\n' .. get_rules(msg), ok_cb, false)
+                end
+                postpone(post_msg, false, 1)
                 redis:getset(hash, 0)
             end
         else
@@ -146,7 +149,10 @@ local function run(msg, matches)
         end
     end
     if msg.action.type == "chat_del_user" and get_goodbye(msg) ~= '' then
-        send_large_msg(get_receiver(msg), get_goodbye(msg) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)
+        local function post_msg()
+            send_large_msg(get_receiver(msg), get_goodbye(msg) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)
+        end
+        postpone(post_msg, false, 1)
     end
 end
 
