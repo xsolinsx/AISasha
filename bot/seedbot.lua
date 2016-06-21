@@ -46,60 +46,60 @@ local function callback_sudo_ids(extra, success, result)
     local tagged = false
     if result.username then
         if extra.msg.text then
-            if string.find(extra.msg.text:lower(), '@' .. result.username:lower()) or string.find(extra.msg.text:lower(), result.first_name:gsub('_', ' '):lower()) then
+            if string.find(extra.msg.text:lower(), '@' .. result.username:lower()) or string.find(extra.msg.text, result.first_name:gsub('_', ' ')) then
                 tagged = true
             end
         end
         if extra.msg.media then
             if extra.msg.media.title then
-                if string.find(extra.msg.media.title:lower(), '@' .. result.username:lower()) or string.find(extra.msg.media.title:lower(), result.first_name:gsub('_', ' '):lower()) then
+                if string.find(extra.msg.media.title:lower(), '@' .. result.username:lower()) or string.find(extra.msg.media.title, result.first_name:gsub('_', ' ')) then
                     tagged = true
                 end
             end
             if extra.msg.media.description then
-                if string.find(extra.msg.media.description:lower(), '@' .. result.username:lower()) or string.find(extra.msg.media.description:lower(), result.first_name:gsub('_', ' '):lower()) then
+                if string.find(extra.msg.media.description:lower(), '@' .. result.username:lower()) or string.find(extra.msg.media.description, result.first_name) then
                     tagged = true
                 end
             end
             if extra.msg.media.caption then
-                if string.find(extra.msg.media.caption:lower(), '@' .. result.username:lower()) or string.find(extra.msg.media.caption:lower(), result.first_name:gsub('_', ' '):lower()) then
+                if string.find(extra.msg.media.caption:lower(), '@' .. result.username:lower()) or string.find(extra.msg.media.caption, result.first_name) then
                     tagged = true
                 end
             end
         end
         if extra.msg.fwd_from then
             if extra.msg.fwd_from.title then
-                if string.find(extra.msg.fwd_from.title:lower(), '@' .. result.username:lower()) or string.find(extra.msg.fwd_from.title:lower(), result.first_name:gsub('_', ' '):lower()) then
+                if string.find(extra.msg.fwd_from.title:lower(), '@' .. result.username:lower()) or string.find(extra.msg.fwd_from.title, result.first_name) then
                     tagged = true
                 end
             end
         end
     else
         if extra.msg.text then
-            if string.find(extra.msg.text:lower(), result.first_name:gsub('_', ' '):lower()) then
+            if string.find(extra.msg.text, result.first_name) then
                 tagged = true
             end
         end
         if extra.msg.media then
             if extra.msg.media.title then
-                if string.find(extra.msg.media.title:lower(), result.first_name:gsub('_', ' '):lower()) then
+                if string.find(extra.msg.media.title, result.first_name) then
                     tagged = true
                 end
             end
             if extra.msg.media.description then
-                if string.find(extra.msg.media.description:lower(), result.first_name:gsub('_', ' '):lower()) then
+                if string.find(extra.msg.media.description, result.first_name) then
                     tagged = true
                 end
             end
             if extra.msg.media.caption then
-                if string.find(extra.msg.media.caption:lower(), result.first_name:gsub('_', ' '):lower()) then
+                if string.find(extra.msg.media.caption, result.first_name) then
                     tagged = true
                 end
             end
         end
         if extra.msg.fwd_from then
             if extra.msg.fwd_from.title then
-                if string.find(extra.msg.fwd_from.title:lower(), result.first_name:gsub('_', ' '):lower()) then
+                if string.find(extra.msg.fwd_from.title, result.first_name) then
                     tagged = true
                 end
             end
