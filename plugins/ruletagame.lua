@@ -59,6 +59,7 @@ local bad = {
     "Centro 🎯",
     "💥",
     "☠",
+    "Avada Kedavra.",
 }
 
 local function get_challenge(chat_id)

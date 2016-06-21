@@ -30,11 +30,12 @@ local phrases = {
     "Fine.",
     "😊",
     ":3",
-    "Shake that bottle and make it [BANG]",
+    "Shake that bottle and make it [BAN]",
     "Tieni 💣",
     "Centro 🎯",
     "💥",
     "☠",
+    "AVADA KEDABAN",
 }
 
 local function kick_by_username(extra, success, result)
