@@ -14,7 +14,7 @@ local function pre_process(msg)
             if data[tostring(msg.to.id)] and data[tostring(msg.to.id)]['settings'] then
                 settings = data[tostring(msg.to.id)]['settings']
             else
-                return
+                return msg
             end
             if settings.lock_arabic then
                 lock_arabic = settings.lock_arabic
