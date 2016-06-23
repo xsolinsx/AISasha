@@ -1169,6 +1169,11 @@ function mutes_list(chat_id)
     for k, v in pairsByKeys(list) do
         text = text .. lang_text('mute') .. v .. "\n"
     end
+    local data = load_data(_config.moderation.data)
+    if data[tostring(chat_id)] then
+        local settings = data[tostring(chat_id)]['settings']
+        text = text .. lang_text('strictrules') .. settings.strict
+    end
     return text
 end
 
