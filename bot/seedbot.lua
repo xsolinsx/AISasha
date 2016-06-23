@@ -139,12 +139,14 @@ end
 
 -- send message to sudoers when tagged
 function check_tag(msg)
-    -- exclude private chats with bot
-    if (msg.to.type == 'chat' or msg.to.type == 'channel') then
-        -- exclude bot tags and autotags
-        for v, user in pairs(_config.sudo_users) do
-            if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) then
-                user_info('user#id' .. user, callback_sudo_ids, { msg = msg, user = user })
+    if msg then
+        -- exclude private chats with bot
+        if (msg.to.type == 'chat' or msg.to.type == 'channel') then
+            -- exclude bot tags and autotags
+            for v, user in pairs(_config.sudo_users) do
+                if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) then
+                    user_info('user#id' .. user, callback_sudo_ids, { msg = msg, user = user })
+                end
             end
         end
     end

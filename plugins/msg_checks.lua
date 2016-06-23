@@ -66,6 +66,7 @@ local function pre_process(msg)
                 if to_chat then
                     -- kick_user(msg.from.id, msg.to.id)
                 end
+                return
             end
             if not is_momod(msg) then
                 if msg.text then
@@ -75,9 +76,9 @@ local function pre_process(msg)
                     if lock_spam == "yes" and string.len(msg.text) > 2049 or ctrl_chars > 40 or real_digits > 2000 then
                         delete_msg(msg.id, ok_cb, false)
                         if strict == "yes" or to_chat then
-                            delete_msg(msg.id, ok_cb, false)
                             kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                     local is_link_msg = msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/") or msg.text:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.text:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.text:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                     local is_bot = msg.text:match("?[Ss][Tt][Aa][Rr][Tt]=")
@@ -86,13 +87,12 @@ local function pre_process(msg)
                         if strict == "yes" or to_chat then
                             kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                     if msg.service then
                         if lock_tgservice == "yes" then
                             delete_msg(msg.id, ok_cb, false)
-                            if to_chat then
-                                return
-                            end
+                            return
                         end
                     end
                     local is_squig_msg = msg.text:match("[\216-\219][\128-\191]")
@@ -101,6 +101,7 @@ local function pre_process(msg)
                         if strict == "yes" or to_chat then
                             kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                     local print_name = msg.from.print_name
                     local is_rtl = print_name:match("‮") or msg.text:match("‮")
@@ -109,12 +110,14 @@ local function pre_process(msg)
                         if strict == "yes" or to_chat then
                             kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                     if is_muted(msg.to.id, "Text: yes") and msg.text and not msg.media and not msg.service then
                         delete_msg(msg.id, ok_cb, false)
                         if to_chat then
                             kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                 end
                 if msg.media then
@@ -126,6 +129,7 @@ local function pre_process(msg)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                         local is_squig_title = msg.media.title:match("[\216-\219][\128-\191]")
                         if is_squig_title and lock_arabic == "yes" then
@@ -133,6 +137,7 @@ local function pre_process(msg)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                     end
                     if msg.media.description then
@@ -142,6 +147,7 @@ local function pre_process(msg)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                         local is_squig_desc = msg.media.description:match("[\216-\219][\128-\191]")
                         if is_squig_desc and lock_arabic == "yes" then
@@ -149,6 +155,7 @@ local function pre_process(msg)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                     end
                     if msg.media.caption then
@@ -159,6 +166,7 @@ local function pre_process(msg)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                         local is_squig_caption = msg.media.caption:match("[\216-\219][\128-\191]")
                         if is_squig_caption and lock_arabic == "yes" then
@@ -166,6 +174,7 @@ local function pre_process(msg)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                         local is_username_caption = msg.media.caption:match("^@[%a%d]")
                         if is_username_caption and lock_link == "yes" then
@@ -173,12 +182,14 @@ local function pre_process(msg)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                         if lock_sticker == "yes" and msg.media.caption:match("sticker.webp") then
                             delete_msg(msg.id, ok_cb, false)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                     end
                     if msg.media.type:match("contact") and lock_contacts == "yes" then
@@ -186,6 +197,7 @@ local function pre_process(msg)
                         if strict == "yes" or to_chat then
                             kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                     local is_photo_caption = msg.media.caption and msg.media.caption:match("photo")
                     -- ".jpg",
@@ -194,6 +206,7 @@ local function pre_process(msg)
                         if strict == "yes" or to_chat then
                             -- kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                     local is_gif_caption = msg.media.caption and msg.media.caption:match(".mp4")
                     if is_muted(msg.to.id, 'Gifs: yes') and is_gif_caption and msg.media.type:match("document") and not msg.service then
@@ -201,12 +214,14 @@ local function pre_process(msg)
                         if strict == "yes" or to_chat then
                             -- kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                     if is_muted(msg.to.id, 'Audio: yes') and msg.media.type:match("audio") and not msg.service then
                         delete_msg(msg.id, ok_cb, false)
                         if strict == "yes" or to_chat then
                             kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                     local is_video_caption = msg.media.caption and msg.media.caption:lower(".mp4", "video")
                     if is_muted(msg.to.id, 'Video: yes') and msg.media.type:match("video") and not msg.service then
@@ -214,12 +229,14 @@ local function pre_process(msg)
                         if strict == "yes" or to_chat then
                             kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                     if is_muted(msg.to.id, 'Documents: yes') and msg.media.type:match("document") and not msg.service then
                         delete_msg(msg.id, ok_cb, false)
                         if strict == "yes" or to_chat then
                             kick_user(msg.from.id, msg.to.id)
                         end
+                        return
                     end
                 end
                 if msg.fwd_from then
@@ -230,6 +247,7 @@ local function pre_process(msg)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                         local is_squig_title = msg.fwd_from.title:match("[\216-\219][\128-\191]")
                         if is_squig_title and lock_arabic == "yes" then
@@ -237,10 +255,12 @@ local function pre_process(msg)
                             if strict == "yes" or to_chat then
                                 kick_user(msg.from.id, msg.to.id)
                             end
+                            return
                         end
                     end
                     if is_muted_user(msg.to.id, msg.fwd_from.peer_id) then
                         delete_msg(msg.id, ok_cb, false)
+                        return
                     end
                 end
                 if msg.service then
