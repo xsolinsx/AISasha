@@ -61,14 +61,21 @@ local function pre_process(msg)
             else
                 strict = 'no'
             end
-            if msg and not msg.service and is_muted(msg.to.id, 'All: yes') or is_muted_user(msg.to.id, msg.from.id) and not msg.service then
+            if is_muted_user(msg.to.id, msg.from.id) and not msg.service then
                 delete_msg(msg.id, ok_cb, false)
                 if to_chat then
-                    -- kick_user(msg.from.id, msg.to.id)
+                    kick_user(msg.from.id, msg.to.id)
                 end
                 return
             end
             if not is_momod(msg) then
+                if msg and not msg.service and is_muted(msg.to.id, 'All: yes') then
+                    delete_msg(msg.id, ok_cb, false)
+                    if to_chat then
+                        kick_user(msg.from.id, msg.to.id)
+                    end
+                    return
+                end
                 if msg.text then
                     -- msg.text checks
                     local _nl, ctrl_chars = string.gsub(msg.text, '%c', '')
@@ -204,7 +211,7 @@ local function pre_process(msg)
                     if is_muted(msg.to.id, 'Photo: yes') and msg.media.type:match("photo") or is_photo_caption and not msg.service then
                         delete_msg(msg.id, ok_cb, false)
                         if strict == "yes" or to_chat then
-                            -- kick_user(msg.from.id, msg.to.id)
+                            kick_user(msg.from.id, msg.to.id)
                         end
                         return
                     end
@@ -212,7 +219,7 @@ local function pre_process(msg)
                     if is_muted(msg.to.id, 'Gifs: yes') and is_gif_caption and msg.media.type:match("document") and not msg.service then
                         delete_msg(msg.id, ok_cb, false)
                         if strict == "yes" or to_chat then
-                            -- kick_user(msg.from.id, msg.to.id)
+                            kick_user(msg.from.id, msg.to.id)
                         end
                         return
                     end
