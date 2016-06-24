@@ -1835,13 +1835,6 @@ local function run(msg, matches)
     end
 end
 
-local function pre_process(msg)
-    if not msg.text and msg.media then
-        msg.text = '[' .. msg.media.type .. ']'
-    end
-    return msg
-end
-
 return {
     description = "SUPERGROUP",
     patterns =
@@ -1959,7 +1952,6 @@ return {
         "^([Ll][Ii][Ss][Tt][Aa] [Uu][Tt][Ee][Nn][Tt][Ii] [Mm][Uu][Tt][Ii])$",
     },
     run = run,
-    pre_process = pre_process,
     min_rank = 0
     -- usage
     -- #owner
