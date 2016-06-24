@@ -37,11 +37,13 @@ local function list_variables(msg)
 end
 
 local function run(msg, matches)
-    local vars = list_variables(msg)
-
     if (matches[1]:lower() == 'get' or matches[1]:lower() == 'getlist' or matches[1]:lower() == 'sasha lista') and not matches[2] then
-        return vars
+        return list_variables(msg)
     end
+end
+
+local function pre_process(msg, matches)
+    local vars = list_variables(msg)
 
     if vars ~= nil then
         local t = vars:split('\n')
@@ -68,6 +70,7 @@ local function run(msg, matches)
             end
         end
     end
+    return msg
 end
 
 return {
@@ -75,17 +78,13 @@ return {
     patterns =
     {
         "^[#!/]([Gg][Ee][Tt][Ll][Ii][Ss][Tt])$",
-        "^[#!/]([Gg][Ee][Tt]) ([^%s]+)$",
         -- getlist
         "^[#!/]([Gg][Ee][Tt])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa])$",
-        -- get
-        "^([^%s]+) (.+)$",
-        "^([^%s]+)$",
     },
+    pre_process = pre_process,
     run = run,
     min_rank = 0
     -- usage
     -- (#getlist|#get|sasha lista)
-    -- [#get] <var_name>
 }
