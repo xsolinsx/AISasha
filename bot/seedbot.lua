@@ -334,10 +334,12 @@ function create_config()
     config = {
         enabled_plugins =
         {
+            "msg_checks",
+            "onservice",
             "strings_it",
             "strings_en",
+            "preprocess_media",
             "administrator",
-            "onservice",
             "bot",
             "inrealm",
             "ingroup",
@@ -358,7 +360,6 @@ function create_config()
             "leave_ban",
             "supergroup",
             "whitelist",
-            "msg_checks",
             "feedback",
             "tagall",
             "duckduckgo",
