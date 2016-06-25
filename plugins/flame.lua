@@ -100,8 +100,9 @@ local function pre_process(msg)
             if hashonredis then
                 reply_msg(msg.id, sashaflamma[tonumber(hashonredis)], ok_cb, false)
                 if tonumber(hashonredis) == #sashaflamma then
+                    local user_id = redis:get(tokick)
                     local function post_kick()
-                        kick_user_any(redis:get(tokick), msg.to.id)
+                        kick_user_any(user_id, msg.to.id)
                     end
                     postpone(post_kick, false, 3)
                     redis:del(hash)
