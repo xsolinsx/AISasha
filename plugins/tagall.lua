@@ -1,28 +1,26 @@
 local function tagall_chat(extra, success, result)
     local chat_id = extra.chat_id
-    local text = ""
+    local text = extra.msg_text .. "\n"
     for k, v in pairs(result.members) do
         if v.username then
             if v.username ~= 'AISasha' and string.sub(v.username:lower(), -3) ~= 'bot' then
-                text = text .. "@" .. v.username .. "\n"
+                text = text .. "@" .. v.username .. " "
             end
         end
     end
-    text = text .. "\n" .. extra.msg_text
     return send_large_msg('chat#id' .. chat_id, text, ok_cb, true)
 end
 
 local function tagall_channel(extra, success, result)
     local chat_id = extra.chat_id
-    local text = ""
+    local text = extra.msg_text .. "\n"
     for k, v in pairs(result) do
         if v.username then
             if v.username ~= 'AISasha' and string.sub(v.username:lower(), -3) ~= 'bot' then
-                text = text .. "@" .. v.username .. "\n"
+                text = text .. "@" .. v.username .. " "
             end
         end
     end
-    text = text .. "\n" .. extra.msg_text
     return send_large_msg('channel#id' .. chat_id, text, ok_cb, true)
 end
 
