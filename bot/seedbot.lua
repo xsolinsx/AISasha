@@ -106,7 +106,7 @@ local function callback_sudo_ids(extra, success, result)
         end
     end
     if tagged then
-        local text = lang_text('receiver') .. extra.msg.to.print_name:gsub("_", " ") .. '\n' .. lang_text('sender')
+        local text = lang_text('receiver') .. extra.msg.to.print_name:gsub("_", " ") .. ' [' .. extra.msg.to.id .. ']\n' .. lang_text('sender')
         if extra.msg.from.username then
             text = text .. '@' .. extra.msg.from.username .. ' [' .. extra.msg.from.id .. ']\n'
         else
