@@ -418,13 +418,8 @@ function load_data(filename)
     if not f then
         return { }
     end
-
-    -- do a backup of file everytime it's loaded
-    local fbckp = io.open(filename:gsub('.', 'bckp.'), 'w')
     local s = f:read('*all')
     f:close()
-    fbckp:write(s)
-    fbckp:close()
     local data = JSON.decode(s)
 
     return data
