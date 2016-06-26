@@ -1209,25 +1209,11 @@ local function run(msg, matches)
                 }
                 setowner = get_message(msg.reply_id, get_message_callback, cbreply_extra)
             elseif string.match(matches[2], '^%d+$') then
-                --[[	local group_owner = data[tostring(msg.to.id)]['set_owner']
-				if group_owner then
-					local receiver = get_receiver(msg)
-					local user_id = "user#id"..group_owner
-					if not is_admin2(group_owner) and not is_support(group_owner) then
-						channel_demote(receiver, user_id, ok_cb, false)
-					end
-					local user = "user#id"..matches[2]
-					channel_set_admin(receiver, user, ok_cb, false)
-					data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
-					save_data(_config.moderation.data, data)
-					savelog(msg.to.id, name_log.." ["..msg.from.id.."] set ["..matches[2].."] as owner")
-					local text = matches[2]..lang_text('setOwner')
-					return text
-				end]]
-                local get_cmd = 'setowner'
-                local msg = msg
-                local user_id = matches[2]
-                channel_get_users(receiver, in_channel_cb, { get_cmd = get_cmd, receiver = receiver, msg = msg, user_id = user_id })
+                data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
+                save_data(_config.moderation.data, data)
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
+                local text = matches[2] .. lang_text('setOwner')
+                return text
             else
                 local get_cmd = 'setowner'
                 local msg = msg
