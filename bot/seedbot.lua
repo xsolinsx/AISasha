@@ -168,8 +168,6 @@ function on_binlog_replay_end()
 end
 
 function msg_valid(msg)
-    local receiver = get_receiver(msg)
-
     -- Don't process outgoing messages
     if msg.out then
         print('\27[36mNot valid: msg from us\27[39m')
@@ -416,26 +414,27 @@ end
 
 -- custom add
 function load_data(filename)
-
     local f = io.open(filename)
     if not f then
         return { }
     end
+
+    -- do a backup of file everytime it's loaded
+    local fbckp = io.open(filename:gsub('.', 'bckp.'), 'w')
     local s = f:read('*all')
     f:close()
+    fbckp:write(s)
+    fbckp:close()
     local data = JSON.decode(s)
 
     return data
-
 end
 
 function save_data(filename, data)
-
     local s = JSON.encode(data)
     local f = io.open(filename, 'w')
     f:write(s)
     f:close()
-
 end
 
 
