@@ -1,7 +1,7 @@
 local function like(likedata, chat, user)
     chat = tostring(chat)
     user = tostring(user)
-    if user ~= our_id then
+    if user ~= tostring(our_id) then
         if not likedata[chat] then
             likedata[chat] = { }
         end
@@ -16,7 +16,7 @@ end
 local function dislike(likedata, chat, user)
     chat = tostring(chat)
     user = tostring(user)
-    if user ~= our_id then
+    if user ~= tostring(our_id) then
         if not likedata[chat] then
             likedata[chat] = { }
         end
