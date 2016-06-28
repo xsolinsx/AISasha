@@ -368,6 +368,7 @@ function create_config()
         moderation = { data = 'data/moderation.json' },
         ruleta = { db = 'data/ruletadb.json' },
         knife = { db = 'data/knifedb.json' },
+        clicktap = { db = 'data/clicktapdb.json' },
         about_text = "AISashaSuper by @EricSolinas based on TeleSeed supergroup branch and something of DBTeam.\nThanks guys.",
     }
     serialize_to_file(config, './data/config.lua', false)
