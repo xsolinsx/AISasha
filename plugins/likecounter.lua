@@ -114,6 +114,7 @@ local function run(msg, matches)
         if not likedata[chat] then
             likedata[chat] = { }
             save_data(_config.likecounter.db, likedata)
+            likedata = load_data(_config.likecounter.db)
         end
 
         if matches[1]:lower() == 'addlikes' and matches[2] and matches[3] and is_sudo(msg) then
