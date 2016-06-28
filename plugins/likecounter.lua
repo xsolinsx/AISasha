@@ -1,23 +1,27 @@
 local function like(likedata, chat, user)
-    if not likedata[chat] then
-        likedata[chat] = { }
+    if user ~= our_id then
+        if not likedata[chat] then
+            likedata[chat] = { }
+        end
+        if not likedata[chat][user] then
+            likedata[chat][user] = 0
+        end
+        likedata[chat][user] = tonumber(likedata[chat][user] + 1)
+        save_data(_config.likecounter.db, likedata)
     end
-    if not likedata[chat][user] then
-        likedata[chat][user] = 0
-    end
-    likedata[chat][user] = tonumber(likedata[chat][user] + 1)
-    save_data(_config.likecounter.db, likedata)
 end
 
 local function dislike(likedata, chat, user)
-    if not likedata[chat] then
-        likedata[chat] = { }
+    if user ~= our_id then
+        if not likedata[chat] then
+            likedata[chat] = { }
+        end
+        if not likedata[chat][user] then
+            likedata[chat][user] = 0
+        end
+        likedata[chat][user] = tonumber(likedata[chat][user] -1)
+        save_data(_config.likecounter.db, likedata)
     end
-    if not likedata[chat][user] then
-        likedata[chat][user] = 0
-    end
-    likedata[chat][user] = tonumber(likedata[chat][user] -1)
-    save_data(_config.likecounter.db, likedata)
 end
 
 local function like_by_username(extra, success, result)
