@@ -16,7 +16,7 @@ local function invite_from(extra, success, result)
     channel_invite(extra.receiver, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
 end
 
-function run(msg, matches)
+local function run(msg, matches)
     -- if is_owner(msg) then
     if is_admin1(msg) then
         local data = load_data(_config.moderation.data)
@@ -75,5 +75,5 @@ return {
     -- usage
     -- OWNER
     -- ADMIN
-    -- (#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>
+    -- (#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>|from
 }

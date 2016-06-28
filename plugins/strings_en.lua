@@ -171,6 +171,7 @@ local function run(msg, matches)
         set_text('duelsLeaderboard', 'Duels leaderboard\n')
         set_text('victoriesLeaderboard', 'Victories leaderboard\n')
         set_text('defeatsLeaderboard', 'Defeats leaderboard\n')
+        set_text('likesLeaderboard', 'Likes leaderboard\n')
 
         -- goodbyewelcome.lua --
         set_text('newWelcome', 'New welcome message:\n')
@@ -307,6 +308,10 @@ local function run(msg, matches)
         set_text('userGbanned', 'User is globally banned.')
         set_text('privateGroup', 'Group is private.')
 
+        -- likecounter.lua --
+        set_text('forwardingLike', 'Forwarding for likes is not allowed.')
+        set_text('likesdbCreated', 'Likecounter database created.')
+
         -- locks --
         set_text('nameLock', '\nLock name: ')
         set_text('nameAlreadyLocked', 'Name already locked.')
@@ -408,6 +413,7 @@ local function run(msg, matches)
         set_text('pokeHeight', 'Height: ')
 
         -- ruletagame.lua --
+        set_text('ruletadbCreated', 'Ruleta database created.')
         set_text('ruletaAlreadySignedUp', 'You\'re already registered, use /ruleta to die.')
         set_text('ruletaSignedUp', 'You\'ve been registered, have a nice death.')
         set_text('ruletaDeleted', 'You\'ve been deleted from the game.')
@@ -806,6 +812,17 @@ local function run(msg, matches)
         set_text('leave_ban:0', 2)
         set_text('leave_ban:1', '🅿️ LEAVE_BAN')
         set_text('leave_ban:2', 'Sasha bans leaving users.')
+
+        -- likecounter.lua --
+        set_text('likecounter:0', 8)
+        set_text('likecounter:1', '🅿️ LIKECOUNTER')
+        set_text('likecounter:2', '#like <id>|<username>|<reply>|from: Sasha adds a like to specified user.')
+        set_text('likecounter:3', '#dislike <id>|<username>|<reply>|from: Sasha removes a like from specified user.')
+        set_text('likecounter:4', '#likes: Sasha sends the likes leaderboard.')
+        set_text('likecounter:5', 'SUDO')
+        set_text('likecounter:6', '#createlikesdb:  Sasha creates likecounter database.')
+        set_text('likecounter:7', '#addlikes <id> <value>: Sasha adds <value> likes to specified user.')
+        set_text('likecounter:8', '#remlikes <id> <value>: Sasha removes <value> likes to specified user.')
 
         -- msg_checks.lua --
         set_text('msg_checks:0', 2)
