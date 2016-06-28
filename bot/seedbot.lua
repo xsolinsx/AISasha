@@ -332,6 +332,7 @@ function create_config()
     config = {
         enabled_plugins =
         {
+            "anti_spam",
             "msg_checks",
             "onservice",
             "strings_it",
@@ -345,7 +346,6 @@ function create_config()
             "banhammer",
             "stats",
             "plugins",
-            "anti_spam",
             "owners",
             "arabic_lock",
             "set",

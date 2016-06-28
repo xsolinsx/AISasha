@@ -1722,15 +1722,15 @@ local function run(msg, matches)
             local chat_id = msg.to.id
             if not has_mutes(chat_id) then
                 set_mutes(chat_id)
-                return mutes_list(chat_id)
+                return mutes_list(chat_id, msg.to.print_name)
             end
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
-            return mutes_list(chat_id)
+            return mutes_list(chat_id, msg.to.print_name)
         end
         if (matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti") and is_momod(msg) then
             local chat_id = msg.to.id
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
-            return muted_user_list(chat_id)
+            return muted_user_list(chat_id, msg.to.print_name)
         end
 
         if matches[1]:lower() == 'settings' and is_momod(msg) then

@@ -1162,10 +1162,10 @@ function unmute_user(chat_id, user_id)
 end
 
 -- Returns chat_id mute list
-function mutes_list(chat_id)
+function mutes_list(chat_id, group_name)
     local hash = 'mute:' .. chat_id
     local list = redis:smembers(hash)
-    local text = lang_text('mutedTypesStart') .. " [ID: " .. chat_id .. " ]:\n\n"
+    local text = lang_text('mutedTypesStart') .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
     for k, v in pairsByKeys(list) do
         text = text .. lang_text('mute') .. v .. "\n"
     end
@@ -1178,10 +1178,10 @@ function mutes_list(chat_id)
 end
 
 -- Returns chat_user mute list
-function muted_user_list(chat_id)
+function muted_user_list(chat_id, group_name)
     local hash = 'mute_user:' .. chat_id
     local list = redis:smembers(hash)
-    local text = lang_text('mutedUsersStart') .. " [ID: " .. chat_id .. " ]:\n\n"
+    local text = lang_text('mutedUsersStart') .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
     for k, v in pairsByKeys(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then
