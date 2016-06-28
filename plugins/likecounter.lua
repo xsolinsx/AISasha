@@ -168,6 +168,7 @@ return {
     description = "LIKECOUNTER",
     patterns =
     {
+        "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Ll][Ii][Kk][Ee][Ss][Dd][Bb])$",
         "^[#!/]([Ll][Ii][Kk][Ee]) (.*)$",
         "^[#!/]([Ll][Ii][Kk][Ee])$",
         "^[#!/]([Dd][Ii][Ss][Ll][Ii][Kk][Ee]) (.*)$",
