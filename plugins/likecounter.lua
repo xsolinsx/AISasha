@@ -50,6 +50,15 @@ local function dislike_from(extra, success, result)
     dislike(extra.likedata, result.to.peer_id, result.fwd_from.peer_id)
 end
 
+-- Returns a table with `name`
+local function get_name(user_id)
+    local user_info = { }
+    local uhash = 'user:' .. user_id
+    local user = redis:hgetall(uhash)
+    user_info.name = user_print_name(user):gsub('_', ' ')
+    return user_info
+end
+
 local function likes_leaderboard(users, lbtype)
     local users_info = { }
 
