@@ -168,21 +168,18 @@ function on_binlog_replay_end()
 end
 
 function msg_valid(msg)
+    local valid = false
+
     -- Don't process outgoing messages
     if msg.out then
         if not msg.fwd_from then
             if msg.text then
                 if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
-                    msg.text = string.gsub(msg.text:lower(), 'autoexec ', '')
-                else
-                    print('\27[36mNot valid: msg from us\27[39m')
-                    return false
+                    valid = true
                 end
-            else
-                print('\27[36mNot valid: msg from us\27[39m')
-                return false
             end
-        else
+        end
+        if not valid then
             print('\27[36mNot valid: msg from us\27[39m')
             return false
         end
@@ -210,18 +207,8 @@ function msg_valid(msg)
     end
 
     if msg.from.id == our_id then
-        if not msg.fwd_from then
-            if msg.text then
-                if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
-                    msg.text = string.gsub(msg.text:lower(), 'autoexec ', '')
-                else
-                    print('\27[36mNot valid: msg from our id\27[39m')
-                    return false
-                end
-            else
-                print('\27[36mNot valid: msg from our id\27[39m')
-                return false
-            end
+        if valid then
+            msg.text = string.gsub(msg.text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
         else
             print('\27[36mNot valid: msg from our id\27[39m')
             return false
