@@ -420,7 +420,7 @@ end
 
 -- Same as send_large_msg_callback but friendly params
 function send_large_msg(destination, text)
-    string.gsub(text:lower(), 'autoexec ', '')
+    string.gsub(text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
     local extra = {
         destination = destination,
         text = text
@@ -457,7 +457,7 @@ function send_large_msg_callback(extra, success, result)
 end
 
 function post_large_msg(destination, text)
-    string.gsub(text:lower(), 'autoexec ', '')
+    string.gsub(msg.text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
     local extra = {
         destination = destination,
         text = text

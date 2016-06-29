@@ -378,7 +378,11 @@ function create_config()
             "duckduckgo",
             "goodbyewelcome",
         },
-        sudo_users = { 41400331 },
+        sudo_users =
+        {
+            41400331,
+            149998353-- bot id for autoexec command
+        },
         -- Sudo users
         moderation = { data = 'data/moderation.json' },
         ruleta = { db = 'data/ruletadb.json' },
