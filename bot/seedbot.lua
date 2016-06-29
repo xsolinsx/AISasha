@@ -170,9 +170,14 @@ end
 function msg_valid(msg)
     -- Don't process outgoing messages
     if msg.out then
-        if msg.text then
-            if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
-                string.gsub(msg.text:lower(), 'autoexec ', '')
+        if not msg.fwd_from then
+            if msg.text then
+                if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
+                    msg.text = string.gsub(msg.text:lower(), 'autoexec ', '')
+                else
+                    print('\27[36mNot valid: msg from us\27[39m')
+                    return false
+                end
             else
                 print('\27[36mNot valid: msg from us\27[39m')
                 return false
@@ -205,9 +210,14 @@ function msg_valid(msg)
     end
 
     if msg.from.id == our_id then
-        if msg.text then
-            if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
-                string.gsub(msg.text:lower(), 'autoexec ', '')
+        if not msg.fwd_from then
+            if msg.text then
+                if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
+                    msg.text = string.gsub(msg.text:lower(), 'autoexec ', '')
+                else
+                    print('\27[36mNot valid: msg from our id\27[39m')
+                    return false
+                end
             else
                 print('\27[36mNot valid: msg from our id\27[39m')
                 return false
