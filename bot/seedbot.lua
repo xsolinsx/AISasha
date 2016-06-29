@@ -170,8 +170,17 @@ end
 function msg_valid(msg)
     -- Don't process outgoing messages
     if msg.out then
-        print('\27[36mNot valid: msg from us\27[39m')
-        return false
+        if msg.text then
+            if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
+                string.gsub(msg.text:lower(), 'autoexec ', '')
+            else
+                print('\27[36mNot valid: msg from us\27[39m')
+                return false
+            end
+        else
+            print('\27[36mNot valid: msg from us\27[39m')
+            return false
+        end
     end
 
     -- Before bot was started
@@ -186,12 +195,12 @@ function msg_valid(msg)
     end
 
     if not msg.to.id then
-        print('\27[36mNot valid: To id not provided\27[39m')
+        print('\27[36mNot valid: to id not provided\27[39m')
         return false
     end
 
     if not msg.from.id then
-        print('\27[36mNot valid: From id not provided\27[39m')
+        print('\27[36mNot valid: from id not provided\27[39m')
         return false
     end
 
@@ -200,17 +209,17 @@ function msg_valid(msg)
             if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
                 string.gsub(msg.text:lower(), 'autoexec ', '')
             else
-                print('\27[36mNot valid: Msg from our id\27[39m')
+                print('\27[36mNot valid: msg from our id\27[39m')
                 return false
             end
         else
-            print('\27[36mNot valid: Msg from our id\27[39m')
+            print('\27[36mNot valid: msg from our id\27[39m')
             return false
         end
     end
 
     if msg.to.type == 'encr_chat' then
-        print('\27[36mNot valid: Encrypted chat\27[39m')
+        print('\27[36mNot valid: encrypted chat\27[39m')
         return false
     end
 
@@ -221,7 +230,7 @@ function msg_valid(msg)
     end
 
     if is_channel_disabled(receiver) and not is_momod(msg) then
-        print('\27[36mNot valid: Channel disabled\27[39m')
+        print('\27[36mNot valid: channel disabled\27[39m')
         return false
     end
 
