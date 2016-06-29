@@ -93,6 +93,9 @@ local function run(msg, matches)
             return lang_text('require_mod')
         end
     elseif matches[1]:lower() == 'set' or matches[1]:lower() == 'sasha setta' or matches[1]:lower() == 'setta' then
+        if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+            return lang_text('autoexecDenial')
+        end
         if is_momod(msg) then
             local name = string.sub(matches[2]:lower(), 1, 50)
             local value = string.sub(matches[3], 1, 4096)

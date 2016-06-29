@@ -196,8 +196,17 @@ function msg_valid(msg)
     end
 
     if msg.from.id == our_id then
-        print('\27[36mNot valid: Msg from our id\27[39m')
-        return false
+        if msg.text then
+            if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
+                string.gsub(msg.text:lower(), 'autoexec ', '')
+            else
+                print('\27[36mNot valid: Msg from our id\27[39m')
+                return false
+            end
+        else
+            print('\27[36mNot valid: Msg from our id\27[39m')
+            return false
+        end
     end
 
     if msg.to.type == 'encr_chat' then

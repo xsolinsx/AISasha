@@ -104,9 +104,15 @@ local function run(msg, matches)
         end
     end
     if matches[1]:lower() == 'setwelcome' and is_momod(msg) then
+        if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+            return lang_text('autoexecDenial')
+        end
         return set_welcome(msg, matches[2])
     end
     if matches[1]:lower() == 'setgoodbye' and is_momod(msg) then
+        if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+            return lang_text('autoexecDenial')
+        end
         return set_goodbye(msg, matches[2])
     end
     if matches[1]:lower() == 'unsetwelcome' and is_momod(msg) then

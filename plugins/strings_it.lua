@@ -32,6 +32,7 @@ local function run(msg, matches)
         set_text('unbanned', ' unbannato.')
         set_text('gbanned', ' bannato globalmente.')
         set_text('ungbanned', ' unbannato globalmente.')
+        set_text('autoexecDenial', 'Non puoi usare autoexec tramite un altro comando.')
 
         -- seedbot.lua --
         set_text('sender', 'Mittente: ')
