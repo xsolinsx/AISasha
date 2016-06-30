@@ -36,7 +36,7 @@ local function set_media(msg, name)
 end
 
 local function callback(extra, success, result)
-    if success then
+    if success and result then
         local file
         if extra.media == 'photo' then
             file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.jpg'
