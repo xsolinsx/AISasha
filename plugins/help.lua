@@ -50,7 +50,7 @@ local function plugin_help(var, chat, rank)
                     if rank_table[lang_text(plugin.description:lower() .. ':' .. i)] > rank then
                         help_permission = false
                     end
-                elseif i == 1 then
+                elseif i == 2 then
                     text = text .. 'USER\n'
                 end
                 if help_permission then
