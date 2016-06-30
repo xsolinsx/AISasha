@@ -46,12 +46,13 @@ local function plugin_help(var, chat, rank)
         local textHash = plugin.description:lower() .. ':0'
         if lang_text(textHash) then
             for i = 1, tonumber(lang_text(plugin.description:lower() .. ':0')), 1 do
-                if not rank_table[lang_text(plugin.description:lower() .. ':' .. i)] then
-                    if help_permission then
-                        text = text .. lang_text(plugin.description:lower() .. ':' .. i) .. '\n'
+                if rank_table[lang_text(plugin.description:lower() .. ':' .. i)] then
+                    if rank_table[lang_text(plugin.description:lower() .. ':' .. i)] > rank then
+                        help_permission = false
                     end
-                elseif rank_table[lang_text(plugin.description:lower() .. ':' .. i)] > rank then
-                    help_permission = false
+                end
+                if help_permission then
+                    text = text .. lang_text(plugin.description:lower() .. ':' .. i) .. '\n'
                 end
             end
         end
