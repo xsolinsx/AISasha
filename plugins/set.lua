@@ -50,9 +50,9 @@ local function callback(extra, success, result)
         redis:hset(extra.hash, extra.name, file)
         redis:hdel(extra.hash, 'waiting')
         print(file)
-        send_large_msg(extra.receiver, lang_text('mediaSaved') .. extra.hash .. ' - ' .. extra.name .. ' - ' .. extra.receiver)
+        send_large_msg(extra.receiver, lang_text('mediaSaved'))
     else
-        send_large_msg(extra.receiver, lang_text('mediaSaved') .. extra.hash .. ' - ' .. extra.name .. ' - ' .. extra.receiver)
+        send_large_msg(extra.receiver, lang_text('errorDownloading') .. extra.hash .. ' - ' .. extra.name .. ' - ' .. extra.receiver)
     end
 end
 
