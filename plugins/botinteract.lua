@@ -85,9 +85,6 @@ local function run(msg, matches)
 end
 
 local function pre_process(msg)
-    if not msg.text and msg.media then
-        msg.text = '[' .. msg.media.type .. ']'
-    end
     if msg.to.type == 'user' then
         local chat = ''
         local bot = ''
