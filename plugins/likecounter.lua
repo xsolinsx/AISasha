@@ -143,7 +143,7 @@ local function run(msg, matches)
         if msg.fwd_from then
             reply_msg(msg.id, lang_text('forwardingLike'), ok_cb, false)
         else
-            if matches[1]:lower() == 'like' then
+            if matches[1]:lower() == 'like' or matches[1]:lower() == '1up' then
                 if type(msg.reply_id) ~= "nil" then
                     if matches[2] then
                         if matches[2]:lower() == 'from' then
@@ -160,7 +160,7 @@ local function run(msg, matches)
                 else
                     resolve_username(matches[2]:gsub('@', ''), like_by_username, { chat = chat, likedata = likedata })
                 end
-            elseif matches[1]:lower() == 'dislike' then
+            elseif matches[1]:lower() == 'dislike' or matches[1]:lower() == '1down' then
                 if type(msg.reply_id) ~= "nil" then
                     if matches[2] then
                         if matches[2]:lower() == 'from' then
