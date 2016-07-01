@@ -194,12 +194,18 @@ return {
         "^[#!/]([Ll][Ii][Kk][Ee][Ss])$",
         "^[#!/]([Aa][Dd][Dd][Ll][Ii][Kk][Ee][Ss]) (%d+) (%d+)$",
         "^[#!/]([Rr][Ee][Mm][Ll][Ii][Kk][Ee][Ss]) (%d+) (%d+)$",
+        -- like
+        "^[#!/](1[Uu][Pp]) (.*)$",
+        "^[#!/](1[Uu][Pp])$",
+        -- dislike
+        "^[#!/](1[Dd][Oo][Ww][Nn]) (.*)$",
+        "^[#!/](1[Dd][Oo][Ww][Nn])$",
     },
     run = run,
     min_rank = 0
     -- usage
-    -- #like <id>|<username>|<reply>|from
-    -- #dislike <id>|<username>|<reply>|from
+    -- #like|#1up <id>|<username>|<reply>|from
+    -- #dislike|#1down <id>|<username>|<reply>|from
     -- #likes
     -- SUDO
     -- #createlikesdb
