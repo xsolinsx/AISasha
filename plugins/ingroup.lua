@@ -1725,11 +1725,7 @@ return {
         "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr]) (.*)$",
         "^[#!/]([Mm][Uu][Tt][Ee][Ss][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Mm][Uu][Tt][Ee][Ll][Ii][Ss][Tt])$",
-        "^(https://telegram.me/joinchat/%S+)$",
-        "%[(document)%]",
         "%[(photo)%]",
-        "%[(video)%]",
-        "%[(audio)%]",
         "^!!tgservice (.+)$",
         -- rules
         "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ee][Gg][Oo][Ll][Ee])$",
