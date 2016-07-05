@@ -452,10 +452,10 @@ local function run(msg, matches)
                         if matches[2]:lower() == 'from' then
                             get_message(msg.reply_id, ban_from, { receiver = receiver, executer = msg.from.id })
                         else
-                            msgr = get_message(msg.reply_id, ban_by_reply, { receiver = receiver, executer = msg.from.id })
+                            get_message(msg.reply_id, ban_by_reply, { receiver = receiver, executer = msg.from.id })
                         end
                     else
-                        msgr = get_message(msg.reply_id, ban_by_reply, { receiver = receiver, executer = msg.from.id })
+                        get_message(msg.reply_id, ban_by_reply, { receiver = receiver, executer = msg.from.id })
                     end
                 elseif string.match(matches[2], '^%d+$') then
                     -- ignore higher or same rank
