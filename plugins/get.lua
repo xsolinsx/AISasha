@@ -64,13 +64,17 @@ local function run(msg, matches)
     if (matches[1]:lower() == 'getglobal' or matches[1]:lower() == 'getgloballist' or matches[1]:lower() == 'sasha lista globali') then
         return list_variables(msg, true)
     end
-    if matches[1]:lower() == 'enableglobal' then
-        redis:del(msg.to.id .. ':gvariables')
-        return lang_text('globalEnable')
-    end
-    if matches[1]:lower() == 'disableglobal' then
-        redis:set(msg.to.id .. ':gvariables', true)
-        return lang_text('globalDisable')
+    if is_owner(msg) then
+        if matches[1]:lower() == 'enableglobal' then
+            redis:del(msg.to.id .. ':gvariables')
+            return lang_text('globalEnable')
+        end
+        if matches[1]:lower() == 'disableglobal' then
+            redis:set(msg.to.id .. ':gvariables', true)
+            return lang_text('globalDisable')
+        end
+    else
+        return lang_text('require_owner')
     end
 end
 
