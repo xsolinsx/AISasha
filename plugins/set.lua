@@ -115,6 +115,8 @@ local function run(msg, matches)
             return lang_text('autoexecDenial')
         end
         if is_admin1(msg) then
+            local name = string.sub(matches[2]:lower(), 1, 50)
+            local value = string.sub(matches[3], 1, 4096)
             return set_value(msg, name, value, true)
         else
             return lang_text('require_admin')
