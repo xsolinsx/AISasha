@@ -74,8 +74,23 @@ end
 
 local function pre_process(msg, matches)
     if msg.text then
-        if not string.match(msg.text, "^[#!/][Uu][Nn][Ss][Ee][Tt] ([^%s]+)") and not string.match(msg.text, "^[Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)") and not string.match(msg.text, "^[Ss][Aa][Ss][Hh][Aa] [Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)") then
-            local vars = list_variables(msg)
+        if not string.match(msg.text, "^[#!/][Uu][Nn][Ss][Ee][Tt] ([^%s]+)") and not string.match(msg.text, "^[Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)") and not string.match(msg.text, "^[Ss][Aa][Ss][Hh][Aa] [Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)") and not string.match(msg.text, "^[Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll] ([^%s]+)") then
+            local vars = list_variables(msg, true)
+
+            if vars ~= nil then
+                local t = vars:split('\n')
+                for i, word in pairs(t) do
+                    local temp = word:lower()
+                    if word:lower() ~= 'get' and string.find(msg.text:lower(), temp) then
+                        local value = get_value(msg, word:lower())
+                        if value then
+                            reply_msg(msg.id, get_value(msg, word:lower()), ok_cb, false)
+                        end
+                    end
+                end
+            end
+
+            local vars = list_variables(msg, false)
 
             if vars ~= nil then
                 local t = vars:split('\n')
