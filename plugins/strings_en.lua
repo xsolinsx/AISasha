@@ -174,6 +174,10 @@ local function run(msg, matches)
         set_text('defeatsLeaderboard', 'Defeats leaderboard\n')
         set_text('likesLeaderboard', 'Likes leaderboard\n')
 
+        -- get.lua --
+        set_text('globalEnable', 'Global variables enabled on this chat.')
+        set_text('globalDisable', 'Global variables disabled on this chat.')
+
         -- goodbyewelcome.lua --
         set_text('newWelcome', 'New welcome message:\n')
         set_text('newGoodbye', 'New goodbye message:\n')

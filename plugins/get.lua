@@ -66,9 +66,11 @@ local function run(msg, matches)
     end
     if matches[1]:lower() == 'enableglobal' then
         redis:del(msg.to.id .. ':gvariables')
+        return lang_text('globalEnable')
     end
     if matches[1]:lower() == 'disableglobal' then
         redis:set(msg.to.id .. ':gvariables', true)
+        return lang_text('globalDisable')
     end
 end
 
