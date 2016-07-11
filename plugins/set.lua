@@ -1,25 +1,33 @@
-﻿local function get_variables_hash(msg)
-    if msg.to.type == 'channel' then
-        return 'channel:' .. msg.to.id .. ':variables'
+﻿local function get_variables_hash(msg, global)
+    if global then
+        return 'gvariables'
+    else
+        if msg.to.type == 'channel' then
+            return 'channel:' .. msg.to.id .. ':variables'
+        end
+        if msg.to.type == 'chat' then
+            return 'chat:' .. msg.to.id .. ':variables'
+        end
+        if msg.to.type == 'user' then
+            return 'user:' .. msg.from.id .. ':variables'
+        end
+        return false
     end
-    if msg.to.type == 'chat' then
-        return 'chat:' .. msg.to.id .. ':variables'
-    end
-    if msg.to.type == 'user' then
-        return 'user:' .. msg.from.id .. ':variables'
-    end
-    return false
 end
 
-local function set_value(msg, name, value)
+local function set_value(msg, name, value, global)
     if (not name or not value) then
         return lang_text('errorTryAgain')
     end
 
-    local hash = get_variables_hash(msg)
+    local hash = get_variables_hash(msg, global)
     if hash then
         redis:hset(hash, name, value)
-        return name .. lang_text('saved')
+        if global then
+            return name .. lang_text('gSaved')
+        else
+            return name .. lang_text('saved')
+        end
     end
 end
 
@@ -57,7 +65,7 @@ local function callback(extra, success, result)
 end
 
 local function run(msg, matches)
-    local hash = get_variables_hash(msg)
+    local hash = get_variables_hash(msg, false)
     if msg.media then
         if hash then
             local name = redis:hget(hash, 'waiting')
@@ -98,18 +106,20 @@ local function run(msg, matches)
         if is_momod(msg) then
             local name = string.sub(matches[2]:lower(), 1, 50)
             local value = string.sub(matches[3], 1, 4096)
-            return set_value(msg, name, value)
+            return set_value(msg, name, value, false)
         else
             return lang_text('require_mod')
         end
+    elseif matches[1]:lower() == 'setglobal' then
+        if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+            return lang_text('autoexecDenial')
+        end
+        if is_admin1(msg) then
+            return set_value(msg, name, value, true)
+        else
+            return lang_text('require_admin')
+        end
     end
-end
-
-local function pre_process(msg)
-    if not msg.text and msg.media then
-        msg.text = '[' .. msg.media.type .. ']'
-    end
-    return msg
 end
 
 return {
@@ -117,6 +127,7 @@ return {
     patterns =
     {
         "^[#!/]([Ss][Ee][Tt]) ([^%s]+) (.+)$",
+        "^[#!/]([Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll]) ([^%s]+) (.+)$",
         "^[#!/]([Ss][Ee][Tt][Mm][Ee][Dd][Ii][Aa]) ([^%s]+)$",
         "^[#!/]([Cc][Aa][Nn][Cc][Ee][Ll])$",
         "%[(photo)%]",
@@ -138,4 +149,6 @@ return {
     -- (#set|[sasha] setta) <var_name> <text>
     -- (#setmedia|[sasha] setta media) <var_name>
     -- (#cancel|[sasha] annulla)
+    -- ADMIN
+    -- #setglobal <var_name> <text>
 }

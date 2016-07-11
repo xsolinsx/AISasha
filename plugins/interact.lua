@@ -90,19 +90,6 @@ local function run(msg, matches)
     if matches[1]:lower() == 'sasha ti amo' or matches[1]:lower() == 'ti amo sasha' then
         reply_msg(msg.id, tiamo[math.random(#tiamo)], ok_cb, false)
     end
-    -- words
-    if matches[1]:lower() == 'gangbang' then
-        reply_msg(msg.id, ".    👇🏿\n👉🏾👌🏻👈🏾\n      👆🏿", ok_cb, false)
-    end
-    if matches[1]:lower() == 'maometto' or matches[1]:lower() == 'maometo' or matches[1]:lower() == 'cancaroman' then
-        reply_msg(msg.id, "D\n  I\n    O\n     o\n     o\n      o\n     o\n     。\n    。\n   .\n   .\n    .\n    .\nC \nA\n  N\n    C\n  A\n    R\n      o\n       o\n      o\n     。\n    。\n   .\n   .\n    .\n    .\n🚴", ok_cb, false)
-    end
-    if matches[1]:lower() == 'mohammed' then
-        reply_msg(msg.id, "☁️☀️    ☁️         ☁️  ☁️\n       ☁️                🚁   ☁️\n\n_🌵_🌻________🌵_____\n                 /  |   \\\n        🌴  / 🚔    \\ 🌴\n             /      |       \\\n    🌴   /      🚔      \\ 🌴\n         /          |    🚔  \\\n⛽️  /  🚔     |   🚔     \\ 🌴\n     /            🚔             \\ 🌴\n   /                |                \\\n /                  |        👳🏿      \\\n", ok_cb, false)
-    end
-    if matches[1]:lower() == 'nazismo' or matches[1]:lower() == 'nazista' or matches[1]:lower() == 'hitler' then
-        reply_msg(msg.id, "❤️❤️❤️❤️❤️❤️❤️❤️❤️\n❤️⚫️❤️❤️⚫️⚫️⚫️⚫️❤️\n❤️⚫️❤️❤️⚫️❤️❤️❤️❤️\n❤️⚫️❤️❤️⚫️❤️❤️❤️❤️\n❤️⚫️⚫️⚫️⚫️⚫️⚫️⚫️❤️\n❤️❤️❤️❤️⚫️❤️❤️⚫️❤️\n❤️❤️❤️❤️⚫️❤️❤️⚫️❤️\n❤️⚫️⚫️⚫️⚫️❤️❤️⚫️❤️\n❤️❤️❤️❤️❤️❤️❤️❤️❤️", ok_cb, false)
-    end
 end
 
 return {
@@ -117,15 +104,6 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa])(.*%?)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Tt][Ii] [Aa][Mm][Oo])$",
         "^([Tt][Ii] [Aa][Mm][Oo] [Ss][Aa][Ss][Hh][Aa])$",
-        -- words
-        "([Gg][Aa][Nn][Gg][Bb][Aa][Nn][Gg])",
-        "([Mm][Aa][Oo][Mm][Ee][Tt][Tt][Oo])",
-        "([Mm][Aa][Oo][Mm][Ee][Tt][Oo])",
-        "([Cc][Aa][Nn][Cc][Aa][Rr][Oo][Mm][Aa][Nn])",
-        "([Mm][Oo][Hh][Aa][Mm][Mm][Ee][Dd])",
-        "([Nn][Aa][Zz][Ii][Ss][Mm][Oo])",
-        "([Nn][Aa][Zz][Ii][Ss][Tt][Aa])",
-        "([Hh][Ii][Tt][Ll][Ee][Rr])",
     },
     run = run,
     min_rank = 0

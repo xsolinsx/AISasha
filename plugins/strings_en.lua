@@ -439,6 +439,7 @@ local function run(msg, matches)
 
         -- set.lua --
         set_text('saved', ' saved.')
+        set_text('gSaved', ' global variable saved.')
         set_text('sendMedia', 'Send me the media you want to save (audio or picture).')
         set_text('cancelled', 'Cancelled.')
         set_text('nothingToSet', 'Nothing to set.')
@@ -486,6 +487,7 @@ local function run(msg, matches)
 
         -- unset.lua --
         set_text('deleted', ' deleted.')
+        set_text('gDeleted', ' global variable deleted.')
 
         -- warn.lua --
         set_text('errorWarnRange', 'Error, range is [0-10].')
@@ -646,10 +648,13 @@ local function run(msg, matches)
         set_text('flame:5', '(#flameinfo|[sasha] info flame): Sasha sends flamed user info.')
 
         -- get.lua --
-        set_text('get:0', 3)
+        set_text('get:0', 6)
         set_text('get:1', '🅿️ GET')
         set_text('get:2', '(#getlist|#get|sasha lista): Sasha sends a list of saved variables.')
-        set_text('get:3', '[#get] <var_name>: Sasha sends value of <var_name>.')
+        set_text('get:3', '(#getgloballist|#getglobal|sasha lista globali): Sasha sends a list of globally saved variables.')
+        set_text('get:4', 'OWNER')
+        set_text('get:5', '#enableglobal: Sasha enables global gets on chat.')
+        set_text('get:6', '#disableglobal: Sasha disables global gets on chat.')
 
         -- goodbyewelcome.lua --
         set_text('goodbyewelcome:0', 10)
@@ -899,12 +904,14 @@ local function run(msg, matches)
         set_text('ruletagame:26', '#rempoints <id> <value>: Sasha subtracts <value> points to specified user.')
 
         -- set.lua --
-        set_text('set:0', 5)
+        set_text('set:0', 7)
         set_text('set:1', '🅿️ SET')
         set_text('set:2', 'MOD')
         set_text('set:3', '(#set|[sasha] setta) <var_name> <text>: Sasha saves <text> as answer to <var_name>.')
         set_text('set:4', '(#setmedia|[sasha] setta media) <var_name>: Sasha saves the media (audio or picture) that will be sent as answer to <var_name>.')
         set_text('set:5', '(#cancel|[sasha] annulla): Sasha cancels #setmedia.')
+        set_text('set:6', 'ADMIN')
+        set_text('set:7', '#setglobal <var_name> <text>: Sasha globally saves <text> as answer to <var_name>.')
 
         -- shout.lua --
         set_text('shout:0', 2)
@@ -1010,10 +1017,12 @@ local function run(msg, matches)
         set_text('tex:2', '(#tex|[sasha] equazione) <equation>: Sasha converts <equation> in image.')
 
         -- unset.lua --
-        set_text('unset:0', 3)
+        set_text('unset:0', 5)
         set_text('unset:1', '🅿️ UNSET')
         set_text('unset:2', 'MOD')
         set_text('unset:3', '(#unset|[sasha] unsetta) <var_name>: Sasha deletes <var_name>.')
+        set_text('unset:4', 'ADMIN')
+        set_text('unset:5', '#unsetglobal <var_name>: Sasha globally deletes <var_name>.')
 
         -- urbandictionary.lua --
         set_text('urbandictionary:0', 2)

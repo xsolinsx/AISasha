@@ -1,30 +1,51 @@
-﻿local function get_variables_hash(msg)
-    if msg.to.type == 'channel' then
-        return 'channel:' .. msg.to.id .. ':variables'
-    end
-    if msg.to.type == 'chat' then
-        return 'chat:' .. msg.to.id .. ':variables'
-    end
-    if msg.to.type == 'user' then
-        return 'user:' .. msg.from.id .. ':variables'
+﻿local function get_variables_hash(msg, global)
+    if global then
+        if not redis:get(msg.to.id .. ':gvariables') then
+            return 'gvariables'
+        end
+        return false
+    else
+        if msg.to.type == 'channel' then
+            return 'channel:' .. msg.to.id .. ':variables'
+        end
+        if msg.to.type == 'chat' then
+            return 'chat:' .. msg.to.id .. ':variables'
+        end
+        if msg.to.type == 'user' then
+            return 'user:' .. msg.from.id .. ':variables'
+        end
+        return false
     end
 end
 
 local function get_value(msg, var_name)
-    local hash = get_variables_hash(msg)
     var_name = var_name:gsub(' ', '_')
+    if not redis:get(msg.to.id .. ':gvariables') then
+        local hash = get_variables_hash(msg, true)
+        if hash then
+            local value = redis:hget(hash, var_name)
+            if value then
+                return value
+            end
+        end
+    end
+
+    local hash = get_variables_hash(msg, false)
     if hash then
         local value = redis:hget(hash, var_name)
         if value then
             return value
-        else
-            return
         end
     end
 end
 
-local function list_variables(msg)
-    local hash = get_variables_hash(msg)
+local function list_variables(msg, global)
+    local hash = nil
+    if global then
+        hash = get_variables_hash(msg, true)
+    else
+        hash = get_variables_hash(msg, false)
+    end
 
     if hash then
         local names = redis:hkeys(hash)
@@ -37,8 +58,17 @@ local function list_variables(msg)
 end
 
 local function run(msg, matches)
-    if (matches[1]:lower() == 'get' or matches[1]:lower() == 'getlist' or matches[1]:lower() == 'sasha lista') and not matches[2] then
-        return list_variables(msg)
+    if (matches[1]:lower() == 'get' or matches[1]:lower() == 'getlist' or matches[1]:lower() == 'sasha lista') then
+        return list_variables(msg, false)
+    end
+    if (matches[1]:lower() == 'getglobal' or matches[1]:lower() == 'getgloballist' or matches[1]:lower() == 'sasha lista globali') then
+        return list_variables(msg, true)
+    end
+    if matches[1]:lower() == 'enableglobal' then
+        redis:del(msg.to.id .. ':gvariables')
+    end
+    if matches[1]:lower() == 'disableglobal' then
+        redis:set(msg.to.id .. ':gvariables', true)
     end
 end
 
@@ -82,13 +112,23 @@ return {
     patterns =
     {
         "^[#!/]([Gg][Ee][Tt][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Gg][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Ee][Nn][Aa][Bb][Ll][Ee][Gg][Ll][Oo][Bb][Aa][Ll])$",
+        "^[#!/]([Dd][Ii][Ss][Aa][Bb][Ll][Ee][Gg][Ll][Oo][Bb][Aa][Ll])$",
         -- getlist
         "^[#!/]([Gg][Ee][Tt])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa])$",
+        -- getgloballist
+        "^[#!/]([Gg][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Gg][Ll][Oo][Bb][Aa][Ll][Ii])$",
     },
     pre_process = pre_process,
     run = run,
     min_rank = 0
     -- usage
     -- (#getlist|#get|sasha lista)
+    -- (#getgloballist|#getglobal|sasha lista globali)
+    -- OWNER
+    -- #enableglobal
+    -- #disableglobal
 }
