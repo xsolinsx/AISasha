@@ -683,6 +683,18 @@ local function run(msg, matches)
             end
         end
     end
+    if matches[1]:lower() == 'grouplink' or matches[1]:lower() == 'sasha link gruppo' or matches[1]:lower() == 'link gruppo' and matches[2] then
+        if is_admin1(msg) then
+            local data = load_data(_config.moderation.data)
+            local group_link = data[tostring(matches[2])]['settings']['set_link']
+            if not group_link then
+                return lang_text('noLinkAvailable')
+            end
+            return matches[2] .. '\n' .. group_link
+        else
+            return lang_text('require_admin')
+        end
+    end
     if matches[1]:lower() == 'database' or matches[1]:lower() == 'sasha database' then
         if is_sudo(msg) then
             if chat_type == 'channel' then
@@ -723,6 +735,7 @@ return {
         "^[#!/]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo]) (%d+)$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
+        "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ll][Ii][Nn][Kk]) (%d+)$",
         "^[#!/]([Ii][Ss][Hh][Ee][Rr][Ee]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
@@ -737,6 +750,9 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
         "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
         "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
+        -- grouplink
+        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Nn][Kk] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
+        "^([Ll][Ii][Nn][Kk] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
         -- getrank
         "^([Rr][Aa][Nn][Gg][Oo]) (.*)$",
         "^([Rr][Aa][Nn][Gg][Oo])$",
@@ -764,6 +780,7 @@ return {
     -- (#kicked|[sasha] lista rimossi)
     -- ADMIN
     -- (#groupinfo|[sasha] info gruppo) <group_id>
+    -- (#grouplink|[sasha] link gruppo) <group_id>
     -- SUDO
     -- (#database|[sasha] database)
 }

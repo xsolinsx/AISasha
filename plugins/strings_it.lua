@@ -243,6 +243,7 @@ local function run(msg, matches)
         set_text('peerTypeUnknown', 'Tipo sconosciuto.')
         set_text('ishereYes', 'Si.')
         set_text('ishereNo', 'No.')
+        set_text('noLinkAvailable', 'Nessun link disponibile.')
 
         -- ingroup.lua --
         set_text('welcomeNewRealm', 'Benvenuto nel tuo nuovo regno.')
@@ -708,7 +709,7 @@ local function run(msg, matches)
         set_text('help:6', 'Il parametro <fake_rank> serve per mandare l\'help di un rango più basso, i ranghi sono: USER, MOD, OWNER, SUPPORT, ADMIN, SUDO.')
 
         -- info.lua --
-        set_text('info:0', 13)
+        set_text('info:0', 14)
         set_text('info:1', '🅿️ INFO')
         set_text('info:2', '#getrank|rango [<id>|<username>|<reply>]: Sasha manda il rank dell\'utente.')
         set_text('info:3', '(#info|[sasha] info): Sasha manda le info dell\'utente e della chat o di se stessa')
@@ -720,8 +721,9 @@ local function run(msg, matches)
         set_text('info:9', '(#kicked|[sasha] lista rimossi): Sasha manda la lista degli utenti rimossi.')
         set_text('info:10', 'ADMIN')
         set_text('info:11', '(#groupinfo|[sasha] info gruppo) <group_id>: Sasha manda le info del gruppo specificato.')
-        set_text('info:12', 'SUDO')
-        set_text('info:13', '(#database|[sasha] database): Sasha salva i dati di tutti gli utenti.')
+        set_text('info:12', '(#grouplink|[sasha] link gruppo) <group_id>: Sasha manda il link del gruppo specificato.')
+        set_text('info:13', 'SUDO')
+        set_text('info:14', '(#database|[sasha] database): Sasha salva i dati di tutti gli utenti.')
 
         -- ingroup.lua --
         set_text('ingroup:0', 33)
