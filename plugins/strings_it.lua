@@ -629,12 +629,6 @@ local function run(msg, matches)
         set_text('broadcast:4', 'SUDO')
         set_text('broadcast:5', '#broadcast <text>: Sasha invia <text> a tutti i gruppi.')
 
-        -- codify.lua --
-        set_text('codify:0', 3)
-        set_text('codify:1', '🅿️ CODIFY')
-        set_text('codify:2', 'MOD')
-        set_text('codify:3', '#codify <text>|<reply>: Sasha manda <text> o il messaggio specificato in forma di codice.')
-
         -- dogify.lua --
         set_text('dogify:0', 2)
         set_text('dogify:1', '🅿️ DOGIFY')

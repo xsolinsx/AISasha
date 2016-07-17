@@ -92,13 +92,13 @@ local function pre_process(msg)
         for i, v in pairs(t) do
             chat, bot = v:match("(%d+):(%d+)")
             if tonumber(msg.from.id) == tonumber(bot) then
-                if not msg.media then
-                    fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
-                    fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
-                else
-                    fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
-                    fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
-                end
+                -- if not msg.media then
+                --    fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
+                --    fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
+                -- else
+                fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
+                fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
+                -- end
             end
         end
     end
