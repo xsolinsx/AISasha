@@ -298,7 +298,7 @@ function match_plugin(plugin, plugin_name, msg)
 
             local disabled = is_plugin_disabled_on_chat(plugin_name, receiver)
 
-            if pattern ~= '([\216-\219][\128-\191])' then
+            if pattern ~= "([\216-\219][\128-\191])" and pattern ~= "(%[(document)%])" and pattern ~= "(%[(photo)%])" and pattern ~= "(%[(video)%])" and pattern ~= "(%[(audio)%])" and pattern ~= "(%[(contact)%])" and pattern ~= "(%[(geo)%])" then
                 if msg.to.type == 'user' then
                     if disabled then
                         savelog(msg.from.id .. ' PM', msg.from.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" received but plugin is disabled on chat.')
