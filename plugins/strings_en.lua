@@ -616,6 +616,12 @@ local function run(msg, matches)
         set_text('duckduckgo:1', '🅿️ DUCKDUCKGO')
         set_text('duckduckgo:2', '#duck[duck]go <terms>: Sasha searches <terms> on DuckDuckGo.')
 
+        -- fakecommand.lua --
+        set_text('fakecommand:0', 3)
+        set_text('fakecommand:1', '🅿️ FAKECOMMAND')
+        set_text('fakecommand:2', 'MOD')
+        set_text('fakecommand:3', '(#user|#mod|#owner|#support|#admin) <command>: Sasha executes <command> as it would be sent by a user with the specified rank.')
+
         -- feedback.lua --
         set_text('feedback:0', 2)
         set_text('feedback:1', '🅿️ FEEDBACK')

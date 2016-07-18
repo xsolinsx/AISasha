@@ -793,6 +793,11 @@ function is_admin1(msg)
             var = true
         end
     end
+
+    -- check if executing a fakecommand, if yes confirm
+    if tonumber(msg.from.id) <= -4 then
+        var = true
+    end
     return var
 end
 
@@ -811,12 +816,22 @@ function is_admin2(user_id)
             var = true
         end
     end
+
+    -- check if executing a fakecommand, if yes confirm
+    if tonumber(user_id) <= -4 then
+        var = true
+    end
     return var
 end
 
 function is_support(support_id)
     local hash = 'support'
     local support = redis:sismember(hash, support_id)
+
+    -- check if executing a fakecommand, if yes confirm
+    if tonumber(support_id) <= -3 then
+        support = true
+    end
     return support or false
 end
 
@@ -850,6 +865,11 @@ function is_owner(msg)
             var = true
         end
     end
+
+    -- check if executing a fakecommand, if yes confirm
+    if tonumber(msg.from.id) <= -2 then
+        var = true
+    end
     return var
 end
 
@@ -881,6 +901,11 @@ function is_owner2(user_id, group_id)
         if tostring(user) == tostring(user_id) then
             var = true
         end
+    end
+
+    -- check if executing a fakecommand, if yes confirm
+    if tonumber(user_id) <= -2 then
+        var = true
     end
     return var
 end
@@ -923,6 +948,11 @@ function is_momod(msg)
             var = true
         end
     end
+
+    -- check if executing a fakecommand, if yes confirm
+    if tonumber(msg.from.id) <= -1 then
+        var = true
+    end
     return var
 end
 
@@ -962,6 +992,11 @@ function is_momod2(user_id, group_id)
         if tostring(user) == tostring(usert) then
             var = true
         end
+    end
+
+    -- check if executing a fakecommand, if yes confirm
+    if tonumber(user_id) <= -1 then
+        var = true
     end
     return var
 end

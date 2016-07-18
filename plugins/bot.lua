@@ -20,7 +20,6 @@ local function run(msg, matches)
     else
         return lang_text('require_owner')
     end
-    return
 end
 
 return {
@@ -38,7 +37,6 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] (%d+) ([Oo][Ff][Ff])",
     },
     run = run,
-    pre_process = pre_process,
     min_rank = 2
     -- usage
     -- OWNER
