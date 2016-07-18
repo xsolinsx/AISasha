@@ -296,7 +296,25 @@ function match_plugin(plugin, plugin_name, msg)
         if matches then
             print("msg matches: ", plugin_name, " => ", pattern)
 
-            if is_plugin_disabled_on_chat(plugin_name, receiver) then
+            local disabled = is_plugin_disabled_on_chat(plugin_name, receiver)
+
+            if pattern ~= '([\216-\219][\128-\191])' then
+                if msg.to.type == 'user' then
+                    if disabled then
+                        savelog(msg.from.id .. ' PM', msg.from.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" received but plugin is disabled on chat.')
+                    else
+                        savelog(msg.from.id .. ' PM', msg.from.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" executed.')
+                    end
+                else
+                    if disabled then
+                        savelog(msg.to.id, msg.to.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.to.id .. ']' .. ' Sender: ' .. msg.from.print_name:gsub('_', ' ') .. ' [' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" received but plugin is disabled on chat.')
+                    else
+                        savelog(msg.to.id, msg.to.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.to.id .. ']' .. ' Sender: ' .. msg.from.print_name:gsub('_', ' ') .. ' [' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" executed.')
+                    end
+                end
+            end
+
+            if disabled then
                 return nil
             end
             -- Function exists
