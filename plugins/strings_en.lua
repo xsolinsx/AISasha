@@ -451,10 +451,12 @@ local function run(msg, matches)
         set_text('mediaSaved', 'Media saved.')
 
         -- spam.lua --
+        --[[
         set_text('msgSet', 'Message set.')
         set_text('msgsToSend', 'Messages to send: ')
         set_text('timeBetweenMsgs', 'Time between every message: X seconds.')
         set_text('msgNotSet', 'You haven\'t set the message, use /setspam.')
+        ]]
 
         -- stats.lua --
         set_text('usersInChat', 'Users on chat\n')
@@ -919,6 +921,11 @@ local function run(msg, matches)
         set_text('shout:2', '(#shout|[sasha] grida|[sasha] urla) <text>: Sasha "shouts" <text>.')
 
         -- spam.lua --
+        set_text('spam:0', 3)
+        set_text('spam:1', '🅿️ SPAM')
+        set_text('spam:2', 'OWNER')
+        set_text('spam:3', '(#spam|[sasha] spamma) <messages> <seconds> <text>: Sasha starts spamming <text> for <messages> times every <seconds> seconds.')
+        --[[
         set_text('spam:0', 6)
         set_text('spam:1', '🅿️ SPAM')
         set_text('spam:2', 'OWNER')
@@ -926,6 +933,7 @@ local function run(msg, matches)
         set_text('spam:4', '#setmsgs <value>: Sasha sets <value> as number of messages to send.')
         set_text('spam:5', '#setwait <seconds>: Sasha sets <seconds> as wait between messages.')
         set_text('spam:6', '(#spam|[sasha] spamma): Sasha starts spamming.')
+        ]]
 
         -- stats.lua --
         set_text('stats:0', 13)

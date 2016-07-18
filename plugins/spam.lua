@@ -6,6 +6,37 @@ local function spam(chat, text, i)
 end
 
 local function run(msg, matches)
+    if is_owner(msg) then
+        if (matches[1]:lower() == 'spam' or matches[1]:lower() == 'sasha spamma' or matches[1]:lower() == 'spamma') and matches[2] and matches[3] and matches[4] then
+            local i = 0
+            while i <(tonumber(matches[2]) /(0.5 / tonumber(matches[3]))) / 2 do
+                i = i + matches[3]
+                spam(get_receiver(msg), matches[4], i)
+            end
+        end
+    else
+        return lang_text('require_owner')
+    end
+end
+
+return {
+    description = "SPAM",
+    patterns =
+    {
+        "^[#!/]([Ss][Pp][Aa][Mm]) (%d+) (%d+) (.+)$",
+        -- spam
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Mm][Mm][Aa]) (%d+) (%d+) (.+)$",
+        "^([Ss][Pp][Aa][Mm][Mm][Aa]) (%d+) (%d+) (.+)$",
+    },
+    run = run,
+    min_rank = 2
+    -- usage
+    -- OWNER
+    -- (#spam|[sasha] spamma) <messages> <seconds> <text>
+}
+
+--[[ -- OLD VERSION
+local function run(msg, matches)
     local receiver = get_receiver(msg)
     if is_owner(msg) then
         if matches[2] then
@@ -73,3 +104,4 @@ return {
     -- #setwait <seconds>
     -- (#spam|[sasha] spamma)
 }
+]]
