@@ -16,7 +16,7 @@ local function run(msg, matches)
             match_plugins(msg)
         else
             -- no
-            return lang_text('youTried')
+            return lang_text('fakecommandYouTried')
         end
     else
         return lang_text('require_mod')

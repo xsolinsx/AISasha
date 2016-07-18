@@ -98,6 +98,9 @@ local function run(msg, matches)
         set_text('sendMeMedia', 'Mandami ora il media che vuoi che io inoltri.')
         set_text('mediaForwarded', 'Media inoltrato.')
 
+        -- fakecommand.lua --
+        set_text('fakecommandYouTried', 'Ci hai provato pezzente, non eseguirai un comando che richiede un rango superiore al tuo.')
+
         -- feedback.lua --
         set_text('feedStart', '@EricSolinas hai ricevuto un feedback: #newfeedback\n\nMittente')
         set_text('feedName', '\nNome: ')
@@ -134,7 +137,7 @@ local function run(msg, matches)
         set_text('errorNoPlugin', 'Questo plugin non esiste o non ha una descrizione.')
         set_text('doYourBusiness', 'Ma una sportina di cazzi tuoi no?')
         set_text('helpIntro', 'Ogni \'#\' può essere sostituito con i simboli \'/\' o \'!\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n\n')
-        set_text('youTried', 'Ci hai provato, non avrai un help più dettagliato di quello che ti spetta, pezzente.')
+        set_text('youTried', 'Ci hai provato pezzente, non avrai un help più dettagliato di quello che ti spetta.')
 
         -- games --
         set_text('groupAlreadySignedUp', 'Gruppo già registrato.')

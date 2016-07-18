@@ -98,6 +98,9 @@ local function run(msg, matches)
         set_text('sendMeMedia', 'Send me the media you want me to forward.')
         set_text('mediaForwarded', 'Media forwarded.')
 
+        -- fakecommand.lua --
+        set_text('fakecommandYouTried', 'You tried asshole, you won\'t execute a command that requires a rank higher than yours.')
+
         -- feedback.lua --
         set_text('feedStart', '@EricSolinas you received a feedback: #newfeedback\n\nSender')
         set_text('feedName', '\nName: ')
@@ -134,7 +137,7 @@ local function run(msg, matches)
         set_text('errorNoPlugin', 'This plugin doesn\'t exist or doesn\'t have a description.')
         set_text('doYourBusiness', 'Do your business!')
         set_text('helpIntro', 'Every \'#\' can be replaced with \'/\' or \'!\'.\nAll commands are Case Insensitive.\nSquare brackets means that is an optional.\nRound brackets with \'|\' means that\'s a choice".\n\n')
-        set_text('youTried', 'You tried it, you won\'t read an help higher than the one you deserve, asshole.')
+        set_text('youTried', 'You tried asshole, you won\'t read an help higher than the one you deserve.')
 
         -- games --
         set_text('groupAlreadySignedUp', 'Group already registered.')
