@@ -1,10 +1,10 @@
 local function run(msg, matches)
     if (matches[1]:lower() == 'setlang' or matches[1]:lower() == 'lingua') and matches[2] then
         if msg.to.type == 'user' then
-            redis:set('lang:' .. chat_id, matches[2]:lower())
+            redis:set('lang:' .. msg.to.id, matches[2]:lower())
             return langs[matches[2]:lower()].langSet
         elseif is_owner(msg) then
-            redis:set('lang:' .. chat_id, matches[2]:lower())
+            redis:set('lang:' .. msg.to.id, matches[2]:lower())
             return langs[matches[2]:lower()].langSet
         else
             return langs[msg.lang].require_owner
