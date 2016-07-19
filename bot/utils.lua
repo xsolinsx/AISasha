@@ -785,21 +785,21 @@ end
 function is_admin1(msg)
     local var = false
     local data = load_data(_config.moderation.data)
-    local user = msg.from.id
+    local user_id = msg.from.id
     local admins = 'admins'
     if data[tostring(admins)] then
-        if data[tostring(admins)][tostring(user)] then
+        if data[tostring(admins)][tostring(user_id)] then
             var = true
         end
     end
     for v, user in pairs(_config.sudo_users) do
-        if tostring(user) == tostring(msg.from.id) then
+        if tostring(user) == tostring(user_id) then
             var = true
         end
     end
 
     -- check if executing a fakecommand, if yes confirm
-    if tonumber(msg.from.id) <= -4 then
+    if tonumber(user_id) <= -4 then
         var = true
     end
     return var
@@ -808,10 +808,9 @@ end
 function is_admin2(user_id)
     local var = false
     local data = load_data(_config.moderation.data)
-    local user = user_id
     local admins = 'admins'
     if data[tostring(admins)] then
-        if data[tostring(admins)][tostring(user)] then
+        if data[tostring(admins)][tostring(user_id)] then
             var = true
         end
     end
@@ -843,35 +842,35 @@ end
 function is_owner(msg)
     local var = false
     local data = load_data(_config.moderation.data)
-    local user = msg.from.id
+    local user_id = msg.from.id
     if data[tostring(msg.to.id)] then
         if data[tostring(msg.to.id)]['set_owner'] then
-            if data[tostring(msg.to.id)]['set_owner'] == tostring(user) then
+            if data[tostring(msg.to.id)]['set_owner'] == tostring(user_id) then
                 var = true
             end
         end
     end
 
     local hash = 'support'
-    local support = redis:sismember(hash, user)
+    local support = redis:sismember(hash, user_id)
     if support then
         var = true
     end
 
     if data['admins'] then
-        if data['admins'][tostring(user)] then
+        if data['admins'][tostring(user_id)] then
             var = true
         end
     end
 
     for v, user in pairs(_config.sudo_users) do
-        if tostring(user) == tostring(msg.from.id) then
+        if tostring(user) == tostring(user_id) then
             var = true
         end
     end
 
     -- check if executing a fakecommand, if yes confirm
-    if tonumber(msg.from.id) <= -2 then
+    if tonumber(user_id) <= -2 then
         var = true
     end
     return var
@@ -880,7 +879,6 @@ end
 function is_owner2(user_id, group_id)
     local var = false
     local data = load_data(_config.moderation.data)
-    local user = user_id
     if data[tostring(group_id)] then
         if data[tostring(group_id)]['set_owner'] then
             if data[tostring(group_id)]['set_owner'] == tostring(user_id) then
@@ -890,7 +888,7 @@ function is_owner2(user_id, group_id)
     end
 
     local hash = 'support'
-    local support = redis:sismember(hash, user)
+    local support = redis:sismember(hash, user_id)
     if support then
         var = true
     end
@@ -918,10 +916,10 @@ end
 function is_momod(msg)
     local var = false
     local data = load_data(_config.moderation.data)
-    local user = msg.from.id
+    local user_id = msg.from.id
     if data[tostring(msg.to.id)] then
         if data[tostring(msg.to.id)]['moderators'] then
-            if data[tostring(msg.to.id)]['moderators'][tostring(user)] then
+            if data[tostring(msg.to.id)]['moderators'][tostring(user_id)] then
                 var = true
             end
         end
@@ -929,26 +927,26 @@ function is_momod(msg)
 
     if data[tostring(msg.to.id)] then
         if data[tostring(msg.to.id)]['set_owner'] then
-            if data[tostring(msg.to.id)]['set_owner'] == tostring(user) then
+            if data[tostring(msg.to.id)]['set_owner'] == tostring(user_id) then
                 var = true
             end
         end
     end
 
     local hash = 'support'
-    local support = redis:sismember(hash, user)
+    local support = redis:sismember(hash, user_id)
     if support then
         var = true
     end
 
     if data['admins'] then
-        if data['admins'][tostring(user)] then
+        if data['admins'][tostring(user_id)] then
             var = true
         end
     end
 
     for v, user in pairs(_config.sudo_users) do
-        if tostring(user) == tostring(msg.from.id) then
+        if tostring(user) == tostring(user_id) then
             var = true
         end
     end
@@ -963,10 +961,9 @@ end
 function is_momod2(user_id, group_id)
     local var = false
     local data = load_data(_config.moderation.data)
-    local usert = user_id
     if data[tostring(group_id)] then
         if data[tostring(group_id)]['moderators'] then
-            if data[tostring(group_id)]['moderators'][tostring(usert)] then
+            if data[tostring(group_id)]['moderators'][tostring(user_id)] then
                 var = true
             end
         end
@@ -993,7 +990,7 @@ function is_momod2(user_id, group_id)
     end
 
     for v, user in pairs(_config.sudo_users) do
-        if tostring(user) == tostring(usert) then
+        if tostring(user) == tostring(user_id) then
             var = true
         end
     end
