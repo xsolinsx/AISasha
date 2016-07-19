@@ -110,6 +110,18 @@ local function warn_by_reply(extra, success, result)
     end
 end
 
+local function warn_from(extra, success, result)
+    local lang = get_lang(result.to.peer_id)
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+        warn_user(result.fwd_from.peer_id, result.to.peer_id)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.fwd_from.peer_id .. " Y")
+    else
+        send_large_msg(extra.receiver, langs[lang].require_rank)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.fwd_from.peer_id .. " N")
+    end
+end
+
 local function unwarn_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
@@ -134,6 +146,18 @@ local function unwarn_by_reply(extra, success, result)
     else
         send_large_msg(extra.receiver, langs[lang].require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.from.peer_id .. " N")
+    end
+end
+
+local function unwarn_from(extra, success, result)
+    local lang = get_lang(result.to.peer_id)
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+        unwarn_user(result.fwd_from.peer_id, result.to.peer_id)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.fwd_from.peer_id .. " Y")
+    else
+        send_large_msg(extra.receiver, langs[lang].require_rank)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.fwd_from.peer_id .. " N")
     end
 end
 
@@ -164,6 +188,18 @@ local function unwarnall_by_reply(extra, success, result)
     end
 end
 
+local function unwarnall_from(extra, success, result)
+    local lang = get_lang(result.to.peer_id)
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+        unwarnall_user(result.fwd_from.peer_id, result.to.peer_id)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.fwd_from.peer_id .. " Y")
+    else
+        send_large_msg(extra.receiver, langs[lang].require_rank)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.fwd_from.peer_id .. " N")
+    end
+end
+
 local function getWarn_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
@@ -177,6 +213,12 @@ local function getWarn_by_reply(extra, success, result)
     local lang = get_lang(result.to.peer_id)
     get_user_warns(result.from.peer_id, result.to.peer_id)
     savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.from.peer_id .. " Y")
+end
+
+local function getWarn_from(extra, success, result)
+    local lang = get_lang(result.to.peer_id)
+    get_user_warns(result.fwd_from.peer_id, result.to.peer_id)
+    savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.fwd_from.peer_id .. " Y")
 end
 
 local function run(msg, matches)
@@ -198,7 +240,15 @@ local function run(msg, matches)
             else
                 if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then
                     if type(msg.reply_id) ~= "nil" then
-                        get_message(msg.reply_id, getWarn_by_reply, { executer = msg.from.id })
+                        if matches[2] then
+                            if matches[2]:lower() == 'from' then
+                                get_message(msg.reply_id, getWarn_from, { executer = msg.from.id })
+                            else
+                                get_message(msg.reply_id, getWarn_by_reply, { executer = msg.from.id })
+                            end
+                        else
+                            get_message(msg.reply_id, getWarn_by_reply, { executer = msg.from.id })
+                        end
                     elseif string.match(matches[2], '^%d+$') then
                         get_user_warns(msg.from.id, msg.to.id)
                     else
@@ -208,7 +258,15 @@ local function run(msg, matches)
                 end
                 if matches[1]:lower() == 'warn' or matches[1]:lower() == 'sasha avverti' or matches[1]:lower() == 'avverti' then
                     if type(msg.reply_id) ~= "nil" then
-                        get_message(msg.reply_id, warn_by_reply, { receiver = receiver, executer = msg.from.id })
+                        if matches[2] then
+                            if matches[2]:lower() == 'from' then
+                                get_message(msg.reply_id, warn_from, { receiver = receiver, executer = msg.from.id })
+                            else
+                                get_message(msg.reply_id, warn_by_reply, { receiver = receiver, executer = msg.from.id })
+                            end
+                        else
+                            get_message(msg.reply_id, warn_by_reply, { receiver = receiver, executer = msg.from.id })
+                        end
                     elseif string.match(matches[2], '^%d+$') then
                         -- ignore higher or same rank
                         if compare_ranks(msg.from.id, matches[2], msg.to.id) then
@@ -225,7 +283,15 @@ local function run(msg, matches)
                 end
                 if matches[1]:lower() == 'unwarn' then
                     if type(msg.reply_id) ~= "nil" then
-                        get_message(msg.reply_id, unwarn_by_reply, { receiver = receiver, executer = msg.from.id })
+                        if matches[2] then
+                            if matches[2]:lower() == 'from' then
+                                get_message(msg.reply_id, unwarn_from, { receiver = receiver, executer = msg.from.id })
+                            else
+                                get_message(msg.reply_id, unwarn_by_reply, { receiver = receiver, executer = msg.from.id })
+                            end
+                        else
+                            get_message(msg.reply_id, unwarn_by_reply, { receiver = receiver, executer = msg.from.id })
+                        end
                     elseif string.match(matches[2], '^%d+$') then
                         -- ignore higher or same rank
                         if compare_ranks(msg.from.id, matches[2], msg.to.id) then
@@ -242,7 +308,15 @@ local function run(msg, matches)
                 end
                 if matches[1]:lower() == 'unwarnall' or matches[1]:lower() == 'sasha azzera avvertimenti' or matches[1]:lower() == 'azzera avvertimenti' then
                     if type(msg.reply_id) ~= "nil" then
-                        get_message(msg.reply_id, unwarnall_by_reply, { receiver = receiver, executer = msg.from.id })
+                        if matches[2] then
+                            if matches[2]:lower() == 'from' then
+                                get_message(msg.reply_id, unwarnall_from, { receiver = receiver, executer = msg.from.id })
+                            else
+                                get_message(msg.reply_id, unwarnall_by_reply, { receiver = receiver, executer = msg.from.id })
+                            end
+                        else
+                            get_message(msg.reply_id, unwarnall_by_reply, { receiver = receiver, executer = msg.from.id })
+                        end
                     elseif string.match(matches[2], '^%d+$') then
                         -- ignore higher or same rank
                         if compare_ranks(msg.from.id, matches[2], msg.to.id) then
@@ -302,8 +376,8 @@ return {
     -- MOD
     -- #setwarn <value>
     -- #getwarn
-    -- (#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>
-    -- (#warn|[sasha] avverti) <id>|<username>|<reply>
-    -- #unwarn <id>|<username>|<reply>
-    -- (#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>
+    -- (#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from
+    -- (#warn|[sasha] avverti) <id>|<username>|<reply>|from
+    -- #unwarn <id>|<username>|<reply>|from
+    -- (#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from
 }

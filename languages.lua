@@ -872,7 +872,7 @@ return {
         {
             '🅿️ FLAME',
             'MOD',
-            '(#startflame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l\'utente specificato.',
+            '(#startflame|[sasha] flamma) <id>|<username>|<reply>|from: Sasha flamma l\'utente specificato.',
             '(#stopflame|[sasha] stop flame): Sasha smette di flammare.',
             '(#flameinfo|[sasha] info flame): Sasha manda le info su chi sta flammando.',
         },
@@ -1334,10 +1334,10 @@ return {
             'MOD',
             '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>, se zero gli avvertimenti non funzioneranno più.',
             '#getwarn: Sasha manda il numero di avvertimenti massimi.',
-            '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>: Sasha manda il numero di avvertimenti ricevuti dall\'utente.',
-            '(#warn|[sasha] avverti) <id>|<username>|<reply>: Sasha avverte l\'utente.',
-            '#unwarn <id>|<username>|<reply>: Sasha diminuisce di uno gli avvertimenti dell\'utente.',
-            '(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>: Sasha azzera gli avvertimenti dell\'utente.',
+            '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from: Sasha manda il numero di avvertimenti ricevuti dall\'utente.',
+            '(#warn|[sasha] avverti) <id>|<username>|<reply>|from: Sasha avverte l\'utente.',
+            '#unwarn <id>|<username>|<reply>|from: Sasha diminuisce di uno gli avvertimenti dell\'utente.',
+            '(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from: Sasha azzera gli avvertimenti dell\'utente.',
         },
 
         -- webshot.lua --
@@ -2029,7 +2029,7 @@ return {
         {
             '🅿️ FLAME',
             'MOD',
-            '(#startflame|[sasha] flamma) <id>|<username>|<reply>: Sasha flames specified user.',
+            '(#startflame|[sasha] flamma) <id>|<username>|<reply>|from: Sasha flames specified user.',
             '(#stopflame|[sasha] stop flame): Sasha stops flame.',
             '(#flameinfo|[sasha] info flame): Sasha sends flamed user info.',
         },
@@ -2491,10 +2491,10 @@ return {
             'MOD',
             '#setwarn <value>: Sasha sets max warns to <value>, if zero warns will not work.',
             '#getwarn: Sasha sends max warns value.',
-            '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>: Sasha sends user\'s warns.',
-            '(#warn|[sasha] avverti) <id>|<username>|<reply>: Sasha warns specified user.',
-            '#unwarn <id>|<username>|<reply>: Sasha removes one warn from specified user.',
-            '(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>: Sasha removes all warns from specified user.',
+            '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from: Sasha sends user\'s warns.',
+            '(#warn|[sasha] avverti) <id>|<username>|<reply>|from: Sasha warns specified user.',
+            '#unwarn <id>|<username>|<reply>|from: Sasha removes one warn from specified user.',
+            '(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from: Sasha removes all warns from specified user.',
         },
 
         -- webshot.lua --
