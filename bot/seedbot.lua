@@ -413,7 +413,7 @@ function create_config()
         knife = { db = 'data/knifedb.json' },
         clicktap = { db = 'data/clicktapdb.json' },
         likecounter = { db = 'data/likecounterdb.json' },
-        about_text = "AISashaSuper by @EricSolinas based on TeleSeed supergroup branch and something of DBTeam.\nThanks guys.",
+        about_text = "AISashaSuper by @EricSolinas based on TeleSeed supergroup branch with langs management taken from GroupButlerBot and something else taken from DBTeam.\nThanks guys.",
     }
     serialize_to_file(config, './data/config.lua', false)
     print('saved config into ./data/config.lua')
