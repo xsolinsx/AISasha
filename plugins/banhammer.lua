@@ -236,6 +236,7 @@ local function kickrandom_chat(extra, success, result)
     local kickable = false
     local id
     local lang = get_lang(extra.chat_id)
+
     while not kickable do
         id = result.members[math.random(#result.members)].peer_id
         print(id)
@@ -256,6 +257,7 @@ local function kickrandom_channel(extra, success, result)
     local kickable = false
     local id
     local lang = get_lang(extra.chat_id)
+
     while not kickable do
         id = result[math.random(#result)].peer_id
         print(id)
@@ -273,41 +275,71 @@ local function kickrandom_channel(extra, success, result)
 end
 
 local function kick_nouser_chat(extra, success, result)
+    local kicked = 0
+    local lang = get_lang(extra.chat_id)
+
     for k, v in pairs(result.members) do
         if not v.username then
-            kick_user(v.id, extra.chat_id)
+            if kicked == 20 then
+                break
+            end
+            kick_user(v.peer_id, extra.chat_id)
+            kicked = kicked + 1
         end
     end
+    send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
 end
 
 local function kick_nouser_channel(extra, success, result)
+    local kicked = 0
+    local lang = get_lang(extra.chat_id)
+
     for k, v in pairs(result) do
         if not v.username then
-            kick_user(v.id, extra.chat_id)
+            if kicked == 20 then
+                break
+            end
+            kick_user(v.peer_id, extra.chat_id)
+            kicked = kicked + 1
         end
     end
+    send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
 end
 
 local function kick_deleted_chat(extra, success, result)
+    local kicked = 0
+    local lang = get_lang(extra.chat_id)
+
     for k, v in pairs(result.members) do
         if not v.print_name then
             if v.peer_id then
-                print(v.peer_id)
+                if kicked == 20 then
+                    break
+                end
                 kick_user(v.peer_id, extra.chat_id)
+                kicked = kicked + 1
             end
         end
     end
+    send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
 end
 
 local function kick_deleted_channel(extra, success, result)
+    local kicked = 0
+    local lang = get_lang(extra.chat_id)
+
     for k, v in pairs(result) do
         if not v.print_name then
             if v.peer_id then
-                print(v.peer_id)
+                if kicked == 20 then
+                    break
+                end
                 kick_user(v.peer_id, extra.chat_id)
+                kicked = kicked + 1
             end
         end
     end
+    send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
 end
 
 local function user_msgs(user_id, chat_id)
@@ -320,15 +352,13 @@ local function user_msgs(user_id, chat_id)
 end
 
 local function kick_inactive_chat(extra, success, result)
-    local num = extra.num
-    local receiver = extra.receiver
     local kicked = 0
     local lang = get_lang(extra.chat_id)
 
     for k, v in pairs(result.members) do
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
             local user_info = user_msgs(v.peer_id, extra.chat_id)
-            if tonumber(user_info) < tonumber(num) then
+            if tonumber(user_info) < tonumber(extra.num) then
                 if kicked == 20 then
                     break
                 end
@@ -337,19 +367,17 @@ local function kick_inactive_chat(extra, success, result)
             end
         end
     end
-    send_large_msg(receiver, langs[lang].massacre:gsub('X', kicked))
+    send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
 end
 
 local function kick_inactive_channel(extra, success, result)
-    local num = extra.num
-    local receiver = extra.receiver
     local kicked = 0
     local lang = get_lang(extra.chat_id)
 
     for k, v in pairs(result) do
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
             local user_info = user_msgs(v.peer_id, extra.chat_id)
-            if tonumber(user_info) < tonumber(num) then
+            if tonumber(user_info) < tonumber(extra.num) then
                 if kicked == 20 then
                     break
                 end
@@ -358,7 +386,7 @@ local function kick_inactive_channel(extra, success, result)
             end
         end
     end
-    send_large_msg(receiver, langs[lang].massacre:gsub('X', kicked))
+    send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
 end
 
 local function run(msg, matches)
