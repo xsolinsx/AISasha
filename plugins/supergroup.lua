@@ -802,9 +802,12 @@ end
 
 -- Begin resolve username actions
 local function callbackres(extra, success, result)
-    local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if not lang then
-    lang= get_lang(string.match(extra.channel, '%d+'))
+    local lang
+    if extra.receiver then
+        lang = get_lang(string.match(extra.receiver, '%d+'))
+    end
+    if extra.channel then
+        lang = get_lang(string.match(extra.channel, '%d+'))
     end
     local member_id = result.peer_id
     local member_username = "@" .. result.username
