@@ -1,20 +1,3 @@
-local sashaflamma = {
-    "Davvero ritardato del cazzo stai zitto.",
-    "Mi sembri peggio dei cristiani porcoddio.",
-    "Dei calci in bocca meriti altrochè.",
-    "Scusa eh ma quanto ti senti frocio da 1 a 10? no perchè a me il 10 sembra fisso.",
-    "Sei sicuro di non avere qualche cromosoma in più?",
-    "Dio se sei messo male amico.",
-    "Per favore calate il banhammer sulla sua testa.",
-    "Parla parla scemo del cazzo.",
-    "SEI SICURO DI VOLERTI METTERE CONTRO UNA BOTTESSA?",
-    "Vai a farti una vita reale sennò giuro che ti squarto.",
-    "Dimmi un po', per caso hai i genitori parenti?",
-    "CON CHE CORAGGIO PARLI ANCORA BRUTTA FOGNA?",
-    "Ok adesso mi prenderò un attimo di tempo per te, dimmi, cosa ti turba?",
-    "Finito il tempo, ops.",
-}
-
 local function flame_by_reply(extra, success, result)
     local hash
     local tokick
@@ -100,8 +83,8 @@ local function pre_process(msg)
             redis:incr(hash)
             local hashonredis = redis:get(hash)
             if hashonredis then
-                reply_msg(msg.id, sashaflamma[tonumber(hashonredis)], ok_cb, false)
-                if tonumber(hashonredis) == #sashaflamma then
+                reply_msg(msg.id, langs.phrases.flame[tonumber(hashonredis)], ok_cb, false)
+                if tonumber(hashonredis) == #langs.phrases.flame then
                     local user_id = redis:get(tokick)
                     local function post_kick()
                         kick_user_any(user_id, msg.to.id)

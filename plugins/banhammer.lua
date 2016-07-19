@@ -1,43 +1,3 @@
--- kick sentences
-local phrases = {
-    "Ancora ancora ancora! 😍",
-    "الله أَكْبَر",
-    "Datemene un altro dai dai.",
-    "R.I.P.",
-    "Ora dovremmo nascondere il corpo. 🚔",
-    "DIE DIE BASTARD!",
-    "Lalalalalala.",
-    "Oh che bel castello marcondirondirondello, oh che bel castello marcondirondironBAN.",
-    "Oddio cos'ho fatto? 😱",
-    "Giro giro tondo, casca il mondo, casca la terra, tutti giù per BAN.",
-    "Tempo presente del verbo Bannare:\nIo banno, Tu vieni bannato.",
-    "Bim Bum BAN.",
-    "Datemi un'arma.",
-    "BOOM!",
-    "Headshot.",
-    "BANG! 🔫",
-    "Bye Bye.",
-    "Allahuakbar.",
-    "Muori idiota.",
-    "Sei stato terminato.",
-    "Ecco che se ne va.",
-    "Saluta tutti.",
-    "Ciaoooooo.",
-    "( ͡° ͜ʖ ͡°)",
-    "BLOOD.",
-    "Killed",
-    "¯\\_(ツ)_/¯",
-    "Fine.",
-    "😊",
-    ":3",
-    "Shake that bottle and make it [BAN]",
-    "Tieni 💣",
-    "Centro 🎯",
-    "💥",
-    "☠",
-    "AVADA KEDABAN",
-}
-
 local function kick_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
@@ -49,7 +9,7 @@ local function kick_by_username(extra, success, result)
             kick_user_any(result.peer_id, extra.chat_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, phrases[math.random(#phrases)])
+        send_large_msg(extra.receiver, langs.phrases.banhammer[math.random(#langs.phrases.banhammer)])
         savelog(extra.chat_id, "[" .. extra.executer .. "] kicked user " .. result.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, langs[lang].require_rank)
@@ -65,7 +25,7 @@ local function kick_by_reply(extra, success, result)
             kick_user_any(result.from.peer_id, result.to.peer_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, phrases[math.random(#phrases)])
+        send_large_msg(extra.receiver, langs.phrases.banhammer[math.random(#langs.phrases.banhammer)])
         savelog(result.to.peer_id, "[" .. extra.executer .. "] kicked user " .. result.from.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, langs[lang].require_rank)
@@ -81,7 +41,7 @@ local function kick_from(extra, success, result)
             kick_user(result.fwd_from.peer_id, result.to.peer_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, phrases[math.random(#phrases)])
+        send_large_msg(extra.receiver, langs.phrases.banhammer[math.random(#langs.phrases.banhammer)])
         savelog(result.to.peer_id, "[" .. extra.executer .. "] kicked user " .. result.fwd_from.peer_id .. " from Y")
     else
         send_large_msg(extra.receiver, langs[lang].require_rank)
@@ -100,7 +60,7 @@ local function ban_by_username(extra, success, result)
             ban_user(result.peer_id, extra.chat_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, langs[lang].user .. result.peer_id .. langs[lang].banned .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(extra.receiver, langs[lang].user .. result.peer_id .. langs[lang].banned .. '\n' .. langs.phrases.banhammer[math.random(#langs.phrases.banhammer)])
         savelog(extra.chat_id, "[" .. extra.executer .. "] banned user " .. result.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, langs[lang].require_rank)
@@ -116,7 +76,7 @@ local function ban_by_reply(extra, success, result)
             ban_user(result.from.peer_id, result.to.peer_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, langs[lang].user .. result.from.peer_id .. langs[lang].banned .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(extra.receiver, langs[lang].user .. result.from.peer_id .. langs[lang].banned .. '\n' .. langs.phrases.banhammer[math.random(#langs.phrases.banhammer)])
         savelog(result.to.peer_id, "[" .. extra.executer .. "] banned user " .. result.from.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, langs[lang].require_rank)
@@ -132,7 +92,7 @@ local function ban_from(extra, success, result)
             ban_user(result.fwd_from.peer_id, result.to.peer_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, langs[lang].user .. result.fwd_from.peer_id .. langs[lang].banned .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(extra.receiver, langs[lang].user .. result.fwd_from.peer_id .. langs[lang].banned .. '\n' .. langs.phrases.banhammer[math.random(#langs.phrases.banhammer)])
         savelog(result.to.peer_id, "[" .. extra.executer .. "] banned user " .. result.fwd_from.peer_id .. " from Y")
     else
         send_large_msg(extra.receiver, langs[lang].require_rank)
@@ -415,7 +375,7 @@ local function run(msg, matches)
                 kick_user_any(msg.from.id, msg.to.id)
             end
             postpone(post_kick, false, 3)
-            return phrases[math.random(#phrases)]
+            return langs.phrases.banhammer[math.random(#langs.phrases.banhammer)]
         else
             return langs[msg.lang].useYourGroups
         end
@@ -442,7 +402,7 @@ local function run(msg, matches)
                         end
                         postpone(post_kick, false, 3)
                         savelog(msg.to.id, "[" .. msg.from.id .. "] kicked user " .. matches[2] .. " Y")
-                        return phrases[math.random(#phrases)]
+                        return langs.phrases.banhammer[math.random(#langs.phrases.banhammer)]
                     else
                         savelog(msg.to.id, "[" .. msg.from.id .. "] kicked user " .. matches[2] .. " N")
                         return langs[msg.lang].require_rank
@@ -484,7 +444,7 @@ local function run(msg, matches)
                         end
                         postpone(post_kick, false, 3)
                         savelog(msg.to.id, "[" .. msg.from.id .. "] banned user " .. matches[2] .. " Y")
-                        return langs[msg.lang].user .. matches[2] .. langs[msg.lang].banned .. '\n' .. phrases[math.random(#phrases)]
+                        return langs[msg.lang].user .. matches[2] .. langs[msg.lang].banned .. '\n' .. langs.phrases.banhammer[math.random(#langs.phrases.banhammer)]
                     else
                         savelog(msg.to.id, "[" .. msg.from.id .. "] banned user " .. matches[2] .. " N")
                         return langs[msg.lang].require_rank

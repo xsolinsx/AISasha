@@ -1,67 +1,3 @@
--- safe
-local good = {
-    "Ti è andata bene.",
-    "Fiuu.",
-    "Per poco.",
-    "Ritenta, sarai più fortunato.",
-    "Ancora ancora.",
-    "Fortunello.",
-    "Gioca di nuovo.",
-    "Mancato.",
-    "Salvo.",
-    "Forse la prossima volta non ti andrà così bene.",
-    "Riproviamo?",
-    "Meh.",
-    "Muoviti riprova.",
-    "Di più di più.",
-    "Se non continui ti passo un kick gratis.",
-    "Argh.",
-    "Ti sei cagato addosso eh?",
-    "Continua a provare che prima o poi riesci a suicidarti.",
-    "Cilecca.",
-    "Merda, si è inceppata.",
-}
--- safe ruletagod
-local godgood = {
-    "Maledetto.",
-    "Ma quanto culo hai?",
-    "Mi riprenderò quei punti.",
-    "Non hai le palle di rifarlo.",
-    "No io non ci posso credere.",
-    "Come hai fatto??",
-    "La prossima volta non sarò così clemente.",
-    "Hai fegato. Ti premierò.",
-    "(╯°□°）╯︵ ┻━┻",
-}
--- killed
-local bad = {
-    "BOOM!",
-    "Headshot.",
-    "BANG! 🔫",
-    "Bye Bye.",
-    "Allahuakbar.",
-    "Muori idiota.",
-    "Sei stato terminato.",
-    "Ecco che se ne va.",
-    "Come dici? Vuoi un kick? Ecco a te, attento che brucia.",
-    "Saluta tutti.",
-    "Ciaoooooo.",
-    "( ͡° ͜ʖ ͡°)",
-    "BLOOD.",
-    "Killed",
-    "Porca POOHtana.",
-    "¯\\_(ツ)_/¯",
-    "Fine.",
-    "😊",
-    ":3",
-    "Shake that bottle and make it [BANG]",
-    "Tieni 💣",
-    "Centro 🎯",
-    "💥",
-    "☠",
-    "Avada Kedavra.",
-}
-
 local function get_challenge(chat_id)
     local Whashonredis = redis:get('ruleta:' .. chat_id .. ':challenger')
     local Xhashonredis = redis:get('ruleta:' .. chat_id .. ':challenged')
@@ -571,7 +507,7 @@ local function run(msg, matches)
                     end
 
                     if math.random(1, 2) == math.random(1, 2) then
-                        reply_msg(msg.id, bad[math.random(#bad)], ok_cb, false)
+                        reply_msg(msg.id, langs.phrases.ruletagame.killed[math.random(#langs.phrases.ruletagame.killed)], ok_cb, false)
 
                         userstats.score = tonumber(0)
                         userstats.deaths = tonumber(userstats.deaths + 1)
@@ -584,7 +520,7 @@ local function run(msg, matches)
                         end
                         postpone(post_kick, false, 1)
                     else
-                        reply_msg(msg.id, godgood[math.random(#godgood)], ok_cb, false)
+                        reply_msg(msg.id, langs.phrases.ruletagame.godsafe[math.random(#langs.phrases.ruletagame.godsafe)], ok_cb, false)
 
                         userstats.score = tonumber(userstats.score + 70)
                         ruletadata['users'][user] = userstats
@@ -672,7 +608,7 @@ local function run(msg, matches)
                             end
                             local percentage =(groupstats.challengecaps * 100) /(groupstats.challengecylinder - temp - 1)
                             percentage = string.format('%d', percentage)
-                            reply_msg(msg.id, good[math.random(#good)] .. '\n' .. langs[msg.lang].shotsLeft .. notshotted .. shotted .. '\n' .. langs[msg.lang].deathPercentage .. percentage .. '%\n' .. nextplayeruser .. langs[msg.lang].yourTurn, ok_cb, false)
+                            reply_msg(msg.id, langs.phrases.ruletagame.safe[math.random(#langs.phrases.ruletagame.safe)] .. '\n' .. langs[msg.lang].shotsLeft .. notshotted .. shotted .. '\n' .. langs[msg.lang].deathPercentage .. percentage .. '%\n' .. nextplayeruser .. langs[msg.lang].yourTurn, ok_cb, false)
 
                             ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
 
@@ -683,7 +619,7 @@ local function run(msg, matches)
                     end
                 else
                     if math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) == math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) then
-                        reply_msg(msg.id, bad[math.random(#bad)], ok_cb, false)
+                        reply_msg(msg.id, langs.phrases.ruletagame.killed[math.random(#langs.phrases.ruletagame.killed)], ok_cb, false)
 
                         ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
                         ruletadata['users'][user].actualstreak = tonumber(0)
@@ -694,7 +630,7 @@ local function run(msg, matches)
                         end
                         postpone(post_kick, false, 1)
                     else
-                        reply_msg(msg.id, good[math.random(#good)], ok_cb, false)
+                        reply_msg(msg.id, langs.phrases.ruletagame.safe[math.random(#langs.phrases.ruletagame.safe)], ok_cb, false)
 
                         ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
 
