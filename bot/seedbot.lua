@@ -17,7 +17,7 @@ function on_msg_receive(msg)
     msg = backward_msg_format(msg)
 
     -- Group language
-    msg.lang = db:get('lang:' .. msg.to.id)
+    msg.lang = redis:get('lang:' .. msg.to.id)
     if not msg.lang then
         redis:set('lang:' .. msg.to.id, 'it')
         msg.lang = 'it'
