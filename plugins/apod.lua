@@ -1,5 +1,4 @@
 ﻿function run(msg, matches)
-
     local receiver = get_receiver(msg)
     local caption = ''
     local specdate = '*'
@@ -17,13 +16,13 @@
 
     local jstr, res = https.request(url)
     if res ~= 200 then
-        return langs['it'].opsError
+        return langs[msg.lang].opsError
     end
 
     local jdat = json:decode(jstr)
 
     if jdat.error then
-        return langs['it'].opsError
+        return langs[msg.lang].opsError
     end
 
     local img_url = jdat.url
@@ -40,7 +39,6 @@
     else
         send_photo_from_url(receiver, img_url)
     end
-
 end
 
 return {

@@ -17,11 +17,7 @@ function on_msg_receive(msg)
     msg = backward_msg_format(msg)
 
     -- Group language
-    msg.lang = redis:get('lang:' .. msg.to.id)
-    if not msg.lang then
-        redis:set('lang:' .. msg.to.id, 'it')
-        msg.lang = 'it'
-    end
+    msg.lang = get_lang(msg.to.id)
 
     local receiver = get_receiver(msg)
     print(receiver)
@@ -113,13 +109,13 @@ local function callback_sudo_ids(extra, success, result)
         end
     end
     if tagged then
-        local text = langs['it'].receiver .. extra.msg.to.print_name:gsub("_", " ") .. ' [' .. extra.msg.to.id .. ']\n' .. langs['it'].sender
+        local text = langs[extra.msg.lang].receiver .. extra.msg.to.print_name:gsub("_", " ") .. ' [' .. extra.msg.to.id .. ']\n' .. langs[extra.msg.lang].sender
         if extra.msg.from.username then
             text = text .. '@' .. extra.msg.from.username .. ' [' .. extra.msg.from.id .. ']\n'
         else
             text = text .. extra.msg.from.print_name:gsub("_", " ") .. ' [' .. extra.msg.from.id .. ']\n'
         end
-        text = text .. langs['it'].msgText
+        text = text .. langs[extra.msg.lang].msgText
 
         if extra.msg.text then
             text = text .. extra.msg.text .. ' '

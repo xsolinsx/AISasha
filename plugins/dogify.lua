@@ -8,7 +8,7 @@
         local receiver = get_receiver(msg)
         send_photo_from_url(receiver, url)
     else
-        print("Can't build a good URL with parameter " .. matches[1])
+        return langs[msg.lang].opsError
     end
 end
 

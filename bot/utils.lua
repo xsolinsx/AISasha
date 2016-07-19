@@ -242,6 +242,8 @@ end
 -- Download the image and send to receiver, it will be deleted.
 -- cb_function and extra are optionals callback
 function send_photo_from_url(receiver, url, cb_function, extra)
+    local lang = get_lang(string.match(receiver, '%d+'))
+
     -- If callback not provided
     cb_function = cb_function or ok_cb
     extra = extra or false
@@ -249,7 +251,7 @@ function send_photo_from_url(receiver, url, cb_function, extra)
     local file_path = download_to_file(url, false)
     if not file_path then
         -- Error
-        send_msg(receiver, langs['it'].errorImageDownload, cb_function, extra)
+        send_msg(receiver, langs[lang].errorImageDownload, cb_function, extra)
     else
         print("File path: " .. file_path)
         _send_photo(receiver, file_path, cb_function, extra)
@@ -261,10 +263,12 @@ function send_photo_from_url_callback(extra, success, result)
     local receiver = extra.receiver
     local url = extra.url
 
+    local lang = get_lang(string.match(receiver, '%d+'))
+
     local file_path = download_to_file(url, false)
     if not file_path then
         -- Error
-        send_msg(receiver, langs['it'].errorImageDownload, ok_cb, false)
+        send_msg(receiver, langs[lang].errorImageDownload, ok_cb, false)
     else
         print("File path: " .. file_path)
         _send_photo(receiver, file_path, ok_cb, false)
@@ -503,21 +507,25 @@ function is_channel_disabled(receiver)
 end
 
 function enable_channel(receiver, to_id)
+    local lang = get_lang(string.match(receiver, '%d+'))
+
     if not _config.disabled_channels then
         _config.disabled_channels = { }
     end
 
     if _config.disabled_channels[receiver] == nil then
-        return send_large_msg(receiver, langs['it'].botOn)
+        return send_large_msg(receiver, langs[lang].botOn)
     end
 
     _config.disabled_channels[receiver] = false
 
     save_config()
-    return send_large_msg(receiver, langs['it'].botOn)
+    return send_large_msg(receiver, langs[lang].botOn)
 end
 
 function disable_channel(receiver, to_id)
+    local lang = get_lang(string.match(receiver, '%d+'))
+
     if not _config.disabled_channels then
         _config.disabled_channels = { }
     end
@@ -525,7 +533,7 @@ function disable_channel(receiver, to_id)
     _config.disabled_channels[receiver] = true
 
     save_config()
-    return send_large_msg(receiver, langs['it'].botOff)
+    return send_large_msg(receiver, langs[lang].botOff)
 end
 
 -- Returns a table with matches or nil
@@ -705,6 +713,15 @@ function user_print_name(user)
         text = text .. user.last_name
     end
     return text
+end
+
+function get_lang(chat_id)
+    local lang = redis:get('lang:' .. chat_id)
+    if not lang then
+        redis:set('lang:' .. chat_id, 'it')
+        lang = 'it'
+    end
+    return lang
 end
 
 function get_rank(user_id, chat_id)
@@ -1073,9 +1090,11 @@ end
 
 -- Returns chat_id ban list
 function ban_list(chat_id)
+    local lang = get_lang(chat_id)
+
     local hash = 'banned:' .. chat_id
     local list = redis:smembers(hash)
-    local text = langs['it'].banListStart
+    local text = langs[lang].banListStart
     for k, v in pairs(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then
@@ -1091,9 +1110,10 @@ end
 
 -- Returns globally ban list
 function banall_list()
+    local lang = get_lang(chat_id)
     local hash = 'gbanned'
     local list = redis:smembers(hash)
-    local text = langs['it'].gbanListStart
+    local text = langs[lang].gbanListStart
     for k, v in pairs(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then
@@ -1187,25 +1207,27 @@ end
 
 -- Returns chat_id mute list
 function mutes_list(chat_id, group_name)
+    local lang = get_lang(chat_id)
     local hash = 'mute:' .. chat_id
     local list = redis:smembers(hash)
-    local text = langs['it'].mutedTypesStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
+    local text = langs[lang].mutedTypesStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
     for k, v in pairsByKeys(list) do
-        text = text .. langs['it'].mute .. v .. "\n"
+        text = text .. langs[lang].mute .. v .. "\n"
     end
     local data = load_data(_config.moderation.data)
     if data[tostring(chat_id)] then
         local settings = data[tostring(chat_id)]['settings']
-        text = text .. langs['it'].strictrules .. settings.strict
+        text = text .. langs[lang].strictrules .. settings.strict
     end
     return text
 end
 
 -- Returns chat_user mute list
 function muted_user_list(chat_id, group_name)
+    local lang = get_lang(chat_id)
     local hash = 'mute_user:' .. chat_id
     local list = redis:smembers(hash)
-    local text = langs['it'].mutedUsersStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
+    local text = langs[lang].mutedUsersStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
     for k, v in pairsByKeys(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then

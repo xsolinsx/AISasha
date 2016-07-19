@@ -45,11 +45,11 @@ local function reload_plugins()
     return list_plugins(true)
 end
 
-local function enable_plugin(plugin_name)
+local function enable_plugin(plugin_name, lang)
     print('checking if ' .. plugin_name .. ' exists')
     -- Check if plugin is enabled
     if plugin_enabled(plugin_name) then
-        return '✔️ ' .. plugin_name .. langs['it'].alreadyEnabled
+        return '✔️ ' .. plugin_name .. langs[lang].alreadyEnabled
     end
     -- Checks if plugin exists
     if plugin_exists(plugin_name) then
@@ -59,32 +59,33 @@ local function enable_plugin(plugin_name)
         save_config()
         -- Reload the plugins
         reload_plugins()
-        return '✅ ' .. plugin_name .. langs['it'].enabled
+        return '✅ ' .. plugin_name .. langs[lang].enabled
     else
-        return '❔ ' .. plugin_name .. langs['it'].notExists
+        return '❔ ' .. plugin_name .. langs[lang].notExists
     end
 end
 
-local function disable_plugin(name, chat)
+local function disable_plugin(name, lang)
     -- Check if plugins exists
     if not plugin_exists(name) then
-        return '❔ ' .. name .. langs['it'].notExists
+        return '❔ ' .. name .. langs[lang].notExists
     end
     local k = plugin_enabled(name)
     -- Check if plugin is enabled
     if not k then
-        return '✖️ ' .. name .. langs['it'].alreadyDisabled
+        return '✖️ ' .. name .. langs[lang].alreadyDisabled
     end
     -- Disable and reload
     table.remove(_config.enabled_plugins, k)
     save_config()
     reload_plugins(true)
-    return '❌ ' .. name .. langs['it'].disabled
+    return '❌ ' .. name .. langs[lang].disabled
 end
 
 local function disable_plugin_on_chat(receiver, plugin)
+    local lang = get_lang(string.match(receiver, '%d+'))
     if not plugin_exists(plugin) then
-        return '❔ ' .. plugin .. langs['it'].notExists
+        return '❔ ' .. plugin .. langs[lang].notExists
     end
 
     if not _config.disabled_plugin_on_chat then
@@ -98,34 +99,36 @@ local function disable_plugin_on_chat(receiver, plugin)
     _config.disabled_plugin_on_chat[receiver][plugin] = true
 
     save_config()
-    return '❌ ' .. plugin .. langs['it'].disabledOnChat
+    return '❌ ' .. plugin .. langs[lang].disabledOnChat
 end
 
 local function reenable_plugin_on_chat(receiver, plugin)
+    local lang = get_lang(string.match(receiver, '%d+'))
     if not _config.disabled_plugin_on_chat then
-        return langs['it'].noDisabledPlugin
+        return langs[lang].noDisabledPlugin
     end
 
     if not _config.disabled_plugin_on_chat[receiver] then
-        return langs['it'].noDisabledPlugin
+        return langs[lang].noDisabledPlugin
     end
 
     if not _config.disabled_plugin_on_chat[receiver][plugin] then
-        return langs['it'].pluginNotDisabled
+        return langs[lang].pluginNotDisabled
     end
 
     _config.disabled_plugin_on_chat[receiver][plugin] = false
     save_config()
-    return '✅ ' .. plugin .. langs['it'].pluginEnabledAgain
+    return '✅ ' .. plugin .. langs[lang].pluginEnabledAgain
 end
 
 local function list_disabled_plugin_on_chat(receiver)
+    local lang = get_lang(string.match(receiver, '%d+'))
     if not _config.disabled_plugin_on_chat then
-        return langs['it'].noDisabledPlugin
+        return langs[lang].noDisabledPlugin
     end
 
     if not _config.disabled_plugin_on_chat[receiver] then
-        return langs['it'].noDisabledPlugin
+        return langs[lang].noDisabledPlugin
     end
 
     local status = '❌'
@@ -155,7 +158,7 @@ local function run(msg, matches)
                 print("enable " .. plugin .. ' on this chat')
                 return reenable_plugin_on_chat(receiver, plugin)
             else
-                return langs['it'].require_owner
+                return langs[msg.lang].require_owner
             end
         end
 
@@ -165,12 +168,12 @@ local function run(msg, matches)
                 local plugin = matches[2]
                 local receiver = get_receiver(msg)
                 if check_plugin(plugin) then
-                    return langs['it'].systemPlugin
+                    return langs[msg.lang].systemPlugin
                 end
                 print("disable " .. plugin .. ' on this chat')
                 return disable_plugin_on_chat(receiver, plugin)
             else
-                return langs['it'].require_owner
+                return langs[msg.lang].require_owner
             end
         end
     end
@@ -180,7 +183,7 @@ local function run(msg, matches)
         if is_owner(msg) then
             return list_plugins()
         else
-            return langs['it'].require_owner
+            return langs[msg.lang].require_owner
         end
     end
 
@@ -190,7 +193,7 @@ local function run(msg, matches)
             local receiver = get_receiver(msg)
             return list_disabled_plugin_on_chat(receiver)
         else
-            return langs['it'].require_owner
+            return langs[msg.lang].require_owner
         end
     end
 
@@ -198,9 +201,9 @@ local function run(msg, matches)
     if matches[1]:lower() == 'reload' or matches[1]:lower() == 'sasha ricarica' or matches[1]:lower() == 'ricarica' then
         if is_sudo(msg) then
             print(reload_plugins())
-            return langs['it'].pluginsReloaded
+            return langs[msg.lang].pluginsReloaded
         else
-            return langs['it'].require_sudo
+            return langs[msg.lang].require_sudo
         end
     end
 
@@ -211,7 +214,7 @@ local function run(msg, matches)
             print("enable: " .. matches[2])
             return enable_plugin(plugin_name)
         else
-            return langs['it'].require_sudo
+            return langs[msg.lang].require_sudo
         end
     end
 
@@ -219,12 +222,12 @@ local function run(msg, matches)
     if matches[1]:lower() == 'disable' or matches[1]:lower() == 'sasha disabilita' or matches[1]:lower() == 'sasha disattiva' or matches[1]:lower() == 'disabilita' or matches[1]:lower() == 'disattiva' then
         if is_sudo(msg) then
             if check_plugin(matches[2]) then
-                return langs['it'].systemPlugin
+                return langs[msg.lang].systemPlugin
             end
             print("disable: " .. matches[2])
             return disable_plugin(matches[2])
         else
-            return langs['it'].require_sudo
+            return langs[msg.lang].require_sudo
         end
     end
 end

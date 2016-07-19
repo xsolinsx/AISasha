@@ -17,16 +17,16 @@ end
 
 local function unset_var(msg, name, global)
     if (not name) then
-        return langs['it'].errorTryAgain
+        return langs[msg.lang].errorTryAgain
     end
 
     local hash = get_variables_hash(msg, global)
     if hash then
         redis:hdel(hash, name)
         if global then
-            return name .. langs['it'].gDeleted
+            return name .. langs[msg.lang].gDeleted
         else
-            return name .. langs['it'].deleted
+            return name .. langs[msg.lang].deleted
         end
     end
 end
@@ -43,10 +43,10 @@ local function run(msg, matches)
                 unset_var(msg, name:lower(), true)
             end
         else
-            return langs['it'].require_admin
+            return langs[msg.lang].require_admin
         end
     else
-        return langs['it'].require_mod
+        return langs[msg.lang].require_mod
     end
 end
 

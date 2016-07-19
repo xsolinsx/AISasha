@@ -479,6 +479,7 @@ return {
 
         -- strings.lua --
         langUpdate = 'ℹ️ Stringhe aggiornate.',
+        langSet = 'ℹ️ Lingua impostata.',
 
         -- supergroup.lua --
         makeBotAdmin = 'Promuovimi prima amministratrice!',
@@ -1042,6 +1043,10 @@ return {
         strings =
         {
             '🅿️ STRINGS',
+            'USER',
+            '(#setlang|lingua) (it|en): Sasha imposta la lingua in cui deve parlare (funziona solo in privato con l\'utente).',
+            'OWNER',
+            '(#setlang|lingua) (it|en): Sasha imposta la lingua in cui deve parlare in questo gruppo.',
             'SUDO',
             '(#reloadstrings|[sasha] aggiorna stringhe): Sasha aggiorna le stringhe di testo.',
         },
@@ -1630,6 +1635,7 @@ return {
 
         -- strings.lua --
         langUpdate = 'ℹ️ Strings updated.',
+        langSet = 'ℹ️ Language set.',
 
         -- supergroup.lua --
         makeBotAdmin = 'Promote me as administrator!',
@@ -2193,6 +2199,10 @@ return {
         strings =
         {
             '🅿️ STRINGS',
+            'USER',
+            '(#setlang|lingua) (it|en): Sasha sets the language she has to talk (works just in private with the user).',
+            'OWNER',
+            '(#setlang|lingua) (it|en): Sasha sets the language she has to talk in this group.',
             'SUDO',
             '(#reloadstrings|[sasha] aggiorna stringhe): Sasha updates strings.',
         },

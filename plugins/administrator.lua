@@ -6,11 +6,11 @@ local function set_bot_photo(msg, success, result)
         os.rename(result, file)
         print('File moved to:', file)
         set_profile_photo(file, ok_cb, false)
-        send_large_msg(receiver, langs['it'].botPicChanged, ok_cb, false)
+        send_large_msg(receiver, langs[msg.lang].botPicChanged, ok_cb, false)
         redis:del("bot:photo")
     else
         print('Error downloading: ' .. msg.id)
-        send_large_msg(receiver, langs['it'].errorTryAgain, ok_cb, false)
+        send_large_msg(receiver, langs[msg.lang].errorTryAgain, ok_cb, false)
     end
 end
 
@@ -25,7 +25,7 @@ local function logadd(msg)
     end
     data[tostring(GBan_log)][tostring(msg.to.id)] = msg.to.peer_id
     save_data(_config.moderation.data, data)
-    local text = langs['it'].logSet
+    local text = langs[msg.lang].logSet
     reply_msg(msg.id, text, ok_cb, false)
     return
 end
@@ -41,7 +41,7 @@ local function logrem(msg)
     end
     data[tostring(GBan_log)][tostring(msg.to.id)] = nil
     save_data(_config.moderation.data, data)
-    local text = langs['it'].logUnset
+    local text = langs[msg.lang].logUnset
     reply_msg(msg.id, text, ok_cb, false)
     return
 end
@@ -255,33 +255,33 @@ local function run(msg, matches)
         end
         if matches[1]:lower() == "setbotphoto" or matches[1]:lower() == "sasha setta foto" then
             redis:set("bot:photo", "waiting")
-            return langs['it'].sendNewPic
+            return langs[msg.lang].sendNewPic
         end
         if matches[1] == "markread" or matches[1]:lower() == "sasha segna letto" then
             if matches[2] == "on" then
                 redis:set("bot:markread", "on")
-                return langs['it'].markRead .. " > on"
+                return langs[msg.lang].markRead .. " > on"
             end
             if matches[2] == "off" then
                 redis:del("bot:markread")
-                return langs['it'].markRead .. " > off"
+                return langs[msg.lang].markRead .. " > off"
             end
             return
         end
         if matches[1]:lower() == "pm" or matches[1]:lower() == "sasha messaggia" then
             send_large_msg("user#id" .. matches[2], matches[3])
-            return langs['it'].pmSent
+            return langs[msg.lang].pmSent
         end
         if matches[1]:lower() == "pmblock" or matches[1]:lower() == "sasha blocca" then
             if is_admin2(matches[2]) then
-                return langs['it'].cantBlockAdmin
+                return langs[msg.lang].cantBlockAdmin
             end
             block_user("user#id" .. matches[2], ok_cb, false)
-            return langs['it'].userBlocked
+            return langs[msg.lang].userBlocked
         end
         if matches[1]:lower() == "pmunblock" or matches[1]:lower() == "sasha sblocca" then
             unblock_user("user#id" .. matches[2], ok_cb, false)
-            return langs['it'].userUnblocked
+            return langs[msg.lang].userUnblocked
         end
         if matches[1]:lower() == "import" then
             -- join by group link
@@ -295,18 +295,18 @@ local function run(msg, matches)
                 else
                     get_contact_list(get_contact_list_callback, { target = msg.from.id, filetype = matches[2]:lower() })
                 end
-                return langs['it'].contactListSent
+                return langs[msg.lang].contactListSent
             end
             if matches[1]:lower() == "delcontact" or matches[1]:lower() == "sasha elimina contatto" and matches[2] then
                 del_contact("user#id" .. matches[2], ok_cb, false)
-                return langs['it'].user .. matches[2] .. langs['it'].removedFromContacts
+                return langs[msg.lang].user .. matches[2] .. langs[msg.lang].removedFromContacts
             end
             if matches[1]:lower() == "addcontact" or matches[1]:lower() == "sasha aggiungi contatto" and matches[2] then
                 phone = matches[2]
                 first_name = matches[3]
                 last_name = matches[4]
                 add_contact(phone, first_name, last_name, ok_cb, false)
-                return langs['it'].user .. phone .. langs['it'].addedToContacts
+                return langs[msg.lang].user .. phone .. langs[msg.lang].addedToContacts
             end
             if matches[1]:lower() == "sendcontact" or matches[1]:lower() == "sasha invia contatto" then
                 phone = matches[2]
@@ -316,7 +316,7 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == "mycontact" or matches[1]:lower() == "sasha mio contatto" then
                 if not msg.from.phone then
-                    return langs['it'].contactMissing
+                    return langs[msg.lang].contactMissing
                 end
                 phone = msg.from.phone
                 first_name =(msg.from.first_name or msg.from.phone)
@@ -329,7 +329,7 @@ local function run(msg, matches)
                 else
                     get_dialog_list(get_dialog_list_callback, { target = msg.from.id, filetype = matches[2]:lower() })
                 end
-                return langs['it'].chatListSent
+                return langs[msg.lang].chatListSent
             end
             if matches[1]:lower() == "sync_gbans" or matches[1]:lower() == "sasha sincronizza lista superban" then
                 local url = "http://seedteam.org/Teleseed/Global_bans.json"
@@ -340,7 +340,7 @@ local function run(msg, matches)
                     banall_user(v)
                     print(k, v .. " Globally banned")
                 end
-                return langs['it'].gbansSync
+                return langs[msg.lang].gbansSync
             end
             if matches[1]:lower() == "backup" or matches[1]:lower() == "sasha esegui backup" then
                 local time = os.time()
@@ -350,7 +350,7 @@ local function run(msg, matches)
                 file:flush()
                 file:close()
                 send_document("user#id" .. msg.from.id, "/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
-                return langs['it'].backupDone
+                return langs[msg.lang].backupDone
             end
             if matches[1]:lower() == 'vardump' then
                 if type(msg.reply_id) ~= "nil" then
@@ -376,12 +376,12 @@ local function run(msg, matches)
             if not long_id then
                 data[tostring(msg.to.id)]['long_id'] = msg.to.peer_id
                 save_data(_config.moderation.data, data)
-                return langs['it'].longidUpdate
+                return langs[msg.lang].longidUpdate
             end
         end
         if matches[1]:lower() == 'addlog' or matches[1]:lower() == 'sasha aggiungi log' and not matches[2] then
             if is_log_group(msg) then
-                return langs['it'].alreadyLog
+                return langs[msg.lang].alreadyLog
             end
             print("Log_SuperGroup " .. msg.to.title .. "(" .. msg.to.id .. ") added")
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")
@@ -389,7 +389,7 @@ local function run(msg, matches)
         end
         if matches[1]:lower() == 'remlog' or matches[1]:lower() == 'sasha rimuovi log' and not matches[2] then
             if not is_log_group(msg) then
-                return langs['it'].notLog
+                return langs[msg.lang].notLog
             end
             print("Log_SuperGroup " .. msg.to.title .. "(" .. msg.to.id .. ") removed")
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")

@@ -29,8 +29,9 @@ local function dislike(likedata, chat, user)
 end
 
 local function like_by_username(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs['it'].noUsernameFound)
+        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
     end
     like(extra.likedata, extra.chat, result.peer_id)
 end
@@ -44,8 +45,9 @@ local function like_from(extra, success, result)
 end
 
 local function dislike_by_username(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs['it'].noUsernameFound)
+        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
     end
     dislike(extra.likedata, extra.chat, result.peer_id)
 end
@@ -67,7 +69,7 @@ local function get_name(user_id)
     return user_info
 end
 
-local function likes_leaderboard(users, lbtype)
+local function likes_leaderboard(users, lang)
     local users_info = { }
 
     -- Get user name and param
@@ -86,7 +88,7 @@ local function likes_leaderboard(users, lbtype)
         end
     end )
 
-    local text = langs['it'].likesLeaderboard
+    local text = langs[lang].likesLeaderboard
     local i = 0
     for k, user in pairs(users_info) do
         if user.name and user.param then
@@ -104,9 +106,9 @@ local function run(msg, matches)
                 local f = io.open(_config.likecounter.db, 'w+')
                 f:write('{}')
                 f:close()
-                reply_msg(msg.id, langs['it'].likesdbCreated, ok_cb, false)
+                reply_msg(msg.id, langs[msg.lang].likesdbCreated, ok_cb, false)
             else
-                return langs['it'].require_sudo
+                return langs[msg.lang].require_sudo
             end
             return
         end
@@ -124,24 +126,24 @@ local function run(msg, matches)
         if matches[1]:lower() == 'addlikes' and matches[2] and matches[3] and is_sudo(msg) then
             likedata[chat][matches[2]] = tonumber(likedata[chat][matches[2]] + matches[3])
             save_data(_config.likecounter.db, likedata)
-            reply_msg(msg.id, langs['it'].cheating, ok_cb, false)
+            reply_msg(msg.id, langs[msg.lang].cheating, ok_cb, false)
             return
         end
 
         if matches[1]:lower() == 'remlikes' and matches[2] and matches[3] and is_sudo(msg) then
             likedata[chat][matches[2]] = tonumber(likedata[chat][matches[2]] - matches[3])
             save_data(_config.likecounter.db, likedata)
-            reply_msg(msg.id, langs['it'].cheating, ok_cb, false)
+            reply_msg(msg.id, langs[msg.lang].cheating, ok_cb, false)
             return
         end
 
         if (matches[1]:lower() == 'likes') then
-            send_large_msg(get_receiver(msg), likes_leaderboard(likedata[chat]))
+            send_large_msg(get_receiver(msg), likes_leaderboard(likedata[chat], msg.lang))
             return
         end
 
         if msg.fwd_from then
-            reply_msg(msg.id, langs['it'].forwardingLike, ok_cb, false)
+            reply_msg(msg.id, langs[msg.lang].forwardingLike, ok_cb, false)
         else
             if matches[1]:lower() == 'like' or matches[1]:lower() == '1up' then
                 if type(msg.reply_id) ~= "nil" then

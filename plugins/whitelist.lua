@@ -1,4 +1,5 @@
 ﻿local function get_message_callback(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
     if result.service then
         local action = result.action.type
         if action == 'chat_add_user' or action == 'chat_del_user' or action == 'chat_rename' or action == 'chat_change_photo' then
@@ -14,24 +15,25 @@
     local is_whitelisted = redis:sismember(hash, user_id)
     if is_whitelisted then
         redis:srem(hash, user_id)
-        send_large_msg(receiver, langs['it'].userBot .. user_id .. langs['it'].whitelistRemoved)
+        send_large_msg(receiver, langs[lang].userBot .. user_id .. langs[lang].whitelistRemoved)
     else
         redis:sadd(hash, user_id)
-        send_large_msg(receiver, langs['it'].userBot .. user_id .. langs['it'].whitelistAdded)
+        send_large_msg(receiver, langs[lang].userBot .. user_id .. langs[lang].whitelistAdded)
     end
 end
 
 local function whitelist_res(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
     local user_id = result.peer_id
     local receiver = extra.receiver
     local hash = "whitelist"
     local is_whitelisted = redis:sismember(hash, user_id)
     if is_whitelisted then
         redis:srem(hash, user_id)
-        send_large_msg(receiver, langs['it'].userBot .. user_id .. langs['it'].whitelistRemoved)
+        send_large_msg(receiver, langs[lang].userBot .. user_id .. langs[lang].whitelistRemoved)
     else
         redis:sadd(hash, user_id)
-        send_large_msg(receiver, langs['it'].userBot .. user_id .. langs['it'].whitelistAdded)
+        send_large_msg(receiver, langs[lang].userBot .. user_id .. langs[lang].whitelistAdded)
     end
 end
 
@@ -47,10 +49,10 @@ local function run(msg, matches)
             local is_whitelisted = redis:sismember(hash, user_id)
             if is_whitelisted then
                 redis:srem(hash, user_id)
-                return langs['it'].userBot .. user_id .. langs['it'].whitelistRemoved
+                return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistRemoved
             else
                 redis:sadd(hash, user_id)
-                return langs['it'].userBot .. user_id .. langs['it'].whitelistAdded
+                return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistAdded
             end
         else
             local receiver = get_receiver(msg)
@@ -63,7 +65,7 @@ local function run(msg, matches)
     if matches[1]:lower() == "clean whitelist" and is_admin1(msg) then
         local hash = 'whitelist'
         redis:del(hash)
-        return langs['it'].whitelistCleaned
+        return langs[msg.lang].whitelistCleaned
     end
 end
 

@@ -67,14 +67,14 @@ local function run(msg, matches)
     if is_owner(msg) then
         if matches[1]:lower() == 'enableglobal' then
             redis:del(msg.to.id .. ':gvariables')
-            return langs['it'].globalEnable
+            return langs[msg.lang].globalEnable
         end
         if matches[1]:lower() == 'disableglobal' then
             redis:set(msg.to.id .. ':gvariables', true)
-            return langs['it'].globalDisable
+            return langs[msg.lang].globalDisable
         end
     else
-        return langs['it'].require_owner
+        return langs[msg.lang].require_owner
     end
 end
 

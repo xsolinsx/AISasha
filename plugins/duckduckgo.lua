@@ -3,11 +3,11 @@ local function run(msg, matches)
     local url = "http://api.duckduckgo.com/?q=" .. URL.escape(matches[1]) .. "&format=json&pretty=1&no_html=1&skip_disambig=1"
     local jstr, res = https.request(url)
     if res ~= 200 then
-        return langs['it'].opsError
+        return langs[msg.lang].opsError
     end
     local jdat = JSON.decode(jstr)
     if not jdat.RelatedTopics[1] then
-        return langs['it'].opsError
+        return langs[msg.lang].opsError
     end
     local text = ""
     local i = 1

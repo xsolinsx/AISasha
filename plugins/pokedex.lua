@@ -13,13 +13,16 @@ local function callback(extra)
     send_msg(extra.receiver, extra.text, ok_cb, false)
 end
 
-local function send_pokemon(query, receiver)
+local function run(msg, matches)
+    local receiver = get_receiver(msg)
+    local query = URL.escape(matches[1])
+
     local url = "http://pokeapi.co/api/v2/pokemon/" .. query .. "/"
     local b, c = http.request(url)
     local pokemon = json:decode(b)
 
     if pokemon == nil then
-        return langs['it'].noPoke
+        return langs[msg.lang].noPoke
     end
 
     -- api returns height and weight x10
@@ -27,9 +30,9 @@ local function send_pokemon(query, receiver)
     local weight = tonumber(pokemon.weight) / 10
 
     local text = 'ID Pokédex: ' .. pokemon.id
-    .. '\n' .. langs['it'].pokeName .. pokemon.name
-    .. '\n' .. langs['it'].pokeWeight .. weight .. " kg"
-    .. '\n' .. langs['it'].pokeHeight .. height .. " m"
+    .. '\n' .. langs[msg.lang].pokeName .. pokemon.name
+    .. '\n' .. langs[msg.lang].pokeWeight .. weight .. " kg"
+    .. '\n' .. langs[msg.lang].pokeHeight .. height .. " m"
 
     local image = nil
 
@@ -47,12 +50,6 @@ local function send_pokemon(query, receiver)
         send_photo_from_url(receiver, image, callback, extra)
     end
     return text
-end
-
-local function run(msg, matches)
-    local receiver = get_receiver(msg)
-    local query = URL.escape(matches[1])
-    return send_pokemon(query, receiver)
 end
 
 return {
