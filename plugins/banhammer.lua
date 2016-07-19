@@ -233,18 +233,17 @@ local function unbanall_from(extra, success, result)
 end
 
 local function kickrandom_chat(extra, success, result)
-    local chat_id = extra.chat_id
     local kickable = false
     local id
-    local lang = get_lang(chat_id)
+    local lang = get_lang(extra.chat_id)
     while not kickable do
-        id = result.members[math.random(#result.members)].id
+        id = result.members[math.random(#result.members)].peer_id
         print(id)
-        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
+        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, extra.chat_id) or is_whitelisted(id)) then
             kickable = true
-            send_large_msg('chat#id' .. chat_id, 'ℹ️ ' .. id .. ' ' .. langs[lang].kicked)
+            send_large_msg('chat#id' .. extra.chat_id, 'ℹ️ ' .. id .. ' ' .. langs[lang].kicked)
             local function post_kick()
-                kick_user_any(id, chat_id)
+                kick_user_any(id, extra.chat_id)
             end
             postpone(post_kick, false, 1)
         else
@@ -254,18 +253,17 @@ local function kickrandom_chat(extra, success, result)
 end
 
 local function kickrandom_channel(extra, success, result)
-    local chat_id = extra.chat_id
     local kickable = false
     local id
-    local lang = get_lang(chat_id)
+    local lang = get_lang(extra.chat_id)
     while not kickable do
-        id = result[math.random(#result)].id
+        id = result[math.random(#result)].peer_id
         print(id)
-        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
+        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, extra.chat_id) or is_whitelisted(id)) then
             kickable = true
-            send_large_msg('channel#id' .. result.id, 'ℹ️ ' .. id .. ' ' .. langs[lang].kicked)
+            send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. id .. ' ' .. langs[lang].kicked)
             local function post_kick()
-                kick_user_any(id, result.id)
+                kick_user_any(id, extra.chat_id)
             end
             postpone(post_kick, false, 1)
         else
@@ -277,7 +275,7 @@ end
 local function kick_nouser_chat(extra, success, result)
     for k, v in pairs(result.members) do
         if not v.username then
-            kick_user(v.id, result.id)
+            kick_user(v.id, extra.chat_id)
         end
     end
 end
@@ -295,7 +293,7 @@ local function kick_deleted_chat(extra, success, result)
         if not v.print_name then
             if v.peer_id then
                 print(v.peer_id)
-                kick_user(v.peer_id, result.id)
+                kick_user(v.peer_id, extra.chat_id)
             end
         end
     end
@@ -322,20 +320,19 @@ local function user_msgs(user_id, chat_id)
 end
 
 local function kick_inactive_chat(extra, success, result)
-    local chat_id = extra.chat_id
     local num = extra.num
     local receiver = extra.receiver
     local kicked = 0
-    local lang = get_lang(chat_id)
+    local lang = get_lang(extra.chat_id)
 
     for k, v in pairs(result.members) do
-        if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, chat_id) then
-            local user_info = user_msgs(v.peer_id, chat_id)
+        if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
+            local user_info = user_msgs(v.peer_id, extra.chat_id)
             if tonumber(user_info) < tonumber(num) then
                 if kicked == 20 then
                     break
                 end
-                kick_user(v.peer_id, chat_id)
+                kick_user(v.peer_id, extra.chat_id)
                 kicked = kicked + 1
             end
         end
@@ -344,20 +341,19 @@ local function kick_inactive_chat(extra, success, result)
 end
 
 local function kick_inactive_channel(extra, success, result)
-    local chat_id = extra.chat_id
     local num = extra.num
     local receiver = extra.receiver
     local kicked = 0
-    local lang = get_lang(chat_id)
+    local lang = get_lang(extra.chat_id)
 
     for k, v in pairs(result) do
-        if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, chat_id) then
-            local user_info = user_msgs(v.peer_id, chat_id)
+        if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
+            local user_info = user_msgs(v.peer_id, extra.chat_id)
             if tonumber(user_info) < tonumber(num) then
                 if kicked == 20 then
                     break
                 end
-                kick_user(v.peer_id, chat_id)
+                kick_user(v.peer_id, extra.chat_id)
                 kicked = kicked + 1
             end
         end
@@ -510,7 +506,7 @@ local function run(msg, matches)
         if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'sasha uccidi eliminati' or matches[1]:lower() == 'spara eliminati' then
             -- /kickdeleted
             if msg.to.type == 'chat' then
-                chat_info(receiver, kick_deleted_chat, { receiver = get_receiver(msg) })
+                chat_info(receiver, kick_deleted_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
             elseif msg.to.type == 'channel' then
                 channel_get_users(receiver, kick_deleted_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
             end
@@ -533,7 +529,7 @@ local function run(msg, matches)
             if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
                 -- /kicknouser
                 if msg.to.type == 'chat' then
-                    chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg) })
+                    chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
                 elseif msg.to.type == 'channel' then
                     channel_get_users(receiver, kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
                 end
