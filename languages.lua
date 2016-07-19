@@ -400,7 +400,7 @@ return {
         mutelistCleaned = 'Lista muti svuotata.',
 
         -- info.lua --
-        info = 'INFO',
+        infoWord = 'INFO',
         youAre = '\nTu sei',
         name = '\nNome: ',
         surname = '\nCognome: ',
@@ -1582,7 +1582,7 @@ return {
         mutelistCleaned = 'Mute list cleaned.',
 
         -- info.lua --
-        info = 'INFO',
+        infoWord = 'INFO',
         youAre = '\nYou are',
         name = '\nName: ',
         surname = '\nSurname: ',

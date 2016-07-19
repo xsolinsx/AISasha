@@ -119,7 +119,7 @@ local function info_by_username(extra, success, result)
         send_large_msg(extra.receiver, langs[lang].noUsernameFound)
         return
     end
-    local text = langs[lang].info .. ' (<username>)'
+    local text = langs[lang].infoWord .. ' (<username>)'
     if result.peer_type == 'channel' then
         if result.title then
             text = text .. langs[lang].name .. result.title
@@ -179,7 +179,7 @@ end
 
 local function info_by_reply(extra, success, result)
     local lang = get_lang(result.to.peer_id)
-    local text = langs[lang].info .. ' (<reply>)'
+    local text = langs[lang].infoWord .. ' (<reply>)'
     local action = false
     if result.action then
         if result.action.type ~= 'chat_add_user_link' then
@@ -277,7 +277,7 @@ end
 
 local function info_by_from(extra, success, result)
     local lang = get_lang(result.to.peer_id)
-    local text = langs[lang].info .. ' (<from>)'
+    local text = langs[lang].infoWord .. ' (<from>)'
     if result.fwd_from.peer_type == 'channel' then
         if result.fwd_from.title then
             text = text .. langs[lang].name .. result.fwd_from.title
@@ -337,7 +337,7 @@ end
 
 local function info_by_id(extra, success, result)
     local lang = get_lang(extra.chat_id)
-    local text = langs[lang].info .. ' (<id>)'
+    local text = langs[lang].infoWord .. ' (<id>)'
     if result.first_name then
         text = text .. langs[lang].name .. result.first_name
     end
@@ -464,7 +464,7 @@ end
 local function pre_process(msg)
     if msg.to.type == 'user' and msg.fwd_from then
         if is_support(msg.from.id) or is_admin1(msg) then
-            local text = langs[msg.lang].info .. ' (<private_from>)'
+            local text = langs[msg.lang].infoWord .. ' (<private_from>)'
             if msg.fwd_from.peer_type == 'channel' then
                 if msg.fwd_from.title then
                     text = text .. langs[msg.lang].name .. msg.fwd_from.title
@@ -585,7 +585,7 @@ local function run(msg, matches)
                 return langs[msg.lang].require_mod
             end
         else
-            local text = langs[msg.lang].info ..
+            local text = langs[msg.lang].infoWord ..
             langs[msg.lang].youAre
             if msg.from.title then
                 text = text .. langs[msg.lang].name .. msg.from.title
