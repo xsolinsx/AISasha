@@ -618,7 +618,7 @@ local function username_id(extra, success, result)
     local mod_cmd = extra.mod_cmd
     local receiver = extra.receiver
     local member = extra.member
-    local text = langs[lang].none .. '@' .. member .. langs[lang].inGroup
+    local text = langs[lang].none .. '@' .. member .. langs[lang].inThisGroup
     for k, v in pairs(result.members) do
         vusername = v.username
         if vusername == member then
