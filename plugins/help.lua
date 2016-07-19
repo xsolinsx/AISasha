@@ -36,21 +36,21 @@ local function plugin_help(var, chat, rank)
         local text = ''
         -- = '=======================\n'
         local textHash = plugin.description:lower()
-        if langs.textHash then
-            for i = 1, #langs.plugin.description:lower(), 1 do
-                if rank_table[langs.plugin.description:lower()[i]] then
-                    if rank_table[langs.plugin.description:lower()[i]] > rank then
+        if langs['it'].textHash then
+            for i = 1, #langs['it'].plugin.description:lower(), 1 do
+                if rank_table[langs['it'].plugin.description:lower()[i]] then
+                    if rank_table[langs['it'].plugin.description:lower()[i]] > rank then
                         help_permission = false
                     end
                 end
                 if help_permission then
-                    text = text .. langs.plugin.description:lower()[i] .. '\n'
+                    text = text .. langs['it'].plugin.description:lower()[i] .. '\n'
                 end
             end
         end
         return text .. '\n'
     else
-        -- return text .. langs.require_higher .. '\n'
+        -- return text .. langs['it'].require_higher .. '\n'
         return ''
     end
 end
@@ -58,7 +58,7 @@ end
 -- !help command
 local function telegram_help(receiver, rank)
     local i = 0
-    local text = langs.pluginListStart
+    local text = langs['it'].pluginListStart
     -- Plugins names
     for name in pairsByKeys(plugins) do
         if _config.disabled_plugin_on_chat[receiver] then
@@ -76,7 +76,7 @@ local function telegram_help(receiver, rank)
         end
     end
 
-    text = text .. '\n' .. langs.helpInfo
+    text = text .. '\n' .. langs['it'].helpInfo
     return text
 end
 
@@ -98,28 +98,28 @@ end
 local function get_sudo_info(extra, success, result)
     local text = 'SUDO INFO'
     if result.first_name then
-        text = text .. langs.name .. result.first_name
+        text = text .. langs['it'].name .. result.first_name
     end
     if result.real_first_name then
-        text = text .. langs.name .. result.real_first_name
+        text = text .. langs['it'].name .. result.real_first_name
     end
     if result.last_name then
-        text = text .. langs.surname .. result.last_name
+        text = text .. langs['it'].surname .. result.last_name
     end
     if result.real_last_name then
-        text = text .. langs.surname .. result.real_last_name
+        text = text .. langs['it'].surname .. result.real_last_name
     end
     if result.username then
-        text = text .. langs.username .. '@' .. result.username
+        text = text .. langs['it'].username .. '@' .. result.username
     end
     --[[
     if result.phone then
-        text = text .. langs.phone .. '+' .. string.sub(result.phone, 1, 6) .. '******'
+        text = text .. langs['it'].phone .. '+' .. string.sub(result.phone, 1, 6) .. '******'
     end
     ]]
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.msg.to.id) or 0)
-    text = text .. langs.date .. os.date('%c') ..
-    langs.totalMessages .. msgs
+    text = text .. langs['it'].date .. os.date('%c') ..
+    langs['it'].totalMessages .. msgs
     text = text .. '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. extra.msg.to.id, text)
     send_large_msg('channel#id' .. extra.msg.to.id, text)
@@ -127,7 +127,7 @@ end
 
 local function run(msg, matches)
     -- if msg.to.peer_type == 'user' and not is_admin1(msg) then
-    --    return langs.doYourBusiness
+    --    return langs['it'].doYourBusiness
     -- end
 
     if matches[1]:lower() == "sudolist" or matches[1]:lower() == "sasha lista sudo" then
@@ -139,7 +139,7 @@ local function run(msg, matches)
         return
     end
 
-    local text = langs.helpIntro
+    local text = langs['it'].helpIntro
     local rank = get_rank(msg.from.id, msg.to.id)
 
     if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" or matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
@@ -151,7 +151,7 @@ local function run(msg, matches)
                 rank = fakerank
             else
                 -- no
-                return langs.youTried
+                return langs['it'].youTried
             end
             text = text .. 'FAKE HELP\n'
         elseif matches[3] and(matches[3]:lower() == "user" or matches[3]:lower() == "mod" or matches[3]:lower() == "owner" or matches[3]:lower() == "support" or matches[3]:lower() == "admin" or matches[3]:lower() == "sudo") then
@@ -162,7 +162,7 @@ local function run(msg, matches)
                 rank = fakerank
             else
                 -- no
-                return langs.youTried
+                return langs['it'].youTried
             end
             text = text .. 'FAKE HELP\n'
         end
@@ -188,12 +188,12 @@ local function run(msg, matches)
         if temp ~= nil then
             text = text .. temp
         else
-            return matches[2]:lower() .. langs.notExists
+            return matches[2]:lower() .. langs['it'].notExists
         end
     end
 
-    if text == langs.helpIntro then
-        return langs.require_higher
+    if text == langs['it'].helpIntro then
+        return langs['it'].require_higher
     else
         send_large_msg(get_receiver(msg), text)
     end

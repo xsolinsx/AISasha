@@ -1085,9 +1085,9 @@ local function run(msg, matches)
         set_text('whitelist:3', '#whitelist <id>|<username>|<reply>: Sasha adds|removes specified user to|from whitelist.')
         set_text('whitelist:4', '#clean whitelist: Sasha cleans whitelist.')
 
-        return langs.langUpdate
+        return langs['it'].langUpdate
     else
-        return langs.require_sudo
+        return langs['it'].require_sudo
     end
 end
 

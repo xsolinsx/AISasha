@@ -248,7 +248,7 @@ function send_photo_from_url(receiver, url, cb_function, extra)
     local file_path = download_to_file(url, false)
     if not file_path then
         -- Error
-        send_msg(receiver, langs.errorImageDownload, cb_function, extra)
+        send_msg(receiver, langs['it'].errorImageDownload, cb_function, extra)
     else
         print("File path: " .. file_path)
         _send_photo(receiver, file_path, cb_function, extra)
@@ -263,7 +263,7 @@ function send_photo_from_url_callback(extra, success, result)
     local file_path = download_to_file(url, false)
     if not file_path then
         -- Error
-        send_msg(receiver, langs.errorImageDownload, ok_cb, false)
+        send_msg(receiver, langs['it'].errorImageDownload, ok_cb, false)
     else
         print("File path: " .. file_path)
         _send_photo(receiver, file_path, ok_cb, false)
@@ -507,13 +507,13 @@ function enable_channel(receiver, to_id)
     end
 
     if _config.disabled_channels[receiver] == nil then
-        return send_large_msg(receiver, langs.botOn)
+        return send_large_msg(receiver, langs['it'].botOn)
     end
 
     _config.disabled_channels[receiver] = false
 
     save_config()
-    return send_large_msg(receiver, langs.botOn)
+    return send_large_msg(receiver, langs['it'].botOn)
 end
 
 function disable_channel(receiver, to_id)
@@ -524,7 +524,7 @@ function disable_channel(receiver, to_id)
     _config.disabled_channels[receiver] = true
 
     save_config()
-    return send_large_msg(receiver, langs.botOff)
+    return send_large_msg(receiver, langs['it'].botOff)
 end
 
 -- Returns a table with matches or nil
@@ -1088,7 +1088,7 @@ end
 function ban_list(chat_id)
     local hash = 'banned:' .. chat_id
     local list = redis:smembers(hash)
-    local text = langs.banListStart
+    local text = langs['it'].banListStart
     for k, v in pairs(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then
@@ -1106,7 +1106,7 @@ end
 function banall_list()
     local hash = 'gbanned'
     local list = redis:smembers(hash)
-    local text = langs.gbanListStart
+    local text = langs['it'].gbanListStart
     for k, v in pairs(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then
@@ -1202,14 +1202,14 @@ end
 function mutes_list(chat_id, group_name)
     local hash = 'mute:' .. chat_id
     local list = redis:smembers(hash)
-    local text = langs.mutedTypesStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
+    local text = langs['it'].mutedTypesStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
     for k, v in pairsByKeys(list) do
-        text = text .. langs.mute .. v .. "\n"
+        text = text .. langs['it'].mute .. v .. "\n"
     end
     local data = load_data(_config.moderation.data)
     if data[tostring(chat_id)] then
         local settings = data[tostring(chat_id)]['settings']
-        text = text .. langs.strictrules .. settings.strict
+        text = text .. langs['it'].strictrules .. settings.strict
     end
     return text
 end
@@ -1218,7 +1218,7 @@ end
 function muted_user_list(chat_id, group_name)
     local hash = 'mute_user:' .. chat_id
     local list = redis:smembers(hash)
-    local text = langs.mutedUsersStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
+    local text = langs['it'].mutedUsersStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
     for k, v in pairsByKeys(list) do
         local user_info = redis:hgetall('user:' .. v)
         if user_info and user_info.print_name then

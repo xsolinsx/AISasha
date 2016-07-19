@@ -113,13 +113,13 @@ local function callback_sudo_ids(extra, success, result)
         end
     end
     if tagged then
-        local text = langs.receiver .. extra.msg.to.print_name:gsub("_", " ") .. ' [' .. extra.msg.to.id .. ']\n' .. langs.sender
+        local text = langs['it'].receiver .. extra.msg.to.print_name:gsub("_", " ") .. ' [' .. extra.msg.to.id .. ']\n' .. langs['it'].sender
         if extra.msg.from.username then
             text = text .. '@' .. extra.msg.from.username .. ' [' .. extra.msg.from.id .. ']\n'
         else
             text = text .. extra.msg.from.print_name:gsub("_", " ") .. ' [' .. extra.msg.from.id .. ']\n'
         end
-        text = text .. langs.msgText
+        text = text .. langs['it'].msgText
 
         if extra.msg.text then
             text = text .. extra.msg.text .. ' '
@@ -442,7 +442,7 @@ end
 -- Enable plugins in config.json
 function load_plugins()
     print('Loading languages.lua...')
-    langs = dofile('languages.lua')
+    langs['it'].= dofile('languages.lua')
     -- All the languages available
 
     for k, v in pairs(_config.enabled_plugins) do

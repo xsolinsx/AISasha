@@ -3,7 +3,7 @@ local function set_welcome(msg, welcome)
     local data_cat = 'welcome'
     data[tostring(msg.to.id)][data_cat] = welcome
     save_data(_config.moderation.data, data)
-    return langs.newWelcome .. welcome
+    return langs['it'].newWelcome .. welcome
 end
 
 local function get_welcome(msg)
@@ -21,7 +21,7 @@ local function unset_welcome(msg)
     local data_cat = 'welcome'
     data[tostring(msg.to.id)][data_cat] = ''
     save_data(_config.moderation.data, data)
-    return langs.welcomeRemoved
+    return langs['it'].welcomeRemoved
 end
 
 local function set_memberswelcome(msg, value)
@@ -29,14 +29,14 @@ local function set_memberswelcome(msg, value)
     local data_cat = 'welcomemembers'
     data[tostring(msg.to.id)][data_cat] = value
     save_data(_config.moderation.data, data)
-    return string.gsub(langs.newWelcomeNumber, 'X', tostring(value))
+    return string.gsub(langs['it'].newWelcomeNumber, 'X', tostring(value))
 end
 
 local function get_memberswelcome(msg)
     local data = load_data(_config.moderation.data)
     local data_cat = 'welcomemembers'
     if not data[tostring(msg.to.id)][data_cat] then
-        return langs.noSetValue
+        return langs['it'].noSetValue
     end
     local value = data[tostring(msg.to.id)][data_cat]
     return value
@@ -47,7 +47,7 @@ local function set_goodbye(msg, goodbye)
     local data_cat = 'goodbye'
     data[tostring(msg.to.id)][data_cat] = goodbye
     save_data(_config.moderation.data, data)
-    return langs.newGoodbye .. goodbye
+    return langs['it'].newGoodbye .. goodbye
 end
 
 local function get_goodbye(msg)
@@ -65,14 +65,14 @@ local function unset_goodbye(msg)
     local data_cat = 'goodbye'
     data[tostring(msg.to.id)][data_cat] = ''
     save_data(_config.moderation.data, data)
-    return langs.goodbyeRemoved
+    return langs['it'].goodbyeRemoved
 end
 
 local function get_rules(msg)
     local data = load_data(_config.moderation.data)
     local data_cat = 'rules'
     if not data[tostring(msg.to.id)][data_cat] then
-        return langs.noRules
+        return langs['it'].noRules
     end
     local rules = data[tostring(msg.to.id)][data_cat]
     return rules
@@ -105,13 +105,13 @@ local function run(msg, matches)
     end
     if matches[1]:lower() == 'setwelcome' and is_momod(msg) then
         if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-            return langs.autoexecDenial
+            return langs['it'].autoexecDenial
         end
         return set_welcome(msg, matches[2])
     end
     if matches[1]:lower() == 'setgoodbye' and is_momod(msg) then
         if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-            return langs.autoexecDenial
+            return langs['it'].autoexecDenial
         end
         return set_goodbye(msg, matches[2])
     end
@@ -124,7 +124,7 @@ local function run(msg, matches)
     if matches[1]:lower() == 'setmemberswelcome' and is_momod(msg) then
         local msg = set_memberswelcome(msg, matches[2])
         if matches[2] == '0' then
-            return langs.neverWelcome
+            return langs['it'].neverWelcome
         else
             return msg
         end
@@ -132,7 +132,7 @@ local function run(msg, matches)
     if matches[1]:lower() == 'getmemberswelcome' and is_momod(msg) then
         return get_memberswelcome(msg)
     end
-    if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg) ~= langs.noSetValue then
+    if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg) ~= langs['it'].noSetValue then
         local hash
         if msg.to.type == 'channel' then
             hash = 'channel:welcome' .. msg.to.id

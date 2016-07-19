@@ -3,7 +3,7 @@
     if is_sudo(msg) or is_realm(msg) and is_admin1(msg) then
         local group_creator = msg.from.print_name
         create_group_chat(group_creator, group_name, ok_cb, false)
-        return langs.group .. string.gsub(group_name, '_', ' ') .. langs.created
+        return langs['it'].group .. string.gsub(group_name, '_', ' ') .. langs['it'].created
     end
 end
 
@@ -12,7 +12,7 @@ local function create_realm(msg)
     if is_sudo(msg) or is_realm(msg) and is_admin1(msg) then
         local group_creator = msg.from.print_name
         create_group_chat(group_creator, group_name, ok_cb, false)
-        return langs.realm .. string.gsub(group_name, '_', ' ') .. langs.created
+        return langs['it'].realm .. string.gsub(group_name, '_', ' ') .. langs['it'].created
     end
 end
 
@@ -74,7 +74,7 @@ local function get_group_type(msg)
         local group_type = data[tostring(msg.to.id)]['group_type']
         return group_type
     else
-        return langs.chatTypeNotFound
+        return langs['it'].chatTypeNotFound
     end
 end
 
@@ -91,305 +91,305 @@ end
 
 local function set_description(msg, data, target, about)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local data_cat = 'description'
     data[tostring(target)][data_cat] = about
     save_data(_config.moderation.data, data)
-    return langs.newDescription .. about
+    return langs['it'].newDescription .. about
 end
 
 local function set_rules(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local data_cat = 'rules'
     data[tostring(target)][data_cat] = rules
     save_data(_config.moderation.data, data)
-    return langs.newRules .. rules
+    return langs['it'].newRules .. rules
 end
 -- lock/unlock group name. bot automatically change group name when locked
 local function lock_group_name(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_name_set = data[tostring(target)]['settings']['set_name']
     local group_name_lock = data[tostring(target)]['settings']['lock_name']
     if group_name_lock == 'yes' then
-        return langs.nameAlreadyLocked
+        return langs['it'].nameAlreadyLocked
     else
         data[tostring(target)]['settings']['lock_name'] = 'yes'
         save_data(_config.moderation.data, data)
         rename_chat('chat#id' .. target, group_name_set, ok_cb, false)
-        return langs.nameLocked
+        return langs['it'].nameLocked
     end
 end
 
 local function unlock_group_name(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_name_set = data[tostring(target)]['settings']['set_name']
     local group_name_lock = data[tostring(target)]['settings']['lock_name']
     if group_name_lock == 'no' then
-        return langs.nameAlreadyUnlocked
+        return langs['it'].nameAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_name'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.nameUnlocked
+        return langs['it'].nameUnlocked
     end
 end
 -- lock/unlock group member. bot automatically kick new added user when locked
 local function lock_group_member(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_member_lock = data[tostring(target)]['settings']['lock_member']
     if group_member_lock == 'yes' then
-        return langs.membersAlreadyLocked
+        return langs['it'].membersAlreadyLocked
     else
         data[tostring(target)]['settings']['lock_member'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs.membersLocked
+        return langs['it'].membersLocked
     end
 end
 
 local function unlock_group_member(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_member_lock = data[tostring(target)]['settings']['lock_member']
     if group_member_lock == 'no' then
-        return langs.membersAlreadyUnlocked
+        return langs['it'].membersAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_member'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.membersUnlocked
+        return langs['it'].membersUnlocked
     end
 end
 
 -- lock/unlock group photo. bot automatically keep group photo when locked
 local function lock_group_photo(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_photo_lock = data[tostring(target)]['settings']['lock_photo']
     if group_photo_lock == 'yes' then
-        return langs.photoAlreadyLocked
+        return langs['it'].photoAlreadyLocked
     else
         data[tostring(target)]['settings']['set_photo'] = 'waiting'
         save_data(_config.moderation.data, data)
-        return langs.sendNewGroupPic
+        return langs['it'].sendNewGroupPic
     end
 end
 
 local function unlock_group_photo(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_photo_lock = data[tostring(target)]['settings']['lock_photo']
     if group_photo_lock == 'no' then
-        return langs.photoAlreadyUnlocked
+        return langs['it'].photoAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_photo'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.photoUnlocked
+        return langs['it'].photoUnlocked
     end
 end
 
 local function lock_group_flood(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_flood_lock = data[tostring(target)]['settings']['flood']
     if group_flood_lock == 'yes' then
-        return langs.floodAlreadyLocked
+        return langs['it'].floodAlreadyLocked
     else
         data[tostring(target)]['settings']['flood'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs.floodLocked
+        return langs['it'].floodLocked
     end
 end
 
 local function unlock_group_flood(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_flood_lock = data[tostring(target)]['settings']['flood']
     if group_flood_lock == 'no' then
-        return langs.floodAlreadyUnlocked
+        return langs['it'].floodAlreadyUnlocked
     else
         data[tostring(target)]['settings']['flood'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.floodUnlocked
+        return langs['it'].floodUnlocked
     end
 end
 
 local function lock_group_arabic(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_arabic_lock = data[tostring(target)]['settings']['lock_arabic']
     if group_arabic_lock == 'yes' then
-        return langs.arabicAlreadyLocked
+        return langs['it'].arabicAlreadyLocked
     else
         data[tostring(target)]['settings']['lock_arabic'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs.arabicLocked
+        return langs['it'].arabicLocked
     end
 end
 
 local function unlock_group_arabic(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_arabic_lock = data[tostring(target)]['settings']['lock_arabic']
     if group_arabic_lock == 'no' then
-        return langs.arabicAlreadyUnlocked
+        return langs['it'].arabicAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_arabic'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.arabicUnlocked
+        return langs['it'].arabicUnlocked
     end
 end
 
 local function lock_group_rtl(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_rtl_lock = data[tostring(target)]['settings']['lock_rtl']
     if group_rtl_lock == 'yes' then
-        return langs.rtlAlreadyLocked
+        return langs['it'].rtlAlreadyLocked
     else
         data[tostring(target)]['settings']['lock_rtl'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs.rtlLocked
+        return langs['it'].rtlLocked
     end
 end
 
 local function unlock_group_rtl(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_rtl_lock = data[tostring(target)]['settings']['lock_rtl']
     if group_rtl_lock == 'no' then
-        return langs.rtlAlreadyUnlocked
+        return langs['it'].rtlAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_rtl'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.rtlUnlocked
+        return langs['it'].rtlUnlocked
     end
 end
 
 local function lock_group_links(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_link_lock = data[tostring(target)]['settings']['lock_link']
     if group_link_lock == 'yes' then
-        return langs.linksAlreadyLocked
+        return langs['it'].linksAlreadyLocked
     else
         data[tostring(target)]['settings']['lock_link'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs.linksLocked
+        return langs['it'].linksLocked
     end
 end
 
 local function unlock_group_links(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_link_lock = data[tostring(target)]['settings']['lock_link']
     if group_link_lock == 'no' then
-        return langs.linksAlreadyUnlocked
+        return langs['it'].linksAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_link'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.linksUnlocked
+        return langs['it'].linksUnlocked
     end
 end
 
 local function lock_group_spam(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_spam_lock = data[tostring(target)]['settings']['lock_spam']
     if group_spam_lock == 'yes' then
-        return langs.spamAlreadyLocked
+        return langs['it'].spamAlreadyLocked
     else
         data[tostring(target)]['settings']['lock_spam'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs.spamLocked
+        return langs['it'].spamLocked
     end
 end
 
 local function unlock_group_spam(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_spam_lock = data[tostring(target)]['settings']['lock_spam']
     if group_spam_lock == 'no' then
-        return langs.spamAlreadyUnlocked
+        return langs['it'].spamAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_spam'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.spamUnlocked
+        return langs['it'].spamUnlocked
     end
 end
 
 local function lock_group_sticker(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_sticker_lock = data[tostring(target)]['settings']['lock_sticker']
     if group_sticker_lock == 'yes' then
-        return langs.stickersAlreadyLocked
+        return langs['it'].stickersAlreadyLocked
     else
         data[tostring(target)]['settings']['lock_sticker'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs.stickersLocked
+        return langs['it'].stickersLocked
     end
 end
 
 local function unlock_group_sticker(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_sticker_lock = data[tostring(target)]['settings']['lock_sticker']
     if group_sticker_lock == 'no' then
-        return langs.stickersAlreadyUnlocked
+        return langs['it'].stickersAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_sticker'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.stickersUnlocked
+        return langs['it'].stickersUnlocked
     end
 end
 
 local function set_public_membermod(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_public_lock = data[tostring(target)]['settings']['public']
     if group_public_lock == 'yes' then
-        return langs.publicAlreadyYes
+        return langs['it'].publicAlreadyYes
     else
         data[tostring(target)]['settings']['public'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs.publicYes
+        return langs['it'].publicYes
     end
 end
 
 local function unset_public_membermod(msg, data, target)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local group_public_lock = data[tostring(target)]['settings']['public']
     if group_public_lock == 'no' then
-        return langs.publicAlreadyNo
+        return langs['it'].publicAlreadyNo
     else
         data[tostring(target)]['settings']['public'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.publicNo
+        return langs['it'].publicNo
     end
 end
 
@@ -397,7 +397,7 @@ end
 local function show_group_settings(msg, data, target)
     local data = load_data(_config.moderation.data, data)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     if data[tostring(target)]['settings'] then
         if not data[tostring(target)]['settings']['public'] then
@@ -405,11 +405,11 @@ local function show_group_settings(msg, data, target)
         end
     end
     local settings = data[tostring(target)]['settings']
-    local text = langs.groupSettings .. target .. ":" ..
-    langs.nameLock .. settings.lock_name ..
-    langs.photoLock .. settings.lock_photo ..
-    langs.membersLock .. settings.lock_member ..
-    langs.public .. settings.public
+    local text = langs['it'].groupSettings .. target .. ":" ..
+    langs['it'].nameLock .. settings.lock_name ..
+    langs['it'].photoLock .. settings.lock_photo ..
+    langs['it'].membersLock .. settings.lock_member ..
+    langs['it'].public .. settings.public
     return text
 end
 
@@ -417,7 +417,7 @@ end
 local function show_super_group_settings(msg, data, target)
     local data = load_data(_config.moderation.data, data)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     if data[tostring(msg.to.id)]['settings'] then
         if not data[tostring(msg.to.id)]['settings']['public'] then
@@ -435,16 +435,16 @@ local function show_super_group_settings(msg, data, target)
         end
     end
     local settings = data[tostring(target)]['settings']
-    local text = langs.supergroupSettings .. target .. ":" ..
-    langs.linksLock .. settings.lock_link ..
-    langs.floodLock .. settings.flood ..
-    langs.spamLock .. settings.lock_spam ..
-    langs.arabic_lock .. settings.lock_arabic ..
-    langs.membersLock .. settings.lock_member ..
-    langs.rtlLock .. settings.lock_rtl ..
-    langs.stickersLock .. settings.lock_sticker ..
-    langs.public .. settings.public ..
-    langs.strictrules .. settings.strict
+    local text = langs['it'].supergroupSettings .. target .. ":" ..
+    langs['it'].linksLock .. settings.lock_link ..
+    langs['it'].floodLock .. settings.flood ..
+    langs['it'].spamLock .. settings.lock_spam ..
+    langs['it'].arabic_lock .. settings.lock_arabic ..
+    langs['it'].membersLock .. settings.lock_member ..
+    langs['it'].rtlLock .. settings.lock_rtl ..
+    langs['it'].stickersLock .. settings.lock_sticker ..
+    langs['it'].public .. settings.public ..
+    langs['it'].strictrules .. settings.strict
     return text
 end
 
@@ -453,7 +453,7 @@ local function returnids(extra, success, result)
     local receiver = extra.receiver
     local chat_id = "chat#id" .. result.peer_id
     local chatname = result.print_name
-    local text = langs.usersIn .. string.gsub(chatname, "_", " ") .. ' ID: ' .. result.peer_id .. '\n\n'
+    local text = langs['it'].usersIn .. string.gsub(chatname, "_", " ") .. ' ID: ' .. result.peer_id .. '\n\n'
     for k, v in pairs(result.members) do
         if v.print_name then
             local username = ""
@@ -469,7 +469,7 @@ end
 
 local function admin_promote(msg, admin_id)
     if not is_sudo(msg) then
-        return langs.require_sudo
+        return langs['it'].require_sudo
     end
     local admins = 'admins'
     if not data[tostring(admins)] then
@@ -477,16 +477,16 @@ local function admin_promote(msg, admin_id)
         save_data(_config.moderation.data, data)
     end
     if data[tostring(admins)][tostring(admin_id)] then
-        return admin_id .. langs.alreadyAdmin
+        return admin_id .. langs['it'].alreadyAdmin
     end
     data[tostring(admins)][tostring(admin_id)] = admin_id
     save_data(_config.moderation.data, data)
-    return admin_id .. langs.promoteAdmin
+    return admin_id .. langs['it'].promoteAdmin
 end
 
 local function admin_demote(msg, admin_id)
     if not is_sudo(msg) then
-        return langs.require_sudo
+        return langs['it'].require_sudo
     end
     local data = load_data(_config.moderation.data)
     local admins = 'admins'
@@ -495,11 +495,11 @@ local function admin_demote(msg, admin_id)
         save_data(_config.moderation.data, data)
     end
     if not data[tostring(admins)][tostring(admin_id)] then
-        return admin_id .. langs.notAdmin
+        return admin_id .. langs['it'].notAdmin
     end
     data[tostring(admins)][tostring(admin_id)] = nil
     save_data(_config.moderation.data, data)
-    return admin_id .. langs.demoteAdmin
+    return admin_id .. langs['it'].demoteAdmin
 end
 
 local function admin_list(msg)
@@ -509,7 +509,7 @@ local function admin_list(msg)
         data[tostring(admins)] = { }
         save_data(_config.moderation.data, data)
     end
-    local message = langs.adminListStart
+    local message = langs['it'].adminListStart
     for k, v in pairs(data[tostring(admins)]) do
         message = message .. '@' .. v .. ' - ' .. k .. '\n'
     end
@@ -520,9 +520,9 @@ local function groups_list(msg)
     local data = load_data(_config.moderation.data)
     local groups = 'groups'
     if not data[tostring(groups)] then
-        return langs.noGroups
+        return langs['it'].noGroups
     end
-    local message = langs.groupListStart
+    local message = langs['it'].groupListStart
     for k, v in pairs(data[tostring(groups)]) do
         if data[tostring(v)] then
             if data[tostring(v)]['settings'] then
@@ -554,9 +554,9 @@ local function realms_list(msg)
     local data = load_data(_config.moderation.data)
     local realms = 'realms'
     if not data[tostring(realms)] then
-        return langs.noRealms
+        return langs['it'].noRealms
     end
-    local message = langs.realmListStart
+    local message = langs['it'].realmListStart
     for k, v in pairs(data[tostring(realms)]) do
         local settings = data[tostring(v)]['settings']
         for m, n in pairs(settings) do
@@ -587,11 +587,11 @@ local function admin_user_promote(receiver, member_username, member_id)
         save_data(_config.moderation.data, data)
     end
     if data['admins'][tostring(member_id)] then
-        return send_large_msg(receiver, '@' .. member_username .. langs.alreadyAdmin)
+        return send_large_msg(receiver, '@' .. member_username .. langs['it'].alreadyAdmin)
     end
     data['admins'][tostring(member_id)] = member_username
     save_data(_config.moderation.data, data)
-    return send_large_msg(receiver, '@' .. member_username .. langs.promoteAdmin)
+    return send_large_msg(receiver, '@' .. member_username .. langs['it'].promoteAdmin)
 end
 
 local function admin_user_demote(receiver, member_username, member_id)
@@ -601,19 +601,19 @@ local function admin_user_demote(receiver, member_username, member_id)
         save_data(_config.moderation.data, data)
     end
     if not data['admins'][tostring(member_id)] then
-        send_large_msg(receiver, "@" .. member_username .. langs.notAdmin)
+        send_large_msg(receiver, "@" .. member_username .. langs['it'].notAdmin)
         return
     end
     data['admins'][tostring(member_id)] = nil
     save_data(_config.moderation.data, data)
-    send_large_msg(receiver, '@' .. member_username .. langs.demoteAdmin)
+    send_large_msg(receiver, '@' .. member_username .. langs['it'].demoteAdmin)
 end
 
 local function username_id(extra, success, result)
     local mod_cmd = extra.mod_cmd
     local receiver = extra.receiver
     local member = extra.member
-    local text = langs.none .. '@' .. member .. langs.inGroup
+    local text = langs['it'].none .. '@' .. member .. langs['it'].inGroup
     for k, v in pairs(result.members) do
         vusername = v.username
         if vusername == member then
@@ -635,38 +635,38 @@ local function res_user_support(extra, success, result)
     local support_id = result.peer_id
     if get_cmd == 'addsupport' then
         support_add(support_id)
-        send_large_msg(receiver, support_id .. langs.supportAdded)
+        send_large_msg(receiver, support_id .. langs['it'].supportAdded)
     elseif get_cmd == 'removesupport' then
         support_remove(support_id)
-        send_large_msg(receiver, support_id .. langs.supportRemoved)
+        send_large_msg(receiver, support_id .. langs['it'].supportRemoved)
     end
 end
 
 local function set_log_group(target, data)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local log_group = data[tostring(target)]['log_group']
     if log_group == 'yes' then
-        return langs.logAlreadyYes
+        return langs['it'].logAlreadyYes
     else
         data[tostring(target)]['log_group'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs.logYes
+        return langs['it'].logYes
     end
 end
 
 local function unset_log_group(msg)
     if not is_admin1(msg) then
-        return langs.require_admin
+        return langs['it'].require_admin
     end
     local log_group = data[tostring(target)]['log_group']
     if log_group == 'no' then
-        return langs.logAlreadyNo
+        return langs['it'].logAlreadyNo
     else
         data[tostring(target)]['log_group'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs.logNo
+        return langs['it'].logNo
     end
 end
 
@@ -703,7 +703,7 @@ function run(msg, matches)
     --[[ Experimental
 	if matches[1]:lower() == 'createsuper' or matches[1]:lower() == 'sasha crea supergruppo' and matches[2] then
 	if not is_sudo(msg) then
-        return langs.require_sudo
+        return langs['it'].require_sudo
 	end
         group_name = matches[2]
         group_type = 'super_group'
@@ -712,7 +712,7 @@ function run(msg, matches)
 
     if (matches[1]:lower() == 'createrealm' or matches[1]:lower() == 'sasha crea regno') and matches[2] then
         if not is_sudo(msg) then
-            return langs.require_sudo
+            return langs['it'].require_sudo
         end
         group_name = matches[2]
         group_type = 'realm'
@@ -734,7 +734,7 @@ function run(msg, matches)
         channel_set_about(channel, about_text, ok_cb, false)
         data[tostring(target)][data_cat] = about_text
         save_data(_config.moderation.data, data)
-        return langs.descriptionSet .. matches[2]
+        return langs['it'].descriptionSet .. matches[2]
     end
     if matches[1]:lower() == 'setrules' or matches[1]:lower() == 'sasha imposta regole' then
         rules = matches[3]
@@ -860,7 +860,7 @@ function run(msg, matches)
             chat_info(receiver, killchat, false)
             return modrem(msg)
         else
-            return langs.errorGroup .. matches[3] .. langs.notFound
+            return langs['it'].errorGroup .. matches[3] .. langs['it'].notFound
         end
     end
     if matches[1]:lower() == 'kill' and matches[2]:lower() == 'supergroup' and matches[3] then
@@ -873,7 +873,7 @@ function run(msg, matches)
             channel_get_users(receiver, killchannel, { chat_id = matches[3] })
             return modrem(msg)
         else
-            return langs.errorGroup .. matches[3] .. langs.notFound
+            return langs['it'].errorGroup .. matches[3] .. langs['it'].notFound
         end
     end
     if matches[1]:lower() == 'kill' and matches[2]:lower() == 'realm' and matches[3] then
@@ -886,7 +886,7 @@ function run(msg, matches)
             chat_info(receiver, killrealm, false)
             return realmrem(msg)
         else
-            return langs.errorRealm .. matches[3] .. langs.notFound
+            return langs['it'].errorRealm .. matches[3] .. langs['it'].notFound
         end
     end
     if matches[1]:lower() == 'rem' and matches[2] then
@@ -900,7 +900,7 @@ function run(msg, matches)
         end
         data[tostring(groups)][tostring(matches[2])] = nil
         save_data(_config.moderation.data, data)
-        send_large_msg(receiver, langs.chat .. matches[2] .. langs.removed)
+        send_large_msg(receiver, langs['it'].chat .. matches[2] .. langs['it'].removed)
     end
 
     if matches[1] == 'chat_add_user' then
@@ -948,7 +948,7 @@ function run(msg, matches)
             local support_id = matches[2]
             print("User " .. support_id .. " has been added to the support team")
             support_add(support_id)
-            return support_id .. langs.supportAdded
+            return support_id .. langs['it'].supportAdded
         else
             local member = string.gsub(matches[2], "@", "")
             local receiver = get_receiver(msg)
@@ -961,7 +961,7 @@ function run(msg, matches)
             local support_id = matches[2]
             print("User " .. support_id .. " has been removed from the support team")
             support_remove(support_id)
-            return support_id .. langs.supportRemoved
+            return support_id .. langs['it'].supportRemoved
         else
             local member = string.gsub(matches[2], "@", "")
             local receiver = get_receiver(msg)
@@ -993,7 +993,7 @@ function run(msg, matches)
             send_document("user#id" .. msg.from.id, "./groups/lists/groups.txt", ok_cb, false)
             -- group_list(msg)
         end
-        return langs.groupListCreated
+        return langs['it'].groupListCreated
     end
     if matches[1]:lower() == 'list' and matches[2]:lower() == 'realms' then
         if msg.to.type == 'chat' or msg.to.type == 'channel' then
@@ -1006,7 +1006,7 @@ function run(msg, matches)
             send_document("user#id" .. msg.from.id, "./groups/lists/realms.txt", ok_cb, false)
             -- realms_list(msg)
         end
-        return langs.realmListCreated
+        return langs['it'].realmListCreated
     end
 end
 

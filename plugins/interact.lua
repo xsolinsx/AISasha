@@ -61,7 +61,7 @@ local tiamo = {
 local function run(msg, matches)
     if (matches[1]:lower() == 'echo' or matches[1]:lower() == 'sasha ripeti') and matches[2] then
         if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-            return langs.autoexecDenial
+            return langs['it'].autoexecDenial
         end
         if is_momod(msg) then
             if type(msg.reply_id) ~= "nil" then
@@ -70,7 +70,7 @@ local function run(msg, matches)
                 return matches[2]
             end
         else
-            return langs.require_mod
+            return langs['it'].require_mod
         end
     end
     -- interact

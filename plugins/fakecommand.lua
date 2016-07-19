@@ -16,10 +16,10 @@ local function run(msg, matches)
             match_plugins(msg)
         else
             -- no
-            return langs.fakecommandYouTried
+            return langs['it'].fakecommandYouTried
         end
     else
-        return langs.require_mod
+        return langs['it'].require_mod
     end
 end
 

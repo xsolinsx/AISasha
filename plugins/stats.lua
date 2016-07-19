@@ -49,7 +49,7 @@ local function callback_group_members(extra, success, result)
         end
     end )
 
-    local text = langs.usersInChat .. langs.totalChatMessages .. chattotal .. '\n'
+    local text = langs['it'].usersInChat .. langs['it'].totalChatMessages .. chattotal .. '\n'
     for kuser, user in pairs(users_info) do
         text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
@@ -84,7 +84,7 @@ local function chat_stats(chat_id)
             return a.msgs > b.msgs
         end
     end )
-    local text = langs.usersInChat .. langs.totalChatMessages .. chattotal .. '\n'
+    local text = langs['it'].usersInChat .. langs['it'].totalChatMessages .. chattotal .. '\n'
     for k, user in pairs(users_info) do
         text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
@@ -126,7 +126,7 @@ local function chat_stats2(chat_id)
         end
     end )
 
-    local text = langs.usersInChat .. langs.totalChatMessages .. chattotal .. '\n'
+    local text = langs['it'].usersInChat .. langs['it'].totalChatMessages .. chattotal .. '\n'
     for k, user in pairs(users_info) do
         text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
@@ -165,7 +165,7 @@ local function callback_supergroup_members(extra, success, result)
             table.insert(users_info, user_info)
         end
     end
-    local text = langs.usersInChat .. langs.totalChatMessages .. chattotal .. '\n'
+    local text = langs['it'].usersInChat .. langs['it'].totalChatMessages .. chattotal .. '\n'
 
     -- Sort users by msgs number
     table.sort(users_info, function(a, b)
@@ -208,7 +208,7 @@ local function channel_stats(chat_id)
             return a.msgs > b.msgs
         end
     end )
-    local text = langs.usersInChat .. langs.totalChatMessages .. chattotal .. '\n'
+    local text = langs['it'].usersInChat .. langs['it'].totalChatMessages .. chattotal .. '\n'
     for k, user in pairs(users_info) do
         text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
@@ -250,7 +250,7 @@ local function channel_stats2(chat_id)
         end
     end )
 
-    local text = langs.usersInChat .. langs.totalChatMessages .. chattotal .. '\n'
+    local text = langs['it'].usersInChat .. langs['it'].totalChatMessages .. chattotal .. '\n'
     for k, user in pairs(users_info) do
         text = text .. user.name .. ' = ' .. user.msgs .. ' (' .. user.percentage .. '%)\n'
     end
@@ -271,11 +271,11 @@ local function bot_stats()
     -- Users
     local hash = 'msgs:*:' .. our_id
     local r = redis:eval(redis_scan, 1, hash)
-    local text = langs.users .. r
+    local text = langs['it'].users .. r
 
     hash = 'chat:*:users'
     r = redis:eval(redis_scan, 1, hash)
-    text = text .. langs.groups .. r
+    text = text .. langs['it'].groups .. r
     return text
 end
 
@@ -300,20 +300,20 @@ local function run(msg, matches)
                     return
                 end
             else
-                return langs.require_mod
+                return langs['it'].require_mod
             end
         elseif matches[2]:lower() == "aisasha" then
             if is_admin1(msg) then
                 return bot_stats()
             else
-                return langs.require_admin
+                return langs['it'].require_admin
             end
         elseif matches[2]:lower() == "group" then
             if is_admin1(msg) then
                 send_large_msg(get_receiver(msg), chat_stats2(matches[3]))
                 send_large_msg(get_receiver(msg), channel_stats2(matches[3]))
             else
-                return langs.require_admin
+                return langs['it'].require_admin
             end
         end
         return
@@ -331,7 +331,7 @@ local function run(msg, matches)
                 end
                 send_document(get_receiver(msg), "./groups/lists/" .. msg.to.id .. "stats.txt", ok_cb, false)
             else
-                return langs.require_mod
+                return langs['it'].require_mod
             end
         elseif matches[2]:lower() == "group" then
             if is_admin1(msg) then
@@ -339,7 +339,7 @@ local function run(msg, matches)
                 channel_stats(matches[3])
                 send_document(get_receiver(msg), "./groups/lists/" .. matches[3] .. "stats.txt", ok_cb, false)
             else
-                return langs.require_admin
+                return langs['it'].require_admin
             end
         end
         return
@@ -356,14 +356,14 @@ local function run(msg, matches)
                     return
                 end
             else
-                return langs.require_mod
+                return langs['it'].require_mod
             end
         elseif matches[2]:lower() == "group" then
             if is_admin1(msg) then
                 chat_info('chat#id' .. matches[3], callback_group_members, { receiver = get_receiver(msg), chat_id = matches[3] })
                 channel_get_users('channel#id' .. matches[3], callback_supergroup_members, { receiver = get_receiver(msg), chat_id = matches[3] })
             else
-                return langs.require_admin
+                return langs['it'].require_admin
             end
         end
         return
@@ -373,24 +373,24 @@ local function run(msg, matches)
                 if msg.to.type == 'chat' then
                     savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] cleaned real group stats ")
                     clean_chat_stats(msg.to.id)
-                    return langs.statsCleaned
+                    return langs['it'].statsCleaned
                 elseif msg.to.type == 'channel' then
                     savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] cleaned real supergroup stats ")
                     clean_channel_stats(msg.to.id)
-                    return langs.statsCleaned
+                    return langs['it'].statsCleaned
                 else
                     return
                 end
             else
-                return langs.require_mod
+                return langs['it'].require_mod
             end
         elseif matches[2]:lower() == "group" then
             if is_admin1(msg) then
                 clean_chat_stats(matches[3])
                 clean_channel_stats(matches[3])
-                return langs.statsCleaned
+                return langs['it'].statsCleaned
             else
-                return langs.require_admin
+                return langs['it'].require_admin
             end
         end
         return

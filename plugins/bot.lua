@@ -15,10 +15,10 @@ local function run(msg, matches)
                 disable_channel(get_receiver(msg), matches[1])
             end
         else
-            return langs.require_admin
+            return langs['it'].require_admin
         end
     else
-        return langs.require_owner
+        return langs['it'].require_owner
     end
 end
 

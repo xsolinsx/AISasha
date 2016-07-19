@@ -17,13 +17,13 @@
 
     local jstr, res = https.request(url)
     if res ~= 200 then
-        return langs.opsError
+        return langs['it'].opsError
     end
 
     local jdat = json:decode(jstr)
 
     if jdat.error then
-        return langs.opsError
+        return langs['it'].opsError
     end
 
     local img_url = jdat.url

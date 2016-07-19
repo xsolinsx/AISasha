@@ -36,7 +36,7 @@ local function run(msg, matches)
             end
         end
     else
-        return langs.require_owner
+        return langs['it'].require_owner
     end
 end
 

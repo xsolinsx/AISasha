@@ -14,10 +14,10 @@
     local is_whitelisted = redis:sismember(hash, user_id)
     if is_whitelisted then
         redis:srem(hash, user_id)
-        send_large_msg(receiver, langs.userBot .. user_id .. langs.whitelistRemoved)
+        send_large_msg(receiver, langs['it'].userBot .. user_id .. langs['it'].whitelistRemoved)
     else
         redis:sadd(hash, user_id)
-        send_large_msg(receiver, langs.userBot .. user_id .. langs.whitelistAdded)
+        send_large_msg(receiver, langs['it'].userBot .. user_id .. langs['it'].whitelistAdded)
     end
 end
 
@@ -28,10 +28,10 @@ local function whitelist_res(extra, success, result)
     local is_whitelisted = redis:sismember(hash, user_id)
     if is_whitelisted then
         redis:srem(hash, user_id)
-        send_large_msg(receiver, langs.userBot .. user_id .. langs.whitelistRemoved)
+        send_large_msg(receiver, langs['it'].userBot .. user_id .. langs['it'].whitelistRemoved)
     else
         redis:sadd(hash, user_id)
-        send_large_msg(receiver, langs.userBot .. user_id .. langs.whitelistAdded)
+        send_large_msg(receiver, langs['it'].userBot .. user_id .. langs['it'].whitelistAdded)
     end
 end
 
@@ -47,10 +47,10 @@ local function run(msg, matches)
             local is_whitelisted = redis:sismember(hash, user_id)
             if is_whitelisted then
                 redis:srem(hash, user_id)
-                return langs.userBot .. user_id .. langs.whitelistRemoved
+                return langs['it'].userBot .. user_id .. langs['it'].whitelistRemoved
             else
                 redis:sadd(hash, user_id)
-                return langs.userBot .. user_id .. langs.whitelistAdded
+                return langs['it'].userBot .. user_id .. langs['it'].whitelistAdded
             end
         else
             local receiver = get_receiver(msg)
@@ -63,7 +63,7 @@ local function run(msg, matches)
     if matches[1]:lower() == "clean whitelist" and is_admin1(msg) then
         local hash = 'whitelist'
         redis:del(hash)
-        return langs.whitelistCleaned
+        return langs['it'].whitelistCleaned
     end
 end
 

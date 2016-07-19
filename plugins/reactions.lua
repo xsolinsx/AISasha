@@ -7,7 +7,7 @@ local function run(msg, matches)
             redis:del('writing')
         end
     else
-        return langs.require_sudo
+        return langs['it'].require_sudo
     end
 end
 

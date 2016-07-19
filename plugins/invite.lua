@@ -1,6 +1,6 @@
 ﻿local function invite_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, langs.noUsernameFound)
+        return send_large_msg(extra.receiver, langs['it'].noUsernameFound)
     end
     chat_add_user(extra.receiver, 'user#id' .. result.peer_id, ok_cb, false)
     channel_invite(extra.receiver, 'user#id' .. result.peer_id, ok_cb, false)
@@ -23,7 +23,7 @@ local function run(msg, matches)
         local receiver = get_receiver(msg)
         if not is_realm(msg) then
             if data[tostring(msg.to.id)]['settings']['lock_member'] == 'yes' and not is_admin1(msg) then
-                return langs.privateGroup
+                return langs['it'].privateGroup
             end
         end
         if msg.to.type == 'chat' or msg.to.type == 'channel' then
@@ -45,11 +45,11 @@ local function run(msg, matches)
                 resolve_username(matches[2]:gsub('@', ''), invite_by_username, { receiver = receiver })
             end
         else
-            return langs.useYourGroups
+            return langs['it'].useYourGroups
         end
     else
-        -- return langs.require_owner
-        return langs.require_admin
+        -- return langs['it'].require_owner
+        return langs['it'].require_admin
     end
 end
 

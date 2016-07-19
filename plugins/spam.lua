@@ -15,7 +15,7 @@ local function run(msg, matches)
             end
         end
     else
-        return langs.require_owner
+        return langs['it'].require_owner
     end
 end
 
@@ -42,13 +42,13 @@ local function run(msg, matches)
         if matches[2] then
             if matches[1]:lower() == 'setspam' then
                 text = matches[2]
-                return langs.msgSet
+                return langs['it'].msgSet
             elseif matches[1]:lower() == 'setmsgs' and tonumber(matches[2]) then
                 num_msg = tonumber(matches[2])
-                return langs.msgsToSend .. tostring(num_msg)
+                return langs['it'].msgsToSend .. tostring(num_msg)
             elseif matches[1]:lower() == 'setwait' and tonumber(matches[2]) then
                 time_msg = tonumber(matches[2])
-                return string.gsub(langs.timeBetweenMsgs, 'X', tostring(time_msg))
+                return string.gsub(langs['it'].timeBetweenMsgs, 'X', tostring(time_msg))
             end
         elseif matches[1]:lower() == 'spam' or matches[1]:lower() == 'sasha spamma' or matches[1]:lower() == 'spamma' then
             local i = 0
@@ -75,11 +75,11 @@ local function run(msg, matches)
                     end
                 end
             else
-                return langs.msgNotSet
+                return langs['it'].msgNotSet
             end
         end
     else
-        return langs.require_owner
+        return langs['it'].require_owner
     end
 end
 

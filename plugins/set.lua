@@ -17,29 +17,29 @@ end
 
 local function set_value(msg, name, value, global)
     if (not name or not value) then
-        return langs.errorTryAgain
+        return langs['it'].errorTryAgain
     end
 
     local hash = get_variables_hash(msg, global)
     if hash then
         redis:hset(hash, name, value)
         if global then
-            return name .. langs.gSaved
+            return name .. langs['it'].gSaved
         else
-            return name .. langs.saved
+            return name .. langs['it'].saved
         end
     end
 end
 
 local function set_media(msg, name)
     if not name then
-        return langs.errorTryAgain
+        return langs['it'].errorTryAgain
     end
 
     local hash = get_variables_hash(msg)
     if hash then
         redis:hset(hash, 'waiting', name)
-        return langs.sendMedia
+        return langs['it'].sendMedia
     end
 end
 
@@ -58,9 +58,9 @@ local function callback(extra, success, result)
         redis:hset(extra.hash, extra.name, file)
         redis:hdel(extra.hash, 'waiting')
         print(file)
-        send_large_msg(extra.receiver, langs.mediaSaved)
+        send_large_msg(extra.receiver, langs['it'].mediaSaved)
     else
-        send_large_msg(extra.receiver, langs.errorDownloading .. extra.hash .. ' - ' .. extra.name .. ' - ' .. extra.receiver)
+        send_large_msg(extra.receiver, langs['it'].errorDownloading .. extra.hash .. ' - ' .. extra.name .. ' - ' .. extra.receiver)
     end
 end
 
@@ -77,49 +77,49 @@ local function run(msg, matches)
                         return load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
                     end
                 else
-                    return langs.require_mod
+                    return langs['it'].require_mod
                 end
             end
             return
         else
-            return langs.nothingToSet
+            return langs['it'].nothingToSet
         end
     end
     if matches[1]:lower() == 'cancel' or matches[1]:lower() == 'sasha annulla' or matches[1]:lower() == 'annulla' then
         if is_momod(msg) then
             redis:hdel(hash, 'waiting')
-            return langs.cancelled
+            return langs['it'].cancelled
         else
-            return langs.require_mod
+            return langs['it'].require_mod
         end
     elseif matches[1]:lower() == 'setmedia' or matches[1]:lower() == 'sasha setta media' or matches[1]:lower() == 'setta media' then
         if is_momod(msg) then
             local name = string.sub(matches[2]:lower(), 1, 50)
             return set_media(msg, name)
         else
-            return langs.require_mod
+            return langs['it'].require_mod
         end
     elseif matches[1]:lower() == 'set' or matches[1]:lower() == 'sasha setta' or matches[1]:lower() == 'setta' then
         if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-            return langs.autoexecDenial
+            return langs['it'].autoexecDenial
         end
         if is_momod(msg) then
             local name = string.sub(matches[2]:lower(), 1, 50)
             local value = string.sub(matches[3], 1, 4096)
             return set_value(msg, name, value, false)
         else
-            return langs.require_mod
+            return langs['it'].require_mod
         end
     elseif matches[1]:lower() == 'setglobal' then
         if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-            return langs.autoexecDenial
+            return langs['it'].autoexecDenial
         end
         if is_admin1(msg) then
             local name = string.sub(matches[2]:lower(), 1, 50)
             local value = string.sub(matches[3], 1, 4096)
             return set_value(msg, name, value, true)
         else
-            return langs.require_admin
+            return langs['it'].require_admin
         end
     end
 end

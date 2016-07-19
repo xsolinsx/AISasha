@@ -43,7 +43,7 @@ local function run(msg, matches)
                 if is_admin1(msg) then
                     size = matches[2]
                 else
-                    return langs.require_admin
+                    return langs['it'].require_admin
                 end
             else
                 size = matches[2]
@@ -56,7 +56,7 @@ local function run(msg, matches)
             send_photo_from_url(receiver, imgurl)
         end
     else
-        return langs.require_mod
+        return langs['it'].require_mod
     end
 end
 

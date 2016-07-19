@@ -78,8 +78,8 @@ local function start_challenge(challenger_id, challenged_id, challenger, challen
     local chat = 'chat#id' .. chat_id
 
     if get_challenge(chat_id) and tonumber(get_challenge(chat_id)[3]) == 1 then
-        send_large_msg(chat, langs.errorOngoingChallenge)
-        send_large_msg(channel, langs.errorOngoingChallenge)
+        send_large_msg(chat, langs['it'].errorOngoingChallenge)
+        send_large_msg(channel, langs['it'].errorOngoingChallenge)
     else
         redis:set('ruleta:' .. chat_id .. ':challenger', challenger_id)
         redis:set('ruleta:' .. chat_id .. ':challenged', challenged_id)
@@ -88,8 +88,8 @@ local function start_challenge(challenger_id, challenged_id, challenger, challen
         redis:set('ruletachallenge:' .. chat_id .. ':player', challenger_id)
         redis:set('ruletachallenger:' .. chat_id, challenger)
         redis:set('ruletachallenged:' .. chat_id, challenged)
-        send_large_msg(chat, langs.challengeSet:gsub('X', challenged))
-        send_large_msg(channel, langs.challengeSet:gsub('X', challenged))
+        send_large_msg(chat, langs['it'].challengeSet:gsub('X', challenged))
+        send_large_msg(channel, langs['it'].challengeSet:gsub('X', challenged))
     end
 end
 
@@ -119,11 +119,11 @@ end
 local function Challenge_by_reply(extra, success, result)
     if tonumber(result.from.peer_id) == tonumber(our_id) then
         -- Ignore bot
-        reply_msg(extra.msg.id, langs.cantChallengeMe, ok_cb, false)
+        reply_msg(extra.msg.id, langs['it'].cantChallengeMe, ok_cb, false)
         return
     end
     if tonumber(extra.challenger) == tonumber(result.from.peer_id) then
-        reply_msg(extra.msg.id, langs.cantChallengeYourself, ok_cb, false)
+        reply_msg(extra.msg.id, langs['it'].cantChallengeYourself, ok_cb, false)
         return
     end
     local challenger = ''
@@ -143,15 +143,15 @@ end
 
 local function Challenge_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, langs.noUsernameFound)
+        return send_large_msg(extra.receiver, langs['it'].noUsernameFound)
     end
     if tonumber(result.peer_id) == tonumber(our_id) then
         -- Ignore bot
-        reply_msg(extra.msg.id, langs.cantChallengeMe, ok_cb, false)
+        reply_msg(extra.msg.id, langs['it'].cantChallengeMe, ok_cb, false)
         return
     end
     if tonumber(extra.msg.from.id) == tonumber(result.peer_id) then
-        reply_msg(extra.msg.id, langs.cantChallengeYourself, ok_cb, false)
+        reply_msg(extra.msg.id, langs['it'].cantChallengeYourself, ok_cb, false)
         return
     end
     local challenger = ''
@@ -200,7 +200,7 @@ local function leaderboards(users, lbtype)
             elseif lbtype == 'defeats' then
                 user_info.param = tonumber(user.lostduels)
             else
-                return langs.opsError
+                return langs['it'].opsError
             end
             table.insert(users_info, user_info)
         end
@@ -215,19 +215,19 @@ local function leaderboards(users, lbtype)
 
     local text = ''
     if lbtype == 'score' then
-        text = langs.scoreLeaderboard
+        text = langs['it'].scoreLeaderboard
     elseif lbtype == 'attempts' then
-        text = langs.attemptsLeaderboard
+        text = langs['it'].attemptsLeaderboard
     elseif lbtype == 'deaths' then
-        text = langs.deathsLeaderboard
+        text = langs['it'].deathsLeaderboard
     elseif lbtype == 'streak' then
-        text = langs.streakLeaderboard
+        text = langs['it'].streakLeaderboard
     elseif lbtype == 'challenges' then
-        text = langs.duelsLeaderboard
+        text = langs['it'].duelsLeaderboard
     elseif lbtype == 'victories' then
-        text = langs.victoriesLeaderboard
+        text = langs['it'].victoriesLeaderboard
     elseif lbtype == 'defeats' then
-        text = langs.defeatsLeaderboard
+        text = langs['it'].defeatsLeaderboard
     end
     local i = 0
     for k, user in pairs(users_info) do
@@ -248,9 +248,9 @@ local function run(msg, matches)
                 local f = io.open(_config.ruleta.db, 'w+')
                 f:write('{"groups":{},"users":{},"challenges":{}}')
                 f:close()
-                reply_msg(msg.id, langs.ruletadbCreated, ok_cb, false)
+                reply_msg(msg.id, langs['it'].ruletadbCreated, ok_cb, false)
             else
-                return langs.require_sudo
+                return langs['it'].require_sudo
             end
             return
         end
@@ -262,7 +262,7 @@ local function run(msg, matches)
         if matches[1]:lower() == 'registergroupruleta' or matches[1]:lower() == 'registra gruppo ruleta' then
             if is_admin1(msg) then
                 if ruletadata['groups'][chat] then
-                    reply_msg(msg.id, langs.groupAlreadySignedUp, ok_cb, false)
+                    reply_msg(msg.id, langs['it'].groupAlreadySignedUp, ok_cb, false)
                 else
                     ruletadata['groups'][chat] = {
                         cylinder = tonumber(6),
@@ -271,10 +271,10 @@ local function run(msg, matches)
                         challengecaps = tonumber(1),
                     }
                     save_data(_config.ruleta.db, ruletadata)
-                    reply_msg(msg.id, langs.groupSignedUp, ok_cb, false)
+                    reply_msg(msg.id, langs['it'].groupSignedUp, ok_cb, false)
                 end
             else
-                return langs.require_admin
+                return langs['it'].require_admin
             end
             return
         end
@@ -282,7 +282,7 @@ local function run(msg, matches)
         local groupstats = ruletadata['groups'][chat]
 
         if not groupstats then
-            -- reply_msg(msg.id, langs.requireGroupSignUp, ok_cb, false)
+            -- reply_msg(msg.id, langs['it'].requireGroupSignUp, ok_cb, false)
             print('group not registered')
             return
         end
@@ -291,9 +291,9 @@ local function run(msg, matches)
             if is_admin1(msg) then
                 ruletadata['groups'][chat] = false
                 save_data(_config.ruleta.db, ruletadata)
-                reply_msg(msg.id, langs.ruletaGroupDeleted, ok_cb, false)
+                reply_msg(msg.id, langs['it'].ruletaGroupDeleted, ok_cb, false)
             else
-                return langs.require_admin
+                return langs['it'].require_admin
             end
             return
         end
@@ -321,7 +321,7 @@ local function run(msg, matches)
 
         if matches[1]:lower() == 'registerme' or matches[1]:lower() == 'registrami' then
             if ruletadata['users'][user] then
-                reply_msg(msg.id, langs.ruletaAlreadySignedUp, ok_cb, false)
+                reply_msg(msg.id, langs['it'].ruletaAlreadySignedUp, ok_cb, false)
             else
                 ruletadata['users'][user] = {
                     attempts = tonumber(0),
@@ -334,7 +334,7 @@ local function run(msg, matches)
                     longeststreak = tonumber(0),
                 }
                 save_data(_config.ruleta.db, ruletadata)
-                reply_msg(msg.id, langs.ruletaSignedUp, ok_cb, false)
+                reply_msg(msg.id, langs['it'].ruletaSignedUp, ok_cb, false)
             end
             return
         end
@@ -343,11 +343,11 @@ local function run(msg, matches)
             local percentage =(groupstats.caps * 100) / groupstats.cylinder
             percentage = string.format('%d', percentage)
 
-            local info = langs.cylinderCapacity .. groupstats.cylinder .. '\n' ..
-            langs.capsNumber .. groupstats.caps .. '\n' ..
-            langs.deathPercentage .. percentage .. '%\n' ..
-            langs.challengeCylinderCapacity .. groupstats.challengecylinder .. '\n' ..
-            langs.challengeCapsNumber .. groupstats.challengecaps .. '\n'
+            local info = langs['it'].cylinderCapacity .. groupstats.cylinder .. '\n' ..
+            langs['it'].capsNumber .. groupstats.caps .. '\n' ..
+            langs['it'].deathPercentage .. percentage .. '%\n' ..
+            langs['it'].challengeCylinderCapacity .. groupstats.challengecylinder .. '\n' ..
+            langs['it'].challengeCapsNumber .. groupstats.challengecaps .. '\n'
             return info
         end
 
@@ -356,12 +356,12 @@ local function run(msg, matches)
                 if tonumber(matches[2]) > 0 and tonumber(matches[2]) < groupstats.cylinder then
                     ruletadata['groups'][chat].caps = matches[2]
                     save_data(_config.ruleta.db, ruletadata)
-                    reply_msg(msg.id, langs.capsChanged .. tonumber(matches[2]), ok_cb, false)
+                    reply_msg(msg.id, langs['it'].capsChanged .. tonumber(matches[2]), ok_cb, false)
                 else
-                    reply_msg(msg.id, langs.errorCapsRange:gsub('X', groupstats.cylinder - 1), ok_cb, false)
+                    reply_msg(msg.id, langs['it'].errorCapsRange:gsub('X', groupstats.cylinder - 1), ok_cb, false)
                 end
             else
-                return langs.require_mod
+                return langs['it'].require_mod
             end
             return
         end
@@ -371,12 +371,12 @@ local function run(msg, matches)
                 if tonumber(matches[2]) > 0 and tonumber(matches[2]) < groupstats.challengecylinder then
                     ruletadata['groups'][chat].challengecaps = tonumber(matches[2])
                     save_data(_config.ruleta.db, ruletadata)
-                    reply_msg(msg.id, langs.challengeCapsChanged .. matches[2], ok_cb, false)
+                    reply_msg(msg.id, langs['it'].challengeCapsChanged .. matches[2], ok_cb, false)
                 else
-                    reply_msg(msg.id, langs.errorCapsRange:gsub('X', groupstats.challengecylinder - 1), ok_cb, false)
+                    reply_msg(msg.id, langs['it'].errorCapsRange:gsub('X', groupstats.challengecylinder - 1), ok_cb, false)
                 end
             else
-                return langs.require_mod
+                return langs['it'].require_mod
             end
             return
         end
@@ -386,12 +386,12 @@ local function run(msg, matches)
                 if tonumber(matches[2]) >= 5 and tonumber(matches[2]) <= 10 then
                     ruletadata['groups'][chat].cylinder = tonumber(matches[2])
                     save_data(_config.ruleta.db, ruletadata)
-                    reply_msg(msg.id, langs.cylinderChanged .. matches[2], ok_cb, false)
+                    reply_msg(msg.id, langs['it'].cylinderChanged .. matches[2], ok_cb, false)
                 else
-                    reply_msg(msg.id, langs.errorCylinderRange, ok_cb, false)
+                    reply_msg(msg.id, langs['it'].errorCylinderRange, ok_cb, false)
                 end
             else
-                return langs.require_owner
+                return langs['it'].require_owner
             end
             return
         end
@@ -401,12 +401,12 @@ local function run(msg, matches)
                 if tonumber(matches[2]) >= 5 and tonumber(matches[2]) <= 10 then
                     ruletadata['groups'][chat].challengecylinder = tonumber(matches[2])
                     save_data(_config.ruleta.db, ruletadata)
-                    reply_msg(msg.id, langs.challengeCylinderChanged .. matches[2], ok_cb, false)
+                    reply_msg(msg.id, langs['it'].challengeCylinderChanged .. matches[2], ok_cb, false)
                 else
-                    reply_msg(msg.id, langs.errorCylinderRange, ok_cb, false)
+                    reply_msg(msg.id, langs['it'].errorCylinderRange, ok_cb, false)
                 end
             else
-                return langs.require_owner
+                return langs['it'].require_owner
             end
             return
         end
@@ -414,7 +414,7 @@ local function run(msg, matches)
         local userstats = ruletadata['users'][user]
 
         if not userstats then
-            reply_msg(msg.id, langs.ruletaRequireSignUp, ok_cb, false)
+            reply_msg(msg.id, langs['it'].ruletaRequireSignUp, ok_cb, false)
             return
         end
 
@@ -422,22 +422,22 @@ local function run(msg, matches)
             if userstats.score >= 0 then
                 ruletadata['users'][user] = false
                 save_data(_config.ruleta.db, ruletadata)
-                reply_msg(msg.id, langs.ruletaDeleted, ok_cb, false)
+                reply_msg(msg.id, langs['it'].ruletaDeleted, ok_cb, false)
             else
-                reply_msg(msg.id, langs.ruletaRequireZeroPoints, ok_cb, false)
+                reply_msg(msg.id, langs['it'].ruletaRequireZeroPoints, ok_cb, false)
             end
             return
         end
 
         if matches[1]:lower() == 'mystats' or matches[1]:lower() == 'punti' then
-            local stats = langs.attempts .. userstats.attempts .. '\n' ..
-            langs.score .. userstats.score .. '\n' ..
-            langs.deaths .. userstats.deaths .. '\n' ..
-            langs.duels .. userstats.duels .. '\n' ..
-            langs.wonduels .. userstats.wonduels .. '\n' ..
-            langs.lostduels .. userstats.lostduels .. '\n' ..
-            langs.actualstreak .. userstats.actualstreak .. '\n' ..
-            langs.longeststreak .. userstats.longeststreak
+            local stats = langs['it'].attempts .. userstats.attempts .. '\n' ..
+            langs['it'].score .. userstats.score .. '\n' ..
+            langs['it'].deaths .. userstats.deaths .. '\n' ..
+            langs['it'].duels .. userstats.duels .. '\n' ..
+            langs['it'].wonduels .. userstats.wonduels .. '\n' ..
+            langs['it'].lostduels .. userstats.lostduels .. '\n' ..
+            langs['it'].actualstreak .. userstats.actualstreak .. '\n' ..
+            langs['it'].longeststreak .. userstats.longeststreak
             reply_msg(msg.id, stats, ok_cb, false)
             return
         end
@@ -465,25 +465,25 @@ local function run(msg, matches)
 
         if matches[1]:lower() == 'challengeinfo' then
             if challenge then
-                local text = langs.challenge .. '\n' ..
-                langs.challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
-                langs.challenged .. redis:get('ruletachallenged:' .. chat) .. '\n'
+                local text = langs['it'].challenge .. '\n' ..
+                langs['it'].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
+                langs['it'].challenged .. redis:get('ruletachallenged:' .. chat) .. '\n'
                 if accepted == 0 then
-                    text = text .. langs.notAccepted .. '\n'
+                    text = text .. langs['it'].notAccepted .. '\n'
                 elseif accepted == 1 then
-                    text = text .. langs.accepted .. '\n'
+                    text = text .. langs['it'].accepted .. '\n'
                 end
-                text = text .. langs.roundsLeft .. rounds
+                text = text .. langs['it'].roundsLeft .. rounds
                 reply_msg(msg.id, text, ok_cb, false)
             else
-                reply_msg(msg.id, langs.noChallenge, ok_cb, false)
+                reply_msg(msg.id, langs['it'].noChallenge, ok_cb, false)
             end
             return
         end
 
         if (matches[1]:lower() == 'accept' or matches[1]:lower() == 'accetta') and challenge and accepted == 0 then
-            local text = langs.challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
-            langs.challenged .. redis:get('ruletachallenged:' .. chat)
+            local text = langs['it'].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
+            langs['it'].challenged .. redis:get('ruletachallenged:' .. chat)
             if redis:get('ruleta:' .. chat .. ':challenged') == user then
                 redis:set('ruleta:' .. chat .. ':accepted', 1)
                 redis:set('ruleta:' .. chat .. ':rounds', groupstats.challengecylinder)
@@ -491,7 +491,7 @@ local function run(msg, matches)
                 ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
                 save_data(_config.ruleta.db, ruletadata)
             else
-                text = langs.wrongPlayer:gsub('X', redis:get('ruletachallenged:' .. chat))
+                text = langs['it'].wrongPlayer:gsub('X', redis:get('ruletachallenged:' .. chat))
             end
             reply_msg(msg.id, text, ok_cb, false)
             return
@@ -500,11 +500,11 @@ local function run(msg, matches)
         if (matches[1]:lower() == 'reject' or matches[1]:lower() == 'rifiuta') and challenge then
             if (user == challenger or user == challenged) then
                 if user == challenged and accepted == 0 then
-                    reply_msg(msg.id, langs.challengeRejected:gsub('X', redis:get('ruletachallenged:' .. chat)), ok_cb, false)
+                    reply_msg(msg.id, langs['it'].challengeRejected:gsub('X', redis:get('ruletachallenged:' .. chat)), ok_cb, false)
                 elseif is_momod(msg) then
-                    reply_msg(msg.id, langs.challengeModTerminated, ok_cb, false)
+                    reply_msg(msg.id, langs['it'].challengeModTerminated, ok_cb, false)
                 elseif accepted == 1 then
-                    reply_msg(msg.id, langs.challengeEnd, ok_cb, false)
+                    reply_msg(msg.id, langs['it'].challengeEnd, ok_cb, false)
                     if user == challenger then
                         if tonumber(ruletadata['users'][challenger].score) -20 < 0 then
                             ruletadata['users'][challenger].score = tonumber(0)
@@ -531,7 +531,7 @@ local function run(msg, matches)
                     postpone(post_kick, false, 1)
                 end
             elseif not is_momod(msg) then
-                reply_msg(msg.id, langs.wrongPlayer:gsub('X', redis:get('ruletachallenged:' .. chat)), ok_cb, false)
+                reply_msg(msg.id, langs['it'].wrongPlayer:gsub('X', redis:get('ruletachallenged:' .. chat)), ok_cb, false)
                 return
             end
             reject_challenge(user, chat)
@@ -541,14 +541,14 @@ local function run(msg, matches)
         if matches[1]:lower() == 'addpoints' and matches[2] and matches[3] and is_sudo(msg) then
             ruletadata['users'][matches[2]].score = tonumber(ruletadata['users'][matches[2]].score + matches[3])
             save_data(_config.ruleta.db, ruletadata)
-            reply_msg(msg.id, langs.cheating, ok_cb, false)
+            reply_msg(msg.id, langs['it'].cheating, ok_cb, false)
             return
         end
 
         if matches[1]:lower() == 'rempoints' and matches[2] and matches[3] and is_sudo(msg) then
             ruletadata['users'][matches[2]].score = tonumber(ruletadata['users'][matches[2]].score - matches[3])
             save_data(_config.ruleta.db, ruletadata)
-            reply_msg(msg.id, langs.cheating, ok_cb, false)
+            reply_msg(msg.id, langs['it'].cheating, ok_cb, false)
             return
         end
 
@@ -557,7 +557,7 @@ local function run(msg, matches)
                 kick_user_any(user, chat)
             end
             postpone(post_kick, false, 1)
-            reply_msg(msg.id, langs.forwardingRuleta, ok_cb, false)
+            reply_msg(msg.id, langs['it'].forwardingRuleta, ok_cb, false)
         else
             if matches[1]:lower() == 'godruleta' then
                 if userstats.score > 10 then
@@ -589,7 +589,7 @@ local function run(msg, matches)
                         save_data(_config.ruleta.db, ruletadata)
                     end
                 else
-                    reply_msg(msg.id, langs.ruletaRequirePoints, ok_cb, false)
+                    reply_msg(msg.id, langs['it'].ruletaRequirePoints, ok_cb, false)
                 end
                 return
             end
@@ -617,7 +617,7 @@ local function run(msg, matches)
                         if math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) == math.random(tonumber(groupstats.challengecaps), tonumber(groupstats.challengecylinder) - temp) then
                             -- bot destroy challenge on redis
                             reject_challenge(our_id, chat)
-                            reply_msg(msg.id, langs.challengeEnd, ok_cb, false)
+                            reply_msg(msg.id, langs['it'].challengeEnd, ok_cb, false)
 
                             ruletadata['users'][user].deaths = tonumber(ruletadata['users'][user].deaths + 1)
                             ruletadata['users'][user].actualstreak = tonumber(0)
@@ -669,14 +669,14 @@ local function run(msg, matches)
                             end
                             local percentage =(groupstats.challengecaps * 100) /(groupstats.challengecylinder - temp - 1)
                             percentage = string.format('%d', percentage)
-                            reply_msg(msg.id, good[math.random(#good)] .. '\n' .. langs.shotsLeft .. notshotted .. shotted .. '\n' .. langs.deathPercentage .. percentage .. '%\n' .. nextplayeruser .. langs.yourTurn, ok_cb, false)
+                            reply_msg(msg.id, good[math.random(#good)] .. '\n' .. langs['it'].shotsLeft .. notshotted .. shotted .. '\n' .. langs['it'].deathPercentage .. percentage .. '%\n' .. nextplayeruser .. langs['it'].yourTurn, ok_cb, false)
 
                             ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
 
                             save_data(_config.ruleta.db, ruletadata)
                         end
                     else
-                        reply_msg(msg.id, langs.notYourTurn, ok_cb, false)
+                        reply_msg(msg.id, langs['it'].notYourTurn, ok_cb, false)
                     end
                 else
                     if math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) == math.random(tonumber(groupstats.caps), tonumber(groupstats.cylinder)) then
