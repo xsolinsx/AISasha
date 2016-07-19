@@ -442,7 +442,7 @@ end
 -- Enable plugins in config.json
 function load_plugins()
     print('Loading languages.lua...')
-    langs['it'].= dofile('languages.lua')
+    langs = dofile('languages.lua')
     -- All the languages available
 
     for k, v in pairs(_config.enabled_plugins) do
