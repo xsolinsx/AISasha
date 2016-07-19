@@ -1,10 +1,6 @@
 return {
     it =
     {
-        -------------
-        -- Plugins --
-        -------------
-
         -- global --
         require_sudo = '🚫 Questo comando richiede i privilegi di sudo.',
         require_admin = '🚫 Questo comando richiede privilegi da admin o superiori.',
@@ -537,7 +533,6 @@ return {
         -- administrator.lua --
         administrator =
         {
-            21,
             '🅿️ ADMINISTRATOR',
             'ADMIN',
             '(#pm|sasha messaggia) <user_id> <msg>: Sasha invia <msg> a <user_id>.',
@@ -564,7 +559,6 @@ return {
         -- apod.lua --
         apod =
         {
-            6,
             '🅿️ APOD',
             'USER',
             '#apod|#astro [<date>]: Sasha manda l\'APOD.',
@@ -576,7 +570,6 @@ return {
         -- banhammer.lua --
         banhammer =
         {
-            18,
             '🅿️ BANHAMMER',
             'USER',
             '(#kickme|sasha uccidimi): Sasha rimuove l\'utente.',
@@ -600,7 +593,6 @@ return {
         -- bot.lua --
         bot =
         {
-            5,
             '🅿️ BOT',
             'OWNER',
             '#bot|sasha on|off: Sasha si attiva|disattiva.',
@@ -611,7 +603,6 @@ return {
         -- botinteract.lua --
         botinteract =
         {
-            9,
             '🅿️ BOTINTERACT',
             'USER',
             '$<text>: Sasha manda <text> al bot.',
@@ -626,7 +617,6 @@ return {
         -- broadcast.lua --
         broadcast =
         {
-            5,
             '🅿️ BROADCAST',
             'ADMIN',
             '#br <group_id> <text>: Sasha invia <text> a <group_id>.',
@@ -637,7 +627,6 @@ return {
         -- dogify.lua --
         dogify =
         {
-            3,
             '🅿️ DOGIFY',
             'USER',
             '(#dogify|[sasha] doge) <your/words/with/slashes>: Sasha crea un\'immagine col doge e le parole specificate.',
@@ -646,7 +635,6 @@ return {
         -- duckduckgo.lua --
         duckduckgo =
         {
-            3,
             '🅿️ DUCKDUCKGO',
             'USER',
             '#duck[duck]go <terms>: Sasha cerca <terms> su DuckDuckGo.',
@@ -655,7 +643,6 @@ return {
         -- fakecommand.lua --
         fakecommand =
         {
-            3,
             '🅿️ FAKECOMMAND',
             'MOD',
             '(#user|#mod|#owner|#support|#admin) <command>: Sasha esegue <command> come se fosse stato inviato da un utente con il rango specificato.',
@@ -664,7 +651,6 @@ return {
         -- feedback.lua --
         feedback =
         {
-            3,
             '🅿️ FEEDBACK',
             'USER',
             '#feedback <text>: Sasha invia <text> al suo creatore.',
@@ -673,7 +659,6 @@ return {
         -- filemanager.lua --
         filemanager =
         {
-            16,
             '🅿️ FILEMANAGER',
             'SUDO',
             '#folder: Sasha manda la directory attuale.',
@@ -695,7 +680,6 @@ return {
         -- flame.lua --
         flame =
         {
-            5,
             '🅿️ FLAME',
             'MOD',
             '(#startflame|[sasha] flamma) <id>|<username>|<reply>: Sasha flamma l\'utente specificato.',
@@ -706,7 +690,6 @@ return {
         -- get.lua --
         get =
         {
-            7,
             '🅿️ GET',
             'USER',
             '(#getlist|#get|sasha lista): Sasha mostra una lista delle variabili settate.',
@@ -719,7 +702,6 @@ return {
         -- goodbyewelcome.lua --
         goodbyewelcome =
         {
-            11,
             '🅿️ GOODBYEWELCOME',
             'USER',
             '#getwelcome: Sasha manda il benvenuto.',
@@ -736,7 +718,6 @@ return {
         -- help.lua --
         help =
         {
-            7,
             '🅿️ HELP',
             'USER',
             '(#sudolist|sasha lista sudo): Sasha manda la lista dei sudo.',
@@ -749,7 +730,6 @@ return {
         -- info.lua --
         info =
         {
-            15,
             '🅿️ INFO',
             'USER',
             '#getrank|rango [<id>|<username>|<reply>]: Sasha manda il rank dell\'utente.',
@@ -770,7 +750,6 @@ return {
         -- ingroup.lua --
         ingroup =
         {
-            34,
             '🅿️ INGROUP',
             'USER',
             '(#rules|sasha regole): Sasha mostra le regole del gruppo.',
@@ -810,7 +789,6 @@ return {
         -- inpm.lua --
         inpm =
         {
-            12,
             '🅿️ INPM',
             'USER',
             '#chats: Sasha mostra un elenco di chat "pubbliche".',
@@ -828,7 +806,6 @@ return {
         -- inrealm.lua --
         inrealm =
         {
-            28,
             '🅿️ INREALM',
             'MOD',
             '#who: Sasha mostra una lista di membri del gruppo/regno.',
@@ -860,7 +837,6 @@ return {
         -- interact.lua --
         interact =
         {
-            5,
             '🅿️ INTERACT',
             'USER',
             'Sasha interagisce con gli utenti.',
@@ -871,18 +847,16 @@ return {
         -- invite.lua --
         invite =
         {
-            3,
             '🅿️ INVITE',
             -- 'OWNER',
             'ADMIN',
             '(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invita l\'utente specificato.',
         },
 
-        --[[
         -- knivesgame.lua --
+        --[[
         knivesgame =
         {
-            23,
             '🅿️ KNIVESGAME',
             'USER',
             'Knives by AISasha. Knives è il lancio dei coltelli, Sasha lancia i coltelli con una certa precisione, se ti centra sei fuori altrimenti rimani.',
@@ -912,7 +886,6 @@ return {
         -- likecounter.lua --
         likecounter =
         {
-            9,
             '🅿️ LIKECOUNTER',
             'USER',
             '#like|#1up <id>|<username>|<reply>|from: Sasha aggiunge un like all\'utente specificato.',
@@ -927,7 +900,6 @@ return {
         -- onservice.lua --
         onservice =
         {
-            3,
             '🅿️ ONSERVICE',
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha lascia il gruppo.',
@@ -936,7 +908,6 @@ return {
         -- plugins.lua --
         plugins =
         {
-            10,
             '🅿️ PLUGINS',
             'OWNER',
             '(#plugins|[sasha] lista plugins): Sasha mostra una lista di tutti i plugins.',
@@ -952,7 +923,6 @@ return {
         -- pokedex.lua --
         pokedex =
         {
-            3,
             '🅿️ POKEDEX',
             'USER',
             '#pokedex|#pokemon <name>|<id>: Sasha cerca il pokémon specificato e ne invia le informazioni.',
@@ -961,7 +931,6 @@ return {
         -- qr.lua --
         qr =
         {
-            7,
             '🅿️ QR',
             'USER',
             '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha crea il QR Code di <text>, se specificato colora il QR Code.',
@@ -974,7 +943,6 @@ return {
         -- reactions.lua --
         reactions =
         {
-            3,
             '🅿️ REACTIONS',
             'SUDO',
             '#writing on|off: Sasha (fa finta|smette di far finta) di scrivere.',
@@ -983,7 +951,6 @@ return {
         -- ruletagame.lua --
         ruletagame =
         {
-            27,
             '🅿️ RULETAGAME',
             'USER',
             'Ruleta by AISasha, inspired from Leia (#RIP) and Arya (#RIP). Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si spara e se c\'è il proiettile sei fuori altrimenti rimani.',
@@ -1016,7 +983,6 @@ return {
         -- set.lua --
         set =
         {
-            7,
             '🅿️ SET',
             'MOD',
             '(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.',
@@ -1029,7 +995,6 @@ return {
         -- shout.lua --
         shout =
         {
-            3,
             '🅿️ SHOUT',
             'USER',
             '(#shout|[sasha] grida|[sasha] urla) <text>: Sasha "urla" <text>.',
@@ -1038,7 +1003,6 @@ return {
         -- spam.lua --
         spam =
         {
-            3,
             '🅿️ SPAM',
             'OWNER',
             '(#spam|[sasha] spamma) <messages> <seconds> <text>: Sasha inzia a spammare <text> per <messages> volte ogni <seconds> secondi.',
@@ -1046,7 +1010,6 @@ return {
         --[[
         spam =
         {
-            6,
             '🅿️ SPAM',
             'OWNER',
             '#setspam <text>: Sasha imposta <text> come messaggio da spammare.',
@@ -1059,7 +1022,6 @@ return {
         -- stats.lua --
         stats =
         {
-            14,
             '🅿️ STATS',
             'USER',
             '[#]aisasha: Sasha invia la propria descrizione.',
@@ -1076,28 +1038,17 @@ return {
             '(#stats|#messages) aisasha: Sasha invia le proprie statistiche.',
         },
 
-        -- strings_en.lua --
-        strings_en =
+        -- strings.lua --
+        strings =
         {
-            3,
-            '🅿️ STRINGS_EN',
+            '🅿️ STRINGS',
             'SUDO',
-            '(#updateenstrings|#installenstrings|([sasha] installa|[sasha] aggiorna) stringhe en): Sasha updates strings.',
-        },
-
-        -- strings_it.lua --
-        strings_it =
-        {
-            3,
-            '🅿️ STRINGS_IT',
-            'SUDO',
-            '(#updateitstrings|#installitstrings|([sasha] installa|[sasha] aggiorna) stringhe it): Sasha aggiorna le stringhe di testo.',
+            '(#reloadstrings|[sasha] aggiorna stringhe): Sasha aggiorna le stringhe di testo.',
         },
 
         -- supergroup.lua --
         supergroup =
         {
-            48,
             '🅿️ SUPERGROUP',
             'USER',
             '#owner: Sasha manda il proprietario.',
@@ -1151,7 +1102,6 @@ return {
         -- tagall.lua --
         tagall =
         {
-            3,
             '🅿️ TAGALL',
             'OWNER',
             '(#tagall|sasha tagga tutti) <text>: Sasha tagga tutti i membri del gruppo con username e scrive <text>.',
@@ -1160,7 +1110,6 @@ return {
         -- tex.lua --
         tex =
         {
-            3,
             '🅿️ TEX',
             'USER',
             '(#tex|[sasha] equazione) <equation>: Sasha converte <equation> in immagine.',
@@ -1169,7 +1118,6 @@ return {
         -- unset.lua --
         unset =
         {
-            5,
             '🅿️ UNSET',
             'MOD',
             '(#unset|[sasha] unsetta) <var_name>: Sasha elimina <var_name>.',
@@ -1180,7 +1128,6 @@ return {
         -- urbandictionary.lua --
         urbandictionary =
         {
-            3,
             '🅿️ URBANDICTIONARY',
             'USER',
             '(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>: Sasha mostra la definizione di <text> dall\'Urban Dictionary.',
@@ -1189,7 +1136,6 @@ return {
         -- warn.lua --
         warn =
         {
-            8,
             '🅿️ WARN',
             'MOD',
             '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>, se zero gli avvertimenti non funzioneranno più.',
@@ -1203,7 +1149,6 @@ return {
         -- webshot.lua --
         webshot =
         {
-            15,
             '🅿️ WEBSHOT',
             'MOD',
             '(#webshot|[sasha] webshotta) <url> [<size>]: Sasha esegue uno screenshot di <url> e lo invia, se <size> è specificata di quella dimensione.',
@@ -1224,7 +1169,6 @@ return {
         -- whitelist.lua --
         whitelist =
         {
-            4,
             '🅿️ WHITELIST',
             'ADMIN',
             '#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist.',
@@ -1233,7 +1177,6 @@ return {
     },
     en =
     {
-
         -- global --
         require_sudo = '🚫 This plugin requires sudo privileges.',
         require_admin = '🚫 This plugin requires admin privileges or higher.',
@@ -2061,8 +2004,8 @@ return {
             '(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invites specified user.',
         },
 
-        --[[
         -- knivesgame.lua --
+        --[[
         knivesgame =
         {
             '🅿️ KNIVESGAME',
@@ -2246,20 +2189,12 @@ return {
             '(#stats|#messages) aisasha: Sasha sends her stats.',
         },
 
-        -- strings_en.lua --
-        strings_en =
+        -- strings.lua --
+        strings =
         {
-            '🅿️ STRINGS_EN',
+            '🅿️ STRINGS',
             'SUDO',
-            '(#updateenstrings|#installenstrings|([sasha] installa|[sasha] aggiorna) stringhe en): Sasha updates strings.',
-        },
-
-        -- strings_it.lua --
-        strings_it =
-        {
-            '🅿️ STRINGS_IT',
-            'SUDO',
-            '(#updateitstrings|#installitstrings|([sasha] installa|[sasha] aggiorna) stringhe it): Sasha aggiorna le stringhe di testo.',
+            '(#reloadstrings|[sasha] aggiorna stringhe): Sasha updates strings.',
         },
 
         -- supergroup.lua --

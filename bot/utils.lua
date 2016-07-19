@@ -12,6 +12,7 @@ json =(loadfile "./libs/JSON.lua")()
 mimetype =(loadfile "./libs/mimetype.lua")()
 redis =(loadfile "./libs/redis.lua")()
 JSON =(loadfile "./libs/dkjson.lua")()
+langs = dofile("languages.lua")
 
 http.TIMEOUT = 10
 
@@ -704,20 +705,6 @@ function user_print_name(user)
         text = text .. user.last_name
     end
     return text
-end
-
-function lang_text(keyword)
-    local hash = 'lang:' .. redis:get('lang') .. keyword
-    if redis:get(hash) then
-        return redis:get(hash)
-    else
-        return 'Error while getting language string, try sending /installenstrings.'
-    end
-end
-
-function set_text(keyword, text)
-    local hash = 'lang:' .. redis:get('lang') .. keyword
-    redis:set(hash, text)
 end
 
 function get_rank(user_id, chat_id)

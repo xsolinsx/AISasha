@@ -375,8 +375,7 @@ function create_config()
             "anti_spam",
             "msg_checks",
             "onservice",
-            "strings_it",
-            "strings_en",
+            "strings",
             "preprocess_media",
             "administrator",
             "bot",
@@ -443,7 +442,6 @@ end
 function load_plugins()
     print('Loading languages.lua...')
     langs = dofile('languages.lua')
-    -- All the languages available
 
     for k, v in pairs(_config.enabled_plugins) do
         print("Loading plugin", v)
