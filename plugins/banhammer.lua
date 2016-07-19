@@ -293,7 +293,9 @@ end
 local function kick_deleted_chat(extra, success, result)
     for k, v in pairs(result.members) do
         if not v.print_name then
-            kick_user(v.id, result.id)
+            if v.id then
+                kick_user(v.id, result.id)
+            end
         end
     end
 end
@@ -301,7 +303,9 @@ end
 local function kick_deleted_channel(extra, success, result)
     for k, v in pairs(result) do
         if not v.print_name then
-            kick_user(v.id, extra.chat_id)
+            if v.id then
+                kick_user(v.id, extra.chat_id)
+            end
         end
     end
 end
