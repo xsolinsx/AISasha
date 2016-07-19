@@ -37,14 +37,14 @@ local function plugin_help(var, chat, rank)
         -- = '=======================\n'
         local textHash = plugin.description:lower()
         if langs['it'].textHash then
-            for i = 1, #langs['it'].plugin.description:lower(), 1 do
-                if rank_table[langs['it'].plugin.description:lower()[i]] then
-                    if rank_table[langs['it'].plugin.description:lower()[i]] > rank then
+            for i = 1, #langs['it'][plugin.description:lower()], 1 do
+                if rank_table[langs['it'][plugin.description:lower()][i]] then
+                    if rank_table[langs['it'][plugin.description:lower()][i]] > rank then
                         help_permission = false
                     end
                 end
                 if help_permission then
-                    text = text .. langs['it'].plugin.description:lower()[i] .. '\n'
+                    text = text .. langs['it'][plugin.description:lower()][i] .. '\n'
                 end
             end
         end
