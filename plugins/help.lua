@@ -36,7 +36,7 @@ local function plugin_help(var, chat, rank)
         local text = ''
         -- = '=======================\n'
         local textHash = plugin.description:lower()
-        if langs['it'].textHash then
+        if langs['it'][textHash] then
             for i = 1, #langs['it'][plugin.description:lower()], 1 do
                 if rank_table[langs['it'][plugin.description:lower()][i]] then
                     if rank_table[langs['it'][plugin.description:lower()][i]] > rank then
