@@ -30,7 +30,7 @@ end
 
 local function like_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, langs.noUsernameFound)
     end
     like(extra.likedata, extra.chat, result.peer_id)
 end
@@ -45,7 +45,7 @@ end
 
 local function dislike_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, langs.noUsernameFound)
     end
     dislike(extra.likedata, extra.chat, result.peer_id)
 end
@@ -86,7 +86,7 @@ local function likes_leaderboard(users, lbtype)
         end
     end )
 
-    local text = lang_text('likesLeaderboard')
+    local text = langs.likesLeaderboard
     local i = 0
     for k, user in pairs(users_info) do
         if user.name and user.param then
@@ -104,9 +104,9 @@ local function run(msg, matches)
                 local f = io.open(_config.likecounter.db, 'w+')
                 f:write('{}')
                 f:close()
-                reply_msg(msg.id, lang_text('likesdbCreated'), ok_cb, false)
+                reply_msg(msg.id, langs.likesdbCreated, ok_cb, false)
             else
-                return lang_text('require_sudo')
+                return langs.require_sudo
             end
             return
         end
@@ -124,14 +124,14 @@ local function run(msg, matches)
         if matches[1]:lower() == 'addlikes' and matches[2] and matches[3] and is_sudo(msg) then
             likedata[chat][matches[2]] = tonumber(likedata[chat][matches[2]] + matches[3])
             save_data(_config.likecounter.db, likedata)
-            reply_msg(msg.id, lang_text('cheating'), ok_cb, false)
+            reply_msg(msg.id, langs.cheating, ok_cb, false)
             return
         end
 
         if matches[1]:lower() == 'remlikes' and matches[2] and matches[3] and is_sudo(msg) then
             likedata[chat][matches[2]] = tonumber(likedata[chat][matches[2]] - matches[3])
             save_data(_config.likecounter.db, likedata)
-            reply_msg(msg.id, lang_text('cheating'), ok_cb, false)
+            reply_msg(msg.id, langs.cheating, ok_cb, false)
             return
         end
 
@@ -141,7 +141,7 @@ local function run(msg, matches)
         end
 
         if msg.fwd_from then
-            reply_msg(msg.id, lang_text('forwardingLike'), ok_cb, false)
+            reply_msg(msg.id, langs.forwardingLike, ok_cb, false)
         else
             if matches[1]:lower() == 'like' or matches[1]:lower() == '1up' then
                 if type(msg.reply_id) ~= "nil" then

@@ -16,6 +16,13 @@ function on_msg_receive(msg)
 
     msg = backward_msg_format(msg)
 
+    -- Group language
+    msg.lang = db:get('lang:' .. msg.to.id)
+    if not msg.lang then
+        redis:set('lang:' .. msg.to.id, 'it')
+        msg.lang = 'it'
+    end
+
     local receiver = get_receiver(msg)
     print(receiver)
     -- reaction writing
@@ -106,13 +113,13 @@ local function callback_sudo_ids(extra, success, result)
         end
     end
     if tagged then
-        local text = lang_text('receiver') .. extra.msg.to.print_name:gsub("_", " ") .. ' [' .. extra.msg.to.id .. ']\n' .. lang_text('sender')
+        local text = langs.receiver .. extra.msg.to.print_name:gsub("_", " ") .. ' [' .. extra.msg.to.id .. ']\n' .. langs.sender
         if extra.msg.from.username then
             text = text .. '@' .. extra.msg.from.username .. ' [' .. extra.msg.from.id .. ']\n'
         else
             text = text .. extra.msg.from.print_name:gsub("_", " ") .. ' [' .. extra.msg.from.id .. ']\n'
         end
-        text = text .. lang_text('msgText')
+        text = text .. langs.msgText
 
         if extra.msg.text then
             text = text .. extra.msg.text .. ' '
@@ -298,7 +305,7 @@ function match_plugin(plugin, plugin_name, msg)
 
             local disabled = is_plugin_disabled_on_chat(plugin_name, receiver)
 
-            if pattern ~= "([\216-\219][\128-\191])" and pattern ~= "(%[(document)%])" and pattern ~= "(%[(photo)%])" and pattern ~= "(%[(video)%])" and pattern ~= "(%[(audio)%])" and pattern ~= "(%[(contact)%])" and pattern ~= "(%[(geo)%])" then
+            if pattern ~= "([\216-\219][\128-\191])" and pattern ~= "!!tgservice (.*)" and pattern ~= "(%[(document)%])" and pattern ~= "(%[(photo)%])" and pattern ~= "(%[(video)%])" and pattern ~= "(%[(audio)%])" and pattern ~= "(%[(contact)%])" and pattern ~= "(%[(geo)%])" then
                 if msg.to.type == 'user' then
                     if disabled then
                         savelog(msg.from.id .. ' PM', msg.from.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" received but plugin is disabled on chat.')
@@ -434,6 +441,10 @@ end
 
 -- Enable plugins in config.json
 function load_plugins()
+    print('Loading languages.lua...')
+    langs = dofile('languages.lua')
+    -- All the languages available
+
     for k, v in pairs(_config.enabled_plugins) do
         print("Loading plugin", v)
 

@@ -1,18 +1,18 @@
 ﻿function run(msg, matches)
-    local text = lang_text('feedStart')
+    local text = langs.feedStart
     if msg.from.first_name then
-        text = text .. lang_text('feedName') .. msg.from.first_name
+        text = text .. langs.feedName .. msg.from.first_name
     end
     if msg.from.last_name then
-        text = text .. lang_text('feedSurname') .. msg.from.last_name
+        text = text .. langs.feedSurname .. msg.from.last_name
     end
     if msg.from.username then
-        text = text .. lang_text('feedUsername') .. msg.from.username
+        text = text .. langs.feedUsername .. msg.from.username
     end
     text = text .. '\n🆔: ' .. msg.from.id ..
     '\n\nFeedback:\n' .. matches[1]
     send_large_msg('chat#id120307338', text)
-    return lang_text('feedSent')
+    return langs.feedSent
 end
 
 return {

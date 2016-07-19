@@ -11,7 +11,7 @@ local function run(msg, matches)
             leave_channel("channel#id" .. matches[2], ok_cb, false)
         end
     elseif msg.service and msg.action.type == "chat_add_user" and msg.action.user.id == tonumber(bot_id) and not is_admin1(msg) then
-        send_large_msg(receiver, lang_text('notMyGroup'), ok_cb, false)
+        send_large_msg(receiver, langs.notMyGroup, ok_cb, false)
         chat_del_user(receiver, 'user#id' .. bot_id, ok_cb, false)
         leave_channel(receiver, ok_cb, false)
     end

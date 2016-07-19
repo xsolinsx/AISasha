@@ -19,7 +19,7 @@ local function send_pokemon(query, receiver)
     local pokemon = json:decode(b)
 
     if pokemon == nil then
-        return lang_text('noPoke')
+        return langs.noPoke
     end
 
     -- api returns height and weight x10
@@ -27,9 +27,9 @@ local function send_pokemon(query, receiver)
     local weight = tonumber(pokemon.weight) / 10
 
     local text = 'ID Pokédex: ' .. pokemon.id
-    .. '\n' .. lang_text('pokeName') .. pokemon.name
-    .. '\n' .. lang_text('pokeWeight') .. weight .. " kg"
-    .. '\n' .. lang_text('pokeHeight') .. height .. " m"
+    .. '\n' .. langs.pokeName .. pokemon.name
+    .. '\n' .. langs.pokeWeight .. weight .. " kg"
+    .. '\n' .. langs.pokeHeight .. height .. " m"
 
     local image = nil
 

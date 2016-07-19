@@ -40,7 +40,7 @@ local phrases = {
 
 local function kick_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, langs.noUsernameFound)
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -51,7 +51,7 @@ local function kick_by_username(extra, success, result)
         send_large_msg(extra.receiver, phrases[math.random(#phrases)])
         savelog(extra.chat_id, "[" .. extra.executer .. "] kicked user " .. result.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(extra.chat_id, "[" .. extra.executer .. "] kicked user " .. result.peer_id .. " N")
     end
 end
@@ -66,7 +66,7 @@ local function kick_by_reply(extra, success, result)
         send_large_msg(extra.receiver, phrases[math.random(#phrases)])
         savelog(result.to.peer_id, "[" .. extra.executer .. "] kicked user " .. result.from.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] kicked user " .. result.from.peer_id .. " N")
     end
 end
@@ -81,14 +81,14 @@ local function kick_from(extra, success, result)
         send_large_msg(extra.receiver, phrases[math.random(#phrases)])
         savelog(result.to.peer_id, "[" .. extra.executer .. "] kicked user " .. result.fwd_from.peer_id .. " from Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] kicked user " .. result.fwd_from.peer_id .. " from N")
     end
 end
 
 local function ban_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, langs.noUsernameFound)
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -96,10 +96,10 @@ local function ban_by_username(extra, success, result)
             ban_user(result.peer_id, extra.chat_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, lang_text('user') .. result.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(extra.receiver, langs.user .. result.peer_id .. langs.banned .. '\n' .. phrases[math.random(#phrases)])
         savelog(extra.chat_id, "[" .. extra.executer .. "] banned user " .. result.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(extra.chat_id, "[" .. extra.executer .. "] banned user " .. result.peer_id .. " N")
     end
 end
@@ -111,10 +111,10 @@ local function ban_by_reply(extra, success, result)
             ban_user(result.from.peer_id, result.to.peer_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, lang_text('user') .. result.from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(extra.receiver, langs.user .. result.from.peer_id .. langs.banned .. '\n' .. phrases[math.random(#phrases)])
         savelog(result.to.peer_id, "[" .. extra.executer .. "] banned user " .. result.from.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] banned user " .. result.from.peer_id .. " N")
     end
 end
@@ -126,26 +126,26 @@ local function ban_from(extra, success, result)
             ban_user(result.fwd_from.peer_id, result.to.peer_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, lang_text('user') .. result.fwd_from.peer_id .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)])
+        send_large_msg(extra.receiver, langs.user .. result.fwd_from.peer_id .. langs.banned .. '\n' .. phrases[math.random(#phrases)])
         savelog(result.to.peer_id, "[" .. extra.executer .. "] banned user " .. result.fwd_from.peer_id .. " from Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] banned user " .. result.fwd_from.peer_id .. " from N")
     end
 end
 
 local function unban_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, langs.noUsernameFound)
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
         local hash = 'banned:' .. extra.chat_id
         redis:srem(hash, result.peer_id)
-        send_large_msg(extra.receiver, lang_text('user') .. result.peer_id .. lang_text('unbanned'))
+        send_large_msg(extra.receiver, langs.user .. result.peer_id .. langs.unbanned)
         savelog(extra.chat_id, "[" .. extra.executer .. "] unbanned user " .. result.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(extra.chat_id, "[" .. extra.executer .. "] unbanned user " .. result.peer_id .. " N")
     end
 end
@@ -155,10 +155,10 @@ local function unban_by_reply(extra, success, result)
     if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
         local hash = 'banned:' .. result.to.peer_id
         redis:srem(hash, result.from.peer_id)
-        send_large_msg(extra.receiver, lang_text('user') .. result.from.peer_id .. lang_text('unbanned'))
+        send_large_msg(extra.receiver, langs.user .. result.from.peer_id .. langs.unbanned)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] unbanned user " .. result.from.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] unbanned user " .. result.from.peer_id .. " N")
     end
 end
@@ -168,25 +168,25 @@ local function unban_from(extra, success, result)
     if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
         local hash = 'banned:' .. result.to.peer_id
         redis:srem(hash, result.fwd_from.peer_id)
-        send_large_msg(extra.receiver, lang_text('user') .. result.fwd_from.peer_id .. lang_text('unbanned'))
+        send_large_msg(extra.receiver, langs.user .. result.fwd_from.peer_id .. langs.unbanned)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] unbanned user " .. result.fwd_from.peer_id .. " from Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] unbanned user " .. result.fwd_from.peer_id .. " from N")
     end
 end
 
 local function banall_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, langs.noUsernameFound)
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
         banall_user(result.peer_id)
-        send_large_msg(extra.receiver, lang_text('user') .. result.peer_id .. lang_text('gbanned'))
+        send_large_msg(extra.receiver, langs.user .. result.peer_id .. langs.gbanned)
         savelog(extra.chat_id, "[" .. extra.executer .. "] globally banned user " .. result.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(extra.chat_id, "[" .. extra.executer .. "] globally banned user " .. result.peer_id .. " N")
     end
 end
@@ -198,10 +198,10 @@ local function banall_by_reply(extra, success, result)
             banall_user(result.from.peer_id)
         end
         postpone(post_kick, false, 3)
-        send_large_msg(extra.receiver, lang_text('user') .. result.peer_id .. lang_text('gbanned'))
+        send_large_msg(extra.receiver, langs.user .. result.peer_id .. langs.gbanned)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] globally banned user " .. result.from.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] globally banned user " .. result.from.peer_id .. " N")
     end
 end
@@ -210,25 +210,25 @@ local function banall_from(extra, success, result)
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
         banall_user(result.fwd_from.peer_id)
-        send_large_msg(extra.receiver, lang_text('user') .. result.fwd_from.peer_id .. lang_text('gbanned'))
+        send_large_msg(extra.receiver, langs.user .. result.fwd_from.peer_id .. langs.gbanned)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] globally banned user " .. result.fwd_from.peer_id .. " from Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] globally banned user " .. result.fwd_from.peer_id .. " from N")
     end
 end
 
 local function unbanall_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, langs.noUsernameFound)
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
         unbanall_user(result.peer_id)
-        send_large_msg(extra.receiver, lang_text('user') .. result.peer_id .. lang_text('ungbanned'))
+        send_large_msg(extra.receiver, langs.user .. result.peer_id .. langs.ungbanned)
         savelog(extra.chat_id, "[" .. extra.executer .. "] globally unbanned user " .. result.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(extra.chat_id, "[" .. extra.executer .. "] globally unbanned user " .. result.peer_id .. " N")
     end
 end
@@ -237,10 +237,10 @@ local function unbanall_by_reply(extra, success, result)
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
         unbanall_user(result.from.peer_id)
-        send_large_msg(extra.receiver, lang_text('user') .. result.from.peer_id .. lang_text('ungbanned'))
+        send_large_msg(extra.receiver, langs.user .. result.from.peer_id .. langs.ungbanned)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] globally unbanned user " .. result.from.peer_id .. " Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] globally unbanned user " .. result.from.peer_id .. " N")
     end
 end
@@ -249,10 +249,10 @@ local function unbanall_from(extra, success, result)
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
         unbanall_user(result.fwd_from.peer_id)
-        send_large_msg(extra.receiver, lang_text('user') .. result.fwd_from.peer_id .. lang_text('ungbanned'))
+        send_large_msg(extra.receiver, langs.user .. result.fwd_from.peer_id .. langs.ungbanned)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] globally unbanned user " .. result.fwd_from.peer_id .. " from Y")
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] globally unbanned user " .. result.fwd_from.peer_id .. " from N")
     end
 end
@@ -266,7 +266,7 @@ local function kickrandom_chat(extra, success, result)
         print(id)
         if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
             kickable = true
-            send_large_msg('chat#id' .. chat_id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
+            send_large_msg('chat#id' .. chat_id, 'ℹ️ ' .. id .. ' ' .. langs.kicked)
             local function post_kick()
                 kick_user_any(id, chat_id)
             end
@@ -286,7 +286,7 @@ local function kickrandom_channel(extra, success, result)
         print(id)
         if not(tonumber(id) == tonumber(our_id) or is_momod2(id, chat_id) or is_whitelisted(id)) then
             kickable = true
-            send_large_msg('channel#id' .. result.id, 'ℹ️ ' .. id .. ' ' .. lang_text('kicked'))
+            send_large_msg('channel#id' .. result.id, 'ℹ️ ' .. id .. ' ' .. langs.kicked)
             local function post_kick()
                 kick_user_any(id, result.id)
             end
@@ -356,7 +356,7 @@ local function kick_inactive_chat(extra, success, result)
             end
         end
     end
-    send_large_msg(receiver, lang_text('massacre'):gsub('X', kicked))
+    send_large_msg(receiver, langs.massacre:gsub('X', kicked))
 end
 
 local function kick_inactive_channel(extra, success, result)
@@ -377,7 +377,7 @@ local function kick_inactive_channel(extra, success, result)
             end
         end
     end
-    send_large_msg(receiver, lang_text('massacre'):gsub('X', kicked))
+    send_large_msg(receiver, langs.massacre:gsub('X', kicked))
 end
 
 local function run(msg, matches)
@@ -398,7 +398,7 @@ local function run(msg, matches)
             postpone(post_kick, false, 3)
             return phrases[math.random(#phrases)]
         else
-            return lang_text('useYourGroups')
+            return langs.useYourGroups
         end
     end
     if is_momod(msg) then
@@ -426,14 +426,14 @@ local function run(msg, matches)
                         return phrases[math.random(#phrases)]
                     else
                         savelog(msg.to.id, "[" .. msg.from.id .. "] kicked user " .. matches[2] .. " N")
-                        return lang_text('require_rank')
+                        return langs.require_rank
                     end
                 else
                     resolve_username(matches[2]:gsub('@', ''), kick_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                 end
                 return
             else
-                return lang_text('useYourGroups')
+                return langs.useYourGroups
             end
         end
         if matches[1]:lower() == 'kickrandom' or matches[1]:lower() == 'sasha uccidi random' or matches[1]:lower() == 'spara random' then
@@ -465,17 +465,17 @@ local function run(msg, matches)
                         end
                         postpone(post_kick, false, 3)
                         savelog(msg.to.id, "[" .. msg.from.id .. "] banned user " .. matches[2] .. " Y")
-                        return lang_text('user') .. matches[2] .. lang_text('banned') .. '\n' .. phrases[math.random(#phrases)]
+                        return langs.user .. matches[2] .. langs.banned .. '\n' .. phrases[math.random(#phrases)]
                     else
                         savelog(msg.to.id, "[" .. msg.from.id .. "] banned user " .. matches[2] .. " N")
-                        return lang_text('require_rank')
+                        return langs.require_rank
                     end
                 else
                     resolve_username(matches[2]:gsub('@', ''), ban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                 end
                 return
             else
-                return lang_text('useYourGroups')
+                return langs.useYourGroups
             end
         end
         if matches[1]:lower() == 'unban' or matches[1]:lower() == 'sasha sbanna' or matches[1]:lower() == 'sasha ricompila' or matches[1]:lower() == 'sasha compila' or matches[1]:lower() == 'sbanna' or matches[1]:lower() == 'ricompila' or matches[1]:lower() == 'compila' then
@@ -497,17 +497,17 @@ local function run(msg, matches)
                         local hash = 'banned:' .. msg.to.id
                         redis:srem(hash, matches[2])
                         savelog(msg.to.id, "[" .. msg.from.id .. "] unbanned user " .. matches[2] .. " Y")
-                        return lang_text('user') .. matches[2] .. lang_text('unbanned')
+                        return langs.user .. matches[2] .. langs.unbanned
                     else
                         savelog(msg.to.id, "[" .. msg.from.id .. "] unbanned user " .. matches[2] .. " N")
-                        return lang_text('require_rank')
+                        return langs.require_rank
                     end
                 else
                     resolve_username(matches[2]:gsub('@', ''), unban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                 end
                 return
             else
-                return lang_text('useYourGroups')
+                return langs.useYourGroups
             end
         end
         if matches[1]:lower() == "banlist" or matches[1]:lower() == "sasha lista ban" or matches[1]:lower() == "lista ban" then
@@ -518,7 +518,7 @@ local function run(msg, matches)
                 if msg.to.type == 'chat' or msg.to.type == 'channel' then
                     return ban_list(msg.to.id)
                 else
-                    return lang_text('useYourGroups')
+                    return langs.useYourGroups
                 end
             end
         end
@@ -573,10 +573,10 @@ local function run(msg, matches)
                         if compare_ranks(msg.from.id, matches[2], msg.to.id) then
                             banall_user(matches[2])
                             savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " Y")
-                            return lang_text('user') .. matches[2] .. lang_text('gbanned')
+                            return langs.user .. matches[2] .. langs.gbanned
                         else
                             savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " N")
-                            return lang_text('require_rank')
+                            return langs.require_rank
                         end
                     else
                         resolve_username(matches[2]:gsub('@', ''), banall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
@@ -601,10 +601,10 @@ local function run(msg, matches)
                         if compare_ranks(msg.from.id, matches[2], msg.to.id) then
                             unbanall_user(matches[2])
                             savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " Y")
-                            return lang_text('user') .. matches[2] .. lang_text('ungbanned')
+                            return langs.user .. matches[2] .. langs.ungbanned
                         else
                             savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " N")
-                            return lang_text('require_rank')
+                            return langs.require_rank
                         end
                     else
                         resolve_username(matches[2]:gsub('@', ''), unbanall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
@@ -623,13 +623,13 @@ local function run(msg, matches)
                     return list
                 end
             else
-                return lang_text('require_support')
+                return langs.require_support
             end
         else
-            return lang_text('require_owner')
+            return langs.require_owner
         end
     else
-        return lang_text('require_mod')
+        return langs.require_mod
     end
 end
 

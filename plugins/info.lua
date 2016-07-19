@@ -1,21 +1,21 @@
 ﻿local function get_rank_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, langs.noUsernameFound)
     end
     local rank = get_rank(result.peer_id, extra.chat_id)
-    send_large_msg(extra.receiver, lang_text('rank') .. reverse_rank_table[rank + 1])
+    send_large_msg(extra.receiver, langs.rank .. reverse_rank_table[rank + 1])
 end
 
 local function get_rank_by_reply(extra, success, result)
     local rank = get_rank(result.from.peer_id, result.to.peer_id)
-    send_large_msg(extra.receiver, lang_text('rank') .. reverse_rank_table[rank + 1])
+    send_large_msg(extra.receiver, langs.rank .. reverse_rank_table[rank + 1])
 end
 
 local function callback_group_members(extra, success, result)
     local i = 1
     local chat_id = "chat#id" .. result.peer_id
     local chatname = result.print_name
-    local text = lang_text('usersIn') .. string.gsub(chatname, "_", " ") .. ' ' .. result.peer_id .. '\n'
+    local text = langs.usersIn .. string.gsub(chatname, "_", " ") .. ' ' .. result.peer_id .. '\n'
     for k, v in pairs(result.members) do
         if v.print_name then
             name = v.print_name:gsub("_", " ")
@@ -34,7 +34,7 @@ local function callback_group_members(extra, success, result)
 end
 
 local function callback_supergroup_members(extra, success, result)
-    local text = lang_text('membersOf') .. extra.receiver .. '\n'
+    local text = langs.membersOf .. extra.receiver .. '\n'
     local i = 1
     for k, v in pairsByKeys(result) do
         if v.print_name then
@@ -55,7 +55,7 @@ end
 
 local function callback_kicked(extra, success, result)
     -- vardump(result)
-    local text = lang_text('membersKickedFrom') .. extra.receiver .. '\n'
+    local text = langs.membersKickedFrom .. extra.receiver .. '\n'
     local i = 1
     for k, v in pairsByKeys(result) do
         if v.print_name then
@@ -76,15 +76,15 @@ end
 
 local function channel_callback_ishere(extra, success, result)
     local user = extra.user
-    local text = lang_text('ishereNo')
+    local text = langs.ishereNo
     for k, v in pairsByKeys(result) do
         if tonumber(user) then
             if tonumber(v.peer_id) == tonumber(user) then
-                text = lang_text('ishereYes')
+                text = langs.ishereYes
             end
         elseif v.username then
             if v.username:lower() == user:lower() then
-                text = lang_text('ishereYes')
+                text = langs.ishereYes
             end
         end
     end
@@ -93,15 +93,15 @@ end
 
 local function chat_callback_ishere(extra, success, result)
     local user = extra.user
-    local text = lang_text('ishereNo')
+    local text = langs.ishereNo
     for k, v in pairs(result.members) do
         if tonumber(user) then
             if tonumber(v.peer_id) == tonumber(user) then
-                text = lang_text('ishereYes')
+                text = langs.ishereYes
             end
         elseif v.username then
             if v.username:lower() == user:lower() then
-                text = lang_text('ishereYes')
+                text = langs.ishereYes
             end
         end
     end
@@ -110,48 +110,48 @@ end
 
 local function info_by_username(extra, success, result)
     if success == 0 then
-        send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        send_large_msg(extra.receiver, langs.noUsernameFound)
         return
     end
-    local text = lang_text('info') .. ' (<username>)'
+    local text = langs.info .. ' (<username>)'
     if result.peer_type == 'channel' then
         if result.title then
-            text = text .. lang_text('name') .. result.title
+            text = text .. langs.name .. result.title
         end
         if result.username then
-            text = text .. lang_text('username') .. '@' .. result.username
+            text = text .. langs.username .. '@' .. result.username
         end
-        text = text .. lang_text('date') .. os.date('%c') ..
+        text = text .. langs.date .. os.date('%c') ..
         '\n🆔: ' .. result.peer_id
     elseif result.peer_type == 'user' then
         if result.first_name then
-            text = text .. lang_text('name') .. result.first_name
+            text = text .. langs.name .. result.first_name
         end
         if result.real_first_name then
-            text = text .. lang_text('name') .. result.real_first_name
+            text = text .. langs.name .. result.real_first_name
         end
         if result.last_name then
-            text = text .. lang_text('surname') .. result.last_name
+            text = text .. langs.surname .. result.last_name
         end
         if result.real_last_name then
-            text = text .. lang_text('surname') .. result.real_last_name
+            text = text .. langs.surname .. result.real_last_name
         end
         if result.username then
-            text = text .. lang_text('username') .. '@' .. result.username
+            text = text .. langs.username .. '@' .. result.username
         end
         -- exclude bot phone
         if our_id ~= result.peer_id then
             --[[
             if result.phone then
-                text = text .. lang_text('phone') .. '+' .. string.sub(result.phone, 1, 6) .. '******'
+                text = text .. langs.phone .. '+' .. string.sub(result.phone, 1, 6) .. '******'
             end
             ]]
         end
         local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.chat_id) or 0)
-        text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.peer_id, extra.chat_id) + 1] ..
-        lang_text('date') .. os.date('%c') ..
-        lang_text('totalMessages') .. msgs ..
-        lang_text('otherInfo')
+        text = text .. langs.rank .. reverse_rank_table[get_rank(result.peer_id, extra.chat_id) + 1] ..
+        langs.date .. os.date('%c') ..
+        langs.totalMessages .. msgs ..
+        langs.otherInfo
         if is_whitelisted(result.peer_id) then
             text = text .. 'WHITELISTED, '
         end
@@ -166,13 +166,13 @@ local function info_by_username(extra, success, result)
         end
         text = text .. '\n🆔: ' .. result.peer_id
     else
-        text = lang_text('peerTypeUnknown')
+        text = langs.peerTypeUnknown
     end
     send_large_msg(extra.receiver, text)
 end
 
 local function info_by_reply(extra, success, result)
-    local text = lang_text('info') .. ' (<reply>)'
+    local text = langs.info .. ' (<reply>)'
     local action = false
     if result.action then
         if result.action.type ~= 'chat_add_user_link' then
@@ -182,33 +182,33 @@ local function info_by_reply(extra, success, result)
 
     if action and result.action.user then
         if result.action.user.first_name then
-            text = text .. lang_text('name') .. result.action.user.first_name
+            text = text .. langs.name .. result.action.user.first_name
         end
         if result.action.user.real_first_name then
-            text = text .. lang_text('name') .. result.action.user.real_first_name
+            text = text .. langs.name .. result.action.user.real_first_name
         end
         if result.action.user.last_name then
-            text = text .. lang_text('surname') .. result.action.user.last_name
+            text = text .. langs.surname .. result.action.user.last_name
         end
         if result.action.user.real_last_name then
-            text = text .. lang_text('surname') .. result.action.user.real_last_name
+            text = text .. langs.surname .. result.action.user.real_last_name
         end
         if result.action.user.username then
-            text = text .. lang_text('username') .. '@' .. result.action.user.username
+            text = text .. langs.username .. '@' .. result.action.user.username
         end
         -- exclude bot phone
         if our_id ~= result.action.user.peer_id then
             --[[
             if result.action.user.phone then
-                text = text .. lang_text('phone') .. '+' .. string.sub(result.action.user.phone, 1, 6) .. '******'
+                text = text .. langs.phone .. '+' .. string.sub(result.action.user.phone, 1, 6) .. '******'
             end
             ]]
         end
         local msgs = tonumber(redis:get('msgs:' .. result.action.user.peer_id .. ':' .. result.to.peer_id) or 0)
-        text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.action.user.peer_id, result.to.peer_id) + 1] ..
-        lang_text('date') .. os.date('%c') ..
-        lang_text('totalMessages') .. msgs ..
-        lang_text('otherInfo')
+        text = text .. langs.rank .. reverse_rank_table[get_rank(result.action.user.peer_id, result.to.peer_id) + 1] ..
+        langs.date .. os.date('%c') ..
+        langs.totalMessages .. msgs ..
+        langs.otherInfo
         if is_whitelisted(result.action.user.peer_id) then
             text = text .. 'WHITELISTED, '
         end
@@ -224,33 +224,33 @@ local function info_by_reply(extra, success, result)
         text = text .. '\n🆔: ' .. result.action.user.peer_id
     else
         if result.from.first_name then
-            text = text .. lang_text('name') .. result.from.first_name
+            text = text .. langs.name .. result.from.first_name
         end
         if result.from.real_first_name then
-            text = text .. lang_text('name') .. result.from.real_first_name
+            text = text .. langs.name .. result.from.real_first_name
         end
         if result.from.last_name then
-            text = text .. lang_text('surname') .. result.from.last_name
+            text = text .. langs.surname .. result.from.last_name
         end
         if result.from.real_last_name then
-            text = text .. lang_text('surname') .. result.from.real_last_name
+            text = text .. langs.surname .. result.from.real_last_name
         end
         if result.from.username then
-            text = text .. lang_text('username') .. '@' .. result.from.username
+            text = text .. langs.username .. '@' .. result.from.username
         end
         -- exclude bot phone
         if our_id ~= result.from.peer_id then
             --[[
             if result.from.phone then
-                text = text .. lang_text('phone') .. '+' .. string.sub(result.from.phone, 1, 6) .. '******'
+                text = text .. langs.phone .. '+' .. string.sub(result.from.phone, 1, 6) .. '******'
             end
             ]]
         end
         local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
-        text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id) + 1] ..
-        lang_text('date') .. os.date('%c') ..
-        lang_text('totalMessages') .. msgs ..
-        lang_text('otherInfo')
+        text = text .. langs.rank .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id) + 1] ..
+        langs.date .. os.date('%c') ..
+        langs.totalMessages .. msgs ..
+        langs.otherInfo
         if is_whitelisted(result.from.peer_id) then
             text = text .. 'WHITELISTED, '
         end
@@ -269,45 +269,45 @@ local function info_by_reply(extra, success, result)
 end
 
 local function info_by_from(extra, success, result)
-    local text = lang_text('info') .. ' (<from>)'
+    local text = langs.info .. ' (<from>)'
     if result.fwd_from.peer_type == 'channel' then
         if result.fwd_from.title then
-            text = text .. lang_text('name') .. result.fwd_from.title
+            text = text .. langs.name .. result.fwd_from.title
         end
         if result.fwd_from.username then
-            text = text .. lang_text('username') .. '@' .. result.fwd_from.username
+            text = text .. langs.username .. '@' .. result.fwd_from.username
         end
-        text = text .. lang_text('date') .. os.date('%c') ..
+        text = text .. langs.date .. os.date('%c') ..
         '\n🆔: ' .. result.fwd_from.peer_id
     elseif result.fwd_from.peer_type == 'user' then
         if result.fwd_from.first_name then
-            text = text .. lang_text('name') .. result.fwd_from.first_name
+            text = text .. langs.name .. result.fwd_from.first_name
         end
         if result.fwd_from.real_first_name then
-            text = text .. lang_text('name') .. result.fwd_from.real_first_name
+            text = text .. langs.name .. result.fwd_from.real_first_name
         end
         if result.fwd_from.last_name then
-            text = text .. lang_text('surname') .. result.fwd_from.last_name
+            text = text .. langs.surname .. result.fwd_from.last_name
         end
         if result.fwd_from.real_last_name then
-            text = text .. lang_text('surname') .. result.fwd_from.real_last_name
+            text = text .. langs.surname .. result.fwd_from.real_last_name
         end
         if result.fwd_from.username then
-            text = text .. lang_text('username') .. '@' .. result.fwd_from.username
+            text = text .. langs.username .. '@' .. result.fwd_from.username
         end
         -- exclude bot phone
         if our_id ~= result.fwd_from.peer_id then
             --[[
             if result.fwd_from.phone then
-                text = text .. lang_text('phone') .. '+' .. string.sub(result.fwd_from.phone, 1, 6) .. '******'
+                text = text .. langs.phone .. '+' .. string.sub(result.fwd_from.phone, 1, 6) .. '******'
             end
             ]]
         end
         local msgs = tonumber(redis:get('msgs:' .. result.fwd_from.peer_id .. ':' .. result.to.peer_id) or 0)
-        text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.fwd_from.peer_id, result.to.peer_id) + 1] ..
-        lang_text('date') .. os.date('%c') ..
-        lang_text('totalMessages') .. msgs ..
-        lang_text('otherInfo')
+        text = text .. langs.rank .. reverse_rank_table[get_rank(result.fwd_from.peer_id, result.to.peer_id) + 1] ..
+        langs.date .. os.date('%c') ..
+        langs.totalMessages .. msgs ..
+        langs.otherInfo
         if is_whitelisted(result.fwd_from.peer_id) then
             text = text .. 'WHITELISTED, '
         end
@@ -322,41 +322,41 @@ local function info_by_from(extra, success, result)
         end
         text = text .. '\n🆔: ' .. result.fwd_from.peer_id
     else
-        text = lang_text('peerTypeUnknown')
+        text = langs.peerTypeUnknown
     end
     send_large_msg(extra.receiver, text)
 end
 
 local function info_by_id(extra, success, result)
-    local text = lang_text('info') .. ' (<id>)'
+    local text = langs.info .. ' (<id>)'
     if result.first_name then
-        text = text .. lang_text('name') .. result.first_name
+        text = text .. langs.name .. result.first_name
     end
     if result.real_first_name then
-        text = text .. lang_text('name') .. result.real_first_name
+        text = text .. langs.name .. result.real_first_name
     end
     if result.last_name then
-        text = text .. lang_text('surname') .. result.last_name
+        text = text .. langs.surname .. result.last_name
     end
     if result.real_last_name then
-        text = text .. lang_text('surname') .. result.real_last_name
+        text = text .. langs.surname .. result.real_last_name
     end
     if result.username then
-        text = text .. lang_text('username') .. '@' .. result.username
+        text = text .. langs.username .. '@' .. result.username
     end
     -- exclude bot phone
     if our_id ~= result.peer_id then
         --[[
         if result.phone then
-            text = text .. lang_text('phone') .. '+' .. string.sub(result.phone, 1, 6) .. '******'
+            text = text .. langs.phone .. '+' .. string.sub(result.phone, 1, 6) .. '******'
         end
         ]]
     end
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.chat_id) or 0)
-    text = text .. lang_text('rank') .. reverse_rank_table[get_rank(result.peer_id, extra.chat_id) + 1] ..
-    lang_text('date') .. os.date('%c') ..
-    lang_text('totalMessages') .. msgs ..
-    lang_text('otherInfo')
+    text = text .. langs.rank .. reverse_rank_table[get_rank(result.peer_id, extra.chat_id) + 1] ..
+    langs.date .. os.date('%c') ..
+    langs.totalMessages .. msgs ..
+    langs.otherInfo
     if is_whitelisted(result.peer_id) then
         text = text .. 'WHITELISTED, '
     end
@@ -374,13 +374,13 @@ local function info_by_id(extra, success, result)
 end
 
 local function channel_callback_info(extra, success, result)
-    local title = lang_text('supergroupName') .. result.title
-    local user_num = lang_text('users') .. tostring(result.participants_count)
-    local admin_num = lang_text('admins') .. tostring(result.admins_count)
-    local kicked_num = lang_text('kickedUsers') .. tostring(result.kicked_count)
+    local title = langs.supergroupName .. result.title
+    local user_num = langs.users .. tostring(result.participants_count)
+    local admin_num = langs.admins .. tostring(result.admins_count)
+    local kicked_num = langs.kickedUsers .. tostring(result.kicked_count)
     local channel_id = "\n🆔: " .. result.peer_id
     if result.username then
-        channel_username = lang_text('username') .. "@" .. result.username
+        channel_username = langs.username .. "@" .. result.username
     else
         channel_username = ""
     end
@@ -389,8 +389,8 @@ local function channel_callback_info(extra, success, result)
 end
 
 local function chat_callback_info(extra, success, result)
-    local title = lang_text('groupName') .. result.title
-    local user_num = lang_text('users') .. tostring(result.members_num)
+    local title = langs.groupName .. result.title
+    local user_num = langs.users .. tostring(result.members_num)
     local chat_id = "\n🆔: " .. result.peer_id
     local text = title .. user_num .. chat_id
     send_large_msg(extra.receiver, text)
@@ -453,43 +453,43 @@ end
 local function pre_process(msg)
     if msg.to.type == 'user' and msg.fwd_from then
         if is_support(msg.from.id) or is_admin1(msg) then
-            local text = lang_text('info') .. ' (<private_from>)'
+            local text = langs.info .. ' (<private_from>)'
             if msg.fwd_from.peer_type == 'channel' then
                 if msg.fwd_from.title then
-                    text = text .. lang_text('name') .. msg.fwd_from.title
+                    text = text .. langs.name .. msg.fwd_from.title
                 end
                 if msg.fwd_from.username then
-                    text = text .. lang_text('username') .. '@' .. msg.fwd_from.username
+                    text = text .. langs.username .. '@' .. msg.fwd_from.username
                 end
-                text = text .. lang_text('date') .. os.date('%c') ..
+                text = text .. langs.date .. os.date('%c') ..
                 '\n🆔: ' .. msg.fwd_from.peer_id
             elseif msg.fwd_from.peer_type == 'user' then
                 if msg.fwd_from.first_name then
-                    text = text .. lang_text('name') .. msg.fwd_from.first_name
+                    text = text .. langs.name .. msg.fwd_from.first_name
                 end
                 if msg.fwd_from.real_first_name then
-                    text = text .. lang_text('name') .. msg.fwd_from.real_first_name
+                    text = text .. langs.name .. msg.fwd_from.real_first_name
                 end
                 if msg.fwd_from.last_name then
-                    text = text .. lang_text('surname') .. msg.fwd_from.last_name
+                    text = text .. langs.surname .. msg.fwd_from.last_name
                 end
                 if msg.fwd_from.real_last_name then
-                    text = text .. lang_text('surname') .. msg.fwd_from.real_last_name
+                    text = text .. langs.surname .. msg.fwd_from.real_last_name
                 end
                 if msg.fwd_from.username then
-                    text = text .. lang_text('username') .. '@' .. msg.fwd_from.username
+                    text = text .. langs.username .. '@' .. msg.fwd_from.username
                 end
                 -- exclude bot phone
                 if our_id ~= msg.fwd_from.peer_id then
                     --[[
                     if msg.fwd_from.phone then
-                        text = text .. lang_text('phone') .. '+' .. string.sub(msg.fwd_from.phone, 1, 6) .. '******'
+                        text = text .. langs.phone .. '+' .. string.sub(msg.fwd_from.phone, 1, 6) .. '******'
                     end
                     ]]
                 end
-                text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, msg.to.id) + 1] ..
-                lang_text('date') .. os.date('%c') ..
-                lang_text('otherInfo')
+                text = text .. langs.rank .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, msg.to.id) + 1] ..
+                langs.date .. os.date('%c') ..
+                langs.otherInfo
                 if is_whitelisted(msg.fwd_from.peer_id) then
                     text = text .. 'WHITELISTED, '
                 end
@@ -504,7 +504,7 @@ local function pre_process(msg)
                 end
                 text = text .. '\n🆔: ' .. msg.fwd_from.peer_id
             else
-                text = lang_text('peerTypeUnknown')
+                text = langs.peerTypeUnknown
             end
             send_large_msg('user#id' .. msg.from.id, text)
         end
@@ -522,12 +522,12 @@ local function run(msg, matches)
             return get_message(msg.reply_id, get_rank_by_reply, { receiver = receiver })
         elseif matches[2] then
             if string.match(matches[2], '^%d+$') then
-                return lang_text('rank') .. reverse_rank_table[get_rank(matches[2], chat) + 1]
+                return langs.rank .. reverse_rank_table[get_rank(matches[2], chat) + 1]
             else
                 return resolve_username(string.gsub(matches[2], '@', ''), get_rank_by_username, { receiver = receiver, chat_id = chat })
             end
         else
-            return lang_text('rank') .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
+            return langs.rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
         end
     end
     if matches[1]:lower() == 'ishere' and matches[2] then
@@ -559,7 +559,7 @@ local function run(msg, matches)
                     return get_message(msg.reply_id, info_by_reply, { receiver = receiver })
                 end
             else
-                return lang_text('require_mod')
+                return langs.require_mod
             end
         elseif matches[2] then
             if is_momod(msg) then
@@ -571,42 +571,42 @@ local function run(msg, matches)
                     return
                 end
             else
-                return lang_text('require_mod')
+                return langs.require_mod
             end
         else
-            local text = lang_text('info') ..
-            lang_text('youAre')
+            local text = langs.info ..
+            langs.youAre
             if msg.from.title then
-                text = text .. lang_text('name') .. msg.from.title
+                text = text .. langs.name .. msg.from.title
             end
             if msg.from.first_name then
-                text = text .. lang_text('name') .. msg.from.first_name
+                text = text .. langs.name .. msg.from.first_name
             end
             if msg.from.real_first_name then
-                text = text .. lang_text('name') .. msg.from.real_first_name
+                text = text .. langs.name .. msg.from.real_first_name
             end
             if msg.from.last_name then
-                text = text .. lang_text('surname') .. msg.from.last_name
+                text = text .. langs.surname .. msg.from.last_name
             end
             if msg.from.real_last_name then
-                text = text .. lang_text('surname') .. msg.from.real_last_name
+                text = text .. langs.surname .. msg.from.real_last_name
             end
             if msg.from.username then
-                text = text .. lang_text('username') .. '@' .. msg.from.username
+                text = text .. langs.username .. '@' .. msg.from.username
             end
             -- exclude bot phone
             if our_id ~= msg.from.id then
                 --[[
                 if msg.from.phone then
-                    text = text .. lang_text('phone') .. '+' .. string.sub(msg.from.phone, 1, 6) .. '******'
+                    text = text .. langs.phone .. '+' .. string.sub(msg.from.phone, 1, 6) .. '******'
                 end
                 ]]
             end
             local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
-            text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
-            lang_text('date') .. os.date('%c') ..
-            lang_text('totalMessages') .. msgs ..
-            lang_text('otherInfo')
+            text = text .. langs.rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
+            langs.date .. os.date('%c') ..
+            langs.totalMessages .. msgs ..
+            langs.otherInfo
             if is_whitelisted(msg.from.id) then
                 text = text .. 'WHITELISTED, '
             end
@@ -620,47 +620,47 @@ local function run(msg, matches)
                 text = text .. 'MUTED, '
             end
             text = text .. '\n🆔: ' .. msg.from.id ..
-            lang_text('youAreWriting')
+            langs.youAreWriting
             if chat_type == 'user' then
                 text = text .. ' 👤'
                 if msg.to.first_name then
-                    text = text .. lang_text('name') .. msg.to.first_name
+                    text = text .. langs.name .. msg.to.first_name
                 end
                 if msg.to.real_first_name then
-                    text = text .. lang_text('name') .. msg.to.real_first_name
+                    text = text .. langs.name .. msg.to.real_first_name
                 end
                 if msg.to.last_name then
-                    text = text .. lang_text('surname') .. msg.to.last_name
+                    text = text .. langs.surname .. msg.to.last_name
                 end
                 if msg.to.real_last_name then
-                    text = text .. lang_text('surname') .. msg.to.real_last_name
+                    text = text .. langs.surname .. msg.to.real_last_name
                 end
                 if msg.to.username then
-                    text = text .. lang_text('username') .. '@' .. msg.to.username
+                    text = text .. langs.username .. '@' .. msg.to.username
                 end
                 -- exclude bot phone
                 if our_id ~= msg.to.id then
                     --[[
                     if msg.to.phone then
-                        text = text .. lang_text('phone') .. '+' .. string.sub(msg.to.phone, 1, 6) .. '******'
+                        text = text .. langs.phone .. '+' .. string.sub(msg.to.phone, 1, 6) .. '******'
                     end
                     ]]
                 end
-                text = text .. lang_text('rank') .. reverse_rank_table[get_rank(msg.to.id, chat) + 1] ..
-                lang_text('date') .. os.date('%c') ..
+                text = text .. langs.rank .. reverse_rank_table[get_rank(msg.to.id, chat) + 1] ..
+                langs.date .. os.date('%c') ..
                 '\n🆔: ' .. msg.to.id
                 return text
             elseif chat_type == 'chat' then
                 text = text .. ' 👥' ..
-                lang_text('groupName') .. msg.to.title ..
-                lang_text('users') .. tostring(msg.to.members_num) ..
+                langs.groupName .. msg.to.title ..
+                langs.users .. tostring(msg.to.members_num) ..
                 '\n🆔: ' .. math.abs(msg.to.id)
                 return text
             elseif chat_type == 'channel' then
                 text = text .. ' 👥' ..
-                lang_text('supergroupName') .. msg.to.title
+                langs.supergroupName .. msg.to.title
                 if msg.to.username then
-                    text = text .. lang_text('username') .. "@" .. msg.to.username
+                    text = text .. langs.username .. "@" .. msg.to.username
                 end
                 text = text .. "\n🆔: " .. math.abs(msg.to.id)
                 return text
@@ -679,7 +679,7 @@ local function run(msg, matches)
                 channel_info('channel#id' .. matches[2], channel_callback_info, { receiver = receiver })
                 chat_info('chat#id' .. matches[2], chat_callback_info, { receiver = receiver })
             else
-                return lang_text('require_admin')
+                return langs.require_admin
             end
         end
     end
@@ -688,11 +688,11 @@ local function run(msg, matches)
             local data = load_data(_config.moderation.data)
             local group_link = data[tostring(matches[2])]['settings']['set_link']
             if not group_link then
-                return lang_text('noLinkAvailable')
+                return langs.noLinkAvailable
             end
             return matches[2] .. '\n' .. group_link
         else
-            return lang_text('require_admin')
+            return langs.require_admin
         end
     end
     if matches[1]:lower() == 'database' or matches[1]:lower() == 'sasha database' then
@@ -703,7 +703,7 @@ local function run(msg, matches)
                 chat_info(receiver, database, { receiver = receiver })
             end
         else
-            return lang_text('require_sudo')
+            return langs.require_sudo
         end
     end
     if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] then
@@ -714,7 +714,7 @@ local function run(msg, matches)
                 chat_info(receiver, callback_group_members, { receiver = receiver })
             end
         else
-            return lang_text('require_mod')
+            return langs.require_mod
         end
     end
     if matches[1]:lower() == "kicked" or matches[1]:lower() == "sasha lista rimossi" or matches[1]:lower() == "lista rimossi" then
@@ -722,7 +722,7 @@ local function run(msg, matches)
             if is_momod(msg) then
                 channel_get_kicked(receiver, callback_kicked, { receiver = receiver })
             else
-                return lang_text('require_mod')
+                return langs.require_mod
             end
         end
     end

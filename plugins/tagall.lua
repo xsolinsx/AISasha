@@ -36,7 +36,7 @@ local function run(msg, matches)
             end
         end
     else
-        return lang_text('require_owner')
+        return langs.require_owner
     end
 end
 

@@ -1,25 +1,25 @@
 local function callback_setbot(extra, success, result)
     if success == 0 then
-        send_large_msg('chat#id' .. extra.chatid, lang_text('noUsernameFound'))
-        send_large_msg('channel#id' .. extra.chatid, lang_text('noUsernameFound'))
+        send_large_msg('chat#id' .. extra.chatid, langs.noUsernameFound)
+        send_large_msg('channel#id' .. extra.chatid, langs.noUsernameFound)
         return
     end
     local hash = 'botinteract'
     redis:sadd(hash, extra.chatid .. ':' .. result.peer_id)
-    send_large_msg('chat#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. lang_text('botSet'))
-    send_large_msg('channel#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. lang_text('botSet'))
+    send_large_msg('chat#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. langs.botSet)
+    send_large_msg('channel#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. langs.botSet)
 end
 
 local function callback_unsetbot(extra, success, result)
     if success == 0 then
-        send_large_msg('chat#id' .. extra.chatid, lang_text('noUsernameFound'))
-        send_large_msg('channel#id' .. extra.chatid, lang_text('noUsernameFound'))
+        send_large_msg('chat#id' .. extra.chatid, langs.noUsernameFound)
+        send_large_msg('channel#id' .. extra.chatid, langs.noUsernameFound)
         return
     end
     local hash = 'botinteract'
     redis:srem(hash, extra.chatid .. ':' .. result.peer_id)
-    send_large_msg('chat#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. lang_text('botUnset'))
-    send_large_msg('channel#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. lang_text('botUnset'))
+    send_large_msg('chat#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. langs.botUnset)
+    send_large_msg('channel#id' .. extra.chatid, result.first_name .. ' - ' .. result.username .. langs.botUnset)
 end
 
 local function list_botinteract(msg)
@@ -38,7 +38,7 @@ local function run(msg, matches)
             resolve_username(matches[2]:gsub("@", ""), callback_setbot, { chatid = msg.to.id })
             return
         else
-            return lang_text('require_admin')
+            return langs.require_admin
         end
     end
     if matches[1]:lower() == "unsetbot" or matches[1]:lower() == "sasha rimuovi bot" and string.sub(matches[2]:lower(), -3) == 'bot' then
@@ -46,7 +46,7 @@ local function run(msg, matches)
             resolve_username(matches[2]:gsub("@", ""), callback_unsetbot, { chatid = msg.to.id })
             return
         else
-            return lang_text('require_owner')
+            return langs.require_owner
         end
     end
     if matches[1] == '$' then
@@ -63,11 +63,11 @@ local function run(msg, matches)
     end
     if matches[1] == 'sendmedia' then
         redis:set(msg.to.id, 'waiting')
-        return lang_text('sendMeMedia')
+        return langs.sendMeMedia
     end
     if matches[1]:lower() == 'undo' then
         redis:del(msg.to.id)
-        return lang_text('cancelled')
+        return langs.cancelled
     end
     if (matches[1] == '[photo]' or matches[1] == '[document]' or matches[1] == '[video]' or matches[1] == '[audio]' or matches[1] == '[contact]' or matches[1] == '[geo]') and redis:get(msg.to.id) then
         local chat = ''
@@ -80,7 +80,7 @@ local function run(msg, matches)
             end
         end
         redis:del(msg.to.id)
-        return lang_text('mediaForwarded')
+        return langs.mediaForwarded
     end
 end
 

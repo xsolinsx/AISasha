@@ -30,15 +30,15 @@ local function flame_by_reply(extra, success, result)
     if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
         redis:set(hash, 0);
         redis:set(tokick, result.from.peer_id);
-        send_large_msg(extra.receiver, lang_text('hereIAm'))
+        send_large_msg(extra.receiver, langs.hereIAm)
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
     end
 end
 
 local function flame_by_username(extra, success, result)
     if success == 0 then
-        return send_large_msg(extra.receiver, lang_text('noUsernameFound'))
+        return send_large_msg(extra.receiver, langs.noUsernameFound)
     end
     local hash
     local tokick
@@ -54,14 +54,14 @@ local function flame_by_username(extra, success, result)
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
         redis:set(hash, 0);
         redis:set(tokick, result.peer_id);
-        send_large_msg(extra.receiver, lang_text('hereIAm'))
+        send_large_msg(extra.receiver, langs.hereIAm)
     else
-        send_large_msg(extra.receiver, lang_text('require_rank'))
+        send_large_msg(extra.receiver, langs.require_rank)
     end
 end
 
 local function callback_id(extra, success, result)
-    local text = lang_text('flaming')
+    local text = langs.flaming
     if result.first_name then
         text = text .. '\n' .. result.first_name
     end
@@ -136,13 +136,13 @@ local function run(msg, matches)
                         if compare_ranks(msg.from.id, matches[2], msg.to.id) then
                             redis:set(hash, 0);
                             redis:set(tokick, matches[2]);
-                            return lang_text('hereIAm')
+                            return langs.hereIAm
                         else
-                            send_large_msg(get_receiver(msg), lang_text('require_rank'))
+                            send_large_msg(get_receiver(msg), langs.require_rank)
                         end
                     elseif string.find(matches[2], '@') then
                         if string.gsub(matches[2], '@', ''):lower() == 'aisasha' then
-                            return lang_text('noAutoFlame')
+                            return langs.noAutoFlame
                         end
                         resolve_username(string.gsub(matches[2], '@', ''), flame_by_username, { executer = msg.from.id, chat_id = msg.to.id, chat_type = msg.to.type, receiver = get_receiver(msg) })
                     end
@@ -162,9 +162,9 @@ local function run(msg, matches)
                 if compare_ranks(msg.from.id, redis:get(tokick), msg.to.id) then
                     redis:del(hash)
                     redis:del(tokick)
-                    return lang_text('stopFlame')
+                    return langs.stopFlame
                 else
-                    send_large_msg(get_receiver(msg), lang_text('require_rank'))
+                    send_large_msg(get_receiver(msg), langs.require_rank)
                 end
             elseif matches[1]:lower() == 'flameinfo' or matches[1]:lower() == 'sasha info flame' or matches[1]:lower() == 'info flame' then
                 local hash
@@ -182,14 +182,14 @@ local function run(msg, matches)
                 if hashonredis and user then
                     user_info('user#id' .. user, callback_id, { msg = msg })
                 else
-                    return lang_text('errorParameter')
+                    return langs.errorParameter
                 end
             end
         else
-            lang_text('require_mod')
+            return langs.require_mod
         end
     else
-        return lang_text('useYourGroups')
+        return langs.useYourGroups
     end
 end
 

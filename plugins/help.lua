@@ -1,11 +1,3 @@
--- Returns true if is not empty
-local function has_usage_data(dict)
-    if (dict.usage == nil or dict.usage == '') then
-        return false
-    end
-    return true
-end
-
 -- Get commands for that plugin
 local function plugin_help(var, chat, rank)
     local plugin = ''
@@ -43,24 +35,22 @@ local function plugin_help(var, chat, rank)
         -- '=========================\n'
         local text = ''
         -- = '=======================\n'
-        local textHash = plugin.description:lower() .. ':0'
-        if lang_text(textHash) then
-            for i = 1, tonumber(lang_text(plugin.description:lower() .. ':0')), 1 do
-                if rank_table[lang_text(plugin.description:lower() .. ':' .. i)] then
-                    if rank_table[lang_text(plugin.description:lower() .. ':' .. i)] > rank then
+        local textHash = plugin.description:lower()
+        if langs.textHash then
+            for i = 1, #langs.plugin.description:lower(), 1 do
+                if rank_table[langs.plugin.description:lower()[i]] then
+                    if rank_table[langs.plugin.description:lower()[i]] > rank then
                         help_permission = false
                     end
-                elseif i == 2 then
-                    text = text .. 'USER\n'
                 end
                 if help_permission then
-                    text = text .. lang_text(plugin.description:lower() .. ':' .. i) .. '\n'
+                    text = text .. langs.plugin.description:lower()[i] .. '\n'
                 end
             end
         end
         return text .. '\n'
     else
-        -- return text .. lang_text('require_higher') .. '\n'
+        -- return text .. langs.require_higher .. '\n'
         return ''
     end
 end
@@ -68,7 +58,7 @@ end
 -- !help command
 local function telegram_help(receiver, rank)
     local i = 0
-    local text = lang_text('pluginListStart')
+    local text = langs.pluginListStart
     -- Plugins names
     for name in pairsByKeys(plugins) do
         if _config.disabled_plugin_on_chat[receiver] then
@@ -86,7 +76,7 @@ local function telegram_help(receiver, rank)
         end
     end
 
-    text = text .. '\n' .. lang_text('helpInfo')
+    text = text .. '\n' .. langs.helpInfo
     return text
 end
 
@@ -108,28 +98,28 @@ end
 local function get_sudo_info(extra, success, result)
     local text = 'SUDO INFO'
     if result.first_name then
-        text = text .. lang_text('name') .. result.first_name
+        text = text .. langs.name .. result.first_name
     end
     if result.real_first_name then
-        text = text .. lang_text('name') .. result.real_first_name
+        text = text .. langs.name .. result.real_first_name
     end
     if result.last_name then
-        text = text .. lang_text('surname') .. result.last_name
+        text = text .. langs.surname .. result.last_name
     end
     if result.real_last_name then
-        text = text .. lang_text('surname') .. result.real_last_name
+        text = text .. langs.surname .. result.real_last_name
     end
     if result.username then
-        text = text .. lang_text('username') .. '@' .. result.username
+        text = text .. langs.username .. '@' .. result.username
     end
     --[[
     if result.phone then
-        text = text .. lang_text('phone') .. '+' .. string.sub(result.phone, 1, 6) .. '******'
+        text = text .. langs.phone .. '+' .. string.sub(result.phone, 1, 6) .. '******'
     end
     ]]
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.msg.to.id) or 0)
-    text = text .. lang_text('date') .. os.date('%c') ..
-    lang_text('totalMessages') .. msgs
+    text = text .. langs.date .. os.date('%c') ..
+    langs.totalMessages .. msgs
     text = text .. '\n🆔: ' .. result.peer_id
     send_large_msg('chat#id' .. extra.msg.to.id, text)
     send_large_msg('channel#id' .. extra.msg.to.id, text)
@@ -137,7 +127,7 @@ end
 
 local function run(msg, matches)
     -- if msg.to.peer_type == 'user' and not is_admin1(msg) then
-    --    return lang_text('doYourBusiness')
+    --    return langs.doYourBusiness
     -- end
 
     if matches[1]:lower() == "sudolist" or matches[1]:lower() == "sasha lista sudo" then
@@ -149,7 +139,7 @@ local function run(msg, matches)
         return
     end
 
-    local text = lang_text('helpIntro')
+    local text = langs.helpIntro
     local rank = get_rank(msg.from.id, msg.to.id)
 
     if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" or matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
@@ -161,7 +151,7 @@ local function run(msg, matches)
                 rank = fakerank
             else
                 -- no
-                return lang_text('youTried')
+                return langs.youTried
             end
             text = text .. 'FAKE HELP\n'
         elseif matches[3] and(matches[3]:lower() == "user" or matches[3]:lower() == "mod" or matches[3]:lower() == "owner" or matches[3]:lower() == "support" or matches[3]:lower() == "admin" or matches[3]:lower() == "sudo") then
@@ -172,7 +162,7 @@ local function run(msg, matches)
                 rank = fakerank
             else
                 -- no
-                return lang_text('youTried')
+                return langs.youTried
             end
             text = text .. 'FAKE HELP\n'
         end
@@ -194,16 +184,16 @@ local function run(msg, matches)
             text = text .. help_all(get_receiver(msg), rank)
         end
     else
-        local temp = plugin_help(matches[2], get_receiver(msg), rank)
+        local temp = plugin_help(matches[2]:lower(), get_receiver(msg), rank)
         if temp ~= nil then
             text = text .. temp
         else
-            return matches[2] .. lang_text('notExists')
+            return matches[2]:lower() .. langs.notExists
         end
     end
 
-    if text == lang_text('helpIntro') then
-        return lang_text('require_higher')
+    if text == langs.helpIntro then
+        return langs.require_higher
     else
         send_large_msg(get_receiver(msg), text)
     end
