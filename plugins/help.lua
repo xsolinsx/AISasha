@@ -216,6 +216,7 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo])$",
         -- help
+        "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+)$",-- duplicate but it's for better understanding
         "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",
         "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+)$",
@@ -223,10 +224,10 @@ return {
         -- help <plugin_name>|<plugin_number>
         "^[#!/]([Hh][Ee][Ll][Pp]) ([^%s]+) ([^%s]+)$",
         "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+) ([^%s]+)$",
-        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",
+        "^[#!/]([Cc][Oo][Mm][Mm][Aa][Nn][Dd][Ss]) ([^%s]+)$",-- duplicate but it's for better understanding
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+) ([^%s]+)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+)$",
-        -- sudolist
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo]) ([^%s]+)$",-- duplicate but it's for better understanding
+                                                                 -- sudolist
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Ss][Uu][Dd][Oo])$",
     },
     run = run,
