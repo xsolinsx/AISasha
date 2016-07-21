@@ -562,35 +562,6 @@ function show_supergroup_settingsmod(msg, target)
     return text
 end
 
-local function promote_admin(receiver, member_username, user_id)
-    local lang = get_lang(string.match(receiver, '%d+'))
-    local data = load_data(_config.moderation.data)
-    local group = string.gsub(receiver, 'channel#id', '')
-    local member_tag_username = member_username
-    if not data[group] then
-        return
-    end
-    if data[group]['moderators'][tostring(user_id)] then
-        return send_large_msg(receiver, member_username .. langs[lang].alreadyMod)
-    end
-    data[group]['moderators'][tostring(user_id)] = member_tag_username
-    save_data(_config.moderation.data, data)
-end
-
-local function demote_admin(receiver, member_username, user_id)
-    local lang = get_lang(string.match(receiver, '%d+'))
-    local data = load_data(_config.moderation.data)
-    local group = string.gsub(receiver, 'channel#id', '')
-    if not data[group] then
-        return
-    end
-    if not data[group]['moderators'][tostring(user_id)] then
-        return send_large_msg(receiver, member_username .. langs[lang].notMod)
-    end
-    data[group]['moderators'][tostring(user_id)] = nil
-    save_data(_config.moderation.data, data)
-end
-
 local function promote2(receiver, member_username, user_id)
     local lang = get_lang(string.match(receiver, '%d+'))
     local data = load_data(_config.moderation.data)
@@ -857,14 +828,10 @@ local function callbackres(extra, success, result)
         channel_demote(channel_id, user_id, ok_cb, false)
         if result.username then
             text = "@" .. result.username .. langs[lang].demoteSupergroupMod
-            send_large_msg(channel_id, text)
         else
-            text = "@" .. result.peer_id .. langs[lang].demoteSupergroupMod
-            send_large_msg(channel_id, text)
+            text = result.peer_id .. langs[lang].demoteSupergroupMod
         end
-        local receiver = extra.channel
-        local user_id = result.peer_id
-        demote_admin(receiver, member_username, user_id)
+        send_large_msg(channel_id, text)
     elseif get_cmd == 'mute_user' then
         local user_id = result.peer_id
         local receiver = extra.receiver
@@ -916,14 +883,6 @@ local function in_channel_cb(extra, success, result)
                     text = v.peer_id .. langs[msg.lang].promoteSupergroupMod
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set admin " .. v.peer_id)
                 end
-                if v.username then
-                    member_username = "@" .. v.username
-                else
-                    member_username = string.gsub(v.print_name, '_', ' ')
-                end
-                local receiver = channel_id
-                local user_id = v.peer_id
-                promote_admin(receiver, member_username, user_id)
             end
             send_large_msg(channel_id, text)
         end
