@@ -622,7 +622,7 @@ function get_message_callback(extra, success, result)
     if get_cmd == "del" then
         delete_msg(result.id, ok_cb, false)
         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted a message by reply")
-    elseif get_cmd == "setadmin" then
+    elseif get_cmd == "promoteadmin" then
         local user_id = result.from.peer_id
         local channel_id = "channel#id" .. result.to.peer_id
         channel_set_admin(channel_id, "user#id" .. user_id, ok_cb, false)
@@ -752,7 +752,7 @@ local function cb_user_info(extra, success, result)
     local user_id = result.peer_id
     local get_cmd = extra.get_cmd
     local data = load_data(_config.moderation.data)
-    --[[if get_cmd == "setadmin" then
+    --[[if get_cmd == "promoteadmin" then
 		local user_id = "user#id"..result.peer_id
 		channel_set_admin(receiver, user_id, ok_cb, false)
 		if result.username then
@@ -868,7 +868,7 @@ local function in_channel_cb(extra, success, result)
     else
         text = langs[msg.lang].none .. memberid .. langs[msg.lang].inThisSupergroup
     end
-    if get_cmd == "setadmin" then
+    if get_cmd == "promoteadmin" then
         for k, v in pairs(result) do
             vusername = v.username
             vpeer_id = tostring(v.peer_id)
@@ -1105,35 +1105,35 @@ local function run(msg, matches)
             return msg.to.title .. '\n' .. group_link
         end
 
-        if matches[1]:lower() == 'setadmin' then
+        if matches[1]:lower() == 'promoteadmin' then
             if not is_support(msg.from.id) and not is_owner(msg) then
                 return
             end
             if type(msg.reply_id) ~= "nil" then
                 local cbreply_extra = {
-                    get_cmd = 'setadmin',
+                    get_cmd = 'promoteadmin',
                     msg = msg
                 }
-                setadmin = get_message(msg.reply_id, get_message_callback, cbreply_extra)
+                promoteadmin = get_message(msg.reply_id, get_message_callback, cbreply_extra)
             elseif string.match(matches[2], '^%d+$') then
                 --[[]	local receiver = get_receiver(msg)
 				local user_id = "user#id"..matches[2]
-				local get_cmd = 'setadmin'
+				local get_cmd = 'promoteadmin'
 				user_info(user_id, cb_user_info, {receiver = receiver, get_cmd = get_cmd})]]
-                local get_cmd = 'setadmin'
+                local get_cmd = 'promoteadmin'
                 local msg = msg
                 local user_id = matches[2]
                 channel_get_users(receiver, in_channel_cb, { get_cmd = get_cmd, receiver = receiver, msg = msg, user_id = user_id })
             else
                 --[[local cbres_extra = {
 					channel = get_receiver(msg),
-					get_cmd = 'setadmin'
+					get_cmd = 'promoteadmin'
 				}
 				local username = matches[2]
 				local username = string.gsub(matches[2], '@', '')
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] set admin @"..username)
 				resolve_username(username, callbackres, cbres_extra)]]
-                local get_cmd = 'setadmin'
+                local get_cmd = 'promoteadmin'
                 local msg = msg
                 local username = matches[2]
                 local username = string.gsub(matches[2], '@', '')
@@ -1810,8 +1810,8 @@ return {
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         "^[#!/]([Ll][Ii][Nn][Kk])$",
-        "^[#!/]([Ss][Ee][Tt][Aa][Dd][Mm][Ii][Nn]) (.*)$",
-        "^[#!/]([Ss][Ee][Tt][Aa][Dd][Mm][Ii][Nn])",
+        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
+        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn])",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn])",
         "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr]) (%d+)$",
@@ -1933,7 +1933,7 @@ return {
     -- OWNER
     -- (#admins|[sasha] lista admin)
     -- (#setlink|sasha imposta link) <link>
-    -- #setadmin <id>|<username>|<reply>
+    -- #promoteadmin <id>|<username>|<reply>
     -- #demoteadmin <id>|<username>|<reply>
     -- #setowner <id>|<username>|<reply>
     -- (#promote|[sasha] promuovi) <id>|<username>|<reply>
