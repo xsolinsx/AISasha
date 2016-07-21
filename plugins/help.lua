@@ -179,11 +179,11 @@ local function run(msg, matches)
 
     table.sort(plugins)
     if flag then
-        if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" then
-            text = text .. telegram_help(get_receiver(msg), rank)
-        end
         if matches[1]:lower() == "helpall" or matches[1]:lower() == "allcommands" or matches[1]:lower() == "sasha aiuto tutto" then
             text = text .. help_all(get_receiver(msg), rank)
+        end
+        if matches[1]:lower() == "help" or matches[1]:lower() == "commands" or matches[1]:lower() == "sasha aiuto" then
+            text = text .. telegram_help(get_receiver(msg), rank)
         end
     else
         local temp = plugin_help(matches[2]:lower(), get_receiver(msg), rank)
