@@ -9,8 +9,6 @@ local function get_censorships_hash(msg)
 end
 
 local function setunset_delword(msg, var_name)
-    var_name = var_name:gsub(' ', '_')
-
     local hash = get_censorships_hash(msg)
     if hash then
         if redis:hget(hash, var_name) then
@@ -30,7 +28,7 @@ local function list_censorships(msg)
         local names = redis:hkeys(hash)
         local text = langs[msg.lang].delwordList
         for i = 1, #names do
-            text = text .. names[i]:gsub('_', ' ') .. '\n'
+            text = text .. names[i] .. '\n'
         end
         return text
     end
