@@ -272,6 +272,11 @@ return {
         sendMeMedia = 'Mandami ora il media che vuoi che io inoltri.',
         mediaForwarded = 'Media inoltrato.',
 
+        -- delword.lua --
+        delwordList = 'Lista censure:\n',
+        delwordAdded = 'Censura aggiunta su ',
+        delwordRemoved = 'Censura rimossa su ',
+
         -- fakecommand.lua --
         fakecommandYouTried = 'Ci hai provato pezzente, non eseguirai un comando che richiede un rango superiore al tuo.',
 
@@ -723,6 +728,7 @@ return {
         administrator =
         {
             '🅿️ ADMINISTRATOR',
+            'Plugin per amministratori di Sasha.',
             'ADMIN',
             '(#pm|sasha messaggia) <user_id> <msg>: Sasha invia <msg> a <user_id>.',
             '#import <group_link>: Sasha entra nel gruppo tramite <group_link>.',
@@ -748,6 +754,7 @@ return {
         apod =
         {
             '🅿️ APOD',
+            'Plugin per l\'Astronomy Picture of the Day.',
             'USER',
             '#apod|#astro [<date>]: Sasha manda l\'APOD.',
             '(#apod|#astro)hd [<date>]: Sasha manda l\'APOD in HD.',
@@ -758,6 +765,7 @@ return {
         banhammer =
         {
             '🅿️ BANHAMMER',
+            'Plugin per la gestione dei kick e dei ban.',
             'USER',
             '(#kickme|sasha uccidimi): Sasha rimuove l\'utente.',
             'MOD',
@@ -781,6 +789,7 @@ return {
         bot =
         {
             '🅿️ BOT',
+            'Plugin per attivare e disattivare Sasha sul gruppo.',
             'OWNER',
             '#bot|sasha on|off: Sasha si attiva|disattiva.',
             'ADMIN',
@@ -790,6 +799,7 @@ return {
         botinteract =
         {
             '🅿️ BOTINTERACT',
+            'Plugin per l\'interazione con i bot',
             'USER',
             '$<text>: Sasha manda <text> al bot.',
             '#sendmedia: Sasha manderà il media che verrà inviato nella chat al bot.',
@@ -803,15 +813,27 @@ return {
         broadcast =
         {
             '🅿️ BROADCAST',
+            'Plugin per mandare messaggi broadcast.',
             'ADMIN',
             '#br <group_id> <text>: Sasha invia <text> a <group_id>.',
             'SUDO',
             '#broadcast <text>: Sasha invia <text> a tutti i gruppi.',
         },
 
+        delword =
+        {
+            '🅿️ DELWORD',
+            'Plugin per la censura delle parole.',
+            'USER',
+            '(#dellist|[sasha] lista censura): Sasha manda una lista di parole o pattern censurati.',
+            'OWNER',
+            '(#delword|[sasha] censura) <word>|<pattern>: Sasha mette|toglie una censura su <word>|<pattern>, quando verrà scritta una cosa censurata nei supergruppi Sasha eliminerà il messaggio mentre nei gruppi rimuoverà il membro.',
+        },
+
         dogify =
         {
             '🅿️ DOGIFY',
+            'Plugin per la creazione di immagini col doge.',
             'USER',
             '(#dogify|[sasha] doge) <your/words/with/slashes>: Sasha crea un\'immagine col doge e le parole specificate.',
         },
@@ -819,6 +841,7 @@ return {
         duckduckgo =
         {
             '🅿️ DUCKDUCKGO',
+            'Plugin per la ricerca su duckduckgo.',
             'USER',
             '#duck[duck]go <terms>: Sasha cerca <terms> su DuckDuckGo.',
         },
@@ -826,6 +849,7 @@ return {
         fakecommand =
         {
             '🅿️ FAKECOMMAND',
+            'Plugin per testare i comandi.',
             'MOD',
             '(#user|#mod|#owner|#support|#admin) <command>: Sasha esegue <command> come se fosse stato inviato da un utente con il rango specificato.',
         },
@@ -833,13 +857,15 @@ return {
         feedback =
         {
             '🅿️ FEEDBACK',
+            'Plugin per mandare feedback.',
             'USER',
-            '#feedback <text>: Sasha invia <text> al suo creatore.',
+            '#feedback <text>: Sasha invia <text> come feedback.',
         },
 
         filemanager =
         {
             '🅿️ FILEMANAGER',
+            'Plugin per la gestione del server di Sasha.',
             'SUDO',
             '#folder: Sasha manda la directory attuale.',
             '#cd [<directory>]: Sasha entra in <directory>, se non è specificata torna alla cartella base.',
@@ -860,6 +886,7 @@ return {
         flame =
         {
             '🅿️ FLAME',
+            'Plugin per flammare gli utenti.',
             'MOD',
             '(#startflame|[sasha] flamma) <id>|<username>|<reply>|from: Sasha flamma l\'utente specificato.',
             '(#stopflame|[sasha] stop flame): Sasha smette di flammare.',
@@ -869,6 +896,7 @@ return {
         get =
         {
             '🅿️ GET',
+            'Plugin per ottenere le cose salvate con SET.',
             'USER',
             '(#getlist|#get|sasha lista): Sasha mostra una lista delle variabili settate.',
             '(#getgloballist|#getglobal|sasha lista globali): Sasha mostra una lista delle variabili globali settate.',
@@ -880,6 +908,7 @@ return {
         goodbyewelcome =
         {
             '🅿️ GOODBYEWELCOME',
+            'Plugin per il benvenuto e l\'addio dei membri.',
             'USER',
             '#getwelcome: Sasha manda il benvenuto.',
             '#getgoodbye: Sasha manda l\'addio.',
@@ -895,6 +924,7 @@ return {
         help =
         {
             '🅿️ HELP',
+            'Plugin di aiuto, USATELO!',
             'USER',
             '(#sudolist|sasha lista sudo): Sasha manda la lista dei sudo.',
             '(#help|sasha aiuto): Sasha mostra una lista dei plugin disponibili.',
@@ -906,6 +936,7 @@ return {
         info =
         {
             '🅿️ INFO',
+            'Plugin per ottenere informazioni.',
             'USER',
             '#getrank|rango [<id>|<username>|<reply>]: Sasha manda il rank dell\'utente.',
             '(#info|[sasha] info): Sasha manda le info dell\'utente e della chat o di se stessa',
@@ -925,6 +956,7 @@ return {
         ingroup =
         {
             '🅿️ INGROUP',
+            'Plugin per la gestione di un gruppo.',
             'USER',
             '(#rules|sasha regole): Sasha mostra le regole del gruppo.',
             '(#about|sasha descrizione): Sasha mostra la descrizione del gruppo.',
@@ -963,6 +995,7 @@ return {
         inpm =
         {
             '🅿️ INPM',
+            'Plugin per ottenere dei gruppi "pubblici".',
             'USER',
             '#chats: Sasha mostra un elenco di chat "pubbliche".',
             '#chatlist: Sasha manda un file con un elenco di chat "pubbliche".',
@@ -979,6 +1012,7 @@ return {
         inrealm =
         {
             '🅿️ INREALM',
+            'Plugin per la gestione dei gruppi e supergruppi (riservato agli admin)',
             'MOD',
             '#who: Sasha mostra una lista di membri del gruppo/regno.',
             '#wholist: Sasha invia un file con una lista di membri del gruppo/regno.',
@@ -1009,8 +1043,7 @@ return {
         interact =
         {
             '🅿️ INTERACT',
-            'USER',
-            'Sasha interagisce con gli utenti.',
+            'Plugin per l\'interazione con gli utenti.',
             'MOD',
             '(#echo|sasha ripeti) [<reply>]<text>: Sasha ripete <text>, se in risposta ad un messaggio sasha risponde a quel messaggio.',
         },
@@ -1018,6 +1051,7 @@ return {
         invite =
         {
             '🅿️ INVITE',
+            'Plugin per l\'invito di utenti nei gruppi.',
             -- 'OWNER',
             'ADMIN',
             '(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invita l\'utente specificato.',
@@ -1027,6 +1061,7 @@ return {
         knivesgame =
         {
             '🅿️ KNIVESGAME',
+            'Plugin per il gioco dei coltelli.',
             'USER',
             'Knives by AISasha. Knives è il lancio dei coltelli, Sasha lancia i coltelli con una certa precisione, se ti centra sei fuori altrimenti rimani.',
             '#registerme|#registrami: Sasha registra l\'utente al gioco.',
@@ -1055,6 +1090,7 @@ return {
         likecounter =
         {
             '🅿️ LIKECOUNTER',
+            'Plugin per il conteggio dei likes.',
             'USER',
             '#like|#1up <id>|<username>|<reply>|from: Sasha aggiunge un like all\'utente specificato.',
             '#dislike|#1down <id>|<username>|<reply>|from: Sasha toglie un like all\'utente specificato.',
@@ -1068,6 +1104,7 @@ return {
         onservice =
         {
             '🅿️ ONSERVICE',
+            'Plugin per far abbandonare un gruppo a Sasha.',
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha lascia il gruppo.',
         },
@@ -1075,6 +1112,7 @@ return {
         plugins =
         {
             '🅿️ PLUGINS',
+            'Plugin per attivare e disattivare plugin.',
             'OWNER',
             '(#plugins|[sasha] lista plugins): Sasha mostra una lista di tutti i plugins.',
             '(#disabledlist|([sasha] lista disabilitati|disattivati)): Sasha mostra una lista dei plugins disabilitati su questa chat.',
@@ -1089,6 +1127,7 @@ return {
         pokedex =
         {
             '🅿️ POKEDEX',
+            'Plugin per ottenere informazioni su un pokémon.',
             'USER',
             '#pokedex|#pokemon <name>|<id>: Sasha cerca il pokémon specificato e ne invia le informazioni.',
         },
@@ -1096,6 +1135,7 @@ return {
         qr =
         {
             '🅿️ QR',
+            'Plugin per creare QR Code.',
             'USER',
             '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha crea il QR Code di <text>, se specificato colora il QR Code.',
             'I colori possono essere specificati come segue:',
@@ -1107,6 +1147,7 @@ return {
         reactions =
         {
             '🅿️ REACTIONS',
+            'Plugin per far reagire Sasha.',
             'SUDO',
             '#writing on|off: Sasha (fa finta|smette di far finta) di scrivere.',
         },
@@ -1114,6 +1155,7 @@ return {
         ruletagame =
         {
             '🅿️ RULETAGAME',
+            'Plugin per il gioco della roulette russa.',
             'USER',
             'Ruleta by AISasha, inspired from Leia (#RIP) and Arya (#RIP). Ruleta è la roulette russa con la pistola, tamburo da tot colpi con tot proiettili al suo interno, si spara e se c\'è il proiettile sei fuori altrimenti rimani.',
             '#registerme|#registrami: Sasha registra l\'utente alla roulette.',
@@ -1145,6 +1187,7 @@ return {
         set =
         {
             '🅿️ SET',
+            'Plugin per salvare cose.',
             'MOD',
             '(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.',
             '(#setmedia|[sasha] setta media) <var_name>: Sasha salva il media (foto o audio) che le verrà inviato come risposta a <var_name>.',
@@ -1156,6 +1199,7 @@ return {
         shout =
         {
             '🅿️ SHOUT',
+            'Plugin per urlare delle parole.',
             'USER',
             '(#shout|[sasha] grida|[sasha] urla) <text>: Sasha "urla" <text>.',
         },
@@ -1163,24 +1207,15 @@ return {
         spam =
         {
             '🅿️ SPAM',
+            'Plugin per spammare fastidiosamente.',
             'OWNER',
-            '(#spam|[sasha] spamma) <messages> <seconds> <text>: Sasha inzia a spammare <text> per <messages> volte ogni <seconds> secondi.',
+            '(#spam|[sasha] spamma) [<messages> <seconds>] <text>: Sasha inzia a spammare <text>, se specificato per <messages> volte ogni <seconds> secondi.',
         },
-        --[[
-        spam =
-        {
-            '🅿️ SPAM',
-            'OWNER',
-            '#setspam <text>: Sasha imposta <text> come messaggio da spammare.',
-            '#setmsgs <value>: Sasha imposta <value> come numero di messaggi da spammare.',
-            '#setwait <seconds>: Sasha imposta <seconds> come intervallo di tempo tra i messaggi.',
-            '(#spam|[sasha] spamma): Sasha inizia a spammare.',
-        },
-        ]]
 
         stats =
         {
             '🅿️ STATS',
+            'Plugin per ottenere statistiche sui gruppi e su Sasha.',
             'USER',
             '[#]aisasha: Sasha invia la propria descrizione.',
             'MOD',
@@ -1199,6 +1234,7 @@ return {
         strings =
         {
             '🅿️ STRINGS',
+            'Plugin per la gestione delle lingue di Sasha.',
             'USER',
             '(#setlang|lingua) (it|en): Sasha imposta la lingua in cui deve parlare (funziona solo in privato con l\'utente).',
             'OWNER',
@@ -1210,6 +1246,7 @@ return {
         supergroup =
         {
             '🅿️ SUPERGROUP',
+            'Plugin per la gestione dei supergruppi.',
             'USER',
             '#owner: Sasha manda il proprietario.',
             '(#modlist|[sasha] lista mod): Sasha manda la lista dei moderatori.',
@@ -1262,6 +1299,7 @@ return {
         tagall =
         {
             '🅿️ TAGALL',
+            'Plugin per taggare tutti i membri con un username.',
             'OWNER',
             '(#tagall|sasha tagga tutti) <text>: Sasha tagga tutti i membri del gruppo con username e scrive <text>.',
         },
@@ -1269,6 +1307,7 @@ return {
         tex =
         {
             '🅿️ TEX',
+            'Plugin per generare equazioni.',
             'USER',
             '(#tex|[sasha] equazione) <equation>: Sasha converte <equation> in immagine.',
         },
@@ -1276,6 +1315,7 @@ return {
         unset =
         {
             '🅿️ UNSET',
+            'Plugin per eliminare cose salvate con SET.',
             'MOD',
             '(#unset|[sasha] unsetta) <var_name>: Sasha elimina <var_name>.',
             'ADMIN',
@@ -1285,6 +1325,7 @@ return {
         urbandictionary =
         {
             '🅿️ URBANDICTIONARY',
+            'Plugin per interagire con l\'Urban Dictionary.',
             'USER',
             '(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>: Sasha mostra la definizione di <text> dall\'Urban Dictionary.',
         },
@@ -1292,6 +1333,7 @@ return {
         warn =
         {
             '🅿️ WARN',
+            'Plugin per la gestione degli avvertimenti.',
             'MOD',
             '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>, se zero gli avvertimenti non funzioneranno più.',
             '#getwarn: Sasha manda il numero di avvertimenti massimi.',
@@ -1304,6 +1346,7 @@ return {
         webshot =
         {
             '🅿️ WEBSHOT',
+            'Plugin per fare screenshots di siti.',
             'MOD',
             '(#webshot|[sasha] webshotta) <url> [<size>]: Sasha esegue uno screenshot di <url> e lo invia, se <size> è specificata di quella dimensione.',
             'La dimensione può essere:',
@@ -1323,6 +1366,7 @@ return {
         whitelist =
         {
             '🅿️ WHITELIST',
+            'Plugin per la gestione della whitelist.',
             'ADMIN',
             '#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist.',
             '#clean whitelist: Sasha pulisce la whitelist.',
@@ -1412,6 +1456,11 @@ return {
         botUnset = ' has been removed from bots to interact with.',
         sendMeMedia = 'Send me the media you want me to forward.',
         mediaForwarded = 'Media forwarded.',
+
+        -- delword.lua --
+        delwordList = 'Censorship list:\n',
+        delwordAdded = 'Censorship added on ',
+        delwordRemoved = 'Censorship removed on ',
 
         -- fakecommand.lua --
         fakecommandYouTried = 'You tried asshole, you won\'t execute a command that requires a rank higher than yours.',
@@ -1839,6 +1888,7 @@ return {
         administrator =
         {
             '🅿️ ADMINISTRATOR',
+            'Plugin for Sasha\'s administrators.',
             'ADMIN',
             '(#pm|sasha messaggia) <user_id> <msg>: Sasha writes <msg> to <user_id>.',
             '#import <group_link>: Sasha joins <group_link>.',
@@ -1864,6 +1914,7 @@ return {
         apod =
         {
             '🅿️ APOD',
+            'Plugin for the Astronomy Picture of the Day.',
             'USER',
             '#apod|astro [<date>]: Sasha sends APOD.',
             '(#apod|#astro)hd [<date>]: Sasha sends APOD in HD.',
@@ -1874,6 +1925,7 @@ return {
         banhammer =
         {
             '🅿️ BANHAMMER',
+            'Plugin for the management of kick and bans.',
             'USER',
             '(#kickme|sasha uccidimi): Sasha kicks sender.',
             'MOD',
@@ -1897,6 +1949,7 @@ return {
         bot =
         {
             '🅿️ BOT',
+            'Plugin to enable or disable Sasha on the group.',
             'OWNER',
             '#bot|sasha on|off: Sasha goes on|off on the group.',
             'ADMIN',
@@ -1906,6 +1959,7 @@ return {
         botinteract =
         {
             '🅿️ BOTINTERACT',
+            'Plugin for the interaction with bots.',
             'USER',
             '$<text>: Sasha sends <text> to the bot.',
             '#sendmedia: Sasha will forward the media that will be sent to chat.',
@@ -1919,15 +1973,27 @@ return {
         broadcast =
         {
             '🅿️ BROADCAST',
+            'Plugin to send broadcast messages.',
             'ADMIN',
             '#br <group_id> <text>: Sasha sends <text> to <group_id>.',
             'SUDO',
             '#broadcast <text>: Sasha sends <text> to all groups.',
         },
 
+        delword =
+        {
+            '🅿️ DELWORD',
+            'Plugin for the management of censorships.',
+            'USER',
+            '(#dellist|[sasha] lista censura): Sasha sends a list of censored words or patterns.',
+            'OWNER',
+            '(#delword|[sasha] censura) <word>|<pattern>: Sasha puts|removes a censorship on <word>|<pattern>, when someone writes it in supergroups the message is deleted and in normal groups the user is kicked.',
+        },
+
         dogify =
         {
             '🅿️ DOGIFY',
+            'Plugin to create picture with doge.',
             'USER',
             '(#dogify|[sasha] doge) <your/words/with/slashes>: Sasha creates a pic with doge and specified words.',
         },
@@ -1935,6 +2001,7 @@ return {
         duckduckgo =
         {
             '🅿️ DUCKDUCKGO',
+            'Plugin for the research on duckduckgo.',
             'USER',
             '#duck[duck]go <terms>: Sasha searches <terms> on DuckDuckGo.',
         },
@@ -1942,6 +2009,7 @@ return {
         fakecommand =
         {
             '🅿️ FAKECOMMAND',
+            'Plugin to test commands.',
             'MOD',
             '(#user|#mod|#owner|#support|#admin) <command>: Sasha executes <command> as it would be sent by a user with the specified rank.',
         },
@@ -1949,13 +2017,15 @@ return {
         feedback =
         {
             '🅿️ FEEDBACK',
+            'Plugin for feedbacks.',
             'USER',
-            '#feedback <text>: Sasha sends <text> to her creator.',
+            '#feedback <text>: Sasha sends <text> as feedback.',
         },
 
         filemanager =
         {
             '🅿️ FILEMANAGER',
+            'Plugin for the management of Sasha\'s server.',
             'SUDO',
             '#folder: Sasha sends actual directory.',
             '#cd [<directory>]: Sasha enters in <directory>, if it\'s not specified it returns to base folder.',
@@ -1976,6 +2046,7 @@ return {
         flame =
         {
             '🅿️ FLAME',
+            'Plugin to start flames.',
             'MOD',
             '(#startflame|[sasha] flamma) <id>|<username>|<reply>|from: Sasha flames specified user.',
             '(#stopflame|[sasha] stop flame): Sasha stops flame.',
@@ -1985,6 +2056,7 @@ return {
         get =
         {
             '🅿️ GET',
+            'Plugin to get things saved with SET.',
             'USER',
             '(#getlist|#get|sasha lista): Sasha sends a list of saved variables.',
             '(#getgloballist|#getglobal|sasha lista globali): Sasha sends a list of globally saved variables.',
@@ -1996,6 +2068,7 @@ return {
         goodbyewelcome =
         {
             '🅿️ GOODBYEWELCOME',
+            'Plugin for welcome and goodbye.',
             'USER',
             '#getwelcome: Sasha sends welcome.',
             '#getgoodbye: Sasha sends goodbye.',
@@ -2011,6 +2084,7 @@ return {
         help =
         {
             '🅿️ HELP',
+            'Plugin to help users with commands, USE IT!',
             'USER',
             '(#sudolist|sasha lista sudo): Sasha sends sudo list.',
             '(#help|sasha aiuto): Sasha sends a list of plugins.',
@@ -2022,6 +2096,7 @@ return {
         info =
         {
             '🅿️ INFO',
+            'Plugin to obtain info.',
             'USER',
             '#getrank|rango [<id>|<username>|<reply>]: Sasha sends rank of specified user.',
             '(#info|[sasha] info): Sasha sends user\'s info or chat\'s info or her info.',
@@ -2041,6 +2116,7 @@ return {
         ingroup =
         {
             '🅿️ INGROUP',
+            'Plugin for the management of a normal group.',
             'USER',
             '(#rules|sasha regole): Sasha sends group\'s rules.',
             '(#about|sasha descrizione): Sasha sends group\'s about.',
@@ -2079,6 +2155,7 @@ return {
         inpm =
         {
             '🅿️ INPM',
+            'Plugin to obtain "public" groups.',
             'USER',
             '#chats: Sasha sends a "public" chats list.',
             '#chatlist: Sasha sends a file with "public" chats list.',
@@ -2095,6 +2172,7 @@ return {
         inrealm =
         {
             '🅿️ INREALM',
+            'Plugin for the management of groups and supergroups (reserved to admins).',
             'MOD',
             '#who: Sasha sends a list of all group|realm members.',
             '#wholist: Sasha sends a file with a list of all group/realm members.',
@@ -2125,8 +2203,7 @@ return {
         interact =
         {
             '🅿️ INTERACT',
-            'USER',
-            'Sasha interacts with users.',
+            'Plugin for the interaction with users.',
             'MOD',
             '(#echo|sasha ripeti) [<reply>]<text>: Sasha repeat <text>, if in reply of a message she replies to that message.',
         },
@@ -2134,6 +2211,7 @@ return {
         invite =
         {
             '🅿️ INVITE',
+            'Plugin to invite users.',
             --  'OWNER',
             'ADMIN',
             '(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invites specified user.',
@@ -2143,6 +2221,7 @@ return {
         knivesgame =
         {
             '🅿️ KNIVESGAME',
+            'Plugin for knives game.',
             'USER',
             'Knives by AISasha. Knives is the throwing knives game, Sasha throws a knife with a certain accuracy, if she hits you you\'re out, otherwise you stay.',
             '#registerme|#registrami: Sasha registers user to the game.',
@@ -2171,6 +2250,7 @@ return {
         likecounter =
         {
             '🅿️ LIKECOUNTER',
+            'Plugin for the management of likes.',
             'USER',
             '#like|#1up <id>|<username>|<reply>|from: Sasha adds a like to specified user.',
             '#dislike|#1down <id>|<username>|<reply>|from: Sasha removes a like from specified user.',
@@ -2184,6 +2264,7 @@ return {
         onservice =
         {
             '🅿️ ONSERVICE',
+            'Plugin to make Sasha leave a group.',
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha leaves the group.',
         },
@@ -2191,6 +2272,7 @@ return {
         plugins =
         {
             '🅿️ PLUGINS',
+            'Plugin to enable or disable plugins.',
             'OWNER',
             '(#plugins|[sasha] lista plugins): Sasha sends a list of all plugins.',
             '(#disabledlist|([sasha] lista disabilitati|disattivati)): Sasha sends disabled plugins list.',
@@ -2205,6 +2287,7 @@ return {
         pokedex =
         {
             '🅿️ POKEDEX',
+            'Plugin to obtain info on pokémons.',
             'USER',
             '#pokedex|#pokemon <name>|<id>: Sasha searches specified pokemon and sends its info.',
         },
@@ -2212,6 +2295,7 @@ return {
         qr =
         {
             '🅿️ QR',
+            'Plugin to create QR Codes.',
             'USER',
             '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha creates QR Code of <text>, if specified it colors QR Code.',
             'Colors can be specified as follows:',
@@ -2223,6 +2307,7 @@ return {
         reactions =
         {
             '🅿️ REACTIONS',
+            'Plugin to make Sasha reacts.',
             'SUDO',
             '#writing on|off: Sasha (pretends|stops pretending) to write.',
         },
@@ -2230,6 +2315,7 @@ return {
         ruletagame =
         {
             '🅿️ RULETAGAME',
+            'Plugin for russian roulette.',
             'USER',
             'Ruleta by AISasha, inspired from Leia (#RIP) and Arya (#RIP). Ruleta is the russian roulette with gun, cylinder and bullets, Sasha shots and if there\'s the bullet you\'re out, otherwise you stay.',
             '#registerme|#registrami: Sasha registers user to the game.',
@@ -2261,6 +2347,7 @@ return {
         set =
         {
             '🅿️ SET',
+            'Plugin to save things.',
             'MOD',
             '(#set|[sasha] setta) <var_name> <text>: Sasha saves <text> as answer to <var_name>.',
             '(#setmedia|[sasha] setta media) <var_name>: Sasha saves the media (audio or picture) that will be sent as answer to <var_name>.',
@@ -2272,6 +2359,7 @@ return {
         shout =
         {
             '🅿️ SHOUT',
+            'Plugin to shout words.',
             'USER',
             '(#shout|[sasha] grida|[sasha] urla) <text>: Sasha "shouts" <text>.',
         },
@@ -2279,24 +2367,15 @@ return {
         spam =
         {
             '🅿️ SPAM',
+            'Plugin for spamming.',
             'OWNER',
-            '(#spam|[sasha] spamma) <messages> <seconds> <text>: Sasha starts spamming <text> for <messages> times every <seconds> seconds.',
+            '(#spam|[sasha] spamma) [<messages> <seconds>] <text>: Sasha starts spamming <text> for <messages> times every <seconds> seconds.',
         },
-        --[[
-        spam =
-        {
-            '🅿️ SPAM',
-            'OWNER',
-            '#setspam <text>: Sasha sets <text> as the spam message.',
-            '#setmsgs <value>: Sasha sets <value> as number of messages to send.',
-            '#setwait <seconds>: Sasha sets <seconds> as wait between messages.',
-            '(#spam|[sasha] spamma): Sasha starts spamming.',
-        },
-        ]]
 
         stats =
         {
             '🅿️ STATS',
+            'Plugin to obtain stats on groups and Sasha.',
             'USER',
             '[#]aisasha: Sasha sends her description.',
             'MOD',
@@ -2315,6 +2394,7 @@ return {
         strings =
         {
             '🅿️ STRINGS',
+            'Plugin for the management of Sasha\'s languages.',
             'USER',
             '(#setlang|lingua) (it|en): Sasha sets the language she has to talk (works just in private with the user).',
             'OWNER',
@@ -2326,6 +2406,7 @@ return {
         supergroup =
         {
             '🅿️ SUPERGROUP',
+            'Plugin for the management of supergroups.',
             'USER',
             '#owner: Sasha sends owner info.',
             '(#modlist|[sasha] lista mod): Sasha moderators list.',
@@ -2378,6 +2459,7 @@ return {
         tagall =
         {
             '🅿️ TAGALL',
+            'Plugin to tag all users with username.',
             'OWNER',
             '(#tagall|sasha tagga tutti) <text>: Sasha tags all group\'s members and writes <text>.',
         },
@@ -2385,6 +2467,7 @@ return {
         tex =
         {
             '🅿️ TEX',
+            'Plugin to create equations.',
             'USER',
             '(#tex|[sasha] equazione) <equation>: Sasha converts <equation> in image.',
         },
@@ -2392,6 +2475,7 @@ return {
         unset =
         {
             '🅿️ UNSET',
+            'Plugin to delete things saved with SET.',
             'MOD',
             '(#unset|[sasha] unsetta) <var_name>: Sasha deletes <var_name>.',
             'ADMIN',
@@ -2401,6 +2485,7 @@ return {
         urbandictionary =
         {
             '🅿️ URBANDICTIONARY',
+            'Plugin for the interaction with the Urban Dictionary.',
             'USER',
             '(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>: Sasha searches <text> in the Urban Dictionary.',
         },
@@ -2408,6 +2493,7 @@ return {
         warn =
         {
             '🅿️ WARN',
+            'Plugin for the management of warns.',
             'MOD',
             '#setwarn <value>: Sasha sets max warns to <value>, if zero warns will not work.',
             '#getwarn: Sasha sends max warns value.',
@@ -2420,6 +2506,7 @@ return {
         webshot =
         {
             '🅿️ WEBSHOT',
+            'Plugin to make screenshots of websites.',
             'MOD',
             '(#webshot|[sasha] webshotta) <url> [<size>]: Sasha does a screenshot of <url> and sends it, if <size> is specified it sends of that dimension.',
             'Size can be:',
@@ -2439,6 +2526,7 @@ return {
         whitelist =
         {
             '🅿️ WHITELIST',
+            'Plugin for the management of the whitelist.',
             'ADMIN',
             '#whitelist <id>|<username>|<reply>: Sasha adds|removes specified user to|from whitelist.',
             '#clean whitelist: Sasha cleans whitelist.',
