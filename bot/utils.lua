@@ -725,37 +725,88 @@ function get_lang(chat_id)
 end
 
 function get_rank(user_id, chat_id)
-    if tostring(our_id) ~= tostring(user_id) then
-        if not is_sudo( { from = { id = user_id } }) then
-            if not is_admin2(user_id) then
-                if not is_support(user_id) then
-                    if not is_owner2(user_id, chat_id) then
-                        if not is_momod2(user_id, chat_id) then
-                            -- user
-                            return rank_table["USER"]
+    if tonumber(chat_id) ~= tonumber(our_id) then
+        -- if get_rank in a group check only in that group
+        if tonumber(our_id) ~= tonumber(user_id) then
+            if not is_sudo( { from = { id = user_id } }) then
+                if not is_admin2(user_id) then
+                    if not is_support(user_id) then
+                        if not is_owner2(user_id, chat_id) then
+                            if not is_momod2(user_id, chat_id) then
+                                -- user
+                                return rank_table["USER"]
+                            else
+                                -- mod
+                                return rank_table["MOD"]
+                            end
                         else
-                            -- mod
-                            return rank_table["MOD"]
+                            -- owner
+                            return rank_table["OWNER"]
                         end
                     else
-                        -- owner
-                        return rank_table["OWNER"]
+                        -- support
+                        return rank_table["SUPPORT"]
                     end
                 else
-                    -- support
-                    return rank_table["SUPPORT"]
+                    -- admin
+                    return rank_table["ADMIN"]
                 end
             else
-                -- admin
-                return rank_table["ADMIN"]
+                -- sudo
+                return rank_table["SUDO"]
             end
         else
-            -- sudo
-            return rank_table["SUDO"]
+            -- bot
+            return rank_table["BOT"]
         end
     else
-        -- bot
-        return rank_table["BOT"]
+        -- if get_rank in private check the higher rank of the user in all groups
+        if tonumber(our_id) ~= tonumber(user_id) then
+            if not is_sudo( { from = { id = user_id } }) then
+                if not is_admin2(user_id) then
+                    if not is_support(user_id) then
+                        local higher_rank = rank_table["USER"]
+                        local data = load_data(_config.moderation.data)
+                        if data['groups'] then
+                            -- if there are any groups check for everyone of them the rank of the user and choose the higher one
+                            for id_string in pairs(data['groups']) do
+                                if not is_owner2(user_id, id_string) then
+                                    if not is_momod2(user_id, id_string) then
+                                        -- user
+                                        if higher_rank < rank_table["USER"] then
+                                            higher_rank = rank_table["USER"]
+                                        end
+                                    else
+                                        -- mod
+                                        if higher_rank < rank_table["MOD"] then
+                                            higher_rank = rank_table["MOD"]
+                                        end
+                                    end
+                                else
+                                    -- owner
+                                    if higher_rank < rank_table["OWNER"] then
+                                        higher_rank = rank_table["OWNER"]
+                                    end
+                                end
+                            end
+                        end
+                        return higher_rank
+                    else
+                        -- support
+                        return rank_table["SUPPORT"]
+                    end
+                else
+                    -- admin
+                    return rank_table["ADMIN"]
+                end
+            else
+                -- sudo
+                return rank_table["SUDO"]
+            end
+        else
+            -- bot
+            return rank_table["BOT"]
+        end
     end
 end
 
