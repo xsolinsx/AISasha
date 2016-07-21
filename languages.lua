@@ -220,10 +220,6 @@ return {
         mutedUsersStart = 'Utenti muti di:',
         mutedTypesStart = 'Muti di:',
         mute = 'Muto ',
-        alreadyEnabled = ' già attivato.',
-        enabled = ' attivato.',
-        alreadyDisabled = ' già disattivato.',
-        disabled = ' disattivato',
         noAutoKick = 'Non puoi rimuoverti da solo.',
         noAutoBan = 'Non puoi bannarti da solo.',
 
