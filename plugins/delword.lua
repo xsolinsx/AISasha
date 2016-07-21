@@ -58,7 +58,7 @@ local function pre_process(msg, matches)
                 local temp = word:lower()
                 if msg.text then
                     if not string.match(msg.text, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                        if string.find(msg.text:lower(), temp) then
+                        if string.match(msg.text:lower(), temp) then
                             found = true
                         end
                     end
@@ -66,21 +66,21 @@ local function pre_process(msg, matches)
                 if msg.media then
                     if msg.media.title then
                         if not string.match(msg.media.title, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                            if string.find(msg.media.title:lower(), temp) then
+                            if string.match(msg.media.title:lower(), temp) then
                                 found = true
                             end
                         end
                     end
                     if msg.media.description then
                         if not string.match(msg.media.description, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                            if string.find(msg.media.description:lower(), temp) then
+                            if string.match(msg.media.description:lower(), temp) then
                                 found = true
                             end
                         end
                     end
                     if msg.media.caption then
                         if not string.match(msg.media.caption, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                            if string.find(msg.media.caption:lower(), temp) then
+                            if string.match(msg.media.caption:lower(), temp) then
                                 found = true
                             end
                         end
@@ -89,7 +89,7 @@ local function pre_process(msg, matches)
                 if msg.fwd_from then
                     if msg.fwd_from.title then
                         if not string.match(msg.fwd_from.title, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                            if string.find(msg.fwd_from.title:lower(), temp) then
+                            if string.match(msg.fwd_from.title:lower(), temp) then
                                 found = true
                             end
                         end

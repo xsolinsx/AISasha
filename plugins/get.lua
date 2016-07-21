@@ -88,7 +88,7 @@ local function pre_process(msg, matches)
             local temp = word:lower()
             if msg.text then
                 if not string.match(msg.text, "^[#!/][Uu][Nn][Ss][Ee][Tt] ([^%s]+)$") and not string.match(msg.text, "^[Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)$") and not string.match(msg.text, "^[Ss][Aa][Ss][Hh][Aa] [Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)$") and not string.match(msg.text, "^[Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll] ([^%s]+)$") then
-                    if string.find(msg.text:lower(), temp) then
+                    if string.match(msg.text:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
@@ -98,7 +98,7 @@ local function pre_process(msg, matches)
             end
             if msg.media then
                 if msg.media.title then
-                    if string.find(msg.media.title:lower(), temp) then
+                    if string.match(msg.media.title:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
@@ -106,7 +106,7 @@ local function pre_process(msg, matches)
                     end
                 end
                 if msg.media.description then
-                    if string.find(msg.media.description:lower(), temp) then
+                    if string.match(msg.media.description:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
@@ -114,7 +114,7 @@ local function pre_process(msg, matches)
                     end
                 end
                 if msg.media.caption then
-                    if string.find(msg.media.caption:lower(), temp) then
+                    if string.match(msg.media.caption:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
@@ -124,7 +124,7 @@ local function pre_process(msg, matches)
             end
             if msg.fwd_from then
                 if msg.fwd_from.title then
-                    if string.find(msg.fwd_from.title:lower(), temp) then
+                    if string.match(msg.fwd_from.title:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
@@ -147,7 +147,7 @@ local function pre_process(msg, matches)
             local temp = word:lower()
             if msg.text then
                 if not string.match(msg.text, "^[#!/][Uu][Nn][Ss][Ee][Tt] ([^%s]+)$") and not string.match(msg.text, "^[Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)$") and not string.match(msg.text, "^[Ss][Aa][Ss][Hh][Aa] [Uu][Nn][Ss][Ee][Tt][Tt][Aa] ([^%s]+)$") and not string.match(msg.text, "^[Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll] ([^%s]+)$") then
-                    if string.find(msg.text:lower(), temp) then
+                    if string.match(msg.text:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
@@ -157,7 +157,7 @@ local function pre_process(msg, matches)
             end
             if msg.media then
                 if msg.media.title then
-                    if string.find(msg.media.title:lower(), temp) then
+                    if string.match(msg.media.title:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
@@ -165,7 +165,7 @@ local function pre_process(msg, matches)
                     end
                 end
                 if msg.media.description then
-                    if string.find(msg.media.description:lower(), temp) then
+                    if string.match(msg.media.description:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
@@ -173,7 +173,7 @@ local function pre_process(msg, matches)
                     end
                 end
                 if msg.media.caption then
-                    if string.find(msg.media.caption:lower(), temp) then
+                    if string.match(msg.media.caption:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
@@ -183,7 +183,7 @@ local function pre_process(msg, matches)
             end
             if msg.fwd_from then
                 if msg.fwd_from.title then
-                    if string.find(msg.fwd_from.title:lower(), temp) then
+                    if string.match(msg.fwd_from.title:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
                             found = true
