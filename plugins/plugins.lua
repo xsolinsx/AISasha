@@ -212,7 +212,7 @@ local function run(msg, matches)
         if is_sudo(msg) then
             local plugin_name = matches[2]
             print("enable: " .. matches[2])
-            return enable_plugin(plugin_name)
+            return enable_plugin(plugin_name, msg.lang)
         else
             return langs[msg.lang].require_sudo
         end
@@ -225,7 +225,7 @@ local function run(msg, matches)
                 return langs[msg.lang].systemPlugin
             end
             print("disable: " .. matches[2])
-            return disable_plugin(matches[2])
+            return disable_plugin(matches[2], msg.lang)
         else
             return langs[msg.lang].require_sudo
         end
