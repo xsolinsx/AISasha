@@ -15,10 +15,10 @@ local function setunset_delword(msg, var_name)
     if hash then
         if redis:hget(hash, var_name) then
             redis:hdel(hash, var_name)
-            return langs[msg.lang].delwordRemoved
+            return langs[msg.lang].delwordRemoved .. var_name
         else
             redis:hset(hash, var_name, true)
-            return langs[msg.lang].delwordAdded
+            return langs[msg.lang].delwordAdded .. var_name
         end
     end
 end
