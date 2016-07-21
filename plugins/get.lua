@@ -80,6 +80,7 @@ end
 
 local function pre_process(msg, matches)
     local vars = list_variables(msg, true)
+    local answer = nil
 
     if vars ~= nil then
         local t = vars:split('\n')
@@ -91,6 +92,7 @@ local function pre_process(msg, matches)
                     if string.match(msg.text:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
@@ -101,6 +103,7 @@ local function pre_process(msg, matches)
                     if string.match(msg.media.title:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
@@ -109,6 +112,7 @@ local function pre_process(msg, matches)
                     if string.match(msg.media.description:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
@@ -117,6 +121,7 @@ local function pre_process(msg, matches)
                     if string.match(msg.media.caption:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
@@ -127,18 +132,33 @@ local function pre_process(msg, matches)
                     if string.match(msg.fwd_from.title:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
                 end
             end
             if found then
-                reply_msg(msg.id, get_value(msg, temp), ok_cb, false)
+                if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
+                    -- if not media
+                    reply_msg(msg.id, get_value(msg, word:lower()), ok_cb, false)
+                elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
+                    -- if picture
+                    if io.popen('find ' .. answer):read("*all") ~= '' then
+                        send_photo(get_receiver(msg), answer, ok_cb, false)
+                    end
+                elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.ogg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.ogg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.ogg$") then
+                    -- if audio
+                    if io.popen('find ' .. answer):read("*all") ~= '' then
+                        send_audio(get_receiver(msg), answer, ok_cb, false)
+                    end
+                end
             end
         end
     end
 
     local vars = list_variables(msg, false)
+    local answer = nil
 
     if vars ~= nil then
         local t = vars:split('\n')
@@ -150,6 +170,7 @@ local function pre_process(msg, matches)
                     if string.match(msg.text:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
@@ -160,6 +181,7 @@ local function pre_process(msg, matches)
                     if string.match(msg.media.title:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
@@ -168,6 +190,7 @@ local function pre_process(msg, matches)
                     if string.match(msg.media.description:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
@@ -176,6 +199,7 @@ local function pre_process(msg, matches)
                     if string.match(msg.media.caption:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
@@ -186,13 +210,27 @@ local function pre_process(msg, matches)
                     if string.match(msg.fwd_from.title:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
+                            answer = value
                             found = true
                         end
                     end
                 end
             end
             if found then
-                reply_msg(msg.id, get_value(msg, temp), ok_cb, false)
+                if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
+                    -- if not media
+                    reply_msg(msg.id, get_value(msg, word:lower()), ok_cb, false)
+                elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
+                    -- if picture
+                    if io.popen('find ' .. answer):read("*all") ~= '' then
+                        send_photo(get_receiver(msg), answer, ok_cb, false)
+                    end
+                elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.ogg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.ogg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.ogg$") then
+                    -- if audio
+                    if io.popen('find ' .. answer):read("*all") ~= '' then
+                        send_audio(get_receiver(msg), answer, ok_cb, false)
+                    end
+                end
             end
         end
     end
