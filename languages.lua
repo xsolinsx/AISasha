@@ -271,7 +271,7 @@ return {
         -- delword.lua --
         delwordList = 'Lista censure:\n',
         delwordAdded = 'Censura aggiunta su ',
-        delwordRemoved = 'Censura rimossa su ',
+        delwordRemoved = 'Censura rimossa da ',
 
         -- fakecommand.lua --
         fakecommandYouTried = 'Ci hai provato pezzente, non eseguirai un comando che richiede un rango superiore al tuo.',
@@ -1456,7 +1456,7 @@ return {
         -- delword.lua --
         delwordList = 'Censorship list:\n',
         delwordAdded = 'Censorship added on ',
-        delwordRemoved = 'Censorship removed on ',
+        delwordRemoved = 'Censorship removed from ',
 
         -- fakecommand.lua --
         fakecommandYouTried = 'You tried asshole, you won\'t execute a command that requires a rank higher than yours.',
