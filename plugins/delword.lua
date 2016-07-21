@@ -118,8 +118,8 @@ return {
         "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$",
         "^[#!/]([Dd][Ee][Ll][Ll][Ii][Ss][Tt])$",
         -- delword
-        "^([Ss][Aa][Ss][Hh][Aa] [Cc][Ee][Nn][Ss][Uu][Rr][Aa])$",
-        "^([Cc][Ee][Nn][Ss][Uu][Rr][Aa])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Cc][Ee][Nn][Ss][Uu][Rr][Aa]) (.*)$",
+        "^([Cc][Ee][Nn][Ss][Uu][Rr][Aa]) (.*)$",
         -- dellist
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Cc][Ee][Nn][Ss][Uu][Rr][Ee])$",
         "^([Ll][Ii][Ss][Tt][Aa] [Cc][Ee][Nn][Ss][Uu][Rr][Ee])$",
