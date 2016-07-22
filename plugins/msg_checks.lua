@@ -66,7 +66,27 @@ local function pre_process(msg)
                 if to_chat then
                     kick_user(msg.from.id, msg.to.id)
                 end
-                return
+                -- clean msg but returns it
+                if msg.text then
+                    msg.text = ''
+                end
+                if msg.media then
+                    if msg.media.title then
+                        msg.media.title = ''
+                    end
+                    if msg.media.description then
+                        msg.media.description = ''
+                    end
+                    if msg.media.caption then
+                        msg.media.caption = ''
+                    end
+                end
+                if msg.fwd_from then
+                    if msg.fwd_from.title then
+                        msg.fwd_from.title = ''
+                    end
+                end
+                return msg
             end
             if not is_momod(msg) then
                 if msg and not msg.service and is_muted(msg.to.id, 'All: yes') then
@@ -74,7 +94,27 @@ local function pre_process(msg)
                     if to_chat then
                         kick_user(msg.from.id, msg.to.id)
                     end
-                    return
+                    -- clean msg but returns it
+                    if msg.text then
+                        msg.text = ''
+                    end
+                    if msg.media then
+                        if msg.media.title then
+                            msg.media.title = ''
+                        end
+                        if msg.media.description then
+                            msg.media.description = ''
+                        end
+                        if msg.media.caption then
+                            msg.media.caption = ''
+                        end
+                    end
+                    if msg.fwd_from then
+                        if msg.fwd_from.title then
+                            msg.fwd_from.title = ''
+                        end
+                    end
+                    return msg
                 end
                 if msg.text then
                     -- msg.text checks
