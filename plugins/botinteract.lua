@@ -58,8 +58,7 @@ local function run(msg, matches)
         for i, v in pairs(t) do
             chat, bot = v:match("(%d+):(%d+)")
             if tonumber(msg.to.id) == tonumber(chat) then
-                msg.text = msg.text:gsub('$', '')
-                send_large_msg('user#id' .. bot, msg.text)
+                send_large_msg('user#id' .. bot, matches[2])
             end
         end
     end
@@ -111,7 +110,7 @@ return {
     description = "BOTINTERACT",
     patterns =
     {
-        "^(%$).*$",
+        "^(%$)(.*)$",
         "^[#!/]([Ss][Ee][Nn][Dd][Mm][Ee][Dd][Ii][Aa])$",
         "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
         "^[#!/]([Uu][Nn][Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
