@@ -1070,7 +1070,7 @@ local function run(msg, matches)
             local function callback_link(extra, success, result)
                 local receiver = get_receiver(msg)
                 if success == 0 then
-                    send_large_msg(receiver, langs[msg.lang].errorCreateSuperLink)
+                    send_large_msg(receiver, langs[msg.lang].errorCreateLink)
                     data[tostring(msg.to.id)]['settings']['set_link'] = nil
                     save_data(_config.moderation.data, data)
                 else
@@ -1109,7 +1109,7 @@ local function run(msg, matches)
             end
             local group_link = data[tostring(msg.to.id)]['settings']['set_link']
             if not group_link then
-                return langs[msg.lang].errorCreateSuperLink
+                return langs[msg.lang].createLinkInfo
             end
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
             return msg.to.title .. '\n' .. group_link
