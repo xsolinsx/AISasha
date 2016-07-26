@@ -44,21 +44,37 @@ local function run(msg, matches)
         if type(msg.reply_id) ~= "nil" then
             local receiver = get_receiver(msg)
             get_message(msg.reply_id, get_message_callback, { receiver = receiver })
-        elseif string.match(matches[2], '^%d+$') then
-            local user_id = matches[2]
-            local is_whitelisted = redis:sismember(hash, user_id)
-            if is_whitelisted then
-                redis:srem(hash, user_id)
-                return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistRemoved
+        elseif matches[2] then
+            if string.match(matches[2], '^%d+$') then
+                local user_id = matches[2]
+                local is_whitelisted = redis:sismember(hash, user_id)
+                if is_whitelisted then
+                    redis:srem(hash, user_id)
+                    return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistRemoved
+                else
+                    redis:sadd(hash, user_id)
+                    return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistAdded
+                end
             else
-                redis:sadd(hash, user_id)
-                return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistAdded
+                local receiver = get_receiver(msg)
+                local username = matches[2]
+                local username = string.gsub(matches[2], '@', '')
+                resolve_username(username, whitelist_res, { receiver = receiver })
             end
         else
-            local receiver = get_receiver(msg)
-            local username = matches[2]
-            local username = string.gsub(matches[2], '@', '')
-            resolve_username(username, whitelist_res, { receiver = receiver })
+            local hash = 'whitelist'
+            local list = redis:smembers(hash)
+            local text = langs[msg.lang].whitelistStart
+            for k, v in pairs(list) do
+                local user_info = redis:hgetall('user:' .. v)
+                if user_info and user_info.print_name then
+                    local print_name = string.gsub(user_info.print_name, "_", " ")
+                    text = text .. k .. " - " .. print_name .. " [" .. v .. "]\n"
+                else
+                    text = text .. k .. " - " .. v .. "\n"
+                end
+            end
+            return text
         end
     end
 

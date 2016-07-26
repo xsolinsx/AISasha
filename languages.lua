@@ -717,6 +717,7 @@ return {
         whitelistRemoved = ' rimosso dalla whitelist.',
         whitelistAdded = ' aggiunto alla whitelist.',
         whitelistCleaned = 'Whitelist svuotata.',
+        whitelistStart = 'Whitelist:\n',
 
         ------------
         -- Usages --
@@ -1366,7 +1367,7 @@ return {
             '🅿️ WHITELIST',
             'Plugin per la gestione della whitelist.',
             'ADMIN',
-            '#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist.',
+            '#whitelist [<id>|<username>|<reply>]: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist, se nulla è specificato Sasha manda la whitelist.',
             '#clean whitelist: Sasha pulisce la whitelist.',
         },
     },
@@ -1880,6 +1881,7 @@ return {
         whitelistRemoved = ' removed from whitelist.',
         whitelistAdded = ' added to whitelist.',
         whitelistCleaned = 'Whitelist cleaned.',
+        whitelistStart = 'Whitelist:\n',
 
         ------------
         -- Usages --
@@ -2529,7 +2531,7 @@ return {
             '🅿️ WHITELIST',
             'Plugin for the management of the whitelist.',
             'ADMIN',
-            '#whitelist <id>|<username>|<reply>: Sasha adds|removes specified user to|from whitelist.',
+            '#whitelist [<id>|<username>|<reply>]: Sasha adds|removes specified user to|from whitelist, if nothing is specified Sasha sends the whitelist.',
             '#clean whitelist: Sasha cleans whitelist.',
         },
     }
