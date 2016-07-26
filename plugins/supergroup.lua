@@ -1093,6 +1093,16 @@ local function run(msg, matches)
             end
         end
 
+        if matches[1]:lower() == 'unsetlink' or matches[1]:lower() == "sasha elimina link" then
+            if is_owner(msg) then
+                data[tostring(msg.to.id)]['settings']['set_link'] = nil
+                save_data(_config.moderation.data, data)
+                return langs[msg.lang].linkDeleted
+            else
+                return langs[msg.lang].require_owner
+            end
+        end
+
         if matches[1]:lower() == 'link' or matches[1]:lower() == "sasha link" then
             if not is_momod(msg) then
                 return
@@ -1809,6 +1819,7 @@ return {
         "^[#!/]([Nn][Ee][Ww][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ll][Ii][Nn][Kk])$",
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn])",
@@ -1863,6 +1874,8 @@ return {
         -- setlink
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
+        -- unsetlink
+        "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa] [Ll][Ii][Nn][Kk])$",
         -- link
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Nn][Kk])$",
         -- promote
@@ -1933,6 +1946,7 @@ return {
     -- OWNER
     -- (#admins|[sasha] lista admin)
     -- (#setlink|sasha imposta link) <link>
+    -- (#unsetlink|sasha elimina link)
     -- #promoteadmin <id>|<username>|<reply>
     -- #demoteadmin <id>|<username>|<reply>
     -- #setowner <id>|<username>|<reply>

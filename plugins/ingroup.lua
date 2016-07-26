@@ -1563,6 +1563,16 @@ local function run(msg, matches)
                 end
             end
 
+            if matches[1]:lower() == 'unsetlink' or matches[1]:lower() == "sasha elimina link" then
+                if is_owner(msg) then
+                    data[tostring(msg.to.id)]['settings']['set_link'] = nil
+                    save_data(_config.moderation.data, data)
+                    return langs[msg.lang].linkDeleted
+                else
+                    return langs[msg.lang].require_owner
+                end
+            end
+
             if matches[1]:lower() == 'link' or matches[1]:lower() == 'sasha link' then
                 if not is_momod(msg) then
                     return langs[msg.lang].require_mod
@@ -1724,6 +1734,7 @@ return {
         "^[#!/]([Nn][Ee][Ww][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ll][Ii][Nn][Kk])$",
         "^[#!/]([Mm][Uu][Tt][Ee]) ([^%s]+)$",
         "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) ([^%s]+)$",
@@ -1771,6 +1782,8 @@ return {
         -- setlink
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
+        -- unsetlink
+        "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa] [Ll][Ii][Nn][Kk])$",
         -- mute
         "^([Ss][Ii][Ll][Ee][Nn][Zz][Ii][Aa]) ([^%s]+)$",
         -- unmute
@@ -1806,7 +1819,8 @@ return {
     -- (#link|sasha link)
     -- #setflood <value>
     -- OWNER
-    -- (#setlink|[sasha] imposta link) <link>
+    -- (#setlink|sasha imposta link) <link>
+    -- (#unsetlink|sasha elimina link)
     -- (#promote|[sasha] promuovi) <username>|<reply>
     -- (#demote|[sasha] degrada) <username>|<reply>
     -- #mute|silenzia all|text|documents|gifs|video|photo|audio
