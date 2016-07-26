@@ -291,12 +291,12 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'ruletainfo' then
-            local percentage =(groupstats.caps * 100) / groupstats.cylinder
+            local percentage =(tonumber(groupstats.caps) * 100) / tonumber(groupstats.cylinder)
             percentage = string.format('%d', percentage)
 
             local info = langs[msg.lang].cylinderCapacity .. groupstats.cylinder .. '\n' ..
             langs[msg.lang].capsNumber .. groupstats.caps .. '\n' ..
-            langs[msg.lang].deathPercentage .. percentage .. '%\n' ..
+            langs[msg.lang].ruletaDeathPercentage .. percentage .. '%\n' ..
             langs[msg.lang].challengeCylinderCapacity .. groupstats.challengecylinder .. '\n' ..
             langs[msg.lang].challengeCapsNumber .. groupstats.challengecaps .. '\n'
             return info
