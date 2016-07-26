@@ -173,7 +173,19 @@ local function leaderboards(users, lbtype, lang)
         if user.name and user.param then
             if user.param > 0 then
                 i = i + 1
-                text = text .. i .. '. ' .. user.name .. ' => ' .. user.param .. '\n'
+                if user.param >= 1000 then
+                    local j = 0
+                    local mad = ''
+                    local points = user.param
+                    while points >= 0 do
+                        j = j + 1
+                        points = points - 1000
+                        mad = mad .. '☠'
+                    end
+                    text = text .. i .. '. ' .. user.name .. ' => ' .. mad .. ' ' .. tostring(tonumber(user.param) -(1000 *(j - 1))) .. '\n'
+                else
+                    text = text .. i .. '. ' .. user.name .. ' => ' .. user.param .. '\n'
+                end
             end
         end
     end

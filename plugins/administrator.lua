@@ -212,8 +212,6 @@ local function tableshow(t, name, indent)
     end
     cart, autoref = "", ""
     addtocart(t, name, indent)
-    print(cart)
-    print(autoref)
     return cart .. autoref
 end
 
