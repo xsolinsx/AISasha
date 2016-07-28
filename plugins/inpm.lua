@@ -177,7 +177,7 @@ local function run(msg, matches)
                         -- local channel = long_id
                         local chat = 'chat#id' .. matches[2]
                         local channel = 'channel#id' .. matches[2]
-                        local user = msg.from.peer_id
+                        local user = msg.from.id
                         chat_add_user(chat, user, ok_cb, false)
                         channel_invite(channel, user, ok_cb, false)
                         -- channel_set_admin(channel, user, ok_cb, false)
@@ -189,7 +189,7 @@ local function run(msg, matches)
                         -- local channel = long_id
                         local chat = 'chat#id' .. matches[2]
                         local channel = 'channel#id' .. matches[2]
-                        local user = msg.from.peer_id
+                        local user = msg.from.id
                         chat_add_user(chat, user, ok_cb, false)
                         channel_invite(channel, user, ok_cb, false)
                         -- channel_set_mod(channel, user, ok_cb, false)
@@ -206,7 +206,7 @@ local function run(msg, matches)
                         -- local channel = long_id
                         local chat = 'chat#id' .. matches[2]
                         local channel = 'channel#id' .. matches[2]
-                        local user = msg.from.peer_id
+                        local user = msg.from.id
                         chat_add_user(chat, user, ok_cb, false)
                         channel_invite(channel, user, ok_cb, false)
                     end
@@ -217,7 +217,7 @@ local function run(msg, matches)
                 if value then
                     local chat = 'chat#id' .. value
                     local channel = 'channel#id' .. value
-                    local user = msg.from.peer_id
+                    local user = msg.from.id
                     chat_add_user(chat, user, ok_cb, false)
                     channel_invite(channel, user, ok_cb, false)
                     return
