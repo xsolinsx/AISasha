@@ -374,6 +374,7 @@ function create_config()
             "strings",
             "preprocess_media",
             "administrator",
+            "database",
             "bot",
             "inrealm",
             "ingroup",
@@ -382,7 +383,6 @@ function create_config()
             "stats",
             "plugins",
             "owners",
-            "arabic_lock",
             "set",
             "unset",
             "help",
@@ -409,6 +409,7 @@ function create_config()
         knife = { db = 'data/knifedb.json' },
         clicktap = { db = 'data/clicktapdb.json' },
         likecounter = { db = 'data/likecounterdb.json' },
+        database = { db = 'data/database.json' },
         about_text = "AISashaSuper by @EricSolinas based on TeleSeed supergroup branch with langs management taken from GroupButlerBot and something else taken from DBTeam.\nThanks guys.",
     }
     serialize_to_file(config, './data/config.lua', false)

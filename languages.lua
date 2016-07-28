@@ -268,6 +268,10 @@ return {
         sendMeMedia = 'Mandami ora il media che vuoi che io inoltri.',
         mediaForwarded = 'Media inoltrato.',
 
+        -- database.lua --
+        dbCreated = 'Database creato.',
+        dataLeaked = 'Data leaked.',
+
         -- delword.lua --
         delwordList = 'Lista censure:\n',
         delwordAdded = 'Censura aggiunta su ',
@@ -817,6 +821,15 @@ return {
             '#broadcast <text>: Sasha invia <text> a tutti i gruppi.',
         },
 
+        database =
+        {
+            '🅿️ DATABASE',
+            'Plugin per il salvataggio delle informazioni di utenti e gruppi.',
+            'SUDO',
+            '#createdatabase: Sasha crea il database.',
+            '(#database|[sasha] database): Sasha salva i dati di tutti gli utenti del gruppo e i dati del gruppo.',
+        },
+
         delword =
         {
             '🅿️ DELWORD',
@@ -946,8 +959,6 @@ return {
             'ADMIN',
             '(#groupinfo|[sasha] info gruppo) <group_id>: Sasha manda le info del gruppo specificato.',
             '(#grouplink|[sasha] link gruppo) <group_id>: Sasha manda il link del gruppo specificato.',
-            'SUDO',
-            '(#database|[sasha] database): Sasha salva i dati di tutti gli utenti.',
         },
 
         ingroup =
@@ -1455,6 +1466,10 @@ return {
         botUnset = ' has been removed from bots to interact with.',
         sendMeMedia = 'Send me the media you want me to forward.',
         mediaForwarded = 'Media forwarded.',
+
+        -- database.lua --
+        dbCreated = 'Database created.',
+        dataLeaked = 'Data leaked.',
 
         -- delword.lua --
         delwordList = 'Censorship list:\n',
@@ -1981,6 +1996,15 @@ return {
             '#broadcast <text>: Sasha sends <text> to all groups.',
         },
 
+        database =
+        {
+            '🅿️ DATABASE',
+            'Plugin to save all users and groups info.',
+            'SUDO',
+            '#createdatabase: Sasha creates the database.',
+            '(#database|[sasha] database): Sasha saves all info of all users of group and group info.',
+        },
+
         delword =
         {
             '🅿️ DELWORD',
@@ -2110,8 +2134,6 @@ return {
             'ADMIN',
             '(#groupinfo|[sasha] info gruppo) <group_id>: Sasha sends info of specified group.',
             '(#grouplink|[sasha] link gruppo) <group_id>: Sasha sends link of specified group.',
-            'SUDO',
-            '(#database|[sasha] database): Sasha saves all info of all users of group.',
         },
 
         ingroup =

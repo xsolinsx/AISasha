@@ -407,60 +407,6 @@ local function chat_callback_info(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
-local function database(extra, success, result)
-    local text
-    local id
-    local db = io.open("./data/db.txt", "a")
-    for k, v in pairs(result.members) do
-        text = ''
-        id = ''
-        if v.title then
-            text = text .. ' Nome: ' .. v.title
-        end
-        if v.first_name then
-            text = text .. ' Nome: ' .. v.first_name
-        end
-        if v.real_first_name then
-            text = text .. ' Nome: ' .. v.real_first_name
-        end
-        if v.last_name then
-            text = text .. ' Cognome: ' .. v.last_name
-        end
-        if v.real_last_name then
-            text = text .. ' Cognome: ' .. v.real_last_name
-        end
-        if v.username then
-            text = text .. ' Username: @' .. v.username
-        end
-        if v.phone then
-            text = text .. 'Telefono: ' .. '+' .. string.sub(v.phone, 1, 6) .. '******'
-        end
-        text = text .. 'Rango: ' .. reverse_rank_table[get_rank(v.peer_id, result.peer_id) + 1]
-        .. 'Data: ' .. os.date('%c')
-        .. 'Altre informazioni:  '
-        if is_whitelisted(v.peer_id) then
-            text = text .. 'WHITELISTED, '
-        end
-        if is_gbanned(v.peer_id) then
-            text = text .. 'GBANNED, '
-        end
-        if is_banned(v.peer_id, result.peer_id) then
-            text = text .. 'BANNED, '
-        end
-        if is_muted_user(result.peer_id, v.peer_id) then
-            text = text .. 'MUTED, '
-        end
-        text = text .. '\nId: ' .. v.peer_id
-        .. ' Long_id: ' .. v.id
-        id = v.peer_id
-        db:write('"' .. id .. '" = "' .. text .. '"\n')
-    end
-    db:flush()
-    db:close()
-    send_large_msg('chat#id' .. result.peer_id, "Data leak.")
-    send_large_msg('channel#id' .. result.peer_id, "Data leak.")
-end
-
 local function pre_process(msg)
     if msg.to.type == 'user' and msg.fwd_from then
         if is_support(msg.from.id) or is_admin1(msg) then
@@ -681,9 +627,9 @@ local function run(msg, matches)
     if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' then
         if not matches[2] then
             if chat_type == 'channel' then
-                channel_info('channel#id' .. msg.to.id, channel_callback_info, { receiver = receiver })
+                channel_info(receiver, channel_callback_info, { receiver = receiver })
             elseif chat_type == 'chat' then
-                chat_info('chat#id' .. msg.to.id, chat_callback_info, { receiver = receiver })
+                chat_info(receiver, chat_callback_info, { receiver = receiver })
             end
         else
             if is_admin1(msg) then
@@ -704,17 +650,6 @@ local function run(msg, matches)
             return matches[2] .. '\n' .. group_link
         else
             return langs[msg.lang].require_admin
-        end
-    end
-    if matches[1]:lower() == 'database' or matches[1]:lower() == 'sasha database' then
-        if is_sudo(msg) then
-            if chat_type == 'channel' then
-                channel_info(receiver, database, { receiver = receiver, msg = msg })
-            elseif chat_type == 'chat' then
-                chat_info(receiver, database, { receiver = receiver })
-            end
-        else
-            return langs[msg.lang].require_sudo
         end
     end
     if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] then
@@ -743,7 +678,6 @@ return {
     description = "INFO",
     patterns =
     {
-        "^[#!/]([Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo]) (%d+)$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ll][Ii][Nn][Kk]) (%d+)$",
@@ -754,8 +688,6 @@ return {
         "^[#!/]([Ii][Nn][Ff][Oo])$",
         "^[#!/]([Ww][Hh][Oo])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ee][Dd])$",
-        -- database
-        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         -- groupinfo
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
@@ -792,6 +724,4 @@ return {
     -- ADMIN
     -- (#groupinfo|[sasha] info gruppo) <group_id>
     -- (#grouplink|[sasha] link gruppo) <group_id>
-    -- SUDO
-    -- (#database|[sasha] database)
 }
