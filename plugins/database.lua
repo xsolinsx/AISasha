@@ -108,9 +108,9 @@ local function run(msg, matches)
 
         if matches[1]:lower() == 'database' or matches[1]:lower() == 'sasha database' then
             local receiver = get_receiver(msg)
-            if chat_type == 'channel' then
+            if msg.to.type == 'channel' then
                 channel_get_users(receiver, callback_supergroup_database, { receiver = receiver, database = database, print_name = msg.to.print_name, username = (msg.to.username or nil), id = msg.to.peer_id })
-            elseif chat_type == 'chat' then
+            elseif msg.to.type == 'chat' then
                 chat_info(receiver, callback_group_database, { receiver = receiver, database = database })
             else
                 return
