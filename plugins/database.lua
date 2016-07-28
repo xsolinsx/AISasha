@@ -22,25 +22,36 @@ local function callback_group_database(extra, success, result)
     -- save users info
     for k, v in pairs(result.members) do
         if database["users"][tostring(v.peer_id)] then
-            if not database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] then
-                database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] = tonumber(chat_id)
+            if database["users"][tostring(v.peer_id)].groups then
+                if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
+                    database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
+                end
+            else
+                database["users"][tostring(v.peer_id)].groups = { [tostring(chat_id)] = tonumber(chat_id) }
             end
-            database["users"][tostring(v.peer_id)] = {
-                print_name = v.print_name:gsub("_"," "),
-                username = v.username or 'NOUSER',
-                old_print_names = database["users"][tostring(v.peer_id)].old_print_names .. ' ### ' .. v.print_name:gsub("_"," "),
-                old_usernames = database["users"][tostring(v.peer_id)].old_usernames .. ' ### ' ..(v.username or 'NOUSER'),
-                long_id = v.id
-            }
+            if database["users"][tostring(v.peer_id)].print_name ~= v.print_name or database["users"][tostring(v.peer_id)].username ~= v.username then
+                if database["users"][tostring(v.peer_id)].print_name ~= v.print_name then
+                    database["users"][tostring(v.peer_id)] = {
+                        print_name = v.print_name:gsub("_"," "),
+                        old_print_names = database["users"][tostring(v.peer_id)].old_print_names .. ' ### ' .. v.print_name:gsub("_"," "),
+                    }
+                end
+                if database["users"][tostring(v.peer_id)].username ~= v.username then
+                    database["users"][tostring(v.peer_id)] = {
+                        username = v.username or 'NOUSER',
+                        old_usernames = database["users"][tostring(v.peer_id)].old_usernames .. ' ### ' ..(v.username or 'NOUSER'),
+                    }
+                end
+            end
         else
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
                 old_print_names = v.print_name:gsub("_"," "),
                 old_usernames = v.username or 'NOUSER',
-                long_id = v.id
+                long_id = v.id,
+                groups = { [tostring(chat_id)] = tonumber(chat_id) }
             }
-            database["users"][tostring(v.peer_id)]["groups"] = { [tostring(chat_id)] = tonumber(chat_id) }
         end
     end
     save_data(_config.database.db, database)
@@ -75,25 +86,36 @@ local function callback_supergroup_database(extra, success, result)
     -- save users info
     for k, v in pairsByKeys(result) do
         if database["users"][tostring(v.peer_id)] then
-            if not database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] then
-                database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] = tonumber(chat_id)
+            if database["users"][tostring(v.peer_id)].groups then
+                if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
+                    database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
+                end
+            else
+                database["users"][tostring(v.peer_id)].groups = { [tostring(chat_id)] = tonumber(chat_id) }
             end
-            database["users"][tostring(v.peer_id)] = {
-                print_name = v.print_name:gsub("_"," "),
-                username = v.username or 'NOUSER',
-                old_print_names = database["users"][tostring(v.peer_id)].old_print_names .. ' ### ' .. v.print_name:gsub("_"," "),
-                old_usernames = database["users"][tostring(v.peer_id)].old_usernames .. ' ### ' ..(v.username or 'NOUSER'),
-                long_id = v.id
-            }
+            if database["users"][tostring(v.peer_id)].print_name ~= v.print_name or database["users"][tostring(v.peer_id)].username ~= v.username then
+                if database["users"][tostring(v.peer_id)].print_name ~= v.print_name then
+                    database["users"][tostring(v.peer_id)] = {
+                        print_name = v.print_name:gsub("_"," "),
+                        old_print_names = database["users"][tostring(v.peer_id)].old_print_names .. ' ### ' .. v.print_name:gsub("_"," "),
+                    }
+                end
+                if database["users"][tostring(v.peer_id)].username ~= v.username then
+                    database["users"][tostring(v.peer_id)] = {
+                        username = v.username or 'NOUSER',
+                        old_usernames = database["users"][tostring(v.peer_id)].old_usernames .. ' ### ' ..(v.username or 'NOUSER'),
+                    }
+                end
+            end
         else
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
                 old_print_names = v.print_name:gsub("_"," "),
                 old_usernames = v.username or 'NOUSER',
-                long_id = v.id
+                long_id = v.id,
+                groups = { [tostring(chat_id)] = tonumber(chat_id) }
             }
-            database["users"][tostring(v.peer_id)]["groups"] = { [tostring(chat_id)] = tonumber(chat_id) }
         end
     end
     save_data(_config.database.db, database)
