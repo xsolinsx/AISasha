@@ -22,6 +22,9 @@ local function callback_group_database(extra, success, result)
     -- save users info
     for k, v in pairs(result.members) do
         if database["users"][tostring(v.peer_id)] then
+            if not database["users"][tostring(v.peer_id)].groups then
+                database["users"][tostring(v.peer_id)].groups = { }
+            end
             if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
                 database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
             end
@@ -76,6 +79,9 @@ local function callback_supergroup_database(extra, success, result)
     -- save users info
     for k, v in pairsByKeys(result) do
         if database["users"][tostring(v.peer_id)] then
+            if not database["users"][tostring(v.peer_id)].groups then
+                database["users"][tostring(v.peer_id)].groups = { }
+            end
             if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
                 database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
             end
