@@ -4,6 +4,7 @@ local function callback_group_database(extra, success, result)
 
     -- save group info
     if database["groups"][tostring(chat_id)] then
+        print('already registered group')
         database["groups"][tostring(chat_id)] = {
             print_name = result.print_name:gsub("_"," "),
             lang = get_lang(result.peer_id),
@@ -11,6 +12,7 @@ local function callback_group_database(extra, success, result)
             long_id = result.id
         }
     else
+        print('new group')
         database["groups"][tostring(chat_id)] = {
             print_name = result.print_name:gsub("_"," "),
             lang = get_lang(result.peer_id),
@@ -22,6 +24,7 @@ local function callback_group_database(extra, success, result)
     -- save users info
     for k, v in pairs(result.members) do
         if database["users"][tostring(v.peer_id)] then
+            print('already registered user')
             if database["users"][tostring(v.peer_id)].groups then
                 if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
                     database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
@@ -44,6 +47,7 @@ local function callback_group_database(extra, success, result)
                 end
             end
         else
+            print('new user')
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
@@ -56,9 +60,9 @@ local function callback_group_database(extra, success, result)
     end
     local function post_save()
         save_data(_config.database.db, database)
+        send_large_msg(extra.receiver, langs[get_lang(result.peer_id)].dataLeaked)
     end
     postpone(post_save, false, 10)
-    send_large_msg(extra.receiver, langs[get_lang(result.peer_id)].dataLeaked)
 end
 
 local function callback_supergroup_database(extra, success, result)
@@ -67,6 +71,7 @@ local function callback_supergroup_database(extra, success, result)
 
     -- save supergroup info
     if database["groups"][tostring(chat_id)] then
+        print('already registered group')
         database["groups"][tostring(chat_id)] = {
             print_name = extra.print_name:gsub("_"," "),
             username = extra.username or 'NOUSER',
@@ -76,6 +81,7 @@ local function callback_supergroup_database(extra, success, result)
             long_id = extra.id
         }
     else
+        print('new group')
         database["groups"][tostring(chat_id)] = {
             print_name = extra.print_name:gsub("_"," "),
             username = extra.username or 'NOUSER',
@@ -89,6 +95,7 @@ local function callback_supergroup_database(extra, success, result)
     -- save users info
     for k, v in pairsByKeys(result) do
         if database["users"][tostring(v.peer_id)] then
+            print('already registered user')
             if database["users"][tostring(v.peer_id)].groups then
                 if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
                     database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
@@ -111,6 +118,7 @@ local function callback_supergroup_database(extra, success, result)
                 end
             end
         else
+            print('new user')
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
@@ -123,9 +131,9 @@ local function callback_supergroup_database(extra, success, result)
     end
     local function post_save()
         save_data(_config.database.db, database)
+        send_large_msg(extra.receiver, langs[get_lang(string.match(extra.receiver, '%d+'))].dataLeaked)
     end
     postpone(post_save, false, 10)
-    send_large_msg(extra.receiver, langs[get_lang(string.match(extra.receiver, '%d+'))].dataLeaked)
 end
 
 local function run(msg, matches)
