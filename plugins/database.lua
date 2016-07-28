@@ -1,4 +1,5 @@
 local function callback_all_supergroups_members(extra, success, result)
+    print('supergroups members')
     local database = extra.database
     local chat_id = string.match(extra.receiver, '%d+')
 
@@ -41,6 +42,7 @@ local function callback_all_supergroups_members(extra, success, result)
 end
 
 local function callback_all_supergroups_info(extra, success, result)
+    print('supergroups info')
     local database = extra.database
     local chat_id = result.peer_id
 
@@ -71,6 +73,7 @@ local function callback_all_supergroups_info(extra, success, result)
 end
 
 local function callback_group_database(extra, success, result)
+    print('group info and members')
     local database = extra.database
     local chat_id = result.peer_id
 
@@ -133,6 +136,7 @@ local function callback_group_database(extra, success, result)
 end
 
 local function callback_supergroup_database(extra, success, result)
+    print('supergroup info and members')
     local database = extra.database
     local chat_id = string.match(extra.receiver, '%d+')
 
