@@ -226,6 +226,7 @@ local function run(msg, matches)
             local data = load_data(_config.moderation.data)
             if data['groups'] then
                 for k, v in pairsByKeys(data['groups']) do
+                    print(v)
                     local database = load_data(_config.database.db)
                     channel_get_users('channel#id' .. tostring(v), callback_all_supergroups_members, { receiver = 'channel#id' .. tostring(v), database = database })
                     channel_info('channel#id' .. tostring(v), callback_all_supergroups_info, { receiver = 'channel#id' .. tostring(v), database = database })
@@ -235,6 +236,7 @@ local function run(msg, matches)
 
             if data['realms'] then
                 for k, v in pairsByKeys(data['realms']) do
+                    print(v)
                     local database = load_data(_config.database.db)
                     chat_info('chat#id' .. tostring(v), callback_all_groups, { receiver = 'chat#id' .. tostring(v), database = database })
                 end
