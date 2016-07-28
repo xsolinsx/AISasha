@@ -18,7 +18,6 @@ local function callback_group_database(extra, success, result)
             long_id = result.id
         }
     end
-    save_data(_config.database.db, database)
 
     -- save users info
     for k, v in pairs(result.members) do
@@ -26,7 +25,6 @@ local function callback_group_database(extra, success, result)
             if not database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] then
                 database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] = tonumber(chat_id)
             end
-            save_data(_config.database.db, database)
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
@@ -34,7 +32,6 @@ local function callback_group_database(extra, success, result)
                 old_usernames = database["users"][tostring(v.peer_id)].old_usernames .. ' ### ' ..(v.username or 'NOUSER'),
                 long_id = v.id
             }
-            save_data(_config.database.db, database)
         else
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
@@ -43,13 +40,10 @@ local function callback_group_database(extra, success, result)
                 old_usernames = v.username or 'NOUSER',
                 long_id = v.id
             }
-            save_data(_config.database.db, database)
-            database["users"][tostring(v.peer_id)]["groups"] = { }
-            save_data(_config.database.db, database)
-            database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] = tonumber(chat_id)
-            save_data(_config.database.db, database)
+            database["users"][tostring(v.peer_id)]["groups"] = { [tostring(chat_id)] = tonumber(chat_id) }
         end
     end
+    save_data(_config.database.db, database)
     send_large_msg(extra.receiver, langs[get_lang(result.peer_id)].dataLeaked)
 end
 
@@ -77,7 +71,6 @@ local function callback_supergroup_database(extra, success, result)
             long_id = extra.id
         }
     end
-    save_data(_config.database.db, database)
 
     -- save users info
     for k, v in pairsByKeys(result) do
@@ -85,7 +78,6 @@ local function callback_supergroup_database(extra, success, result)
             if not database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] then
                 database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] = tonumber(chat_id)
             end
-            save_data(_config.database.db, database)
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
@@ -93,7 +85,6 @@ local function callback_supergroup_database(extra, success, result)
                 old_usernames = database["users"][tostring(v.peer_id)].old_usernames .. ' ### ' ..(v.username or 'NOUSER'),
                 long_id = v.id
             }
-            save_data(_config.database.db, database)
         else
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
@@ -102,13 +93,10 @@ local function callback_supergroup_database(extra, success, result)
                 old_usernames = v.username or 'NOUSER',
                 long_id = v.id
             }
-            save_data(_config.database.db, database)
-            database["users"][tostring(v.peer_id)]["groups"] = { }
-            save_data(_config.database.db, database)
-            database["users"][tostring(v.peer_id)]["groups"][tostring(chat_id)] = tonumber(chat_id)
-            save_data(_config.database.db, database)
+            database["users"][tostring(v.peer_id)]["groups"] = { [tostring(chat_id)] = tonumber(chat_id) }
         end
     end
+    save_data(_config.database.db, database)
     send_large_msg(extra.receiver, langs[get_lang(string.match(extra.receiver, '%d+'))].dataLeaked)
 end
 
