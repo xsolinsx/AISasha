@@ -49,11 +49,11 @@ local function callback_all_supergroups_info(extra, success, result)
     -- save supergroup info
     if database["groups"][tostring(chat_id)] then
         print('already registered group')
-        if database["groups"][tostring(chat_id)]['print_name'] ~= result.print_name:gsub("_", " ") or database["groups"][tostring(chat_id)]['username'] ~=(('@' .. result.username) or 'NOUSER') then
-            if database["groups"][tostring(chat_id)]['print_name'] ~= result.print_name:gsub("_", " ") then
-                database["groups"][tostring(chat_id)]['print_name'] = result.print_name:gsub("_", " ")
-                database["groups"][tostring(chat_id)]['old_print_names'] = database["groups"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. result.print_name:gsub("_", " ")
-            end
+        if database["groups"][tostring(chat_id)]['print_name'] ~= result.print_name:gsub("_", " ") then
+            database["groups"][tostring(chat_id)]['print_name'] = result.print_name:gsub("_", " ")
+            database["groups"][tostring(chat_id)]['old_print_names'] = database["groups"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. result.print_name:gsub("_", " ")
+        end
+        if database["groups"][tostring(chat_id)]['username'] and database["groups"][tostring(chat_id)]['old_usernames'] then
             if database["groups"][tostring(chat_id)]['username'] ~=(('@' .. result.username) or 'NOUSER') then
                 database["groups"][tostring(chat_id)]['username'] =(('@' .. result.username) or 'NOUSER')
                 database["groups"][tostring(chat_id)]['old_usernames'] = database["groups"][tostring(chat_id)]['old_usernames'] .. ' ### ' ..(('@' .. result.username) or 'NOUSER')
@@ -81,10 +81,8 @@ local function callback_group_database(extra, success, result)
     if database["groups"][tostring(chat_id)] then
         print('already registered group')
         if database["groups"][tostring(chat_id)]['print_name'] ~= result.print_name:gsub("_", " ") then
-            if database["groups"][tostring(chat_id)]['print_name'] ~= result.print_name:gsub("_", " ") then
-                database["groups"][tostring(chat_id)]['print_name'] = result.print_name:gsub("_", " ")
-                database["groups"][tostring(chat_id)]['old_print_names'] = database["groups"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. result.print_name:gsub("_", " ")
-            end
+            database["groups"][tostring(chat_id)]['print_name'] = result.print_name:gsub("_", " ")
+            database["groups"][tostring(chat_id)]['old_print_names'] = database["groups"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. result.print_name:gsub("_", " ")
         end
     else
         print('new group')
@@ -143,11 +141,11 @@ local function callback_supergroup_database(extra, success, result)
     -- save supergroup info
     if database["groups"][tostring(chat_id)] then
         print('already registered group')
-        if database["groups"][tostring(chat_id)]['print_name'] ~= extra.print_name:gsub("_", " ") or database["groups"][tostring(chat_id)]['username'] ~=(('@' .. extra.username) or 'NOUSER') then
-            if database["groups"][tostring(chat_id)]['print_name'] ~= extra.print_name:gsub("_", " ") then
-                database["groups"][tostring(chat_id)]['print_name'] = extra.print_name:gsub("_", " ")
-                database["groups"][tostring(chat_id)]['old_print_names'] = database["groups"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. extra.print_name:gsub("_", " ")
-            end
+        if database["groups"][tostring(chat_id)]['print_name'] ~= extra.print_name:gsub("_", " ") then
+            database["groups"][tostring(chat_id)]['print_name'] = extra.print_name:gsub("_", " ")
+            database["groups"][tostring(chat_id)]['old_print_names'] = database["groups"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. extra.print_name:gsub("_", " ")
+        end
+        if database["groups"][tostring(chat_id)]['username'] and database["groups"][tostring(chat_id)]['old_usernames'] then
             if database["groups"][tostring(chat_id)]['username'] ~=(('@' .. extra.username) or 'NOUSER') then
                 database["groups"][tostring(chat_id)]['username'] =(('@' .. extra.username) or 'NOUSER')
                 database["groups"][tostring(chat_id)]['old_usernames'] = database["groups"][tostring(chat_id)]['old_usernames'] .. ' ### ' ..(('@' .. extra.username) or 'NOUSER')
