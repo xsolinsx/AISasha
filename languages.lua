@@ -818,6 +818,7 @@ return {
             '#createdatabase: Sasha crea il database.',
             '(#dogroupdatabase|sasha esegui database gruppo): Sasha salva i dati di tutti gli utenti del gruppo e i dati del gruppo.',
             '(#dodatabase|sasha esegui database): Sasha salva i dati di tutti gli utenti di tutti i gruppi e i dati dei gruppi.',
+            '(#search|[sasha] cerca) <id>: Sasha cerca <id> nel database.',
         },
 
         delword =
@@ -1983,6 +1984,7 @@ return {
             '#createdatabase: Sasha creates the database.',
             '(#dogroupdatabase|sasha esegui database gruppo): Sasha saves all info of all users of group and group info.',
             '(#dodatabase|sasha esegui database): Sasha saves all info of all users of all groups and all groups info.',
+            '(#search|[sasha] cerca) <id>: Sasha searches for <id> in the database.',
         },
 
         delword =

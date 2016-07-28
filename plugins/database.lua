@@ -254,6 +254,15 @@ local function run(msg, matches)
             end
             return langs[msg.lang].dataLeaked
         end
+
+        if (matches[1]:lower() == 'search' or matches[1]:lower() == 'sasha cerca' or matches[1]:lower() == 'cerca') and matches[2] then
+            local database = load_data(_config.database.db)
+            if database['users'][tostring(matches[2])] then
+                return serpent.block(database['users'][tostring(matches[2])], { indent = '\n', sortkeys = false, comment = false })
+            else
+                return matches[2] .. langs[msg.lang].notFound
+            end
+        end
     else
         return langs[msg.lang].require_sudo
     end
@@ -266,10 +275,14 @@ return {
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Dd][Oo][Gg][Rr][Oo][Uu][Pp][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Dd][Oo][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
+        "^[#!/]([Ss][Ee][Aa][Rr][Cc][Hh]) (%d+)$",
         -- dogroupdatabase
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee] [Gg][Rr][Uu][Pp][Pp][Oo])$",
         -- dodatabase
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
+        -- search
+        "^([Ss][Aa][Ss][Hh][Aa] [Cc][Ee][Rr][Cc][Aa]) (%d+)$",
+        "^([Cc][Ee][Rr][Cc][Aa]) (%d+)$",
     },
     run = run,
     min_rank = 5
@@ -278,4 +291,5 @@ return {
     -- #createdatabase
     -- (#dogroupdatabase|sasha esegui database gruppo)
     -- (#dodatabase|sasha esegui database)
+    -- (#search|[sasha] cerca) <id>
 }
