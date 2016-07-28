@@ -154,43 +154,31 @@ end
 
 -- TODO: add lock and unlock joins
 local function run(msg, matches)
-    local to = msg.to.type
-    local service = msg.service
     local name_log = user_print_name(msg.from)
-    if to == 'user' or service or is_admin1(msg) and to == "chat" or to == "channel" then
-        if is_gbanned(msg.from.id) then
-            return langs[msg.lang].youGbanned
-        end
-        if (matches[1]:lower() == 'join' or matches[1]:lower() == 'inviteme' or matches[1]:lower() == 'sasha invitami' or matches[1]:lower() == 'invitami') and is_admin1(msg) then
-            if string.match(matches[2], '^%d+$') then
-                local data = load_data(_config.moderation.data)
-                local long_id = tostring(data[tostring(matches[2])]['long_id'])
-                if not data[tostring(matches[2])] then
-                    return langs[msg.lang].chatNotFound
-                end
-                group_name = data[tostring(matches[2])]['settings']['set_name']
-                local receiver = get_receiver(msg)
-                local chat = 'chat#id' .. matches[2]
-                local channel = 'channel#id' .. matches[2]
+    if (matches[1]:lower() == 'join' or matches[1]:lower() == 'inviteme' or matches[1]:lower() == 'sasha invitami' or matches[1]:lower() == 'invitami') and is_admin1(msg) then
+        if string.match(matches[2], '^%d+$') then
+            local data = load_data(_config.moderation.data)
+            if not data[tostring(matches[2])] then
+                return langs[msg.lang].chatNotFound
+            end
+            local chat = 'chat#id' .. matches[2]
+            local channel = 'channel#id' .. matches[2]
+            local user = 'user#id' .. msg.from.id
+            chat_add_user(chat, user, ok_cb, false)
+            channel_invite(channel, user, ok_cb, false)
+            return
+        else
+            local hash = 'groupalias'
+            local value = redis:hget(hash, matches[2]:lower())
+            if value then
+                local chat = 'chat#id' .. value
+                local channel = 'channel#id' .. value
                 local user = 'user#id' .. msg.from.id
-                chat_add_user(chat, user, ok_cb, false)
-                channel_invite(channel, user, ok_cb, false)
                 chat_add_user(chat, user, ok_cb, false)
                 channel_invite(channel, user, ok_cb, false)
                 return
             else
-                local hash = 'groupalias'
-                local value = redis:hget(hash, matches[2]:lower())
-                if value then
-                    local chat = 'chat#id' .. value
-                    local channel = 'channel#id' .. value
-                    local user = 'user#id' .. msg.from.id
-                    chat_add_user(chat, user, ok_cb, false)
-                    channel_invite(channel, user, ok_cb, false)
-                    return
-                else
-                    return langs[msg.lang].noAliasFound
-                end
+                return langs[msg.lang].noAliasFound
             end
         end
     end
@@ -271,23 +259,18 @@ return {
         "^[#!/]([Cc][Hh][Aa][Tt][Ss])$",
         "^[#!/]([Cc][Hh][Aa][Tt][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Jj][Oo][Ii][Nn]) (%d+)$",
-        "^[#!/]([Jj][Oo][Ii][Nn]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
         "^[#!/]([Aa][Ll][Ll][Cc][Hh][Aa][Tt][Ss])$",
         "^[#!/]([Aa][Ll][Ll][Cc][Hh][Aa][Tt][Ss][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ss][Ee][Tt][Aa][Ll][Ii][Aa][Ss]) ([^%s]+) (%d+)$",
         "^[#!/]([Uu][Nn][Ss][Ee][Tt][Aa][Ll][Ii][Aa][Ss]) ([^%s]+)$",
         "^[#!/]([Gg][Ee][Tt][Aa][Ll][Ii][Aa][Ss][Ll][Ii][Ss][Tt])$",
-        "^!!tgservice (chat_add_user)$",
         -- join
         "^[#!/]([Jj][Oo][Ii][Nn]) (.*)$",
         "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee][Mm][Ee]) (%d+)$",
-        "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee][Mm][Ee]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
         "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee][Mm][Ee]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (%d+)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*)$",
         "^([Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (%d+)$",
-        "^([Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*) ([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
         "^([Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*)$",
     },
     run = run,
@@ -297,7 +280,7 @@ return {
     -- #chats
     -- #chatlist
     -- ADMIN
-    -- #join <chat_id>|<alias> [support]
+    -- #join <chat_id>|<alias>
     -- #getaliaslist
     -- SUDO
     -- #allchats
