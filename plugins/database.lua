@@ -229,6 +229,7 @@ local function run(msg, matches)
         if matches[1]:lower() == 'dodatabase' or matches[1]:lower() == 'sasha esegui database' then
             local data = load_data(_config.moderation.data)
             if data['groups'] then
+                local i = 1
                 for k, v in pairsByKeys(data['groups']) do
                     local function post_get_db_groups()
                         local database = load_data(_config.database.db)
@@ -236,7 +237,8 @@ local function run(msg, matches)
                         channel_info('channel#id' .. tostring(v), callback_all_supergroups_info, { receiver = 'channel#id' .. tostring(v), database = database })
                         chat_info('chat#id' .. tostring(v), callback_group_database, { receiver = 'chat#id' .. tostring(v), database = database })
                     end
-                    postpone(post_get_db_groups, false, math.random(5, 10))
+                    postpone(post_get_db_groups, false, i)
+                    i = i + 1
                 end
             end
 
