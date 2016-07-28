@@ -22,7 +22,9 @@ local function callback_group_database(extra, success, result)
     -- save users info
     for k, v in pairs(result.members) do
         if database["users"][tostring(v.peer_id)] then
-            table.insert(database["users"][tostring(v.peer_id)].groups, chat_id)
+            if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
+                database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
+            end
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
@@ -34,11 +36,12 @@ local function callback_group_database(extra, success, result)
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
-                groups = { chat_id },
                 old_print_names = v.print_name:gsub("_"," "),
                 old_usernames = v.username or 'NOUSER',
                 long_id = v.id
             }
+            database["users"][tostring(v.peer_id)].groups = { }
+            database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
         end
     end
     save_data(_config.database.db, database)
@@ -73,7 +76,9 @@ local function callback_supergroup_database(extra, success, result)
     -- save users info
     for k, v in pairsByKeys(result) do
         if database["users"][tostring(v.peer_id)] then
-            table.insert(database["users"][tostring(v.peer_id)].groups, chat_id)
+            if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
+                database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
+            end
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
@@ -85,11 +90,12 @@ local function callback_supergroup_database(extra, success, result)
             database["users"][tostring(v.peer_id)] = {
                 print_name = v.print_name:gsub("_"," "),
                 username = v.username or 'NOUSER',
-                groups = { chat_id },
                 old_print_names = v.print_name:gsub("_"," "),
                 old_usernames = v.username or 'NOUSER',
                 long_id = v.id
             }
+            database["users"][tostring(v.peer_id)].groups = { }
+            database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
         end
     end
     save_data(_config.database.db, database)
