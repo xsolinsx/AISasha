@@ -238,17 +238,18 @@ local function run(msg, matches)
                         chat_info('chat#id' .. tostring(v), callback_group_database, { receiver = 'chat#id' .. tostring(v), database = database })
                     end
                     postpone(post_get_db_groups, false, i)
-                    i = i + 1
+                    i = i + 2
                 end
             end
 
             if data['realms'] then
                 for k, v in pairsByKeys(data['realms']) do
-                    local function post_get_db_realms()
+                    local function post_get_db_groups()
                         local database = load_data(_config.database.db)
                         chat_info('chat#id' .. tostring(v), callback_all_groups, { receiver = 'chat#id' .. tostring(v), database = database })
                     end
-                    postpone(post_get_db_realms, false, math.random(2))
+                    postpone(post_get_db_groups, false, i)
+                    i = i + 2
                 end
             end
             return langs[msg.lang].dataLeaked
