@@ -5,12 +5,12 @@ local function callback_group_database(extra, success, result)
     -- save group info
     if database["groups"][tostring(chat_id)] then
         print('already registered group')
-        database["groups"][tostring(chat_id)] = {
-            print_name = result.print_name:gsub("_"," "),
-            lang = get_lang(result.peer_id),
-            old_print_names = database["groups"][tostring(chat_id)].old_print_names .. ' ### ' .. result.print_name:gsub("_"," "),
-            long_id = result.id
-        }
+        if database["groups"][tostring(chat_id)]['print_name'] ~= result.print_name:gsub("_", " ") then
+            if database["chat_id"][tostring(chat_id)]['print_name'] ~= result.print_name:gsub("_", " ") then
+                database["chat_id"][tostring(chat_id)]['print_name'] = result.print_name:gsub("_", " ")
+                database["chat_id"][tostring(chat_id)]['old_print_names'] = database["chat_id"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. result.print_name:gsub("_", " ")
+            end
+        end
     else
         print('new group')
         database["groups"][tostring(chat_id)] = {
@@ -25,25 +25,21 @@ local function callback_group_database(extra, success, result)
     for k, v in pairs(result.members) do
         if database["users"][tostring(v.peer_id)] then
             print('already registered user')
-            if database["users"][tostring(v.peer_id)].groups then
-                if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
-                    database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
+            if database["users"][tostring(v.peer_id)]['groups'] then
+                if not database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] then
+                    database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] = tonumber(chat_id)
                 end
             else
-                database["users"][tostring(v.peer_id)].groups = { [tostring(chat_id)] = tonumber(chat_id) }
+                database["users"][tostring(v.peer_id)]['groups'] = { [tostring(chat_id)] = tonumber(chat_id) }
             end
-            if tostring(database["users"][tostring(v.peer_id)].print_name) ~= tostring(v.print_name) or tostring(database["users"][tostring(v.peer_id)].username) ~= tostring(v.username) then
-                if tostring(database["users"][tostring(v.peer_id)].print_name) ~= tostring(v.print_name) then
-                    database["users"][tostring(v.peer_id)] = {
-                        print_name = v.print_name:gsub("_"," "),
-                        old_print_names = database["users"][tostring(v.peer_id)].old_print_names .. ' ### ' .. v.print_name:gsub("_"," "),
-                    }
+            if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") or database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
+                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
+                    database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
+                    database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
                 end
-                if tostring(database["users"][tostring(v.peer_id)].username) ~= tostring(v.username) then
-                    database["users"][tostring(v.peer_id)] = {
-                        username = v.username or 'NOUSER',
-                        old_usernames = database["users"][tostring(v.peer_id)].old_usernames .. ' ### ' ..(v.username or 'NOUSER'),
-                    }
+                if database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
+                    database["users"][tostring(v.peer_id)]['username'] =(v.username or 'NOUSER')
+                    database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' ..(v.username or 'NOUSER')
                 end
             end
         else
@@ -72,14 +68,16 @@ local function callback_supergroup_database(extra, success, result)
     -- save supergroup info
     if database["groups"][tostring(chat_id)] then
         print('already registered group')
-        database["groups"][tostring(chat_id)] = {
-            print_name = extra.print_name:gsub("_"," "),
-            username = extra.username or 'NOUSER',
-            lang = get_lang(string.match(extra.receiver,'%d+')),
-            old_print_names = database["groups"][tostring(chat_id)].old_print_names .. ' ### ' .. extra.print_name:gsub("_"," "),
-            old_usernames = database["groups"][tostring(chat_id)].old_usernames .. ' ### ' ..(extra.username or 'NOUSER'),
-            long_id = extra.id
-        }
+        if database["groups"][tostring(chat_id)]['print_name'] ~= extra.print_name:gsub("_", " ") or database["groups"][tostring(chat_id)]['username'] ~=(extra.username or 'NOUSER') then
+            if database["chat_id"][tostring(chat_id)]['print_name'] ~= extra.print_name:gsub("_", " ") then
+                database["chat_id"][tostring(chat_id)]['print_name'] = extra.print_name:gsub("_", " ")
+                database["chat_id"][tostring(chat_id)]['old_print_names'] = database["chat_id"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. extra.print_name:gsub("_", " ")
+            end
+            if database["chat_id"][tostring(chat_id)]['username'] ~=(extra.username or 'NOUSER') then
+                database["chat_id"][tostring(chat_id)]['username'] =(extra.username or 'NOUSER')
+                database["chat_id"][tostring(chat_id)]['old_usernames'] = database["chat_id"][tostring(chat_id)]['old_usernames'] .. ' ### ' ..(extra.username or 'NOUSER')
+            end
+        end
     else
         print('new group')
         database["groups"][tostring(chat_id)] = {
@@ -96,25 +94,21 @@ local function callback_supergroup_database(extra, success, result)
     for k, v in pairsByKeys(result) do
         if database["users"][tostring(v.peer_id)] then
             print('already registered user')
-            if database["users"][tostring(v.peer_id)].groups then
-                if not database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] then
-                    database["users"][tostring(v.peer_id)].groups[tostring(chat_id)] = tonumber(chat_id)
+            if database["users"][tostring(v.peer_id)]['groups'] then
+                if not database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] then
+                    database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] = tonumber(chat_id)
                 end
             else
-                database["users"][tostring(v.peer_id)].groups = { [tostring(chat_id)] = tonumber(chat_id) }
+                database["users"][tostring(v.peer_id)]['groups'] = { [tostring(chat_id)] = tonumber(chat_id) }
             end
-            if tostring(database["users"][tostring(v.peer_id)].print_name) ~= tostring(v.print_name) or tostring(database["users"][tostring(v.peer_id)].username) ~= tostring(v.username) then
-                if tostring(database["users"][tostring(v.peer_id)].print_name) ~= tostring(v.print_name) then
-                    database["users"][tostring(v.peer_id)] = {
-                        print_name = v.print_name:gsub("_"," "),
-                        old_print_names = database["users"][tostring(v.peer_id)].old_print_names .. ' ### ' .. v.print_name:gsub("_"," "),
-                    }
+            if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") or database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
+                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
+                    database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
+                    database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
                 end
-                if tostring(database["users"][tostring(v.peer_id)].username) ~= tostring(v.username) then
-                    database["users"][tostring(v.peer_id)] = {
-                        username = v.username or 'NOUSER',
-                        old_usernames = database["users"][tostring(v.peer_id)].old_usernames .. ' ### ' ..(v.username or 'NOUSER'),
-                    }
+                if database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
+                    database["users"][tostring(v.peer_id)]['username'] =(v.username or 'NOUSER')
+                    database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' ..(v.username or 'NOUSER')
                 end
             end
         else
