@@ -7,7 +7,7 @@ local function callback_group_database(extra, success, result)
         database["groups"][tostring(chat_id)] = {
             print_name = result.print_name:gsub("_"," "),
             lang = get_lang(result.peer_id),
-            old_print_names = database["groups"][tostring(v.peer_id)].old_print_names .. ' ### ' .. result.print_name:gsub("_"," "),
+            old_print_names = database["groups"][tostring(chat_id)].old_print_names .. ' ### ' .. result.print_name:gsub("_"," "),
             long_id = result.id
         }
     else
@@ -55,8 +55,8 @@ local function callback_supergroup_database(extra, success, result)
             print_name = extra.print_name:gsub("_"," "),
             username = extra.username or 'NOUSER',
             lang = get_lang(string.match(extra.receiver,'%d+')),
-            old_print_names = database["groups"][tostring(v.peer_id)].old_print_names .. ' ### ' .. extra.print_name:gsub("_"," "),
-            old_usernames = database["groups"][tostring(v.peer_id)].old_usernames .. ' ### ' ..(extra.username or 'NOUSER'),
+            old_print_names = database["groups"][tostring(chat_id)].old_print_names .. ' ### ' .. extra.print_name:gsub("_"," "),
+            old_usernames = database["groups"][tostring(chat_id)].old_usernames .. ' ### ' ..(extra.username or 'NOUSER'),
             long_id = extra.id
         }
     else
