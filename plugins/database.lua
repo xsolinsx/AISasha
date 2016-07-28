@@ -258,7 +258,7 @@ local function run(msg, matches)
         if (matches[1]:lower() == 'search' or matches[1]:lower() == 'sasha cerca' or matches[1]:lower() == 'cerca') and matches[2] then
             local database = load_data(_config.database.db)
             if database['users'][tostring(matches[2])] then
-                return serpent.block(database['users'][tostring(matches[2])], { indent = '\n', sortkeys = false, comment = false })
+                return serpent.block(database['users'][tostring(matches[2])], { sortkeys = false, comment = false })
             else
                 return matches[2] .. langs[msg.lang].notFound
             end
