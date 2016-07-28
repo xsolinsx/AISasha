@@ -259,6 +259,8 @@ local function run(msg, matches)
             local database = load_data(_config.database.db)
             if database['users'][tostring(matches[2])] then
                 return serpent.block(database['users'][tostring(matches[2])], { sortkeys = false, comment = false })
+            elseif database['groups'][tostring(matches[2])] then
+                return serpent.block(database['groups'][tostring(matches[2])], { sortkeys = false, comment = false })
             else
                 return matches[2] .. langs[msg.lang].notFound
             end
