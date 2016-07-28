@@ -23,35 +23,37 @@ local function callback_group_database(extra, success, result)
 
     -- save users info
     for k, v in pairs(result.members) do
-        if database["users"][tostring(v.peer_id)] then
-            print('already registered user')
-            if database["users"][tostring(v.peer_id)]['groups'] then
-                if not database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] then
-                    database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] = tonumber(chat_id)
+        if v.print_name then
+            if database["users"][tostring(v.peer_id)] then
+                print('already registered user')
+                if database["users"][tostring(v.peer_id)]['groups'] then
+                    if not database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] then
+                        database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] = tonumber(chat_id)
+                    end
+                else
+                    database["users"][tostring(v.peer_id)]['groups'] = { [tostring(chat_id)] = tonumber(chat_id) }
+                end
+                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") or database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
+                    if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
+                        database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
+                        database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
+                    end
+                    if database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
+                        database["users"][tostring(v.peer_id)]['username'] =(v.username or 'NOUSER')
+                        database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' ..(v.username or 'NOUSER')
+                    end
                 end
             else
-                database["users"][tostring(v.peer_id)]['groups'] = { [tostring(chat_id)] = tonumber(chat_id) }
+                print('new user')
+                database["users"][tostring(v.peer_id)] = {
+                    print_name = v.print_name:gsub("_"," "),
+                    username = v.username or 'NOUSER',
+                    old_print_names = v.print_name:gsub("_"," "),
+                    old_usernames = v.username or 'NOUSER',
+                    long_id = v.id,
+                    groups = { [tostring(chat_id)] = tonumber(chat_id) }
+                }
             end
-            if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") or database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
-                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
-                    database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
-                    database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
-                end
-                if database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
-                    database["users"][tostring(v.peer_id)]['username'] =(v.username or 'NOUSER')
-                    database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' ..(v.username or 'NOUSER')
-                end
-            end
-        else
-            print('new user')
-            database["users"][tostring(v.peer_id)] = {
-                print_name = v.print_name:gsub("_"," "),
-                username = v.username or 'NOUSER',
-                old_print_names = v.print_name:gsub("_"," "),
-                old_usernames = v.username or 'NOUSER',
-                long_id = v.id,
-                groups = { [tostring(chat_id)] = tonumber(chat_id) }
-            }
         end
     end
     save_data(_config.database.db, database)
@@ -89,35 +91,37 @@ local function callback_supergroup_database(extra, success, result)
 
     -- save users info
     for k, v in pairsByKeys(result) do
-        if database["users"][tostring(v.peer_id)] then
-            print('already registered user')
-            if database["users"][tostring(v.peer_id)]['groups'] then
-                if not database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] then
-                    database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] = tonumber(chat_id)
+        if v.print_name then
+            if database["users"][tostring(v.peer_id)] then
+                print('already registered user')
+                if database["users"][tostring(v.peer_id)]['groups'] then
+                    if not database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] then
+                        database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] = tonumber(chat_id)
+                    end
+                else
+                    database["users"][tostring(v.peer_id)]['groups'] = { [tostring(chat_id)] = tonumber(chat_id) }
+                end
+                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") or database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
+                    if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
+                        database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
+                        database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
+                    end
+                    if database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
+                        database["users"][tostring(v.peer_id)]['username'] =(v.username or 'NOUSER')
+                        database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' ..(v.username or 'NOUSER')
+                    end
                 end
             else
-                database["users"][tostring(v.peer_id)]['groups'] = { [tostring(chat_id)] = tonumber(chat_id) }
+                print('new user')
+                database["users"][tostring(v.peer_id)] = {
+                    print_name = v.print_name:gsub("_"," "),
+                    username = v.username or 'NOUSER',
+                    old_print_names = v.print_name:gsub("_"," "),
+                    old_usernames = v.username or 'NOUSER',
+                    long_id = v.id,
+                    groups = { [tostring(chat_id)] = tonumber(chat_id) }
+                }
             end
-            if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") or database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
-                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
-                    database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
-                    database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
-                end
-                if database["users"][tostring(v.peer_id)]['username'] ~=(v.username or 'NOUSER') then
-                    database["users"][tostring(v.peer_id)]['username'] =(v.username or 'NOUSER')
-                    database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' ..(v.username or 'NOUSER')
-                end
-            end
-        else
-            print('new user')
-            database["users"][tostring(v.peer_id)] = {
-                print_name = v.print_name:gsub("_"," "),
-                username = v.username or 'NOUSER',
-                old_print_names = v.print_name:gsub("_"," "),
-                old_usernames = v.username or 'NOUSER',
-                long_id = v.id,
-                groups = { [tostring(chat_id)] = tonumber(chat_id) }
-            }
         end
     end
     save_data(_config.database.db, database)
