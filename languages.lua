@@ -250,10 +250,6 @@ return {
         statusRemoved = 'Utente rimosso.',
         gbannedFrom = ' bannato globalmente da ',
 
-        -- arabic_lock.lua --
-        arabicNotAllowed = 'L\'arabo/Il persiano non è ammesso.\n',
-        statusRemovedMsgDeleted = 'Utente rimosso/messaggio eliminato.',
-
         -- banhammer.lua --
         noUsernameFound = 'Non trovo nessun utente con quell\'username.',
         massacre = 'Massacro => X',
@@ -1448,10 +1444,6 @@ return {
         floodNotAdmitted = 'Flooding is not admitted.\n',
         statusRemoved = 'User kicked.',
         gbannedFrom = ' globally banned from ',
-
-        -- arabic_lock.lua --
-        arabicNotAllowed = 'Arabic/Persian is not admitted.\n',
-        statusRemovedMsgDeleted = 'User kicked/Message deleted.',
 
         -- banhammer.lua --
         noUsernameFound = 'Can\'t find a user with that username.',
