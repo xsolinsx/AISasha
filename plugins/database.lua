@@ -1,7 +1,7 @@
 local function callback_all_supergroups_members(extra, success, result)
-    print('supergroups members')
     local database = extra.database
     local chat_id = string.match(extra.receiver, '%d+')
+    print('supergroups members ' .. chat_id)
 
     -- save users info
     for k, v in pairsByKeys(result) do
@@ -42,9 +42,9 @@ local function callback_all_supergroups_members(extra, success, result)
 end
 
 local function callback_all_supergroups_info(extra, success, result)
-    print('supergroups info')
     local database = extra.database
     local chat_id = result.peer_id
+    print('supergroups info ' .. chat_id)
 
     -- save supergroup info
     if database["groups"][tostring(chat_id)] then
@@ -73,9 +73,9 @@ local function callback_all_supergroups_info(extra, success, result)
 end
 
 local function callback_group_database(extra, success, result)
-    print('group info and members')
     local database = extra.database
     local chat_id = result.peer_id
+    print('group info and members ' .. chat_id)
 
     -- save group info
     if database["groups"][tostring(chat_id)] then
@@ -136,9 +136,9 @@ local function callback_group_database(extra, success, result)
 end
 
 local function callback_supergroup_database(extra, success, result)
-    print('supergroup info and members')
     local database = extra.database
     local chat_id = string.match(extra.receiver, '%d+')
+    print('supergroup info and members ' .. chat_id)
 
     -- save supergroup info
     if database["groups"][tostring(chat_id)] then
@@ -230,19 +230,23 @@ local function run(msg, matches)
             local data = load_data(_config.moderation.data)
             if data['groups'] then
                 for k, v in pairsByKeys(data['groups']) do
-                    print(v)
-                    local database = load_data(_config.database.db)
-                    channel_get_users('channel#id' .. tostring(v), callback_all_supergroups_members, { receiver = 'channel#id' .. tostring(v), database = database })
-                    channel_info('channel#id' .. tostring(v), callback_all_supergroups_info, { receiver = 'channel#id' .. tostring(v), database = database })
-                    chat_info('chat#id' .. tostring(v), callback_group_database, { receiver = 'chat#id' .. tostring(v), database = database })
+                    local function post_get_db_groups()
+                        local database = load_data(_config.database.db)
+                        channel_get_users('channel#id' .. tostring(v), callback_all_supergroups_members, { receiver = 'channel#id' .. tostring(v), database = database })
+                        channel_info('channel#id' .. tostring(v), callback_all_supergroups_info, { receiver = 'channel#id' .. tostring(v), database = database })
+                        chat_info('chat#id' .. tostring(v), callback_group_database, { receiver = 'chat#id' .. tostring(v), database = database })
+                    end
+                    postpone(post_get_db_groups, false, math.random(10))
                 end
             end
 
             if data['realms'] then
                 for k, v in pairsByKeys(data['realms']) do
-                    print(v)
-                    local database = load_data(_config.database.db)
-                    chat_info('chat#id' .. tostring(v), callback_all_groups, { receiver = 'chat#id' .. tostring(v), database = database })
+                    local function post_get_db_realms()
+                        local database = load_data(_config.database.db)
+                        chat_info('chat#id' .. tostring(v), callback_all_groups, { receiver = 'chat#id' .. tostring(v), database = database })
+                    end
+                    postpone(post_get_db_realms, false, math.random(2))
                 end
             end
             return langs[msg.lang].dataLeaked
