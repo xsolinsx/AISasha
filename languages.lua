@@ -816,7 +816,8 @@ return {
             'Plugin per il salvataggio delle informazioni di utenti e gruppi.',
             'SUDO',
             '#createdatabase: Sasha crea il database.',
-            '(#database|[sasha] database): Sasha salva i dati di tutti gli utenti del gruppo e i dati del gruppo.',
+            '(#dogroupdatabase|sasha esegui database gruppo): Sasha salva i dati di tutti gli utenti del gruppo e i dati del gruppo.',
+            '(#dodatabase|sasha esegui database): Sasha salva i dati di tutti gli utenti di tutti i gruppi e i dati dei gruppi.',
         },
 
         delword =
@@ -1980,7 +1981,8 @@ return {
             'Plugin to save all users and groups info.',
             'SUDO',
             '#createdatabase: Sasha creates the database.',
-            '(#database|[sasha] database): Sasha saves all info of all users of group and group info.',
+            '(#dogroupdatabase|sasha esegui database gruppo): Sasha saves all info of all users of group and group info.',
+            '(#dodatabase|sasha esegui database): Sasha saves all info of all users of all groups and all groups info.',
         },
 
         delword =
