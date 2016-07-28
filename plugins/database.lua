@@ -41,6 +41,7 @@ local function callback_group_database(extra, success, result)
             }
         end
     end
+    save_data(_config.database.db, database)
     send_large_msg(extra.receiver, langs[get_lang(result.peer_id)].dataLeaked)
 end
 
@@ -91,6 +92,7 @@ local function callback_supergroup_database(extra, success, result)
             }
         end
     end
+    save_data(_config.database.db, database)
     send_large_msg(extra.receiver, langs[get_lang(string.match(extra.receiver, '%d+'))].dataLeaked)
 end
 
@@ -115,7 +117,6 @@ local function run(msg, matches)
             else
                 return
             end
-            save_data(_config.database.db, database)
         end
     else
         return langs[msg.lang].require_sudo
