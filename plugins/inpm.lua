@@ -164,60 +164,27 @@ local function run(msg, matches)
         if (matches[1]:lower() == 'join' or matches[1]:lower() == 'inviteme' or matches[1]:lower() == 'sasha invitami' or matches[1]:lower() == 'invitami') and is_admin1(msg) then
             if string.match(matches[2], '^%d+$') then
                 local data = load_data(_config.moderation.data)
-                if string.match(matches[2], '^%d+$') then
-                    local long_id = tostring(data[tostring(matches[2])]['long_id'])
-                    if not data[tostring(matches[2])] then
-                        return langs[msg.lang].chatNotFound
-                    end
-                    group_name = data[tostring(matches[2])]['settings']['set_name']
-                    if is_admin1(msg) then
-                        user_type = 'admin'
-                        local receiver = get_receiver(msg)
-                        -- local chat = long_id
-                        -- local channel = long_id
-                        local chat = 'chat#id' .. matches[2]
-                        local channel = 'channel#id' .. matches[2]
-                        local user = msg.from.id
-                        chat_add_user(chat, user, ok_cb, false)
-                        channel_invite(channel, user, ok_cb, false)
-                        -- channel_set_admin(channel, user, ok_cb, false)
-                    end
-                    if is_support(msg.from.id) and not is_admin1(msg) and not is_owner2(msg.fom.id, matches[2]) then
-                        user_type = "support"
-                        local receiver = get_receiver(msg)
-                        -- local chat = long_id
-                        -- local channel = long_id
-                        local chat = 'chat#id' .. matches[2]
-                        local channel = 'channel#id' .. matches[2]
-                        local user = msg.from.id
-                        chat_add_user(chat, user, ok_cb, false)
-                        channel_invite(channel, user, ok_cb, false)
-                        -- channel_set_mod(channel, user, ok_cb, false)
-                    end
-                    if is_banned(msg.from.id, matches[2]) then
-                        return langs[msg.lang].youBanned
-                    end
-                    if data[tostring(matches[2])]['settings']['lock_member'] == 'yes' and not is_owner2(msg.from.id, matches[2]) then
-                        return langs[msg.lang].privateGroup
-                    end
-                    if not is_support(msg.from.id) and not is_admin1(msg) then
-                        user_type = "regular"
-                        -- local chat = long_id
-                        -- local channel = long_id
-                        local chat = 'chat#id' .. matches[2]
-                        local channel = 'channel#id' .. matches[2]
-                        local user = msg.from.id
-                        chat_add_user(chat, user, ok_cb, false)
-                        channel_invite(channel, user, ok_cb, false)
-                    end
+                local long_id = tostring(data[tostring(matches[2])]['long_id'])
+                if not data[tostring(matches[2])] then
+                    return langs[msg.lang].chatNotFound
                 end
+                group_name = data[tostring(matches[2])]['settings']['set_name']
+                local receiver = get_receiver(msg)
+                local chat = 'chat#id' .. matches[2]
+                local channel = 'channel#id' .. matches[2]
+                local user = 'user#id' .. msg.from.id
+                chat_add_user(chat, user, ok_cb, false)
+                channel_invite(channel, user, ok_cb, false)
+                chat_add_user(chat, user, ok_cb, false)
+                channel_invite(channel, user, ok_cb, false)
+                return
             else
                 local hash = 'groupalias'
                 local value = redis:hget(hash, matches[2]:lower())
                 if value then
                     local chat = 'chat#id' .. value
                     local channel = 'channel#id' .. value
-                    local user = msg.from.id
+                    local user = 'user#id' .. msg.from.id
                     chat_add_user(chat, user, ok_cb, false)
                     channel_invite(channel, user, ok_cb, false)
                     return
@@ -226,38 +193,6 @@ local function run(msg, matches)
                 end
             end
         end
-    end
-
-    if msg.service and user_type == "support" and msg.action.type == "chat_add_user" and msg.from.id == 0 then
-        local user_id = msg.action.user.id
-        local user_name = msg.action.user.print_name
-        local username = msg.action.user.username
-        local group_name = string.gsub(msg.to.print_name, '_', ' ')
-        savelog(msg.from.id, "Added Support member " .. user_name .. " to chat " .. group_name .. " (ID:" .. msg.to.id .. ")")
-        if username then
-            -- send_large_msg("user#id" .. user_id, langs[msg.lang].supportAdded .. "@" .. username .. " " .. user_id .. langs[msg.lang].toChat') .. group_name .. " ID:" .. msg.to.id)
-        else
-            -- send_large_msg("user#id" .. user_id, langs[msg.lang].supportAdded .. user_id .. langs[msg.lang].toChat') .. group_name .. " ID:" .. msg.to.id)
-        end
-    end
-    if msg.service and user_type == "admin" and msg.action.type == "chat_add_user" and msg.from.id == 0 then
-        local user_id = msg.action.user.id
-        local user_name = msg.action.user.print_name
-        local username = msg.action.user.username
-        savelog(msg.from.id, "Added Admin " .. user_name .. "  " .. user_id .. " to chat " .. group_name .. " (ID:" .. msg.to.id .. ")")
-        if username then
-            -- send_large_msg("user#id" .. user_id, langs[msg.lang].adminAdded .. "@" .. username .. " " .. user_id .. langs[msg.lang].toChat') .. group_name .. " ID:" .. msg.to.id)
-        else
-            -- send_large_msg("user#id" .. user_id, langs[msg.lang].adminAdded .. user_id .. langs[msg.lang].toChat') .. group_name .. " ID:" .. msg.to.id)
-        end
-    end
-
-    if msg.service and user_type == "regular" and msg.action.type == "chat_add_user" and msg.from.id == 0 then
-        local user_id = msg.action.user.id
-        local user_name = msg.action.user.print_name
-        print("Added " .. user_id .. " to chat " .. msg.to.print_name .. " (ID:" .. msg.to.id .. ")")
-        savelog(msg.from.id, "Added " .. user_name .. " to chat " .. msg.to.print_name .. " ID:" .. msg.to.id)
-        -- send_large_msg("user#id" .. user_id, langs[msg.lang].addedTo .. group_name .. " ID:" .. msg.to.id)
     end
 
     if matches[1]:lower() == 'chats' and is_admin1(msg) then
