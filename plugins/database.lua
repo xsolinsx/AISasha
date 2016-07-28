@@ -238,7 +238,7 @@ local function run(msg, matches)
                         chat_info('chat#id' .. tostring(v), callback_group_database, { receiver = 'chat#id' .. tostring(v), database = database })
                     end
                     postpone(post_get_db_groups, false, i)
-                    i = i + 2
+                    i = i + 5
                 end
             end
 
@@ -249,7 +249,7 @@ local function run(msg, matches)
                         chat_info('chat#id' .. tostring(v), callback_all_groups, { receiver = 'chat#id' .. tostring(v), database = database })
                     end
                     postpone(post_get_db_groups, false, i)
-                    i = i + 2
+                    i = i + 5
                 end
             end
             return langs[msg.lang].dataLeaked
