@@ -54,7 +54,10 @@ local function callback_group_database(extra, success, result)
             }
         end
     end
-    save_data(_config.database.db, database)
+    local function post_save()
+        save_data(_config.database.db, database)
+    end
+    postpone(post_save, false, 10)
     send_large_msg(extra.receiver, langs[get_lang(result.peer_id)].dataLeaked)
 end
 
@@ -118,7 +121,10 @@ local function callback_supergroup_database(extra, success, result)
             }
         end
     end
-    save_data(_config.database.db, database)
+    local function post_save()
+        save_data(_config.database.db, database)
+    end
+    postpone(post_save, false, 10)
     send_large_msg(extra.receiver, langs[get_lang(string.match(extra.receiver, '%d+'))].dataLeaked)
 end
 
