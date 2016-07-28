@@ -471,7 +471,7 @@ function load_data(filename)
 end
 
 function save_data(filename, data)
-    local s = JSON.encode_pretty(data)
+    local s = json:encode_pretty(data)
     local f = io.open(filename, 'w')
     f:write(s)
     f:close()
