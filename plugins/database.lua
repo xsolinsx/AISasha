@@ -41,7 +41,7 @@ local function callback_group_database(extra, success, result)
             }
         end
     end
-    send_large_msg(extra.receiver, languages[get_lang(result.peer_id)].dataLeaked)
+    send_large_msg(extra.receiver, langs[get_lang(result.peer_id)].dataLeaked)
 end
 
 local function callback_supergroup_database(extra, success, result)
@@ -91,7 +91,7 @@ local function callback_supergroup_database(extra, success, result)
             }
         end
     end
-    send_large_msg(extra.receiver, languages[get_lang(string.match(extra.receiver, '%d+'))].dataLeaked)
+    send_large_msg(extra.receiver, langs[get_lang(string.match(extra.receiver, '%d+'))].dataLeaked)
 end
 
 local function run(msg, matches)
