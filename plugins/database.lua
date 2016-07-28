@@ -236,7 +236,7 @@ local function run(msg, matches)
                         channel_info('channel#id' .. tostring(v), callback_all_supergroups_info, { receiver = 'channel#id' .. tostring(v), database = database })
                         chat_info('chat#id' .. tostring(v), callback_group_database, { receiver = 'chat#id' .. tostring(v), database = database })
                     end
-                    postpone(post_get_db_groups, false, math.random(10))
+                    postpone(post_get_db_groups, false, math.random(5, 10))
                 end
             end
 
