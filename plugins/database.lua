@@ -15,19 +15,17 @@ local function callback_all_supergroups_members(extra, success, result)
                 else
                     database["users"][tostring(v.peer_id)]['groups'] = { [tostring(chat_id)] = tonumber(chat_id) }
                 end
-                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") or database["users"][tostring(v.peer_id)]['username'] ~=(('@' .. v.username) or 'NOUSER') then
-                    if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
-                        database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
-                        database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
-                    end
-                    local username = 'NOUSER'
-                    if v.username then
-                        username = '@' .. v.username
-                    end
-                    if database["users"][tostring(v.peer_id)]['username'] ~= username then
-                        database["users"][tostring(v.peer_id)]['username'] = username
-                        database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' .. username
-                    end
+                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
+                    database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
+                    database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
+                end
+                local username = 'NOUSER'
+                if v.username then
+                    username = '@' .. v.username
+                end
+                if database["users"][tostring(v.peer_id)]['username'] ~= username then
+                    database["users"][tostring(v.peer_id)]['username'] = username
+                    database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' .. username
                 end
             else
                 print('new user')
@@ -112,19 +110,17 @@ local function callback_group_database(extra, success, result)
                 else
                     database["users"][tostring(v.peer_id)]['groups'] = { [tostring(chat_id)] = tonumber(chat_id) }
                 end
-                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") or database["users"][tostring(v.peer_id)]['username'] ~=(('@' .. v.username) or 'NOUSER') then
-                    if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
-                        database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
-                        database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
-                    end
-                    local username = 'NOUSER'
-                    if v.username then
-                        username = '@' .. v.username
-                    end
-                    if database["users"][tostring(v.peer_id)]['username'] ~= username then
-                        database["users"][tostring(v.peer_id)]['username'] = username
-                        database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' .. username
-                    end
+                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
+                    database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
+                    database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
+                end
+                local username = 'NOUSER'
+                if v.username then
+                    username = '@' .. v.username
+                end
+                if database["users"][tostring(v.peer_id)]['username'] ~= username then
+                    database["users"][tostring(v.peer_id)]['username'] = username
+                    database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' .. username
                 end
             else
                 print('new user')
@@ -189,19 +185,17 @@ local function callback_supergroup_database(extra, success, result)
                 else
                     database["users"][tostring(v.peer_id)]['groups'] = { [tostring(chat_id)] = tonumber(chat_id) }
                 end
-                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") or database["users"][tostring(v.peer_id)]['username'] ~=(('@' .. v.username) or 'NOUSER') then
-                    if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
-                        database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
-                        database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
-                    end
-                    local username = 'NOUSER'
-                    if v.username then
-                        username = '@' .. v.username
-                    end
-                    if database["users"][tostring(v.peer_id)]['username'] ~= username then
-                        database["users"][tostring(v.peer_id)]['username'] = username
-                        database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' .. username
-                    end
+                if database["users"][tostring(v.peer_id)]['print_name'] ~= v.print_name:gsub("_", " ") then
+                    database["users"][tostring(v.peer_id)]['print_name'] = v.print_name:gsub("_", " ")
+                    database["users"][tostring(v.peer_id)]['old_print_names'] = database["users"][tostring(v.peer_id)]['old_print_names'] .. ' ### ' .. v.print_name:gsub("_", " ")
+                end
+                local username = 'NOUSER'
+                if v.username then
+                    username = '@' .. v.username
+                end
+                if database["users"][tostring(v.peer_id)]['username'] ~= username then
+                    database["users"][tostring(v.peer_id)]['username'] = username
+                    database["users"][tostring(v.peer_id)]['old_usernames'] = database["users"][tostring(v.peer_id)]['old_usernames'] .. ' ### ' .. username
                 end
             else
                 print('new user')
