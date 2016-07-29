@@ -92,7 +92,7 @@ local function run(msg, matches)
             local tab = matches[2]:split('\n###\n')
             local i = 0
             for k, command in pairs(tab) do
-                local name, value = string.match(command, '/set ([^%s]+) (.+)')
+                local name, value = string.match(command, '([^%s]+) (.+)')
                 name = string.sub(name:lower(), 1, 50)
                 value = string.sub(value, 1, 4096)
                 set_value(msg, name, value, false)
@@ -109,7 +109,7 @@ local function run(msg, matches)
             local tab = matches[2]:split('\n###\n')
             local i = 0
             for k, command in pairs(tab) do
-                local name, value = string.match(command, '/setglobal ([^%s]+) (.+)')
+                local name, value = string.match(command, '([^%s]+) (.+)')
                 name = string.sub(name:lower(), 1, 50)
                 value = string.sub(value, 1, 4096)
                 set_value(msg, name, value, true)

@@ -76,7 +76,7 @@ local function run(msg, matches)
                 end
                 local text = ''
                 for word, answer in pairs(newtab) do
-                    text = text .. '/set ' .. word:gsub(' ', '_') .. ' ' .. answer .. '\n###\n'
+                    text = text .. word:gsub(' ', '_') .. ' ' .. answer .. '\n###\n'
                 end
                 send_large_msg(get_receiver(msg), text)
             end
@@ -95,7 +95,7 @@ local function run(msg, matches)
                 end
                 local text = ''
                 for word, answer in pairs(newtab) do
-                    text = text .. '/setglobal ' .. word:gsub(' ', '_') .. ' ' .. answer .. '\n###\n'
+                    text = text .. word:gsub(' ', '_') .. ' ' .. answer .. '\n###\n'
                 end
                 send_large_msg(get_receiver(msg), text)
             end
@@ -133,7 +133,7 @@ local function pre_process(msg, matches)
             local found = false
             local temp = word:lower()
             if msg.text then
-                if not string.match(msg.text, "^[Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll] ([^%s]+)$") and not string.match(msg.text, "^[#!/]([Ii][Mm][Pp][Oo][Rr][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ss][Ee][Tt][Ss]) (.+)$") then
+                if not string.match(msg.text, "^[#!/][Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll] ([^%s]+)$") and not string.match(msg.text, "^[#!/]([Ii][Mm][Pp][Oo][Rr][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ss][Ee][Tt][Ss]) (.+)$") then
                     if string.match(msg.text:lower(), temp) then
                         local value = get_value(msg, temp)
                         if value then
