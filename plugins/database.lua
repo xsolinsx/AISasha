@@ -29,11 +29,15 @@ local function callback_all_supergroups_members(extra, success, result)
                 end
             else
                 print('new user')
+                local username = 'NOUSER'
+                if v.username then
+                    username = '@' .. v.username
+                end
                 database["users"][tostring(v.peer_id)] = {
                     print_name = v.print_name:gsub("_"," "),
                     old_print_names = v.print_name:gsub("_"," "),
-                    username = ('@' .. v.username) or 'NOUSER',
-                    old_usernames = ('@' .. v.username) or 'NOUSER',
+                    username = username,
+                    old_usernames = username,
                     long_id = v.id,
                     groups = { [tostring(chat_id)] = tonumber(chat_id) },
                 }
@@ -65,11 +69,15 @@ local function callback_all_supergroups_info(extra, success, result)
         end
     else
         print('new group')
+        local username = 'NOUSER'
+        if result.username then
+            username = '@' .. result.username
+        end
         database["groups"][tostring(chat_id)] = {
             print_name = result.print_name:gsub("_"," "),
             old_print_names = result.print_name:gsub("_"," "),
-            username = ('@' .. result.username) or 'NOUSER',
-            old_usernames = ('@' .. result.username) or 'NOUSER',
+            username = username,
+            old_usernames = username,
             lang = get_lang(result.peer_id),
             long_id = result.id,
         }
@@ -124,11 +132,15 @@ local function callback_group_database(extra, success, result)
                 end
             else
                 print('new user')
+                local username = 'NOUSER'
+                if v.username then
+                    username = '@' .. v.username
+                end
                 database["users"][tostring(v.peer_id)] = {
                     print_name = v.print_name:gsub("_"," "),
                     old_print_names = v.print_name:gsub("_"," "),
-                    username = ('@' .. v.username) or 'NOUSER',
-                    old_usernames = ('@' .. v.username) or 'NOUSER',
+                    username = username,
+                    old_usernames = username,
                     long_id = v.id,
                     groups = { [tostring(chat_id)] = tonumber(chat_id) },
                 }
@@ -163,13 +175,17 @@ local function callback_supergroup_database(extra, success, result)
         end
     else
         print('new group')
+        local username = 'NOUSER'
+        if extra.username then
+            username = '@' .. extra.username
+        end
         database["groups"][tostring(chat_id)] = {
             print_name = extra.print_name:gsub("_"," "),
             old_print_names = extra.print_name:gsub("_"," "),
             lang = get_lang(string.match(extra.receiver,'%d+')),
             long_id = extra.id,
-            username = ('@' .. extra.username) or 'NOUSER',
-            old_usernames = ('@' .. extra.username) or 'NOUSER',
+            username = username,
+            old_usernames = username,
         }
     end
 
@@ -199,11 +215,15 @@ local function callback_supergroup_database(extra, success, result)
                 end
             else
                 print('new user')
+                local username = 'NOUSER'
+                if v.username then
+                    username = '@' .. v.username
+                end
                 database["users"][tostring(v.peer_id)] = {
                     print_name = v.print_name:gsub("_"," "),
                     old_print_names = v.print_name:gsub("_"," "),
-                    username = ('@' .. v.username) or 'NOUSER',
-                    old_usernames = ('@' .. v.username) or 'NOUSER',
+                    username = username,
+                    old_usernames = username,
                     long_id = v.id,
                     groups = { [tostring(chat_id)] = tonumber(chat_id) },
                 }
