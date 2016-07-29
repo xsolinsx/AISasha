@@ -31,11 +31,11 @@ local function callback_all_supergroups_members(extra, success, result)
                 print('new user')
                 database["users"][tostring(v.peer_id)] = {
                     print_name = v.print_name:gsub("_"," "),
-                    username = ('@' .. v.username) or 'NOUSER',
                     old_print_names = v.print_name:gsub("_"," "),
+                    username = ('@' .. v.username) or 'NOUSER',
                     old_usernames = ('@' .. v.username) or 'NOUSER',
                     long_id = v.id,
-                    groups = { [tostring(chat_id)] = tonumber(chat_id) }
+                    groups = { [tostring(chat_id)] = tonumber(chat_id) },
                 }
             end
         end
@@ -67,11 +67,11 @@ local function callback_all_supergroups_info(extra, success, result)
         print('new group')
         database["groups"][tostring(chat_id)] = {
             print_name = result.print_name:gsub("_"," "),
-            username = ('@' .. result.username) or 'NOUSER',
-            lang = get_lang(result.peer_id),
             old_print_names = result.print_name:gsub("_"," "),
+            username = ('@' .. result.username) or 'NOUSER',
             old_usernames = ('@' .. result.username) or 'NOUSER',
-            long_id = result.id
+            lang = get_lang(result.peer_id),
+            long_id = result.id,
         }
     end
 end
@@ -92,8 +92,8 @@ local function callback_group_database(extra, success, result)
         print('new group')
         database["groups"][tostring(chat_id)] = {
             print_name = result.print_name:gsub("_"," "),
-            lang = get_lang(result.peer_id),
             old_print_names = result.print_name:gsub("_"," "),
+            lang = get_lang(result.peer_id),
             long_id = result.id
         }
     end
@@ -126,11 +126,11 @@ local function callback_group_database(extra, success, result)
                 print('new user')
                 database["users"][tostring(v.peer_id)] = {
                     print_name = v.print_name:gsub("_"," "),
-                    username = ('@' .. v.username) or 'NOUSER',
                     old_print_names = v.print_name:gsub("_"," "),
+                    username = ('@' .. v.username) or 'NOUSER',
                     old_usernames = ('@' .. v.username) or 'NOUSER',
                     long_id = v.id,
-                    groups = { [tostring(chat_id)] = tonumber(chat_id) }
+                    groups = { [tostring(chat_id)] = tonumber(chat_id) },
                 }
             end
         end
@@ -165,11 +165,11 @@ local function callback_supergroup_database(extra, success, result)
         print('new group')
         database["groups"][tostring(chat_id)] = {
             print_name = extra.print_name:gsub("_"," "),
-            username = ('@' .. extra.username) or 'NOUSER',
-            lang = get_lang(string.match(extra.receiver,'%d+')),
             old_print_names = extra.print_name:gsub("_"," "),
+            lang = get_lang(string.match(extra.receiver,'%d+')),
+            long_id = extra.id,
+            username = ('@' .. extra.username) or 'NOUSER',
             old_usernames = ('@' .. extra.username) or 'NOUSER',
-            long_id = extra.id
         }
     end
 
@@ -201,11 +201,11 @@ local function callback_supergroup_database(extra, success, result)
                 print('new user')
                 database["users"][tostring(v.peer_id)] = {
                     print_name = v.print_name:gsub("_"," "),
-                    username = ('@' .. v.username) or 'NOUSER',
                     old_print_names = v.print_name:gsub("_"," "),
+                    username = ('@' .. v.username) or 'NOUSER',
                     old_usernames = ('@' .. v.username) or 'NOUSER',
                     long_id = v.id,
-                    groups = { [tostring(chat_id)] = tonumber(chat_id) }
+                    groups = { [tostring(chat_id)] = tonumber(chat_id) },
                 }
             end
         end
@@ -275,6 +275,80 @@ local function run(msg, matches)
                 return matches[2] .. langs[msg.lang].notFound
             end
         end
+
+        if matches[1]:lower() == 'addrecord' and matches[2] and matches[3] then
+            local database = load_data(_config.database.db)
+            local t = matches[3]:split('\n')
+            if matches[2]:lower() == 'user' then
+                local id = t[1]
+                local print_name = t[2]
+                local old_print_names = t[3]
+                local username = t[4]
+                local old_usernames = t[5]
+                local long_id = t[6]
+                local groups = { }
+                for k, v in pairs(t[7]:split(' ')) do
+                    groups[tostring(v)] = tonumber(v)
+                end
+                print('new user')
+                database["users"][tostring(id)] = {
+                    print_name = print_name:gsub("_"," "),
+                    old_print_names = old_print_names:gsub("_"," "),
+                    username = username,
+                    old_usernames = old_usernames,
+                    long_id = long_id,
+                    groups = groups,
+                }
+                save_data(_config.database.db, database)
+                return langs[msg.lang].userManuallyAdded
+            elseif matches[2]:lower() == 'group' then
+                local id = t[1]
+                local print_name = t[2]
+                local old_print_names = t[3]
+                local lang = t[4]
+                local long_id = t[5]
+                if t[6] and t[7] then
+                    local username = t[6]
+                    local old_usernames = t[7]
+                    print('new group')
+                    database["groups"][tostring(id)] = {
+                        print_name = print_name:gsub("_"," "),
+                        old_print_names = old_print_names:gsub("_"," "),
+                        lang = lang,
+                        long_id = long_id,
+                        username = username,
+                        old_usernames = old_usernames,
+                    }
+                else
+                    print('new group')
+                    database["groups"][tostring(id)] = {
+                        print_name = print_name:gsub("_"," "),
+                        old_print_names = old_print_names:gsub("_"," "),
+                        lang = lang,
+                        long_id = long_id,
+                    }
+                end
+                save_data(_config.database.db, database)
+                return langs[msg.lang].groupManuallyAdded
+            else
+                return langs[msg.lang].errorUserOrGroup
+            end
+        end
+
+        if (matches[1]:lower() == 'delete' or matches[1]:lower() == 'sasha elimina' or matches[1]:lower() == 'elimina') and matches[2] then
+            local database = load_data(_config.database.db)
+            if database['users'][tostring(matches[2])] then
+                database['users'][tostring(matches[2])] = nil
+                save_data(_config.database.db, database)
+                return langs[msg.lang].userDeleted
+            elseif database['groups'][tostring(matches[2])] then
+                database['groups'][tostring(matches[2])] = nil
+                save_data(_config.database.db, database)
+                return langs[msg.lang].groupDeleted
+            else
+                return matches[2] .. langs[msg.lang].notFound
+            end
+        end
     else
         return langs[msg.lang].require_sudo
     end
@@ -288,6 +362,8 @@ return {
         "^[#!/]([Dd][Oo][Gg][Rr][Oo][Uu][Pp][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Dd][Oo][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Ss][Ee][Aa][Rr][Cc][Hh]) (%d+)$",
+        "^[#!/]([Aa][Dd][Dd][Rr][Ee][Cc][Oo][Rr][Dd]) ([^%s]+) (.*)$",
+        "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee]) (%d+)$",
         -- dogroupdatabase
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee] [Gg][Rr][Uu][Pp][Pp][Oo])$",
         -- dodatabase
@@ -295,6 +371,9 @@ return {
         -- search
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Ee][Rr][Cc][Aa]) (%d+)$",
         "^([Cc][Ee][Rr][Cc][Aa]) (%d+)$",
+        -- delete
+        "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa]) (%d+)$",
+        "^([Ee][Ll][Ii][Mm][Ii][Nn][Aa]) (%d+)$",
     },
     run = run,
     min_rank = 5
@@ -304,4 +383,7 @@ return {
     -- (#dogroupdatabase|sasha esegui database gruppo)
     -- (#dodatabase|sasha esegui database)
     -- (#search|[sasha] cerca) <id>
+    -- (#delete|[sasha] elimina) <id>
+    -- #addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>
+    -- #addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]
 }

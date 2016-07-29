@@ -267,6 +267,11 @@ return {
         -- database.lua --
         dbCreated = 'Database creato.',
         dataLeaked = 'Data leaked.',
+        userManuallyAdded = 'Utente aggiunto manualmente al database.',
+        groupManuallyAdded = 'Gruppo aggiunto manualmente al database.',
+        errorUserOrGroup = 'Solo gruppi o utenti.',
+        userDeleted = 'Utente eliminato dal database.',
+        groupDeleted = 'Gruppo eliminato dal database.',
 
         -- delword.lua --
         delwordList = 'Lista censure:\n',
@@ -819,6 +824,9 @@ return {
             '(#dogroupdatabase|sasha esegui database gruppo): Sasha salva i dati di tutti gli utenti del gruppo e i dati del gruppo.',
             '(#dodatabase|sasha esegui database): Sasha salva i dati di tutti gli utenti di tutti i gruppi e i dati dei gruppi.',
             '(#search|[sasha] cerca) <id>: Sasha cerca <id> nel database.',
+            '(#delete|[sasha] elimina) <id>: Sasha elimina <id> dal database.',
+            '#addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>: Sasha aggiunge manualmente al database l\'utente specificato.',
+            '#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]: Sasha aggiunge manualmente al database il gruppo specificato.',
         },
 
         delword =
@@ -1457,6 +1465,11 @@ return {
         -- database.lua --
         dbCreated = 'Database created.',
         dataLeaked = 'Data leaked.',
+        userManuallyAdded = 'User manually added to the database.',
+        groupManuallyAdded = 'Group manually added to the database.',
+        errorUserOrGroup = 'Just groups or users.',
+        userDeleted = 'User deleted from database.',
+        groupDeleted = 'Group deleted from database.',
 
         -- delword.lua --
         delwordList = 'Censorship list:\n',
@@ -1985,6 +1998,9 @@ return {
             '(#dogroupdatabase|sasha esegui database gruppo): Sasha saves all info of all users of group and group info.',
             '(#dodatabase|sasha esegui database): Sasha saves all info of all users of all groups and all groups info.',
             '(#search|[sasha] cerca) <id>: Sasha searches for <id> in the database.',
+            '(#delete|[sasha] elimina) <id>: Sasha deleted <id> from the database.',
+            '#addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>: Sasha manually adds specified user to the database.',
+            '#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]: Sasha manually adds specified group to the database.',
         },
 
         delword =
