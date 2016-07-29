@@ -89,10 +89,10 @@ local function run(msg, matches)
 
     if matches[1]:lower() == 'importgroupsets' and matches[2] then
         if is_owner(msg) then
-            local tab = matches[2]:split('\n###\n')
+            local tab = matches[2]:split('\nXXXxxxXXX\n')
             local i = 0
             for k, command in pairs(tab) do
-                local name, value = string.match(command, '([^%s]+) (.+)')
+                local name, value = string.match(command, '/set ([^%s]+) (.+)')
                 name = string.sub(name:lower(), 1, 50)
                 value = string.sub(value, 1, 4096)
                 set_value(msg, name, value, false)
@@ -106,10 +106,14 @@ local function run(msg, matches)
 
     if matches[1]:lower() == 'importglobalsets' and matches[2] then
         if is_admin1(msg) then
-            local tab = matches[2]:split('\n###\n')
+            local tab = matches[2]:split('\nXXXxxxXXX\n')
             local i = 0
+            vardump(tab)
             for k, command in pairs(tab) do
-                local name, value = string.match(command, '([^%s]+) (.+)')
+                print(k, command)
+                print(string.match(command, '/setglobal ([^%s]+) (.+)'))
+                local name, value = string.match(command, '/setglobal ([^%s]+) (.+)')
+                print(name, value)
                 name = string.sub(name:lower(), 1, 50)
                 value = string.sub(value, 1, 4096)
                 set_value(msg, name, value, true)

@@ -76,7 +76,7 @@ local function run(msg, matches)
                 end
                 local text = ''
                 for word, answer in pairs(newtab) do
-                    text = text .. word:gsub(' ', '_') .. ' ' .. answer .. '\n###\n'
+                    text = text .. '/set ' .. word:gsub(' ', '_') .. ' ' .. answer .. '\nXXXxxxXXX\n'
                 end
                 send_large_msg(get_receiver(msg), text)
             end
@@ -95,7 +95,7 @@ local function run(msg, matches)
                 end
                 local text = ''
                 for word, answer in pairs(newtab) do
-                    text = text .. word:gsub(' ', '_') .. ' ' .. answer .. '\n###\n'
+                    text = text .. '/setglobal ' .. word:gsub(' ', '_') .. ' ' .. answer .. '\nXXXxxxXXX\n'
                 end
                 send_large_msg(get_receiver(msg), text)
             end
