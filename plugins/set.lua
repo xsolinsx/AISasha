@@ -86,6 +86,41 @@ local function run(msg, matches)
             return langs[msg.lang].nothingToSet
         end
     end
+
+    if matches[1]:lower() == 'importgroupsets' and matches[2] then
+        if is_owner(msg) then
+            local tab = matches[2]:split('\n###\n')
+            local i = 0
+            for k, command in pairs(tab) do
+                local name, value = string.match(command, '/set ([^%s]+) (.+)')
+                name = string.sub(name:lower(), 1, 50)
+                value = string.sub(value, 1, 4096)
+                set_value(msg, name, value, false)
+                i = i + 1
+            end
+            return i .. ' sets restored.'
+        else
+            return langs[msg.lang].require_owner
+        end
+    end
+
+    if matches[1]:lower() == 'importglobalsets' and matches[2] then
+        if is_admin1(msg) then
+            local tab = matches[2]:split('\n###\n')
+            local i = 0
+            for k, command in pairs(tab) do
+                local name, value = string.match(command, '/setglobal ([^%s]+) (.+)')
+                name = string.sub(name:lower(), 1, 50)
+                value = string.sub(value, 1, 4096)
+                set_value(msg, name, value, true)
+                i = i + 1
+            end
+            return i .. ' global sets restored.'
+        else
+            return langs[msg.lang].require_admin
+        end
+    end
+
     if matches[1]:lower() == 'cancel' or matches[1]:lower() == 'sasha annulla' or matches[1]:lower() == 'annulla' then
         if is_momod(msg) then
             redis:hdel(hash, 'waiting')
@@ -93,14 +128,18 @@ local function run(msg, matches)
         else
             return langs[msg.lang].require_mod
         end
-    elseif matches[1]:lower() == 'setmedia' or matches[1]:lower() == 'sasha setta media' or matches[1]:lower() == 'setta media' then
+    end
+
+    if matches[1]:lower() == 'setmedia' or matches[1]:lower() == 'sasha setta media' or matches[1]:lower() == 'setta media' then
         if is_momod(msg) then
             local name = string.sub(matches[2]:lower(), 1, 50)
             return set_media(msg, name)
         else
             return langs[msg.lang].require_mod
         end
-    elseif matches[1]:lower() == 'set' or matches[1]:lower() == 'sasha setta' or matches[1]:lower() == 'setta' then
+    end
+
+    if matches[1]:lower() == 'set' or matches[1]:lower() == 'sasha setta' or matches[1]:lower() == 'setta' then
         if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
             return langs[msg.lang].autoexecDenial
         end
@@ -111,7 +150,9 @@ local function run(msg, matches)
         else
             return langs[msg.lang].require_mod
         end
-    elseif matches[1]:lower() == 'setglobal' then
+    end
+
+    if matches[1]:lower() == 'setglobal' then
         if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
             return langs[msg.lang].autoexecDenial
         end
@@ -133,6 +174,8 @@ return {
         "^[#!/]([Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll]) ([^%s]+) (.+)$",
         "^[#!/]([Ss][Ee][Tt][Mm][Ee][Dd][Ii][Aa]) ([^%s]+)$",
         "^[#!/]([Cc][Aa][Nn][Cc][Ee][Ll])$",
+        "^[#!/]([Ii][Mm][Pp][Oo][Rr][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ss][Ee][Tt][Ss]) (.+)$",
+        "^[#!/]([Ii][Mm][Pp][Oo][Rr][Tt][Gg][Rr][Oo][Uu][Pp][Ss][Ee][Tt][Ss]) (.+)$",
         "%[(photo)%]",
         "%[(audio)%]",
         -- set

@@ -61,20 +61,65 @@ local function run(msg, matches)
     if (matches[1]:lower() == 'get' or matches[1]:lower() == 'getlist' or matches[1]:lower() == 'sasha lista') then
         return list_variables(msg, false)
     end
+
     if (matches[1]:lower() == 'getglobal' or matches[1]:lower() == 'getgloballist' or matches[1]:lower() == 'sasha lista globali') then
         return list_variables(msg, true)
     end
-    if is_owner(msg) then
-        if matches[1]:lower() == 'enableglobal' then
+
+    if matches[1]:lower() == 'exportgroupsets' then
+        if is_owner(msg) then
+            if list_variables(msg, false) then
+                local tab = list_variables(msg, false):split('\n')
+                local newtab = { }
+                for i, word in pairs(tab) do
+                    newtab[word] = get_value(msg, word:lower())
+                end
+                local text = ''
+                for word, answer in pairs(newtab) do
+                    text = text .. '/set ' .. word:gsub(' ', '_') .. ' ' .. answer .. '\n###\n'
+                end
+                send_large_msg(get_receiver(msg), text)
+            end
+        else
+            return langs[msg.lang].require_owner
+        end
+    end
+
+    if matches[1]:lower() == 'exportglobalsets' then
+        if is_admin1(msg) then
+            if list_variables(msg, true) then
+                local tab = list_variables(msg, true):split('\n')
+                local newtab = { }
+                for i, word in pairs(tab) do
+                    newtab[word] = get_value(msg, word:lower())
+                end
+                local text = ''
+                for word, answer in pairs(newtab) do
+                    text = text .. '/setglobal ' .. word:gsub(' ', '_') .. ' ' .. answer .. '\n###\n'
+                end
+                send_large_msg(get_receiver(msg), text)
+            end
+        else
+            return langs[msg.lang].require_admin
+        end
+    end
+
+    if matches[1]:lower() == 'enableglobal' then
+        if is_owner(msg) then
             redis:del(msg.to.id .. ':gvariables')
             return langs[msg.lang].globalEnable
+        else
+            return langs[msg.lang].require_owner
         end
-        if matches[1]:lower() == 'disableglobal' then
+    end
+
+    if matches[1]:lower() == 'disableglobal' then
+        if is_owner(msg) then
             redis:set(msg.to.id .. ':gvariables', true)
             return langs[msg.lang].globalDisable
+        else
+            return langs[msg.lang].require_owner
         end
-    else
-        return langs[msg.lang].require_owner
     end
 end
 
@@ -246,6 +291,8 @@ return {
         "^[#!/]([Gg][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ee][Nn][Aa][Bb][Ll][Ee][Gg][Ll][Oo][Bb][Aa][Ll])$",
         "^[#!/]([Dd][Ii][Ss][Aa][Bb][Ll][Ee][Gg][Ll][Oo][Bb][Aa][Ll])$",
+        "^[#!/]([Ee][Xx][Pp][Oo][Rr][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ss][Ee][Tt][Ss])$",
+        "^[#!/]([Ee][Xx][Pp][Oo][Rr][Tt][Gg][Rr][Oo][Uu][Pp][Ss][Ee][Tt][Ss])$",
         -- getlist
         "^[#!/]([Gg][Ee][Tt])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa])$",
