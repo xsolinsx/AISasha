@@ -98,7 +98,7 @@ local function run(msg, matches)
                 set_value(msg, name, value, false)
                 i = i + 1
             end
-            return i .. ' sets restored.'
+            return i .. langs[msg.lang].setsRestored
         else
             return langs[msg.lang].require_owner
         end
@@ -115,7 +115,7 @@ local function run(msg, matches)
                 set_value(msg, name, value, true)
                 i = i + 1
             end
-            return i .. ' global sets restored.'
+            return i .. langs[msg.lang].globalSetsRestored
         else
             return langs[msg.lang].require_admin
         end

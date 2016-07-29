@@ -651,6 +651,8 @@ return {
         cancelled = 'Annullato.',
         nothingToSet = 'Niente da salvare.',
         mediaSaved = 'Media salvato.',
+        setsRestored = ' sets ripristinati.',
+        globalSetsRestored = ' global sets ripristinati.',
 
         --[[
         -- spam.lua --
@@ -912,6 +914,9 @@ return {
             'OWNER',
             '#enableglobal: Sasha abilita i get globali sulla chat.',
             '#disableglobal: Sasha disabilita i get globali sulla chat.',
+            '#exportgroupsets: Sasha esporta i set della chat.',
+            'ADMIN',
+            '#exportglobalsets: Sasha esporta i get globali.',
         },
 
         goodbyewelcome =
@@ -1200,7 +1205,10 @@ return {
             '(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.',
             '(#setmedia|[sasha] setta media) <var_name>: Sasha salva il media (foto o audio) che le verrà inviato come risposta a <var_name>.',
             '(#cancel|[sasha] annulla): Sasha annulla un #setmedia.',
+            'OWNER',
+            '#importgroupsets <group_sets>: Sasha ripristina tutti i set di <group_sets>.',
             'ADMIN',
+            '#importglobalsets <global_sets>: Sasha ripristina tutti i set globali di <global_sets>.',
             '#setglobal <var_name> <text>: Sasha salva globalmente <text> come risposta a <var_name>.',
         },
 
@@ -1823,6 +1831,8 @@ return {
         cancelled = 'Cancelled.',
         nothingToSet = 'Nothing to set.',
         mediaSaved = 'Media saved.',
+        setsRestored = ' sets restored.',
+        globalSetsRestored = ' global sets restored.',
 
         -- spam.lua --
         --[[
@@ -2086,6 +2096,9 @@ return {
             'OWNER',
             '#enableglobal: Sasha enables global gets on chat.',
             '#disableglobal: Sasha disables global gets on chat.',
+            '#exportgroupsets: Sasha exports sets from chat.',
+            'ADMIN',
+            '#exportglobalsets: Sasha exports global sets.',
         },
 
         goodbyewelcome =
@@ -2374,7 +2387,10 @@ return {
             '(#set|[sasha] setta) <var_name> <text>: Sasha saves <text> as answer to <var_name>.',
             '(#setmedia|[sasha] setta media) <var_name>: Sasha saves the media (audio or picture) that will be sent as answer to <var_name>.',
             '(#cancel|[sasha] annulla): Sasha cancels #setmedia.',
+            'OWNER',
+            '#importgroupsets <group_sets>: Sasha restores all the group sets in <group_sets>.',
             'ADMIN',
+            '#importglobalsets <global_sets>: Sasha restores all the global sets in <global_sets>.',
             '#setglobal <var_name> <text>: Sasha globally saves <text> as answer to <var_name>.',
         },
 
