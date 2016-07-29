@@ -110,10 +110,7 @@ local function run(msg, matches)
             local i = 0
             vardump(tab)
             for k, command in pairs(tab) do
-                print(k, command)
-                print(string.match(command, '/setglobal ([^%s]+) (.+)'))
                 local name, value = string.match(command, '/setglobal ([^%s]+) (.+)')
-                print(name, value)
                 name = string.sub(name:lower(), 1, 50)
                 value = string.sub(value, 1, 4096)
                 set_value(msg, name, value, true)
