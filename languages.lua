@@ -243,6 +243,7 @@ return {
         alreadyLog = 'Già un gruppo di log.',
         notLog = 'Non un gruppo di log.',
         backupDone = 'Backup eseguito, ti invio il log in privato.',
+        backupSent = 'Ti sto inviando il backup.',
 
         -- anti_spam.lua --
         blockedForSpam = ' bloccato (SPAM).',
@@ -1449,6 +1450,7 @@ return {
         alreadyLog = 'Already a log group.',
         notLog = 'Not a log group.',
         backupDone = 'Backup finished, I\'m sending you the log.',
+        backupSent = 'I\'m sending you the backup.',
 
         -- anti_spam.lua --
         blockedForSpam = ' blocked (SPAM).',

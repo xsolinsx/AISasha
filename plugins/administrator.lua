@@ -136,92 +136,13 @@ local function get_dialog_list_callback(extra, success, result)
     end
 end
 
-local function tableshow(t, name, indent)
-    local cart
-    -- a container
-    local autoref
-    -- for self references
-
-    --[[ counts the number of elements in a table
-   local function tablecount(t)
-      local n = 0
-      for _, _ in pairs(t) do n = n+1 end
-      return n
-   end
-   ]]
-    -- (RiciLake) returns true if the table is empty
-    local function isemptytable(t) return next(t) == nil end
-
-    local function basicSerialize(o)
-        local so = tostring(o)
-        if type(o) == "function" then
-            local info = debug.getinfo(o, "S")
-            -- info.name is nil because o is not a calling level
-            if info.what == "C" then
-                return string.format("%q", so .. ", C function")
-            else
-                -- the information is defined through lines
-                return string.format("%q", so .. ", defined in (" ..
-                info.linedefined .. "-" .. info.lastlinedefined ..
-                ")" .. info.source)
-            end
-        elseif type(o) == "number" or type(o) == "boolean" then
-            return so
-        else
-            return string.format("%q", so)
-        end
-    end
-
-    local function addtocart(value, name, indent, saved, field)
-        indent = indent or ""
-        saved = saved or { }
-        field = field or name
-
-        cart = cart .. indent .. field
-
-        if type(value) ~= "table" then
-            cart = cart .. " = " .. basicSerialize(value) .. ";\n"
-        else
-            if saved[value] then
-                cart = cart .. " = {}; -- " .. saved[value]
-                .. " (self reference)\n"
-                autoref = autoref .. name .. " = " .. saved[value] .. ";\n"
-            else
-                saved[value] = name
-                -- if tablecount(value) == 0 then
-                if isemptytable(value) then
-                    cart = cart .. " = {};\n"
-                else
-                    cart = cart .. " = {\n"
-                    for k, v in pairs(value) do
-                        k = basicSerialize(k)
-                        local fname = string.format("%s[%s]", name, k)
-                        field = string.format("[%s]", k)
-                        -- three spaces between levels
-                        addtocart(v, fname, indent .. "   ", saved, field)
-                    end
-                    cart = cart .. indent .. "};\n"
-                end
-            end
-        end
-    end
-
-    name = name or "__unnamed__"
-    if type(t) ~= "table" then
-        return name .. " = " .. basicSerialize(t)
-    end
-    cart, autoref = "", ""
-    addtocart(t, name, indent)
-    return cart .. autoref
-end
-
 local function vardump_msg(extra, success, result)
     local name = 'msg'
     if extra.name == 'reply' then
-        name = 'VARDUMP (<reply>)'
+        name = 'VARDUMP (<reply>)\n'
     end
     if extra.name == 'msg_id' then
-        name = 'VARDUMP (<msg_id>)'
+        name = 'VARDUMP (<msg_id>)\n'
     end
     if result.to.phone then
         result.to.phone = ''
@@ -234,7 +155,7 @@ local function vardump_msg(extra, success, result)
             result.fwd_from.phone = ''
         end
     end
-    local text = tableshow(result, name)
+    local text = name .. serpent.block(result, { sortkeys = false, comment = false })
     send_large_msg(extra.receiver, text)
 end
 
@@ -342,13 +263,28 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == "backup" or matches[1]:lower() == "sasha esegui backup" then
                 local time = os.time()
-                local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISashaExp'):read('*all')
+                local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISashaExp --exclude=/home/pi/AISashaExp/.git --exclude=/home/pi/AISashaExp/.luarocks --exclude=/home/pi/AISashaExp/patches --exclude=/home/pi/AISashaExp/tg'):read('*all')
                 local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
                 file:write(log)
                 file:flush()
                 file:close()
                 send_document("user#id" .. msg.from.id, "/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
                 return langs[msg.lang].backupDone
+            end
+            if matches[1]:lower() == "sendbackup" or matches[1]:lower() == "sasha invia backup" then
+                local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
+                local backups = { }
+                for k, v in pairsByKeys(files) do
+                    if string.match(v, '^backupAISasha%d+%.tar%.gz$') then
+                        backups[string.match(v, '%d+')] = v
+                    end
+                end
+                local last_backup = ''
+                for k, v in pairsByKeys(backups) do
+                    last_backup = v
+                end
+                send_document("user#id" .. msg.from.id, '/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
+                return langs[msg.lang].backupSent
             end
             if matches[1]:lower() == 'vardump' then
                 if type(msg.reply_id) ~= "nil" then
@@ -358,16 +294,11 @@ local function run(msg, matches)
                 else
                     msg.to.phone = ''
                     msg.from.phone = ''
-                    local text = tableshow(msg, 'VARDUMP (<msg>)')
+                    local text = 'VARDUMP (<msg>)\n' .. serpent.block(msg, { sortkeys = false, comment = false })
                     send_large_msg(get_receiver(msg), text)
                 end
             end
         end
-        --[[*For Debug*
-	    if matches[1] == "vardumpmsg" then
-		local text = serpent.block(msg, {comment=false})
-		send_large_msg("channel#id"..msg.to.id, text)
-	end]]
         if matches[1]:lower() == 'updateid' or matches[1]:lower() == 'sasha aggiorna longid' then
             local data = load_data(_config.moderation.data)
             local long_id = data[tostring(msg.to.id)]['long_id']
@@ -416,6 +347,7 @@ return {
         "^[#!/]([Ss][Yy][Nn][Cc]_[Gg][Bb][Aa][Nn][Ss])$",
         -- sync your global bans with seed
         "^[#!/]([Bb][Aa][Cc][Kk][Uu][Pp])$",
+        "^[#!/]([Ss][Ee][Nn][Dd][Bb][Aa][Cc][Kk][Uu][Pp])$",
         "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Ii][Dd])$",
         "^[#!/]([Aa][Dd][Dd][Ll][Oo][Gg])$",
         "^[#!/]([Rr][Ee][Mm][Ll][Oo][Gg])$",
@@ -457,6 +389,8 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ii][Nn][Cc][Rr][Oo][Nn][Ii][Zz][Zz][Aa] [Ss][Uu][Pp][Ee][Rr][Bb][Aa][Nn])$",
         -- backup
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Bb][Aa][Cc][Kk][Uu][Pp])$",
+        -- sendbackup
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Aa] [Bb][Aa][Cc][Kk][Uu][Pp])$",
         -- updateid
         "^[Ss][Aa][Ss][Hh][Aa] ([Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ll][Oo][Nn][Gg][Ii][Dd])$",
         -- addlog
@@ -486,6 +420,7 @@ return {
     -- (#mycontact|sasha mio contatto)
     -- (#sync_gbans|sasha sincronizza superban)
     -- (#backup|sasha esegui backup)
+    -- (#sendbackup|sasha invia backup)
     -- #vardump [<reply>|<msg_id>]
 }
 -- By @imandaneshi :)
