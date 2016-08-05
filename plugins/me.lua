@@ -7,7 +7,7 @@ local function get_group_stats(extra, success, result)
         chattotal = chattotal + tmpmsgs
     end
     local percentage =(usermsgs * 100) / chattotal
-    send_large_msg(extra.receiver, string.gsub(string.gsub(string.gsub(langs[lang].meString, 'W', tostring(usermsgs)), 'X', tostring(percentage)), 'Z', tostring(chattotal)))
+    send_large_msg(extra.receiver, string.gsub(string.gsub(string.gsub(langs[lang].meString, 'W', tostring(usermsgs)), 'X', string.format('%d', percentage)), 'Z', tostring(chattotal)))
 end
 
 local function get_supergroup_stats(extra, success, result)
@@ -19,7 +19,7 @@ local function get_supergroup_stats(extra, success, result)
         chattotal = chattotal + tmpmsgs
     end
     local percentage =(usermsgs * 100) / chattotal
-    send_large_msg(extra.receiver, string.gsub(string.gsub(string.gsub(langs[lang].meString, 'W', tostring(usermsgs)), 'X', tostring(percentage)), 'Z', tostring(chattotal)))
+    send_large_msg(extra.receiver, string.gsub(string.gsub(string.gsub(langs[lang].meString, 'W', tostring(usermsgs)), 'X', string.format('%d', percentage)), 'Z', tostring(chattotal)))
 end
 
 local function run(msg, matches)
