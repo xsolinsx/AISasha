@@ -47,6 +47,7 @@ return {
             "Mi sembri peggio dei cristiani porcoddio.",
             "Dei calci in bocca meriti altrochè.",
             "Scusa eh ma quanto ti senti frocio da 1 a 10? no perchè a me il 10 sembra fisso.",
+            "Fai un favore al gruppo, ucciditi da solo.",
             "Sei sicuro di non avere qualche cromosoma in più?",
             "Dio se sei messo male amico.",
             "Per favore calate il banhammer sulla sua testa.",
