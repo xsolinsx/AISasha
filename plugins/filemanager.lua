@@ -70,7 +70,7 @@ function run(msg, matches)
             end
             if matches[1]:lower() == 'upload' and matches[2] then
                 if io.popen('find ' .. BASE_FOLDER .. folder .. matches[2]):read("*all") == '' then
-                    return matches[2] .. langs[msg.lang].notExist
+                    return matches[2] .. langs[msg.lang].noSuchFile
                 else
                     send_document(receiver, BASE_FOLDER .. folder .. matches[2], ok_cb, false)
                     return langs[msg.lang].sendingYou .. matches[2]

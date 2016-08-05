@@ -303,6 +303,7 @@ return {
         needMedia = 'Mi serve un file.',
         fileDownloadedTo = 'File scaricato in: ',
         errorDownloading = 'Errore durante il download: ',
+        noSuchFile = ' non esiste.',
 
         -- flame.lua --
         cantFlameHigher = 'Non puoi flammare un mod/owner/admin/sudo/!',
@@ -599,6 +600,9 @@ return {
         strictrulesLocked = 'Pugno di ferro attivato.',
         strictrulesAlreadyUnlocked = 'Pugno di ferro già disattivato.',
         strictrulesUnlocked = 'Pugno di ferro disattivato.',
+
+        -- me.lua --
+        meString = 'Hai mandato W (X%) messaggi e questo gruppo ne ha Z.',
 
         -- onservice.lua --
         notMyGroup = 'Questo non è un mio gruppo, addio.',
@@ -1116,6 +1120,14 @@ return {
             '#remlikes <id> <value>: Sasha toglie <value> likes all\'utente specificato.',
         },
 
+        me =
+        {
+            '🅿️ ME',
+            'Plugin per sapere i messaggi mandati.',
+            'USER',
+            '#me: Sasha dice quanti messaggi hai mandato.',
+        },
+
         onservice =
         {
             '🅿️ ONSERVICE',
@@ -1510,6 +1522,7 @@ return {
         needMedia = 'I need a file.',
         fileDownloadedTo = 'File downloaded to: ',
         errorDownloading = 'Error downloading: ',
+        noSuchFile = ' doesn\'t exist.',
 
         -- flame.lua --
         cantFlameHigher = 'You can\'t flame mod/owner/admin/sudo/!',
@@ -1780,6 +1793,9 @@ return {
         strictrulesLocked = 'Strict rules enabled.',
         strictrulesAlreadyUnlocked = 'Strict rules already disabled.',
         strictrulesUnlocked = 'Strict rules disabled.',
+
+        -- me.lua --
+        meString = 'You have sent W (X%) messages and this group has Z messages.',
 
         -- onservice.lua --
         notMyGroup = 'This is not one of my groups, bye.',
@@ -2297,6 +2313,14 @@ return {
             '#createlikesdb:  Sasha creates likecounter database.',
             '#addlikes <id> <value>: Sasha adds <value> likes to specified user.',
             '#remlikes <id> <value>: Sasha removes <value> likes to specified user.',
+        },
+
+        me =
+        {
+            '🅿️ ME',
+            'Plugin to know number of sent messages.',
+            'USER',
+            '#me: Sasha tells you how many messages you\'ve sent.',
         },
 
         onservice =
