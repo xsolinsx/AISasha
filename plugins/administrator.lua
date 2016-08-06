@@ -299,7 +299,7 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == 'checkspeed' then
-                return os.date('%S', os.difftime(os.date(), tonumber(msg.date)))
+                return os.date('%S', os.difftime(tonumber(os.date()), tonumber(msg.date)))
             end
         end
         if matches[1]:lower() == 'updateid' or matches[1]:lower() == 'sasha aggiorna longid' then
