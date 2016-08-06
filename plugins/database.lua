@@ -232,6 +232,7 @@ local function pre_process(msg)
         end
     end
     save_data(_config.database.db, database)
+    return msg
 end
 
 local function run(msg, matches)
