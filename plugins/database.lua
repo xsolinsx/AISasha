@@ -193,42 +193,44 @@ local function pre_process(msg)
             end
         end
     end
-    if msg.from.print_name then
-        if database["users"][tostring(msg.from.id)] then
-            print('already registered user')
-            if database["users"][tostring(msg.from.id)]['groups'] then
-                if not database["users"][tostring(msg.from.id)]['groups'][tostring(msg.to.id)] then
-                    database["users"][tostring(msg.from.id)]['groups'][tostring(msg.to.id)] = tonumber(msg.to.id)
+    if msg.from.type == 'user' then
+        if msg.from.print_name then
+            if database["users"][tostring(msg.from.id)] then
+                print('already registered user')
+                if database["users"][tostring(msg.from.id)]['groups'] then
+                    if not database["users"][tostring(msg.from.id)]['groups'][tostring(msg.to.id)] then
+                        database["users"][tostring(msg.from.id)]['groups'][tostring(msg.to.id)] = tonumber(msg.to.id)
+                    end
+                else
+                    database["users"][tostring(msg.from.id)]['groups'] = { [tostring(msg.to.id)] = tonumber(msg.to.id) }
+                end
+                if database["users"][tostring(msg.from.id)]['print_name'] ~= msg.from.print_name:gsub("_", " ") then
+                    database["users"][tostring(msg.from.id)]['print_name'] = msg.from.print_name:gsub("_", " ")
+                    database["users"][tostring(msg.from.id)]['old_print_names'] = database["users"][tostring(msg.from.id)]['old_print_names'] .. ' ### ' .. msg.from.print_name:gsub("_", " ")
+                end
+                local username = 'NOUSER'
+                if msg.from.username then
+                    username = '@' .. msg.from.username
+                end
+                if database["users"][tostring(msg.from.id)]['username'] ~= username then
+                    database["users"][tostring(msg.from.id)]['username'] = username
+                    database["users"][tostring(msg.from.id)]['old_usernames'] = database["users"][tostring(msg.from.id)]['old_usernames'] .. ' ### ' .. username
                 end
             else
-                database["users"][tostring(msg.from.id)]['groups'] = { [tostring(msg.to.id)] = tonumber(msg.to.id) }
+                print('new user')
+                local username = 'NOUSER'
+                if msg.from.username then
+                    username = '@' .. msg.from.username
+                end
+                database["users"][tostring(msg.from.id)] = {
+                    print_name = msg.from.print_name:gsub("_"," "),
+                    old_print_names = msg.from.print_name:gsub("_"," "),
+                    username = username,
+                    old_usernames = username,
+                    long_id = msg.from.peer_id,
+                    groups = { [tostring(msg.to.id)] = tonumber(msg.to.id) },
+                }
             end
-            if database["users"][tostring(msg.from.id)]['print_name'] ~= msg.from.print_name:gsub("_", " ") then
-                database["users"][tostring(msg.from.id)]['print_name'] = msg.from.print_name:gsub("_", " ")
-                database["users"][tostring(msg.from.id)]['old_print_names'] = database["users"][tostring(msg.from.id)]['old_print_names'] .. ' ### ' .. msg.from.print_name:gsub("_", " ")
-            end
-            local username = 'NOUSER'
-            if msg.from.username then
-                username = '@' .. msg.from.username
-            end
-            if database["users"][tostring(msg.from.id)]['username'] ~= username then
-                database["users"][tostring(msg.from.id)]['username'] = username
-                database["users"][tostring(msg.from.id)]['old_usernames'] = database["users"][tostring(msg.from.id)]['old_usernames'] .. ' ### ' .. username
-            end
-        else
-            print('new user')
-            local username = 'NOUSER'
-            if msg.from.username then
-                username = '@' .. msg.from.username
-            end
-            database["users"][tostring(msg.from.id)] = {
-                print_name = msg.from.print_name:gsub("_"," "),
-                old_print_names = msg.from.print_name:gsub("_"," "),
-                username = username,
-                old_usernames = username,
-                long_id = msg.from.peer_id,
-                groups = { [tostring(msg.to.id)] = tonumber(msg.to.id) },
-            }
         end
     end
     save_data(_config.database.db, database)
