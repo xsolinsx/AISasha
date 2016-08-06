@@ -5,7 +5,7 @@ local function run(msg, matches)
 end
 
 return {
-    description = "BOT",
+    description = "LUA_EXEC",
     patterns =
     {
         "^[#!/][Ll][Uu][Aa] (.*)",
