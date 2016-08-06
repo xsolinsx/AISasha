@@ -149,6 +149,57 @@ local function callback_supergroup_database(extra, success, result)
 end
 
 local function pre_process(msg)
+    if msg.to.type == 'chat' then
+        -- save group info
+        if database["groups"][tostring(msg.to.id)] then
+            print('already registered group')
+            if database["groups"][tostring(msg.to.id)]['print_name'] ~= msg.to.print_name:gsub("_", " ") then
+                database["groups"][tostring(msg.to.id)]['print_name'] = msg.to.print_name:gsub("_", " ")
+                database["groups"][tostring(msg.to.id)]['old_print_names'] = database["groups"][tostring(msg.to.id)]['old_print_names'] .. ' ### ' .. msg.to.print_name:gsub("_", " ")
+            end
+        else
+            print('new group')
+            database["groups"][tostring(msg.to.id)] = {
+                print_name = msg.to.print_name:gsub("_"," "),
+                old_print_names = msg.to.print_name:gsub("_"," "),
+                lang = get_lang(msg.to.id),
+                long_id = msg.to.peer_id
+            }
+        end
+    elseif msg.to.type == 'channel' then
+        -- save supergroup info
+        if database["groups"][tostring(msg.to.id)] then
+            print('already registered group')
+            if database["groups"][tostring(msg.to.id)]['print_name'] ~= msg.to.print_name:gsub("_", " ") then
+                database["groups"][tostring(msg.to.id)]['print_name'] = msg.to.print_name:gsub("_", " ")
+                database["groups"][tostring(msg.to.id)]['old_print_names'] = database["groups"][tostring(msg.to.id)]['old_print_names'] .. ' ### ' .. msg.to.print_name:gsub("_", " ")
+            end
+            if database["groups"][tostring(msg.to.id)]['username'] and database["groups"][tostring(msg.to.id)]['old_usernames'] then
+                local username = 'NOUSER'
+                if msg.to.username then
+                    username = '@' .. msg.to.username
+                end
+                if database["groups"][tostring(msg.to.id)]['username'] ~= username then
+                    database["groups"][tostring(msg.to.id)]['username'] = username
+                    database["groups"][tostring(msg.to.id)]['old_usernames'] = database["groups"][tostring(msg.to.id)]['old_usernames'] .. ' ### ' .. username
+                end
+            end
+        else
+            print('new group')
+            local username = 'NOUSER'
+            if msg.to.username then
+                username = '@' .. msg.to.username
+            end
+            database["groups"][tostring(msg.to.id)] = {
+                print_name = msg.to.print_name:gsub("_"," "),
+                old_print_names = msg.to.print_name:gsub("_"," "),
+                lang = get_lang(msg.to.id),
+                long_id = msg.to.peer_id,
+                username = username,
+                old_usernames = username,
+            }
+        end
+    end
     -- save user info
     if msg.action then
         if msg.action.user then
@@ -347,6 +398,7 @@ local function run(msg, matches)
 end
 
 local function cron()
+    print('SAVING USERS/GROUPS DATABASE')
     save_data(_config.database.db, database)
 end
 
