@@ -625,7 +625,7 @@ local function run(msg, matches)
                 langs[msg.lang].groupName .. msg.to.title ..
                 langs[msg.lang].users .. tostring(msg.to.members_num) ..
                 langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
-                langs[msg.lang].long_id .. math.abs(msg.to.peer_id)
+                langs[msg.lang].long_id .. msg.to.peer_id
                 return text
             elseif chat_type == 'channel' then
                 text = text .. ' 👥' ..
@@ -634,7 +634,7 @@ local function run(msg, matches)
                     text = text .. langs[msg.lang].username .. "@" .. msg.to.username
                 end
                 text = text .. langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
-                langs[msg.lang].long_id .. math.abs(msg.to.peer_id)
+                langs[msg.lang].long_id .. msg.to.peer_id
                 return text
             end
         end
