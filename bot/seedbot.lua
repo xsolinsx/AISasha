@@ -13,6 +13,10 @@ function on_msg_receive(msg)
     if not started then
         return
     end
+    if not loaded then
+        loaded = true
+        database = load_data(_config.database.db)
+    end
 
     msg = backward_msg_format(msg)
 
@@ -55,7 +59,6 @@ function on_binlog_replay_end()
     -- load plugins
     plugins = { }
     load_plugins()
-    database = load_data("./data/database.json")
 end
 
 function msg_valid(msg)
@@ -385,3 +388,4 @@ our_id = 0
 now = os.time()
 math.randomseed(now)
 started = false
+dbloaded = false
