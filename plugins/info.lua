@@ -128,7 +128,8 @@ local function info_by_username(extra, success, result)
             text = text .. langs[lang].username .. '@' .. result.username
         end
         text = text .. langs[lang].date .. os.date('%c') ..
-        '\n🆔: ' .. result.peer_id
+        langs[lang].peer_id .. result.peer_id ..
+        langs[lang].long_id .. result.id
     elseif result.peer_type == 'user' then
         if result.first_name then
             text = text .. langs[lang].name .. result.first_name
@@ -170,7 +171,8 @@ local function info_by_username(extra, success, result)
         if is_muted_user(extra.chat_id, result.peer_id) then
             text = text .. 'MUTED, '
         end
-        text = text .. '\n🆔: ' .. result.peer_id
+        text = text .. langs[lang].peer_id .. result.peer_id ..
+        langs[lang].long_id .. result.id
     else
         text = langs[lang].peerTypeUnknown
     end
@@ -228,7 +230,8 @@ local function info_by_reply(extra, success, result)
         if is_muted_user(result.to.peer_id, result.action.user.peer_id) then
             text = text .. 'MUTED, '
         end
-        text = text .. '\n🆔: ' .. result.action.user.peer_id
+        text = text .. langs[lang].peer_id .. result.action.user.peer_id ..
+        langs[lang].long_id .. result.action.user.id
     else
         if result.from.first_name then
             text = text .. langs[lang].name .. result.from.first_name
@@ -270,7 +273,8 @@ local function info_by_reply(extra, success, result)
         if is_muted_user(result.to.peer_id, result.from.peer_id) then
             text = text .. 'MUTED, '
         end
-        text = text .. '\n🆔: ' .. result.from.peer_id
+        text = text .. langs[lang].peer_id .. result.from.peer_id ..
+        langs[lang].long_id .. result.from.id
     end
     send_large_msg(extra.receiver, text)
 end
@@ -286,7 +290,8 @@ local function info_by_from(extra, success, result)
             text = text .. langs[lang].username .. '@' .. result.fwd_from.username
         end
         text = text .. langs[lang].date .. os.date('%c') ..
-        '\n🆔: ' .. result.fwd_from.peer_id
+        langs[lang].peer_id .. result.fwd_from.peer_id ..
+        langs[lang].long_id .. result.fwd_from.id
     elseif result.fwd_from.peer_type == 'user' then
         if result.fwd_from.first_name then
             text = text .. langs[lang].name .. result.fwd_from.first_name
@@ -328,7 +333,8 @@ local function info_by_from(extra, success, result)
         if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
             text = text .. 'MUTED, '
         end
-        text = text .. '\n🆔: ' .. result.fwd_from.peer_id
+        text = text .. langs[lang].peer_id .. result.fwd_from.peer_id ..
+        langs[lang].long_id .. result.fwd_from.id
     else
         text = langs[lang].peerTypeUnknown
     end
@@ -378,7 +384,8 @@ local function info_by_id(extra, success, result)
     if is_muted_user(extra.chat_id, result.peer_id) then
         text = text .. 'MUTED, '
     end
-    text = text .. '\n🆔: ' .. result.peer_id
+    text = text .. langs[lang].peer_id .. result.peer_id ..
+    langs[lang].long_id .. result.id
     send_large_msg(extra.receiver, text)
 end
 
@@ -388,13 +395,14 @@ local function channel_callback_info(extra, success, result)
     local user_num = langs[lang].users .. tostring(result.participants_count)
     local admin_num = langs[lang].admins .. tostring(result.admins_count)
     local kicked_num = langs[lang].kickedUsers .. tostring(result.kicked_count)
-    local channel_id = "\n🆔: " .. result.peer_id
+    local channel_id = langs[lang].peer_id .. result.peer_id
+    local long_id = langs[lang].long_id .. result.id
     if result.username then
         channel_username = langs[lang].username .. "@" .. result.username
     else
         channel_username = ""
     end
-    local text = title .. admin_num .. user_num .. kicked_num .. channel_id .. channel_username
+    local text = title .. admin_num .. user_num .. kicked_num .. channel_username .. channel_id .. long_id
     send_large_msg(extra.receiver, text)
 end
 
@@ -402,8 +410,9 @@ local function chat_callback_info(extra, success, result)
     local lang = get_lang(result.peer_id)
     local title = langs[lang].groupName .. result.title
     local user_num = langs[lang].users .. tostring(result.members_num)
-    local chat_id = "\n🆔: " .. result.peer_id
-    local text = title .. user_num .. chat_id
+    local chat_id = langs[lang].peer_id .. result.peer_id
+    local long_id = langs[lang].long_id .. result.id
+    local text = title .. user_num .. chat_id .. long_id
     send_large_msg(extra.receiver, text)
 end
 
@@ -419,7 +428,8 @@ local function pre_process(msg)
                     text = text .. langs[msg.lang].username .. '@' .. msg.fwd_from.username
                 end
                 text = text .. langs[msg.lang].date .. os.date('%c') ..
-                '\n🆔: ' .. msg.fwd_from.peer_id
+                langs[msg.lang].peer_id .. msg.fwd_from.peer_id ..
+                langs[msg.lang].long_id .. msg.fwd_from.id
             elseif msg.fwd_from.peer_type == 'user' then
                 if msg.fwd_from.first_name then
                     text = text .. langs[msg.lang].name .. msg.fwd_from.first_name
@@ -459,7 +469,8 @@ local function pre_process(msg)
                 if is_muted_user(msg.to.id, msg.fwd_from.peer_id) then
                     text = text .. 'MUTED, '
                 end
-                text = text .. '\n🆔: ' .. msg.fwd_from.peer_id
+                text = text .. langs[msg.lang].peer_id .. msg.fwd_from.peer_id ..
+                langs[msg.lang].long_id .. msg.fwd_from.id
             else
                 text = langs[msg.lang].peerTypeUnknown
             end
@@ -576,7 +587,8 @@ local function run(msg, matches)
             if is_muted_user(chat, msg.from.id) then
                 text = text .. 'MUTED, '
             end
-            text = text .. '\n🆔: ' .. msg.from.id ..
+            text = text .. langs[msg.lang].peer_id .. msg.from.id ..
+            langs[msg.lang].long_id .. msg.from.peer_id ..
             langs[msg.lang].youAreWriting
             if chat_type == 'user' then
                 text = text .. ' 👤'
@@ -605,13 +617,15 @@ local function run(msg, matches)
                 end
                 text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.to.id, chat) + 1] ..
                 langs[msg.lang].date .. os.date('%c') ..
-                '\n🆔: ' .. msg.to.id
+                langs[msg.lang].peer_id .. msg.to.id ..
+                langs[msg.lang].long_id .. msg.to.peer_id
                 return text
             elseif chat_type == 'chat' then
                 text = text .. ' 👥' ..
                 langs[msg.lang].groupName .. msg.to.title ..
                 langs[msg.lang].users .. tostring(msg.to.members_num) ..
-                '\n🆔: ' .. math.abs(msg.to.id)
+                langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
+                langs[msg.lang].long_id .. math.abs(msg.to.peer_id)
                 return text
             elseif chat_type == 'channel' then
                 text = text .. ' 👥' ..
@@ -619,7 +633,8 @@ local function run(msg, matches)
                 if msg.to.username then
                     text = text .. langs[msg.lang].username .. "@" .. msg.to.username
                 end
-                text = text .. "\n🆔: " .. math.abs(msg.to.id)
+                text = text .. langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
+                langs[msg.lang].long_id .. math.abs(msg.to.peer_id)
                 return text
             end
         end
