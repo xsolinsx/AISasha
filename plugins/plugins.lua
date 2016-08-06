@@ -33,7 +33,7 @@ local function list_plugins(only_enabled)
         if not only_enabled or status == '✅' then
             -- get the name
             v = string.match(v, "(.*)%.lua")
-            text = text .. status .. ' ' .. v .. '\n'
+            text = text .. k .. '. ' .. status .. ' ' .. v .. '\n'
         end
     end
     return text
@@ -46,7 +46,6 @@ local function reload_plugins()
 end
 
 local function enable_plugin(plugin_name, lang)
-    print('checking if ' .. plugin_name .. ' exists')
     -- Check if plugin is enabled
     if plugin_enabled(plugin_name) then
         return '✔️ ' .. plugin_name .. langs[lang].alreadyEnabled
