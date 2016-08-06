@@ -149,7 +149,6 @@ local function callback_supergroup_database(extra, success, result)
 end
 
 local function pre_process(msg)
-    local database = load_data(_config.database.db)
     -- save user info
     if msg.action then
         if msg.action.user then
