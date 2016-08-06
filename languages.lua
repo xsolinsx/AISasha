@@ -1123,6 +1123,14 @@ return {
             '#remlikes <id> <value>: Sasha toglie <value> likes all\'utente specificato.',
         },
 
+        lua_exec =
+        {
+            '🅿️ LUA_EXEC',
+            'Plugin per l\'esecuzione di codice LUA.',
+            'SUDO',
+            '#lua <command>: Sasha esegue <command>.',
+        },
+
         me =
         {
             '🅿️ ME',
@@ -2319,6 +2327,14 @@ return {
             '#createlikesdb:  Sasha creates likecounter database.',
             '#addlikes <id> <value>: Sasha adds <value> likes to specified user.',
             '#remlikes <id> <value>: Sasha removes <value> likes to specified user.',
+        },
+
+        lua_exec =
+        {
+            '🅿️ LUA_EXEC',
+            'Plugin for executing LUA code.',
+            'SUDO',
+            '#lua <command>: Sasha executes <command>.',
         },
 
         me =
