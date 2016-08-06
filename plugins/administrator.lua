@@ -298,6 +298,9 @@ local function run(msg, matches)
                     send_large_msg(get_receiver(msg), text)
                 end
             end
+            if matches[1]:lower() == 'checkspeed' then
+                return os.date('%S', os.difftime(os.date(), msg.date))
+            end
         end
         if matches[1]:lower() == 'updateid' or matches[1]:lower() == 'sasha aggiorna longid' then
             local data = load_data(_config.moderation.data)
@@ -353,6 +356,7 @@ return {
         "^[#!/]([Rr][Ee][Mm][Ll][Oo][Gg])$",
         "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp]) (.*)$",
         "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp])$",
+        "^[#!/]([Cc][Hh][Ee][Cc][Kk][Ss][Pp][Ee][Ee][Dd])$",
         "%[(photo)%]",
         -- pm
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii][Aa]) (%d+) (.*)$",
@@ -422,6 +426,7 @@ return {
     -- (#backup|sasha esegui backup)
     -- (#sendbackup|sasha invia backup)
     -- #vardump [<reply>|<msg_id>]
+    -- #checkspeed
 }
 -- By @imandaneshi :)
 -- https://github.com/SEEDTEAM/TeleSeed/blob/test/plugins/admin.lua

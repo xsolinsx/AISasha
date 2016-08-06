@@ -755,6 +755,7 @@ return {
             '(#sync_gbans|sasha sincronizza superban): Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.',
             '(#backup|sasha esegui backup): Sasha esegue un backup di se stessa e invia il log al richiedente.',
             '#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.',
+            '#checkspeed: Sasha calcola la velocità con cui processa i messaggi.',
         },
 
         apod =
@@ -1952,6 +1953,7 @@ return {
             '(#sync_gbans|sasha sincronizza superban): Sasha syncs gbans list with the one offered by TeleSeed.',
             '(#backup|sasha esegui backup): Sasha makes a backup of herself and sends log to the sender.',
             '#vardump [<reply>|<msg_id>]: Sasha sends vardump of specified message.',
+            '#checkspeed: Sasha calculates how much time she needs to process messages.',
         },
 
         apod =

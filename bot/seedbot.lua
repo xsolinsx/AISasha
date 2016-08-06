@@ -14,6 +14,7 @@ function on_msg_receive(msg)
         return
     end
     if not loaded then
+        print('loaded')
         loaded = true
         database = load_data(_config.database.db)
     end
