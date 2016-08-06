@@ -1,6 +1,8 @@
 local function run(msg, matches)
     if is_sudo(msg) then
         return loadstring('return ' .. matches[1])()
+    else
+        return langs[msg.lang].require_sudo
     end
 end
 
