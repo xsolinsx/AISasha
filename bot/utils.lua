@@ -13,7 +13,6 @@ mimetype =(loadfile "./libs/mimetype.lua")()
 redis =(loadfile "./libs/redis.lua")()
 JSON =(loadfile "./libs/dkjson.lua")()
 langs = dofile("languages.lua")
-database = load_data("./data/database.json")
 
 http.TIMEOUT = 10
 

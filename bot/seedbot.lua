@@ -55,6 +55,7 @@ function on_binlog_replay_end()
     -- load plugins
     plugins = { }
     load_plugins()
+    database = load_data("./data/database.json")
 end
 
 function msg_valid(msg)
