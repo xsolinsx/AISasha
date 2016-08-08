@@ -335,9 +335,7 @@ end
 
 function send_document_SUDOERS(file_path, cb_function, extra)
     for v, user in pairs(_config.sudo_users) do
-        if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) then
-            send_document('user#id' .. user, file_path, cb_function, extra)
-        end
+        send_document('user#id' .. user, file_path, cb_function, extra)
     end
 end
 
@@ -433,9 +431,7 @@ end
 
 function send_large_msg_SUDOERS(text)
     for v, user in pairs(_config.sudo_users) do
-        if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) then
-            send_large_msg('user#id' .. user, text)
-        end
+        send_large_msg('user#id' .. user, text)
     end
 end
 
