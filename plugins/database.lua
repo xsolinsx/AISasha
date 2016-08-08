@@ -156,6 +156,7 @@ local function callback(extra, success, result)
         os.rename(result, file)
         print('File moved to:', file)
         send_large_msg(extra.receiver, langs[lang].databaseDownloaded .. file)
+        database = load_data(_config.database.db)
     else
         send_large_msg(extra.receiver, langs[lang].errorDownloading)
     end
