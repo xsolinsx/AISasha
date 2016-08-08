@@ -274,6 +274,8 @@ return {
         errorUserOrGroup = 'Solo gruppi o utenti.',
         userDeleted = 'Utente eliminato dal database.',
         groupDeleted = 'Gruppo eliminato dal database.',
+        databaseDownloaded = 'Database scaricato\n',
+        databaseFuckedUp = 'Errore, crash durante il salvataggio del database, ripristinarlo al più presto.',
 
         -- delword.lua --
         delwordList = 'Lista censure:\n',
@@ -302,7 +304,7 @@ return {
         useQuoteOnFile = 'Usa \'rispondi\' sul file che vuoi che scarichi.',
         needMedia = 'Mi serve un file.',
         fileDownloadedTo = 'File scaricato in: ',
-        errorDownloading = 'Errore durante il download: ',
+        errorDownloading = 'Errore durante il download.',
         noSuchFile = ' non esiste.',
 
         -- flame.lua --
@@ -1504,6 +1506,8 @@ return {
         errorUserOrGroup = 'Just groups or users.',
         userDeleted = 'User deleted from database.',
         groupDeleted = 'Group deleted from database.',
+        databaseDownloaded = 'Database downloaded\n',
+        databaseFuckedUp = 'Error, crash while saving database, restore it as soon as possible.',
 
         -- delword.lua --
         delwordList = 'Censorship list:\n',
@@ -1532,7 +1536,7 @@ return {
         useQuoteOnFile = 'Use \'reply\' on the file you want me to download.',
         needMedia = 'I need a file.',
         fileDownloadedTo = 'File downloaded to: ',
-        errorDownloading = 'Error downloading: ',
+        errorDownloading = 'Error during the download.',
         noSuchFile = ' doesn\'t exist.',
 
         -- flame.lua --

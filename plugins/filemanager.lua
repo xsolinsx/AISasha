@@ -6,7 +6,7 @@ local function callback(extra, success, result)
     if success then
         send_large_msg(extra.receiver, langs[lang].fileDownloadedTo .. result)
     else
-        send_large_msg(extra.receiver, langs[lang].errorDownloading .. extra)
+        send_large_msg(extra.receiver, langs[lang].errorDownloading)
     end
 end
 

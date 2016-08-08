@@ -333,6 +333,14 @@ function rmtmp_cb(extra, success, result)
     cb_function(extra, success, result)
 end
 
+function send_document_SUDOERS(file_path, cb_function, extra)
+    for v, user in pairs(_config.sudo_users) do
+        if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) then
+            send_document('user#id' .. user, file_path, cb_function, extra)
+        end
+    end
+end
+
 -- Send document to user and delete it when finished.
 -- cb_function and extra are optionals callback
 function _send_document(receiver, file_path, cb_function, extra)
@@ -419,6 +427,14 @@ function send_order_msg_callback(extra, success, result)
             send_video(destination, nmsg, send_order_msg_callback, new_extra)
         else
             send_file(destination, nmsg, send_order_msg_callback, new_extra)
+        end
+    end
+end
+
+function send_large_msg_SUDOERS(text)
+    for v, user in pairs(_config.sudo_users) do
+        if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) then
+            send_large_msg('user#id' .. user, text)
         end
     end
 end

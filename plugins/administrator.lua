@@ -268,7 +268,7 @@ local function run(msg, matches)
                 file:write(log)
                 file:flush()
                 file:close()
-                send_document("user#id" .. msg.from.id, "/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
+                send_document_SUDOERS("/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
                 return langs[msg.lang].backupDone
             end
             if matches[1]:lower() == "sendbackup" or matches[1]:lower() == "sasha invia backup" then
@@ -283,7 +283,7 @@ local function run(msg, matches)
                 for k, v in pairsByKeys(backups) do
                     last_backup = v
                 end
-                send_document("user#id" .. msg.from.id, '/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
+                send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
                 return langs[msg.lang].backupSent
             end
             if matches[1]:lower() == 'vardump' then
