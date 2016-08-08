@@ -154,7 +154,7 @@ local function run(msg, matches)
                 local function post_msg()
                     send_large_msg(get_receiver(msg), get_welcome(msg.to.id) .. '\n' .. get_rules(msg.to.id), ok_cb, false)
                 end
-                postpone(post_msg, false, 1)
+                postpone(post_msg, false, math.random(1, 3))
                 redis:getset(hash, 0)
             end
         else
@@ -165,7 +165,7 @@ local function run(msg, matches)
         local function post_msg()
             send_large_msg(get_receiver(msg), get_goodbye(msg.to.id) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)
         end
-        postpone(post_msg, false, 1)
+        postpone(post_msg, false, math.random(1, 5))
     end
 end
 
