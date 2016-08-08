@@ -2048,6 +2048,8 @@ return {
             '(#delete|[sasha] elimina) <id>: Sasha deleted <id> from the database.',
             '#addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>: Sasha manually adds specified user to the database.',
             '#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]: Sasha manually adds specified group to the database.',
+            '#uploaddb: Sasha uploads the database.',
+            '#replacedb: Sasha replaces the database.',
         },
 
         delword =
