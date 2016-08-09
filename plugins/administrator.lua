@@ -370,6 +370,7 @@ local function pre_process(msg)
             send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
         end
     end
+    return msg
 end
 
 return {
