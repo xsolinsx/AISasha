@@ -224,7 +224,7 @@ return {
         noAutoKick = 'Non puoi rimuoverti da solo.',
         noAutoBan = 'Non puoi bannarti da solo.',
 
-        -- admin.lua --
+        -- administrator.lua --
         sendNewPic = 'Mandami la nuova foto.',
         botPicChanged = 'Foto cambiata!',
         logSet = 'Il log è stato aggiunto.',
@@ -245,6 +245,7 @@ return {
         notLog = 'Non un gruppo di log.',
         backupDone = 'Backup eseguito, ti invio il log in privato.',
         backupSent = 'Ti sto inviando il backup.',
+        autoSendBackupDb = 'Ti sto inviando il backup automatico.',
 
         -- anti_spam.lua --
         blockedForSpam = ' bloccato (SPAM).',
@@ -1458,7 +1459,7 @@ return {
         noAutoKick = 'You can\'t kick yourself.',
         noAutoBan = 'You can\'t ban yourself.',
 
-        -- admin.lua --
+        -- administrator.lua --
         sendNewPic = 'Send me the new picture.',
         botPicChanged = 'Picture changed!',
         logSet = 'Log added.',
@@ -1479,6 +1480,7 @@ return {
         notLog = 'Not a log group.',
         backupDone = 'Backup finished, I\'m sending you the log.',
         backupSent = 'I\'m sending you the backup.',
+        autoSendBackupDb = 'I\'m sending you the automatic backup.',
 
         -- anti_spam.lua --
         blockedForSpam = ' blocked (SPAM).',
