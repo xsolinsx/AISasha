@@ -337,10 +337,24 @@ local function pre_process(msg)
     local hour = tonumber(os.date('%H'))
     local day = tostring(os.date('%A'))
     if second == 1 and minute == 1 and hour == 12 and day == 'Tuesday' then
+        -- save database
+        save_data(_config.database.db, database)
+
+        -- do backup
+        local time = os.time()
+        local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISashaExp --exclude=/home/pi/AISashaExp/.git --exclude=/home/pi/AISashaExp/.luarocks --exclude=/home/pi/AISashaExp/patches --exclude=/home/pi/AISashaExp/tg'):read('*all')
+        local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
+        file:write(log)
+        file:flush()
+        file:close()
+        send_large_msg_SUDOERS(langs[msg.lang].autoSendBackupDb)
+
+        -- send database
         if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
             send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
         end
 
+        -- send last backup
         local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
         local backups = { }
         if files then
