@@ -335,7 +335,9 @@ end
 
 function send_document_SUDOERS(file_path, cb_function, extra)
     for v, user in pairs(_config.sudo_users) do
-        send_document('user#id' .. user, file_path, cb_function, extra)
+        if tonumber(user) ~= tonumber(our_id) then
+            send_document('user#id' .. user, file_path, cb_function, extra)
+        end
     end
 end
 

@@ -330,6 +330,34 @@ local function run(msg, matches)
     end
 end
 
+local function pre_process(msg)
+    -- send database and last backup every Tuesday at 12:01:01
+    local second = tonumber(os.date('%S'))
+    local minute = tonumber(os.date('%M'))
+    local hour = tonumber(os.date('%H'))
+    local day = tostring(os.date('%A'))
+    if second == 1 and minute == 1 and hour == 12 and day == 'Tuesday' then
+        if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
+            send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
+        end
+
+        local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
+        local backups = { }
+        if files then
+            for k, v in pairsByKeys(files) do
+                if string.match(v, '^backupAISasha%d+%.tar%.gz$') then
+                    backups[string.match(v, '%d+')] = v
+                end
+            end
+            local last_backup = ''
+            for k, v in pairsByKeys(backups) do
+                last_backup = v
+            end
+            send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
+        end
+    end
+end
+
 return {
     description = "ADMINISTRATOR",
     patterns =
@@ -403,6 +431,7 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] ([Rr][Ii][Mm][Uu][Oo][Vv][Ii] [Ll][Oo][Gg])$",
     },
     run = run,
+    pre_process = pre_process,
     min_rank = 4
     -- usage
     -- ADMIN

@@ -288,15 +288,6 @@ local function run(msg, matches)
 end
 
 local function pre_process(msg)
-    local second = tonumber(os.date('%S'))
-    local minute = tonumber(os.date('%M'))
-    local hour = tonumber(os.date('%H'))
-    local day = tostring(os.date('%A'))
-    if second == 1 and minute == 1 and hour == 12 and day == 'Sunday' then
-        if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
-            send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
-        end
-    end
     if database then
         if msg.to.type == 'chat' then
             -- save group info
