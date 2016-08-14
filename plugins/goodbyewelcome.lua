@@ -141,26 +141,28 @@ local function run(msg, matches)
     if matches[1]:lower() == 'getmemberswelcome' and is_momod(msg) then
         return get_memberswelcome(msg.to.id)
     end
-    if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg.to.id) ~= langs[msg.lang].noSetValue then
-        local hash
-        if msg.to.type == 'channel' then
-            hash = 'channel:welcome' .. msg.to.id
-        end
-        if msg.to.type == 'chat' then
-            hash = 'chat:welcome' .. msg.to.id
-        end
-        redis:incr(hash)
-        local hashonredis = redis:get(hash)
-        if hashonredis then
-            if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg.to.id)) and tonumber(get_memberswelcome(msg.to.id)) ~= 0 then
-                local function post_msg()
-                    send_large_msg(get_receiver(msg), get_welcome(msg.to.id) .. '\n' .. get_rules(msg.to.id), ok_cb, false)
-                end
-                postpone(post_msg, false, 1)
-                redis:getset(hash, 0)
+    if msg.action then
+        if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg.to.id) ~= langs[msg.lang].noSetValue then
+            local hash
+            if msg.to.type == 'channel' then
+                hash = 'channel:welcome' .. msg.to.id
             end
-        else
-            redis:set(hash, 0)
+            if msg.to.type == 'chat' then
+                hash = 'chat:welcome' .. msg.to.id
+            end
+            redis:incr(hash)
+            local hashonredis = redis:get(hash)
+            if hashonredis then
+                if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg.to.id)) and tonumber(get_memberswelcome(msg.to.id)) ~= 0 then
+                    local function post_msg()
+                        send_large_msg(get_receiver(msg), get_welcome(msg.to.id) .. '\n' .. get_rules(msg.to.id), ok_cb, false)
+                    end
+                    postpone(post_msg, false, 1)
+                    redis:getset(hash, 0)
+                end
+            else
+                redis:set(hash, 0)
+            end
         end
     end
 
@@ -183,12 +185,14 @@ local function run(msg, matches)
         end
         postpone(post_multiple_kick_false, false, 5)
     end
-    -- if there's someone kicked in the group with multiple_kicks = true it doesn't send goodbye messages,
-    if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) ~= '' and not multiple_kicks[tostring(msg.to.id)] then
-        local function post_msg()
-            send_large_msg(get_receiver(msg), get_goodbye(msg.to.id) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)
+    if msg.action then
+        -- if there's someone kicked in the group with multiple_kicks = true it doesn't send goodbye messages,
+        if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) ~= '' and not multiple_kicks[tostring(msg.to.id)] then
+            local function post_msg()
+                send_large_msg(get_receiver(msg), get_goodbye(msg.to.id) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)
+            end
+            postpone(post_msg, false, 1)
         end
-        postpone(post_msg, false, 1)
     end
 end
 
