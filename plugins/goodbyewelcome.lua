@@ -1,3 +1,5 @@
+multiple_kicks = { }
+
 local function set_welcome(chat_id, welcome)
     local lang = get_lang(chat_id)
     local data = load_data(_config.moderation.data)
@@ -154,18 +156,28 @@ local function run(msg, matches)
                 local function post_msg()
                     send_large_msg(get_receiver(msg), get_welcome(msg.to.id) .. '\n' .. get_rules(msg.to.id), ok_cb, false)
                 end
-                postpone(post_msg, false, math.random(1, 3))
+                postpone(post_msg, false, 1)
                 redis:getset(hash, 0)
             end
         else
             redis:set(hash, 0)
         end
     end
-    if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) ~= '' then
+    if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'sasha uccidi eliminati' or matches[1]:lower() == 'spara eliminati' or matches[1]:lower() == 'kickinactive' or((matches[1]:lower() == 'sasha uccidi sotto' or matches[1]:lower() == 'spara sotto') and matches[3]:lower() == 'messaggi') or matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
+        -- multiple kicks
+        -- set multiple_kicks of the group as true, after 5 seconds it's set to false to restore goodbye
+        multiple_kicks[tostring(msg.to.id)] = true
+        local function post_multiple_kick_false()
+            multiple_kicks[tostring(msg.to.id)] = false
+        end
+        postpone(post_multiple_kick_false, false, 5)
+    end
+    -- if there's someone kicked in the group with multiple_kicks = true it doesn't send goodbye messages,
+    if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) ~= '' and not multiple_kicks[tostring(msg.to.id)] then
         local function post_msg()
             send_large_msg(get_receiver(msg), get_goodbye(msg.to.id) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)
         end
-        postpone(post_msg, false, math.random(1, 5))
+        postpone(post_msg, false, 1)
     end
 end
 
@@ -182,6 +194,17 @@ return {
         "^[#!/]([Ss][Ee][Tt][Mm][Ee][Mm][Bb][Ee][Rr][Ss][Ww][Ee][Ll][Cc][Oo][Mm][Ee]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Mm][Ee][Mm][Bb][Ee][Rr][Ss][Ww][Ee][Ll][Cc][Oo][Mm][Ee])$",
         "^!!tgservice (.+)$",
+        -- MULTIPLE KICKS PATTERNS TO PREVENT LOTS OF MESSAGES TO BE SENT
+        "^[#!/]([Kk][Ii][Cc][Kk][Nn][Oo][Uu][Ss][Ee][Rr])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Nn][Oo][Uu][Ss][Ee][Rr])$",
+        "^([Ss][Pp][Aa][Rr][Aa] [Nn][Oo][Uu][Ss][Ee][Rr])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee]) (%d+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
+        "^([Ss][Pp][Aa][Rr][Aa] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
+        "^[#!/]([Kk][Ii][Cc][Kk][Dd][Ee][Ll][Ee][Tt][Ee][Dd])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
+        "^([Ss][Pp][Aa][Rr][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
     },
     run = run,
     min_rank = 0

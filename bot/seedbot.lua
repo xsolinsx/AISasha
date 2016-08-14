@@ -121,7 +121,7 @@ function msg_valid(msg)
         return false
     end
 
-    if is_channel_disabled(receiver) and not is_momod(msg) then
+    if is_channel_disabled(get_receiver(msg)) and not is_momod(msg) then
         print('\27[36mNot valid: channel disabled\27[39m')
         return false
     end
@@ -303,7 +303,7 @@ function create_config()
         clicktap = { db = 'data/clicktapdb.json' },
         likecounter = { db = 'data/likecounterdb.json' },
         database = { db = 'data/database.json' },
-        about_text = "AISashaSuper by @EricSolinas based on TeleSeed supergroup branch with langs management taken from GroupButlerBot and something else taken from DBTeam.\nThanks guys.",
+        about_text = "AISashaSuper by @EricSolinas based on @TeleSeed supergroup branch with langs management taken from @GroupButler_bot and something else taken from @DBTeam.\nThanks guys.",
     }
     serialize_to_file(config, './data/config.lua', false)
     print('saved config into ./data/config.lua')
@@ -328,7 +328,7 @@ end
 function on_get_difference_end()
 end
 
--- Enable plugins in config.json
+-- Enable plugins in config.lua
 function load_plugins()
     print('Loading languages.lua...')
     langs = dofile('languages.lua')
