@@ -287,7 +287,10 @@ local function kick_nouser_chat(extra, success, result)
             kicked = kicked + 1
         end
     end
-    send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    local function post_msg()
+        send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function kick_nouser_channel(extra, success, result)
@@ -303,7 +306,10 @@ local function kick_nouser_channel(extra, success, result)
             kicked = kicked + 1
         end
     end
-    send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    local function post_msg()
+        send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function kick_deleted_chat(extra, success, result)
@@ -321,7 +327,10 @@ local function kick_deleted_chat(extra, success, result)
             end
         end
     end
-    send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    local function post_msg()
+        send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function kick_deleted_channel(extra, success, result)
@@ -339,7 +348,10 @@ local function kick_deleted_channel(extra, success, result)
             end
         end
     end
-    send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    local function post_msg()
+        send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function user_msgs(user_id, chat_id)
