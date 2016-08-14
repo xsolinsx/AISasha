@@ -283,10 +283,7 @@ local function kick_nouser_chat(extra, success, result)
             if kicked == 20 then
                 break
             end
-            local function post_kick()
-                kick_user(v.peer_id, extra.chat_id)
-            end
-            postpone(post_kick, false, 1)
+            kick_user(v.peer_id, extra.chat_id)
             kicked = kicked + 1
         end
     end
@@ -302,10 +299,7 @@ local function kick_nouser_channel(extra, success, result)
             if kicked == 20 then
                 break
             end
-            local function post_kick()
-                kick_user(v.peer_id, extra.chat_id)
-            end
-            postpone(post_kick, false, 1)
+            kick_user(v.peer_id, extra.chat_id)
             kicked = kicked + 1
         end
     end
@@ -322,10 +316,7 @@ local function kick_deleted_chat(extra, success, result)
                 if kicked == 20 then
                     break
                 end
-                local function post_kick()
-                    kick_user(v.peer_id, extra.chat_id)
-                end
-                postpone(post_kick, false, 1)
+                kick_user(v.peer_id, extra.chat_id)
                 kicked = kicked + 1
             end
         end
@@ -343,10 +334,7 @@ local function kick_deleted_channel(extra, success, result)
                 if kicked == 20 then
                     break
                 end
-                local function post_kick()
-                    kick_user(v.peer_id, extra.chat_id)
-                end
-                postpone(post_kick, false, 1)
+                kick_user(v.peer_id, extra.chat_id)
                 kicked = kicked + 1
             end
         end
