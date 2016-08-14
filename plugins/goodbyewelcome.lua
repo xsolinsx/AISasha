@@ -142,18 +142,8 @@ local function run(msg, matches)
         return get_memberswelcome(msg.to.id)
     end
 
-    local mk = false
-    if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'sasha uccidi eliminati' or matches[1]:lower() == 'spara eliminati' then
-        mk = true
-    end
-    if matches[1]:lower() == 'kickinactive' or((matches[1]:lower() == 'sasha uccidi sotto' or matches[1]:lower() == 'spara sotto') and matches[3]:lower() == 'messaggi') then
-        mk = true
-    end
-    if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
-        mk = true
-    end
-    if mk then
-        -- multiple kicks
+    -- multiple_kicks
+    if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'kickinactive' or matches[1]:lower() == 'kicknouser' then
         -- set multiple_kicks of the group as true, after 5 seconds it's set to false to restore goodbye
         multiple_kicks[tostring(msg.to.id)] = true
         local function post_multiple_kick_false()
@@ -161,6 +151,7 @@ local function run(msg, matches)
         end
         postpone(post_multiple_kick_false, false, 5)
     end
+
     if msg.action then
         if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg.to.id) ~= langs[msg.lang].noSetValue then
             local hash
@@ -209,15 +200,9 @@ return {
         "^!!tgservice (.+)$",
         -- MULTIPLE KICKS PATTERNS TO PREVENT LOTS OF MESSAGES TO BE SENT
         "^[#!/]([Kk][Ii][Cc][Kk][Nn][Oo][Uu][Ss][Ee][Rr])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Nn][Oo][Uu][Ss][Ee][Rr])$",
-        "^([Ss][Pp][Aa][Rr][Aa] [Nn][Oo][Uu][Ss][Ee][Rr])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ii][Nn][Aa][Cc][Tt][Ii][Vv][Ee]) (%d+)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
-        "^([Ss][Pp][Aa][Rr][Aa] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Dd][Ee][Ll][Ee][Tt][Ee][Dd])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
-        "^([Ss][Pp][Aa][Rr][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
     },
     run = run,
     min_rank = 0

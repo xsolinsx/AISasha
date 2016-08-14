@@ -447,7 +447,7 @@ local function run(msg, matches)
                 return langs[msg.lang].useYourGroups
             end
         end
-        if matches[1]:lower() == 'kickrandom' or matches[1]:lower() == 'sasha uccidi random' or matches[1]:lower() == 'spara random' then
+        if matches[1]:lower() == 'kickrandom' then
             if msg.to.type == 'chat' then
                 chat_info(receiver, kickrandom_chat, { chat_id = msg.to.id })
             elseif msg.to.type == 'channel' then
@@ -533,7 +533,7 @@ local function run(msg, matches)
                 end
             end
         end
-        if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'sasha uccidi eliminati' or matches[1]:lower() == 'spara eliminati' then
+        if matches[1]:lower() == 'kickdeleted' then
             -- /kickdeleted
             if msg.to.type == 'chat' then
                 chat_info(receiver, kick_deleted_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
@@ -543,7 +543,7 @@ local function run(msg, matches)
             return
         end
         if is_owner(msg) then
-            if matches[1]:lower() == 'kickinactive' or((matches[1]:lower() == 'sasha uccidi sotto' or matches[1]:lower() == 'spara sotto') and matches[3]:lower() == 'messaggi') then
+            if matches[1]:lower() == 'kickinactive' then
                 -- /kickinactive
                 local num = 1
                 if matches[2] then
@@ -556,7 +556,7 @@ local function run(msg, matches)
                 end
                 return
             end
-            if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
+            if matches[1]:lower() == 'kicknouser' then
                 -- /kicknouser
                 if msg.to.type == 'chat' then
                     chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
@@ -765,18 +765,6 @@ return {
         "^!!tgservice (.+)$",
         -- kickme
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii][Mm][Ii])$",
-        -- kick random
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Rr][Aa][Nn][Dd][Oo][Mm])$",
-        "^([Ss][Pp][Aa][Rr][Aa] [Rr][Aa][Nn][Dd][Oo][Mm])$",
-        -- kicknouser
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Nn][Oo][Uu][Ss][Ee][Rr])$",
-        "^([Ss][Pp][Aa][Rr][Aa] [Nn][Oo][Uu][Ss][Ee][Rr])$",
-        -- kickinactive
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
-        "^([Ss][Pp][Aa][Rr][Aa] [Ss][Oo][Tt][Tt][Oo]) (%d+) ([Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii])$",
-        -- kickdeleted
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
-        "^([Ss][Pp][Aa][Rr][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa][Tt][Ii])$",
         -- kick
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii])$",
@@ -839,11 +827,11 @@ return {
     -- (#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>|from
     -- (#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>|from
     -- (#banlist|[sasha] lista ban)
-    -- (#kickrandom|sasha uccidi random|spara random)
-    -- (#kickdeleted|sasha uccidi eliminati|spara eliminati)
+    -- #kickrandom
+    -- #kickdeleted
     -- OWNER
-    -- (#kicknouser|sasha uccidi nouser|spara nouser)
-    -- (#kickinactive [<msgs>]|((sasha uccidi)|spara sotto <msgs> messaggi))
+    -- #kicknouser
+    -- #kickinactive [<msgs>]
     -- SUPPORT
     -- (#gban|[sasha] superbanna) <id>|<username>|<reply>|from
     -- (#ungban|[sasha] supersbanna) <id>|<username>|<reply>|from
