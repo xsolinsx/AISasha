@@ -821,8 +821,7 @@ end
 local function mute_user_callback(extra, success, result)
     local lang = get_lang(string.match(receiver, '%d+'))
     if result.service then
-        local action = result.action.type
-        if action == 'chat_add_user' or action == 'chat_del_user' or action == 'chat_rename' or action == 'chat_change_photo' then
+        if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
             if result.action.user then
                 user_id = result.action.user.peer_id
             end
@@ -1020,7 +1019,7 @@ local function run(msg, matches)
             end
             if matches[1] == 'chat_del_user' then
                 if not msg.service then
-                    -- return "Are you trying to troll me?"
+                    return
                 end
                 local user = 'user#id' .. msg.action.user.id
                 local chat = 'chat#id' .. msg.to.id

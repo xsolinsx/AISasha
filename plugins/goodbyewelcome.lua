@@ -141,6 +141,26 @@ local function run(msg, matches)
     if matches[1]:lower() == 'getmemberswelcome' and is_momod(msg) then
         return get_memberswelcome(msg.to.id)
     end
+
+    local mk = false
+    if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'sasha uccidi eliminati' or matches[1]:lower() == 'spara eliminati' then
+        mk = true
+    end
+    if matches[1]:lower() == 'kickinactive' or((matches[1]:lower() == 'sasha uccidi sotto' or matches[1]:lower() == 'spara sotto') and matches[3]:lower() == 'messaggi') then
+        mk = true
+    end
+    if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
+        mk = true
+    end
+    if mk then
+        -- multiple kicks
+        -- set multiple_kicks of the group as true, after 5 seconds it's set to false to restore goodbye
+        multiple_kicks[tostring(msg.to.id)] = true
+        local function post_multiple_kick_false()
+            multiple_kicks[tostring(msg.to.id)] = false
+        end
+        postpone(post_multiple_kick_false, false, 5)
+    end
     if msg.action then
         if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg.to.id) ~= langs[msg.lang].noSetValue then
             local hash
@@ -164,28 +184,6 @@ local function run(msg, matches)
                 redis:set(hash, 0)
             end
         end
-    end
-
-    local mk = false
-    if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'sasha uccidi eliminati' or matches[1]:lower() == 'spara eliminati' then
-        mk = true
-    end
-    if matches[1]:lower() == 'kickinactive' or((matches[1]:lower() == 'sasha uccidi sotto' or matches[1]:lower() == 'spara sotto') and matches[3]:lower() == 'messaggi') then
-        mk = true
-    end
-    if matches[1]:lower() == 'kicknouser' or matches[1]:lower() == 'sasha uccidi nouser' or matches[1]:lower() == 'spara nouser' then
-        mk = true
-    end
-    if mk then
-        -- multiple kicks
-        -- set multiple_kicks of the group as true, after 5 seconds it's set to false to restore goodbye
-        multiple_kicks[tostring(msg.to.id)] = true
-        local function post_multiple_kick_false()
-            multiple_kicks[tostring(msg.to.id)] = false
-        end
-        postpone(post_multiple_kick_false, false, 5)
-    end
-    if msg.action then
         -- if there's someone kicked in the group with multiple_kicks = true it doesn't send goodbye messages,
         if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) ~= '' and not multiple_kicks[tostring(msg.to.id)] then
             local function post_msg()

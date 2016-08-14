@@ -695,13 +695,12 @@ function get_message_callback(extra, success, result)
         -- channel_demote(channel_id, user, ok_cb, false)
     elseif get_cmd == 'mute_user' then
         if result.service then
-            local action = result.action.type
-            if action == 'chat_add_user' or action == 'chat_del_user' or action == 'chat_rename' or action == 'chat_change_photo' then
+            if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
                 if result.action.user then
                     user_id = result.action.user.peer_id
                 end
             end
-            if action == 'chat_add_user_link' then
+            if result.action.type == 'chat_add_user_link' then
                 if result.from then
                     user_id = result.from.peer_id
                 end
@@ -1281,10 +1280,14 @@ local function run(msg, matches)
             rename_channel(receiver, set_name, ok_cb, false)
         end
 
-        if msg.service and msg.action.type == 'chat_rename' then
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] renamed SuperGroup to: " .. msg.to.title)
-            data[tostring(msg.to.id)]['settings']['set_name'] = msg.to.title
-            save_data(_config.moderation.data, data)
+        if msg.service then
+            if msg.action then
+                if msg.action.type == 'chat_rename' then
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] renamed SuperGroup to: " .. msg.to.title)
+                    data[tostring(msg.to.id)]['settings']['set_name'] = msg.to.title
+                    save_data(_config.moderation.data, data)
+                end
+            end
         end
 
         if (matches[1]:lower() == "setabout" or matches[1]:lower() == "sasha imposta descrizione") and is_momod(msg) then
@@ -1767,33 +1770,34 @@ local function run(msg, matches)
 
         -- Admin Join Service Message
         if msg.service then
-            local action = msg.action.type
-            if action == 'chat_add_user_link' then
-                if is_owner2(msg.from.id) then
-                    local receiver = get_receiver(msg)
-                    local user = "user#id" .. msg.from.id
-                    savelog(msg.to.id, name_log .. " Admin [" .. msg.from.id .. "] joined the SuperGroup via link")
-                    channel_set_admin(receiver, user, ok_cb, false)
+            if msg.action then
+                if msg.action.type == 'chat_add_user_link' then
+                    if is_owner2(msg.from.id) then
+                        local receiver = get_receiver(msg)
+                        local user = "user#id" .. msg.from.id
+                        savelog(msg.to.id, name_log .. " Admin [" .. msg.from.id .. "] joined the SuperGroup via link")
+                        channel_set_admin(receiver, user, ok_cb, false)
+                    end
+                    if is_support(msg.from.id) and not is_owner2(msg.from.id) then
+                        local receiver = get_receiver(msg)
+                        local user = "user#id" .. msg.from.id
+                        savelog(msg.to.id, name_log .. " Support member [" .. msg.from.id .. "] joined the SuperGroup")
+                        channel_set_mod(receiver, user, ok_cb, false)
+                    end
                 end
-                if is_support(msg.from.id) and not is_owner2(msg.from.id) then
-                    local receiver = get_receiver(msg)
-                    local user = "user#id" .. msg.from.id
-                    savelog(msg.to.id, name_log .. " Support member [" .. msg.from.id .. "] joined the SuperGroup")
-                    channel_set_mod(receiver, user, ok_cb, false)
-                end
-            end
-            if action == 'chat_add_user' then
-                if is_owner2(msg.action.user.id) then
-                    local receiver = get_receiver(msg)
-                    local user = "user#id" .. msg.action.user.id
-                    savelog(msg.to.id, name_log .. " Admin [" .. msg.action.user.id .. "] added to the SuperGroup by [ " .. msg.from.id .. " ]")
-                    channel_set_admin(receiver, user, ok_cb, false)
-                end
-                if is_support(msg.action.user.id) and not is_owner2(msg.action.user.id) then
-                    local receiver = get_receiver(msg)
-                    local user = "user#id" .. msg.action.user.id
-                    savelog(msg.to.id, name_log .. " Support member [" .. msg.action.user.id .. "] added to the SuperGroup by [ " .. msg.from.id .. " ]")
-                    channel_set_mod(receiver, user, ok_cb, false)
+                if msg.action.type == 'chat_add_user' then
+                    if is_owner2(msg.action.user.id) then
+                        local receiver = get_receiver(msg)
+                        local user = "user#id" .. msg.action.user.id
+                        savelog(msg.to.id, name_log .. " Admin [" .. msg.action.user.id .. "] added to the SuperGroup by [ " .. msg.from.id .. " ]")
+                        channel_set_admin(receiver, user, ok_cb, false)
+                    end
+                    if is_support(msg.action.user.id) and not is_owner2(msg.action.user.id) then
+                        local receiver = get_receiver(msg)
+                        local user = "user#id" .. msg.action.user.id
+                        savelog(msg.to.id, name_log .. " Support member [" .. msg.action.user.id .. "] added to the SuperGroup by [ " .. msg.from.id .. " ]")
+                        channel_set_mod(receiver, user, ok_cb, false)
+                    end
                 end
             end
         end
