@@ -379,7 +379,10 @@ local function kick_inactive_chat(extra, success, result)
             end
         end
     end
-    send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    local function post_msg()
+        send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function kick_inactive_channel(extra, success, result)
@@ -398,7 +401,10 @@ local function kick_inactive_channel(extra, success, result)
             end
         end
     end
-    send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    local function post_msg()
+        send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function run(msg, matches)
