@@ -850,6 +850,17 @@ local function callbackres(extra, success, result)
         end
     end
 end
+
+local function setowner_by_username(extra, success, result)
+    local lang = get_lang(extra.chat_id)
+    if success == 0 then
+        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+    end
+    data[tostring(msg.to.id)]['set_owner'] = result.peer_id
+    save_data(_config.moderation.data, data)
+    savelog(extra.chat_id, name_log .. " [" .. result.peer_id .. "] set as owner")
+    send_large_msg(extra.receiver, result.peer_id .. langs[msg.lang].setOwner)
+end
 -- End resolve username actions
 
 -- Begin non-channel_invite username actions
@@ -884,46 +895,6 @@ local function in_channel_cb(extra, success, result)
                 end
             end
             send_large_msg(channel_id, text)
-        end
-    elseif get_cmd == 'setowner' then
-        for k, v in pairs(result) do
-            vusername = v.username
-            vpeer_id = tostring(v.peer_id)
-            if vusername == member or vpeer_id == memberid then
-                local channel = string.gsub(receiver, 'channel#id', '')
-                local from_id = extra.msg.from.id
-                local group_owner = data[tostring(channel)]['set_owner']
-                if group_owner then
-                    if not is_admin2(tonumber(group_owner)) and not is_support(tonumber(group_owner)) then
-                        local user = "user#id" .. group_owner
-                        channel_demote(receiver, user, ok_cb, false)
-                    end
-                    local user_id = "user#id" .. v.peer_id
-                    channel_set_admin(receiver, user_id, ok_cb, false)
-                    data[tostring(channel)]['set_owner'] = tostring(v.peer_id)
-                    save_data(_config.moderation.data, data)
-                    savelog(channel, name_log .. "[" .. from_id .. "] set [" .. v.peer_id .. "] as owner by username")
-                    if result.username then
-                        text = member_username .. " " .. v.peer_id .. langs[msg.lang].setOwner
-                    else
-                        text = v.peer_id .. langs[msg.lang].setOwner
-                    end
-                end
-            elseif memberid and vusername ~= member and vpeer_id ~= memberid then
-                local channel = string.gsub(receiver, 'channel#id', '')
-                local from_id = extra.msg.from.id
-                local group_owner = data[tostring(channel)]['set_owner']
-                if group_owner then
-                    if not is_admin2(tonumber(group_owner)) and not is_support(tonumber(group_owner)) then
-                        local user = "user#id" .. group_owner
-                        channel_demote(receiver, user, ok_cb, false)
-                    end
-                    data[tostring(channel)]['set_owner'] = tostring(memberid)
-                    save_data(_config.moderation.data, data)
-                    savelog(channel, name_log .. "[" .. from_id .. "] set [" .. memberid .. "] as owner by username")
-                    text = memberid .. langs[msg.lang].setOwner
-                end
-            end
         end
     end
     send_large_msg(receiver, text)
@@ -1196,11 +1167,7 @@ local function run(msg, matches)
                 local text = matches[2] .. langs[msg.lang].setOwner
                 return text
             else
-                local get_cmd = 'setowner'
-                local msg = msg
-                local username = matches[2]
-                local username = string.gsub(matches[2], '@', '')
-                channel_get_users(receiver, in_channel_cb, { get_cmd = get_cmd, receiver = receiver, msg = msg, username = username })
+                return resolve_username(string.gsub(matches[2], '@', ''), setowner_by_username, { receiver = receiver, chat_id = chat })
             end
         end
 

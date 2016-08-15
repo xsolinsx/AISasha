@@ -1,6 +1,5 @@
-﻿local data = load_data(_config.moderation.data)
-
-local function set_warn(user_id, chat_id, value)
+﻿local function set_warn(user_id, chat_id, value)
+    local data = load_data(_config.moderation.data)
     local lang = get_lang(chat_id)
     if tonumber(value) < 0 or tonumber(value) > 10 then
         return langs[lang].errorWarnRange
@@ -13,6 +12,7 @@ local function set_warn(user_id, chat_id, value)
 end
 
 local function get_warn(chat_id)
+    local data = load_data(_config.moderation.data)
     local lang = get_lang(chat_id)
     local warn_max = data[tostring(chat_id)]['settings']['warn_max']
     if not warn_max then
