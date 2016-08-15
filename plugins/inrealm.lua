@@ -78,17 +78,6 @@ local function get_group_type(msg)
     end
 end
 
-local function callbackres(extra, success, result)
-    -- vardump(result)
-    local user = result.peer_id
-    local name = string.gsub(result.print_name, "_", " ")
-    local chat = 'chat#id' .. extra.chatid
-    local channel = 'channel#id' .. extra.chatid
-    send_large_msg(chat, user .. '\n' .. name)
-    send_large_msg(channel, user .. '\n' .. name)
-    return user
-end
-
 local function set_description(msg, data, target, about)
     if not is_admin1(msg) then
         return langs[msg.lang].require_admin
@@ -920,7 +909,7 @@ function run(msg, matches)
             resolve_username(member, res_user_support, { get_cmd = get_cmd, receiver = receiver })
         end
     end
-    if matches[1]:lower() == '-support' then
+    if matches[1]:lower() == '-support' and matches[2] then
         if string.match(matches[2], '^%d+$') then
             local support_id = matches[2]
             print("User " .. support_id .. " has been removed from the support team")
@@ -933,6 +922,16 @@ function run(msg, matches)
             resolve_username(member, res_user_support, { get_cmd = get_cmd, receiver = receiver })
         end
     end
+    if matches[1]:lower() == 'setgpowner' then
+        local chat = "chat#id" .. matches[2]
+        local channel = "channel#id" .. matches[2]
+        data[tostring(matches[2])]['set_owner'] = matches[3]
+        save_data(_config.moderation.data, data)
+        local text = matches[3] .. langs[msg.lang].setOwner
+        send_large_msg(chat, text)
+        send_large_msg(channel, text)
+        return
+    end
     if matches[1]:lower() == 'type' then
         local group_type = get_group_type(msg)
         return group_type
@@ -941,9 +940,6 @@ function run(msg, matches)
         if matches[2]:lower() == 'admins' then
             return admin_list(msg)
         end
-        -- if matches[2] == 'support' and not matches[2] then
-        -- return support_list()
-        -- end
     end
 
     if matches[1]:lower() == 'list' and matches[2]:lower() == 'groups' then
@@ -981,48 +977,45 @@ return {
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Gg][Rr][Oo][Uu][Pp]) (.*)$",
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Ss][Uu][Pp][Ee][Rr]) (.*)$",
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Rr][Ee][Aa][Ll][Mm]) (.*)$",
-        "^[#!/]([Ss][Ee][Tt][Aa][Bb][Oo][Uu][Tt]) (%d+) (.*)$",
-        "^[#!/]([Ss][Ee][Tt][Rr][Uu][Ll][Ee][Ss]) (%d+) (.*)$",
-        "^[#!/]([Ss][Ee][Tt][Nn][Aa][Mm][Ee]) (.*)$",
-        "^[#!/]([Ss][Ee][Tt][Gg][Pp][Nn][Aa][Mm][Ee]) (%d+) (.*)$",
-        "^[#!/]([Ss][Ee][Tt][Nn][Aa][Mm][Ee]) (%d+) (.*)$",
-        "^[#!/]([Ll][Oo][Cc][Kk]) (%d+) (.*)$",
-        "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (%d+) (.*)$",
-        -- "^[#!/]([Mm][Uu][Tt][Ee]) (%d+)$",
-        -- "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) (%d+)$",
-        "^[#!/]([Ss][Uu][Pp][Ee][Rr][Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss]) (%d+)$",
-        "^[#!/]([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss]) (%d+)$",
-        "^[#!/]([Ww][Hh][Oo][Ll][Ii][Ss][Tt])$",
-        "^[#!/]([Ww][Hh][Oo])$",
-        "^[#!/]([Tt][Yy][Pp][Ee])$",
+        "^[#!/]([Rr][Ee][Mm]) (%d+)$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Gg][Rr][Oo][Uu][Pp]) (%d+)$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Ss][Uu][Pp][Ee][Rr][Gg][Rr][Oo][Uu][Pp]) (%d+)$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Rr][Ee][Aa][Ll][Mm]) (%d+)$",
+        "^[#!/]([Ll][Oo][Gg])$",
         "^[#!/]([Aa][Dd][Dd][Aa][Dd][Mm][Ii][Nn]) (.*)$",
         "^[#!/]([Rr][Ee][Mm][Oo][Vv][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
-        "^[#!/]([Rr][Ee][Mm]) (%d+)$",
-        "^[#!/]([Ss][Uu][Pp][Pp][Oo][Rr][Tt])$",
         "^[#!/]([Ss][Uu][Pp][Pp][Oo][Rr][Tt]) (.*)$",
         "^[#!/](-[Ss][Uu][Pp][Pp][Oo][Rr][Tt]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Gg][Pp][Oo][Ww][Nn][Ee][Rr]) (%d+) (%d+)$",-- (group id) (owner id)
         "^[#!/]([Ll][Ii][Ss][Tt]) (.*)$",
-        "^[#!/]([Ll][Oo][Gg])$",
-        "^!!tgservice (.+)$",
+        "^[#!/]([Ll][Oo][Cc][Kk]) (%d+) (.*)$",
+        "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (%d+) (.*)$",
+        "^[#!/]([Ss][Uu][Pp][Ee][Rr][Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss]) (%d+)$",
+        "^[#!/]([Ww][Hh][Oo][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Ww][Hh][Oo])$",
+        "^[#!/]([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss]) (%d+)$",
+        "^[#!/]([Ss][Ee][Tt][Aa][Bb][Oo][Uu][Tt]) (%d+) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Rr][Uu][Ll][Ee][Ss]) (%d+) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Nn][Aa][Mm][Ee]) (%d+) (.*)$",
+        "^[#!/]([Tt][Yy][Pp][Ee])$",
         -- creategroup
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Rr][Ee][Aa] [Gg][Rr][Uu][Pp][Pp][Oo]) (.*)$",
         -- createsuper
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Rr][Ee][Aa] [Ss][Uu][Pp][Ee][Rr][Gg][Rr][Uu][Pp][Pp][Oo]) (.*)$",
         -- createrealm
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Rr][Ee][Aa] [Rr][Ee][Gg][Nn][Oo]) (.*)$",
-        -- setabout
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Dd][Ee][Ss][Cc][Rr][Ii][Zz][Ii][Oo][Nn][Ee]) (%d+) (.*)$",
-        -- setrules
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Rr][Ee][Gg][Oo][Ll][Ee]) (%d+) (.*)$",
         -- lock
         "^([Ss][Aa][Ss][Hh][Aa] [Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) (.*)$",
         "^([Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) (.*)$",
         -- unlock
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) (.*)$",
         "^([Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) (.*)$",
+        -- setabout
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Dd][Ee][Ss][Cc][Rr][Ii][Zz][Ii][Oo][Nn][Ee]) (%d+) (.*)$",
+        -- setrules
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Rr][Ee][Gg][Oo][Ll][Ee]) (%d+) (.*)$",
+        -- setname
+        "^[#!/]([Ss][Ee][Tt][Gg][Pp][Nn][Aa][Mm][Ee]) (%d+) (.*)$",
     },
     run = run,
     min_rank = 1
@@ -1049,6 +1042,7 @@ return {
     -- #support <user_id>|<username>
     -- #-support <user_id>|<username>
     -- #list admins|groups|realms
+    -- #setgpowner <group_id> <user_id>
     -- SUDO
     -- #addadmin <user_id>|<username>
     -- #removeadmin <user_id>|<username>

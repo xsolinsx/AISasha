@@ -1606,19 +1606,6 @@ local function run(msg, matches)
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] used /owner")
             return langs[msg.lang].ownerIs .. group_owner
         end
-        if matches[1]:lower() == 'setgpowner' then
-            local chat = "chat#id" .. matches[2]
-            local channel = "channel#id" .. matches[2]
-            if not is_admin1(msg) then
-                return langs[msg.lang].require_admin
-            end
-            data[tostring(matches[2])]['set_owner'] = matches[3]
-            save_data(_config.moderation.data, data)
-            local text = matches[3] .. langs[msg.lang].setOwner
-            send_large_msg(chat, text)
-            send_large_msg(channel, text)
-            return
-        end
         if matches[1]:lower() == 'setflood' then
             if not is_momod(msg) then
                 return langs[msg.lang].require_mod
@@ -1724,7 +1711,6 @@ return {
         "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr]) (%d+)$",
         "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr])$",
         "^[#!/]([Oo][Ww][Nn][Ee][Rr])$",
-        "^[#!/]([Ss][Ee][Tt][Gg][Pp][Oo][Ww][Nn][Ee][Rr]) (%d+) (%d+)$",-- (group id) (owner id)
         "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (.*)$",
         "^[#!/]([Ss][Ee][Tt][Ff][Ll][Oo][Oo][Dd]) (%d+)$",
         "^[#!/]([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss])$",
@@ -1830,5 +1816,4 @@ return {
     -- #add [realm]
     -- #rem [realm]
     -- #kill group|realm
-    -- #setgpowner <group_id> <user_id>
 }
