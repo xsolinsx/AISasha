@@ -751,6 +751,7 @@ return {
             '(#updateid|sasha aggiorna longid): Sasha salva il long_id.',
             '(#addlog|sasha aggiungi log): Sasha aggiunge il log.',
             '(#remlog|sasha rimuovi log): Sasha rimuove il log.',
+            '#checkspeed: Sasha calcola la velocità con cui processa i messaggi.',
             'SUDO',
             '(#contactlist|sasha lista contatti) (txt|json): Sasha manda la lista dei contatti.',
             '(#dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.',
@@ -762,7 +763,6 @@ return {
             '(#backup|sasha esegui backup): Sasha esegue un backup di se stessa e invia il log al richiedente.',
             '(#uploadbackup|sasha invia backup): Sasha invia il suo ultimo backup.',
             '#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.',
-            '#checkspeed: Sasha calcola la velocità con cui processa i messaggi.',
         },
 
         apod =
@@ -1966,6 +1966,7 @@ return {
             '(#updateid|sasha aggiorna longid): Sasha saves long_id.',
             '(#addlog|sasha aggiungi log): Sasha adds log.',
             '(#remlog|sasha rimuovi log): Sasha removes log.',
+            '#checkspeed: Sasha calculates how much time she needs to process messages.',
             'SUDO',
             '(#contactlist|sasha lista contatti) (txt|json): Sasha sends contacts list.',
             '(#dialoglist|sasha lista chat) (txt|json): Sasha sends chats list.',
@@ -1977,7 +1978,6 @@ return {
             '(#backup|sasha esegui backup): Sasha makes a backup of herself and sends log to the sender.',
             '(#uploadbackup|sasha invia backup): Sasha sends her last backup.',
             '#vardump [<reply>|<msg_id>]: Sasha sends vardump of specified message.',
-            '#checkspeed: Sasha calculates how much time she needs to process messages.',
         },
 
         apod =

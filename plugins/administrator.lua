@@ -306,9 +306,9 @@ local function run(msg, matches)
                     send_large_msg(get_receiver(msg), text)
                 end
             end
-            if matches[1]:lower() == 'checkspeed' then
-                return os.date('%S', os.difftime(tonumber(os.time()), tonumber(msg.date)))
-            end
+        end
+        if matches[1]:lower() == 'checkspeed' then
+            return os.date('%S', os.difftime(tonumber(os.time()), tonumber(msg.date)))
         end
         if matches[1]:lower() == 'updateid' or matches[1]:lower() == 'sasha aggiorna longid' then
             local data = load_data(_config.moderation.data)
@@ -467,6 +467,7 @@ return {
     -- (#updateid|sasha aggiorna longid)
     -- (#addlog|sasha aggiungi log)
     -- (#remlog|sasha rimuovi log)
+    -- #checkspeed
     -- SUDO
     -- (#contactlist|sasha lista contatti) (txt|json)
     -- (#dialoglist|sasha lista chat) (txt|json)
@@ -478,7 +479,6 @@ return {
     -- (#backup|sasha esegui backup)
     -- (#uploadbackup|sasha invia backup)
     -- #vardump [<reply>|<msg_id>]
-    -- #checkspeed
 }
 -- By @imandaneshi :)
 -- https://github.com/SEEDTEAM/TeleSeed/blob/test/plugins/admin.lua
