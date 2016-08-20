@@ -271,7 +271,7 @@ local function run(msg, matches)
                 send_document_SUDOERS("/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
                 return langs[msg.lang].backupDone
             end
-            if matches[1]:lower() == "sendbackup" or matches[1]:lower() == "sasha invia backup" then
+            if matches[1]:lower() == "uploadbackup" or matches[1]:lower() == "sasha invia backup" then
                 local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
                 local backups = { }
                 for k, v in pairsByKeys(files) do
@@ -468,7 +468,7 @@ return {
     -- (#mycontact|sasha mio contatto)
     -- (#sync_gbans|sasha sincronizza superban)
     -- (#backup|sasha esegui backup)
-    -- (#sendbackup|sasha invia backup)
+    -- (#uploadbackup|sasha invia backup)
     -- #vardump [<reply>|<msg_id>]
     -- #checkspeed
 }
