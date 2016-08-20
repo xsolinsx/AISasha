@@ -272,6 +272,9 @@ local function run(msg, matches)
         if matches[1]:lower() == 'uploaddb' then
             if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
                 send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
+                return langs[msg.lang].databaseSent
+            else
+                return langs[msg.lang].databaseMissing
             end
         end
 

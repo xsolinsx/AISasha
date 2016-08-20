@@ -245,6 +245,7 @@ return {
         notLog = 'Non un gruppo di log.',
         backupDone = 'Backup eseguito, ti invio il log in privato.',
         backupSent = 'Ti sto inviando il backup.',
+        backupMissing = 'Backup mancante.',
         autoSendBackupDb = 'Ti sto inviando il backup automatico.',
 
         -- anti_spam.lua --
@@ -276,6 +277,8 @@ return {
         userDeleted = 'Utente eliminato dal database.',
         groupDeleted = 'Gruppo eliminato dal database.',
         databaseDownloaded = 'Database scaricato\n',
+        databaseSent = 'Ti sto inviando il database.',
+        databaseMissing = 'Database mancante.',
         databaseFuckedUp = 'Errore, crash durante il salvataggio del database, ripristinarlo al più presto.',
 
         -- delword.lua --
@@ -1481,6 +1484,7 @@ return {
         notLog = 'Not a log group.',
         backupDone = 'Backup finished, I\'m sending you the log.',
         backupSent = 'I\'m sending you the backup.',
+        backupMissing = 'Backup missing.',
         autoSendBackupDb = 'I\'m sending you the automatic backup.',
 
         -- anti_spam.lua --
@@ -1512,6 +1516,8 @@ return {
         userDeleted = 'User deleted from database.',
         groupDeleted = 'Group deleted from database.',
         databaseDownloaded = 'Database downloaded\n',
+        databaseSent = 'I\'m sending you the database.',
+        databaseMissing = 'Database missing.',
         databaseFuckedUp = 'Error, crash while saving database, restore it as soon as possible.',
 
         -- delword.lua --

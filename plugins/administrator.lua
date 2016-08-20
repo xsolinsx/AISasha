@@ -273,18 +273,26 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == "uploadbackup" or matches[1]:lower() == "sasha invia backup" then
                 local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
-                local backups = { }
-                for k, v in pairsByKeys(files) do
-                    if string.match(v, '^backupAISasha%d+%.tar%.gz$') then
-                        backups[string.match(v, '%d+')] = v
+                if files then
+                    local backups = { }
+                    for k, v in pairsByKeys(files) do
+                        if string.match(v, '^backupAISasha%d+%.tar%.gz$') then
+                            backups[string.match(v, '%d+')] = v
+                        end
                     end
+                    if backups then
+                        local last_backup = ''
+                        for k, v in pairsByKeys(backups) do
+                            last_backup = v
+                        end
+                        send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
+                        return langs[msg.lang].backupSent
+                    else
+                        return langs[msg.lang].backupMissing
+                    end
+                else
+                    return langs[msg.lang].backupMissing
                 end
-                local last_backup = ''
-                for k, v in pairsByKeys(backups) do
-                    last_backup = v
-                end
-                send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
-                return langs[msg.lang].backupSent
             end
             if matches[1]:lower() == 'vardump' then
                 if type(msg.reply_id) ~= "nil" then
