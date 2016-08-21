@@ -375,7 +375,7 @@ end
 function cron_database()
     for name, plugin in pairs(plugins) do
         -- Only plugins with cron function
-        if name == 'database.lua' then
+        if name == 'database' then
             plugin.cron()
         end
     end
@@ -385,7 +385,7 @@ end
 function cron_plugins()
     for name, plugin in pairs(plugins) do
         -- Only plugins with cron function
-        if name ~= 'database.lua' then
+        if name ~= 'database' then
             if plugin.cron ~= nil then
                 plugin.cron()
             end
