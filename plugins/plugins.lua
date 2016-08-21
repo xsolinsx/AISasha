@@ -42,7 +42,7 @@ end
 local function reload_plugins()
     plugins = { }
     load_plugins()
-    return list_plugins(true)
+    return list_plugins()
 end
 
 local function enable_plugin(plugin_name, lang)
@@ -77,7 +77,7 @@ local function disable_plugin(name, lang)
     -- Disable and reload
     table.remove(_config.enabled_plugins, k)
     save_config()
-    reload_plugins(true)
+    reload_plugins()
     return '❌ ' .. name .. langs[lang].disabled
 end
 

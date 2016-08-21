@@ -13,11 +13,6 @@ function on_msg_receive(msg)
     if not started then
         return
     end
-    if not loaded then
-        print('loaded')
-        loaded = true
-        database = load_data(_config.database.db)
-    end
 
     msg = backward_msg_format(msg)
 
@@ -53,13 +48,16 @@ end
 function on_binlog_replay_end()
     started = true
     postpone(cron_plugins, false, 60 * 5.0)
-    -- See plugins/isup.lua as an example for cron
+    -- bot restarts every 30 min (1800 sec) so it saves database at 29th min (1740 sec)
+    postpone(cron_database, false, 1740)
 
     _config = load_config()
 
     -- load plugins
     plugins = { }
     load_plugins()
+
+    database = load_data(_config.database.db)
 end
 
 function msg_valid(msg)
@@ -346,7 +344,6 @@ function load_plugins()
             print(tostring(io.popen("lua plugins/" .. v .. ".lua"):read('*all')))
             print('\27[31m' .. err .. '\27[39m')
         end
-
     end
 end
 
@@ -370,13 +367,23 @@ function save_data(filename, data)
     f:close()
 end
 
+function cron_database()
+    for name, plugin in pairs(plugins) do
+        -- Only plugins with cron function
+        if name == 'database.lua' then
+            plugin.cron()
+        end
+    end
+end
 
 -- Call and postpone execution for cron plugins
 function cron_plugins()
     for name, plugin in pairs(plugins) do
         -- Only plugins with cron function
-        if plugin.cron ~= nil then
-            plugin.cron()
+        if name ~= 'database.lua' then
+            if plugin.cron ~= nil then
+                plugin.cron()
+            end
         end
     end
 

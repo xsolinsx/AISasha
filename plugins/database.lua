@@ -1,5 +1,4 @@
 local function callback_group_database(extra, success, result)
-    local database = extra.database
     local chat_id = result.peer_id
     print('group info and members ' .. chat_id)
 
@@ -66,7 +65,6 @@ local function callback_group_database(extra, success, result)
 end
 
 local function callback_supergroup_database(extra, success, result)
-    local database = extra.database
     local chat_id = string.match(extra.receiver, '%d+')
     print('supergroup info and members ' .. chat_id)
 
@@ -174,7 +172,6 @@ local function run(msg, matches)
 
         if matches[1]:lower() == 'dodatabase' or matches[1]:lower() == 'sasha esegui database' then
             local receiver = get_receiver(msg)
-            local database = load_data(_config.database.db)
             if msg.to.type == 'channel' then
                 channel_get_users(receiver, callback_supergroup_database, { receiver = receiver, database = database, print_name = msg.to.print_name, username = (msg.to.username or nil), id = msg.to.peer_id })
             elseif msg.to.type == 'chat' then
@@ -185,7 +182,6 @@ local function run(msg, matches)
         end
 
         if (matches[1]:lower() == 'search' or matches[1]:lower() == 'sasha cerca' or matches[1]:lower() == 'cerca') and matches[2] then
-            local database = load_data(_config.database.db)
             if database['users'][tostring(matches[2])] then
                 return serpent.block(database['users'][tostring(matches[2])], { sortkeys = false, comment = false })
             elseif database['groups'][tostring(matches[2])] then
@@ -196,7 +192,6 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'addrecord' and matches[2] and matches[3] then
-            local database = load_data(_config.database.db)
             local t = matches[3]:split('\n')
             if matches[2]:lower() == 'user' then
                 local id = t[1]
@@ -255,7 +250,6 @@ local function run(msg, matches)
         end
 
         if (matches[1]:lower() == 'delete' or matches[1]:lower() == 'sasha elimina' or matches[1]:lower() == 'elimina') and matches[2] then
-            local database = load_data(_config.database.db)
             if database['users'][tostring(matches[2])] then
                 database['users'][tostring(matches[2])] = nil
                 save_data(_config.database.db, database)
@@ -270,6 +264,8 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'uploaddb' then
+            print('SAVING USERS/GROUPS DATABASE')
+            save_data(_config.database.db, database)
             if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
                 send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
                 return langs[msg.lang].databaseSent
