@@ -5,7 +5,6 @@ package.cpath = package.cpath .. ';.luarocks/lib/lua/5.2/?.so'
 require("./bot/utils")
 
 local f = assert(io.popen('/usr/bin/git describe --tags', 'r'))
-VERSION = assert(f:read('*a'))
 f:close()
 
 -- This function is called when tg receive a msg
@@ -96,6 +95,12 @@ function msg_valid(msg)
 
     if not msg.from.id then
         print('\27[36mNot valid: from id not provided\27[39m')
+        return false
+    end
+
+    -- ignore messages from API version
+    if msg.from.id == 202256859 then
+        print('\27[36mNot valid: msg from our API version\27[39m')
         return false
     end
 
