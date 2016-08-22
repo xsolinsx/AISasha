@@ -32,7 +32,12 @@ local function callback_group_members(extra, success, result)
         text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id
         i = i + 1
     end
+    local file = io.open("./groups/lists/" .. result.peer_id .. "memberlist.txt", "w")
+    file:write(text)
+    file:flush()
+    file:close()
     send_large_msg(extra.receiver, text)
+    send_document(extra.receiver, "./groups/lists/" .. msg.to.id .. "memberlist.txt", ok_cb, false)
 end
 
 local function callback_supergroup_members(extra, success, result)
@@ -53,7 +58,12 @@ local function callback_supergroup_members(extra, success, result)
         text = text .. "\n" .. i .. ". " .. name .. "|" .. username .. "|" .. v.peer_id
         i = i + 1
     end
+    local file = io.open("./groups/lists/" .. string.match(extra.receiver, '%d+') .. "memberlist.txt", "w")
+    file:write(text)
+    file:flush()
+    file:close()
     send_large_msg(extra.receiver, text)
+    send_document(extra.receiver, "./groups/lists/" .. msg.to.id .. "memberlist.txt", ok_cb, false)
 end
 
 local function callback_kicked(extra, success, result)

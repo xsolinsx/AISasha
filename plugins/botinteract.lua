@@ -70,18 +70,20 @@ local function run(msg, matches)
         redis:del(msg.to.id)
         return langs[msg.lang].cancelled
     end
-    if (matches[1] == '[photo]' or matches[1] == '[document]' or matches[1] == '[video]' or matches[1] == '[audio]' or matches[1] == '[contact]' or matches[1] == '[geo]') and redis:get(msg.to.id) then
-        local chat = ''
-        local bot = ''
-        local t = list_botinteract(msg):split('\n')
-        for i, v in pairs(t) do
-            chat, bot = v:match("(%d+):(%d+)")
-            if tonumber(msg.to.id) == tonumber(chat) then
-                fwd_msg('user#id' .. bot, msg.id, ok_cb, false)
+    if msg.media then
+        if (msg.media.type == 'photo' or msg.media.type == 'document' or msg.media.type == '[video]' or msg.media.type == '[audio]' or msg.media.type == '[contact]' or msg.media.type == '[geo]') and redis:get(msg.to.id) then
+            local chat = ''
+            local bot = ''
+            local t = list_botinteract(msg):split('\n')
+            for i, v in pairs(t) do
+                chat, bot = v:match("(%d+):(%d+)")
+                if tonumber(msg.to.id) == tonumber(chat) then
+                    fwd_msg('user#id' .. bot, msg.id, ok_cb, false)
+                end
             end
+            redis:del(msg.to.id)
+            return langs[msg.lang].mediaForwarded
         end
-        redis:del(msg.to.id)
-        return langs[msg.lang].mediaForwarded
     end
 end
 
@@ -115,12 +117,12 @@ return {
         "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
         "^[#!/]([Uu][Nn][Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
         "^[#!/]([Uu][Nn][Dd][Oo])$",
-        "(%[(document)%])",
-        "(%[(photo)%])",
-        "(%[(video)%])",
-        "(%[(audio)%])",
-        "(%[(contact)%])",
-        "(%[(geo)%])",
+        "%[(document)%]",
+        "%[(photo)%]",
+        "%[(video)%]",
+        "%[(audio)%]",
+        "%[(contact)%]",
+        "%[(geo)%]",
     },
     run = run,
     pre_process = pre_process,
