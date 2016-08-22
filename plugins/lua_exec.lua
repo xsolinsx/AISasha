@@ -13,7 +13,7 @@ return {
         "^[#!/][Ll][Uu][Aa] (.*)",
     },
     run = run,
-    min_rank = 5
+    min_rank = 4
     -- usage
     -- SUDO
     -- #lua <command>

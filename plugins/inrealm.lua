@@ -46,19 +46,6 @@ local function killrealm(extra, success, result)
     chat_del_user('chat#id' .. result.peer_id, 'user#id' .. our_id, ok_cb, true)
 end
 
--- Support Team
-local function support_add(support_id)
-    -- Save to redis
-    local hash = 'support'
-    redis:sadd(hash, support_id)
-end
-
-local function support_remove(support_id)
-    -- Save on redis
-    local hash = 'support'
-    redis:srem(hash, support_id)
-end
-
 local function get_group_type(msg)
     local data = load_data(_config.moderation.data)
     if data[tostring(msg.to.id)] then
@@ -623,25 +610,11 @@ local function username_id(extra, success, result)
     send_large_msg(receiver, text)
 end
 
-local function res_user_support(extra, success, result)
-    local lang = get_lang(string.match(extra.receiver, '%d+'))
-    local receiver = extra.receiver
-    local get_cmd = extra.get_cmd
-    local support_id = result.peer_id
-    if get_cmd == 'addsupport' then
-        support_add(support_id)
-        send_large_msg(receiver, support_id .. langs[lang].supportAdded)
-    elseif get_cmd == 'removesupport' then
-        support_remove(support_id)
-        send_large_msg(receiver, support_id .. langs[lang].supportRemoved)
-    end
-end
-
 function run(msg, matches)
     local name_log = user_print_name(msg.from)
     if matches[1]:lower() == 'log' and is_owner(msg) then
         local receiver = get_receiver(msg)
-        savelog(msg.to.id, "log file created by owner/support/admin")
+        savelog(msg.to.id, "log file created by owner/admin")
         send_document(receiver, "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
     end
 
@@ -896,32 +869,6 @@ function run(msg, matches)
             chat_info(receiver, username_id, { mod_cmd = mod_cmd, receiver = receiver, member = member })
         end
     end
-    if matches[1]:lower() == 'support' and matches[2] then
-        if string.match(matches[2], '^%d+$') then
-            local support_id = matches[2]
-            print("User " .. support_id .. " has been added to the support team")
-            support_add(support_id)
-            return support_id .. langs[msg.lang].supportAdded
-        else
-            local member = string.gsub(matches[2], "@", "")
-            local receiver = get_receiver(msg)
-            local get_cmd = "addsupport"
-            resolve_username(member, res_user_support, { get_cmd = get_cmd, receiver = receiver })
-        end
-    end
-    if matches[1]:lower() == '-support' and matches[2] then
-        if string.match(matches[2], '^%d+$') then
-            local support_id = matches[2]
-            print("User " .. support_id .. " has been removed from the support team")
-            support_remove(support_id)
-            return support_id .. langs[msg.lang].supportRemoved
-        else
-            local member = string.gsub(matches[2], "@", "")
-            local receiver = get_receiver(msg)
-            local get_cmd = "removesupport"
-            resolve_username(member, res_user_support, { get_cmd = get_cmd, receiver = receiver })
-        end
-    end
     if matches[1]:lower() == 'setgpowner' then
         local chat = "chat#id" .. matches[2]
         local channel = "channel#id" .. matches[2]
@@ -1039,8 +986,6 @@ return {
     -- #type
     -- #kill group|supergroup|realm <group_id>
     -- #rem <group_id>
-    -- #support <user_id>|<username>
-    -- #-support <user_id>|<username>
     -- #list admins|groups|realms
     -- #setgpowner <group_id> <user_id>
     -- SUDO

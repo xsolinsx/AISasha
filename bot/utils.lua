@@ -1,5 +1,5 @@
-rank_table = { ["USER"] = 0, ["MOD"] = 1, ["OWNER"] = 2, ["SUPPORT"] = 3, ["ADMIN"] = 4, ["SUDO"] = 5, ["BOT"] = 6 }
-reverse_rank_table = { "USER", "MOD", "OWNER", "SUPPORT", "ADMIN", "SUDO", "BOT" }
+rank_table = { ["USER"] = 0, ["MOD"] = 1, ["OWNER"] = 2, ["ADMIN"] = 3, ["SUDO"] = 4, ["BOT"] = 5 }
+reverse_rank_table = { "USER", "MOD", "OWNER", "ADMIN", "SUDO", "BOT" }
 
 URL = require "socket.url"
 http = require "socket.http"
@@ -744,22 +744,17 @@ function get_rank(user_id, chat_id)
         if tonumber(our_id) ~= tonumber(user_id) then
             if not is_sudo( { from = { id = user_id } }) then
                 if not is_admin2(user_id) then
-                    if not is_support(user_id) then
-                        if not is_owner2(user_id, chat_id) then
-                            if not is_momod2(user_id, chat_id) then
-                                -- user
-                                return rank_table["USER"]
-                            else
-                                -- mod
-                                return rank_table["MOD"]
-                            end
+                    if not is_owner2(user_id, chat_id) then
+                        if not is_momod2(user_id, chat_id) then
+                            -- user
+                            return rank_table["USER"]
                         else
-                            -- owner
-                            return rank_table["OWNER"]
+                            -- mod
+                            return rank_table["MOD"]
                         end
                     else
-                        -- support
-                        return rank_table["SUPPORT"]
+                        -- owner
+                        return rank_table["OWNER"]
                     end
                 else
                     -- admin
@@ -778,37 +773,32 @@ function get_rank(user_id, chat_id)
         if tonumber(our_id) ~= tonumber(user_id) then
             if not is_sudo( { from = { id = user_id } }) then
                 if not is_admin2(user_id) then
-                    if not is_support(user_id) then
-                        local higher_rank = rank_table["USER"]
-                        local data = load_data(_config.moderation.data)
-                        if data['groups'] then
-                            -- if there are any groups check for everyone of them the rank of the user and choose the higher one
-                            for id_string in pairs(data['groups']) do
-                                if not is_owner2(user_id, id_string) then
-                                    if not is_momod2(user_id, id_string) then
-                                        -- user
-                                        if higher_rank < rank_table["USER"] then
-                                            higher_rank = rank_table["USER"]
-                                        end
-                                    else
-                                        -- mod
-                                        if higher_rank < rank_table["MOD"] then
-                                            higher_rank = rank_table["MOD"]
-                                        end
+                    local higher_rank = rank_table["USER"]
+                    local data = load_data(_config.moderation.data)
+                    if data['groups'] then
+                        -- if there are any groups check for everyone of them the rank of the user and choose the higher one
+                        for id_string in pairs(data['groups']) do
+                            if not is_owner2(user_id, id_string) then
+                                if not is_momod2(user_id, id_string) then
+                                    -- user
+                                    if higher_rank < rank_table["USER"] then
+                                        higher_rank = rank_table["USER"]
                                     end
                                 else
-                                    -- owner
-                                    if higher_rank < rank_table["OWNER"] then
-                                        higher_rank = rank_table["OWNER"]
+                                    -- mod
+                                    if higher_rank < rank_table["MOD"] then
+                                        higher_rank = rank_table["MOD"]
                                     end
+                                end
+                            else
+                                -- owner
+                                if higher_rank < rank_table["OWNER"] then
+                                    higher_rank = rank_table["OWNER"]
                                 end
                             end
                         end
-                        return higher_rank
-                    else
-                        -- support
-                        return rank_table["SUPPORT"]
                     end
+                    return higher_rank
                 else
                     -- admin
                     return rank_table["ADMIN"]
@@ -892,17 +882,6 @@ function is_admin2(user_id)
     return var
 end
 
-function is_support(support_id)
-    local hash = 'support'
-    local support = redis:sismember(hash, support_id)
-
-    -- check if executing a fakecommand, if yes confirm
-    if tonumber(support_id) <= -3 then
-        support = true
-    end
-    return support or false
-end
-
 -- Check if user is the owner of that group or not
 function is_owner(msg)
     local var = false
@@ -914,12 +893,6 @@ function is_owner(msg)
                 var = true
             end
         end
-    end
-
-    local hash = 'support'
-    local support = redis:sismember(hash, user_id)
-    if support then
-        var = true
     end
 
     if data['admins'] then
@@ -950,12 +923,6 @@ function is_owner2(user_id, group_id)
                 var = true
             end
         end
-    end
-
-    local hash = 'support'
-    local support = redis:sismember(hash, user_id)
-    if support then
-        var = true
     end
 
     if data['admins'] then
@@ -998,12 +965,6 @@ function is_momod(msg)
         end
     end
 
-    local hash = 'support'
-    local support = redis:sismember(hash, user_id)
-    if support then
-        var = true
-    end
-
     if data['admins'] then
         if data['admins'][tostring(user_id)] then
             var = true
@@ -1040,12 +1001,6 @@ function is_momod2(user_id, group_id)
                 var = true
             end
         end
-    end
-
-    local hash = 'support'
-    local support = redis:sismember(hash, user_id)
-    if support then
-        var = true
     end
 
     if data['admins'] then

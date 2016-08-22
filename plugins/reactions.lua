@@ -19,7 +19,7 @@ return {
         "^[#!/][Ww][Rr][Ii][Tt][Ii][Nn][Gg] ([Oo][Ff][Ff])$",
     },
     run = run,
-    min_rank = 5
+    min_rank = 4
     -- usage
     -- SUDO
     -- #writing on|off

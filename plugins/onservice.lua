@@ -29,7 +29,7 @@ return {
         "^!!tgservice (.+)$",
     },
     run = run,
-    min_rank = 4
+    min_rank = 3
     -- usage
     -- ADMIN
     -- (#leave|sasha abbandona) [<group_id>]

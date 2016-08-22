@@ -22,8 +22,8 @@ return {
     description = "LEAVE_BAN",
     patterns =
     {
-        "^!!tgservice (.*)$"
+        "^!!tgservice (.+)$"
     },
     run = run,
-    min_rank = 6
+    min_rank = 5
 }

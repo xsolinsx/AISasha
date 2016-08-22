@@ -198,7 +198,7 @@ local function run(msg, matches)
         end
     end
 
-    if matches[1]:lower() == 'chatlist' then
+    if matches[1]:lower() == 'chatlist' and is_admin1(msg) then
         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] Used /chatlist")
         if is_admin1(msg) and msg.to.type == 'chat' or msg.to.type == 'channel' then
             chat_list(msg)
@@ -275,7 +275,7 @@ return {
     },
     run = run,
     pre_process = pre_process,
-    min_rank = 0
+    min_rank = 3
     -- usage
     -- #chats
     -- #chatlist

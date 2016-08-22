@@ -27,7 +27,7 @@ return {
         "^[#!/]([Bb][Rr]) (%d+) (.*)$"
     },
     run = run,
-    min_rank = 4
+    min_rank = 3
     -- usage
     -- ADMIN
     -- #br <group_id> <text>: Sasha invia <text> a <group_id>.

@@ -583,7 +583,7 @@ local function run(msg, matches)
                 end
                 return
             end
-            if is_admin1(msg) or is_support(msg.from.id) then
+            if is_admin1(msg) then
                 if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
                     -- /gban
                     if type(msg.reply_id) ~= "nil" then
@@ -652,7 +652,7 @@ local function run(msg, matches)
                     return list
                 end
             else
-                return langs[msg.lang].require_support
+                return langs[msg.lang].require_admin
             end
         else
             return langs[msg.lang].require_owner
@@ -850,10 +850,9 @@ return {
     -- OWNER
     -- #kicknouser
     -- #kickinactive [<msgs>]
-    -- SUPPORT
+    -- ADMIN
+    -- (#banlist|[sasha] lista ban) <group_id>
     -- (#gban|[sasha] superbanna) <id>|<username>|<reply>|from
     -- (#ungban|[sasha] supersbanna) <id>|<username>|<reply>|from
     -- (#gbanlist|[sasha] lista superban)
-    -- ADMIN
-    -- (#banlist|[sasha] lista ban) <group_id>
 }

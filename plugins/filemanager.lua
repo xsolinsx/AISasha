@@ -113,7 +113,7 @@ return {
         "^[#!/]([Dd][Oo][Ww][Nn][Ll][Oo][Aa][Dd])"
     },
     run = run,
-    min_rank = 5
+    min_rank = 4
     -- usage
     -- SUDO
     -- #folder

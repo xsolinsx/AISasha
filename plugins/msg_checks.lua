@@ -460,7 +460,7 @@ return {
     description = "MSG_CHECKS",
     patterns = { },
     pre_process = pre_process,
-    min_rank = 6
+    min_rank = 5
 }
 -- End msg_checks.lua
 -- By @Rondoozle

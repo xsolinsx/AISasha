@@ -459,7 +459,7 @@ return {
     cron = cron,
     run = run,
     pre_process = pre_process,
-    min_rank = 5
+    min_rank = 4
     -- usage
     -- SUDO
     -- #createdatabase

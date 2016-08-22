@@ -930,10 +930,10 @@ local function run(msg, matches)
         end
     end
     if msg.to.type == 'chat' then
-        if is_admin1(msg) or not is_support(msg.from.id) then
+        if is_admin1(msg) then
             -- Admin only
             if matches[1]:lower() == 'add' and not matches[2] then
-                if not is_admin1(msg) and not is_support(msg.from.id) then
+                if not is_admin1(msg) then
                     -- Admin only
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to add group [ " .. msg.to.id .. " ]")
                     return
@@ -959,7 +959,7 @@ local function run(msg, matches)
                 return realmadd(msg)
             end
             if matches[1]:lower() == 'rem' and not matches[2] then
-                if not is_admin1(msg) and not is_support(msg.from.id) then
+                if not is_admin1(msg) then
                     -- Admin only
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to remove group [ " .. msg.to.id .. " ]")
                     return

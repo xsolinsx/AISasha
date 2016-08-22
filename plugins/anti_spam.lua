@@ -169,5 +169,5 @@ return {
     patterns = { },
     cron = cron,
     pre_process = pre_process,
-    min_rank = 6
+    min_rank = 5
 }

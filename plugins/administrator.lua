@@ -455,7 +455,7 @@ return {
     },
     run = run,
     pre_process = pre_process,
-    min_rank = 4
+    min_rank = 3
     -- usage
     -- ADMIN
     -- (#pm|sasha messaggia) <user_id> <msg>

@@ -448,7 +448,7 @@ end
 
 local function pre_process(msg)
     if msg.to.type == 'user' and msg.fwd_from then
-        if is_support(msg.from.id) or is_admin1(msg) then
+        if is_admin1(msg) then
             local text = langs[msg.lang].infoWord .. ' (<private_from>)'
             if msg.fwd_from.peer_type == 'channel' then
                 if msg.fwd_from.title then

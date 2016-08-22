@@ -72,7 +72,7 @@ return {
     },
     run = run,
     -- min_rank = 2
-    min_rank = 4
+    min_rank = 3
     -- usage
     -- OWNER
     -- ADMIN

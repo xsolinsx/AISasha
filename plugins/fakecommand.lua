@@ -30,11 +30,10 @@ return {
         "^[#!/]([Uu][Ss][Ee][Rr]) (.*)",
         "^[#!/]([Mm][Oo][Dd]) (.*)",
         "^[#!/]([Oo][Ww][Nn][Ee][Rr]) (.*)",
-        "^[#!/]([Ss][Uu][Pp][Pp][Oo][Rr][Tt]) (.*)",
         "^[#!/]([Aa][Dd][Mm][Ii][Nn]) (.*)",
     },
     run = run,
     min_rank = 1
     -- usage
-    -- (#user|#mod|#owner|#support|#admin) <command>
+    -- (#user|#mod|#owner|#admin) <command>
 }

@@ -651,7 +651,7 @@ function get_message_callback(extra, success, result)
         local group_owner = data[tostring(result.to.peer_id)]['set_owner']
         if group_owner then
             local channel_id = 'channel#id' .. result.to.peer_id
-            if not is_admin2(tonumber(group_owner)) and not is_support(tonumber(group_owner)) then
+            if not is_admin2(tonumber(group_owner)) then
                 local user = "user#id" .. group_owner
                 channel_demote(channel_id, user, ok_cb, false)
             end
@@ -789,7 +789,7 @@ local function callbackres(extra, success, result)
 		local group_owner = data[tostring(channel)]['set_owner']
 		if group_owner then
 			local user = "user#id"..group_owner
-			if not is_admin2(group_owner) and not is_support(group_owner) then
+			if not is_admin2(group_owner) then
 				channel_demote(receiver, user, ok_cb, false)
 			end
 			local user_id = "user#id"..result.peer_id
@@ -952,13 +952,12 @@ local function run(msg, matches)
         end
     end
     if msg.to.type == 'channel' then
-        local support_id = msg.from.id
         local receiver = get_receiver(msg)
         local print_name = user_print_name(msg.from):gsub("‮", "")
         local name_log = print_name:gsub("_", " ")
         local data = load_data(_config.moderation.data)
         if matches[1]:lower() == 'add' and not matches[2] then
-            if not is_admin1(msg) and not is_support(support_id) then
+            if not is_admin1(msg) then
                 return
             end
             if is_super_group(msg) then
@@ -985,7 +984,7 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == "admins" or matches[1]:lower() == "sasha lista admin" or matches[1]:lower() == "lista admin" then
-            if not is_owner(msg) and not is_support(msg.from.id) then
+            if not is_owner(msg) then
                 return
             end
             member_type = 'Admins'
@@ -1086,7 +1085,7 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'promoteadmin' then
-            if not is_support(msg.from.id) and not is_owner(msg) then
+            if not is_owner(msg) then
                 return
             end
             if type(msg.reply_id) ~= "nil" then
@@ -1122,7 +1121,7 @@ local function run(msg, matches)
         end
 
         if matches[1]:lower() == 'demoteadmin' then
-            if not is_support(msg.from.id) and not is_owner(msg) then
+            if not is_owner(msg) then
                 return
             end
             if type(msg.reply_id) ~= "nil" then
@@ -1745,12 +1744,6 @@ local function run(msg, matches)
                         savelog(msg.to.id, name_log .. " Admin [" .. msg.from.id .. "] joined the SuperGroup via link")
                         channel_set_admin(receiver, user, ok_cb, false)
                     end
-                    if is_support(msg.from.id) and not is_owner2(msg.from.id) then
-                        local receiver = get_receiver(msg)
-                        local user = "user#id" .. msg.from.id
-                        savelog(msg.to.id, name_log .. " Support member [" .. msg.from.id .. "] joined the SuperGroup")
-                        channel_set_mod(receiver, user, ok_cb, false)
-                    end
                 end
                 if msg.action.type == 'chat_add_user' then
                     if is_owner2(msg.action.user.id) then
@@ -1758,12 +1751,6 @@ local function run(msg, matches)
                         local user = "user#id" .. msg.action.user.id
                         savelog(msg.to.id, name_log .. " Admin [" .. msg.action.user.id .. "] added to the SuperGroup by [ " .. msg.from.id .. " ]")
                         channel_set_admin(receiver, user, ok_cb, false)
-                    end
-                    if is_support(msg.action.user.id) and not is_owner2(msg.action.user.id) then
-                        local receiver = get_receiver(msg)
-                        local user = "user#id" .. msg.action.user.id
-                        savelog(msg.to.id, name_log .. " Support member [" .. msg.action.user.id .. "] added to the SuperGroup by [ " .. msg.from.id .. " ]")
-                        channel_set_mod(receiver, user, ok_cb, false)
                     end
                 end
             end
@@ -1926,10 +1913,9 @@ return {
     -- #clean rules|about|modlist|mutelist
     -- #mute|silenzia all|text|documents|gifs|video|photo|audio
     -- #unmute|ripristina all|text|documents|gifs|video|photo|audio
-    -- SUPPORT
+    -- ADMIN
     -- #add
     -- #rem
-    -- ADMIN
     -- #tosuper
     -- #setusername <text>
     -- #kill supergroup
