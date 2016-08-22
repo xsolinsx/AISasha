@@ -1,6 +1,7 @@
 rank_table = { ["USER"] = 0, ["MOD"] = 1, ["OWNER"] = 2, ["ADMIN"] = 3, ["SUDO"] = 4, ["BOT"] = 5 }
 reverse_rank_table = { "USER", "MOD", "OWNER", "ADMIN", "SUDO", "BOT" }
 
+socket = require "socket"
 URL = require "socket.url"
 http = require "socket.http"
 https = require "ssl.https"
@@ -506,6 +507,10 @@ function post_large_msg_callback(extra, success, result)
 
         post_msg(destination, my_text, post_large_msg_callback, extra)
     end
+end
+
+function sleep(sec)
+    socket.select(nil, nil, sec)
 end
 
 function is_channel_disabled(receiver)

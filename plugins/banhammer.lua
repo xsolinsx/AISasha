@@ -285,6 +285,7 @@ local function kick_nouser_chat(extra, success, result)
             end
             kick_user(v.peer_id, extra.chat_id)
             kicked = kicked + 1
+            sleep(1)
         end
     end
     local function post_msg()
@@ -304,6 +305,7 @@ local function kick_nouser_channel(extra, success, result)
             end
             kick_user(v.peer_id, extra.chat_id)
             kicked = kicked + 1
+            sleep(1)
         end
     end
     local function post_msg()
@@ -324,6 +326,7 @@ local function kick_deleted_chat(extra, success, result)
                 end
                 kick_user(v.peer_id, extra.chat_id)
                 kicked = kicked + 1
+                sleep(1)
             end
         end
     end
@@ -345,6 +348,7 @@ local function kick_deleted_channel(extra, success, result)
                 end
                 kick_user(v.peer_id, extra.chat_id)
                 kicked = kicked + 1
+                sleep(1)
             end
         end
     end
@@ -376,6 +380,7 @@ local function kick_inactive_chat(extra, success, result)
                 end
                 kick_user(v.peer_id, extra.chat_id)
                 kicked = kicked + 1
+                sleep(1)
             end
         end
     end
@@ -398,6 +403,7 @@ local function kick_inactive_channel(extra, success, result)
                 end
                 kick_user(v.peer_id, extra.chat_id)
                 kicked = kicked + 1
+                sleep(1)
             end
         end
     end
