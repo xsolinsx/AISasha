@@ -3036,7 +3036,7 @@ local function run(msg, matches)
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
                         return matches[2] .. langs[msg.lang].setOwner
                     else
-                        return resolve_username(string.gsub(matches[2], '@', ''), setowner_by_username, { receiver = get_receiver(msg), chat_id = chat })
+                        return resolve_username(string.gsub(matches[2], '@', ''), setowner_by_username, { receiver = get_receiver(msg), chat_id = msg.to.id })
                     end
                 else
                     return langs[msg.lang].require_owner
