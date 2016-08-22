@@ -141,7 +141,7 @@ local function list_disabled_plugin_on_chat(receiver)
 end
 
 local function check_plugin(plugin)
-    if plugin == 'administrator' or plugin == 'anti_spam' or plugin == 'banhammer' or plugin == 'bot' or plugin == 'broadcast' or plugin == 'check_tag' or plugin == 'database' or plugin == 'feedback' or plugin == 'goodbyewelcome' or plugin == 'ingroup' or plugin == 'inpm' or plugin == 'inrealm' or plugin == 'leave_ban' or plugin == 'msg_checks' or plugin == 'onservice' or plugin == 'permissions' or plugin == 'plugins' or plugin == 'preprocess_media' or plugin == 'strings' or plugin == 'supergroup' or plugin == 'whitelist' then
+    if plugin == 'administrator' or plugin == 'anti_spam' or plugin == 'banhammer' or plugin == 'bot' or plugin == 'broadcast' or plugin == 'check_tag' or plugin == 'database' or plugin == 'feedback' or plugin == 'goodbyewelcome' or plugin == 'group_management' or plugin == 'leave_ban' or plugin == 'msg_checks' or plugin == 'onservice' or plugin == 'permissions' or plugin == 'plugins' or plugin == 'preprocess_media' or plugin == 'strings' or plugin == 'whitelist' then
         return true
     end
     return false
