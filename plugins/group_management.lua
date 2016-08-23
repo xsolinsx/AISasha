@@ -1341,7 +1341,7 @@ local function setowner_by_username(extra, success, result)
     if success == 0 then
         return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
     end
-    data[tostring(msg.to.id)]['set_owner'] = result.peer_id
+    data[tostring(extra.chat_id)]['set_owner'] = result.peer_id
     save_data(_config.moderation.data, data)
     savelog(extra.chat_id, name_log .. " [" .. result.peer_id .. "] set as owner")
     send_large_msg(extra.receiver, result.peer_id .. langs[msg.lang].setOwner)
