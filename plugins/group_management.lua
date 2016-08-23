@@ -1344,8 +1344,8 @@ local function setowner_by_username(extra, success, result)
     local data = load_data(_config.moderation.data)
     data[tostring(extra.chat_id)]['set_owner'] = result.peer_id
     save_data(_config.moderation.data, data)
-    savelog(extra.chat_id, name_log .. " [" .. result.peer_id .. "] set as owner")
-    send_large_msg(extra.receiver, result.peer_id .. langs[msg.lang].setOwner)
+    savelog(extra.chat_id, result.print_name .. " [" .. result.peer_id .. "] set as owner")
+    send_large_msg(extra.receiver, result.peer_id .. langs[lang].setOwner)
 end
 -- End resolve username actions
 
@@ -1887,7 +1887,7 @@ local function run(msg, matches)
     end
 
     -- INREALM
-    if is_sudo(msg) or is_realm(msg) then
+    if is_realm(msg) then
         if is_admin1(msg) then
             if (matches[1]:lower() == 'creategroup' or matches[1]:lower() == 'sasha crea gruppo') and matches[2] then
                 group_type = 'group'
