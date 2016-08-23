@@ -1646,10 +1646,7 @@ local function unlock_group_links(data, target, lang)
     end
 end
 
-local function lock_group_spam(msg, data, target)
-    if not is_momod(msg) then
-        return langs[msg.lang].require_mod
-    end
+local function lock_group_spam(data, target, lang)
     local group_spam_lock = data[tostring(target)]['settings']['lock_spam']
     if group_spam_lock == 'yes' then
         return langs[msg.lang].spamAlreadyLocked
@@ -1660,10 +1657,7 @@ local function lock_group_spam(msg, data, target)
     end
 end
 
-local function unlock_group_spam(msg, data, target)
-    if not is_momod(msg) then
-        return langs[msg.lang].require_mod
-    end
+local function unlock_group_spam(data, target, lang)
     local group_spam_lock = data[tostring(target)]['settings']['lock_spam']
     if group_spam_lock == 'no' then
         return langs[msg.lang].spamAlreadyUnlocked
