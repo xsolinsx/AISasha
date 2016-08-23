@@ -869,7 +869,7 @@ local function muteuser_by_reply(extra, success, result)
         user_id = result.from.peer_id
     end
     if user_id ~= -1 then
-        if compare_ranks(extra.executer, result.peer_id, string.match(extra.receiver, '%d+')) then
+        if compare_ranks(extra.executer, result.from.peer_id, string.match(extra.receiver, '%d+')) then
             if is_muted_user(string.match(extra.receiver, '%d+'), user_id) then
                 mute_user(string.match(extra.receiver, '%d+'), user_id)
                 send_large_msg(extra.receiver, user_id .. langs[lang].muteUserRemove)
@@ -885,7 +885,7 @@ end
 
 local function muteuser_from(extra, success, result)
     local lang = get_lang(result.to.peer_id)
-    if compare_ranks(extra.executer, result.peer_id, string.match(extra.receiver, '%d+')) then
+    if compare_ranks(extra.executer, result.from.peer_id, string.match(extra.receiver, '%d+')) then
         if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
             unmute_user(result.to.peer_id, result.fwd_from.peer_id)
             send_large_msg(extra.receiver, result.fwd_from.peer_id .. langs[lang].muteUserRemove)
