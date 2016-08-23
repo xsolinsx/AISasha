@@ -1696,31 +1696,25 @@ local function unlock_group_rtl(data, target, lang)
     end
 end
 
-local function lock_group_tgservice(msg, data, target)
-    if not is_momod(msg) then
-        return
-    end
+local function lock_group_tgservice(data, target, lang)
     local group_tgservice_lock = data[tostring(target)]['settings']['lock_tgservice']
     if group_tgservice_lock == 'yes' then
-        return langs[msg.lang].tgserviceAlreadyLocked
+        return langs[lang].tgserviceAlreadyLocked
     else
         data[tostring(target)]['settings']['lock_tgservice'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs[msg.lang].tgserviceLocked
+        return langs[lang].tgserviceLocked
     end
 end
 
-local function unlock_group_tgservice(msg, data, target)
-    if not is_momod(msg) then
-        return
-    end
+local function unlock_group_tgservice(data, target, lang)
     local group_tgservice_lock = data[tostring(target)]['settings']['lock_tgservice']
     if group_tgservice_lock == 'no' then
-        return langs[msg.lang].tgserviceAlreadyUnlocked
+        return langs[lang].tgserviceAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_tgservice'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs[msg.lang].tgserviceUnlocked
+        return langs[lang].tgserviceUnlocked
     end
 end
 
