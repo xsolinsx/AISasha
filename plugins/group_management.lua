@@ -2003,7 +2003,7 @@ local function run(msg, matches)
                     end
                 end
             end
-            if matches[1]:lower() == 'lock' or matches[1]:lower() == 'sasha blocca' or matches[1]:lower() == 'blocca' then
+            if (matches[1]:lower() == 'lock' or matches[1]:lower() == 'sasha blocca' or matches[1]:lower() == 'blocca') and matches[2] and matches[3] then
                 if matches[3]:lower() == 'name' then
                     return realm_lock_group_name(data, matches[2], msg.lang)
                 end
@@ -2032,7 +2032,7 @@ local function run(msg, matches)
                     return realm_lock_group_sticker(data, matches[2], msg.lang)
                 end
             end
-            if matches[1]:lower() == 'unlock' or matches[1]:lower() == 'sasha sblocca' or matches[1]:lower() == 'sblocca' then
+            if (matches[1]:lower() == 'unlock' or matches[1]:lower() == 'sasha sblocca' or matches[1]:lower() == 'sblocca') and matches[2] and matches[3] then
                 if matches[3]:lower() == 'name' then
                     return realm_unlock_group_name(data, matches[2], msg.lang)
                 end
