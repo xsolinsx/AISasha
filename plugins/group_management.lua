@@ -1649,22 +1649,22 @@ end
 local function lock_group_spam(data, target, lang)
     local group_spam_lock = data[tostring(target)]['settings']['lock_spam']
     if group_spam_lock == 'yes' then
-        return langs[msg.lang].spamAlreadyLocked
+        return langs[lang].spamAlreadyLocked
     else
         data[tostring(target)]['settings']['lock_spam'] = 'yes'
         save_data(_config.moderation.data, data)
-        return langs[msg.lang].spamLocked
+        return langs[lang].spamLocked
     end
 end
 
 local function unlock_group_spam(data, target, lang)
     local group_spam_lock = data[tostring(target)]['settings']['lock_spam']
     if group_spam_lock == 'no' then
-        return langs[msg.lang].spamAlreadyUnlocked
+        return langs[lang].spamAlreadyUnlocked
     else
         data[tostring(target)]['settings']['lock_spam'] = 'no'
         save_data(_config.moderation.data, data)
-        return langs[msg.lang].spamUnlocked
+        return langs[lang].spamUnlocked
     end
 end
 
