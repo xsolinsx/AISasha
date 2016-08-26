@@ -1304,7 +1304,7 @@ return {
             '🅿️ TEMPMESSAGE',
             'Plugin per temporizzare i messaggi.',
             'MOD',
-            '(#temp|[sasha] temporizza) <hour> <minutes> <seconds> <text>: Sasha eliminerà il messaggio dopo il tempo specificato.',
+            '(#tempmsg|[sasha] temporizza) <hour> <minutes> <seconds> <text>: Sasha eliminerà il messaggio dopo il tempo specificato.',
             '(#tempmsg|[sasha] temporizza) (<hour>|<minutes>|<seconds>)(h|m|s) <text>: Sasha eliminerà il messaggio dopo il tempo specificato.',
             '(#tempmsg|[sasha] temporizza) <hour>|<minutes>(h|m) <minutes>|<seconds>(m|s) <text>: Sasha eliminerà il messaggio dopo il tempo specificato.'
         },
@@ -2473,7 +2473,7 @@ return {
             '🅿️ TEMPMESSAGE',
             'Plugin to temporize messages.',
             'MOD',
-            '(#temp|[sasha] temporizza) <hour> <minutes> <seconds> <text>: Sasha will delete that message after the specified time.',
+            '(#tempmsg|[sasha] temporizza) <hour> <minutes> <seconds> <text>: Sasha will delete that message after the specified time.',
             '(#tempmsg|[sasha] temporizza) (<hour>|<minutes>|<seconds>)(h|m|s) <text>: Sasha will delete that message after the specified time.',
             '(#tempmsg|[sasha] temporizza) <hour>|<minutes>(h|m) <minutes>|<seconds>(m|s) <text>: Sasha will delete that message after the specified time.'
         },

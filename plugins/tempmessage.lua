@@ -1,12 +1,8 @@
--- An empty table for solving multiple kicking problem(thanks to @topkecleon)
-kicktable = { }
-
-local TIME_CHECK = 2 -- seconds
-
 local function check_time(not_hour)
     if tonumber(not_hour) < 0 or tonumber(not_hour) >= 60 then
         return false
     end
+    return true
 end
 
 local function run(msg, matches)
