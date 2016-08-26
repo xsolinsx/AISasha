@@ -629,7 +629,7 @@ return {
         strictrulesUnlocked = 'Pugno di ferro disattivato.',
 
         -- me.lua --
-        meString = 'Hai mandato W (X%) messaggi e questo gruppo ne ha Z.',
+        meString = 'Hai mandato W (X%) messaggi e questa chat ne ha Z.',
 
         -- onservice.lua --
         notMyGroup = 'Questo non è un mio gruppo, addio.',
@@ -1798,7 +1798,7 @@ return {
         strictrulesUnlocked = 'Strict rules disabled.',
 
         -- me.lua --
-        meString = 'You have sent W (X%) messages and this group has Z messages.',
+        meString = 'You have sent W (X%) messages and this chat has Z messages.',
 
         -- onservice.lua --
         notMyGroup = 'This is not one of my groups, bye.',
