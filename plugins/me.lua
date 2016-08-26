@@ -36,7 +36,7 @@ local function run(msg, matches)
             channel_get_users(get_receiver(msg), get_supergroup_stats, { receiver = get_receiver(msg), user = msg.from.id, chat = msg.to.id })
         elseif msg.to.type == 'user' then
             local usermsgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
-            send_large_msg(get_receiver(msg), string.gsub(string.gsub(string.gsub(langs[msg.lang].meString, 'W', tostring(usermsgs)), 'X', '100%'), 'Z', tostring(usermsgs)))
+            send_large_msg(get_receiver(msg), string.gsub(string.gsub(string.gsub(langs[msg.lang].meString, 'W', tostring(usermsgs)), 'X', '100'), 'Z', tostring(usermsgs)))
         end
         return
     end
