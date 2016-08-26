@@ -705,6 +705,9 @@ return {
         langUpdate = 'ℹ️ Stringhe aggiornate.',
         langSet = 'ℹ️ Lingua impostata.',
 
+        -- tempmessage.lua --
+        wrongTimeFormat = 'Formato timer errato.',
+
         -- unset.lua --
         deleted = ' eliminato.',
         gDeleted = ' variabile globale eliminata.',
@@ -1296,6 +1299,16 @@ return {
             '(#tagall|sasha tagga tutti) <text>: Sasha tagga tutti i membri del gruppo con username e scrive <text>.',
         },
 
+        tempmessage =
+        {
+            '🅿️ TEMPMESSAGE',
+            'Plugin per temporizzare i messaggi.',
+            'MOD',
+            '(#temp|[sasha] temporizza) <hour> <minutes> <seconds> <text>: Sasha eliminerà il messaggio dopo il tempo specificato.',
+            '(#tempmsg|[sasha] temporizza) (<hour>|<minutes>|<seconds>)(h|m|s) <text>: Sasha eliminerà il messaggio dopo il tempo specificato.',
+            '(#tempmsg|[sasha] temporizza) <hour>|<minutes>(h|m) <minutes>|<seconds>(m|s) <text>: Sasha eliminerà il messaggio dopo il tempo specificato.'
+        },
+
         tex =
         {
             '🅿️ TEX',
@@ -1860,6 +1873,9 @@ return {
         -- strings.lua --
         langUpdate = 'ℹ️ Strings updated.',
         langSet = 'ℹ️ Language set.',
+
+        -- tempmessage.lua --
+        wrongTimeFormat = 'Wrong time format.',
 
         -- unset.lua --
         deleted = ' deleted.',
@@ -2450,6 +2466,16 @@ return {
             'Plugin to tag all users with username.',
             'OWNER',
             '(#tagall|sasha tagga tutti) <text>: Sasha tags all group\'s members and writes <text>.',
+        },
+
+        tempmessage =
+        {
+            '🅿️ TEMPMESSAGE',
+            'Plugin to temporize messages.',
+            'MOD',
+            '(#temp|[sasha] temporizza) <hour> <minutes> <seconds> <text>: Sasha will delete that message after the specified time.',
+            '(#tempmsg|[sasha] temporizza) (<hour>|<minutes>|<seconds>)(h|m|s) <text>: Sasha will delete that message after the specified time.',
+            '(#tempmsg|[sasha] temporizza) <hour>|<minutes>(h|m) <minutes>|<seconds>(m|s) <text>: Sasha will delete that message after the specified time.'
         },
 
         tex =

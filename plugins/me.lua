@@ -6,6 +6,9 @@ local function get_group_stats(extra, success, result)
         local tmpmsgs = tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. extra.chat) or 0)
         chattotal = chattotal + tmpmsgs
     end
+    if chattotal == 0 then
+        chattotal = 1
+    end
     local percentage =(usermsgs * 100) / chattotal
     send_large_msg(extra.receiver, string.gsub(string.gsub(string.gsub(langs[lang].meString, 'W', tostring(usermsgs)), 'X', string.format('%d', percentage)), 'Z', tostring(chattotal)))
 end
@@ -18,6 +21,9 @@ local function get_supergroup_stats(extra, success, result)
         local tmpmsgs = tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. extra.chat) or 0)
         chattotal = chattotal + tmpmsgs
     end
+    if chattotal == 0 then
+        chattotal = 1
+    end
     local percentage =(usermsgs * 100) / chattotal
     send_large_msg(extra.receiver, string.gsub(string.gsub(string.gsub(langs[lang].meString, 'W', tostring(usermsgs)), 'X', string.format('%d', percentage)), 'Z', tostring(chattotal)))
 end
@@ -28,6 +34,9 @@ local function run(msg, matches)
             chat_info(get_receiver(msg), get_group_stats, { receiver = get_receiver(msg), user = msg.from.id, chat = msg.to.id })
         elseif msg.to.type == 'channel' then
             channel_get_users(get_receiver(msg), get_supergroup_stats, { receiver = get_receiver(msg), user = msg.from.id, chat = msg.to.id })
+        elseif msg.to.type == 'user' then
+            local usermsgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
+            send_large_msg(extra.receiver, string.gsub(string.gsub(string.gsub(langs[msg.lang].meString, 'W', tostring(usermsgs)), 'X', '100%'), 'Z', tostring(usermsgs)))
         end
         return
     end
