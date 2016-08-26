@@ -19,20 +19,20 @@ local function run(msg, matches)
                     -- X hour Y minutes OR X hour Y seconds OR X minutes Y seconds
                     if matches[3]:lower() == 'h' then
                         hours = true
-                        vhours = tonumber(matches[4])
+                        vhours = tonumber(matches[2])
                     elseif matches[3]:lower() == 'm' then
-                        if check_time(matches[4]) then
+                        if check_time(matches[2]) then
                             minutes = true
-                            vminutes = tonumber(matches[4])
+                            vminutes = tonumber(matches[2])
                         else
                             return langs[msg.lang].wrongTimeFormat
                         end
                     end
                     if matches[5]:lower() == 'm' then
                         if not minutes then
-                            if check_time(matches[6]) then
+                            if check_time(matches[4]) then
                                 minutes = true
-                                vminutes = tonumber(matches[6])
+                                vminutes = tonumber(matches[4])
                             else
                                 return langs[msg.lang].wrongTimeFormat
                             end
@@ -41,9 +41,9 @@ local function run(msg, matches)
                             return langs[msg.lang].wrongTimeFormat
                         end
                     elseif matches[5]:lower() == 's' then
-                        if check_time(matches[6]) then
+                        if check_time(matches[4]) then
                             seconds = true
-                            vseconds = tonumber(matches[6])
+                            vseconds = tonumber(matches[4])
                         else
                             return langs[msg.lang].wrongTimeFormat
                         end
@@ -64,18 +64,18 @@ local function run(msg, matches)
                     -- X hour OR X minutes OR X seconds
                     if matches[3]:lower() == 'h' then
                         hours = true
-                        vhours = tonumber(matches[4])
+                        vhours = tonumber(matches[2])
                     elseif matches[3]:lower() == 'm' then
-                        if check_time(matches[4]) then
+                        if check_time(matches[2]) then
                             minutes = true
-                            vminutes = tonumber(matches[4])
+                            vminutes = tonumber(matches[2])
                         else
                             return langs[msg.lang].wrongTimeFormat
                         end
                     elseif matches[3]:lower() == 's' then
-                        if check_time(matches[4]) then
+                        if check_time(matches[2]) then
                             seconds = true
-                            vseconds = tonumber(matches[4])
+                            vseconds = tonumber(matches[2])
                         else
                             return langs[msg.lang].wrongTimeFormat
                         end
