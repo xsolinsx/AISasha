@@ -1789,9 +1789,15 @@ local function contact_mods_callback(extra, success, result)
                 if msg.reply_id then
                     fwd_msg('user#id' .. v.peer_id, msg.reply_id, ok_cb, false)
                 end
-                fwd_msg('user#id' .. v.peer_id, msg.id, ok_cb, false)
+                local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+                if msg.from.username then
+                    text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+                else
+                    text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                end
+                text = text .. langs[msg.lang].msgText .. msg.text
+                send_large_msg(get_receiver(msg), text)
             else
-                --
                 send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v.peer_id)
             end
         end
@@ -1807,9 +1813,15 @@ local function contact_mods_callback(extra, success, result)
             if msg.reply_id then
                 fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
             end
-            fwd_msg('user#id' .. owner, msg.id, ok_cb, false)
+            local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+            if msg.from.username then
+                text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+            else
+                text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+            end
+            text = text .. langs[msg.lang].msgText .. msg.text
+            send_large_msg(get_receiver(msg), text)
         else
-            --
             send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
         end
     end
@@ -1826,9 +1838,15 @@ local function contact_mods_callback(extra, success, result)
             if msg.reply_id then
                 fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
             end
-            fwd_msg('user#id' .. k, msg.id, ok_cb, false)
+            local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+            if msg.from.username then
+                text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+            else
+                text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+            end
+            text = text .. langs[msg.lang].msgText .. msg.text
+            send_large_msg(get_receiver(msg), text)
         else
-            --
             send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
         end
     end
@@ -1845,9 +1863,15 @@ local function contact_mods(msg)
             if msg.reply_id then
                 fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
             end
-            fwd_msg('user#id' .. k, msg.id, ok_cb, false)
+            local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+            if msg.from.username then
+                text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+            else
+                text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+            end
+            text = text .. langs[msg.lang].msgText .. msg.text
+            send_large_msg(get_receiver(msg), text)
         else
-            --
             send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
         end
     end
@@ -1864,9 +1888,15 @@ local function contact_mods(msg)
             if msg.reply_id then
                 fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
             end
-            fwd_msg('user#id' .. k, msg.id, ok_cb, false)
+            local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+            if msg.from.username then
+                text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+            else
+                text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+            end
+            text = text .. langs[msg.lang].msgText .. msg.text
+            send_large_msg(get_receiver(msg), text)
         else
-            --
             send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
         end
     end
@@ -1905,7 +1935,7 @@ local function run(msg, matches)
     end
     if matches[1]:lower() == 'contactadmins' then
         if msg.to.type == 'channel' then
-            return channel_get_admins(get_receiver(msg), contact_mods_callback, { receiver = get_receiver(msg), msg = msg, member_type = 'Admins' })
+            return channel_get_admins(get_receiver(msg), contact_mods_callback, { msg = msg })
         elseif msg.to.type == 'chat' then
             return contact_mods(msg)
         end
