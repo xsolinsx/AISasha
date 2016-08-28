@@ -1782,6 +1782,14 @@ local function contact_mods_callback(extra, success, result)
     local already_contacted = { }
     local msg = extra.msg
 
+    local text = langs[msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+    if msg.from.username then
+        text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+    else
+        text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+    end
+    text = text .. langs[msg.lang].msgText .. msg.text
+
     -- telegram admins
     for k, v in pairsByKeys(result) do
         local rnd = math.random(1, 10)
@@ -1797,13 +1805,6 @@ local function contact_mods_callback(extra, success, result)
                             end
                             postpone(post_fwd, false, rnd)
                         end
-                        local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-                        if msg.from.username then
-                            text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
-                        else
-                            text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
-                        end
-                        text = text .. langs[msg.lang].msgText .. msg.text
                         local function post_msg()
                             send_large_msg('user#id' .. v.peer_id, text)
                         end
@@ -1835,13 +1836,6 @@ local function contact_mods_callback(extra, success, result)
                     end
                     postpone(post_fwd, false, rnd)
                 end
-                local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-                if msg.from.username then
-                    text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
-                else
-                    text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
-                end
-                text = text .. langs[msg.lang].msgText .. msg.text
                 local function post_msg()
                     send_large_msg('user#id' .. owner, text)
                 end
@@ -1873,13 +1867,6 @@ local function contact_mods_callback(extra, success, result)
                     end
                     postpone(post_fwd, false, rnd)
                 end
-                local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-                if msg.from.username then
-                    text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
-                else
-                    text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
-                end
-                text = text .. langs[msg.lang].msgText .. msg.text
                 local function post_msg()
                     send_large_msg('user#id' .. k, text)
                 end
@@ -1898,6 +1885,14 @@ local function contact_mods(msg)
     local already_contacted = { }
     local data = load_data(_config.moderation.data)
 
+    local text = langs[msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+    if msg.from.username then
+        text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+    else
+        text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+    end
+    text = text .. langs[msg.lang].msgText .. msg.text
+
     -- owner
     local owner = data[tostring(msg.to.id)]['set_owner']
     if owner then
@@ -1912,13 +1907,6 @@ local function contact_mods(msg)
                     end
                     postpone(post_fwd, false, rnd)
                 end
-                local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-                if msg.from.username then
-                    text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
-                else
-                    text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
-                end
-                text = text .. langs[msg.lang].msgText .. msg.text
                 local function post_msg()
                     send_large_msg('user#id' .. owner, text)
                 end
@@ -1950,13 +1938,6 @@ local function contact_mods(msg)
                     end
                     postpone(post_fwd, false, rnd)
                 end
-                local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-                if msg.from.username then
-                    text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
-                else
-                    text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
-                end
-                text = text .. langs[msg.lang].msgText .. msg.text
                 local function post_msg()
                     send_large_msg('user#id' .. k, text)
                 end
