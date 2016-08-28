@@ -1784,7 +1784,7 @@ local function contact_mods_callback(extra, success, result)
 
     -- telegram admins
     for k, v in pairsByKeys(result) do
-        local rnd = math.random(1,10 )
+        local rnd = math.random(1, 10)
         if tonumber(v.peer_id) ~= tonumber(our_id) then
             if v.print_name then
                 if not already_contacted[tonumber(v.peer_id)] then
@@ -1809,7 +1809,10 @@ local function contact_mods_callback(extra, success, result)
                         end
                         postpone(post_msg, false, rnd)
                     else
-                        send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v.peer_id)
+                        local function post_msg()
+                            send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v.peer_id)
+                        end
+                        postpone(post_msg, false, rnd)
                     end
                 end
             end
@@ -1821,7 +1824,7 @@ local function contact_mods_callback(extra, success, result)
     -- owner
     local owner = data[tostring(msg.to.id)]['set_owner']
     if owner then
-        local rnd = math.random(1,10 )
+        local rnd = math.random(1, 10)
         if not already_contacted[tonumber(owner)] then
             already_contacted[tonumber(owner)] = owner
             local tmpmsgs = tonumber(redis:get('msgs:' .. owner .. ':' .. our_id) or 0)
@@ -1844,7 +1847,10 @@ local function contact_mods_callback(extra, success, result)
                 end
                 postpone(post_msg, false, rnd)
             else
-                send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
+                local function post_msg()
+                    send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
+                end
+                postpone(post_msg, false, rnd)
             end
         end
     end
@@ -1856,7 +1862,7 @@ local function contact_mods_callback(extra, success, result)
         return langs[msg.lang].noGroupMods
     end
     for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
-        local rnd = math.random(1,10 )
+        local rnd = math.random(1, 10)
         if not already_contacted[tonumber(k)] then
             already_contacted[tonumber(k)] = k
             local tmpmsgs = tonumber(redis:get('msgs:' .. k .. ':' .. our_id) or 0)
@@ -1879,7 +1885,10 @@ local function contact_mods_callback(extra, success, result)
                 end
                 postpone(post_msg, false, rnd)
             else
-                send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
+                local function post_msg()
+                    send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
+                end
+                postpone(post_msg, false, rnd)
             end
         end
     end
@@ -1892,7 +1901,7 @@ local function contact_mods(msg)
     -- owner
     local owner = data[tostring(msg.to.id)]['set_owner']
     if owner then
-        local rnd = math.random(1,10 )
+        local rnd = math.random(1, 10)
         if not already_contacted[tonumber(owner)] then
             already_contacted[tonumber(owner)] = owner
             local tmpmsgs = tonumber(redis:get('msgs:' .. owner .. ':' .. our_id) or 0)
@@ -1915,7 +1924,10 @@ local function contact_mods(msg)
                 end
                 postpone(post_msg, false, rnd)
             else
-                send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
+                local function post_msg()
+                    send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
+                end
+                postpone(post_msg, false, rnd)
             end
         end
     end
@@ -1927,7 +1939,7 @@ local function contact_mods(msg)
         return langs[msg.lang].noGroupMods
     end
     for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
-        local rnd = math.random(1,10 )
+        local rnd = math.random(1, 10)
         if not already_contacted[tonumber(k)] then
             already_contacted[tonumber(k)] = k
             local tmpmsgs = tonumber(redis:get('msgs:' .. k .. ':' .. our_id) or 0)
@@ -1950,7 +1962,10 @@ local function contact_mods(msg)
                 end
                 postpone(post_msg, false, rnd)
             else
-                send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
+                local function post_msg()
+                    send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
+                end
+                postpone(post_msg, false, rnd)
             end
         end
     end
