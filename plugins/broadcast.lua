@@ -17,7 +17,7 @@
                 send_large_msg(chat, response)
                 send_large_msg(channel, response)
             end
-            postpone(post_msg, false, math.rnd(1, 20))
+            postpone(post_msg, false, math.random(1, 20))
         end
     end
 end
