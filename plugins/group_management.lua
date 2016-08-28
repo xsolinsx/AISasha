@@ -3890,7 +3890,7 @@ return {
         "[Pp][Ee][Ee][Rr]_[Ii][Dd]",
         "[Mm][Ss][Gg].[Tt][Oo].[Ii][Dd]",
         "[Mm][Ss][Gg].[Tt][Oo].[Pp][Ee][Ee][Rr]_[Ii][Dd]",
-        -- admins
+        -- getadmins
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Aa][Dd][Mm][Ii][Nn])$",
         "^([Ll][Ii][Ss][Tt][Aa] [Aa][Dd][Mm][Ii][Nn])$",
         -- bots
