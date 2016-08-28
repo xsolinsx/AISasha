@@ -134,8 +134,7 @@ local function plugin_syntax(var, chat, rank)
         -- '=========================\n'
         local text = ''
         -- = '=======================\n'
-        local textHash = plugin.description:lower()
-        if langs[lang][textHash] then
+        if plugin.syntax then
             for i = 1, #plugin.syntax, 1 do
                 if rank_table[plugin.syntax[i]] then
                     if rank_table[plugin.syntax[i]] > rank then
@@ -235,10 +234,12 @@ local function run(msg, matches)
     if matches[1]:lower() == "syntax" or matches[1]:lower() == "sasha sintassi" and matches[2] then
         local cmd_find = false
         for name, plugin in pairsByKeys(plugins) do
-            for k, v in pairsByKeys(plugin.syntax) do
-                if string.find(v, matches[2]:lower()) then
-                    cmd_find = true
-                    send_large_msg(get_receiver(msg), v)
+            if plugin.syntax then
+                for k, v in pairsByKeys(plugin.syntax) do
+                    if string.find(v, matches[2]:lower()) then
+                        cmd_find = true
+                        send_large_msg(get_receiver(msg), v)
+                    end
                 end
             end
         end
