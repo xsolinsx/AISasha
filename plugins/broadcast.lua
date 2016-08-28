@@ -13,8 +13,11 @@
             chat_id = v
             local chat = 'chat#id' .. chat_id
             local channel = 'channel#id' .. chat_id
-            send_large_msg(chat, response)
-            send_large_msg(channel, response)
+            local function post_msg()
+                send_large_msg(chat, response)
+                send_large_msg(channel, response)
+            end
+            postpone(post_msg, false, math.rnd(1, 10))
         end
     end
 end

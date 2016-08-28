@@ -4009,7 +4009,7 @@ return {
         "GROUPS",
         "#clean modlist|rules|about",
         "SUPERGROUPS",
-        "(#admins|[sasha] lista admin)",
+        "(#getadmins|[sasha] lista admin)",
         "#promoteadmin <id>|<username>|<reply>",
         "#demoteadmin <id>|<username>|<reply>",
         "#clean rules|about|modlist|mutelist",
