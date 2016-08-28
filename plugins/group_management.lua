@@ -1779,27 +1779,31 @@ local function disable_strict_rules(data, target, lang)
 end
 
 local function contact_mods_callback(extra, success, result)
+    local already_contacted = { }
     local msg = extra.msg
 
     -- telegram admins
     for k, v in pairsByKeys(result) do
-        if v.peer_id ~= our_id then
+        if tonumber(v.peer_id) ~= tonumber(our_id) then
             if v.print_name then
-                local tmpmsgs = tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. our_id) or 0)
-                if tmpmsgs ~= 0 then
-                    if msg.reply_id then
-                        fwd_msg('user#id' .. v.peer_id, msg.reply_id, ok_cb, false)
-                    end
-                    local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-                    if msg.from.username then
-                        text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+                if not already_contacted[tonumber(v.peer_id)] then
+                    already_contacted[tonumber(v.peer_id)] = v.peer_id
+                    local tmpmsgs = tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. our_id) or 0)
+                    if tmpmsgs ~= 0 then
+                        if msg.reply_id then
+                            fwd_msg('user#id' .. v.peer_id, msg.reply_id, ok_cb, false)
+                        end
+                        local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+                        if msg.from.username then
+                            text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+                        else
+                            text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                        end
+                        text = text .. langs[msg.lang].msgText .. msg.text
+                        send_large_msg('user#id' .. v.peer_id, text)
                     else
-                        text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                        send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v.peer_id)
                     end
-                    text = text .. langs[msg.lang].msgText .. msg.text
-                    send_large_msg('user#id' .. v.peer_id, text)
-                else
-                    send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v.peer_id)
                 end
             end
         end
@@ -1810,21 +1814,24 @@ local function contact_mods_callback(extra, success, result)
     -- owner
     local owner = data[tostring(msg.to.id)]['set_owner']
     if owner then
-        local tmpmsgs = tonumber(redis:get('msgs:' .. owner .. ':' .. our_id) or 0)
-        if tmpmsgs ~= 0 then
-            if msg.reply_id then
-                fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
-            end
-            local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-            if msg.from.username then
-                text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+        if not already_contacted[tonumber(owner)] then
+            already_contacted[tonumber(owner)] = owner
+            local tmpmsgs = tonumber(redis:get('msgs:' .. owner .. ':' .. our_id) or 0)
+            if tmpmsgs ~= 0 then
+                if msg.reply_id then
+                    fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
+                end
+                local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+                if msg.from.username then
+                    text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+                else
+                    text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                end
+                text = text .. langs[msg.lang].msgText .. msg.text
+                send_large_msg('user#id' .. owner, text)
             else
-                text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
             end
-            text = text .. langs[msg.lang].msgText .. msg.text
-            send_large_msg('user#id' .. owner, text)
-        else
-            send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
         end
     end
 
@@ -1835,46 +1842,53 @@ local function contact_mods_callback(extra, success, result)
         return langs[msg.lang].noGroupMods
     end
     for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
-        local tmpmsgs = tonumber(redis:get('msgs:' .. k .. ':' .. our_id) or 0)
-        if tmpmsgs ~= 0 then
-            if msg.reply_id then
-                fwd_msg('user#id' .. k, msg.reply_id, ok_cb, false)
-            end
-            local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-            if msg.from.username then
-                text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+        if not already_contacted[tonumber(k)] then
+            already_contacted[tonumber(k)] = k
+            local tmpmsgs = tonumber(redis:get('msgs:' .. k .. ':' .. our_id) or 0)
+            if tmpmsgs ~= 0 then
+                if msg.reply_id then
+                    fwd_msg('user#id' .. k, msg.reply_id, ok_cb, false)
+                end
+                local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+                if msg.from.username then
+                    text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+                else
+                    text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                end
+                text = text .. langs[msg.lang].msgText .. msg.text
+                send_large_msg('user#id' .. k, text)
             else
-                text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
             end
-            text = text .. langs[msg.lang].msgText .. msg.text
-            send_large_msg('user#id' .. k, text)
-        else
-            send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
         end
     end
 end
 
 local function contact_mods(msg)
+    local already_contacted = { }
     local data = load_data(_config.moderation.data)
 
     -- owner
     local owner = data[tostring(msg.to.id)]['set_owner']
     if owner then
-        local tmpmsgs = tonumber(redis:get('msgs:' .. owner .. ':' .. our_id) or 0)
-        if tmpmsgs ~= 0 then
-            if msg.reply_id then
-                fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
-            end
-            local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-            if msg.from.username then
-                text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+        if not already_contacted[tonumber(owner)] then
+            already_contacted[tonumber(owner)] = owner
+            local tmpmsgs = tonumber(redis:get('msgs:' .. owner .. ':' .. our_id) or 0)
+            if tmpmsgs ~= 0 then
+                if msg.reply_id then
+                    fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
+                end
+                local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+                if msg.from.username then
+                    text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+                else
+                    text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                end
+                text = text .. langs[msg.lang].msgText .. msg.text
+                send_large_msg('user#id' .. owner, text)
             else
-                text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
             end
-            text = text .. langs[msg.lang].msgText .. msg.text
-            send_large_msg('user#id' .. owner, text)
-        else
-            send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
         end
     end
 
@@ -1885,21 +1899,24 @@ local function contact_mods(msg)
         return langs[msg.lang].noGroupMods
     end
     for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
-        local tmpmsgs = tonumber(redis:get('msgs:' .. k .. ':' .. our_id) or 0)
-        if tmpmsgs ~= 0 then
-            if msg.reply_id then
-                fwd_msg('user#id' .. k, msg.reply_id, ok_cb, false)
-            end
-            local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
-            if msg.from.username then
-                text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+        if not already_contacted[tonumber(k)] then
+            already_contacted[tonumber(k)] = k
+            local tmpmsgs = tonumber(redis:get('msgs:' .. k .. ':' .. our_id) or 0)
+            if tmpmsgs ~= 0 then
+                if msg.reply_id then
+                    fwd_msg('user#id' .. k, msg.reply_id, ok_cb, false)
+                end
+                local text = langs[extra.msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
+                if msg.from.username then
+                    text = text .. '@' .. msg.from.username .. ' [' .. msg.from.id .. ']\n'
+                else
+                    text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                end
+                text = text .. langs[msg.lang].msgText .. msg.text
+                send_large_msg('user#id' .. k, text)
             else
-                text = text .. msg.from.print_name:gsub("_", " ") .. ' [' .. msg.from.id .. ']\n'
+                send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
             end
-            text = text .. langs[msg.lang].msgText .. msg.text
-            send_large_msg('user#id' .. k, text)
-        else
-            send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
         end
     end
 end
