@@ -413,7 +413,7 @@ return {
         rulesCleaned = 'Regole svuotate.',
         descriptionCleaned = 'Descrizione svuotata.',
         mutelistCleaned = 'Lista muti svuotata.',
-        cantContact = 'Non posso contattare ',
+        cantContact = 'Se non mi scrive per primo/a non posso contattare ',
         -- ex inpm.lua --
         groupsJoin = 'Gruppi:\nUsa /join <group_id> per entrare\n\n',
         realmsJoin = 'Reami:\nUsa /join <realm_id> per entrare\n\n',
@@ -1607,7 +1607,7 @@ return {
         rulesCleaned = 'Rules cleaned.',
         descriptionCleaned = 'Description cleaned.',
         mutelistCleaned = 'Mute list cleaned.',
-        cantContact = 'I can\'t contact ',
+        cantContact = 'If (s)he doesn\'t write me first I can\'t contact ',
         -- ex inpm.lua --
         groupsJoin = 'Groups:\nUse /join <group_id> to join\n\n',
         realmsJoin = 'Realm:\nUse /join <realm_id> to join\n\n',
