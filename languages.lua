@@ -413,6 +413,7 @@ return {
         rulesCleaned = 'Regole svuotate.',
         descriptionCleaned = 'Descrizione svuotata.',
         mutelistCleaned = 'Lista muti svuotata.',
+        cantContact = 'Non posso contattare ',
         -- ex inpm.lua --
         groupsJoin = 'Gruppi:\nUsa /join <group_id> per entrare\n\n',
         realmsJoin = 'Reami:\nUsa /join <realm_id> per entrare\n\n',
@@ -958,6 +959,7 @@ return {
             '(#about|sasha descrizione): Sasha mostra la descrizione del gruppo.',
             '(#modlist|[sasha] lista mod): Sasha mostra la lista dei moderatori.',
             '#owner: Sasha mostra l\'id del proprietario del gruppo.',
+            "#contactadmins [<reply>]: Sasha contatta gli admin",
             'MOD',
             '#type: Sasha manda il tipo di gruppo in cui ci si trova.',
             '#setname <group_name>: Sasha imposta il nome del gruppo con <group_name>.',
@@ -1605,6 +1607,7 @@ return {
         rulesCleaned = 'Rules cleaned.',
         descriptionCleaned = 'Description cleaned.',
         mutelistCleaned = 'Mute list cleaned.',
+        cantContact = 'I can\'t contact ',
         -- ex inpm.lua --
         groupsJoin = 'Groups:\nUse /join <group_id> to join\n\n',
         realmsJoin = 'Realm:\nUse /join <realm_id> to join\n\n',
@@ -2127,6 +2130,7 @@ return {
             '(#about|sasha descrizione): Sasha sends group\'s about.',
             '(#modlist|[sasha] lista mod): Sasha sends moderators list.',
             '#owner: Sasha sends owner\'s id.',
+            "#contactadmins [<reply>]: Sasha contacts admins",
             'MOD',
             '#type: Sasha manda il tipo di gruppo in cui ci si trova.',
             '#setname <group_name>: Sasha changes group\'s name with <group_name>.',

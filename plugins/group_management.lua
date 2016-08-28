@@ -1778,17 +1778,39 @@ local function disable_strict_rules(data, target, lang)
     end
 end
 
-local function contact_mods(msg)
+local function contact_mods_callback(extra, success, result)
+    local msg = extra.msg
+
+    -- telegram admins
+    for k, v in pairsByKeys(result) do
+        if v.print_name then
+            local tmpmsgs = tonumber(redis:get('msgs:' .. v.peer_id .. ':' .. our_id) or 0)
+            if tmpmsgs ~= 0 then
+                if msg.reply_id then
+                    fwd_msg('user#id' .. v.peer_id, msg.reply_id, ok_cb, false)
+                end
+                fwd_msg('user#id' .. v.peer_id, msg.id, ok_cb, false)
+            else
+                --
+                send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v.peer_id)
+            end
+        end
+    end
+
     local data = load_data(_config.moderation.data)
 
+    -- owner
     local owner = data[tostring(msg.to.id)]['set_owner']
     if owner then
         local tmpmsgs = tonumber(redis:get('msgs:' .. owner .. ':' .. our_id) or 0)
         if tmpmsgs ~= 0 then
-            send_large_msg('user#id' .. owner, msg.text)
+            if msg.reply_id then
+                fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
+            end
+            fwd_msg('user#id' .. k, msg.id, ok_cb, false)
         else
             --
-            send_large_msg(get_receiver(msg), langs[msg.lang].cantContactMod .. owner)
+            send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
         end
     end
 
@@ -1801,10 +1823,51 @@ local function contact_mods(msg)
     for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
         local tmpmsgs = tonumber(redis:get('msgs:' .. k .. ':' .. our_id) or 0)
         if tmpmsgs ~= 0 then
-            send_large_msg('user#id' .. k, msg.text)
+            if msg.reply_id then
+                fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
+            end
+            fwd_msg('user#id' .. k, msg.id, ok_cb, false)
         else
             --
-            send_large_msg(get_receiver(msg), langs[msg.lang].cantContactMod .. v)
+            send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
+        end
+    end
+end
+
+local function contact_mods(msg)
+    local data = load_data(_config.moderation.data)
+
+    -- owner
+    local owner = data[tostring(msg.to.id)]['set_owner']
+    if owner then
+        local tmpmsgs = tonumber(redis:get('msgs:' .. owner .. ':' .. our_id) or 0)
+        if tmpmsgs ~= 0 then
+            if msg.reply_id then
+                fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
+            end
+            fwd_msg('user#id' .. k, msg.id, ok_cb, false)
+        else
+            --
+            send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
+        end
+    end
+
+    local groups = "groups"
+    -- determine if table is empty
+    if next(data[tostring(msg.to.id)]['moderators']) == nil then
+        -- fix way
+        return langs[msg.lang].noGroupMods
+    end
+    for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
+        local tmpmsgs = tonumber(redis:get('msgs:' .. k .. ':' .. our_id) or 0)
+        if tmpmsgs ~= 0 then
+            if msg.reply_id then
+                fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
+            end
+            fwd_msg('user#id' .. k, msg.id, ok_cb, false)
+        else
+            --
+            send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. v)
         end
     end
 end
@@ -1838,6 +1901,13 @@ local function run(msg, matches)
             return send_document(get_receiver(msg), "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
         else
             return langs[msg.lang].require_owner
+        end
+    end
+    if matches[1]:lower() == 'contactadmins' then
+        if msg.to.type == 'channel' then
+            return channel_get_admins(get_receiver(msg), contact_mods_callback, { receiver = get_receiver(msg), msg = msg, member_type = 'Admins' })
+        elseif msg.to.type == 'chat' then
+            return contact_mods(msg)
         end
     end
 
@@ -3731,6 +3801,7 @@ return {
         -- COMMON
         "^[#!/]([Tt][Yy][Pp][Ee])$",
         "^[#!/]([Ll][Oo][Gg])$",
+        "^[#!/]([Cc][Oo][Nn][Tt][Aa][Cc][Tt][Aa][Dd][Mm][Ii][Nn][Ss])$",
         "^[#!/]([Aa][Dd][Dd])$",
         "^[#!/]([Rr][Ee][Mm])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Ss])$",
@@ -3823,6 +3894,7 @@ return {
         "(#about|sasha descrizione)",
         "(#modlist|[sasha] lista mod)",
         "#owner",
+        "#contactadmins",
         "MOD",
         "#type",
         "#setname <group_name>",
