@@ -3881,7 +3881,7 @@ return {
         -- COMMON
         "^[#!/]([Tt][Yy][Pp][Ee])$",
         "^[#!/]([Ll][Oo][Gg])$",
-        "^[#!/]([Aa][Dd][Mm][Ii][Nn][Ss])$",
+        "^[#!/]([Aa][Dd][Mm][Ii][Nn][Ss])",
         "^[#!/]([Aa][Dd][Dd])$",
         "^[#!/]([Rr][Ee][Mm])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Ss])$",
@@ -3974,7 +3974,7 @@ return {
         "(#about|sasha descrizione)",
         "(#modlist|[sasha] lista mod)",
         "#owner",
-        "#contactadmins",
+        "#admins [<reply>|<text>]",
         "MOD",
         "#type",
         "#setname <group_name>",
