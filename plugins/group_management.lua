@@ -2002,7 +2002,7 @@ local function run(msg, matches)
             return langs[msg.lang].require_owner
         end
     end
-    if matches[1]:lower() == 'contactadmins' then
+    if matches[1]:lower() == 'admins' then
         if msg.to.type == 'channel' then
             return channel_get_admins(get_receiver(msg), contact_mods_callback, { msg = msg })
         elseif msg.to.type == 'chat' then
@@ -3067,7 +3067,7 @@ local function run(msg, matches)
             end
         end
         if data[tostring(msg.to.id)] then
-            if matches[1]:lower() == "admins" or matches[1]:lower() == "sasha lista admin" or matches[1]:lower() == "lista admin" then
+            if matches[1]:lower() == "getadmins" or matches[1]:lower() == "sasha lista admin" or matches[1]:lower() == "lista admin" then
                 if is_owner(msg) then
                     member_type = 'Admins'
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup Admins list")
@@ -3877,7 +3877,7 @@ return {
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Rr][Ee][Aa][Ll][Mm])$",
 
         -- SUPERGROUP
-        "^[#!/]([Aa][Dd][Mm][Ii][Nn][Ss])$",
+        "^[#!/]([Gg][Ee][Tt][Aa][Dd][Mm][Ii][Nn][Ss])$",
         "^[#!/]([Bb][Oo][Tt][Ss])$",
         "^[#!/]([Tt][Oo][Ss][Uu][Pp][Ee][Rr])$",
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
@@ -3900,7 +3900,7 @@ return {
         -- COMMON
         "^[#!/]([Tt][Yy][Pp][Ee])$",
         "^[#!/]([Ll][Oo][Gg])$",
-        "^[#!/]([Cc][Oo][Nn][Tt][Aa][Cc][Tt][Aa][Dd][Mm][Ii][Nn][Ss])$",
+        "^[#!/]([Aa][Dd][Mm][Ii][Nn][Ss])$",
         "^[#!/]([Aa][Dd][Dd])$",
         "^[#!/]([Rr][Ee][Mm])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Ss])$",
