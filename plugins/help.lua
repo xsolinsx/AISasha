@@ -233,18 +233,21 @@ local function run(msg, matches)
     end
     if matches[1]:lower() == "syntax" or matches[1]:lower() == "sasha sintassi" and matches[2] then
         local cmd_find = false
+        local text = ''
         for name, plugin in pairsByKeys(plugins) do
             if plugin.syntax then
                 for k, v in pairsByKeys(plugin.syntax) do
                     if string.find(v, matches[2]:lower()) then
                         cmd_find = true
-                        send_large_msg(get_receiver(msg), v)
+                        text = text .. v .. '\n'
                     end
                 end
             end
         end
         if not cmd_find then
             send_large_msg(get_receiver(msg), langs[msg.lang].commandNotFound)
+        else
+            send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. text)
         end
     end
 end
