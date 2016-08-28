@@ -414,7 +414,7 @@ local function run(msg, matches)
         end
     end
     local receiver = get_receiver(msg)
-    if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' then
+    if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' or matches[1]:lower() == 'sasha esplodimi' or matches[1]:lower() == 'sasha sparami' or matches[1]:lower() == 'sasha decompilami' or matches[1]:lower() == 'sasha bannami' then
         -- /kickme
         if msg.to.type == 'chat' or msg.to.type == 'channel' then
             local print_name = user_print_name(msg.from):gsub("‮", "")
