@@ -38,7 +38,10 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] [Uu][Dd] (.+)$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- (#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>",
+    },
 }

@@ -61,10 +61,12 @@ return {
         "^([Uu][Nn][Ss][Ee][Tt][Tt][Aa]) ([^%s]+)$",
     },
     run = run,
-    min_rank = 1
-    -- usage
-    -- MOD
-    -- (#unset|[sasha] unsetta) <var_name>
-    -- ADMIN
-    -- #unsetglobal <var_name>
+    min_rank = 1,
+    syntax =
+    {
+        "MOD",
+        "(#unset|[sasha] unsetta) <var_name>",
+        "ADMIN",
+        "#unsetglobal <var_name>",
+    },
 }

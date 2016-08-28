@@ -71,10 +71,10 @@ return {
         "^([Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa])$",
     },
     run = run,
-    -- min_rank = 2
-    min_rank = 3
-    -- usage
-    -- OWNER
-    -- ADMIN
-    -- (#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>|from
+    min_rank = 3,
+    syntax =
+    {
+        "ADMIN",
+        "(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>|from",
+    },
 }

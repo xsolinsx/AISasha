@@ -19,8 +19,10 @@ return {
         "^[#!/][Ww][Rr][Ii][Tt][Ii][Nn][Gg] ([Oo][Ff][Ff])$",
     },
     run = run,
-    min_rank = 4
-    -- usage
-    -- SUDO
-    -- #writing on|off
+    min_rank = 4,
+    syntax =
+    {
+        "SUDO",
+        "#writing on|off",
+    },
 }

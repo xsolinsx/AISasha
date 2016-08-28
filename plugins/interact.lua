@@ -46,8 +46,10 @@ return {
         "^([Tt][Ii] [Aa][Mm][Oo] [Ss][Aa][Ss][Hh][Aa])$",
     },
     run = run,
-    min_rank = 0
+    min_rank = 0,
+    syntax =
+    {
+        "MOD",
+        "(#echo|sasha ripeti) <text>",
+    },
 }
--- usage
--- MOD
--- (#echo|sasha ripeti) <text>

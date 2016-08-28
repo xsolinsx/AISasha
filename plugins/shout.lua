@@ -36,7 +36,10 @@ return {
         "^[Uu][Rr][Ll][Aa] (.*)$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- (#shout|[sasha] grida|[sasha] urla) <text>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#shout|[sasha] grida|[sasha] urla) <text>",
+    },
 }

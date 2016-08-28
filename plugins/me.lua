@@ -50,7 +50,10 @@ return {
     },
     run = run,
     min_rank = 0,
-    -- usage
-    -- #me
+    syntax =
+    {
+        "USER",
+        "#me",
+    },
 }
 -- idea taken from jack-telegram-bot

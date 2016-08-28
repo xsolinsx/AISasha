@@ -190,12 +190,14 @@ return {
         "^([Aa][Nn][Nn][Uu][Ll][Ll][Aa])$",
     },
     run = run,
-    min_rank = 1
-    -- usage
-    -- MOD
-    -- (#set|[sasha] setta) <var_name> <text>
-    -- (#setmedia|[sasha] setta media) <var_name>
-    -- (#cancel|[sasha] annulla)
-    -- ADMIN
-    -- #setglobal <var_name> <text>
+    min_rank = 1,
+    syntax =
+    {
+        "MOD",
+        "(#set|[sasha] setta) <var_name> <text>",
+        "(#setmedia|[sasha] setta media) <var_name>",
+        "(#cancel|[sasha] annulla)",
+        "ADMIN",
+        "#setglobal <var_name> <text>",
+    },
 }

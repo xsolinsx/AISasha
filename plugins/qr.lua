@@ -75,7 +75,10 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] [Qq][Rr] (.+)$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- (#qr|sasha qr) [\"<background_color>\" \"<data_color>\"] <text>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#qr|sasha qr) [\"<background_color>\" \"<data_color>\"] <text>",
+    },
 }

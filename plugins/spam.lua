@@ -40,8 +40,10 @@ return {
         "^([Ss][Pp][Aa][Mm][Mm][Aa]) (.+)$",
     },
     run = run,
-    min_rank = 2
-    -- usage
-    -- OWNER
-    -- (#spam|[sasha] spamma) [<messages> <seconds>] <text>
+    min_rank = 2,
+    syntax =
+    {
+        "OWNER",
+        "(#spam|[sasha] spamma) [<messages> <seconds>] <text>",
+    },
 }

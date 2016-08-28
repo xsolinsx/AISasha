@@ -25,7 +25,10 @@ return {
         "^[Ee][Qq][Uu][Aa][Zz][Ii][Oo][Nn][Ee] (.+)$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- (#tex|[sasha] equazione) <equation>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#tex|[sasha] equazione) <equation>",
+    },
 }

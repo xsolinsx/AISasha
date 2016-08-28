@@ -113,22 +113,24 @@ return {
         "^[#!/]([Dd][Oo][Ww][Nn][Ll][Oo][Aa][Dd])"
     },
     run = run,
-    min_rank = 4
-    -- usage
-    -- SUDO
-    -- #folder
-    -- #cd [<directory>]
-    -- #ls
-    -- #mkdir <directory>
-    -- #rmdir <directory>
-    -- #rm <file>
-    -- #touch <file>
-    -- #cat <file>
-    -- #tofile <file> <text>
-    -- #shell <command>
-    -- #cp <file> <directory>
-    -- #mv <file> <directory>
-    -- #upload <file>
-    -- #download <reply>
+    min_rank = 4,
+    syntax =
+    {
+        "SUDO",
+        "#folder",
+        "#cd [<directory>]",
+        "#ls",
+        "#mkdir <directory>",
+        "#rmdir <directory>",
+        "#rm <file>",
+        "#touch <file>",
+        "#cat <file>",
+        "#tofile <file> <text>",
+        "#shell <command>",
+        "#cp <file> <directory>",
+        "#mv <file> <directory>",
+        "#upload <file>",
+        "#download <reply>",
+    },
 }
 -- Thanks to @imandaneshi

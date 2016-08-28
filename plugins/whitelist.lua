@@ -94,9 +94,11 @@ return {
         "^[#!/]([Cc][Ll][Ee][Aa][Nn] [Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt])$"
     },
     run = run,
-    min_rank = 3
-    -- usage
-    -- ADMIN
-    -- #whitelist <id>|<username>|<reply>
-    -- #clean whitelist
+    min_rank = 3,
+    syntax =
+    {
+        "ADMIN",
+        "#whitelist <id>|<username>|<reply>",
+        "#clean whitelist",
+    },
 }

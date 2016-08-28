@@ -302,11 +302,14 @@ return {
     },
     pre_process = pre_process,
     run = run,
-    min_rank = 0
-    -- usage
-    -- (#getlist|#get|sasha lista)
-    -- (#getgloballist|#getglobal|sasha lista globali)
-    -- OWNER
-    -- #enableglobal
-    -- #disableglobal
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#getlist|#get|sasha lista)",
+        "(#getgloballist|#getglobal|sasha lista globali)",
+        "OWNER",
+        "#enableglobal",
+        "#disableglobal",
+    },
 }

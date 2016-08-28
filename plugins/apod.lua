@@ -62,9 +62,12 @@ return {
         "^[#!/]([Aa][Ss][Tt][Rr][Oo][Tt][Ee][Xx][Tt]) (%d%d%d%d%-%d%d%-%d%d)$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- #(apod|astro) [<date>]
-    -- #(apod|astro)hd [<date>]
-    -- #(apod|astro)text [<date>]
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "#(apod|astro) [<date>]",
+        "#(apod|astro)hd [<date>]",
+        "#(apod|astro)text [<date>]",
+    },
 }

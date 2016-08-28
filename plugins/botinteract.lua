@@ -126,13 +126,16 @@ return {
     },
     run = run,
     pre_process = pre_process,
-    min_rank = 0
-    -- usage
-    -- $<text>
-    -- #sendmedia
-    -- #undo
-    -- MOD
-    -- (#unsetbot|sasha rimuovi bot)
-    -- ADMIN
-    -- (#setbot|sasha imposta bot)
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "$<text>",
+        "#sendmedia",
+        "#undo",
+        "MOD",
+        "(#unsetbot|sasha rimuovi bot)",
+        "ADMIN",
+        "(#setbot|sasha imposta bot)",
+    },
 }

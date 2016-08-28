@@ -129,10 +129,12 @@ return {
     },
     pre_process = pre_process,
     run = run,
-    min_rank = 0
-    -- usage
-    -- MOD
-    -- (#tempmsg|[sasha] temporizza) <hour>|<minutes>(h|m) <minutes>|<seconds>(m|s) <text>
-    -- (#tempmsg|[sasha] temporizza) <hour> <minutes> <seconds> <text>
-    -- (#tempmsg|[sasha] temporizza) <hour>|<minutes>|<seconds>(h|m|s) <text>
+    min_rank = 0,
+    syntax =
+    {
+        "MOD",
+        "(#tempmsg|[sasha] temporizza) <hour>|<minutes>(h|m) <minutes>|<seconds>(m|s) <text>",
+        "(#tempmsg|[sasha] temporizza) <hour> <minutes> <seconds> <text>",
+        "(#tempmsg|[sasha] temporizza) <hour>|<minutes>|<seconds>(h|m|s) <text>",
+    },
 }

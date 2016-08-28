@@ -455,30 +455,32 @@ return {
     },
     run = run,
     pre_process = pre_process,
-    min_rank = 3
-    -- usage
-    -- ADMIN
-    -- (#pm|sasha messaggia) <user_id> <msg>
-    -- #import <group_link>
-    -- (#block|sasha blocca) <user_id>
-    -- (#unblock|sasha sblocca) <user_id>
-    -- (#markread|sasha segna letto) (on|off)
-    -- (#setbotphoto|sasha cambia foto)
-    -- (#updateid|sasha aggiorna longid)
-    -- (#addlog|sasha aggiungi log)
-    -- (#remlog|sasha rimuovi log)
-    -- #checkspeed
-    -- SUDO
-    -- (#contactlist|sasha lista contatti) (txt|json)
-    -- (#dialoglist|sasha lista chat) (txt|json)
-    -- (#addcontact|sasha aggiungi contatto) <phone> <name> <surname>
-    -- (#delcontact|sasha elimina contatto) <user_id>
-    -- (#sendcontact|sasha invia contatto) <phone> <name> <surname>
-    -- (#mycontact|sasha mio contatto)
-    -- (#sync_gbans|sasha sincronizza superban)
-    -- (#backup|sasha esegui backup)
-    -- (#uploadbackup|sasha invia backup)
-    -- #vardump [<reply>|<msg_id>]
+    min_rank = 3,
+    syntax =
+    {
+        "ADMIN",
+        "(#pm|sasha messaggia) <user_id> <msg>",
+        "#import <group_link>",
+        "(#block|sasha blocca) <user_id>",
+        "(#unblock|sasha sblocca) <user_id>",
+        "(#markread|sasha segna letto) (on|off)",
+        "(#setbotphoto|sasha cambia foto)",
+        "(#updateid|sasha aggiorna longid)",
+        "(#addlog|sasha aggiungi log)",
+        "(#remlog|sasha rimuovi log)",
+        "#checkspeed",
+        "SUDO",
+        "(#contactlist|sasha lista contatti) (txt|json)",
+        "(#dialoglist|sasha lista chat) (txt|json)",
+        "(#addcontact|sasha aggiungi contatto) <phone> <name> <surname>",
+        "(#delcontact|sasha elimina contatto) <user_id>",
+        "(#sendcontact|sasha invia contatto) <phone> <name> <surname>",
+        "(#mycontact|sasha mio contatto)",
+        "(#sync_gbans|sasha sincronizza superban)",
+        "(#backup|sasha esegui backup)",
+        "(#uploadbackup|sasha invia backup)",
+        "#vardump [<reply>|<msg_id>]",
+    },
 }
 -- By @imandaneshi :)
 -- https://github.com/SEEDTEAM/TeleSeed/blob/test/plugins/admin.lua

@@ -22,7 +22,10 @@ return {
         "^[Dd][Oo][Gg][Ee] (.+)$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- (#dogify|[sasha] doge) <your/words/with/slashes>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#dogify|[sasha] doge) <your/words/with/slashes>",
+    },
 }

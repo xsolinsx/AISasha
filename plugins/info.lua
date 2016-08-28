@@ -764,17 +764,20 @@ return {
     },
     run = run,
     pre_process = pre_process,
-    min_rank = 0
-    -- usage
-    -- #getrank|rango [<id>|<username>|<reply>]
-    -- (#info|[sasha] info)
-    -- #ishere <id>|<username>
-    -- (#groupinfo|[sasha] info gruppo)
-    -- MOD
-    -- (#info|[sasha] info) <id>|<username>|<reply>|from
-    -- (#who|#members|[sasha] lista membri)
-    -- (#kicked|[sasha] lista rimossi)
-    -- ADMIN
-    -- (#groupinfo|[sasha] info gruppo) <group_id>
-    -- (#grouplink|[sasha] link gruppo) <group_id>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "#getrank|rango [<id>|<username>|<reply>]",
+        "(#info|[sasha] info)",
+        "#ishere <id>|<username>",
+        "(#groupinfo|[sasha] info gruppo)",
+        "MOD",
+        "(#info|[sasha] info) <id>|<username>|<reply>|from",
+        "(#who|#members|[sasha] lista membri)",
+        "(#kicked|[sasha] lista rimossi)",
+        "ADMIN",
+        "(#groupinfo|[sasha] info gruppo) <group_id>",
+        "(#grouplink|[sasha] link gruppo) <group_id>",
+    },
 }

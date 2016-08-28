@@ -29,7 +29,10 @@ return {
         "^[/!#][Dd][Uu][Cc][Kk][Dd][Uu][Cc][Kk][Gg][Oo] (.*)",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- #duck[duck]go <terms>:Sasha cerca <terms> su DuckDuckGo.
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "#duck[duck]go <terms>:Sasha cerca <terms> su DuckDuckGo.",
+    },
 }

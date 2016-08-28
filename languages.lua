@@ -323,9 +323,8 @@ return {
         pluginListStart = 'ℹ️Lista plugin: \n\n',
         helpInfo = 'ℹ️Scrivi "!help <plugin_name>|<plugin_number>" per maggiori informazioni su quel plugin.\nℹ️O "!helpall" per mostrare tutte le informazioni.',
         errorNoPlugin = 'Questo plugin non esiste o non ha una descrizione.',
-        doYourBusiness = 'Ma una sportina di cazzi tuoi no?',
         helpIntro = 'Ogni \'#\' può essere sostituito con i simboli \'/\' o \'!\'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da \'|\' che significa "oppure".\n\n',
-        youTried = 'Ci hai provato pezzente, non avrai un help più dettagliato di quello che ti spetta.',
+        commandNotFound = 'Sintassi comando non trovata.',
 
         -- games --
         groupAlreadySignedUp = 'Gruppo già registrato.',
@@ -1046,9 +1045,10 @@ return {
             'USER',
             '(#sudolist|sasha lista sudo): Sasha manda la lista dei sudo.',
             '(#help|sasha aiuto): Sasha mostra una lista dei plugin disponibili.',
-            '(#help|#commands|sasha aiuto) <plugin_name>|<plugin_number> [<fake_rank>]: Sasha mostra l\'aiuto per il plugin specificato.',
-            '(#helpall|#allcommands|sasha aiuto tutto) [<fake_rank>]: Sasha mostra tutti i comandi di tutti i plugin.',
-            'Il parametro <fake_rank> serve per mandare l\'help di un rango più basso, i ranghi sono: USER, MOD, OWNER, ADMIN, SUDO.',
+            '(#help|sasha aiuto) <plugin_name>|<plugin_number>: Sasha mostra l\'aiuto per il plugin specificato.',
+            '(#helpall|sasha aiuto tutto): Sasha mostra tutti i comandi di tutti i plugin.',
+            '(#syntax|sasha sintassi) <filter>: Sasha mostra la sintassi dei comandi che corrispondono a <filter>.',
+            '(#syntaxall|sasha sintassi tutto): Sasha mostra la sintassi di tutti i comandi di tutti i plugin.',
         },
 
         info =
@@ -1516,9 +1516,8 @@ return {
         pluginListStart = 'ℹ️Plugins list: \n\n',
         helpInfo = 'ℹ️Write "!help <plugin_name>|<plugin_number>" for more info on that plugin.\nℹ️Or "!helpall" to have all commands.',
         errorNoPlugin = 'This plugin doesn\'t exist or doesn\'t have a description.',
-        doYourBusiness = 'Do your business!',
         helpIntro = 'Every \'#\' can be replaced with \'/\' or \'!\'.\nAll commands are Case Insensitive.\nSquare brackets means that is an optional.\nRound brackets with \'|\' means that\'s a choice".\n\n',
-        youTried = 'You tried asshole, you won\'t read an help higher than the one you deserve.',
+        commandNotFound = 'Sintassi comando non trovata.',
 
         -- games --
         groupAlreadySignedUp = 'Group already registered.',
@@ -2215,9 +2214,10 @@ return {
             'USER',
             '(#sudolist|sasha lista sudo): Sasha sends sudo list.',
             '(#help|sasha aiuto): Sasha sends a list of plugins.',
-            '(#help|#commands|sasha aiuto) <plugin_name>|<plugin_number> [<fake_rank>]: Sasha sends help of specified plugin.',
-            '(#helpall|#allcommands|sasha aiuto tutto) [<fake_rank>]: Sasha sends help of all plugins.',
-            '<fake_rank> parameter is necessary to get a help of a lower rank, ranks are: USER, MOD, OWNER, ADMIN, SUDO.',
+            '(#help|sasha aiuto) <plugin_name>|<plugin_number>: Sasha sends help of specified plugin.',
+            '(#helpall|sasha aiuto tutto): Sasha sends help of all plugins.',
+            '(#syntax|sasha sintassi) <filter>: Sasha sends syntax of all commands that matches with <filter>.',
+            '(#syntaxall|sasha sintassi tutto): Sasha sends syntax of all commands of all plugins.',
         },
 
         info =
@@ -2545,5 +2545,5 @@ return {
             '#whitelist [<id>|<username>|<reply>]: Sasha adds|removes specified user to|from whitelist, if nothing is specified Sasha sends the whitelist.',
             '#clean whitelist: Sasha cleans whitelist.',
         },
-    }
+    },
 }

@@ -22,7 +22,10 @@ return {
         "^[#!/][Ff][Ee][Ee][Dd][Bb][Aa][Cc][Kk] (.*)$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- #feedback <text>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "#feedback <text>",
+    },
 }

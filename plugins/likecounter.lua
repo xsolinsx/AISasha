@@ -204,13 +204,16 @@ return {
         "^[#!/](1[Dd][Oo][Ww][Nn])$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- #like|#1up <id>|<username>|<reply>|from
-    -- #dislike|#1down <id>|<username>|<reply>|from
-    -- #likes
-    -- SUDO
-    -- #createlikesdb
-    -- #addlikes <id> <value>
-    -- #remlikes <id> <value>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "#like|#1up <id>|<username>|<reply>|from",
+        "#dislike|#1down <id>|<username>|<reply>|from",
+        "#likes",
+        "SUDO",
+        "#createlikesdb",
+        "#addlikes <id> <value>",
+        "#remlikes <id> <value>",
+    },
 }

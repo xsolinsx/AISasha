@@ -702,30 +702,33 @@ return {
         "^[#!/]([Rr][Ii][Ff][Ii][Uu][Tt][Aa])$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- #registerme|#registrami
-    -- #deleteme|#eliminami
-    -- #ruletainfo
-    -- #mystats|#punti
-    -- #ruleta
-    -- #godruleta
-    -- #challenge|#sfida <username>|<reply>
-    -- #accept|#accetta
-    -- #reject|#rifiuta
-    -- #challengeinfo
-    -- #leaderboard
-    -- MOD
-    -- #setcaps <value>
-    -- #setchallengecaps <value>
-    -- OWNER
-    -- #setcylinder <value>
-    -- #setchallengecylinder <value>
-    -- ADMIN
-    -- #registergroupruleta|#registra gruppo ruleta
-    -- #deletegroupruleta|#elimina gruppo ruleta
-    -- SUDO
-    -- #createruletadb
-    -- #addpoints <id> <value>
-    -- #rempoints <id> <value>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "#registerme|#registrami",
+        "#deleteme|#eliminami",
+        "#ruletainfo",
+        "#mystats|#punti",
+        "#ruleta",
+        "#godruleta",
+        "#challenge|#sfida <username>|<reply>",
+        "#accept|#accetta",
+        "#reject|#rifiuta",
+        "#challengeinfo",
+        "#leaderboard",
+        "MOD",
+        "#setcaps <value>",
+        "#setchallengecaps <value>",
+        "OWNER",
+        "#setcylinder <value>",
+        "#setchallengecylinder <value>",
+        "ADMIN",
+        "#registergroupruleta|#registra gruppo ruleta",
+        "#deletegroupruleta|#elimina gruppo ruleta",
+        "SUDO",
+        "#createruletadb",
+        "#addpoints <id> <value>",
+        "#rempoints <id> <value>",
+    },
 }

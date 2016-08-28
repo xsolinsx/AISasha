@@ -230,10 +230,12 @@ return {
     },
     pre_process = pre_process,
     run = run,
-    min_rank = 1
-    -- usage
-    -- MOD
-    -- (#startflame|[sasha] flamma) <id>|<username>|<reply>|from
-    -- (#stopflame|[sasha] stop flame)
-    -- (#flameinfo|[sasha] info flame)
+    min_rank = 1,
+    syntax =
+    {
+        "MOD",
+        "(#startflame|[sasha] flamma) <id>|<username>|<reply>|from",
+        "(#stopflame|[sasha] stop flame)",
+        "(#flameinfo|[sasha] info flame)",
+    },
 }

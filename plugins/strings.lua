@@ -36,12 +36,14 @@ return {
         '^([Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- USER
-    -- (#setlang|lingua) (it|en)
-    -- OWNER
-    -- (#setlang|lingua) (it|en)
-    -- SUDO
-    -- (#reloadstrings|[sasha] aggiorna stringhe)
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#setlang|lingua) (it|en)",
+        "OWNER",
+        "(#setlang|lingua) (it|en)",
+        "SUDO",
+        "(#reloadstrings|[sasha] aggiorna stringhe)",
+    },
 }

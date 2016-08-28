@@ -143,10 +143,12 @@ return {
     },
     pre_process = pre_process,
     run = run,
-    min_rank = 0
-    -- usage
-    -- USER
-    -- (#dellist|[sasha] lista censura)
-    -- OWNER
-    -- (#delword|[sasha] censura) <word>|<pattern>
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#dellist|[sasha] lista censura)",
+        "OWNER",
+        "(#delword|[sasha] censura) <word>|<pattern>",
+    },
 }

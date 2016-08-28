@@ -33,7 +33,10 @@ return {
         "^[#!/]([Aa][Dd][Mm][Ii][Nn]) (.*)",
     },
     run = run,
-    min_rank = 1
-    -- usage
-    -- (#user|#mod|#owner|#admin) <command>
+    min_rank = 1,
+    syntax =
+    {
+        "MOD",
+        "(#user|#mod|#owner|#admin) <command>",
+    },
 }

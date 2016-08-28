@@ -459,14 +459,16 @@ return {
     cron = cron,
     run = run,
     pre_process = pre_process,
-    min_rank = 4
-    -- usage
-    -- SUDO
-    -- #createdatabase
-    -- (#dodatabase|sasha esegui database)
-    -- (#search|[sasha] cerca) <id>
-    -- (#delete|[sasha] elimina) <id>
-    -- #addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>
-    -- #addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]
-    -- #uploaddb
+    min_rank = 4,
+    syntax =
+    {
+        "SUDO",
+        "#createdatabase",
+        "(#dodatabase|sasha esegui database)",
+        "(#search|[sasha] cerca) <id>",
+        "(#delete|[sasha] elimina) <id>",
+        "#addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>",
+        "#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]",
+        "#uploaddb",
+    },
 }

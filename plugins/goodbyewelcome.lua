@@ -205,15 +205,18 @@ return {
         "^[#!/]([Kk][Ii][Cc][Kk][Dd][Ee][Ll][Ee][Tt][Ee][Dd])$",
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- #getwelcome: Sasha manda il benvenuto.
-    -- #getgoodbye: Sasha manda l'addio.
-    -- MOD
-    -- #setwelcome <text>: Sasha imposta <text> come benvenuto.
-    -- #setgoodbye <text>: Sasha imposta <text> come addio.
-    -- #unsetwelcome: Sasha elimina il benvenuto
-    -- #unsetgoodbye: Sasha elimina l'addio
-    -- #setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.
-    -- #getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "#getwelcome: Sasha manda il benvenuto.",
+        "#getgoodbye: Sasha manda l'addio.",
+        "MOD",
+        "#setwelcome <text>: Sasha imposta <text> come benvenuto.",
+        "#setgoodbye <text>: Sasha imposta <text> come addio.",
+        "#unsetwelcome: Sasha elimina il benvenuto",
+        "#unsetgoodbye: Sasha elimina l'addio",
+        "#setmemberswelcome <value>: Sasha dopo <value> membri manderà il benvenuto con le regole, se zero il benvenuto non verrà più mandato.",
+        "#getmemberswelcome: Sasha manda il numero di membri entrati dopo i quali invia il benvenuto.",
+    },
 }

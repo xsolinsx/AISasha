@@ -837,22 +837,25 @@ return {
     },
     run = run,
     pre_process = pre_process,
-    min_rank = 0
-    -- usage
-    -- (#kickme|sasha uccidimi)
-    -- MOD
-    -- (#kick|spara|[sasha] uccidi) <id>|<username>|<reply>|from
-    -- (#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>|from
-    -- (#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>|from
-    -- (#banlist|[sasha] lista ban)
-    -- #kickrandom
-    -- #kickdeleted
-    -- OWNER
-    -- #kicknouser
-    -- #kickinactive [<msgs>]
-    -- ADMIN
-    -- (#banlist|[sasha] lista ban) <group_id>
-    -- (#gban|[sasha] superbanna) <id>|<username>|<reply>|from
-    -- (#ungban|[sasha] supersbanna) <id>|<username>|<reply>|from
-    -- (#gbanlist|[sasha] lista superban)
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#kickme|sasha uccidimi)",
+        "MOD",
+        "(#kick|spara|[sasha] uccidi) <id>|<username>|<reply>|from",
+        "(#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>|from",
+        "(#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>|from",
+        "(#banlist|[sasha] lista ban)",
+        "#kickrandom",
+        "#kickdeleted",
+        "OWNER",
+        "#kicknouser",
+        "#kickinactive [<msgs>]",
+        "ADMIN",
+        "(#banlist|[sasha] lista ban) <group_id>",
+        "(#gban|[sasha] superbanna) <id>|<username>|<reply>|from",
+        "(#ungban|[sasha] supersbanna) <id>|<username>|<reply>|from",
+        "(#gbanlist|[sasha] lista superban)",
+    },
 }

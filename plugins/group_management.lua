@@ -112,7 +112,7 @@ local function killchannel(extra, success, result)
             sleep(1)
         end
     end]]
-    channel_kick('channel#id' .. extra.chat_id, 'user#id' .. our_id, ok_cb, false)
+    leave_channel('channel#id' .. extra.chat_id, ok_cb, false)
 end
 
 local function admin_promote(user, user_id, lang)
@@ -984,7 +984,7 @@ local function chat_setowner_by_username(extra, success, result)
         return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
     end
     local data = load_data(_config.moderation.data)
-    data[tostring(string.match(extra.receiver, '%d+'))]['set_owner'] = result.peer_id
+    data[tostring(string.match(extra.receiver, '%d+'))]['set_owner'] = tostring(result.peer_id)
     save_data(_config.moderation.data, data)
     send_large_msg(extra.receiver, result.peer_id .. langs[lang].setOwner)
 end
@@ -1342,7 +1342,7 @@ local function setowner_by_username(extra, success, result)
         return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
     end
     local data = load_data(_config.moderation.data)
-    data[tostring(extra.chat_id)]['set_owner'] = result.peer_id
+    data[tostring(extra.chat_id)]['set_owner'] = tostring(result.peer_id)
     save_data(_config.moderation.data, data)
     savelog(extra.chat_id, result.print_name .. " [" .. result.peer_id .. "] set as owner")
     send_large_msg(extra.receiver, result.peer_id .. langs[lang].setOwner)
@@ -1775,6 +1775,37 @@ local function disable_strict_rules(data, target, lang)
         data[tostring(target)]['settings']['strict'] = 'no'
         save_data(_config.moderation.data, data)
         return langs[lang].strictrulesUnlocked
+    end
+end
+
+local function contact_mods(msg)
+    local data = load_data(_config.moderation.data)
+
+    local owner = data[tostring(msg.to.id)]['set_owner']
+    if owner then
+        local tmpmsgs = tonumber(redis:get('msgs:' .. owner .. ':' .. our_id) or 0)
+        if tmpmsgs ~= 0 then
+            send_large_msg('user#id' .. owner, msg.text)
+        else
+            --
+            send_large_msg(get_receiver(msg), langs[msg.lang].cantContactMod .. owner)
+        end
+    end
+
+    local groups = "groups"
+    -- determine if table is empty
+    if next(data[tostring(msg.to.id)]['moderators']) == nil then
+        -- fix way
+        return langs[msg.lang].noGroupMods
+    end
+    for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
+        local tmpmsgs = tonumber(redis:get('msgs:' .. k .. ':' .. our_id) or 0)
+        if tmpmsgs ~= 0 then
+            send_large_msg('user#id' .. k, msg.text)
+        else
+            --
+            send_large_msg(get_receiver(msg), langs[msg.lang].cantContactMod .. v)
+        end
     end
 end
 
@@ -2746,7 +2777,7 @@ local function run(msg, matches)
                 if type(msg.reply_id) ~= "nil" then
                     msgr = get_message(msg.reply_id, setowner_by_reply, false)
                 elseif string.match(matches[2], '^%d+$') then
-                    data[tostring(msg.to.id)]['set_owner'] = matches[2]
+                    data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
                     save_data(_config.moderation.data, data)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
                     return matches[2] .. langs[msg.lang].setOwner
@@ -3784,98 +3815,91 @@ return {
         "^([Ll][Ii][Ss][Tt][Aa] [Uu][Tt][Ee][Nn][Tt][Ii] [Mm][Uu][Tt][Ii])$",
     },
     run = run,
-    min_rank = 0
-    -- INPM usage
-    -- ADMIN
-    -- #join <chat_id>|<alias>
-    -- #getaliaslist
-    -- #allchats
-    -- #allchatlist
-    -- #setalias <alias> <group_id>
-    -- #unsetalias <alias>
-    --
-    -- INREALM usage
-    -- ADMIN
-    -- #setgpowner <group_id> <user_id>
-    -- (#creategroup|sasha crea gruppo) <group_name>
-    -- (#createsuper|sasha crea supergruppo) <group_name>
-    -- (#createrealm|sasha crea regno) <realm_name>
-    -- #kill group|supergroup|realm <group_id>
-    -- #list admins|groups|realms
-    -- (#lock|[sasha] blocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker
-    -- (#unlock|[sasha] sblocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker
-    -- #settings <group_id>
-    -- #supersettings <group_id>
-    -- #setgprules <group_id> <text>
-    -- #setsupergroupabout <group_id> <text>
-    -- #setgroupabout <group_id> <text>
-    -- #setgpname <group_id> <group_name>
-    -- SUDO
-    -- #addadmin <user_id>|<username>
-    -- #removeadmin <user_id>|<username>
-    --
-    -- INGROUP usage
-    -- ADMIN
-    -- #add realm
-    -- #rem realm
-    -- #kill group|realm
-    --
-    -- SUPERGROUP usage
-    -- MOD
-    -- (#bots|[sasha] lista bot)
-    -- #del <reply>
-    -- OWNER
-    -- (#admins|[sasha] lista admin)
-    -- #promoteadmin <id>|<username>|<reply>
-    -- #demoteadmin <id>|<username>|<reply>
-    -- ADMIN
-    -- #tosuper
-    -- #setusername <text>
-    -- #kill supergroup
-    -- peer_id
-    -- msg.to.id
-    -- msg.to.peer_id
-    --
-    -- COMMON usage
-    -- USER
-    -- (#rules|sasha regole)
-    -- (#about|sasha descrizione)
-    -- (#modlist|[sasha] lista mod)
-    -- #owner
-    -- MOD
-    -- #type
-    -- #setname <group_name>
-    -- #setphoto
-    -- (#setrules|sasha imposta regole) <text>
-    -- (#setabout|sasha imposta descrizione) <text>
-    -- #muteuser|voce <id>|<username>|<reply>|from
-    -- (#muteslist|lista muti)
-    -- (#mutelist|lista utenti muti)
-    -- #settings
-    -- #public yes|no
-    -- (#newlink|sasha crea link)
-    -- (#link|sasha link)
-    -- #setflood <value>
-    -- GROUPS
-    -- (#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts
-    -- (#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts
-    -- SUPERGROUPS
-    -- (#lock|[sasha] blocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict
-    -- (#unlock|[sasha] sblocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict
-    -- OWNER
-    -- #log
-    -- (#setlink|sasha imposta link) <link>
-    -- (#unsetlink|sasha elimina link)
-    -- (#promote|[sasha] promuovi) <id>|<username>|<reply>
-    -- (#demote|[sasha] degrada) <id>|<username>|<reply>
-    -- #mute|silenzia all|text|documents|gifs|video|photo|audio
-    -- #unmute|ripristina all|text|documents|gifs|video|photo|audio
-    -- #setowner <id>|<username>|<reply>
-    -- GROUPS
-    -- #clean modlist|rules|about
-    -- SUPERGROUPS
-    -- #clean rules|about|modlist|mutelist
-    -- ADMIN
-    -- #add
-    -- #rem
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "(#rules|sasha regole): Sasha sends group\'s rules.",
+        "(#about|sasha descrizione): Sasha sends group\'s about.",
+        "(#modlist|[sasha] lista mod): Sasha sends moderators list.",
+        "#owner: Sasha sends owner\'s id.",
+        "MOD",
+        "#type: Sasha manda il tipo di gruppo in cui ci si trova.",
+        "#setname <group_name>: Sasha changes group\'s name with <group_name>.",
+        "#setphoto: Sasha waits for a pic to set it as group profile pic.",
+        "(#setrules|sasha imposta regole) <text>: Sasha changes group\'s rules with <text>.",
+        "(#setabout|sasha imposta descrizione) <text>: Sasha changes group\'s about with <text>.",
+        "#muteuser|voce <id>|<username>|<reply>|from: Sasha [un]mute specified user.",
+        "(#muteslist|lista muti): Sasha sends muted parameters list.",
+        "(#mutelist|lista utenti muti): Sasha sends muted users list.",
+        "#settings: Sasha sends group settings.",
+        "#public yes|no: Sasha makes group public|private.",
+        "(#newlink|sasha crea link): Sasha creates group\'s link.",
+        "(#link|sasha link): Sasha sends group\'s link.",
+        "#setflood <value>: Sasha sets <value> as max flood.",
+        "GROUPS",
+        "(#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha locks specified parameter.",
+        "(#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha unlocks specified parameter.",
+        "SUPERGROUPS",
+        "(#bots|[sasha] lista bot): Sasha sends bots list.",
+        "#del <reply>: Sasha deletes specified message.",
+        "(#lock|[sasha] blocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha locks specified parameter.",
+        "(#unlock|[sasha] sblocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict: Sasha unlocks specified parameter.",
+        "OWNER",
+        "#log: Sasha sends a file that contains group/realm log.",
+        "(#setlink|sasha imposta link) <link>: Sasha saves <link> as group\'s link.",
+        "(#unsetlink|sasha elimina link): Sasha deletes the saved link.",
+        "(#promote|[sasha] promuovi) <username>|<reply>: Sasha promotes to mod specified user.",
+        "(#demote|[sasha] degrada) <username>|<reply>: Sasha demotes from mod specified user.",
+        "#mute|silenzia all|text|documents|gifs|video|photo|audio: Sasha mute specified parameter.",
+        "#unmute|ripristina all|text|documents|gifs|video|photo|audio: Sasha unmute specified parameter.",
+        "#setowner <id>|<username>|<reply>: Sasha sets specified user as owner.",
+        "GROUPS",
+        "#clean modlist|rules|about: Sasha cleans specified parameter.",
+        "SUPERGROUPS",
+        "(#admins|[sasha] lista admin): Sasha sends telegram\'s administrators list.",
+        "#promoteadmin <id>|<username>|<reply>: Sasha promotes specified user to telegram\'s administrator.",
+        "#demoteadmin <id>|<username>|<reply>: Sasha demotes specified user from telegram\'s administrator.",
+        "#clean rules|about|modlist|mutelist: Sasha cleans specified parameter.",
+        "ADMIN",
+        "#add: Sasha adds the group in which you are.",
+        "#rem: Sasha removes the group in which you are.",
+        "ex INGROUP.LUA",
+        "#add realm: Sasha adds realm.",
+        "#rem realm: Sasha removes realm.",
+        "#kill group|realm: Sasha kicks every user in group|realm and removes it.",
+        "ex INPM.LUA",
+        "(#join|#inviteme|[sasha] invitami) <chat_id>|<alias>: Sasha tries to add the sender to <chat_id>|<alias>.",
+        "#getaliaslist: Sasha sends alias list.",
+        "#allchats: Sasha sends a list of all chats.",
+        "#allchatlist: Sasha sends a file with a list of all chats.",
+        "#setalias <alias> <group_id>: Sasha sets <alias> as alias of <group_id>.",
+        "#unsetalias <alias>: Sasha deletes <alias>.",
+        "SUPERGROUPS",
+        "#tosuper: Sasha converts group to supergroup.",
+        "#setusername <text>: Sasha changes group\'s username with <text>.",
+        "#kill supergroup: Sasha kicks every user in supergroup and removes it.",
+        "peer_id",
+        "msg.to.id",
+        "msg.to.peer_id",
+        "REALMS",
+        "#setgpowner <group_id> <user_id>: Sasha sets <user_id> as owner of <group_id>.",
+        "(#creategroup|sasha crea gruppo) <group_name>: Sasha creates a group with specified name.",
+        "(#createsuper|sasha crea supergruppo) <group_name>: Sasha creates a supergroup with specified name.",
+        "(#createrealm|sasha crea regno) <realm_name>: Sasha creates a realm with specified name.",
+        "(#setabout|sasha imposta descrizione) <group_id> <text>: Sasha changes <group_id>\'s about with <text>.",
+        "(#setrules|sasha imposta regole) <group_id> <text>: Sasha changes <group_id>\'s rules with <text>.",
+        "#setname <realm_name>: Sasha changes realm\'s name with <realm_name>.",
+        "#setname|#setgpname <group_id> <group_name>: Sasha changes <group_id>\'s name with <group_name>.",
+        "(#lock|[sasha] blocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker: Sasha locks <group_id>\'s specified setting.",
+        "(#unlock|[sasha] sblocca) <group_id> name|member|photo|flood|arabic|links|spam|rtl|sticker: Sasha unlocks <group_id>\'s specified setting.",
+        "#settings <group_id>: Sasha sends <group_id>\'s settings.",
+        "#type: Sasha sends group\'s type.",
+        "#kill group|supergroup|realm <group_id>: Sasha kicks all members of <group_id> and removes <group_id>.",
+        "#rem <group_id>: Sasha removes group.",
+        "#list admins|groups|realms: Sasha sends list of specified parameter.",
+        "SUDO",
+        "#addadmin <user_id>|<username>: Sasha promotes specified user to administrator.",
+        "#removeadmin <user_id>|<username>: Sasha demotes specified user from administrator.",
+    },
 }

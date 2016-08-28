@@ -371,13 +371,15 @@ return {
         "^([Aa][Zz][Zz][Ee][Rr][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii])$",
     },
     run = run,
-    min_rank = 1
-    -- usage
-    -- MOD
-    -- #setwarn <value>
-    -- #getwarn
-    -- (#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from
-    -- (#warn|[sasha] avverti) <id>|<username>|<reply>|from
-    -- #unwarn <id>|<username>|<reply>|from
-    -- (#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from
+    min_rank = 1,
+    syntax =
+    {
+        "MOD",
+        "#setwarn <value>",
+        "#getwarn",
+        "(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from",
+        "(#warn|[sasha] avverti) <id>|<username>|<reply>|from",
+        "#unwarn <id>|<username>|<reply>|from",
+        "(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from",
+    },
 }

@@ -37,10 +37,12 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] (%d+) ([Oo][Ff][Ff])",
     },
     run = run,
-    min_rank = 2
-    -- usage
-    -- OWNER
-    -- #bot|sasha on|off
-    -- ADMIN
-    -- #bot|sasha [<group_id>] on|off
+    min_rank = 2,
+    syntax =
+    {
+        "OWNER",
+        "#bot|sasha on|off",
+        "ADMIN",
+        "#bot|sasha [<group_id>] on|off",
+    }
 }

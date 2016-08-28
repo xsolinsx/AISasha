@@ -75,8 +75,10 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] [Ww][Ee][Bb][Ss][Hh][Oo][Tt][Tt][Aa] ([%w-_%.%?%.:/%+=&]+)$",
     },
     run = run,
-    min_rank = 1
-    -- usage
-    -- MOD
-    -- (#webshot|[sasha] webshotta) <url> [<size>]
+    min_rank = 1,
+    syntax =
+    {
+        "MOD",
+        "(#webshot|[sasha] webshotta) <url> [<size>]",
+    },
 }

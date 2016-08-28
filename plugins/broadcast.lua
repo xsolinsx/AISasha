@@ -27,10 +27,12 @@ return {
         "^[#!/]([Bb][Rr]) (%d+) (.*)$"
     },
     run = run,
-    min_rank = 3
-    -- usage
-    -- ADMIN
-    -- #br <group_id> <text>: Sasha invia <text> a <group_id>.
-    -- SUDO
-    -- #broadcast <text>: Sasha invia <text> a tutti i gruppi.
+    min_rank = 3,
+    syntax =
+    {
+        "ADMIN",
+        "#br <group_id> <text>: Sasha invia <text> a <group_id>.",
+        "SUDO",
+        "#broadcast <text>: Sasha invia <text> a tutti i gruppi.",
+    },
 }

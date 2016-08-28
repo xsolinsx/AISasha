@@ -7,7 +7,6 @@ end
 
 return {
     description = "PREPROCESS_MEDIA",
-    patterns = { },
     pre_process = pre_process,
     min_rank = 5
 }

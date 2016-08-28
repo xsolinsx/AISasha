@@ -274,15 +274,17 @@ return {
         "^[Ll][Ii][Ss][Tt][Aa] [Dd][Ii][Ss][Aa][Tt][Tt][Ii][Vv][Aa][Tt][Ii]$",
     },
     run = run,
-    min_rank = 2
-    -- usage
-    -- OWNER
-    -- (#plugins|[sasha] lista plugins)
-    -- (#disabledlist|([sasha] lista disabilitati|disattivati))
-    -- (#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> chat
-    -- (#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat
-    -- SUDO
-    -- (#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]
-    -- (#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]
-    -- (#[plugin[s]] reload|[sasha] ricarica)
+    min_rank = 2,
+    syntax =
+    {
+        "OWNER",
+        "(#plugins|[sasha] lista plugins)",
+        "(#disabledlist|([sasha] lista disabilitati|disattivati))",
+        "(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> chat",
+        "(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat",
+        "SUDO",
+        "(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]",
+        "(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]",
+        "(#[plugin[s]] reload|[sasha] ricarica)",
+    },
 }

@@ -60,7 +60,10 @@ return {
         "^[#!/][Pp][Oo][Kk][Ee][Mm][Oo][Nn] (.+)$"
     },
     run = run,
-    min_rank = 0
-    -- usage
-    -- #pokedex|#pokemon <name>|<id>: Sasha cerca il pokémon specificato e ne invia le informazioni.
+    min_rank = 0,
+    syntax =
+    {
+        "USER",
+        "#pokedex|#pokemon <name>|<id>: Sasha cerca il pokémon specificato e ne invia le informazioni.",
+    },
 }
