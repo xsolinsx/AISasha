@@ -244,19 +244,7 @@ local function run(msg, matches)
             end
         end
         if not cmd_find then
-            --
             send_large_msg(get_receiver(msg), langs[msg.lang].commandNotFound)
-        end
-
-        local temp = plugin_help(matches[2]:lower(), get_receiver(msg), get_rank(msg.from.id, msg.to.id))
-        if temp ~= nil then
-            if temp ~= '' then
-                send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. temp)
-            else
-                return langs[msg.lang].require_higher
-            end
-        else
-            return matches[2]:lower() .. langs[msg.lang].notExists
         end
     end
 end
