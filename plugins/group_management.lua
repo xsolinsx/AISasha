@@ -1807,7 +1807,7 @@ local function contact_mods_callback(extra, success, result)
             if msg.reply_id then
                 fwd_msg('user#id' .. owner, msg.reply_id, ok_cb, false)
             end
-            fwd_msg('user#id' .. k, msg.id, ok_cb, false)
+            fwd_msg('user#id' .. owner, msg.id, ok_cb, false)
         else
             --
             send_large_msg(get_receiver(msg), langs[msg.lang].cantContact .. owner)
