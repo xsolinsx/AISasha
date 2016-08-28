@@ -163,9 +163,7 @@ end
 -- Go over enabled plugins patterns.
 function match_plugins(msg)
     for name, plugin in pairs(plugins) do
-        if plugins.patterns then
-            match_plugin(plugin, name, msg)
-        end
+        match_plugin(plugin, name, msg)
     end
 end
 

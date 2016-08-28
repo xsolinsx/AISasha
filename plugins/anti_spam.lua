@@ -167,6 +167,7 @@ end
 return {
     description = "ANTI_SPAM",
     cron = cron,
+    patterns = { },
     pre_process = pre_process,
     min_rank = 5,
 }

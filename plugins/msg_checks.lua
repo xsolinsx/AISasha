@@ -458,6 +458,7 @@ end
 -- End pre_process function
 return {
     description = "MSG_CHECKS",
+    patterns = { },
     pre_process = pre_process,
     min_rank = 5
 }
