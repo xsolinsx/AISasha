@@ -2069,20 +2069,32 @@ local function run(msg, matches)
 
     -- INREALM
     if is_realm(msg) then
-        if is_admin1(msg) then
-            if (matches[1]:lower() == 'creategroup' or matches[1]:lower() == 'sasha crea gruppo') and matches[2] then
+        if (matches[1]:lower() == 'creategroup' or matches[1]:lower() == 'sasha crea gruppo') and matches[2] then
+            if is_admin1(msg) then
                 group_type = 'group'
                 return create_group(msg.from.print_name, matches[2], msg.lang)
+            else
+                return langs[msg.lang].require_admin
             end
-            if (matches[1]:lower() == 'createsuper' or matches[1]:lower() == 'sasha crea supergruppo') and matches[2] then
+        end
+        if (matches[1]:lower() == 'createsuper' or matches[1]:lower() == 'sasha crea supergruppo') and matches[2] then
+            if is_admin1(msg) then
                 group_type = 'supergroup'
                 return create_group(msg.from.print_name, matches[2], msg.lang)
+            else
+                return langs[msg.lang].require_admin
             end
-            if (matches[1]:lower() == 'createrealm' or matches[1]:lower() == 'sasha crea regno') and matches[2] then
+        end
+        if (matches[1]:lower() == 'createrealm' or matches[1]:lower() == 'sasha crea regno') and matches[2] then
+            if is_sudo(msg) then
                 group_type = 'realm'
                 return create_group(msg.from.print_name, matches[2], msg.lang)
+            else
+                return langs[msg.lang].require_sudo
             end
-            if matches[1]:lower() == 'kill' then
+        end
+        if matches[1]:lower() == 'kill' then
+            if is_admin1(msg) then
                 if matches[2]:lower() == 'group' and matches[3] then
                     print("Closing Group: " .. 'chat#id' .. matches[3])
                     chat_info('chat#id' .. matches[3], killchat, false)
@@ -2098,8 +2110,12 @@ local function run(msg, matches)
                     chat_info('chat#id' .. matches[3], killchat, false)
                     return realmrem(msg)
                 end
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'rem' and matches[2] then
+        end
+        if matches[1]:lower() == 'rem' and matches[2] then
+            if is_admin1(msg) then
                 -- Group configuration removal
                 data[tostring(matches[2])] = nil
                 save_data(_config.moderation.data, data)
@@ -2111,40 +2127,48 @@ local function run(msg, matches)
                 data[tostring(groups)][tostring(matches[2])] = nil
                 save_data(_config.moderation.data, data)
                 return send_large_msg(get_receiver(msg), langs[msg.lang].chat .. matches[2] .. langs[msg.lang].removed)
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'addadmin' then
-                if is_sudo(msg) then
-                    if string.match(matches[2], '^%d+$') then
-                        print("user " .. matches[2] .. " has been promoted as admin")
-                        return admin_promote(matches[2], matches[2], msg.lang)
-                    else
-                        return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
-                    end
+        end
+        if matches[1]:lower() == 'addadmin' then
+            if is_sudo(msg) then
+                if string.match(matches[2], '^%d+$') then
+                    print("user " .. matches[2] .. " has been promoted as admin")
+                    return admin_promote(matches[2], matches[2], msg.lang)
                 else
-                    return langs[msg.lang].require_sudo
+                    return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
                 end
+            else
+                return langs[msg.lang].require_sudo
             end
-            if matches[1]:lower() == 'removeadmin' then
-                if is_sudo(msg) then
-                    if string.match(matches[2], '^%d+$') then
-                        print("user " .. matches[2] .. " has been demoted")
-                        return admin_demote(matches[2], matches[2], msg.lang)
-                    else
-                        return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
-                    end
+        end
+        if matches[1]:lower() == 'removeadmin' then
+            if is_sudo(msg) then
+                if string.match(matches[2], '^%d+$') then
+                    print("user " .. matches[2] .. " has been demoted")
+                    return admin_demote(matches[2], matches[2], msg.lang)
                 else
-                    return langs[msg.lang].require_sudo
+                    return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
                 end
+            else
+                return langs[msg.lang].require_sudo
             end
-            if matches[1]:lower() == 'setgpowner' and matches[2] and matches[3] then
+        end
+        if matches[1]:lower() == 'setgpowner' and matches[2] and matches[3] then
+            if is_admin1(msg) then
                 data[tostring(matches[2])]['set_owner'] = matches[3]
                 save_data(_config.moderation.data, data)
                 local lang = get_lang(matches[2])
                 local text = matches[3] .. langs[lang].setOwner
                 send_large_msg("chat#id" .. matches[2], text)
                 return send_large_msg("channel#id" .. matches[2], text)
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'list' then
+        end
+        if matches[1]:lower() == 'list' then
+            if is_admin1(msg) then
                 if matches[2]:lower() == 'admins' then
                     return admin_list(msg.lang)
                 elseif matches[2]:lower() == 'groups' then
@@ -2172,19 +2196,23 @@ local function run(msg, matches)
                     end
                     return langs[msg.lang].realmListCreated
                 end
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1] == 'chat_add_user' then
-                if msg.service and msg.action then
-                    if msg.action.user then
-                        if msg.action.user.id ~= 202256859 then
-                            if not is_admin1(msg) and is_realm(msg) then
-                                return chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
-                            end
+        end
+        if matches[1] == 'chat_add_user' then
+            if msg.service and msg.action then
+                if msg.action.user then
+                    if msg.action.user.id ~= 202256859 then
+                        if not is_admin1(msg) and is_realm(msg) then
+                            return chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
                         end
                     end
                 end
             end
-            if (matches[1]:lower() == 'lock' or matches[1]:lower() == 'sasha blocca' or matches[1]:lower() == 'blocca') and matches[2] and matches[3] then
+        end
+        if (matches[1]:lower() == 'lock' or matches[1]:lower() == 'sasha blocca' or matches[1]:lower() == 'blocca') and matches[2] and matches[3] then
+            if is_admin1(msg) then
                 if matches[3]:lower() == 'name' then
                     return realm_lock_group_name(data, matches[2], msg.lang)
                 end
@@ -2212,8 +2240,12 @@ local function run(msg, matches)
                 if matches[3]:lower() == 'sticker' then
                     return realm_lock_group_sticker(data, matches[2], msg.lang)
                 end
+            else
+                return langs[msg.lang].require_admin
             end
-            if (matches[1]:lower() == 'unlock' or matches[1]:lower() == 'sasha sblocca' or matches[1]:lower() == 'sblocca') and matches[2] and matches[3] then
+        end
+        if (matches[1]:lower() == 'unlock' or matches[1]:lower() == 'sasha sblocca' or matches[1]:lower() == 'sblocca') and matches[2] and matches[3] then
+            if is_admin1(msg) then
                 if matches[3]:lower() == 'name' then
                     return realm_unlock_group_name(data, matches[2], msg.lang)
                 end
@@ -2241,44 +2273,72 @@ local function run(msg, matches)
                 if matches[3]:lower() == 'sticker' then
                     return realm_unlock_group_sticker(data, matches[2], msg.lang)
                 end
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'settings' and data[tostring(matches[2])]['settings'] then
+        end
+        if matches[1]:lower() == 'settings' and data[tostring(matches[2])]['settings'] then
+            if is_admin1(msg) then
                 return realm_group_settings(matches[2], msg.lang)
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'supersettings' and data[tostring(matches[2])]['settings'] then
+        end
+        if matches[1]:lower() == 'supersettings' and data[tostring(matches[2])]['settings'] then
+            if is_admin1(msg) then
                 return realm_supergroup_settings(matches[2], msg.lang)
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'setgprules' then
+        end
+        if matches[1]:lower() == 'setgprules' then
+            if is_admin1(msg) then
                 data[tostring(matches[2])]['rules'] = matches[3]
                 save_data(_config.moderation.data, data)
                 return langs[lang].newRules .. matches[3]
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'setgroupabout' and matches[2] and matches[3] and is_realm(msg) then
+        end
+        if matches[1]:lower() == 'setgroupabout' and matches[2] and matches[3] then
+            if is_admin1(msg) then
                 data[tostring(matches[2])]['description'] = matches[3]
                 save_data(_config.moderation.data, data)
                 return langs[lang].newDescription .. matches[3]
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'setsupergroupabout' and matches[2] and matches[3] and is_realm(msg) then
+        end
+        if matches[1]:lower() == 'setsupergroupabout' and matches[2] and matches[3] then
+            if is_admin1(msg) then
                 channel_set_about('channel#id' .. matches[2], matches[3], ok_cb, false)
                 data[tostring(target)]['description'] = matches[3]
                 save_data(_config.moderation.data, data)
                 return langs[msg.lang].descriptionSet .. matches[2]
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'setgpname' and is_admin(msg) then
+        end
+        if matches[1]:lower() == 'setgpname' then
+            if is_admin1(msg) then
                 data[tostring(matches[2])]['settings']['set_name'] = string.gsub(matches[3], '_', ' ')
                 save_data(_config.moderation.data, data)
                 rename_chat('chat#id' .. matches[2], data[tostring(matches[2])]['settings']['set_name'], ok_cb, false)
                 rename_channel('channel#id' .. matches[2], data[tostring(matches[2])]['settings']['set_name'], ok_cb, false)
                 return savelog(matches[3], "Group { " .. data[tostring(matches[2])]['settings']['set_name'] .. " }  name changed to [ " .. string.gsub(matches[3], '_', ' ') .. " ] by " .. name_log .. " [" .. msg.from.id .. "]")
+            else
+                return langs[msg.lang].require_admin
             end
-            if matches[1]:lower() == 'setname' and is_realm(msg) then
+        end
+        if matches[1]:lower() == 'setname' then
+            if is_admin1(msg) then
                 data[tostring(msg.to.id)]['settings']['set_name'] = string.gsub(matches[2], '_', ' ')
                 save_data(_config.moderation.data, data)
                 rename_chat('chat#id' .. msg.to.id, data[tostring(msg.to.id)]['settings']['set_name'], ok_cb, false)
                 return savelog(msg.to.id, "Realm { " .. msg.to.print_name .. " }  name changed to [ " .. string.gsub(matches[3], '_', ' ') .. " ] by " .. name_log .. " [" .. msg.from.id .. "]")
+            else
+                return langs[msg.lang].require_admin
             end
-        else
-            return langs[msg.lang].require_admin
         end
     end
 
