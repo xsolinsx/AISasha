@@ -3,27 +3,24 @@ multiple_kicks = { }
 local function set_welcome(chat_id, welcome)
     local lang = get_lang(chat_id)
     local data = load_data(_config.moderation.data)
-    local data_cat = 'welcome'
-    data[tostring(chat_id)][data_cat] = welcome
+    data[tostring(chat_id)]['welcome'] = welcome
     save_data(_config.moderation.data, data)
     return langs[lang].newWelcome .. welcome
 end
 
 local function get_welcome(chat_id)
     local data = load_data(_config.moderation.data)
-    local data_cat = 'welcome'
-    if not data[tostring(chat_id)][data_cat] then
+    if not data[tostring(chat_id)]['welcome'] then
         return ''
     end
-    local welcome = data[tostring(chat_id)][data_cat]
+    local welcome = data[tostring(chat_id)]['welcome']
     return welcome
 end
 
 local function unset_welcome(chat_id)
     local lang = get_lang(chat_id)
     local data = load_data(_config.moderation.data)
-    local data_cat = 'welcome'
-    data[tostring(chat_id)][data_cat] = ''
+    data[tostring(chat_id)]['welcome'] = ''
     save_data(_config.moderation.data, data)
     return langs[lang].welcomeRemoved
 end
@@ -31,8 +28,7 @@ end
 local function set_memberswelcome(chat_id, value)
     local lang = get_lang(chat_id)
     local data = load_data(_config.moderation.data)
-    local data_cat = 'welcomemembers'
-    data[tostring(chat_id)][data_cat] = value
+    data[tostring(chat_id)]['welcomemembers'] = value
     save_data(_config.moderation.data, data)
     return string.gsub(langs[lang].newWelcomeNumber, 'X', tostring(value))
 end
@@ -40,38 +36,34 @@ end
 local function get_memberswelcome(chat_id)
     local lang = get_lang(chat_id)
     local data = load_data(_config.moderation.data)
-    local data_cat = 'welcomemembers'
-    if not data[tostring(chat_id)][data_cat] then
+    if not data[tostring(chat_id)]['welcomemembers'] then
         return langs[lang].noSetValue
     end
-    local value = data[tostring(chat_id)][data_cat]
+    local value = data[tostring(chat_id)]['welcomemembers']
     return value
 end
 
 local function set_goodbye(chat_id, goodbye)
     local lang = get_lang(chat_id)
     local data = load_data(_config.moderation.data)
-    local data_cat = 'goodbye'
-    data[tostring(chat_id)][data_cat] = goodbye
+    data[tostring(chat_id)]['goodbye'] = goodbye
     save_data(_config.moderation.data, data)
     return langs[lang].newGoodbye .. goodbye
 end
 
 local function get_goodbye(chat_id)
     local data = load_data(_config.moderation.data)
-    local data_cat = 'goodbye'
-    if not data[tostring(chat_id)][data_cat] then
+    if not data[tostring(chat_id)]['goodbye'] then
         return ''
     end
-    local goodbye = data[tostring(chat_id)][data_cat]
+    local goodbye = data[tostring(chat_id)]['goodbye']
     return goodbye
 end
 
 local function unset_goodbye(chat_id)
     local lang = get_lang(chat_id)
     local data = load_data(_config.moderation.data)
-    local data_cat = 'goodbye'
-    data[tostring(chat_id)][data_cat] = ''
+    data[tostring(chat_id)]['goodbye'] = ''
     save_data(_config.moderation.data, data)
     return langs[lang].goodbyeRemoved
 end
@@ -79,11 +71,10 @@ end
 local function get_rules(chat_id)
     local lang = get_lang(chat_id)
     local data = load_data(_config.moderation.data)
-    local data_cat = 'rules'
-    if not data[tostring(chat_id)][data_cat] then
+    if not data[tostring(chat_id)]['rules'] then
         return langs[lang].noRules
     end
-    local rules = data[tostring(chat_id)][data_cat]
+    local rules = data[tostring(chat_id)]['rules']
     return rules
 end
 

@@ -2160,7 +2160,7 @@ local function run(msg, matches)
                 data[tostring(matches[2])]['set_owner'] = matches[3]
                 save_data(_config.moderation.data, data)
                 local lang = get_lang(matches[2])
-                local text = matches[3] .. langs[lang].setOwner
+                local text = matches[3] .. langs[msg.lang].setOwner
                 send_large_msg("chat#id" .. matches[2], text)
                 return send_large_msg("channel#id" .. matches[2], text)
             else
@@ -2296,7 +2296,7 @@ local function run(msg, matches)
             if is_admin1(msg) then
                 data[tostring(matches[2])]['rules'] = matches[3]
                 save_data(_config.moderation.data, data)
-                return langs[lang].newRules .. matches[3]
+                return langs[msg.lang].newRules .. matches[3]
             else
                 return langs[msg.lang].require_admin
             end
@@ -2305,7 +2305,7 @@ local function run(msg, matches)
             if is_admin1(msg) then
                 data[tostring(matches[2])]['description'] = matches[3]
                 save_data(_config.moderation.data, data)
-                return langs[lang].newDescription .. matches[3]
+                return langs[msg.lang].newDescription .. matches[3]
             else
                 return langs[msg.lang].require_admin
             end
@@ -2586,7 +2586,7 @@ local function run(msg, matches)
                     data[tostring(msg.to.id)]['rules'] = matches[2]
                     save_data(_config.moderation.data, data)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] has changed group rules to [" .. matches[2] .. "]")
-                    return langs[lang].newRules .. matches[2]
+                    return langs[msg.lang].newRules .. matches[2]
                 else
                     return langs[msg.lang].require_mod
                 end
