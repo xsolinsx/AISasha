@@ -89,28 +89,10 @@ end
 
 local function run(msg, matches)
     if matches[1]:lower() == 'getwelcome' then
-        if tonumber(msg.to.id) == 1026492373 then
-            if is_momod(msg) then
-                -- moderatore del canile abusivo usa getwelcome allora ok altrimenti return
-                return get_welcome(msg.to.id)
-            else
-                return
-            end
-        else
-            return get_welcome(msg.to.id)
-        end
+        return get_welcome(msg.to.id)
     end
     if matches[1]:lower() == 'getgoodbye' then
-        if tonumber(msg.to.id) == 1026492373 then
-            if is_momod(msg) then
-                -- moderatore del canile abusivo usa getgoodbye allora ok altrimenti return
-                return get_goodbye(msg.to.id)
-            else
-                return
-            end
-        else
-            return get_goodbye(msg.to.id)
-        end
+        return get_goodbye(msg.to.id)
     end
     if matches[1]:lower() == 'setwelcome' and is_momod(msg) then
         if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
@@ -149,7 +131,7 @@ local function run(msg, matches)
         local function post_multiple_kick_false()
             multiple_kicks[tostring(msg.to.id)] = false
         end
-        postpone(post_multiple_kick_false, false, 5)
+        postpone(post_multiple_kick_false, false, 30)
     end
 
     if msg.action then

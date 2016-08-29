@@ -89,38 +89,6 @@ local function callback_id(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
-local function pre_process(msg)
-    if msg.to.type == 'chat' or msg.to.type == 'channel' then
-        local hash
-        local tokick
-        if msg.to.type == 'channel' then
-            hash = 'channel:flame' .. msg.to.id
-            tokick = 'channel:tokick' .. msg.to.id
-        end
-        if msg.to.type == 'chat' then
-            hash = 'chat:flame' .. msg.to.id
-            tokick = 'chat:tokick' .. msg.to.id
-        end
-        if tostring(msg.from.id) == tostring(redis:get(tokick)) then
-            redis:incr(hash)
-            local hashonredis = redis:get(hash)
-            if hashonredis then
-                reply_msg(msg.id, langs.phrases.flame[tonumber(hashonredis)], ok_cb, false)
-                if tonumber(hashonredis) == #langs.phrases.flame then
-                    local user_id = redis:get(tokick)
-                    local function post_kick()
-                        kick_user_any(user_id, msg.to.id)
-                    end
-                    postpone(post_kick, false, 3)
-                    redis:del(hash)
-                    redis:del(tokick)
-                end
-            end
-        end
-    end
-    return msg
-end
-
 local function run(msg, matches)
     if msg.to.type == 'chat' or msg.to.type == 'channel' then
         if is_momod(msg) then
@@ -206,6 +174,38 @@ local function run(msg, matches)
     else
         return langs[msg.lang].useYourGroups
     end
+end
+
+local function pre_process(msg)
+    if msg.to.type == 'chat' or msg.to.type == 'channel' then
+        local hash
+        local tokick
+        if msg.to.type == 'channel' then
+            hash = 'channel:flame' .. msg.to.id
+            tokick = 'channel:tokick' .. msg.to.id
+        end
+        if msg.to.type == 'chat' then
+            hash = 'chat:flame' .. msg.to.id
+            tokick = 'chat:tokick' .. msg.to.id
+        end
+        if tostring(msg.from.id) == tostring(redis:get(tokick)) then
+            redis:incr(hash)
+            local hashonredis = redis:get(hash)
+            if hashonredis then
+                reply_msg(msg.id, langs.phrases.flame[tonumber(hashonredis)], ok_cb, false)
+                if tonumber(hashonredis) == #langs.phrases.flame then
+                    local user_id = redis:get(tokick)
+                    local function post_kick()
+                        kick_user_any(user_id, msg.to.id)
+                    end
+                    postpone(post_kick, false, 3)
+                    redis:del(hash)
+                    redis:del(tokick)
+                end
+            end
+        end
+    end
+    return msg
 end
 
 return {

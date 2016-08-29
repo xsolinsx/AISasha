@@ -1,19 +1,21 @@
 ﻿-- Will leave the group if be added
 local function run(msg, matches)
-    local bot_id = our_id
-    local receiver = get_receiver(msg)
-    if (matches[1]:lower() == 'leave' or matches[1]:lower() == 'sasha abbandona') and is_admin1(msg) then
-        if not matches[2] then
-            chat_del_user(receiver, 'user#id' .. bot_id, ok_cb, false)
-            leave_channel(receiver, ok_cb, false)
+    if matches[1]:lower() == 'leave' or matches[1]:lower() == 'sasha abbandona' then
+        if is_admin1(msg) then
+            if not matches[2] then
+                chat_del_user(get_receiver(msg), 'user#id' .. our_id, ok_cb, false)
+                leave_channel(get_receiver(msg), ok_cb, false)
+            else
+                chat_del_user("chat#id" .. matches[2], 'user#id' .. our_id, ok_cb, false)
+                leave_channel("channel#id" .. matches[2], ok_cb, false)
+            end
         else
-            chat_del_user("chat#id" .. matches[2], 'user#id' .. bot_id, ok_cb, false)
-            leave_channel("channel#id" .. matches[2], ok_cb, false)
+            return langs[msg.lang].require_admin
         end
-    elseif msg.service and msg.action.type == "chat_add_user" and msg.action.user.id == tonumber(bot_id) and not is_admin1(msg) then
-        send_large_msg(receiver, langs[msg.lang].notMyGroup, ok_cb, false)
-        chat_del_user(receiver, 'user#id' .. bot_id, ok_cb, false)
-        leave_channel(receiver, ok_cb, false)
+    elseif msg.service and msg.action.type == "chat_add_user" and msg.action.user.id == tonumber(our_id) and not is_admin1(msg) then
+        chat_del_user(get_receiver(msg), 'user#id' .. our_id, ok_cb, false)
+        leave_channel(get_receiver(msg), ok_cb, false)
+        return langs[msg.lang].notMyGroup
     end
 end
 

@@ -1994,8 +1994,8 @@ local function run(msg, matches)
     -- INPM
     -- TODO: add lock and unlock join
     if is_sudo(msg) or msg.to.type == 'user' then
-        if is_admin1(msg) then
-            if (matches[1]:lower() == 'join' or matches[1]:lower() == 'inviteme' or matches[1]:lower() == 'sasha invitami' or matches[1]:lower() == 'invitami') and is_admin1(msg) then
+        if matches[1]:lower() == 'join' or matches[1]:lower() == 'inviteme' or matches[1]:lower() == 'sasha invitami' or matches[1]:lower() == 'invitami' then
+            if is_admin1(msg) then
                 if string.match(matches[2], '^%d+$') then
                     if not data[tostring(matches[2])] then
                         return langs[msg.lang].chatNotFound
@@ -2012,35 +2012,47 @@ local function run(msg, matches)
                         return langs[msg.lang].noAliasFound
                     end
                 end
+            else
+                return langs[msg.lang].require_admin
             end
+        end
 
-            if matches[1]:lower() == 'allchats' then
+        if matches[1]:lower() == 'allchats' then
+            if is_admin1(msg) then
                 return all_chats(msg)
+            else
+                return langs[msg.lang].require_admin
             end
+        end
 
-            if matches[1]:lower() == 'allchatslist' then
+        if matches[1]:lower() == 'allchatslist' then
+            if is_admin1(msg) then
                 all_chats(msg)
                 send_document("chat#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
                 send_document("channel#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
+            else
+                return langs[msg.lang].require_admin
             end
+        end
 
-            if matches[1]:lower() == 'setalias' then
-                if is_sudo(msg) then
-                    return set_alias(msg, matches[2]:gsub('_', ' '), matches[3])
-                else
-                    return langs[msg.lang].require_sudo
-                end
+        if matches[1]:lower() == 'setalias' then
+            if is_sudo(msg) then
+                return set_alias(msg, matches[2]:gsub('_', ' '), matches[3])
+            else
+                return langs[msg.lang].require_sudo
             end
+        end
 
-            if matches[1]:lower() == 'unsetalias' then
-                if is_sudo(msg) then
-                    return unset_alias(msg, matches[2])
-                else
-                    return langs[msg.lang].require_sudo
-                end
+        if matches[1]:lower() == 'unsetalias' then
+            if is_sudo(msg) then
+                return unset_alias(msg, matches[2])
+            else
+                return langs[msg.lang].require_sudo
             end
+        end
 
-            if matches[1]:lower() == 'getaliaslist' then
+        if matches[1]:lower() == 'getaliaslist' then
+            if is_admin1(msg) then
                 local hash = 'groupalias'
                 local names = redis:hkeys(hash)
                 local ids = redis:hvals(hash)
@@ -2049,9 +2061,9 @@ local function run(msg, matches)
                     text = text .. names[i] .. ' - ' .. ids[i] .. '\n'
                 end
                 return text
+            else
+                return langs[msg.lang].require_admin
             end
-        else
-            return langs[msg.lang].require_admin
         end
     end
 
@@ -3370,16 +3382,20 @@ local function run(msg, matches)
                         redis:del(hash)
                         return langs[msg.lang].mutelistCleaned
                     end
-                    if matches[2]:lower() == 'username' and is_admin1(msg) then
-                        local function ok_username_cb(extra, success, result)
-                            if success == 1 then
-                                send_large_msg(extra.receiver, langs[msg.lang].usernameCleaned)
-                            elseif success == 0 then
-                                send_large_msg(extra.receiver, langs[msg.lang].errorCleanUsername)
+                    if matches[2]:lower() == 'username' then
+                        if is_admin1(msg) then
+                            local function ok_username_cb(extra, success, result)
+                                if success == 1 then
+                                    send_large_msg(extra.receiver, langs[msg.lang].usernameCleaned)
+                                elseif success == 0 then
+                                    send_large_msg(extra.receiver, langs[msg.lang].errorCleanUsername)
+                                end
                             end
+                            local username = ""
+                            channel_set_username(get_receiver(msg), username, ok_username_cb, { receiver = get_receiver(msg) })
+                        else
+                            return langs[msg.lang].require_admin
                         end
-                        local username = ""
-                        channel_set_username(get_receiver(msg), username, ok_username_cb, { receiver = get_receiver(msg) })
                     end
                     if matches[2] == "bots" then
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] kicked all SuperGroup bots")
