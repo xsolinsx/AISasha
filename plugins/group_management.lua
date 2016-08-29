@@ -2204,7 +2204,8 @@ local function run(msg, matches)
             if msg.service and msg.action then
                 if msg.action.user then
                     if msg.action.user.id ~= 202256859 then
-                        if not is_admin1(msg) and is_realm(msg) then
+                        -- if not admin and not bot then
+                        if not is_admin1(msg) and not msg.from.id == our_id then
                             return chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
                         end
                     end
