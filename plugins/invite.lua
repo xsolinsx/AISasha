@@ -18,7 +18,6 @@ local function invite_from(extra, success, result)
 end
 
 local function run(msg, matches)
-    -- if is_owner(msg) then
     if is_admin1(msg) then
         local data = load_data(_config.moderation.data)
         local receiver = get_receiver(msg)
@@ -49,7 +48,6 @@ local function run(msg, matches)
             return langs[msg.lang].useYourGroups
         end
     else
-        -- return langs[msg.lang].require_owner
         return langs[msg.lang].require_admin
     end
 end
