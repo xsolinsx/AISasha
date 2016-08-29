@@ -415,9 +415,7 @@ end
 
 local function run(msg, matches)
     if msg.action then
-        if msg.action.type then
-            return
-        end
+        return
     end
     local receiver = get_receiver(msg)
     if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' or matches[1]:lower() == 'sasha esplodimi' or matches[1]:lower() == 'sasha sparami' or matches[1]:lower() == 'sasha decompilami' or matches[1]:lower() == 'sasha bannami' then
