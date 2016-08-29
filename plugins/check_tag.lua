@@ -63,8 +63,8 @@ local function callback_sudo_ids(extra, success, result)
         end
     end
     if tagged then
-        if msg.reply_id then
-            fwd_msg('user#id' .. extra.user, msg.reply_id, ok_cb, false)
+        if extra.msg.reply_id then
+            fwd_msg('user#id' .. extra.user, extra.msg.reply_id, ok_cb, false)
         end
         local text = langs[extra.msg.lang].receiver .. extra.msg.to.print_name:gsub("_", " ") .. ' [' .. extra.msg.to.id .. ']\n' .. langs[extra.msg.lang].sender
         if extra.msg.from.username then

@@ -280,10 +280,11 @@ local function kick_nouser_chat(extra, success, result)
 
     for k, v in pairs(result.members) do
         if not v.username then
-            if kicked == 20 then
-                break
+            local rnd = math.random(1000)
+            local function post_kick()
+                kick_user(v.peer_id, extra.chat_id)
             end
-            kick_user(v.peer_id, extra.chat_id)
+            postpone(post_kick, false, math.fmod(rnd, 30) + 1)
             kicked = kicked + 1
         end
     end
@@ -299,10 +300,11 @@ local function kick_nouser_channel(extra, success, result)
 
     for k, v in pairs(result) do
         if not v.username then
-            if kicked == 20 then
-                break
+            local rnd = math.random(1000)
+            local function post_kick()
+                kick_user(v.peer_id, extra.chat_id)
             end
-            kick_user(v.peer_id, extra.chat_id)
+            postpone(post_kick, false, math.fmod(rnd, 30) + 1)
             kicked = kicked + 1
         end
     end
@@ -319,10 +321,11 @@ local function kick_deleted_chat(extra, success, result)
     for k, v in pairs(result.members) do
         if not v.print_name then
             if v.peer_id then
-                if kicked == 20 then
-                    break
+                local rnd = math.random(1000)
+                local function post_kick()
+                    kick_user(v.peer_id, extra.chat_id)
                 end
-                kick_user(v.peer_id, extra.chat_id)
+                postpone(post_kick, false, math.fmod(rnd, 30) + 1)
                 kicked = kicked + 1
             end
         end
@@ -340,10 +343,11 @@ local function kick_deleted_channel(extra, success, result)
     for k, v in pairs(result) do
         if not v.print_name then
             if v.peer_id then
-                if kicked == 20 then
-                    break
+                local rnd = math.random(1000)
+                local function post_kick()
+                    kick_user(v.peer_id, extra.chat_id)
                 end
-                kick_user(v.peer_id, extra.chat_id)
+                postpone(post_kick, false, math.fmod(rnd, 30) + 1)
                 kicked = kicked + 1
             end
         end
@@ -371,10 +375,11 @@ local function kick_inactive_chat(extra, success, result)
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
             local user_info = user_msgs(v.peer_id, extra.chat_id)
             if tonumber(user_info) < tonumber(extra.num) then
-                if kicked == 20 then
-                    break
+                local rnd = math.random(1000)
+                local function post_kick()
+                    kick_user(v.peer_id, extra.chat_id)
                 end
-                kick_user(v.peer_id, extra.chat_id)
+                postpone(post_kick, false, math.fmod(rnd, 30) + 1)
                 kicked = kicked + 1
             end
         end
@@ -393,10 +398,11 @@ local function kick_inactive_channel(extra, success, result)
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
             local user_info = user_msgs(v.peer_id, extra.chat_id)
             if tonumber(user_info) < tonumber(extra.num) then
-                if kicked == 20 then
-                    break
+                local rnd = math.random(1000)
+                local function post_kick()
+                    kick_user(v.peer_id, extra.chat_id)
                 end
-                kick_user(v.peer_id, extra.chat_id)
+                postpone(post_kick, false, math.fmod(rnd, 30) + 1)
                 kicked = kicked + 1
             end
         end
