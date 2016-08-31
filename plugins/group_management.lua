@@ -2354,7 +2354,7 @@ local function run(msg, matches)
         end
         if msg.media then
             if msg.media.type == 'photo' and data[tostring(msg.to.id)] and data[tostring(msg.to.id)]['settings']['set_photo'] == 'waiting' and is_chat_msg(msg) and is_momod(msg) then
-                load_photo(msg.id, set_group_photo, msg)
+                return load_photo(msg.id, set_group_photo, msg)
             end
         end
         if matches[1] == 'chat_created' and msg.from.id == 0 and group_type == "group" then
@@ -3487,7 +3487,7 @@ local function run(msg, matches)
                     end
                     if matches[2]:lower() == 'member' then
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked member ")
-                        return lock_group_membermod(data, msg.to.id, msg.lang)
+                        return lock_group_member(data, msg.to.id, msg.lang)
                     end
                     if matches[2]:lower() == 'rtl' then
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked rtl chars. in names")
@@ -3534,7 +3534,7 @@ local function run(msg, matches)
                     end
                     if matches[2]:lower() == 'member' then
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked member ")
-                        return unlock_group_membermod(data, msg.to.id, msg.lang)
+                        return unlock_group_member(data, msg.to.id, msg.lang)
                     end
                     if matches[2]:lower() == 'rtl' then
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked RTL chars. in names")
