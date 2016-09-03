@@ -148,7 +148,7 @@ local function run(msg, matches)
                 redis:set(hash, 0)
             end
         end
-        -- if there's someone kicked in the group with multiple_kicks = true it doesn't send goodbye messages,
+        -- if there's someone kicked in the group with multiple_kicks = true it doesn't send goodbye messages
         if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) ~= '' and not multiple_kicks[tostring(msg.to.id)] then
             local function post_msg()
                 send_large_msg(get_receiver(msg), get_goodbye(msg.to.id) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)

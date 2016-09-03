@@ -77,6 +77,11 @@ function msg_valid(msg)
         end
     end
 
+    if msg.from.id == 202256859 then
+        print('\27[36mNot valid: my api bot version\27[39m')
+        return false
+    end
+
     -- Before bot was started
     if msg.date < os.time() -5 then
         print('\27[36mNot valid: old msg\27[39m')

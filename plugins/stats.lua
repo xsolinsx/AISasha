@@ -10,6 +10,16 @@ local function get_msgs_user_chat(user_id, chat_id)
     return user_info
 end
 
+-- Returns chat's total messages
+local function get_msgs_chat(chat_id)
+    local hash = 'chatmsgs:' .. msg.chat.tg_cli_id
+    local msgs = redis:get(hash)
+    if not msgs then
+        return 0
+    end
+    return msgs
+end
+
 local function clean_chat_stats(chat_id)
     local hash = 'chat:' .. chat_id .. ':users'
     local users = redis:smembers(hash)
