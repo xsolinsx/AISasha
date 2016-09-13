@@ -854,7 +854,7 @@ function is_admin1(msg)
     end
 
     -- check if executing a fakecommand, if yes confirm
-    if tonumber(user_id) <= -4 then
+    if tonumber(user_id) <= -3 then
         var = true
     end
     return var
@@ -876,7 +876,7 @@ function is_admin2(user_id)
     end
 
     -- check if executing a fakecommand, if yes confirm
-    if tonumber(user_id) <= -4 then
+    if tonumber(user_id) <= -3 then
         var = true
     end
     return var
