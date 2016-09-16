@@ -3945,9 +3945,9 @@ return {
         "^[#!/]([Ss][Ee][Tt][Uu][Ss][Ee][Rr][Nn][Aa][Mm][Ee]) (.*)$",
         "^[#!/]([Dd][Ee][Ll])$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Ss][Uu][Pp][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
-        "[Pp][Ee][Ee][Rr]_[Ii][Dd]",
-        "[Mm][Ss][Gg].[Tt][Oo].[Ii][Dd]",
-        "[Mm][Ss][Gg].[Tt][Oo].[Pp][Ee][Ee][Rr]_[Ii][Dd]",
+        "^([Pp][Ee][Ee][Rr]_[Ii][Dd])$",
+        "^([Mm][Ss][Gg].[Tt][Oo].[Ii][Dd])$",
+        "^([Mm][Ss][Gg].[Tt][Oo].[Pp][Ee][Ee][Rr]_[Ii][Dd])$",
         -- getadmins
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Aa][Dd][Mm][Ii][Nn])$",
         "^([Ll][Ii][Ss][Tt][Aa] [Aa][Dd][Mm][Ii][Nn])$",
