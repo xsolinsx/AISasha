@@ -48,11 +48,3 @@ Open ./bot/seedbot.lua and in check_tag function change my tag @EricSolinas with
 Write in pm to your bot `/installenstrings` (or `/installitstrings` if you are Italian), with that command the bot will install the text to interact, otherwise will send an error saying that it can't find the string of text
 
 Create a realm using the `!createrealm` command.
-
-Creating a LOG SuperGroup
-	-For GBan Log
-
-	1. Create a group using the `!creategroup` command.
-	2. Add two members or bots, then use `#Tosuper` to convert to a SuperSroup.
-	3. Use the `#addlog` command and your ***LOG SuperGroup(s)*** will be set.
-	Note: you can set multiple Log SuperGroups
