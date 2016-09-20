@@ -54,29 +54,32 @@ local function reject_challenge(challenged_id, chat_id)
 end
 
 local function Challenge_by_reply(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    if tonumber(result.from.peer_id) == tonumber(our_id) then
-        -- Ignore bot
-        reply_msg(extra.msg.id, langs[lang].cantChallengeMe, ok_cb, false)
-        return
-    end
-    if tonumber(extra.challenger) == tonumber(result.from.peer_id) then
-        reply_msg(extra.msg.id, langs[lang].cantChallengeYourself, ok_cb, false)
-        return
-    end
-    local challenger = ''
-    local challenged = ''
-    if extra.msg.from.username then
-        challenger = '@' .. extra.msg.from.username
+    local lang = get_lang(string.match(get_receiver(extra.msg), '%d+'))
+    if get_receiver(result) == get_receiver(extra.msg) then
+        local lang = get_lang(result.to.peer_id)
+        if tonumber(result.from.peer_id) == tonumber(our_id) then
+            -- Ignore bot
+            return reply_msg(extra.msg.id, langs[lang].cantChallengeMe, ok_cb, false)
+        end
+        if tonumber(extra.challenger) == tonumber(result.from.peer_id) then
+            return reply_msg(extra.msg.id, langs[lang].cantChallengeYourself, ok_cb, false)
+        end
+        local challenger = ''
+        local challenged = ''
+        if extra.msg.from.username then
+            challenger = '@' .. extra.msg.from.username
+        else
+            challenger = string.gsub(extra.msg.from.print_name, '_', ' ')
+        end
+        if result.from.username then
+            challenged = '@' .. result.from.username
+        else
+            challenged = string.gsub(result.from.print_name, '_', ' ')
+        end
+        start_challenge(extra.challenger, result.from.peer_id, challenger, challenged, result.to.peer_id)
     else
-        challenger = string.gsub(extra.msg.from.print_name, '_', ' ')
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
-    if result.from.username then
-        challenged = '@' .. result.from.username
-    else
-        challenged = string.gsub(result.from.print_name, '_', ' ')
-    end
-    start_challenge(extra.challenger, result.from.peer_id, challenger, challenged, result.to.peer_id)
 end
 
 local function Challenge_by_username(extra, success, result)
@@ -86,12 +89,10 @@ local function Challenge_by_username(extra, success, result)
     end
     if tonumber(result.peer_id) == tonumber(our_id) then
         -- Ignore bot
-        reply_msg(extra.msg.id, langs[lang].cantChallengeMe, ok_cb, false)
-        return
+        return reply_msg(extra.msg.id, langs[lang].cantChallengeMe, ok_cb, false)
     end
     if tonumber(extra.msg.from.id) == tonumber(result.peer_id) then
-        reply_msg(extra.msg.id, langs[lang].cantChallengeYourself, ok_cb, false)
-        return
+        return reply_msg(extra.msg.id, langs[lang].cantChallengeYourself, ok_cb, false)
     end
     local challenger = ''
     local challenged = ''

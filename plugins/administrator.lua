@@ -137,26 +137,30 @@ local function get_dialog_list_callback(extra, success, result)
 end
 
 local function vardump_msg(extra, success, result)
-    local name = 'msg'
-    if extra.name == 'reply' then
-        name = 'VARDUMP (<reply>)\n'
-    end
-    if extra.name == 'msg_id' then
-        name = 'VARDUMP (<msg_id>)\n'
-    end
-    if result.to.phone then
-        result.to.phone = ''
-    end
-    if result.from.phone then
-        result.from.phone = ''
-    end
-    if result.fwd_from then
-        if result.fwd_from.phone then
-            result.fwd_from.phone = ''
+    if get_receiver(result) == extra.receiver then
+        local name = 'msg'
+        if extra.name == 'reply' then
+            name = 'VARDUMP (<reply>)\n'
         end
+        if extra.name == 'msg_id' then
+            name = 'VARDUMP (<msg_id>)\n'
+        end
+        if result.to.phone then
+            result.to.phone = ''
+        end
+        if result.from.phone then
+            result.from.phone = ''
+        end
+        if result.fwd_from then
+            if result.fwd_from.phone then
+                result.fwd_from.phone = ''
+            end
+        end
+        local text = name .. serpent.block(result, { sortkeys = false, comment = false })
+        send_large_msg(extra.receiver, text)
+    else
+        send_large_msg(extra.receiver, langs[get_lang(string.match(extra.receiver, '^%d+$'))].oldMessage)
     end
-    local text = name .. serpent.block(result, { sortkeys = false, comment = false })
-    send_large_msg(extra.receiver, text)
 end
 
 local function run(msg, matches)

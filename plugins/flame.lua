@@ -27,21 +27,25 @@ local function flame_by_reply(extra, success, result)
     local hash
     local tokick
     local lang = get_lang(result.to.peer_id)
-    if result.to.peer_type == 'channel' then
-        hash = 'channel:flame' .. result.to.peer_id
-        tokick = 'channel:tokick' .. result.to.peer_id
-    end
-    if result.to.peer_type == 'chat' then
-        hash = 'chat:flame' .. result.to.peer_id
-        tokick = 'chat:tokick' .. result.to.peer_id
-    end
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
-        redis:set(hash, 0);
-        redis:set(tokick, result.from.peer_id);
-        send_large_msg(extra.receiver, langs[lang].hereIAm)
+    if get_receiver(result) == extra.receiver then
+        if result.to.peer_type == 'channel' then
+            hash = 'channel:flame' .. result.to.peer_id
+            tokick = 'channel:tokick' .. result.to.peer_id
+        end
+        if result.to.peer_type == 'chat' then
+            hash = 'chat:flame' .. result.to.peer_id
+            tokick = 'chat:tokick' .. result.to.peer_id
+        end
+        -- ignore higher or same rank
+        if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
+            redis:set(hash, 0);
+            redis:set(tokick, result.from.peer_id);
+            send_large_msg(extra.receiver, langs[lang].hereIAm)
+        else
+            send_large_msg(extra.receiver, langs[lang].require_rank)
+        end
     else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
@@ -49,21 +53,25 @@ local function flame_from(extra, success, result)
     local hash
     local tokick
     local lang = get_lang(result.to.peer_id)
-    if result.to.peer_type == 'channel' then
-        hash = 'channel:flame' .. result.to.peer_id
-        tokick = 'channel:tokick' .. result.to.peer_id
-    end
-    if result.to.peer_type == 'chat' then
-        hash = 'chat:flame' .. result.to.peer_id
-        tokick = 'chat:tokick' .. result.to.peer_id
-    end
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
-        redis:set(hash, 0);
-        redis:set(tokick, result.fwd_from.peer_id);
-        send_large_msg(extra.receiver, langs[lang].hereIAm)
+    if get_receiver(result) == extra.receiver then
+        if result.to.peer_type == 'channel' then
+            hash = 'channel:flame' .. result.to.peer_id
+            tokick = 'channel:tokick' .. result.to.peer_id
+        end
+        if result.to.peer_type == 'chat' then
+            hash = 'chat:flame' .. result.to.peer_id
+            tokick = 'chat:tokick' .. result.to.peer_id
+        end
+        -- ignore higher or same rank
+        if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+            redis:set(hash, 0);
+            redis:set(tokick, result.fwd_from.peer_id);
+            send_large_msg(extra.receiver, langs[lang].hereIAm)
+        else
+            send_large_msg(extra.receiver, langs[lang].require_rank)
+        end
     else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 

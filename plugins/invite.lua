@@ -8,13 +8,23 @@
 end
 
 local function invite_by_reply(extra, success, result)
-    chat_add_user(extra.receiver, 'user#id' .. result.from.peer_id, ok_cb, false)
-    channel_invite(extra.receiver, 'user#id' .. result.from.peer_id, ok_cb, false)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        chat_add_user(extra.receiver, 'user#id' .. result.from.peer_id, ok_cb, false)
+        channel_invite(extra.receiver, 'user#id' .. result.from.peer_id, ok_cb, false)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 local function invite_from(extra, success, result)
-    chat_add_user(extra.receiver, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
-    channel_invite(extra.receiver, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        chat_add_user(extra.receiver, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
+        channel_invite(extra.receiver, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 local function run(msg, matches)

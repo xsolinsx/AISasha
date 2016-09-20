@@ -3,10 +3,14 @@ local BASE_FOLDER = "/"
 
 local function callback(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if success then
-        send_large_msg(extra.receiver, langs[lang].fileDownloadedTo .. result)
+    if get_receiver(result) == extra.receiver then
+        if success then
+            send_large_msg(extra.receiver, langs[lang].fileDownloadedTo .. result)
+        else
+            send_large_msg(extra.receiver, langs[lang].errorDownloading)
+        end
     else
-        send_large_msg(extra.receiver, langs[lang].errorDownloading)
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
@@ -14,7 +18,7 @@ function run(msg, matches)
     if is_sudo(msg) then
         local folder = redis:get('folder')
         if folder then
-            receiver = get_receiver(msg)
+            local receiver = get_receiver(msg)
             if matches[1]:lower() == 'folder' then
                 return langs[msg.lang].youAreHere .. BASE_FOLDER .. folder
             end

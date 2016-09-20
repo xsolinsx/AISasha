@@ -207,6 +207,7 @@ return {
         gbanned = ' bannato globalmente.',
         ungbanned = ' unbannato globalmente.',
         autoexecDenial = 'Non puoi usare autoexec tramite un altro comando.',
+        oldMessage = 'Risposta troppo vecchia, non posso eseguire il comando, prova con "<command> <id>" o "<command> <username>" o inoltrando il messaggio desiderato e rispondendo ad esso con "<command> from".',
 
         -- seedbot.lua --
         sender = 'Mittente: ',
@@ -1398,6 +1399,7 @@ return {
         gbanned = ' globally banned.',
         ungbanned = ' globally unbanned.',
         autoexecDenial = 'You can\'t use autoexec from another command.',
+        oldMessage = 'Reply too old, I can\'t execute the command, try with "<command> <id>" or "<command> <username>" or forwarding the message and reply to it with "<command> from".',
 
         -- seedbot.lua --
         sender = 'Sender: ',

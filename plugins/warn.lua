@@ -99,26 +99,34 @@ local function warn_by_username(extra, success, result)
 end
 
 local function warn_by_reply(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
-        warn_user(result.from.peer_id, result.to.peer_id)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.from.peer_id .. " Y")
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        -- ignore higher or same rank
+        if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
+            warn_user(result.from.peer_id, result.to.peer_id)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.from.peer_id .. " Y")
+        else
+            send_large_msg(extra.receiver, langs[lang].require_rank)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.from.peer_id .. " N")
+        end
     else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.from.peer_id .. " N")
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
 local function warn_from(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
-        warn_user(result.fwd_from.peer_id, result.to.peer_id)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.fwd_from.peer_id .. " Y")
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        -- ignore higher or same rank
+        if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+            warn_user(result.fwd_from.peer_id, result.to.peer_id)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.fwd_from.peer_id .. " Y")
+        else
+            send_large_msg(extra.receiver, langs[lang].require_rank)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.fwd_from.peer_id .. " N")
+        end
     else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] warned user " .. result.fwd_from.peer_id .. " N")
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
@@ -138,26 +146,34 @@ local function unwarn_by_username(extra, success, result)
 end
 
 local function unwarn_by_reply(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
-        unwarn_user(result.from.peer_id, result.to.peer_id)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.from.peer_id .. " Y")
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        -- ignore higher or same rank
+        if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
+            unwarn_user(result.from.peer_id, result.to.peer_id)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.from.peer_id .. " Y")
+        else
+            send_large_msg(extra.receiver, langs[lang].require_rank)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.from.peer_id .. " N")
+        end
     else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.from.peer_id .. " N")
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
 local function unwarn_from(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
-        unwarn_user(result.fwd_from.peer_id, result.to.peer_id)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.fwd_from.peer_id .. " Y")
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        -- ignore higher or same rank
+        if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+            unwarn_user(result.fwd_from.peer_id, result.to.peer_id)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.fwd_from.peer_id .. " Y")
+        else
+            send_large_msg(extra.receiver, langs[lang].require_rank)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.fwd_from.peer_id .. " N")
+        end
     else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarned user " .. result.fwd_from.peer_id .. " N")
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
@@ -177,26 +193,34 @@ local function unwarnall_by_username(extra, success, result)
 end
 
 local function unwarnall_by_reply(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
-        unwarnall_user(result.from.peer_id, result.to.peer_id)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.from.peer_id .. " Y")
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        -- ignore higher or same rank
+        if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
+            unwarnall_user(result.from.peer_id, result.to.peer_id)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.from.peer_id .. " Y")
+        else
+            send_large_msg(extra.receiver, langs[lang].require_rank)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.from.peer_id .. " N")
+        end
     else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.from.peer_id .. " N")
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
 local function unwarnall_from(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
-        unwarnall_user(result.fwd_from.peer_id, result.to.peer_id)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.fwd_from.peer_id .. " Y")
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        -- ignore higher or same rank
+        if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+            unwarnall_user(result.fwd_from.peer_id, result.to.peer_id)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.fwd_from.peer_id .. " Y")
+        else
+            send_large_msg(extra.receiver, langs[lang].require_rank)
+            savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.fwd_from.peer_id .. " N")
+        end
     else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
-        savelog(result.to.peer_id, "[" .. extra.executer .. "] unwarnedall user " .. result.fwd_from.peer_id .. " N")
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
@@ -210,20 +234,29 @@ local function getWarn_by_username(extra, success, result)
 end
 
 local function getWarn_by_reply(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    get_user_warns(result.from.peer_id, result.to.peer_id)
-    savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.from.peer_id .. " Y")
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        get_user_warns(result.from.peer_id, result.to.peer_id)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.from.peer_id .. " Y")
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 local function getWarn_from(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    get_user_warns(result.fwd_from.peer_id, result.to.peer_id)
-    savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.fwd_from.peer_id .. " Y")
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        get_user_warns(result.fwd_from.peer_id, result.to.peer_id)
+        savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.fwd_from.peer_id .. " Y")
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 local function run(msg, matches)
     if msg.to.type == 'chat' or msg.to.type == 'channel' then
         if is_momod(msg) then
+            local receiver = get_receiver(msg)
             if matches[1]:lower() == 'setwarn' and matches[2] then
                 local txt = set_warn(msg.from.id, msg.to.id, matches[2])
                 if matches[2] == '0' then
@@ -242,12 +275,12 @@ local function run(msg, matches)
                     if type(msg.reply_id) ~= "nil" then
                         if matches[2] then
                             if matches[2]:lower() == 'from' then
-                                get_message(msg.reply_id, getWarn_from, { executer = msg.from.id })
+                                get_message(msg.reply_id, getWarn_from, { receiver = receiver, executer = msg.from.id })
                             else
-                                get_message(msg.reply_id, getWarn_by_reply, { executer = msg.from.id })
+                                get_message(msg.reply_id, getWarn_by_reply, { receiver = receiver, executer = msg.from.id })
                             end
                         else
-                            get_message(msg.reply_id, getWarn_by_reply, { executer = msg.from.id })
+                            get_message(msg.reply_id, getWarn_by_reply, { receiver = receiver, executer = msg.from.id })
                         end
                     elseif string.match(matches[2], '^%d+$') then
                         get_user_warns(msg.from.id, msg.to.id)

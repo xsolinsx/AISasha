@@ -37,11 +37,21 @@ local function like_by_username(extra, success, result)
 end
 
 local function like_by_reply(extra, success, result)
-    like(extra.likedata, result.to.peer_id, result.from.peer_id)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        like(extra.likedata, result.to.peer_id, result.from.peer_id)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 local function like_from(extra, success, result)
-    like(extra.likedata, result.to.peer_id, result.fwd_from.peer_id)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        like(extra.likedata, result.to.peer_id, result.fwd_from.peer_id)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 local function dislike_by_username(extra, success, result)
@@ -53,11 +63,21 @@ local function dislike_by_username(extra, success, result)
 end
 
 local function dislike_by_reply(extra, success, result)
-    dislike(extra.likedata, result.to.peer_id, result.from.peer_id)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        dislike(extra.likedata, result.to.peer_id, result.from.peer_id)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 local function dislike_from(extra, success, result)
-    dislike(extra.likedata, result.to.peer_id, result.fwd_from.peer_id)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        dislike(extra.likedata, result.to.peer_id, result.fwd_from.peer_id)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 -- Returns a table with `name`
@@ -149,13 +169,13 @@ local function run(msg, matches)
                 if type(msg.reply_id) ~= "nil" then
                     if matches[2] then
                         if matches[2]:lower() == 'from' then
-                            get_message(msg.reply_id, like_from, { likedata = likedata })
+                            get_message(msg.reply_id, like_from, { likedata = likedata, receiver = get_receiver(msg) })
                             return
                         else
-                            get_message(msg.reply_id, like_by_reply, { likedata = likedata })
+                            get_message(msg.reply_id, like_by_reply, { likedata = likedata, receiver = get_receiver(msg) })
                         end
                     else
-                        get_message(msg.reply_id, like_by_reply, { likedata = likedata })
+                        get_message(msg.reply_id, like_by_reply, { likedata = likedata, receiver = get_receiver(msg) })
                     end
                 elseif string.match(matches[2], '^%d+$') then
                     like(likedata, chat, user)
@@ -166,13 +186,13 @@ local function run(msg, matches)
                 if type(msg.reply_id) ~= "nil" then
                     if matches[2] then
                         if matches[2]:lower() == 'from' then
-                            get_message(msg.reply_id, dislike_from, { likedata = likedata })
+                            get_message(msg.reply_id, dislike_from, { likedata = likedata, receiver = get_receiver(msg) })
                             return
                         else
-                            get_message(msg.reply_id, dislike_by_reply, { likedata = likedata })
+                            get_message(msg.reply_id, dislike_by_reply, { likedata = likedata, receiver = get_receiver(msg) })
                         end
                     else
-                        get_message(msg.reply_id, dislike_by_reply, { likedata = likedata })
+                        get_message(msg.reply_id, dislike_by_reply, { likedata = likedata, receiver = get_receiver(msg) })
                     end
                 elseif string.match(matches[2], '^%d+$') then
                     dislike(likedata, chat, user)

@@ -8,9 +8,13 @@
 end
 
 local function get_rank_by_reply(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    local rank = get_rank(result.from.peer_id, result.to.peer_id)
-    send_large_msg(extra.receiver, langs[lang].rank .. reverse_rank_table[rank + 1])
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        local rank = get_rank(result.from.peer_id, result.to.peer_id)
+        send_large_msg(extra.receiver, langs[lang].rank .. reverse_rank_table[rank + 1])
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 local function callback_group_members(extra, success, result)
@@ -194,177 +198,185 @@ local function info_by_username(extra, success, result)
 end
 
 local function info_by_reply(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    local text = langs[lang].infoWord .. ' (<reply>)'
-    local action = false
-    if result.action then
-        if result.action.type ~= 'chat_add_user_link' then
-            action = true
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        local text = langs[lang].infoWord .. ' (<reply>)'
+        local action = false
+        if result.action then
+            if result.action.type ~= 'chat_add_user_link' then
+                action = true
+            end
         end
-    end
 
-    if action and result.action.user then
-        if result.action.user.first_name then
-            text = text .. langs[lang].name .. result.action.user.first_name
-        end
-        if result.action.user.real_first_name then
-            text = text .. langs[lang].name .. result.action.user.real_first_name
-        end
-        if result.action.user.last_name then
-            text = text .. langs[lang].surname .. result.action.user.last_name
-        end
-        if result.action.user.real_last_name then
-            text = text .. langs[lang].surname .. result.action.user.real_last_name
-        end
-        if result.action.user.username then
-            text = text .. langs[lang].username .. '@' .. result.action.user.username
-        end
-        -- exclude bot phone
-        if our_id ~= result.action.user.peer_id then
-            --[[
+        if action and result.action.user then
+            if result.action.user.first_name then
+                text = text .. langs[lang].name .. result.action.user.first_name
+            end
+            if result.action.user.real_first_name then
+                text = text .. langs[lang].name .. result.action.user.real_first_name
+            end
+            if result.action.user.last_name then
+                text = text .. langs[lang].surname .. result.action.user.last_name
+            end
+            if result.action.user.real_last_name then
+                text = text .. langs[lang].surname .. result.action.user.real_last_name
+            end
+            if result.action.user.username then
+                text = text .. langs[lang].username .. '@' .. result.action.user.username
+            end
+            -- exclude bot phone
+            if our_id ~= result.action.user.peer_id then
+                --[[
             if result.action.user.phone then
                 text = text .. langs[lang].phone .. '+' .. string.sub(result.action.user.phone, 1, 6) .. '******'
             end
             ]]
-        end
-        local msgs = tonumber(redis:get('msgs:' .. result.action.user.peer_id .. ':' .. result.to.peer_id) or 0)
-        text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.action.user.peer_id, result.to.peer_id) + 1] ..
-        langs[lang].date .. os.date('%c') ..
-        langs[lang].totalMessages .. msgs
-        local otherinfo = langs[lang].otherInfo
-        if is_whitelisted(result.action.user.peer_id) then
-            otherinfo = otherinfo .. 'WHITELISTED '
-        end
-        if is_gbanned(result.action.user.peer_id) then
-            otherinfo = otherinfo .. 'GBANNED '
-        end
-        if is_banned(result.action.user.peer_id, result.to.peer_id) then
-            otherinfo = otherinfo .. 'BANNED '
-        end
-        if is_muted_user(result.to.peer_id, result.action.user.peer_id) then
-            otherinfo = otherinfo .. 'MUTED '
-        end
-        if otherinfo == langs[lang].otherInfo then
-            otherinfo = otherinfo .. langs[lang].noOtherInfo
-        end
-        text = text .. otherinfo ..
-        langs[lang].peer_id .. result.action.user.peer_id ..
-        langs[lang].long_id .. result.action.user.id
-    else
-        if result.from.first_name then
-            text = text .. langs[lang].name .. result.from.first_name
-        end
-        if result.from.real_first_name then
-            text = text .. langs[lang].name .. result.from.real_first_name
-        end
-        if result.from.last_name then
-            text = text .. langs[lang].surname .. result.from.last_name
-        end
-        if result.from.real_last_name then
-            text = text .. langs[lang].surname .. result.from.real_last_name
-        end
-        if result.from.username then
-            text = text .. langs[lang].username .. '@' .. result.from.username
-        end
-        -- exclude bot phone
-        if our_id ~= result.from.peer_id then
-            --[[
+            end
+            local msgs = tonumber(redis:get('msgs:' .. result.action.user.peer_id .. ':' .. result.to.peer_id) or 0)
+            text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.action.user.peer_id, result.to.peer_id) + 1] ..
+            langs[lang].date .. os.date('%c') ..
+            langs[lang].totalMessages .. msgs
+            local otherinfo = langs[lang].otherInfo
+            if is_whitelisted(result.action.user.peer_id) then
+                otherinfo = otherinfo .. 'WHITELISTED '
+            end
+            if is_gbanned(result.action.user.peer_id) then
+                otherinfo = otherinfo .. 'GBANNED '
+            end
+            if is_banned(result.action.user.peer_id, result.to.peer_id) then
+                otherinfo = otherinfo .. 'BANNED '
+            end
+            if is_muted_user(result.to.peer_id, result.action.user.peer_id) then
+                otherinfo = otherinfo .. 'MUTED '
+            end
+            if otherinfo == langs[lang].otherInfo then
+                otherinfo = otherinfo .. langs[lang].noOtherInfo
+            end
+            text = text .. otherinfo ..
+            langs[lang].peer_id .. result.action.user.peer_id ..
+            langs[lang].long_id .. result.action.user.id
+        else
+            if result.from.first_name then
+                text = text .. langs[lang].name .. result.from.first_name
+            end
+            if result.from.real_first_name then
+                text = text .. langs[lang].name .. result.from.real_first_name
+            end
+            if result.from.last_name then
+                text = text .. langs[lang].surname .. result.from.last_name
+            end
+            if result.from.real_last_name then
+                text = text .. langs[lang].surname .. result.from.real_last_name
+            end
+            if result.from.username then
+                text = text .. langs[lang].username .. '@' .. result.from.username
+            end
+            -- exclude bot phone
+            if our_id ~= result.from.peer_id then
+                --[[
             if result.from.phone then
                 text = text .. langs[lang].phone .. '+' .. string.sub(result.from.phone, 1, 6) .. '******'
             end
             ]]
+            end
+            local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
+            text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id) + 1] ..
+            langs[lang].date .. os.date('%c') ..
+            langs[lang].totalMessages .. msgs
+            local otherinfo = langs[lang].otherInfo
+            if is_whitelisted(result.from.peer_id) then
+                otherinfo = otherinfo .. 'WHITELISTED '
+            end
+            if is_gbanned(result.from.peer_id) then
+                otherinfo = otherinfo .. 'GBANNED '
+            end
+            if is_banned(result.from.peer_id, result.to.peer_id) then
+                otherinfo = otherinfo .. 'BANNED '
+            end
+            if is_muted_user(result.to.peer_id, result.from.peer_id) then
+                otherinfo = otherinfo .. 'MUTED '
+            end
+            if otherinfo == langs[lang].otherInfo then
+                otherinfo = otherinfo .. langs[lang].noOtherInfo
+            end
+            text = text .. otherinfo ..
+            langs[lang].peer_id .. result.from.peer_id ..
+            langs[lang].long_id .. result.from.id
         end
-        local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
-        text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id) + 1] ..
-        langs[lang].date .. os.date('%c') ..
-        langs[lang].totalMessages .. msgs
-        local otherinfo = langs[lang].otherInfo
-        if is_whitelisted(result.from.peer_id) then
-            otherinfo = otherinfo .. 'WHITELISTED '
-        end
-        if is_gbanned(result.from.peer_id) then
-            otherinfo = otherinfo .. 'GBANNED '
-        end
-        if is_banned(result.from.peer_id, result.to.peer_id) then
-            otherinfo = otherinfo .. 'BANNED '
-        end
-        if is_muted_user(result.to.peer_id, result.from.peer_id) then
-            otherinfo = otherinfo .. 'MUTED '
-        end
-        if otherinfo == langs[lang].otherInfo then
-            otherinfo = otherinfo .. langs[lang].noOtherInfo
-        end
-        text = text .. otherinfo ..
-        langs[lang].peer_id .. result.from.peer_id ..
-        langs[lang].long_id .. result.from.id
+        send_large_msg(extra.receiver, text)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
-    send_large_msg(extra.receiver, text)
 end
 
 local function info_by_from(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    local text = langs[lang].infoWord .. ' (<from>)'
-    if result.fwd_from.peer_type == 'channel' then
-        if result.fwd_from.title then
-            text = text .. langs[lang].name .. result.fwd_from.title
-        end
-        if result.fwd_from.username then
-            text = text .. langs[lang].username .. '@' .. result.fwd_from.username
-        end
-        text = text .. langs[lang].date .. os.date('%c') ..
-        langs[lang].peer_id .. result.fwd_from.peer_id ..
-        langs[lang].long_id .. result.fwd_from.id
-    elseif result.fwd_from.peer_type == 'user' then
-        if result.fwd_from.first_name then
-            text = text .. langs[lang].name .. result.fwd_from.first_name
-        end
-        if result.fwd_from.real_first_name then
-            text = text .. langs[lang].name .. result.fwd_from.real_first_name
-        end
-        if result.fwd_from.last_name then
-            text = text .. langs[lang].surname .. result.fwd_from.last_name
-        end
-        if result.fwd_from.real_last_name then
-            text = text .. langs[lang].surname .. result.fwd_from.real_last_name
-        end
-        if result.fwd_from.username then
-            text = text .. langs[lang].username .. '@' .. result.fwd_from.username
-        end
-        -- exclude bot phone
-        if our_id ~= result.fwd_from.peer_id then
-            --[[
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        local text = langs[lang].infoWord .. ' (<from>)'
+        if result.fwd_from.peer_type == 'channel' then
+            if result.fwd_from.title then
+                text = text .. langs[lang].name .. result.fwd_from.title
+            end
+            if result.fwd_from.username then
+                text = text .. langs[lang].username .. '@' .. result.fwd_from.username
+            end
+            text = text .. langs[lang].date .. os.date('%c') ..
+            langs[lang].peer_id .. result.fwd_from.peer_id ..
+            langs[lang].long_id .. result.fwd_from.id
+        elseif result.fwd_from.peer_type == 'user' then
+            if result.fwd_from.first_name then
+                text = text .. langs[lang].name .. result.fwd_from.first_name
+            end
+            if result.fwd_from.real_first_name then
+                text = text .. langs[lang].name .. result.fwd_from.real_first_name
+            end
+            if result.fwd_from.last_name then
+                text = text .. langs[lang].surname .. result.fwd_from.last_name
+            end
+            if result.fwd_from.real_last_name then
+                text = text .. langs[lang].surname .. result.fwd_from.real_last_name
+            end
+            if result.fwd_from.username then
+                text = text .. langs[lang].username .. '@' .. result.fwd_from.username
+            end
+            -- exclude bot phone
+            if our_id ~= result.fwd_from.peer_id then
+                --[[
             if result.fwd_from.phone then
                 text = text .. langs[lang].phone .. '+' .. string.sub(result.fwd_from.phone, 1, 6) .. '******'
             end
             ]]
+            end
+            local msgs = tonumber(redis:get('msgs:' .. result.fwd_from.peer_id .. ':' .. result.to.peer_id) or 0)
+            text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.fwd_from.peer_id, result.to.peer_id) + 1] ..
+            langs[lang].date .. os.date('%c') ..
+            langs[lang].totalMessages .. msgs
+            local otherinfo = langs[lang].otherInfo
+            if is_whitelisted(result.fwd_from.peer_id) then
+                otherinfo = otherinfo .. 'WHITELISTED '
+            end
+            if is_gbanned(result.fwd_from.peer_id) then
+                otherinfo = otherinfo .. 'GBANNED '
+            end
+            if is_banned(result.fwd_from.peer_id, result.to.peer_id) then
+                otherinfo = otherinfo .. 'BANNED '
+            end
+            if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
+                otherinfo = otherinfo .. 'MUTED '
+            end
+            if otherinfo == langs[lang].otherInfo then
+                otherinfo = otherinfo .. langs[lang].noOtherInfo
+            end
+            text = text .. otherinfo ..
+            langs[lang].peer_id .. result.fwd_from.peer_id ..
+            langs[lang].long_id .. result.fwd_from.id
+        else
+            text = langs[lang].peerTypeUnknown
         end
-        local msgs = tonumber(redis:get('msgs:' .. result.fwd_from.peer_id .. ':' .. result.to.peer_id) or 0)
-        text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.fwd_from.peer_id, result.to.peer_id) + 1] ..
-        langs[lang].date .. os.date('%c') ..
-        langs[lang].totalMessages .. msgs
-        local otherinfo = langs[lang].otherInfo
-        if is_whitelisted(result.fwd_from.peer_id) then
-            otherinfo = otherinfo .. 'WHITELISTED '
-        end
-        if is_gbanned(result.fwd_from.peer_id) then
-            otherinfo = otherinfo .. 'GBANNED '
-        end
-        if is_banned(result.fwd_from.peer_id, result.to.peer_id) then
-            otherinfo = otherinfo .. 'BANNED '
-        end
-        if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
-            otherinfo = otherinfo .. 'MUTED '
-        end
-        if otherinfo == langs[lang].otherInfo then
-            otherinfo = otherinfo .. langs[lang].noOtherInfo
-        end
-        text = text .. otherinfo ..
-        langs[lang].peer_id .. result.fwd_from.peer_id ..
-        langs[lang].long_id .. result.fwd_from.id
+        send_large_msg(extra.receiver, text)
     else
-        text = langs[lang].peerTypeUnknown
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
-    send_large_msg(extra.receiver, text)
 end
 
 local function info_by_id(extra, success, result)

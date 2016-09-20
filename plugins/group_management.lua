@@ -809,30 +809,40 @@ local function chat_demote_by_username(extra, success, result)
 end
 
 local function promote_by_reply(extra, success, result)
-    local msg = result
-    local full_name =(msg.from.first_name or '') .. ' ' ..(msg.from.last_name or '')
-    if msg.from.username then
-        member_username = '@' .. msg.from.username
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        local msg = result
+        local full_name =(msg.from.first_name or '') .. ' ' ..(msg.from.last_name or '')
+        if msg.from.username then
+            member_username = '@' .. msg.from.username
+        else
+            member_username = full_name
+        end
+        local member_id = msg.from.peer_id
+        if msg.to.peer_type == 'chat' then
+            return promote('chat#id' .. result.to.peer_id, member_username, member_id)
+        end
     else
-        member_username = full_name
-    end
-    local member_id = msg.from.peer_id
-    if msg.to.peer_type == 'chat' then
-        return promote('chat#id' .. result.to.peer_id, member_username, member_id)
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
 local function demote_by_reply(extra, success, result)
-    local msg = result
-    local full_name =(msg.from.first_name or '') .. ' ' ..(msg.from.last_name or '')
-    if msg.from.username then
-        member_username = '@' .. msg.from.username
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        local msg = result
+        local full_name =(msg.from.first_name or '') .. ' ' ..(msg.from.last_name or '')
+        if msg.from.username then
+            member_username = '@' .. msg.from.username
+        else
+            member_username = full_name
+        end
+        local member_id = msg.from.peer_id
+        if msg.to.peer_type == 'chat' then
+            return demote('chat#id' .. result.to.peer_id, member_username, member_id)
+        end
     else
-        member_username = full_name
-    end
-    local member_id = msg.from.peer_id
-    if msg.to.peer_type == 'chat' then
-        return demote('chat#id' .. result.to.peer_id, member_username, member_id)
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
@@ -857,44 +867,52 @@ local function modlist(msg)
 end
 
 local function muteuser_by_reply(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    local user_id = -1
-    if result.service then
-        if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
-            if result.action.user then
-                user_id = result.action.user.peer_id
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        local user_id = -1
+        if result.service then
+            if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
+                if result.action.user then
+                    user_id = result.action.user.peer_id
+                end
+            end
+        else
+            user_id = result.from.peer_id
+        end
+        if user_id ~= -1 then
+            if compare_ranks(extra.executer, result.from.peer_id, string.match(extra.receiver, '%d+')) then
+                if is_muted_user(string.match(extra.receiver, '%d+'), user_id) then
+                    mute_user(string.match(extra.receiver, '%d+'), user_id)
+                    send_large_msg(extra.receiver, user_id .. langs[lang].muteUserRemove)
+                else
+                    unmute_user(string.match(extra.receiver, '%d+'), user_id)
+                    send_large_msg(extra.receiver, user_id .. langs[lang].muteUserAdd)
+                end
+            else
+                send_large_msg(extra.receiver, langs[lang].require_rank)
             end
         end
     else
-        user_id = result.from.peer_id
-    end
-    if user_id ~= -1 then
-        if compare_ranks(extra.executer, result.from.peer_id, string.match(extra.receiver, '%d+')) then
-            if is_muted_user(string.match(extra.receiver, '%d+'), user_id) then
-                mute_user(string.match(extra.receiver, '%d+'), user_id)
-                send_large_msg(extra.receiver, user_id .. langs[lang].muteUserRemove)
-            else
-                unmute_user(string.match(extra.receiver, '%d+'), user_id)
-                send_large_msg(extra.receiver, user_id .. langs[lang].muteUserAdd)
-            end
-        else
-            send_large_msg(extra.receiver, langs[lang].require_rank)
-        end
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
 local function muteuser_from(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    if compare_ranks(extra.executer, result.from.peer_id, string.match(extra.receiver, '%d+')) then
-        if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
-            unmute_user(result.to.peer_id, result.fwd_from.peer_id)
-            send_large_msg(extra.receiver, result.fwd_from.peer_id .. langs[lang].muteUserRemove)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+            if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
+                unmute_user(result.to.peer_id, result.fwd_from.peer_id)
+                send_large_msg(extra.receiver, result.fwd_from.peer_id .. langs[lang].muteUserRemove)
+            else
+                mute_user(result.to.peer_id, result.fwd_from.peer_id)
+                send_large_msg(extra.receiver, result.fwd_from.peer_id .. langs[lang].muteUserAdd)
+            end
         else
-            mute_user(result.to.peer_id, result.fwd_from.peer_id)
-            send_large_msg(extra.receiver, result.fwd_from.peer_id .. langs[lang].muteUserAdd)
+            send_large_msg(extra.receiver, langs[lang].require_rank)
         end
     else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 
@@ -968,14 +986,19 @@ local function show_group_settingsmod(target, lang)
 end
 
 local function setowner_by_reply(extra, success, result)
-    local msg = result
-    local lang = get_lang(msg.to.id)
-    local data = load_data(_config.moderation.data)
-    local name_log = msg.from.print_name:gsub("_", " ")
-    data[tostring(msg.to.id)]['set_owner'] = tostring(msg.from.id)
-    save_data(_config.moderation.data, data)
-    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. msg.from.id .. "] as owner")
-    return send_large_msg(get_receiver(msg), msg.from.print_name:gsub("_", " ") .. langs[lang].setOwner)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == extra.receiver then
+        local msg = result
+        local lang = get_lang(msg.to.id)
+        local data = load_data(_config.moderation.data)
+        local name_log = msg.from.print_name:gsub("_", " ")
+        data[tostring(msg.to.id)]['set_owner'] = tostring(msg.from.id)
+        save_data(_config.moderation.data, data)
+        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. msg.from.id .. "] as owner")
+        send_large_msg(get_receiver(msg), msg.from.print_name:gsub("_", " ") .. langs[lang].setOwner)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
 end
 
 local function chat_setowner_by_username(extra, success, result)
@@ -1102,117 +1125,122 @@ end
 
 -- Start by reply actions
 function get_message_callback(extra, success, result)
-    local get_cmd = extra.get_cmd
-    local msg = extra.msg
-    local data = load_data(_config.moderation.data)
-    local print_name = user_print_name(msg.from):gsub("?", "")
-    local name_log = print_name:gsub("_", " ")
-    if get_cmd == "del" then
-        delete_msg(result.id, ok_cb, false)
-        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted a message by reply")
-    elseif get_cmd == "promoteadmin" then
-        local user_id = result.from.peer_id
-        local channel_id = "channel#id" .. result.to.peer_id
-        channel_set_admin(channel_id, "user#id" .. user_id, ok_cb, false)
-        if result.from.username then
-            text = "@" .. result.from.username .. langs[msg.lang].promoteSupergroupMod
-        else
-            text = user_id .. langs[msg.lang].promoteSupergroupMod
-        end
-        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted: [" .. user_id .. "] as admin by reply")
-        send_large_msg(channel_id, text)
-    elseif get_cmd == "demoteadmin" then
-        local user_id = result.from.peer_id
-        local channel_id = "channel#id" .. result.to.peer_id
-        if is_admin2(result.from.peer_id) then
-            return send_large_msg(channel_id, langs[msg.lang].cantDemoteOtherAdmin)
-        end
-        channel_demote(channel_id, "user#id" .. user_id, ok_cb, false)
-        if result.from.username then
-            text = "@" .. result.from.username .. langs[msg.lang].demoteSupergroupMod
-        else
-            text = user_id .. langs[msg.lang].demoteSupergroupMod
-        end
-        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted: [" .. user_id .. "] as admin by reply")
-        send_large_msg(channel_id, text)
-    elseif get_cmd == "setowner" then
-        local group_owner = data[tostring(result.to.peer_id)]['set_owner']
-        if group_owner then
-            local channel_id = 'channel#id' .. result.to.peer_id
-            if not is_admin2(tonumber(group_owner)) then
-                local user = "user#id" .. group_owner
-                channel_demote(channel_id, user, ok_cb, false)
-            end
-            local user_id = "user#id" .. result.from.peer_id
-            channel_set_admin(channel_id, user_id, ok_cb, false)
-            data[tostring(result.to.peer_id)]['set_owner'] = tostring(result.from.peer_id)
-            save_data(_config.moderation.data, data)
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set: [" .. result.from.peer_id .. "] as owner by reply")
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_receiver(result) == get_receiver(extra.msg) then
+        local get_cmd = extra.get_cmd
+        local msg = extra.msg
+        local data = load_data(_config.moderation.data)
+        local print_name = user_print_name(msg.from):gsub("?", "")
+        local name_log = print_name:gsub("_", " ")
+        if get_cmd == "del" then
+            delete_msg(result.id, ok_cb, false)
+            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted a message by reply")
+        elseif get_cmd == "promoteadmin" then
+            local user_id = result.from.peer_id
+            local channel_id = "channel#id" .. result.to.peer_id
+            channel_set_admin(channel_id, "user#id" .. user_id, ok_cb, false)
             if result.from.username then
-                text = "@" .. result.from.username .. " " .. result.from.peer_id .. langs[msg.lang].setOwner
+                text = "@" .. result.from.username .. langs[msg.lang].promoteSupergroupMod
             else
-                text = result.from.peer_id .. langs[msg.lang].setOwner
+                text = user_id .. langs[msg.lang].promoteSupergroupMod
             end
+            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted: [" .. user_id .. "] as admin by reply")
             send_large_msg(channel_id, text)
-        end
-    elseif get_cmd == "promote" then
-        local receiver = result.to.peer_id
-        local full_name =(result.from.first_name or '') .. ' ' ..(result.from.last_name or '')
-        local member_name = full_name:gsub("?", "")
-        local member_username = member_name:gsub("_", " ")
-        if result.from.username then
-            member_username = '@' .. result.from.username
-        end
-        local member_id = result.from.peer_id
-        if result.to.peer_type == 'channel' then
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted mod: @" .. member_username .. "[" .. result.from.peer_id .. "] by reply")
-            promote2("channel#id" .. result.to.peer_id, member_username, member_id)
-            -- channel_set_mod(channel_id, user, ok_cb, false)
-        end
-    elseif get_cmd == "demote" then
-        local full_name =(result.from.first_name or '') .. ' ' ..(result.from.last_name or '')
-        local member_name = full_name:gsub("?", "")
-        local member_username = member_name:gsub("_", " ")
-        if result.from.username then
-            member_username = '@' .. result.from.username
-        end
-        local member_id = result.from.peer_id
-        -- local user = "user#id"..result.peer_id
-        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted mod: @" .. member_username .. "[" .. result.from.peer_id .. "] by reply")
-        demote2("channel#id" .. result.to.peer_id, member_username, member_id)
-        -- channel_demote(channel_id, user, ok_cb, false)
-    elseif get_cmd == 'mute_user' then
-        if result.service then
-            if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
-                if result.action.user then
-                    user_id = result.action.user.peer_id
-                end
+        elseif get_cmd == "demoteadmin" then
+            local user_id = result.from.peer_id
+            local channel_id = "channel#id" .. result.to.peer_id
+            if is_admin2(result.from.peer_id) then
+                return send_large_msg(channel_id, langs[msg.lang].cantDemoteOtherAdmin)
             end
-            if result.action.type == 'chat_add_user_link' then
-                if result.from then
-                    user_id = result.from.peer_id
-                end
-            end
-        else
-            user_id = result.from.peer_id
-        end
-        local receiver = extra.receiver
-        local chat_id = msg.to.id
-        print(user_id)
-        print(chat_id)
-
-        -- ignore higher or same rank
-        if compare_ranks(msg.from.id, user_id, chat_id) then
-            if is_muted_user(chat_id, user_id) then
-                unmute_user(chat_id, user_id)
-                send_large_msg(receiver, user_id .. langs[msg.lang].muteUserRemove)
+            channel_demote(channel_id, "user#id" .. user_id, ok_cb, false)
+            if result.from.username then
+                text = "@" .. result.from.username .. langs[msg.lang].demoteSupergroupMod
             else
-                mute_user(chat_id, user_id)
-                send_large_msg(receiver, user_id .. langs[msg.lang].muteUserAdd)
+                text = user_id .. langs[msg.lang].demoteSupergroupMod
             end
-        else
-            send_large_msg(receiver, langs[msg.lang].require_rank)
+            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted: [" .. user_id .. "] as admin by reply")
+            send_large_msg(channel_id, text)
+        elseif get_cmd == "setowner" then
+            local group_owner = data[tostring(result.to.peer_id)]['set_owner']
+            if group_owner then
+                local channel_id = 'channel#id' .. result.to.peer_id
+                if not is_admin2(tonumber(group_owner)) then
+                    local user = "user#id" .. group_owner
+                    channel_demote(channel_id, user, ok_cb, false)
+                end
+                local user_id = "user#id" .. result.from.peer_id
+                channel_set_admin(channel_id, user_id, ok_cb, false)
+                data[tostring(result.to.peer_id)]['set_owner'] = tostring(result.from.peer_id)
+                save_data(_config.moderation.data, data)
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set: [" .. result.from.peer_id .. "] as owner by reply")
+                if result.from.username then
+                    text = "@" .. result.from.username .. " " .. result.from.peer_id .. langs[msg.lang].setOwner
+                else
+                    text = result.from.peer_id .. langs[msg.lang].setOwner
+                end
+                send_large_msg(channel_id, text)
+            end
+        elseif get_cmd == "promote" then
+            local receiver = result.to.peer_id
+            local full_name =(result.from.first_name or '') .. ' ' ..(result.from.last_name or '')
+            local member_name = full_name:gsub("?", "")
+            local member_username = member_name:gsub("_", " ")
+            if result.from.username then
+                member_username = '@' .. result.from.username
+            end
+            local member_id = result.from.peer_id
+            if result.to.peer_type == 'channel' then
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted mod: @" .. member_username .. "[" .. result.from.peer_id .. "] by reply")
+                promote2("channel#id" .. result.to.peer_id, member_username, member_id)
+                -- channel_set_mod(channel_id, user, ok_cb, false)
+            end
+        elseif get_cmd == "demote" then
+            local full_name =(result.from.first_name or '') .. ' ' ..(result.from.last_name or '')
+            local member_name = full_name:gsub("?", "")
+            local member_username = member_name:gsub("_", " ")
+            if result.from.username then
+                member_username = '@' .. result.from.username
+            end
+            local member_id = result.from.peer_id
+            -- local user = "user#id"..result.peer_id
+            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted mod: @" .. member_username .. "[" .. result.from.peer_id .. "] by reply")
+            demote2("channel#id" .. result.to.peer_id, member_username, member_id)
+            -- channel_demote(channel_id, user, ok_cb, false)
+        elseif get_cmd == 'mute_user' then
+            if result.service then
+                if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
+                    if result.action.user then
+                        user_id = result.action.user.peer_id
+                    end
+                end
+                if result.action.type == 'chat_add_user_link' then
+                    if result.from then
+                        user_id = result.from.peer_id
+                    end
+                end
+            else
+                user_id = result.from.peer_id
+            end
+            local receiver = extra.receiver
+            local chat_id = msg.to.id
+            print(user_id)
+            print(chat_id)
+
+            -- ignore higher or same rank
+            if compare_ranks(msg.from.id, user_id, chat_id) then
+                if is_muted_user(chat_id, user_id) then
+                    unmute_user(chat_id, user_id)
+                    send_large_msg(receiver, user_id .. langs[msg.lang].muteUserRemove)
+                else
+                    mute_user(chat_id, user_id)
+                    send_large_msg(receiver, user_id .. langs[msg.lang].muteUserAdd)
+                end
+            else
+                send_large_msg(receiver, langs[msg.lang].require_rank)
+            end
         end
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
 end
 -- End by reply actions
@@ -1378,22 +1406,6 @@ local function callback_clean_bots(extra, success, result)
     for k, v in pairs(result) do
         local bot_id = v.peer_id
         kick_user(bot_id, channel_id)
-    end
-end
-
-local function muteuser_from(extra, success, result)
-    local lang = get_lang(result.to.peer_id)
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
-        if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
-            unmute_user(result.to.peer_id, result.fwd_from.peer_id)
-            send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. langs[lang].muteUserRemove)
-        else
-            mute_user(result.to.peer_id, result.fwd_from.peer_id)
-            send_large_msg('channel#id' .. result.to.peer_id, result.fwd_from.peer_id .. langs[lang].muteUserAdd)
-        end
-    else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
     end
 end
 
@@ -2538,7 +2550,7 @@ local function run(msg, matches)
             if matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi' then
                 if is_owner(msg) then
                     if type(msg.reply_id) ~= "nil" then
-                        msgr = get_message(msg.reply_id, promote_by_reply, false)
+                        msgr = get_message(msg.reply_id, promote_by_reply, { receiver = get_receiver(msg) })
                     elseif string.match(matches[2], '^%d+$') then
                         return promote(get_receiver(msg), 'NONAME', matches[2])
                     else
@@ -2552,7 +2564,7 @@ local function run(msg, matches)
             if matches[1]:lower() == 'demote' or matches[1]:lower() == 'sasha degrada' or matches[1]:lower() == 'degrada' then
                 if is_owner(msg) then
                     if type(msg.reply_id) ~= "nil" then
-                        msgr = get_message(msg.reply_id, demote_by_reply, false)
+                        msgr = get_message(msg.reply_id, demote_by_reply, { receiver = get_receiver(msg) })
                     elseif string.match(matches[2], '^%d+$') then
                         return demote(get_receiver(msg), 'NONAME', matches[2])
                     else
@@ -2998,7 +3010,7 @@ local function run(msg, matches)
         if matches[1]:lower() == 'setowner' then
             if is_owner(msg) then
                 if type(msg.reply_id) ~= "nil" then
-                    msgr = get_message(msg.reply_id, setowner_by_reply, false)
+                    msgr = get_message(msg.reply_id, setowner_by_reply, { receiver = get_receiver(msg) })
                 elseif string.match(matches[2], '^%d+$') then
                     data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
                     save_data(_config.moderation.data, data)
