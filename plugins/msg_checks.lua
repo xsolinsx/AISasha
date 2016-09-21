@@ -384,7 +384,7 @@ local function pre_process(msg)
                     if action == 'chat_add_user_link' then
                         local user_id = msg.from.id
                         local _nl, ctrl_chars = string.gsub(msg.text, '%c', '')
-                        if string.len(msg.from.print_name) > 70 or ctrl_chars > 40 and lock_group_spam == 'yes' then
+                        if string.len(msg.from.print_name) > 70 or ctrl_chars > 40 and lock_spam == 'yes' then
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] joined and Service Msg deleted (#spam name)")
                             delete_msg(msg.id, ok_cb, false)
                             if strict == "yes" then
@@ -417,7 +417,7 @@ local function pre_process(msg)
                     end
                     if action == 'chat_add_user' and not is_momod2(msg.from.id, msg.to.id) then
                         local user_id = msg.action.user.id
-                        if string.len(msg.action.user.print_name) > 70 and lock_group_spam == 'yes' then
+                        if string.len(msg.action.user.print_name) > 70 and lock_spam == 'yes' then
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. user_id .. "]: Service Msg deleted (#spam name)")
                             delete_msg(msg.id, ok_cb, false)
                             if strict == "yes" then
