@@ -1,6 +1,6 @@
 ﻿local function get_message_callback(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         if result.service then
             local action = result.action.type
             if action == 'chat_add_user' or action == 'chat_del_user' or action == 'chat_rename' or action == 'chat_change_photo' then

@@ -100,7 +100,7 @@ end
 
 local function warn_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
             warn_user(result.from.peer_id, result.to.peer_id)
@@ -116,7 +116,7 @@ end
 
 local function warn_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
             warn_user(result.fwd_from.peer_id, result.to.peer_id)
@@ -147,7 +147,7 @@ end
 
 local function unwarn_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
             unwarn_user(result.from.peer_id, result.to.peer_id)
@@ -163,7 +163,7 @@ end
 
 local function unwarn_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
             unwarn_user(result.fwd_from.peer_id, result.to.peer_id)
@@ -194,7 +194,7 @@ end
 
 local function unwarnall_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
             unwarnall_user(result.from.peer_id, result.to.peer_id)
@@ -210,7 +210,7 @@ end
 
 local function unwarnall_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
             unwarnall_user(result.fwd_from.peer_id, result.to.peer_id)
@@ -235,7 +235,7 @@ end
 
 local function getWarn_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         get_user_warns(result.from.peer_id, result.to.peer_id)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.from.peer_id .. " Y")
     else
@@ -245,7 +245,7 @@ end
 
 local function getWarn_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         get_user_warns(result.fwd_from.peer_id, result.to.peer_id)
         savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.fwd_from.peer_id .. " Y")
     else

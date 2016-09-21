@@ -38,7 +38,7 @@ end
 
 local function like_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         like(extra.likedata, result.to.peer_id, result.from.peer_id)
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)
@@ -47,7 +47,7 @@ end
 
 local function like_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         like(extra.likedata, result.to.peer_id, result.fwd_from.peer_id)
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)
@@ -64,7 +64,7 @@ end
 
 local function dislike_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         dislike(extra.likedata, result.to.peer_id, result.from.peer_id)
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)
@@ -73,7 +73,7 @@ end
 
 local function dislike_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         dislike(extra.likedata, result.to.peer_id, result.fwd_from.peer_id)
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)

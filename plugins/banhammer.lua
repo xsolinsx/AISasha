@@ -19,7 +19,7 @@ end
 
 local function kick_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
             local function post_kick()
@@ -39,7 +39,7 @@ end
 
 local function kick_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
             local function post_kick()
@@ -78,7 +78,7 @@ end
 
 local function ban_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
             local function post_kick()
@@ -98,7 +98,7 @@ end
 
 local function ban_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
             local function post_kick()
@@ -135,7 +135,7 @@ end
 
 local function unban_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
             local hash = 'banned:' .. result.to.peer_id
@@ -153,7 +153,7 @@ end
 
 local function unban_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
             local hash = 'banned:' .. result.to.peer_id
@@ -187,7 +187,7 @@ end
 
 local function banall_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
             local function post_kick()
@@ -207,7 +207,7 @@ end
 
 local function banall_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
             banall_user(result.fwd_from.peer_id)
@@ -240,7 +240,7 @@ end
 
 local function unbanall_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
             unbanall_user(result.from.peer_id)
@@ -257,7 +257,7 @@ end
 
 local function unbanall_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
             unbanall_user(result.fwd_from.peer_id)

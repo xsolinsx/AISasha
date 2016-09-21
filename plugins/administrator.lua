@@ -137,7 +137,7 @@ local function get_dialog_list_callback(extra, success, result)
 end
 
 local function vardump_msg(extra, success, result)
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         local name = 'msg'
         if extra.name == 'reply' then
             name = 'VARDUMP (<reply>)\n'

@@ -9,7 +9,7 @@ end
 
 local function get_rank_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         local rank = get_rank(result.from.peer_id, result.to.peer_id)
         send_large_msg(extra.receiver, langs[lang].rank .. reverse_rank_table[rank + 1])
     else
@@ -199,7 +199,7 @@ end
 
 local function info_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         local text = langs[lang].infoWord .. ' (<reply>)'
         local action = false
         if result.action then
@@ -311,7 +311,7 @@ end
 
 local function info_by_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         local text = langs[lang].infoWord .. ' (<from>)'
         if result.fwd_from.peer_type == 'channel' then
             if result.fwd_from.title then

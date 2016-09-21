@@ -27,7 +27,7 @@ local function flame_by_reply(extra, success, result)
     local hash
     local tokick
     local lang = get_lang(result.to.peer_id)
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         if result.to.peer_type == 'channel' then
             hash = 'channel:flame' .. result.to.peer_id
             tokick = 'channel:tokick' .. result.to.peer_id
@@ -53,7 +53,7 @@ local function flame_from(extra, success, result)
     local hash
     local tokick
     local lang = get_lang(result.to.peer_id)
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         if result.to.peer_type == 'channel' then
             hash = 'channel:flame' .. result.to.peer_id
             tokick = 'channel:tokick' .. result.to.peer_id

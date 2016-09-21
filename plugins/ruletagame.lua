@@ -55,7 +55,7 @@ end
 
 local function Challenge_by_reply(extra, success, result)
     local lang = get_lang(string.match(get_receiver(extra.msg), '%d+'))
-    if get_receiver(result) == get_receiver(extra.msg) then
+    if get_reply_receiver(result) == get_receiver(extra.msg) then
         local lang = get_lang(result.to.peer_id)
         if tonumber(result.from.peer_id) == tonumber(our_id) then
             -- Ignore bot

@@ -9,7 +9,7 @@ end
 
 local function invite_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         chat_add_user(extra.receiver, 'user#id' .. result.from.peer_id, ok_cb, false)
         channel_invite(extra.receiver, 'user#id' .. result.from.peer_id, ok_cb, false)
     else
@@ -19,7 +19,7 @@ end
 
 local function invite_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         chat_add_user(extra.receiver, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
         channel_invite(extra.receiver, 'user#id' .. result.fwd_from.peer_id, ok_cb, false)
     else

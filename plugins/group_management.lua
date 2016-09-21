@@ -810,7 +810,7 @@ end
 
 local function promote_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         local msg = result
         local full_name =(msg.from.first_name or '') .. ' ' ..(msg.from.last_name or '')
         if msg.from.username then
@@ -829,7 +829,7 @@ end
 
 local function demote_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         local msg = result
         local full_name =(msg.from.first_name or '') .. ' ' ..(msg.from.last_name or '')
         if msg.from.username then
@@ -868,7 +868,7 @@ end
 
 local function muteuser_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         local user_id = -1
         if result.service then
             if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
@@ -899,7 +899,7 @@ end
 
 local function muteuser_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
             if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
                 unmute_user(result.to.peer_id, result.fwd_from.peer_id)
@@ -987,7 +987,7 @@ end
 
 local function setowner_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == extra.receiver then
+    if get_reply_receiver(result) == extra.receiver then
         local msg = result
         local lang = get_lang(msg.to.id)
         local data = load_data(_config.moderation.data)
@@ -1126,7 +1126,7 @@ end
 -- Start by reply actions
 function get_message_callback(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_receiver(result) == get_receiver(extra.msg) then
+    if get_reply_receiver(result) == get_receiver(extra.msg) then
         local get_cmd = extra.get_cmd
         local msg = extra.msg
         local data = load_data(_config.moderation.data)

@@ -17,7 +17,6 @@ langs = dofile("languages.lua")
 http.TIMEOUT = 10
 
 function get_receiver(msg)
-
     if msg.to.type == 'user' then
         return 'user#id' .. msg.from.id
     end
@@ -29,6 +28,21 @@ function get_receiver(msg)
     end
     if msg.to.type == 'channel' then
         return 'channel#id' .. msg.to.id
+    end
+end
+
+function get_reply_receiver(result)
+    if result.to.peer_type == 'user' then
+        return 'user#id' .. result.from.peer_id
+    end
+    if result.to.peer_type == 'chat' then
+        return 'chat#id' .. result.to.peer_id
+    end
+    if result.to.peer_type == 'encr_chat' then
+        return result.to.print_name
+    end
+    if result.to.peer_type == 'channel' then
+        return 'channel#id' .. result.to.peer_id
     end
 end
 
