@@ -1132,10 +1132,7 @@ function get_message_callback(extra, success, result)
         local data = load_data(_config.moderation.data)
         local print_name = user_print_name(msg.from):gsub("?", "")
         local name_log = print_name:gsub("_", " ")
-        if get_cmd == "del" then
-            delete_msg(result.id, ok_cb, false)
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted a message by reply")
-        elseif get_cmd == "promoteadmin" then
+        if get_cmd == "promoteadmin" then
             local user_id = result.from.peer_id
             local channel_id = "channel#id" .. result.to.peer_id
             channel_set_admin(channel_id, "user#id" .. user_id, ok_cb, false)
@@ -3165,12 +3162,9 @@ local function run(msg, matches)
             if matches[1]:lower() == 'del' then
                 if is_momod(msg) then
                     if type(msg.reply_id) ~= "nil" then
-                        local cbreply_extra = {
-                            get_cmd = 'del',
-                            msg = msg
-                        }
                         delete_msg(msg.id, ok_cb, false)
-                        get_message(msg.reply_id, get_message_callback, cbreply_extra)
+                        delete_msg(msg.reply_id, ok_cb, false)
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted a message by reply")
                     end
                 else
                     return langs[msg.lang].require_mod
