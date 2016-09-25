@@ -458,22 +458,20 @@ local function run(msg, matches)
         return
     end
     local receiver = get_receiver(msg)
-    if not msg.api_patch then
-        if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' or matches[1]:lower() == 'sasha esplodimi' or matches[1]:lower() == 'sasha sparami' or matches[1]:lower() == 'sasha decompilami' or matches[1]:lower() == 'sasha bannami' then
-            -- /kickme
-            if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                local print_name = user_print_name(msg.from):gsub("‮", "")
-                local name = print_name:gsub("_", "")
-                savelog(msg.to.id, name .. " [" .. msg.from.id .. "] left using kickme ")
-                -- Save to logs
-                local function post_kick()
-                    kick_user_any(msg.from.id, msg.to.id)
-                end
-                postpone(post_kick, false, 3)
-                return langs.phrases.banhammer[math.random(#langs.phrases.banhammer)]
-            else
-                return langs[msg.lang].useYourGroups
+    if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' or matches[1]:lower() == 'sasha esplodimi' or matches[1]:lower() == 'sasha sparami' or matches[1]:lower() == 'sasha decompilami' or matches[1]:lower() == 'sasha bannami' then
+        -- /kickme
+        if msg.to.type == 'chat' or msg.to.type == 'channel' then
+            local print_name = user_print_name(msg.from):gsub("‮", "")
+            local name = print_name:gsub("_", "")
+            savelog(msg.to.id, name .. " [" .. msg.from.id .. "] left using kickme ")
+            -- Save to logs
+            local function post_kick()
+                kick_user_any(msg.from.id, msg.to.id)
             end
+            postpone(post_kick, false, 3)
+            return langs.phrases.banhammer[math.random(#langs.phrases.banhammer)]
+        else
+            return langs[msg.lang].useYourGroups
         end
     end
     if is_momod(msg) then
