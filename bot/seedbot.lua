@@ -4,8 +4,8 @@ package.cpath = package.cpath .. ';.luarocks/lib/lua/5.2/?.so'
 
 require("./bot/utils")
 
-local f = assert(io.popen('/usr/bin/git describe --tags', 'r'))
-f:close()
+-- local f = assert(io.popen('/usr/bin/git describe --tags', 'r'))
+-- f:close()
 
 -- This function is called when tg receive a msg
 function on_msg_receive(msg)
