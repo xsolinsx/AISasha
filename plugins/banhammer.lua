@@ -813,7 +813,7 @@ return {
     description = "BANHAMMER",
     patterns =
     {
-        "^[#!/]([Kk][Ii][Cc][Kk][Mm][Ee])",
+        "^[#!/]([Kk][Ii][Cc][Kk][Mm][Ee])$",
         "^[#!/]([Kk][Ii][Cc][Kk]) (.*)$",
         "^[#!/]([Kk][Ii][Cc][Kk])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Rr][Aa][Nn][Dd][Oo][Mm])$",
@@ -834,11 +834,11 @@ return {
         "^[#!/]([Gg][Bb][Aa][Nn][Ll][Ii][Ss][Tt])$",
         "^!!tgservice (.+)$",
         -- kickme
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii][Mm][Ii])",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Pp][Ll][Oo][Dd][Ii][Mm][Ii])",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Rr][Aa][Mm][Ii])",
-        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Cc][Oo][Mm][Pp][Ii][Ll][Aa][Mm][Ii])",
-        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Aa][Nn][Nn][Aa][Mm][Ii])",
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii][Mm][Ii])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Pp][Ll][Oo][Dd][Ii][Mm][Ii])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Pp][Aa][Rr][Aa][Mm][Ii])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Cc][Oo][Mm][Pp][Ii][Ll][Aa][Mm][Ii])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Aa][Nn][Nn][Aa][Mm][Ii])$",
         -- kick
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii]) (.*)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Uu][Cc][Cc][Ii][Dd][Ii])$",
