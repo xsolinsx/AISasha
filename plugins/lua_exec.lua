@@ -1,8 +1,10 @@
 local function run(msg, matches)
-    if is_sudo(msg) then
-        return loadstring(matches[1])()
-    else
-        return langs[msg.lang].require_sudo
+    if not msg.api_patch then
+        if is_sudo(msg) then
+            return loadstring(matches[1])()
+        else
+            return langs[msg.lang].require_sudo
+        end
     end
 end
 

@@ -66,103 +66,105 @@ local function callback(extra, success, result)
 end
 
 local function run(msg, matches)
-    local hash = get_variables_hash(msg, false)
-    if msg.media then
-        if hash then
-            local name = redis:hget(hash, 'waiting')
-            if name then
-                if is_momod(msg) then
-                    if msg.media.type == 'photo' then
-                        return load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
-                    elseif msg.media.type == 'audio' then
-                        return load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+    if not msg.api_patch then
+        local hash = get_variables_hash(msg, false)
+        if msg.media then
+            if hash then
+                local name = redis:hget(hash, 'waiting')
+                if name then
+                    if is_momod(msg) then
+                        if msg.media.type == 'photo' then
+                            return load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                        elseif msg.media.type == 'audio' then
+                            return load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                        end
+                    else
+                        return langs[msg.lang].require_mod
                     end
-                else
-                    return langs[msg.lang].require_mod
                 end
+                return
+            else
+                return langs[msg.lang].nothingToSet
             end
-            return
-        else
-            return langs[msg.lang].nothingToSet
         end
-    end
 
-    if matches[1]:lower() == 'importgroupsets' and matches[2] then
-        if is_owner(msg) then
-            local tab = matches[2]:split('\nXXXxxxXXX\n')
-            local i = 0
-            for k, command in pairs(tab) do
-                local name, value = string.match(command, '/set ([^%s]+) (.+)')
-                name = string.sub(name:lower(), 1, 50)
-                value = string.sub(value, 1, 4096)
-                set_value(msg, name, value, false)
-                i = i + 1
+        if matches[1]:lower() == 'importgroupsets' and matches[2] then
+            if is_owner(msg) then
+                local tab = matches[2]:split('\nXXXxxxXXX\n')
+                local i = 0
+                for k, command in pairs(tab) do
+                    local name, value = string.match(command, '/set ([^%s]+) (.+)')
+                    name = string.sub(name:lower(), 1, 50)
+                    value = string.sub(value, 1, 4096)
+                    set_value(msg, name, value, false)
+                    i = i + 1
+                end
+                return i .. langs[msg.lang].setsRestored
+            else
+                return langs[msg.lang].require_owner
             end
-            return i .. langs[msg.lang].setsRestored
-        else
-            return langs[msg.lang].require_owner
         end
-    end
 
-    if matches[1]:lower() == 'importglobalsets' and matches[2] then
-        if is_admin1(msg) then
-            local tab = matches[2]:split('\nXXXxxxXXX\n')
-            local i = 0
-            vardump(tab)
-            for k, command in pairs(tab) do
-                local name, value = string.match(command, '/setglobal ([^%s]+) (.+)')
-                name = string.sub(name:lower(), 1, 50)
-                value = string.sub(value, 1, 4096)
-                set_value(msg, name, value, true)
-                i = i + 1
+        if matches[1]:lower() == 'importglobalsets' and matches[2] then
+            if is_admin1(msg) then
+                local tab = matches[2]:split('\nXXXxxxXXX\n')
+                local i = 0
+                vardump(tab)
+                for k, command in pairs(tab) do
+                    local name, value = string.match(command, '/setglobal ([^%s]+) (.+)')
+                    name = string.sub(name:lower(), 1, 50)
+                    value = string.sub(value, 1, 4096)
+                    set_value(msg, name, value, true)
+                    i = i + 1
+                end
+                return i .. langs[msg.lang].globalSetsRestored
+            else
+                return langs[msg.lang].require_admin
             end
-            return i .. langs[msg.lang].globalSetsRestored
-        else
-            return langs[msg.lang].require_admin
         end
-    end
 
-    if matches[1]:lower() == 'cancel' or matches[1]:lower() == 'sasha annulla' or matches[1]:lower() == 'annulla' then
-        if is_momod(msg) then
-            redis:hdel(hash, 'waiting')
-            return langs[msg.lang].cancelled
-        else
-            return langs[msg.lang].require_mod
+        if matches[1]:lower() == 'cancel' or matches[1]:lower() == 'sasha annulla' or matches[1]:lower() == 'annulla' then
+            if is_momod(msg) then
+                redis:hdel(hash, 'waiting')
+                return langs[msg.lang].cancelled
+            else
+                return langs[msg.lang].require_mod
+            end
         end
-    end
 
-    if matches[1]:lower() == 'setmedia' or matches[1]:lower() == 'sasha setta media' or matches[1]:lower() == 'setta media' then
-        if is_momod(msg) then
-            local name = string.sub(matches[2]:lower(), 1, 50)
-            return set_media(msg, name)
-        else
-            return langs[msg.lang].require_mod
+        if matches[1]:lower() == 'setmedia' or matches[1]:lower() == 'sasha setta media' or matches[1]:lower() == 'setta media' then
+            if is_momod(msg) then
+                local name = string.sub(matches[2]:lower(), 1, 50)
+                return set_media(msg, name)
+            else
+                return langs[msg.lang].require_mod
+            end
         end
-    end
 
-    if matches[1]:lower() == 'set' or matches[1]:lower() == 'sasha setta' or matches[1]:lower() == 'setta' then
-        if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-            return langs[msg.lang].autoexecDenial
+        if matches[1]:lower() == 'set' or matches[1]:lower() == 'sasha setta' or matches[1]:lower() == 'setta' then
+            if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].autoexecDenial
+            end
+            if is_momod(msg) then
+                local name = string.sub(matches[2]:lower(), 1, 50)
+                local value = string.sub(matches[3], 1, 4096)
+                return set_value(msg, name, value, false)
+            else
+                return langs[msg.lang].require_mod
+            end
         end
-        if is_momod(msg) then
-            local name = string.sub(matches[2]:lower(), 1, 50)
-            local value = string.sub(matches[3], 1, 4096)
-            return set_value(msg, name, value, false)
-        else
-            return langs[msg.lang].require_mod
-        end
-    end
 
-    if matches[1]:lower() == 'setglobal' then
-        if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-            return langs[msg.lang].autoexecDenial
-        end
-        if is_admin1(msg) then
-            local name = string.sub(matches[2]:lower(), 1, 50)
-            local value = string.sub(matches[3], 1, 4096)
-            return set_value(msg, name, value, true)
-        else
-            return langs[msg.lang].require_admin
+        if matches[1]:lower() == 'setglobal' then
+            if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].autoexecDenial
+            end
+            if is_admin1(msg) then
+                local name = string.sub(matches[2]:lower(), 1, 50)
+                local value = string.sub(matches[3], 1, 4096)
+                return set_value(msg, name, value, true)
+            else
+                return langs[msg.lang].require_admin
+            end
         end
     end
 end

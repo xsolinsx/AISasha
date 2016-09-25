@@ -162,123 +162,125 @@ end
 
 local function run(msg, matches)
     if is_sudo(msg) then
-        if matches[1]:lower() == 'createdatabase' then
-            local f = io.open(_config.database.db, 'w+')
-            f:write('{"groups":{},"users":{}}')
-            f:close()
-            reply_msg(msg.id, langs[msg.lang].dbCreated, ok_cb, false)
-            return
-        end
-
-        if matches[1]:lower() == 'dodatabase' or matches[1]:lower() == 'sasha esegui database' then
-            local receiver = get_receiver(msg)
-            if msg.to.type == 'channel' then
-                channel_get_users(receiver, callback_supergroup_database, { receiver = receiver, database = database, print_name = msg.to.print_name, username = (msg.to.username or nil), id = msg.to.peer_id })
-            elseif msg.to.type == 'chat' then
-                chat_info(receiver, callback_group_database, { receiver = receiver, database = database })
-            else
+        if not msg.api_patch then
+            if matches[1]:lower() == 'createdatabase' then
+                local f = io.open(_config.database.db, 'w+')
+                f:write('{"groups":{},"users":{}}')
+                f:close()
+                reply_msg(msg.id, langs[msg.lang].dbCreated, ok_cb, false)
                 return
             end
-        end
 
-        if (matches[1]:lower() == 'search' or matches[1]:lower() == 'sasha cerca' or matches[1]:lower() == 'cerca') and matches[2] then
-            if database['users'][tostring(matches[2])] then
-                return serpent.block(database['users'][tostring(matches[2])], { sortkeys = false, comment = false })
-            elseif database['groups'][tostring(matches[2])] then
-                return serpent.block(database['groups'][tostring(matches[2])], { sortkeys = false, comment = false })
-            else
-                return matches[2] .. langs[msg.lang].notFound
-            end
-        end
-
-        if matches[1]:lower() == 'addrecord' and matches[2] and matches[3] then
-            local t = matches[3]:split('\n')
-            if matches[2]:lower() == 'user' then
-                local id = t[1]
-                local print_name = t[2]
-                local old_print_names = t[3]
-                local username = t[4]
-                local old_usernames = t[5]
-                local long_id = t[6]
-                local groups = { }
-                for k, v in pairs(t[7]:split(' ')) do
-                    groups[tostring(v)] = tonumber(v)
+            if matches[1]:lower() == 'dodatabase' or matches[1]:lower() == 'sasha esegui database' then
+                local receiver = get_receiver(msg)
+                if msg.to.type == 'channel' then
+                    channel_get_users(receiver, callback_supergroup_database, { receiver = receiver, database = database, print_name = msg.to.print_name, username = (msg.to.username or nil), id = msg.to.peer_id })
+                elseif msg.to.type == 'chat' then
+                    chat_info(receiver, callback_group_database, { receiver = receiver, database = database })
+                else
+                    return
                 end
-                print('new user')
-                database["users"][tostring(id)] = {
-                    print_name = print_name:gsub("_"," "),
-                    old_print_names = old_print_names:gsub("_"," "),
-                    username = username,
-                    old_usernames = old_usernames,
-                    long_id = long_id,
-                    groups = groups,
-                }
-                save_data(_config.database.db, database)
-                return langs[msg.lang].userManuallyAdded
-            elseif matches[2]:lower() == 'group' then
-                local id = t[1]
-                local print_name = t[2]
-                local old_print_names = t[3]
-                local lang = t[4]
-                local long_id = t[5]
-                if t[6] and t[7] then
-                    local username = t[6]
-                    local old_usernames = t[7]
-                    print('new group')
-                    database["groups"][tostring(id)] = {
+            end
+
+            if (matches[1]:lower() == 'search' or matches[1]:lower() == 'sasha cerca' or matches[1]:lower() == 'cerca') and matches[2] then
+                if database['users'][tostring(matches[2])] then
+                    return serpent.block(database['users'][tostring(matches[2])], { sortkeys = false, comment = false })
+                elseif database['groups'][tostring(matches[2])] then
+                    return serpent.block(database['groups'][tostring(matches[2])], { sortkeys = false, comment = false })
+                else
+                    return matches[2] .. langs[msg.lang].notFound
+                end
+            end
+
+            if matches[1]:lower() == 'addrecord' and matches[2] and matches[3] then
+                local t = matches[3]:split('\n')
+                if matches[2]:lower() == 'user' then
+                    local id = t[1]
+                    local print_name = t[2]
+                    local old_print_names = t[3]
+                    local username = t[4]
+                    local old_usernames = t[5]
+                    local long_id = t[6]
+                    local groups = { }
+                    for k, v in pairs(t[7]:split(' ')) do
+                        groups[tostring(v)] = tonumber(v)
+                    end
+                    print('new user')
+                    database["users"][tostring(id)] = {
                         print_name = print_name:gsub("_"," "),
                         old_print_names = old_print_names:gsub("_"," "),
-                        lang = lang,
-                        long_id = long_id,
                         username = username,
                         old_usernames = old_usernames,
-                    }
-                else
-                    print('new group')
-                    database["groups"][tostring(id)] = {
-                        print_name = print_name:gsub("_"," "),
-                        old_print_names = old_print_names:gsub("_"," "),
-                        lang = lang,
                         long_id = long_id,
+                        groups = groups,
                     }
+                    save_data(_config.database.db, database)
+                    return langs[msg.lang].userManuallyAdded
+                elseif matches[2]:lower() == 'group' then
+                    local id = t[1]
+                    local print_name = t[2]
+                    local old_print_names = t[3]
+                    local lang = t[4]
+                    local long_id = t[5]
+                    if t[6] and t[7] then
+                        local username = t[6]
+                        local old_usernames = t[7]
+                        print('new group')
+                        database["groups"][tostring(id)] = {
+                            print_name = print_name:gsub("_"," "),
+                            old_print_names = old_print_names:gsub("_"," "),
+                            lang = lang,
+                            long_id = long_id,
+                            username = username,
+                            old_usernames = old_usernames,
+                        }
+                    else
+                        print('new group')
+                        database["groups"][tostring(id)] = {
+                            print_name = print_name:gsub("_"," "),
+                            old_print_names = old_print_names:gsub("_"," "),
+                            lang = lang,
+                            long_id = long_id,
+                        }
+                    end
+                    save_data(_config.database.db, database)
+                    return langs[msg.lang].groupManuallyAdded
+                else
+                    return langs[msg.lang].errorUserOrGroup
                 end
-                save_data(_config.database.db, database)
-                return langs[msg.lang].groupManuallyAdded
-            else
-                return langs[msg.lang].errorUserOrGroup
             end
-        end
 
-        if (matches[1]:lower() == 'delete' or matches[1]:lower() == 'sasha elimina' or matches[1]:lower() == 'elimina') and matches[2] then
-            if database['users'][tostring(matches[2])] then
-                database['users'][tostring(matches[2])] = nil
-                save_data(_config.database.db, database)
-                return langs[msg.lang].userDeleted
-            elseif database['groups'][tostring(matches[2])] then
-                database['groups'][tostring(matches[2])] = nil
-                save_data(_config.database.db, database)
-                return langs[msg.lang].groupDeleted
-            else
-                return matches[2] .. langs[msg.lang].notFound
+            if (matches[1]:lower() == 'delete' or matches[1]:lower() == 'sasha elimina' or matches[1]:lower() == 'elimina') and matches[2] then
+                if database['users'][tostring(matches[2])] then
+                    database['users'][tostring(matches[2])] = nil
+                    save_data(_config.database.db, database)
+                    return langs[msg.lang].userDeleted
+                elseif database['groups'][tostring(matches[2])] then
+                    database['groups'][tostring(matches[2])] = nil
+                    save_data(_config.database.db, database)
+                    return langs[msg.lang].groupDeleted
+                else
+                    return matches[2] .. langs[msg.lang].notFound
+                end
             end
-        end
 
-        if matches[1]:lower() == 'uploaddb' then
-            print('SAVING USERS/GROUPS DATABASE')
-            save_data(_config.database.db, database)
-            if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
-                send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
-                return langs[msg.lang].databaseSent
-            else
-                return langs[msg.lang].databaseMissing
+            if matches[1]:lower() == 'uploaddb' then
+                print('SAVING USERS/GROUPS DATABASE')
+                save_data(_config.database.db, database)
+                if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
+                    send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
+                    return langs[msg.lang].databaseSent
+                else
+                    return langs[msg.lang].databaseMissing
+                end
             end
-        end
 
-        if matches[1]:lower() == 'replacedb' then
-            if type(msg.reply_id) == "nil" then
-                return langs[msg.lang].useQuoteOnFile
-            else
-                load_document(msg.reply_id, callback, { receiver = get_receiver(msg) })
+            if matches[1]:lower() == 'replacedb' then
+                if type(msg.reply_id) == "nil" then
+                    return langs[msg.lang].useQuoteOnFile
+                else
+                    load_document(msg.reply_id, callback, { receiver = get_receiver(msg) })
+                end
             end
         end
     else

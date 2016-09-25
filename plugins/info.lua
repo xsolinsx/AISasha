@@ -463,161 +463,163 @@ local function run(msg, matches)
     local chat = msg.to.id
     local chat_type = msg.to.type
 
-    if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
-        if type(msg.reply_id) ~= "nil" then
-            return get_message(msg.reply_id, get_rank_by_reply, { receiver = receiver })
-        elseif matches[2] then
-            if string.match(matches[2], '^%d+$') then
-                return langs[msg.lang].rank .. reverse_rank_table[get_rank(matches[2], chat) + 1]
+    if not msg.api_patch then
+        if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
+            if type(msg.reply_id) ~= "nil" then
+                return get_message(msg.reply_id, get_rank_by_reply, { receiver = receiver })
+            elseif matches[2] then
+                if string.match(matches[2], '^%d+$') then
+                    return langs[msg.lang].rank .. reverse_rank_table[get_rank(matches[2], chat) + 1]
+                else
+                    return resolve_username(string.gsub(matches[2], '@', ''), get_rank_by_username, { receiver = receiver, chat_id = chat })
+                end
             else
-                return resolve_username(string.gsub(matches[2], '@', ''), get_rank_by_username, { receiver = receiver, chat_id = chat })
-            end
-        else
-            return langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
-        end
-    end
-    if matches[1]:lower() == 'ishere' and matches[2] then
-        if string.match(matches[2], '^%d+$') then
-            if chat_type == 'channel' then
-                channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2] })
-            elseif chat_type == 'chat' then
-                chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2] })
-            end
-        else
-            if chat_type == 'channel' then
-                channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
-            elseif chat_type == 'chat' then
-                chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
+                return langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
             end
         end
-        return
-    end
-    if matches[1]:lower() == 'info' or matches[1]:lower() == 'sasha info' then
-        if type(msg.reply_id) ~= 'nil' then
-            if is_momod(msg) then
-                if matches[2] then
-                    if matches[2]:lower() == 'from' then
-                        return get_message(msg.reply_id, info_by_from, { receiver = receiver })
+        if matches[1]:lower() == 'ishere' and matches[2] then
+            if string.match(matches[2], '^%d+$') then
+                if chat_type == 'channel' then
+                    channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2] })
+                elseif chat_type == 'chat' then
+                    chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2] })
+                end
+            else
+                if chat_type == 'channel' then
+                    channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
+                elseif chat_type == 'chat' then
+                    chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
+                end
+            end
+            return
+        end
+        if matches[1]:lower() == 'info' or matches[1]:lower() == 'sasha info' then
+            if type(msg.reply_id) ~= 'nil' then
+                if is_momod(msg) then
+                    if matches[2] then
+                        if matches[2]:lower() == 'from' then
+                            return get_message(msg.reply_id, info_by_from, { receiver = receiver })
+                        else
+                            return get_message(msg.reply_id, info_by_reply, { receiver = receiver })
+                        end
                     else
                         return get_message(msg.reply_id, info_by_reply, { receiver = receiver })
                     end
                 else
-                    return get_message(msg.reply_id, info_by_reply, { receiver = receiver })
+                    return langs[msg.lang].require_mod
                 end
-            else
-                return langs[msg.lang].require_mod
-            end
-        elseif matches[2] then
-            if is_momod(msg) then
-                if string.match(matches[2], '^%d+$') then
-                    user_info('user#id' .. matches[2], info_by_id, { chat_id = msg.to.id, receiver = receiver })
-                    return
+            elseif matches[2] then
+                if is_momod(msg) then
+                    if string.match(matches[2], '^%d+$') then
+                        user_info('user#id' .. matches[2], info_by_id, { chat_id = msg.to.id, receiver = receiver })
+                        return
+                    else
+                        resolve_username(matches[2]:gsub("@", ""), info_by_username, { chat_id = msg.to.id, receiver = receiver })
+                        return
+                    end
                 else
-                    resolve_username(matches[2]:gsub("@", ""), info_by_username, { chat_id = msg.to.id, receiver = receiver })
-                    return
+                    return langs[msg.lang].require_mod
                 end
             else
-                return langs[msg.lang].require_mod
-            end
-        else
-            local text = langs[msg.lang].infoWord ..
-            langs[msg.lang].youAre
-            if msg.from.title then
-                text = text .. langs[msg.lang].name .. msg.from.title
-            end
-            if msg.from.first_name then
-                text = text .. langs[msg.lang].name .. msg.from.first_name
-            end
-            if msg.from.real_first_name then
-                text = text .. langs[msg.lang].name .. msg.from.real_first_name
-            end
-            if msg.from.last_name then
-                text = text .. langs[msg.lang].surname .. msg.from.last_name
-            end
-            if msg.from.real_last_name then
-                text = text .. langs[msg.lang].surname .. msg.from.real_last_name
-            end
-            if msg.from.username then
-                text = text .. langs[msg.lang].username .. '@' .. msg.from.username
-            end
-            -- exclude bot phone
-            if our_id ~= msg.from.id then
-                --[[
+                local text = langs[msg.lang].infoWord ..
+                langs[msg.lang].youAre
+                if msg.from.title then
+                    text = text .. langs[msg.lang].name .. msg.from.title
+                end
+                if msg.from.first_name then
+                    text = text .. langs[msg.lang].name .. msg.from.first_name
+                end
+                if msg.from.real_first_name then
+                    text = text .. langs[msg.lang].name .. msg.from.real_first_name
+                end
+                if msg.from.last_name then
+                    text = text .. langs[msg.lang].surname .. msg.from.last_name
+                end
+                if msg.from.real_last_name then
+                    text = text .. langs[msg.lang].surname .. msg.from.real_last_name
+                end
+                if msg.from.username then
+                    text = text .. langs[msg.lang].username .. '@' .. msg.from.username
+                end
+                -- exclude bot phone
+                if our_id ~= msg.from.id then
+                    --[[
                 if msg.from.phone then
                     text = text .. langs[msg.lang].phone .. '+' .. string.sub(msg.from.phone, 1, 6) .. '******'
                 end
                 ]]
-            end
-            local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
-            text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
-            langs[msg.lang].date .. os.date('%c') ..
-            langs[msg.lang].totalMessages .. msgs
-            local otherinfo = langs[msg.lang].otherInfo
-            if is_whitelisted(msg.from.id) then
-                otherinfo = otherinfo .. 'WHITELISTED, '
-            end
-            if is_gbanned(msg.from.id) then
-                otherinfo = otherinfo .. 'GBANNED, '
-            end
-            if is_banned(msg.from.id, chat) then
-                otherinfo = otherinfo .. 'BANNED, '
-            end
-            if is_muted_user(chat, msg.from.id) then
-                otherinfo = otherinfo .. 'MUTED, '
-            end
-            if otherinfo == langs[msg.lang].otherInfo then
-                otherinfo = otherinfo .. langs[msg.lang].noOtherInfo
-            end
-            text = text .. otherinfo ..
-            langs[msg.lang].peer_id .. msg.from.id ..
-            langs[msg.lang].long_id .. msg.from.peer_id ..
-            langs[msg.lang].youAreWriting
-            if chat_type == 'user' then
-                text = text .. ' 👤'
-                if msg.to.first_name then
-                    text = text .. langs[msg.lang].name .. msg.to.first_name
                 end
-                if msg.to.real_first_name then
-                    text = text .. langs[msg.lang].name .. msg.to.real_first_name
+                local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
+                text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
+                langs[msg.lang].date .. os.date('%c') ..
+                langs[msg.lang].totalMessages .. msgs
+                local otherinfo = langs[msg.lang].otherInfo
+                if is_whitelisted(msg.from.id) then
+                    otherinfo = otherinfo .. 'WHITELISTED, '
                 end
-                if msg.to.last_name then
-                    text = text .. langs[msg.lang].surname .. msg.to.last_name
+                if is_gbanned(msg.from.id) then
+                    otherinfo = otherinfo .. 'GBANNED, '
                 end
-                if msg.to.real_last_name then
-                    text = text .. langs[msg.lang].surname .. msg.to.real_last_name
+                if is_banned(msg.from.id, chat) then
+                    otherinfo = otherinfo .. 'BANNED, '
                 end
-                if msg.to.username then
-                    text = text .. langs[msg.lang].username .. '@' .. msg.to.username
+                if is_muted_user(chat, msg.from.id) then
+                    otherinfo = otherinfo .. 'MUTED, '
                 end
-                -- exclude bot phone
-                if our_id ~= msg.to.id then
-                    --[[
+                if otherinfo == langs[msg.lang].otherInfo then
+                    otherinfo = otherinfo .. langs[msg.lang].noOtherInfo
+                end
+                text = text .. otherinfo ..
+                langs[msg.lang].peer_id .. msg.from.id ..
+                langs[msg.lang].long_id .. msg.from.peer_id ..
+                langs[msg.lang].youAreWriting
+                if chat_type == 'user' then
+                    text = text .. ' 👤'
+                    if msg.to.first_name then
+                        text = text .. langs[msg.lang].name .. msg.to.first_name
+                    end
+                    if msg.to.real_first_name then
+                        text = text .. langs[msg.lang].name .. msg.to.real_first_name
+                    end
+                    if msg.to.last_name then
+                        text = text .. langs[msg.lang].surname .. msg.to.last_name
+                    end
+                    if msg.to.real_last_name then
+                        text = text .. langs[msg.lang].surname .. msg.to.real_last_name
+                    end
+                    if msg.to.username then
+                        text = text .. langs[msg.lang].username .. '@' .. msg.to.username
+                    end
+                    -- exclude bot phone
+                    if our_id ~= msg.to.id then
+                        --[[
                     if msg.to.phone then
                         text = text .. langs[msg.lang].phone .. '+' .. string.sub(msg.to.phone, 1, 6) .. '******'
                     end
                     ]]
+                    end
+                    text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.to.id, chat) + 1] ..
+                    langs[msg.lang].date .. os.date('%c') ..
+                    langs[msg.lang].peer_id .. msg.to.id ..
+                    langs[msg.lang].long_id .. msg.to.peer_id
+                    return text
+                elseif chat_type == 'chat' then
+                    text = text .. ' 👥' ..
+                    langs[msg.lang].groupName .. msg.to.title ..
+                    langs[msg.lang].users .. tostring(msg.to.members_num) ..
+                    langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
+                    langs[msg.lang].long_id .. msg.to.peer_id
+                    return text
+                elseif chat_type == 'channel' then
+                    text = text .. ' 👥' ..
+                    langs[msg.lang].supergroupName .. msg.to.title
+                    if msg.to.username then
+                        text = text .. langs[msg.lang].username .. "@" .. msg.to.username
+                    end
+                    text = text .. langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
+                    langs[msg.lang].long_id .. msg.to.peer_id
+                    return text
                 end
-                text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.to.id, chat) + 1] ..
-                langs[msg.lang].date .. os.date('%c') ..
-                langs[msg.lang].peer_id .. msg.to.id ..
-                langs[msg.lang].long_id .. msg.to.peer_id
-                return text
-            elseif chat_type == 'chat' then
-                text = text .. ' 👥' ..
-                langs[msg.lang].groupName .. msg.to.title ..
-                langs[msg.lang].users .. tostring(msg.to.members_num) ..
-                langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
-                langs[msg.lang].long_id .. msg.to.peer_id
-                return text
-            elseif chat_type == 'channel' then
-                text = text .. ' 👥' ..
-                langs[msg.lang].supergroupName .. msg.to.title
-                if msg.to.username then
-                    text = text .. langs[msg.lang].username .. "@" .. msg.to.username
-                end
-                text = text .. langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
-                langs[msg.lang].long_id .. msg.to.peer_id
-                return text
             end
         end
     end
@@ -637,16 +639,18 @@ local function run(msg, matches)
             end
         end
     end
-    if matches[1]:lower() == 'grouplink' or matches[1]:lower() == 'sasha link gruppo' or matches[1]:lower() == 'link gruppo' and matches[2] then
-        if is_admin1(msg) then
-            local data = load_data(_config.moderation.data)
-            local group_link = data[tostring(matches[2])]['settings']['set_link']
-            if not group_link then
-                return langs[msg.lang].noLinkAvailable
+    if not msg.api_patch then
+        if matches[1]:lower() == 'grouplink' or matches[1]:lower() == 'sasha link gruppo' or matches[1]:lower() == 'link gruppo' and matches[2] then
+            if is_admin1(msg) then
+                local data = load_data(_config.moderation.data)
+                local group_link = data[tostring(matches[2])]['settings']['set_link']
+                if not group_link then
+                    return langs[msg.lang].noLinkAvailable
+                end
+                return matches[2] .. '\n' .. group_link
+            else
+                return langs[msg.lang].require_admin
             end
-            return matches[2] .. '\n' .. group_link
-        else
-            return langs[msg.lang].require_admin
         end
     end
     if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] then

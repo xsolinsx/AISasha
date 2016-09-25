@@ -198,56 +198,58 @@ local function get_sudo_info(extra, success, result)
 end
 
 local function run(msg, matches)
-    if matches[1]:lower() == "sudolist" or matches[1]:lower() == "sasha lista sudo" then
-        for v, user in pairs(_config.sudo_users) do
-            if user ~= our_id then
-                user_info('user#id' .. user, get_sudo_info, { chat_id = msg.to.id, receiver = get_receiver(msg) })
-            end
-        end
-        return
-    end
-
-    table.sort(plugins)
-    if matches[1]:lower() == "helpall" or matches[1]:lower() == "sasha aiuto tutto" then
-        send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. help_all(get_receiver(msg), get_rank(msg.from.id, msg.to.id)))
-    end
-    if matches[1]:lower() == "help" or matches[1]:lower() == "sasha aiuto" then
-        if not matches[2] then
-            send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. telegram_help(get_receiver(msg), get_rank(msg.from.id, msg.to.id)))
-        else
-            local temp = plugin_help(matches[2]:lower(), get_receiver(msg), get_rank(msg.from.id, msg.to.id))
-            if temp ~= nil then
-                if temp ~= '' then
-                    send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. temp)
-                else
-                    return langs[msg.lang].require_higher
+    if not msg.api_patch then
+        if matches[1]:lower() == "sudolist" or matches[1]:lower() == "sasha lista sudo" then
+            for v, user in pairs(_config.sudo_users) do
+                if user ~= our_id then
+                    user_info('user#id' .. user, get_sudo_info, { chat_id = msg.to.id, receiver = get_receiver(msg) })
                 end
+            end
+            return
+        end
+
+        table.sort(plugins)
+        if matches[1]:lower() == "helpall" or matches[1]:lower() == "sasha aiuto tutto" then
+            send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. help_all(get_receiver(msg), get_rank(msg.from.id, msg.to.id)))
+        end
+        if matches[1]:lower() == "help" or matches[1]:lower() == "sasha aiuto" then
+            if not matches[2] then
+                send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. telegram_help(get_receiver(msg), get_rank(msg.from.id, msg.to.id)))
             else
-                return matches[2]:lower() .. langs[msg.lang].notExists
+                local temp = plugin_help(matches[2]:lower(), get_receiver(msg), get_rank(msg.from.id, msg.to.id))
+                if temp ~= nil then
+                    if temp ~= '' then
+                        send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. temp)
+                    else
+                        return langs[msg.lang].require_higher
+                    end
+                else
+                    return matches[2]:lower() .. langs[msg.lang].notExists
+                end
             end
         end
-    end
 
-    if matches[1]:lower() == "syntaxall" or matches[1]:lower() == "sasha sintassi tutto" then
-        send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. syntax_all(get_receiver(msg), get_rank(msg.from.id, msg.to.id)))
-    end
-    if matches[1]:lower() == "syntax" or matches[1]:lower() == "sasha sintassi" and matches[2] then
-        local cmd_find = false
-        local text = ''
-        for name, plugin in pairsByKeys(plugins) do
-            if plugin.syntax then
-                for k, v in pairsByKeys(plugin.syntax) do
-                    if string.find(v, matches[2]:lower()) then
-                        cmd_find = true
-                        text = text .. v .. '\n'
+        if matches[1]:lower() == "syntaxall" or matches[1]:lower() == "sasha sintassi tutto" then
+            send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. syntax_all(get_receiver(msg), get_rank(msg.from.id, msg.to.id)))
+        end
+        if matches[1]:lower() == "syntax" or matches[1]:lower() == "sasha sintassi" and matches[2] then
+            local cmd_find = false
+            local text = ''
+            for name, plugin in pairsByKeys(plugins) do
+                if plugin.syntax then
+                    for k, v in pairsByKeys(plugin.syntax) do
+                        if string.find(v, matches[2]:lower()) then
+                            cmd_find = true
+                            text = text .. v .. '\n'
+                        end
                     end
                 end
             end
-        end
-        if not cmd_find then
-            send_large_msg(get_receiver(msg), langs[msg.lang].commandNotFound)
-        else
-            send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. text)
+            if not cmd_find then
+                send_large_msg(get_receiver(msg), langs[msg.lang].commandNotFound)
+            else
+                send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. text)
+            end
         end
     end
 end

@@ -255,118 +255,120 @@ end
 
 local function run(msg, matches)
     if msg.to.type == 'chat' or msg.to.type == 'channel' then
-        if is_momod(msg) then
-            local receiver = get_receiver(msg)
-            if matches[1]:lower() == 'setwarn' and matches[2] then
-                local txt = set_warn(msg.from.id, msg.to.id, matches[2])
-                if matches[2] == '0' then
-                    return langs[msg.lang].neverWarn
-                else
-                    return txt
+        if not msg.api_patch then
+            if is_momod(msg) then
+                local receiver = get_receiver(msg)
+                if matches[1]:lower() == 'setwarn' and matches[2] then
+                    local txt = set_warn(msg.from.id, msg.to.id, matches[2])
+                    if matches[2] == '0' then
+                        return langs[msg.lang].neverWarn
+                    else
+                        return txt
+                    end
                 end
-            end
-            if matches[1]:lower() == 'getwarn' then
-                return get_warn(msg.to.id)
-            end
-            if get_warn(msg.to.id) == langs[msg.lang].noWarnSet then
-                return langs[msg.lang].noWarnSet
-            else
-                if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then
-                    if type(msg.reply_id) ~= "nil" then
-                        if matches[2] then
-                            if matches[2]:lower() == 'from' then
-                                get_message(msg.reply_id, getWarn_from, { receiver = receiver, executer = msg.from.id })
+                if matches[1]:lower() == 'getwarn' then
+                    return get_warn(msg.to.id)
+                end
+                if get_warn(msg.to.id) == langs[msg.lang].noWarnSet then
+                    return langs[msg.lang].noWarnSet
+                else
+                    if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then
+                        if type(msg.reply_id) ~= "nil" then
+                            if matches[2] then
+                                if matches[2]:lower() == 'from' then
+                                    get_message(msg.reply_id, getWarn_from, { receiver = receiver, executer = msg.from.id })
+                                else
+                                    get_message(msg.reply_id, getWarn_by_reply, { receiver = receiver, executer = msg.from.id })
+                                end
                             else
                                 get_message(msg.reply_id, getWarn_by_reply, { receiver = receiver, executer = msg.from.id })
                             end
+                        elseif string.match(matches[2], '^%d+$') then
+                            get_user_warns(msg.from.id, msg.to.id)
                         else
-                            get_message(msg.reply_id, getWarn_by_reply, { receiver = receiver, executer = msg.from.id })
+                            resolve_username(string.gsub(matches[2], '@', ''), getWarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        get_user_warns(msg.from.id, msg.to.id)
-                    else
-                        resolve_username(string.gsub(matches[2], '@', ''), getWarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        return
                     end
-                    return
-                end
-                if matches[1]:lower() == 'warn' or matches[1]:lower() == 'sasha avverti' or matches[1]:lower() == 'avverti' then
-                    if type(msg.reply_id) ~= "nil" then
-                        if matches[2] then
-                            if matches[2]:lower() == 'from' then
-                                get_message(msg.reply_id, warn_from, { receiver = receiver, executer = msg.from.id })
+                    if matches[1]:lower() == 'warn' or matches[1]:lower() == 'sasha avverti' or matches[1]:lower() == 'avverti' then
+                        if type(msg.reply_id) ~= "nil" then
+                            if matches[2] then
+                                if matches[2]:lower() == 'from' then
+                                    get_message(msg.reply_id, warn_from, { receiver = receiver, executer = msg.from.id })
+                                else
+                                    get_message(msg.reply_id, warn_by_reply, { receiver = receiver, executer = msg.from.id })
+                                end
                             else
                                 get_message(msg.reply_id, warn_by_reply, { receiver = receiver, executer = msg.from.id })
                             end
+                        elseif string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                warn_user(matches[2], msg.to.id)
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
+                            else
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
+                                return langs[msg.lang].require_rank
+                            end
                         else
-                            get_message(msg.reply_id, warn_by_reply, { receiver = receiver, executer = msg.from.id })
+                            resolve_username(string.gsub(matches[2], '@', ''), warn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            warn_user(matches[2], msg.to.id)
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
-                        else
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
-                            return langs[msg.lang].require_rank
-                        end
-                    else
-                        resolve_username(string.gsub(matches[2], '@', ''), warn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        return
                     end
-                    return
-                end
-                if matches[1]:lower() == 'unwarn' then
-                    if type(msg.reply_id) ~= "nil" then
-                        if matches[2] then
-                            if matches[2]:lower() == 'from' then
-                                get_message(msg.reply_id, unwarn_from, { receiver = receiver, executer = msg.from.id })
+                    if matches[1]:lower() == 'unwarn' then
+                        if type(msg.reply_id) ~= "nil" then
+                            if matches[2] then
+                                if matches[2]:lower() == 'from' then
+                                    get_message(msg.reply_id, unwarn_from, { receiver = receiver, executer = msg.from.id })
+                                else
+                                    get_message(msg.reply_id, unwarn_by_reply, { receiver = receiver, executer = msg.from.id })
+                                end
                             else
                                 get_message(msg.reply_id, unwarn_by_reply, { receiver = receiver, executer = msg.from.id })
                             end
+                        elseif string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                unwarn_user(matches[2], msg.to.id)
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
+                                return
+                            else
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
+                                return langs[msg.lang].require_rank
+                            end
                         else
-                            get_message(msg.reply_id, unwarn_by_reply, { receiver = receiver, executer = msg.from.id })
+                            resolve_username(string.gsub(matches[2], '@', ''), unwarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            unwarn_user(matches[2], msg.to.id)
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
-                            return
-                        else
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
-                            return langs[msg.lang].require_rank
-                        end
-                    else
-                        resolve_username(string.gsub(matches[2], '@', ''), unwarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
-                end
-                if matches[1]:lower() == 'unwarnall' or matches[1]:lower() == 'sasha azzera avvertimenti' or matches[1]:lower() == 'azzera avvertimenti' then
-                    if type(msg.reply_id) ~= "nil" then
-                        if matches[2] then
-                            if matches[2]:lower() == 'from' then
-                                get_message(msg.reply_id, unwarnall_from, { receiver = receiver, executer = msg.from.id })
+                    if matches[1]:lower() == 'unwarnall' or matches[1]:lower() == 'sasha azzera avvertimenti' or matches[1]:lower() == 'azzera avvertimenti' then
+                        if type(msg.reply_id) ~= "nil" then
+                            if matches[2] then
+                                if matches[2]:lower() == 'from' then
+                                    get_message(msg.reply_id, unwarnall_from, { receiver = receiver, executer = msg.from.id })
+                                else
+                                    get_message(msg.reply_id, unwarnall_by_reply, { receiver = receiver, executer = msg.from.id })
+                                end
                             else
                                 get_message(msg.reply_id, unwarnall_by_reply, { receiver = receiver, executer = msg.from.id })
                             end
+                        elseif string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                unwarnall_user(matches[2], msg.to.id)
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
+                                return
+                            else
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
+                                return langs[msg.lang].require_rank
+                            end
                         else
-                            get_message(msg.reply_id, unwarnall_by_reply, { receiver = receiver, executer = msg.from.id })
+                            resolve_username(string.gsub(matches[2], '@', ''), unwarnall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            unwarnall_user(matches[2], msg.to.id)
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
-                            return
-                        else
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
-                            return langs[msg.lang].require_rank
-                        end
-                    else
-                        resolve_username(string.gsub(matches[2], '@', ''), unwarnall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 end
+            else
+                return langs[msg.lang].require_mod
             end
-        else
-            return langs[msg.lang].require_mod
         end
     else
         return langs[msg.lang].useYourGroups

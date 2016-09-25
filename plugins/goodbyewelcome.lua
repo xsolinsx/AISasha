@@ -79,81 +79,83 @@ local function get_rules(chat_id)
 end
 
 local function run(msg, matches)
-    if matches[1]:lower() == 'getwelcome' then
-        return get_welcome(msg.to.id)
-    end
-    if matches[1]:lower() == 'getgoodbye' then
-        return get_goodbye(msg.to.id)
-    end
-    if matches[1]:lower() == 'setwelcome' and is_momod(msg) then
-        if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-            return langs[msg.lang].autoexecDenial
+    if not msg.api_patch then
+        if matches[1]:lower() == 'getwelcome' then
+            return get_welcome(msg.to.id)
         end
-        return set_welcome(msg.to.id, matches[2])
-    end
-    if matches[1]:lower() == 'setgoodbye' and is_momod(msg) then
-        if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-            return langs[msg.lang].autoexecDenial
+        if matches[1]:lower() == 'getgoodbye' then
+            return get_goodbye(msg.to.id)
         end
-        return set_goodbye(msg.to.id, matches[2])
-    end
-    if matches[1]:lower() == 'unsetwelcome' and is_momod(msg) then
-        return unset_welcome(msg.to.id)
-    end
-    if matches[1]:lower() == 'unsetgoodbye' and is_momod(msg) then
-        return unset_goodbye(msg.to.id)
-    end
-    if matches[1]:lower() == 'setmemberswelcome' and is_momod(msg) then
-        local text = set_memberswelcome(msg.to.id, matches[2])
-        if matches[2] == '0' then
-            return langs[msg.lang].neverWelcome
-        else
-            return text
-        end
-    end
-    if matches[1]:lower() == 'getmemberswelcome' and is_momod(msg) then
-        return get_memberswelcome(msg.to.id)
-    end
-
-    -- multiple_kicks
-    if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'kickinactive' or matches[1]:lower() == 'kicknouser' then
-        -- set multiple_kicks of the group as true, after 5 seconds it's set to false to restore goodbye
-        multiple_kicks[tostring(msg.to.id)] = true
-        local function post_multiple_kick_false()
-            multiple_kicks[tostring(msg.to.id)] = false
-        end
-        postpone(post_multiple_kick_false, false, 30)
-    end
-
-    if msg.action then
-        if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg.to.id) ~= langs[msg.lang].noSetValue then
-            local hash
-            if msg.to.type == 'channel' then
-                hash = 'channel:welcome' .. msg.to.id
+        if matches[1]:lower() == 'setwelcome' and is_momod(msg) then
+            if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].autoexecDenial
             end
-            if msg.to.type == 'chat' then
-                hash = 'chat:welcome' .. msg.to.id
+            return set_welcome(msg.to.id, matches[2])
+        end
+        if matches[1]:lower() == 'setgoodbye' and is_momod(msg) then
+            if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].autoexecDenial
             end
-            redis:incr(hash)
-            local hashonredis = redis:get(hash)
-            if hashonredis then
-                if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg.to.id)) and tonumber(get_memberswelcome(msg.to.id)) ~= 0 then
-                    local function post_msg()
-                        send_large_msg(get_receiver(msg), get_welcome(msg.to.id) .. '\n' .. get_rules(msg.to.id), ok_cb, false)
-                    end
-                    postpone(post_msg, false, 1)
-                    redis:getset(hash, 0)
-                end
+            return set_goodbye(msg.to.id, matches[2])
+        end
+        if matches[1]:lower() == 'unsetwelcome' and is_momod(msg) then
+            return unset_welcome(msg.to.id)
+        end
+        if matches[1]:lower() == 'unsetgoodbye' and is_momod(msg) then
+            return unset_goodbye(msg.to.id)
+        end
+        if matches[1]:lower() == 'setmemberswelcome' and is_momod(msg) then
+            local text = set_memberswelcome(msg.to.id, matches[2])
+            if matches[2] == '0' then
+                return langs[msg.lang].neverWelcome
             else
-                redis:set(hash, 0)
+                return text
             end
         end
-        -- if there's someone kicked in the group with multiple_kicks = true it doesn't send goodbye messages
-        if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) ~= '' and not multiple_kicks[tostring(msg.to.id)] then
-            local function post_msg()
-                send_large_msg(get_receiver(msg), get_goodbye(msg.to.id) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)
+        if matches[1]:lower() == 'getmemberswelcome' and is_momod(msg) then
+            return get_memberswelcome(msg.to.id)
+        end
+
+        -- multiple_kicks
+        if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'kickinactive' or matches[1]:lower() == 'kicknouser' then
+            -- set multiple_kicks of the group as true, after 5 seconds it's set to false to restore goodbye
+            multiple_kicks[tostring(msg.to.id)] = true
+            local function post_multiple_kick_false()
+                multiple_kicks[tostring(msg.to.id)] = false
             end
-            postpone(post_msg, false, 1)
+            postpone(post_multiple_kick_false, false, 30)
+        end
+
+        if msg.action then
+            if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg.to.id) ~= langs[msg.lang].noSetValue then
+                local hash
+                if msg.to.type == 'channel' then
+                    hash = 'channel:welcome' .. msg.to.id
+                end
+                if msg.to.type == 'chat' then
+                    hash = 'chat:welcome' .. msg.to.id
+                end
+                redis:incr(hash)
+                local hashonredis = redis:get(hash)
+                if hashonredis then
+                    if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg.to.id)) and tonumber(get_memberswelcome(msg.to.id)) ~= 0 then
+                        local function post_msg()
+                            send_large_msg(get_receiver(msg), get_welcome(msg.to.id) .. '\n' .. get_rules(msg.to.id), ok_cb, false)
+                        end
+                        postpone(post_msg, false, 1)
+                        redis:getset(hash, 0)
+                    end
+                else
+                    redis:set(hash, 0)
+                end
+            end
+            -- if there's someone kicked in the group with multiple_kicks = true it doesn't send goodbye messages
+            if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) ~= '' and not multiple_kicks[tostring(msg.to.id)] then
+                local function post_msg()
+                    send_large_msg(get_receiver(msg), get_goodbye(msg.to.id) .. ' ' .. msg.action.user.print_name:gsub('_', ' '), ok_cb, false)
+                end
+                postpone(post_msg, false, 1)
+            end
         end
     end
 end

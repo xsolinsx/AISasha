@@ -27,8 +27,10 @@ function on_msg_receive(msg)
         send_typing_abort(receiver, ok_cb, false)
     end
     -- vardump(msg)
+    msg.api_patch = redis:sismember(hash, user_id) or false
     if msg.text then
         if string.match(msg.text, "^@[Aa][Ii][Ss][Aa][Ss][Hh][Aa] ") then
+            msg.api_patch = false
             msg.text = msg.text:gsub("^@[Aa][Ii][Ss][Aa][Ss][Hh][Aa] ", "")
         end
     end

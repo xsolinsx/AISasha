@@ -304,18 +304,20 @@ local function run(msg, matches)
     end
     if matches[1]:lower() == "stats" or matches[1]:lower() == "messages" then
         if not matches[2] then
-            if is_momod(msg) then
-                if msg.to.type == 'chat' then
-                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested group stats ")
-                    send_large_msg(get_receiver(msg), chat_stats2(msg.to.id))
-                elseif msg.to.type == 'channel' then
-                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested supergroup stats ")
-                    send_large_msg(get_receiver(msg), channel_stats2(msg.to.id))
+            if not msg.api_patch then
+                if is_momod(msg) then
+                    if msg.to.type == 'chat' then
+                        savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested group stats ")
+                        send_large_msg(get_receiver(msg), chat_stats2(msg.to.id))
+                    elseif msg.to.type == 'channel' then
+                        savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested supergroup stats ")
+                        send_large_msg(get_receiver(msg), channel_stats2(msg.to.id))
+                    else
+                        return
+                    end
                 else
-                    return
+                    return langs[msg.lang].require_mod
                 end
-            else
-                return langs[msg.lang].require_mod
             end
         elseif matches[2]:lower() == "aisasha" then
             if is_admin1(msg) then
@@ -324,37 +326,41 @@ local function run(msg, matches)
                 return langs[msg.lang].require_admin
             end
         elseif matches[2]:lower() == "group" then
-            if is_admin1(msg) then
-                send_large_msg(get_receiver(msg), chat_stats2(matches[3]))
-                send_large_msg(get_receiver(msg), channel_stats2(matches[3]))
-            else
-                return langs[msg.lang].require_admin
+            if not msg.api_patch then
+                if is_admin1(msg) then
+                    send_large_msg(get_receiver(msg), chat_stats2(matches[3]))
+                    send_large_msg(get_receiver(msg), channel_stats2(matches[3]))
+                else
+                    return langs[msg.lang].require_admin
+                end
             end
         end
         return
     elseif matches[1]:lower() == "statslist" or matches[1]:lower() == "messageslist" then
-        if not matches[2] then
-            if is_momod(msg) then
-                if msg.to.type == 'chat' then
-                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested group stats ")
-                    chat_stats(msg.to.id)
-                elseif msg.to.type == 'channel' then
-                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested supergroup stats ")
-                    channel_stats(msg.to.id)
+        if not msg.api_patch then
+            if not matches[2] then
+                if is_momod(msg) then
+                    if msg.to.type == 'chat' then
+                        savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested group stats ")
+                        chat_stats(msg.to.id)
+                    elseif msg.to.type == 'channel' then
+                        savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] requested supergroup stats ")
+                        channel_stats(msg.to.id)
+                    else
+                        return
+                    end
+                    send_document(get_receiver(msg), "./groups/lists/" .. msg.to.id .. "stats.txt", ok_cb, false)
                 else
-                    return
+                    return langs[msg.lang].require_mod
                 end
-                send_document(get_receiver(msg), "./groups/lists/" .. msg.to.id .. "stats.txt", ok_cb, false)
-            else
-                return langs[msg.lang].require_mod
-            end
-        elseif matches[2]:lower() == "group" then
-            if is_admin1(msg) then
-                chat_stats(matches[3])
-                channel_stats(matches[3])
-                send_document(get_receiver(msg), "./groups/lists/" .. matches[3] .. "stats.txt", ok_cb, false)
-            else
-                return langs[msg.lang].require_admin
+            elseif matches[2]:lower() == "group" then
+                if is_admin1(msg) then
+                    chat_stats(matches[3])
+                    channel_stats(matches[3])
+                    send_document(get_receiver(msg), "./groups/lists/" .. matches[3] .. "stats.txt", ok_cb, false)
+                else
+                    return langs[msg.lang].require_admin
+                end
             end
         end
         return
@@ -383,29 +389,31 @@ local function run(msg, matches)
         end
         return
     elseif matches[1]:lower() == "cleanstats" or matches[1]:lower() == "cleanmessages" then
-        if not matches[2] then
-            if is_momod(msg) then
-                if msg.to.type == 'chat' then
-                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] cleaned real group stats ")
-                    clean_chat_stats(msg.to.id)
-                    return langs[msg.lang].statsCleaned
-                elseif msg.to.type == 'channel' then
-                    savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] cleaned real supergroup stats ")
-                    clean_channel_stats(msg.to.id)
+        if not msg.api_patch then
+            if not matches[2] then
+                if is_momod(msg) then
+                    if msg.to.type == 'chat' then
+                        savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] cleaned real group stats ")
+                        clean_chat_stats(msg.to.id)
+                        return langs[msg.lang].statsCleaned
+                    elseif msg.to.type == 'channel' then
+                        savelog(msg.to.id, user_print_name(msg.from) .. " [" .. msg.from.id .. "] cleaned real supergroup stats ")
+                        clean_channel_stats(msg.to.id)
+                        return langs[msg.lang].statsCleaned
+                    else
+                        return
+                    end
+                else
+                    return langs[msg.lang].require_mod
+                end
+            elseif matches[2]:lower() == "group" then
+                if is_admin1(msg) then
+                    clean_chat_stats(matches[3])
+                    clean_channel_stats(matches[3])
                     return langs[msg.lang].statsCleaned
                 else
-                    return
+                    return langs[msg.lang].require_admin
                 end
-            else
-                return langs[msg.lang].require_mod
-            end
-        elseif matches[2]:lower() == "group" then
-            if is_admin1(msg) then
-                clean_chat_stats(matches[3])
-                clean_channel_stats(matches[3])
-                return langs[msg.lang].statsCleaned
-            else
-                return langs[msg.lang].require_admin
             end
         end
         return

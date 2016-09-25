@@ -29,16 +29,18 @@ local function get_supergroup_stats(extra, success, result)
 end
 
 local function run(msg, matches)
-    if matches[1]:lower() == 'me' then
-        if msg.to.type == 'chat' then
-            chat_info(get_receiver(msg), get_group_stats, { receiver = get_receiver(msg), user = msg.from.id, chat = msg.to.id })
-        elseif msg.to.type == 'channel' then
-            channel_get_users(get_receiver(msg), get_supergroup_stats, { receiver = get_receiver(msg), user = msg.from.id, chat = msg.to.id })
-        elseif msg.to.type == 'user' then
-            local usermsgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
-            send_large_msg(get_receiver(msg), string.gsub(string.gsub(string.gsub(langs[msg.lang].meString, 'W', tostring(usermsgs)), 'X', '100'), 'Z', tostring(usermsgs)))
+    if not msg.api_patch then
+        if matches[1]:lower() == 'me' then
+            if msg.to.type == 'chat' then
+                chat_info(get_receiver(msg), get_group_stats, { receiver = get_receiver(msg), user = msg.from.id, chat = msg.to.id })
+            elseif msg.to.type == 'channel' then
+                channel_get_users(get_receiver(msg), get_supergroup_stats, { receiver = get_receiver(msg), user = msg.from.id, chat = msg.to.id })
+            elseif msg.to.type == 'user' then
+                local usermsgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
+                send_large_msg(get_receiver(msg), string.gsub(string.gsub(string.gsub(langs[msg.lang].meString, 'W', tostring(usermsgs)), 'X', '100'), 'Z', tostring(usermsgs)))
+            end
+            return
         end
-        return
     end
 end
 

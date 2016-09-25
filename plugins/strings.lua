@@ -1,22 +1,24 @@
 local function run(msg, matches)
-    if (matches[1]:lower() == 'setlang' or matches[1]:lower() == 'lingua') and matches[2] then
-        if msg.to.type == 'user' then
-            redis:set('lang:' .. msg.to.id, matches[2]:lower())
-            return langs[matches[2]:lower()].langSet
-        elseif is_owner(msg) then
-            redis:set('lang:' .. msg.to.id, matches[2]:lower())
-            return langs[matches[2]:lower()].langSet
-        else
-            return langs[msg.lang].require_owner
+    if not msg.api_patch then
+        if (matches[1]:lower() == 'setlang' or matches[1]:lower() == 'lingua') and matches[2] then
+            if msg.to.type == 'user' then
+                redis:set('lang:' .. msg.to.id, matches[2]:lower())
+                return langs[matches[2]:lower()].langSet
+            elseif is_owner(msg) then
+                redis:set('lang:' .. msg.to.id, matches[2]:lower())
+                return langs[matches[2]:lower()].langSet
+            else
+                return langs[msg.lang].require_owner
+            end
         end
-    end
-    if matches[1]:lower() == 'reloadstrings' or matches[1]:lower() == 'sasha aggiorna stringhe' or matches[1]:lower() == 'aggiorna stringhe' then
-        if is_sudo(msg) then
-            print('Loading languages.lua...')
-            langs = dofile('languages.lua')
-            return langs[msg.lang].langUpdate
-        else
-            return langs[msg.lang].require_sudo
+        if matches[1]:lower() == 'reloadstrings' or matches[1]:lower() == 'sasha aggiorna stringhe' or matches[1]:lower() == 'aggiorna stringhe' then
+            if is_sudo(msg) then
+                print('Loading languages.lua...')
+                langs = dofile('languages.lua')
+                return langs[msg.lang].langUpdate
+            else
+                return langs[msg.lang].require_sudo
+            end
         end
     end
 end

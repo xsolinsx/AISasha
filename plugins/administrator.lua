@@ -191,20 +191,22 @@ local function run(msg, matches)
             end
             return
         end
-        if matches[1]:lower() == "pm" or matches[1]:lower() == "sasha messaggia" then
-            send_large_msg("user#id" .. matches[2], matches[3])
-            return langs[msg.lang].pmSent
-        end
-        if matches[1]:lower() == "pmblock" or matches[1]:lower() == "sasha blocca" then
-            if is_admin2(matches[2]) then
-                return langs[msg.lang].cantBlockAdmin
+        if not msg.api_patch then
+            if matches[1]:lower() == "pm" or matches[1]:lower() == "sasha messaggia" then
+                send_large_msg("user#id" .. matches[2], matches[3])
+                return langs[msg.lang].pmSent
             end
-            block_user("user#id" .. matches[2], ok_cb, false)
-            return langs[msg.lang].userBlocked
-        end
-        if matches[1]:lower() == "pmunblock" or matches[1]:lower() == "sasha sblocca" then
-            unblock_user("user#id" .. matches[2], ok_cb, false)
-            return langs[msg.lang].userUnblocked
+            if matches[1]:lower() == "pmblock" or matches[1]:lower() == "sasha blocca" then
+                if is_admin2(matches[2]) then
+                    return langs[msg.lang].cantBlockAdmin
+                end
+                block_user("user#id" .. matches[2], ok_cb, false)
+                return langs[msg.lang].userBlocked
+            end
+            if matches[1]:lower() == "pmunblock" or matches[1]:lower() == "sasha sblocca" then
+                unblock_user("user#id" .. matches[2], ok_cb, false)
+                return langs[msg.lang].userUnblocked
+            end
         end
         if matches[1]:lower() == "import" then
             -- join by group link
@@ -254,65 +256,69 @@ local function run(msg, matches)
                 end
                 return langs[msg.lang].chatListSent
             end
-            if matches[1]:lower() == "sync_gbans" or matches[1]:lower() == "sasha sincronizza lista superban" then
-                local url = "https://seedteam.org/Teleseed/Global_bans.json"
-                local SEED_gbans = https.request(url)
-                local jdat = json:decode(SEED_gbans)
-                for k, v in pairs(jdat) do
-                    redis:hset('user:' .. v, 'print_name', k)
-                    banall_user(v)
-                    print(k, v .. " Globally banned")
-                end
-                return langs[msg.lang].gbansSync
-            end
-            if matches[1]:lower() == "backup" or matches[1]:lower() == "sasha esegui backup" then
-                local time = os.time()
-                local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISashaExp --exclude=/home/pi/AISashaExp/.git --exclude=/home/pi/AISashaExp/.luarocks --exclude=/home/pi/AISashaExp/patches --exclude=/home/pi/AISashaExp/tg'):read('*all')
-                local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
-                file:write(log)
-                file:flush()
-                file:close()
-                send_document_SUDOERS("/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
-                return langs[msg.lang].backupDone
-            end
-            if matches[1]:lower() == "uploadbackup" or matches[1]:lower() == "sasha invia backup" then
-                local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
-                if files then
-                    local backups = { }
-                    for k, v in pairsByKeys(files) do
-                        if string.match(v, '^backupAISasha%d+%.tar%.gz$') then
-                            backups[string.match(v, '%d+')] = v
-                        end
+            if not msg.api_patch then
+                if matches[1]:lower() == "sync_gbans" or matches[1]:lower() == "sasha sincronizza lista superban" then
+                    local url = "https://seedteam.org/Teleseed/Global_bans.json"
+                    local SEED_gbans = https.request(url)
+                    local jdat = json:decode(SEED_gbans)
+                    for k, v in pairs(jdat) do
+                        redis:hset('user:' .. v, 'print_name', k)
+                        banall_user(v)
+                        print(k, v .. " Globally banned")
                     end
-                    if backups then
-                        local last_backup = ''
-                        for k, v in pairsByKeys(backups) do
-                            last_backup = v
+                    return langs[msg.lang].gbansSync
+                end
+                if matches[1]:lower() == "backup" or matches[1]:lower() == "sasha esegui backup" then
+                    local time = os.time()
+                    local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISashaExp --exclude=/home/pi/AISashaExp/.git --exclude=/home/pi/AISashaExp/.luarocks --exclude=/home/pi/AISashaExp/patches --exclude=/home/pi/AISashaExp/tg'):read('*all')
+                    local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
+                    file:write(log)
+                    file:flush()
+                    file:close()
+                    send_document_SUDOERS("/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
+                    return langs[msg.lang].backupDone
+                end
+                if matches[1]:lower() == "uploadbackup" or matches[1]:lower() == "sasha invia backup" then
+                    local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
+                    if files then
+                        local backups = { }
+                        for k, v in pairsByKeys(files) do
+                            if string.match(v, '^backupAISasha%d+%.tar%.gz$') then
+                                backups[string.match(v, '%d+')] = v
+                            end
                         end
-                        send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
-                        return langs[msg.lang].backupSent
+                        if backups then
+                            local last_backup = ''
+                            for k, v in pairsByKeys(backups) do
+                                last_backup = v
+                            end
+                            send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
+                            return langs[msg.lang].backupSent
+                        else
+                            return langs[msg.lang].backupMissing
+                        end
                     else
                         return langs[msg.lang].backupMissing
                     end
-                else
-                    return langs[msg.lang].backupMissing
                 end
-            end
-            if matches[1]:lower() == 'vardump' then
-                if type(msg.reply_id) ~= "nil" then
-                    msgr = get_message(msg.reply_id, vardump_msg, { receiver = get_receiver(msg), name = 'reply' })
-                elseif matches[2] then
-                    msgr = get_message(matches[2], vardump_msg, { receiver = get_receiver(msg), name = 'msg_id' })
-                else
-                    msg.to.phone = ''
-                    msg.from.phone = ''
-                    local text = 'VARDUMP (<msg>)\n' .. serpent.block(msg, { sortkeys = false, comment = false })
-                    send_large_msg(get_receiver(msg), text)
+                if matches[1]:lower() == 'vardump' then
+                    if type(msg.reply_id) ~= "nil" then
+                        msgr = get_message(msg.reply_id, vardump_msg, { receiver = get_receiver(msg), name = 'reply' })
+                    elseif matches[2] then
+                        msgr = get_message(matches[2], vardump_msg, { receiver = get_receiver(msg), name = 'msg_id' })
+                    else
+                        msg.to.phone = ''
+                        msg.from.phone = ''
+                        local text = 'VARDUMP (<msg>)\n' .. serpent.block(msg, { sortkeys = false, comment = false })
+                        send_large_msg(get_receiver(msg), text)
+                    end
                 end
             end
         end
-        if matches[1]:lower() == 'checkspeed' then
-            return os.date('%S', os.difftime(tonumber(os.time()), tonumber(msg.date)))
+        if not msg.api_patch then
+            if matches[1]:lower() == 'checkspeed' then
+                return os.date('%S', os.difftime(tonumber(os.time()), tonumber(msg.date)))
+            end
         end
         if matches[1]:lower() == 'updateid' or matches[1]:lower() == 'sasha aggiorna longid' then
             local data = load_data(_config.moderation.data)

@@ -32,21 +32,23 @@ local function unset_var(msg, name, global)
 end
 
 local function run(msg, matches)
-    local name = string.sub(matches[2], 1, 50)
+    if not msg.api_patch then
+        local name = string.sub(matches[2], 1, 50)
 
-    if is_momod(msg) then
-        if matches[1]:lower() == 'unset' or matches[1]:lower() == 'sasha unsetta' or matches[1]:lower() == 'unsetta' then
-            return unset_var(msg, name:lower(), false)
-        end
-        if is_admin1(msg) then
-            if matches[1]:lower() == 'unsetglobal' then
-                unset_var(msg, name:lower(), true)
+        if is_momod(msg) then
+            if matches[1]:lower() == 'unset' or matches[1]:lower() == 'sasha unsetta' or matches[1]:lower() == 'unsetta' then
+                return unset_var(msg, name:lower(), false)
+            end
+            if is_admin1(msg) then
+                if matches[1]:lower() == 'unsetglobal' then
+                    unset_var(msg, name:lower(), true)
+                end
+            else
+                return langs[msg.lang].require_admin
             end
         else
-            return langs[msg.lang].require_admin
+            return langs[msg.lang].require_mod
         end
-    else
-        return langs[msg.lang].require_mod
     end
 end
 

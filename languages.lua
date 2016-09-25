@@ -635,6 +635,10 @@ return {
         -- onservice.lua --
         notMyGroup = 'Questo non è un mio gruppo, addio.',
 
+        -- patch_for_api.lua --
+        groupPatched = 'Patch per l\'utilizzo simultaneo di Sasha API e Sasha Utente eseguita. Sarà sempre possibile eseguire i comandi con Sasha Utente usando il tag in questo modo "@AISasha <command>", così facendo Sasha API ignorerà il messaggio.',
+        groupUnpatched = 'Patch per l\'utilizzo simultaneo di Sasha API e Sasha Utente rimossa. Si prega di fare attenzione ai conflitti tra i due bot.',
+
         -- plugins.lua --
         enabled = ' abilitato.',
         disabled = ' disabilitato.',
@@ -1155,6 +1159,14 @@ return {
             'Plugin per far abbandonare un gruppo a Sasha.',
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha lascia il gruppo.',
+        },
+
+        patch_for_api =
+        {
+            '🅿️ PATCH_FOR_API',
+            'Plugin per abilitare e disabilitare la patch.',
+            'OWNER',
+            'apipatch (disable|enable): Sasha disabilita|abilita la patch.',
         },
 
         plugins =
@@ -1807,6 +1819,10 @@ return {
         -- onservice.lua --
         notMyGroup = 'This is not one of my groups, bye.',
 
+        -- patch_for_api.lua --
+        groupPatched = 'Patch to use API Sasha and Sasha User executed. Everyone will be able to execute Sasha User commands by using her tag like this "@AISasha <command>", in this way API Sasha will ignore the message.',
+        groupUnpatched = 'Patch to use API Sasha and Sasha User removed. Be careful of conflicts between the two.',
+
         -- plugins.lua --
         enabled = ' enabled.',
         disabled = ' disabled.',
@@ -2327,6 +2343,14 @@ return {
             'Plugin to make Sasha leave a group.',
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha leaves the group.',
+        },
+
+        patch_for_api =
+        {
+            '🅿️ PATCH_FOR_API',
+            'Plugin to enable or disable the patch.',
+            'OWNER',
+            'apipatch (disable|enable): Sasha disables|enables the patch.',
         },
 
         plugins =
