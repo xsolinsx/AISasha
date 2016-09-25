@@ -1964,39 +1964,41 @@ end
 local function run(msg, matches)
     local name_log = user_print_name(msg.from)
     local data = load_data(_config.moderation.data)
-    if matches[1]:lower() == 'type' then
-        if is_momod(msg) then
-            if data[tostring(msg.to.id)] then
-                if not data[tostring(msg.to.id)]['group_type'] then
-                    if msg.to.type == 'chat' and not is_realm(msg) then
-                        data[tostring(msg.to.id)]['group_type'] = 'Group'
-                        save_data(_config.moderation.data, data)
-                    elseif msg.to.type == 'channel' then
-                        data[tostring(msg.to.id)]['group_type'] = 'SuperGroup'
-                        save_data(_config.moderation.data, data)
+    if not msg.api_patch then
+        if matches[1]:lower() == 'type' then
+            if is_momod(msg) then
+                if data[tostring(msg.to.id)] then
+                    if not data[tostring(msg.to.id)]['group_type'] then
+                        if msg.to.type == 'chat' and not is_realm(msg) then
+                            data[tostring(msg.to.id)]['group_type'] = 'Group'
+                            save_data(_config.moderation.data, data)
+                        elseif msg.to.type == 'channel' then
+                            data[tostring(msg.to.id)]['group_type'] = 'SuperGroup'
+                            save_data(_config.moderation.data, data)
+                        end
                     end
+                    return data[tostring(msg.to.id)]['group_type']
+                else
+                    return langs[msg.lang].chatTypeNotFound
                 end
-                return data[tostring(msg.to.id)]['group_type']
             else
-                return langs[msg.lang].chatTypeNotFound
+                return langs[msg.lang].require_mod
             end
-        else
-            return langs[msg.lang].require_mod
         end
-    end
-    if matches[1]:lower() == 'log' then
-        if is_owner(msg) then
-            savelog(msg.to.id, "log file created by owner/admin")
-            return send_document(get_receiver(msg), "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
-        else
-            return langs[msg.lang].require_owner
+        if matches[1]:lower() == 'log' then
+            if is_owner(msg) then
+                savelog(msg.to.id, "log file created by owner/admin")
+                return send_document(get_receiver(msg), "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
+            else
+                return langs[msg.lang].require_owner
+            end
         end
-    end
-    if matches[1]:lower() == 'admins' then
-        if msg.to.type == 'channel' then
-            return channel_get_admins(get_receiver(msg), contact_mods_callback, { msg = msg })
-        elseif msg.to.type == 'chat' then
-            return contact_mods(msg)
+        if matches[1]:lower() == 'admins' then
+            if msg.to.type == 'channel' then
+                return channel_get_admins(get_receiver(msg), contact_mods_callback, { msg = msg })
+            elseif msg.to.type == 'chat' then
+                return contact_mods(msg)
+            end
         end
     end
 
@@ -2026,21 +2028,23 @@ local function run(msg, matches)
             end
         end
 
-        if matches[1]:lower() == 'allchats' then
-            if is_admin1(msg) then
-                return all_chats(msg)
-            else
-                return langs[msg.lang].require_admin
+        if not msg.api_patch then
+            if matches[1]:lower() == 'allchats' then
+                if is_admin1(msg) then
+                    return all_chats(msg)
+                else
+                    return langs[msg.lang].require_admin
+                end
             end
-        end
 
-        if matches[1]:lower() == 'allchatslist' then
-            if is_admin1(msg) then
-                all_chats(msg)
-                send_document("chat#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
-                send_document("channel#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
-            else
-                return langs[msg.lang].require_admin
+            if matches[1]:lower() == 'allchatslist' then
+                if is_admin1(msg) then
+                    all_chats(msg)
+                    send_document("chat#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
+                    send_document("channel#id" .. msg.to.id, "./groups/lists/all_listed_groups.txt", ok_cb, false)
+                else
+                    return langs[msg.lang].require_admin
+                end
             end
         end
 
@@ -2123,191 +2127,193 @@ local function run(msg, matches)
                 return langs[msg.lang].require_admin
             end
         end
-        if matches[1]:lower() == 'rem' and matches[2] then
-            if is_admin1(msg) then
-                -- Group configuration removal
-                data[tostring(matches[2])] = nil
-                save_data(_config.moderation.data, data)
-                local groups = 'groups'
-                if not data[tostring(groups)] then
-                    data[tostring(groups)] = nil
+        if not msg.api_patch then
+            if matches[1]:lower() == 'rem' and matches[2] then
+                if is_admin1(msg) then
+                    -- Group configuration removal
+                    data[tostring(matches[2])] = nil
                     save_data(_config.moderation.data, data)
-                end
-                data[tostring(groups)][tostring(matches[2])] = nil
-                save_data(_config.moderation.data, data)
-                return send_large_msg(get_receiver(msg), langs[msg.lang].chat .. matches[2] .. langs[msg.lang].removed)
-            else
-                return langs[msg.lang].require_admin
-            end
-        end
-        if matches[1]:lower() == 'addadmin' then
-            if is_sudo(msg) then
-                if string.match(matches[2], '^%d+$') then
-                    print("user " .. matches[2] .. " has been promoted as admin")
-                    return admin_promote(matches[2], matches[2], msg.lang)
-                else
-                    return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
-                end
-            else
-                return langs[msg.lang].require_sudo
-            end
-        end
-        if matches[1]:lower() == 'removeadmin' then
-            if is_sudo(msg) then
-                if string.match(matches[2], '^%d+$') then
-                    print("user " .. matches[2] .. " has been demoted")
-                    return admin_demote(matches[2], matches[2], msg.lang)
-                else
-                    return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
-                end
-            else
-                return langs[msg.lang].require_sudo
-            end
-        end
-        if matches[1]:lower() == 'setgpowner' and matches[2] and matches[3] then
-            if is_admin1(msg) then
-                data[tostring(matches[2])]['set_owner'] = matches[3]
-                save_data(_config.moderation.data, data)
-                local lang = get_lang(matches[2])
-                local text = matches[3] .. langs[msg.lang].setOwner
-                send_large_msg("chat#id" .. matches[2], text)
-                return send_large_msg("channel#id" .. matches[2], text)
-            else
-                return langs[msg.lang].require_admin
-            end
-        end
-        if matches[1]:lower() == 'list' then
-            if is_admin1(msg) then
-                if matches[2]:lower() == 'admins' then
-                    return admin_list(msg.lang)
-                elseif matches[2]:lower() == 'groups' then
-                    if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                        groups_list(msg)
-                        send_document("chat#id" .. msg.to.id, "./groups/lists/groups.txt", ok_cb, false)
-                        send_document("channel#id" .. msg.to.id, "./groups/lists/groups.txt", ok_cb, false)
-                        -- return group_list(msg)
-                    elseif msg.to.type == 'user' then
-                        groups_list(msg)
-                        send_document("user#id" .. msg.from.id, "./groups/lists/groups.txt", ok_cb, false)
-                        -- return group_list(msg)
+                    local groups = 'groups'
+                    if not data[tostring(groups)] then
+                        data[tostring(groups)] = nil
+                        save_data(_config.moderation.data, data)
                     end
-                    return langs[msg.lang].groupListCreated
-                elseif matches[2]:lower() == 'realms' then
-                    if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                        realms_list(msg)
-                        send_document("chat#id" .. msg.to.id, "./groups/lists/realms.txt", ok_cb, false)
-                        send_document("channel#id" .. msg.to.id, "./groups/lists/realms.txt", ok_cb, false)
-                        -- return realms_list(msg)
-                    elseif msg.to.type == 'user' then
-                        realms_list(msg)
-                        send_document("user#id" .. msg.from.id, "./groups/lists/realms.txt", ok_cb, false)
-                        -- return realms_list(msg)
-                    end
-                    return langs[msg.lang].realmListCreated
+                    data[tostring(groups)][tostring(matches[2])] = nil
+                    save_data(_config.moderation.data, data)
+                    return send_large_msg(get_receiver(msg), langs[msg.lang].chat .. matches[2] .. langs[msg.lang].removed)
+                else
+                    return langs[msg.lang].require_admin
                 end
-            else
-                return langs[msg.lang].require_admin
             end
-        end
-        if matches[1] == 'chat_add_user' then
-            if msg.service and msg.action then
-                if msg.action.user then
-                    if msg.action.user.id ~= 202256859 then
-                        -- if not admin and not bot then
-                        if not is_admin1(msg) and not msg.from.id == our_id then
-                            return chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
+            if matches[1]:lower() == 'addadmin' then
+                if is_sudo(msg) then
+                    if string.match(matches[2], '^%d+$') then
+                        print("user " .. matches[2] .. " has been promoted as admin")
+                        return admin_promote(matches[2], matches[2], msg.lang)
+                    else
+                        return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
+                    end
+                else
+                    return langs[msg.lang].require_sudo
+                end
+            end
+            if matches[1]:lower() == 'removeadmin' then
+                if is_sudo(msg) then
+                    if string.match(matches[2], '^%d+$') then
+                        print("user " .. matches[2] .. " has been demoted")
+                        return admin_demote(matches[2], matches[2], msg.lang)
+                    else
+                        return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
+                    end
+                else
+                    return langs[msg.lang].require_sudo
+                end
+            end
+            if matches[1]:lower() == 'setgpowner' and matches[2] and matches[3] then
+                if is_admin1(msg) then
+                    data[tostring(matches[2])]['set_owner'] = matches[3]
+                    save_data(_config.moderation.data, data)
+                    local lang = get_lang(matches[2])
+                    local text = matches[3] .. langs[msg.lang].setOwner
+                    send_large_msg("chat#id" .. matches[2], text)
+                    return send_large_msg("channel#id" .. matches[2], text)
+                else
+                    return langs[msg.lang].require_admin
+                end
+            end
+            if matches[1]:lower() == 'list' then
+                if is_admin1(msg) then
+                    if matches[2]:lower() == 'admins' then
+                        return admin_list(msg.lang)
+                    elseif matches[2]:lower() == 'groups' then
+                        if msg.to.type == 'chat' or msg.to.type == 'channel' then
+                            groups_list(msg)
+                            send_document("chat#id" .. msg.to.id, "./groups/lists/groups.txt", ok_cb, false)
+                            send_document("channel#id" .. msg.to.id, "./groups/lists/groups.txt", ok_cb, false)
+                            -- return group_list(msg)
+                        elseif msg.to.type == 'user' then
+                            groups_list(msg)
+                            send_document("user#id" .. msg.from.id, "./groups/lists/groups.txt", ok_cb, false)
+                            -- return group_list(msg)
+                        end
+                        return langs[msg.lang].groupListCreated
+                    elseif matches[2]:lower() == 'realms' then
+                        if msg.to.type == 'chat' or msg.to.type == 'channel' then
+                            realms_list(msg)
+                            send_document("chat#id" .. msg.to.id, "./groups/lists/realms.txt", ok_cb, false)
+                            send_document("channel#id" .. msg.to.id, "./groups/lists/realms.txt", ok_cb, false)
+                            -- return realms_list(msg)
+                        elseif msg.to.type == 'user' then
+                            realms_list(msg)
+                            send_document("user#id" .. msg.from.id, "./groups/lists/realms.txt", ok_cb, false)
+                            -- return realms_list(msg)
+                        end
+                        return langs[msg.lang].realmListCreated
+                    end
+                else
+                    return langs[msg.lang].require_admin
+                end
+            end
+            if matches[1] == 'chat_add_user' then
+                if msg.service and msg.action then
+                    if msg.action.user then
+                        if msg.action.user.id ~= 202256859 then
+                            -- if not admin and not bot then
+                            if not is_admin1(msg) and not msg.from.id == our_id then
+                                return chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
+                            end
                         end
                     end
                 end
             end
-        end
-        if (matches[1]:lower() == 'lock' or matches[1]:lower() == 'sasha blocca' or matches[1]:lower() == 'blocca') and matches[2] and matches[3] then
-            if is_admin1(msg) then
-                if matches[3]:lower() == 'name' then
-                    return realm_lock_group_name(data, matches[2], msg.lang)
+            if (matches[1]:lower() == 'lock' or matches[1]:lower() == 'sasha blocca' or matches[1]:lower() == 'blocca') and matches[2] and matches[3] then
+                if is_admin1(msg) then
+                    if matches[3]:lower() == 'name' then
+                        return realm_lock_group_name(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'member' then
+                        return realm_lock_group_member(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'photo' then
+                        return realm_lock_group_photo(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'flood' then
+                        return realm_lock_group_flood(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'arabic' then
+                        return realm_lock_group_arabic(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'links' then
+                        return realm_lock_group_links(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'spam' then
+                        return realm_lock_group_spam(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'rtl' then
+                        return realm_lock_group_rtl(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'sticker' then
+                        return realm_lock_group_sticker(data, matches[2], msg.lang)
+                    end
+                else
+                    return langs[msg.lang].require_admin
                 end
-                if matches[3]:lower() == 'member' then
-                    return realm_lock_group_member(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'photo' then
-                    return realm_lock_group_photo(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'flood' then
-                    return realm_lock_group_flood(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'arabic' then
-                    return realm_lock_group_arabic(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'links' then
-                    return realm_lock_group_links(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'spam' then
-                    return realm_lock_group_spam(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'rtl' then
-                    return realm_lock_group_rtl(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'sticker' then
-                    return realm_lock_group_sticker(data, matches[2], msg.lang)
-                end
-            else
-                return langs[msg.lang].require_admin
             end
-        end
-        if (matches[1]:lower() == 'unlock' or matches[1]:lower() == 'sasha sblocca' or matches[1]:lower() == 'sblocca') and matches[2] and matches[3] then
-            if is_admin1(msg) then
-                if matches[3]:lower() == 'name' then
-                    return realm_unlock_group_name(data, matches[2], msg.lang)
+            if (matches[1]:lower() == 'unlock' or matches[1]:lower() == 'sasha sblocca' or matches[1]:lower() == 'sblocca') and matches[2] and matches[3] then
+                if is_admin1(msg) then
+                    if matches[3]:lower() == 'name' then
+                        return realm_unlock_group_name(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'member' then
+                        return realm_unlock_group_member(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'photo' then
+                        return realm_unlock_group_photo(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'flood' then
+                        return realm_unlock_group_flood(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'arabic' then
+                        return realm_unlock_group_arabic(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'links' then
+                        return realm_unlock_group_links(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'spam' then
+                        return realm_unlock_group_spam(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'rtl' then
+                        return realm_unlock_group_rtl(data, matches[2], msg.lang)
+                    end
+                    if matches[3]:lower() == 'sticker' then
+                        return realm_unlock_group_sticker(data, matches[2], msg.lang)
+                    end
+                else
+                    return langs[msg.lang].require_admin
                 end
-                if matches[3]:lower() == 'member' then
-                    return realm_unlock_group_member(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'photo' then
-                    return realm_unlock_group_photo(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'flood' then
-                    return realm_unlock_group_flood(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'arabic' then
-                    return realm_unlock_group_arabic(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'links' then
-                    return realm_unlock_group_links(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'spam' then
-                    return realm_unlock_group_spam(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'rtl' then
-                    return realm_unlock_group_rtl(data, matches[2], msg.lang)
-                end
-                if matches[3]:lower() == 'sticker' then
-                    return realm_unlock_group_sticker(data, matches[2], msg.lang)
-                end
-            else
-                return langs[msg.lang].require_admin
             end
-        end
-        if matches[1]:lower() == 'settings' and data[tostring(matches[2])]['settings'] then
-            if is_admin1(msg) then
-                return realm_group_settings(matches[2], msg.lang)
-            else
-                return langs[msg.lang].require_admin
+            if matches[1]:lower() == 'settings' and data[tostring(matches[2])]['settings'] then
+                if is_admin1(msg) then
+                    return realm_group_settings(matches[2], msg.lang)
+                else
+                    return langs[msg.lang].require_admin
+                end
             end
-        end
-        if matches[1]:lower() == 'supersettings' and data[tostring(matches[2])]['settings'] then
-            if is_admin1(msg) then
-                return realm_supergroup_settings(matches[2], msg.lang)
-            else
-                return langs[msg.lang].require_admin
+            if matches[1]:lower() == 'supersettings' and data[tostring(matches[2])]['settings'] then
+                if is_admin1(msg) then
+                    return realm_supergroup_settings(matches[2], msg.lang)
+                else
+                    return langs[msg.lang].require_admin
+                end
             end
-        end
-        if matches[1]:lower() == 'setgprules' then
-            if is_admin1(msg) then
-                data[tostring(matches[2])]['rules'] = matches[3]
-                save_data(_config.moderation.data, data)
-                return langs[msg.lang].newRules .. matches[3]
-            else
-                return langs[msg.lang].require_admin
+            if matches[1]:lower() == 'setgprules' then
+                if is_admin1(msg) then
+                    data[tostring(matches[2])]['rules'] = matches[3]
+                    save_data(_config.moderation.data, data)
+                    return langs[msg.lang].newRules .. matches[3]
+                else
+                    return langs[msg.lang].require_admin
+                end
             end
         end
         if matches[1]:lower() == 'setgroupabout' and matches[2] and matches[3] then
@@ -2372,56 +2378,58 @@ local function run(msg, matches)
         if matches[1] == 'chat_created' and msg.from.id == 0 and group_type == "realm" then
             return autorealmadd(msg)
         end
-        if matches[1]:lower() == 'add' and not matches[2] then
-            if is_admin1(msg) then
-                if is_realm(msg) then
-                    return langs[msg.lang].errorAlreadyRealm
+        if not msg.api_patch then
+            if matches[1]:lower() == 'add' and not matches[2] then
+                if is_admin1(msg) then
+                    if is_realm(msg) then
+                        return langs[msg.lang].errorAlreadyRealm
+                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added group [ " .. msg.to.id .. " ]")
+                    print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") added")
+                    return modadd(msg)
+                else
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to add group [ " .. msg.to.id .. " ]")
+                    return langs[msg.lang].require_admin
                 end
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added group [ " .. msg.to.id .. " ]")
-                print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") added")
-                return modadd(msg)
-            else
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to add group [ " .. msg.to.id .. " ]")
-                return langs[msg.lang].require_admin
             end
-        end
-        if matches[1]:lower() == 'add' and matches[2]:lower() == 'realm' then
-            if is_sudo(msg) then
-                if is_group(msg) then
-                    return langs[msg.lang].errorAlreadyGroup
+            if matches[1]:lower() == 'add' and matches[2]:lower() == 'realm' then
+                if is_sudo(msg) then
+                    if is_group(msg) then
+                        return langs[msg.lang].errorAlreadyGroup
+                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added realm [ " .. msg.to.id .. " ]")
+                    print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") added as a realm")
+                    return realmadd(msg)
+                else
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to add realm [ " .. msg.to.id .. " ]")
+                    return langs[msg.lang].require_sudo
                 end
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added realm [ " .. msg.to.id .. " ]")
-                print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") added as a realm")
-                return realmadd(msg)
-            else
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to add realm [ " .. msg.to.id .. " ]")
-                return langs[msg.lang].require_sudo
             end
-        end
-        if matches[1]:lower() == 'rem' and not matches[2] then
-            if is_admin1(msg) then
-                if not is_group(msg) then
-                    return langs[msg.lang].errorNotGroup
+            if matches[1]:lower() == 'rem' and not matches[2] then
+                if is_admin1(msg) then
+                    if not is_group(msg) then
+                        return langs[msg.lang].errorNotGroup
+                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed group [ " .. msg.to.id .. " ]")
+                    print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed")
+                    return modrem(msg)
+                else
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to remove group [ " .. msg.to.id .. " ]")
+                    return langs[msg.lang].require_admin
                 end
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed group [ " .. msg.to.id .. " ]")
-                print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed")
-                return modrem(msg)
-            else
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to remove group [ " .. msg.to.id .. " ]")
-                return langs[msg.lang].require_admin
             end
-        end
-        if matches[1]:lower() == 'rem' and matches[2]:lower() == 'realm' then
-            if is_sudo(msg) then
-                if not is_realm(msg) then
-                    return langs[msg.lang].errorNotRealm
+            if matches[1]:lower() == 'rem' and matches[2]:lower() == 'realm' then
+                if is_sudo(msg) then
+                    if not is_realm(msg) then
+                        return langs[msg.lang].errorNotRealm
+                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed realm [ " .. msg.to.id .. " ]")
+                    print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed as a realm")
+                    return realmrem(msg)
+                else
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to remove realm [ " .. msg.to.id .. " ]")
+                    return langs[msg.lang].require_sudo
                 end
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed realm [ " .. msg.to.id .. " ]")
-                print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed as a realm")
-                return realmrem(msg)
-            else
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to remove realm [ " .. msg.to.id .. " ]")
-                return langs[msg.lang].require_sudo
             end
         end
         if data[tostring(msg.to.id)] then
@@ -2451,7 +2459,6 @@ local function run(msg, matches)
                 if settings.lock_photo == 'yes' then
                     local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
                     redis:incr(picturehash)
-                    -- -
                     local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
                     local picprotectionredis = redis:get(picturehash)
                     if picprotectionredis then
@@ -2544,37 +2551,39 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             end
-            if matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi' then
-                if is_owner(msg) then
-                    if type(msg.reply_id) ~= "nil" then
-                        msgr = get_message(msg.reply_id, promote_by_reply, { receiver = get_receiver(msg) })
-                    elseif string.match(matches[2], '^%d+$') then
-                        return promote(get_receiver(msg), 'NONAME', matches[2])
+            if not msg.api_patch then
+                if matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi' then
+                    if is_owner(msg) then
+                        if type(msg.reply_id) ~= "nil" then
+                            msgr = get_message(msg.reply_id, promote_by_reply, { receiver = get_receiver(msg) })
+                        elseif string.match(matches[2], '^%d+$') then
+                            return promote(get_receiver(msg), 'NONAME', matches[2])
+                        else
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
+                            return resolve_username(string.gsub(matches[2], '@', ''), chat_promote_by_username, { receiver = get_receiver(msg) })
+                        end
                     else
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
-                        return resolve_username(string.gsub(matches[2], '@', ''), chat_promote_by_username, { receiver = get_receiver(msg) })
+                        return langs[msg.lang].require_owner
                     end
-                else
-                    return langs[msg.lang].require_owner
                 end
-            end
-            if matches[1]:lower() == 'demote' or matches[1]:lower() == 'sasha degrada' or matches[1]:lower() == 'degrada' then
-                if is_owner(msg) then
-                    if type(msg.reply_id) ~= "nil" then
-                        msgr = get_message(msg.reply_id, demote_by_reply, { receiver = get_receiver(msg) })
-                    elseif string.match(matches[2], '^%d+$') then
-                        return demote(get_receiver(msg), 'NONAME', matches[2])
+                if matches[1]:lower() == 'demote' or matches[1]:lower() == 'sasha degrada' or matches[1]:lower() == 'degrada' then
+                    if is_owner(msg) then
+                        if type(msg.reply_id) ~= "nil" then
+                            msgr = get_message(msg.reply_id, demote_by_reply, { receiver = get_receiver(msg) })
+                        elseif string.match(matches[2], '^%d+$') then
+                            return demote(get_receiver(msg), 'NONAME', matches[2])
+                        else
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
+                            return resolve_username(string.gsub(matches[2], '@', ''), chat_demote_by_username, { receiver = get_receiver(msg) })
+                        end
                     else
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
-                        return resolve_username(string.gsub(matches[2], '@', ''), chat_demote_by_username, { receiver = get_receiver(msg) })
+                        return langs[msg.lang].require_owner
                     end
-                else
-                    return langs[msg.lang].require_owner
                 end
-            end
-            if matches[1]:lower() == 'modlist' or matches[1]:lower() == 'sasha lista mod' or matches[1]:lower() == 'lista mod' then
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group modlist")
-                return modlist(msg)
+                if matches[1]:lower() == 'modlist' or matches[1]:lower() == 'sasha lista mod' or matches[1]:lower() == 'lista mod' then
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group modlist")
+                    return modlist(msg)
+                end
             end
             if matches[1]:lower() == 'about' or matches[1]:lower() == 'sasha descrizione' then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group description")
@@ -2583,21 +2592,23 @@ local function run(msg, matches)
                 end
                 return langs[msg.lang].description .. string.gsub(msg.to.print_name, "_", " ") .. ':\n\n' .. about
             end
-            if matches[1]:lower() == 'rules' or matches[1]:lower() == 'sasha regole' then
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
-                if not data[tostring(msg.to.id)]['rules'] then
-                    return langs[msg.lang].noRules
+            if not msg.api_patch then
+                if matches[1]:lower() == 'rules' or matches[1]:lower() == 'sasha regole' then
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
+                    if not data[tostring(msg.to.id)]['rules'] then
+                        return langs[msg.lang].noRules
+                    end
+                    return langs[msg.lang].rules .. data[tostring(msg.to.id)]['rules']
                 end
-                return langs[msg.lang].rules .. data[tostring(msg.to.id)]['rules']
-            end
-            if matches[1]:lower() == 'setrules' or matches[1]:lower() == 'sasha imposta regole' then
-                if is_momod(msg) then
-                    data[tostring(msg.to.id)]['rules'] = matches[2]
-                    save_data(_config.moderation.data, data)
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] has changed group rules to [" .. matches[2] .. "]")
-                    return langs[msg.lang].newRules .. matches[2]
-                else
-                    return langs[msg.lang].require_mod
+                if matches[1]:lower() == 'setrules' or matches[1]:lower() == 'sasha imposta regole' then
+                    if is_momod(msg) then
+                        data[tostring(msg.to.id)]['rules'] = matches[2]
+                        save_data(_config.moderation.data, data)
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] has changed group rules to [" .. matches[2] .. "]")
+                        return langs[msg.lang].newRules .. matches[2]
+                    else
+                        return langs[msg.lang].require_mod
+                    end
                 end
             end
             if matches[1]:lower() == 'setabout' or matches[1]:lower() == 'sasha imposta descrizione' then
@@ -2611,104 +2622,106 @@ local function run(msg, matches)
                 end
             end
         end
-        if matches[1]:lower() == 'lock' or matches[1]:lower() == 'sasha blocca' or matches[1]:lower() == 'blocca' then
-            if is_momod(msg) then
-                if matches[2]:lower() == 'name' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked name ")
-                    return lock_group_name(data, msg.to.id, msg.lang)
+        if not msg.api_patch then
+            if matches[1]:lower() == 'lock' or matches[1]:lower() == 'sasha blocca' or matches[1]:lower() == 'blocca' then
+                if is_momod(msg) then
+                    if matches[2]:lower() == 'name' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked name ")
+                        return lock_group_name(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'member' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked member ")
+                        return lock_group_member(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'photo' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked photo ")
+                        return lock_group_photo(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'flood' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked flood ")
+                        return lock_group_flood(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'arabic' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked arabic ")
+                        return lock_group_arabic(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'bots' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked bots ")
+                        return lock_group_bots(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'leave' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked leaving ")
+                        return lock_group_leave(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'links' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked link posting ")
+                        return lock_group_links(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'rtl' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked rtl chars. in names")
+                        return lock_group_rtl(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'sticker' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked sticker posting")
+                        return lock_group_sticker(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'contacts' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked contact posting")
+                        return lock_group_contacts(data, msg.to.id, msg.lang)
+                    end
+                else
+                    return langs[msg.lang].require_mod
                 end
-                if matches[2]:lower() == 'member' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked member ")
-                    return lock_group_member(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'photo' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked photo ")
-                    return lock_group_photo(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'flood' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked flood ")
-                    return lock_group_flood(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'arabic' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked arabic ")
-                    return lock_group_arabic(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'bots' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked bots ")
-                    return lock_group_bots(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'leave' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked leaving ")
-                    return lock_group_leave(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'links' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked link posting ")
-                    return lock_group_links(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'rtl' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked rtl chars. in names")
-                    return lock_group_rtl(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'sticker' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked sticker posting")
-                    return lock_group_sticker(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'contacts' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked contact posting")
-                    return lock_group_contacts(data, msg.to.id, msg.lang)
-                end
-            else
-                return langs[msg.lang].require_mod
             end
-        end
-        if matches[1]:lower() == 'unlock' or matches[1]:lower() == 'sasha sblocca' or matches[1]:lower() == 'sblocca' then
-            if is_momod(msg) then
-                if matches[2]:lower() == 'name' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked name ")
-                    return unlock_group_name(data, msg.to.id, msg.lang)
+            if matches[1]:lower() == 'unlock' or matches[1]:lower() == 'sasha sblocca' or matches[1]:lower() == 'sblocca' then
+                if is_momod(msg) then
+                    if matches[2]:lower() == 'name' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked name ")
+                        return unlock_group_name(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'member' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked member ")
+                        return unlock_group_member(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'photo' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked photo ")
+                        return unlock_group_photo(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'flood' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked flood ")
+                        return unlock_group_flood(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'arabic' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked arabic ")
+                        return unlock_group_arabic(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'bots' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked bots ")
+                        return unlock_group_bots(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'leave' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked leaving ")
+                        return unlock_group_leave(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'links' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked link posting")
+                        return unlock_group_links(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'rtl' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked RTL chars. in names")
+                        return unlock_group_rtl(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'sticker' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked sticker posting")
+                        return unlock_group_sticker(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'contacts' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked contact posting")
+                        return unlock_group_contacts(data, msg.to.id, msg.lang)
+                    end
+                else
+                    return langs[msg.lang].require_mod
                 end
-                if matches[2]:lower() == 'member' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked member ")
-                    return unlock_group_member(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'photo' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked photo ")
-                    return unlock_group_photo(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'flood' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked flood ")
-                    return unlock_group_flood(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'arabic' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked arabic ")
-                    return unlock_group_arabic(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'bots' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked bots ")
-                    return unlock_group_bots(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'leave' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked leaving ")
-                    return unlock_group_leave(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'links' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked link posting")
-                    return unlock_group_links(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'rtl' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked RTL chars. in names")
-                    return unlock_group_rtl(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'sticker' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked sticker posting")
-                    return unlock_group_sticker(data, msg.to.id, msg.lang)
-                end
-                if matches[2]:lower() == 'contacts' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked contact posting")
-                    return unlock_group_contacts(data, msg.to.id, msg.lang)
-                end
-            else
-                return langs[msg.lang].require_mod
             end
         end
         -- Begin Chat mutes
@@ -2926,26 +2939,28 @@ local function run(msg, matches)
                 return langs[msg.lang].require_mod
             end
         end
-        if matches[1]:lower() == 'settings' then
-            if is_momod(msg) then
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group settings ")
-                return show_group_settingsmod(msg.to.id, msg.lang)
-            else
-                return langs[msg.lang].require_mod
+        if not msg.api_patch then
+            if matches[1]:lower() == 'settings' then
+                if is_momod(msg) then
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group settings ")
+                    return show_group_settingsmod(msg.to.id, msg.lang)
+                else
+                    return langs[msg.lang].require_mod
+                end
             end
-        end
-        if matches[1]:lower() == 'public' then
-            if is_momod(msg) then
-                if matches[2]:lower() == 'yes' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: public")
-                    return set_public_member(data, msg.to.id, msg.lang)
+            if matches[1]:lower() == 'public' then
+                if is_momod(msg) then
+                    if matches[2]:lower() == 'yes' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: public")
+                        return set_public_member(data, msg.to.id, msg.lang)
+                    end
+                    if matches[2]:lower() == 'no' then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: not public")
+                        return unset_public_member(data, msg.to.id, msg.lang)
+                    end
+                else
+                    return langs[msg.lang].require_mod
                 end
-                if matches[2]:lower() == 'no' then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: not public")
-                    return unset_public_member(data, msg.to.id, msg.lang)
-                end
-            else
-                return langs[msg.lang].require_mod
             end
         end
         if matches[1]:lower() == 'newlink' and not is_realm(msg) then
@@ -2966,72 +2981,74 @@ local function run(msg, matches)
                 return langs[msg.lang].require_mod
             end
         end
-        if (matches[1]:lower() == 'setlink' or matches[1]:lower() == "sasha imposta link") and matches[2] then
-            if is_owner(msg) then
-                data[tostring(msg.to.id)]['settings']['set_link'] = matches[2]
-                save_data(_config.moderation.data, data)
-                return langs[msg.lang].linkSaved
-            else
-                return langs[msg.lang].require_owner
-            end
-        end
-        if matches[1]:lower() == 'unsetlink' or matches[1]:lower() == "sasha elimina link" then
-            if is_owner(msg) then
-                data[tostring(msg.to.id)]['settings']['set_link'] = nil
-                save_data(_config.moderation.data, data)
-                return langs[msg.lang].linkDeleted
-            else
-                return langs[msg.lang].require_owner
-            end
-        end
-        if matches[1]:lower() == 'link' or matches[1]:lower() == 'sasha link' then
-            if is_momod(msg) then
-                local group_link = data[tostring(msg.to.id)]['settings']['set_link']
-                if not group_link then
-                    return langs[msg.lang].createLinkInfo
-                end
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
-                return msg.to.title .. '\n' .. group_link
-            else
-                return langs[msg.lang].require_mod
-            end
-        end
-        if matches[1]:lower() == 'owner' then
-            local group_owner = data[tostring(msg.to.id)]['set_owner']
-            if not group_owner then
-                return langs[msg.lang].noOwnerCallAdmin
-            end
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] used /owner")
-            return langs[msg.lang].ownerIs .. group_owner
-        end
-        if matches[1]:lower() == 'setowner' then
-            if is_owner(msg) then
-                if type(msg.reply_id) ~= "nil" then
-                    msgr = get_message(msg.reply_id, setowner_by_reply, { receiver = get_receiver(msg) })
-                elseif string.match(matches[2], '^%d+$') then
-                    data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
+        if not msg.api_patch then
+            if (matches[1]:lower() == 'setlink' or matches[1]:lower() == "sasha imposta link") and matches[2] then
+                if is_owner(msg) then
+                    data[tostring(msg.to.id)]['settings']['set_link'] = matches[2]
                     save_data(_config.moderation.data, data)
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
-                    return matches[2] .. langs[msg.lang].setOwner
+                    return langs[msg.lang].linkSaved
                 else
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set @" .. string.gsub(matches[2], '@', '') .. " as owner")
-                    return resolve_username(string.gsub(matches[2], '@', ''), chat_setowner_by_username, { receiver = get_receiver(msg) })
+                    return langs[msg.lang].require_owner
                 end
-            else
-                return langs[msg.lang].require_owner
             end
-        end
-        if matches[1]:lower() == 'setflood' then
-            if is_momod(msg) then
-                if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
-                    return langs[msg.lang].errorFloodRange
+            if matches[1]:lower() == 'unsetlink' or matches[1]:lower() == "sasha elimina link" then
+                if is_owner(msg) then
+                    data[tostring(msg.to.id)]['settings']['set_link'] = nil
+                    save_data(_config.moderation.data, data)
+                    return langs[msg.lang].linkDeleted
+                else
+                    return langs[msg.lang].require_owner
                 end
-                data[tostring(msg.to.id)]['settings']['flood_msg_max'] = matches[2]
-                save_data(_config.moderation.data, data)
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set flood to [" .. matches[2] .. "]")
-                return langs[msg.lang].floodSet .. matches[2]
-            else
-                return langs[msg.lang].require_mod
+            end
+            if matches[1]:lower() == 'link' or matches[1]:lower() == 'sasha link' then
+                if is_momod(msg) then
+                    local group_link = data[tostring(msg.to.id)]['settings']['set_link']
+                    if not group_link then
+                        return langs[msg.lang].createLinkInfo
+                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
+                    return msg.to.title .. '\n' .. group_link
+                else
+                    return langs[msg.lang].require_mod
+                end
+            end
+            if matches[1]:lower() == 'owner' then
+                local group_owner = data[tostring(msg.to.id)]['set_owner']
+                if not group_owner then
+                    return langs[msg.lang].noOwnerCallAdmin
+                end
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] used /owner")
+                return langs[msg.lang].ownerIs .. group_owner
+            end
+            if matches[1]:lower() == 'setowner' then
+                if is_owner(msg) then
+                    if type(msg.reply_id) ~= "nil" then
+                        msgr = get_message(msg.reply_id, setowner_by_reply, { receiver = get_receiver(msg) })
+                    elseif string.match(matches[2], '^%d+$') then
+                        data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
+                        save_data(_config.moderation.data, data)
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
+                        return matches[2] .. langs[msg.lang].setOwner
+                    else
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set @" .. string.gsub(matches[2], '@', '') .. " as owner")
+                        return resolve_username(string.gsub(matches[2], '@', ''), chat_setowner_by_username, { receiver = get_receiver(msg) })
+                    end
+                else
+                    return langs[msg.lang].require_owner
+                end
+            end
+            if matches[1]:lower() == 'setflood' then
+                if is_momod(msg) then
+                    if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
+                        return langs[msg.lang].errorFloodRange
+                    end
+                    data[tostring(msg.to.id)]['settings']['flood_msg_max'] = matches[2]
+                    save_data(_config.moderation.data, data)
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set flood to [" .. matches[2] .. "]")
+                    return langs[msg.lang].floodSet .. matches[2]
+                else
+                    return langs[msg.lang].require_mod
+                end
             end
         end
         if matches[1]:lower() == 'clean' then
@@ -3039,22 +3056,24 @@ local function run(msg, matches)
                 if matches[2]:lower() == 'member' then
                     chat_info(get_receiver(msg), cleanmember, false)
                 end
-                if matches[2]:lower() == 'modlist' then
-                    if next(data[tostring(msg.to.id)]['moderators']) == nil then
-                        -- fix way
-                        return langs[msg.lang].noGroupMods
+                if not msg.api_patch then
+                    if matches[2]:lower() == 'modlist' then
+                        if next(data[tostring(msg.to.id)]['moderators']) == nil then
+                            -- fix way
+                            return langs[msg.lang].noGroupMods
+                        end
+                        local message = langs[msg.lang].modListStart .. string.gsub(msg.to.print_name, '_', ' ') .. ':\n'
+                        for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
+                            data[tostring(msg.to.id)]['moderators'][tostring(k)] = nil
+                            save_data(_config.moderation.data, data)
+                        end
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned modlist")
                     end
-                    local message = langs[msg.lang].modListStart .. string.gsub(msg.to.print_name, '_', ' ') .. ':\n'
-                    for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
-                        data[tostring(msg.to.id)]['moderators'][tostring(k)] = nil
+                    if matches[2]:lower() == 'rules' then
+                        data[tostring(msg.to.id)]['rules'] = nil
                         save_data(_config.moderation.data, data)
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned rules")
                     end
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned modlist")
-                end
-                if matches[2]:lower() == 'rules' then
-                    data[tostring(msg.to.id)]['rules'] = nil
-                    save_data(_config.moderation.data, data)
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned rules")
                 end
                 if matches[2]:lower() == 'about' then
                     data[tostring(msg.to.id)]['description'] = nil
@@ -3103,52 +3122,56 @@ local function run(msg, matches)
                 return langs[msg.lang].require_admin
             end
         end
-        if matches[1]:lower() == 'add' and not matches[2] then
-            if is_admin1(msg) then
-                if is_super_group(msg) then
-                    return reply_msg(msg.id, langs[msg.lang].supergroupAlreadyAdded, ok_cb, false)
+        if not msg.api_patch then
+            if matches[1]:lower() == 'add' and not matches[2] then
+                if is_admin1(msg) then
+                    if is_super_group(msg) then
+                        return reply_msg(msg.id, langs[msg.lang].supergroupAlreadyAdded, ok_cb, false)
+                    end
+                    print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") added")
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added SuperGroup")
+                    superadd(msg)
+                    set_mutes(msg.to.id)
+                    channel_set_admin(get_receiver(msg), 'user#id' .. msg.from.id, ok_cb, false)
+                else
+                    return langs[msg.lang].require_admin
                 end
-                print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") added")
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added SuperGroup")
-                superadd(msg)
-                set_mutes(msg.to.id)
-                channel_set_admin(get_receiver(msg), 'user#id' .. msg.from.id, ok_cb, false)
-            else
-                return langs[msg.lang].require_admin
             end
-        end
-        if matches[1]:lower() == 'rem' and is_admin1(msg) and not matches[2] then
-            if is_admin1(msg) then
-                if not is_super_group(msg) then
-                    return reply_msg(msg.id, langs[msg.lang].supergroupRemoved, ok_cb, false)
+            if matches[1]:lower() == 'rem' and is_admin1(msg) and not matches[2] then
+                if is_admin1(msg) then
+                    if not is_super_group(msg) then
+                        return reply_msg(msg.id, langs[msg.lang].supergroupRemoved, ok_cb, false)
+                    end
+                    print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed")
+                    superrem(msg)
+                    rem_mutes(msg.to.id)
+                else
+                    return langs[msg.lang].require_admin
                 end
-                print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed")
-                superrem(msg)
-                rem_mutes(msg.to.id)
-            else
-                return langs[msg.lang].require_admin
             end
         end
         if data[tostring(msg.to.id)] then
-            if matches[1]:lower() == "getadmins" or matches[1]:lower() == "sasha lista admin" or matches[1]:lower() == "lista admin" then
-                if is_owner(msg) then
-                    member_type = 'Admins'
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup Admins list")
-                    channel_get_admins(get_receiver(msg), callback, { receiver = get_receiver(msg), msg = msg, member_type = member_type })
-                else
-                    return langs[msg.lang].require_owner
+            if not msg.api_patch then
+                if matches[1]:lower() == "getadmins" or matches[1]:lower() == "sasha lista admin" or matches[1]:lower() == "lista admin" then
+                    if is_owner(msg) then
+                        member_type = 'Admins'
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup Admins list")
+                        channel_get_admins(get_receiver(msg), callback, { receiver = get_receiver(msg), msg = msg, member_type = member_type })
+                    else
+                        return langs[msg.lang].require_owner
+                    end
                 end
-            end
-            if matches[1]:lower() == "owner" then
-                if not data[tostring(msg.to.id)]['set_owner'] then
-                    return langs[msg.lang].noOwnerCallAdmin
+                if matches[1]:lower() == "owner" then
+                    if not data[tostring(msg.to.id)]['set_owner'] then
+                        return langs[msg.lang].noOwnerCallAdmin
+                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] used /owner")
+                    return langs[msg.lang].ownerIs .. data[tostring(msg.to.id)]['set_owner']
                 end
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] used /owner")
-                return langs[msg.lang].ownerIs .. data[tostring(msg.to.id)]['set_owner']
-            end
-            if matches[1]:lower() == "modlist" or matches[1]:lower() == "sasha lista mod" or matches[1]:lower() == "lista mod" then
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group modlist")
-                return modlist(msg)
+                if matches[1]:lower() == "modlist" or matches[1]:lower() == "sasha lista mod" or matches[1]:lower() == "lista mod" then
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group modlist")
+                    return modlist(msg)
+                end
             end
             if matches[1]:lower() == "bots" or matches[1]:lower() == "sasha lista bot" or matches[1]:lower() == "lista bot" then
                 if is_momod(msg) then
@@ -3190,34 +3213,36 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             end
-            if (matches[1]:lower() == 'setlink' or matches[1]:lower() == "sasha imposta link") and matches[2] then
-                if is_owner(msg) then
-                    data[tostring(msg.to.id)]['settings']['set_link'] = matches[2]
-                    save_data(_config.moderation.data, data)
-                    return langs[msg.lang].linkSaved
-                else
-                    return langs[msg.lang].require_owner
-                end
-            end
-            if matches[1]:lower() == 'unsetlink' or matches[1]:lower() == "sasha elimina link" then
-                if is_owner(msg) then
-                    data[tostring(msg.to.id)]['settings']['set_link'] = nil
-                    save_data(_config.moderation.data, data)
-                    return langs[msg.lang].linkDeleted
-                else
-                    return langs[msg.lang].require_owner
-                end
-            end
-            if matches[1]:lower() == 'link' or matches[1]:lower() == "sasha link" then
-                if is_momod(msg) then
-                    local group_link = data[tostring(msg.to.id)]['settings']['set_link']
-                    if not group_link then
-                        return langs[msg.lang].createLinkInfo
+            if not msg.api_patch then
+                if (matches[1]:lower() == 'setlink' or matches[1]:lower() == "sasha imposta link") and matches[2] then
+                    if is_owner(msg) then
+                        data[tostring(msg.to.id)]['settings']['set_link'] = matches[2]
+                        save_data(_config.moderation.data, data)
+                        return langs[msg.lang].linkSaved
+                    else
+                        return langs[msg.lang].require_owner
                     end
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
-                    return msg.to.title .. '\n' .. group_link
-                else
-                    return langs[msg.lang].require_mod
+                end
+                if matches[1]:lower() == 'unsetlink' or matches[1]:lower() == "sasha elimina link" then
+                    if is_owner(msg) then
+                        data[tostring(msg.to.id)]['settings']['set_link'] = nil
+                        save_data(_config.moderation.data, data)
+                        return langs[msg.lang].linkDeleted
+                    else
+                        return langs[msg.lang].require_owner
+                    end
+                end
+                if matches[1]:lower() == 'link' or matches[1]:lower() == "sasha link" then
+                    if is_momod(msg) then
+                        local group_link = data[tostring(msg.to.id)]['settings']['set_link']
+                        if not group_link then
+                            return langs[msg.lang].createLinkInfo
+                        end
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
+                        return msg.to.title .. '\n' .. group_link
+                    else
+                        return langs[msg.lang].require_mod
+                    end
                 end
             end
             if matches[1]:lower() == 'promoteadmin' then
@@ -3271,71 +3296,73 @@ local function run(msg, matches)
                     return langs[msg.lang].require_owner
                 end
             end
-            if matches[1]:lower() == 'setowner' then
-                if is_owner(msg) then
-                    if type(msg.reply_id) ~= "nil" then
-                        local cbreply_extra = {
-                            get_cmd = 'setowner',
-                            msg = msg
-                        }
-                        get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                    elseif string.match(matches[2], '^%d+$') then
-                        data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
-                        save_data(_config.moderation.data, data)
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
-                        return matches[2] .. langs[msg.lang].setOwner
+            if not msg.api_patch then
+                if matches[1]:lower() == 'setowner' then
+                    if is_owner(msg) then
+                        if type(msg.reply_id) ~= "nil" then
+                            local cbreply_extra = {
+                                get_cmd = 'setowner',
+                                msg = msg
+                            }
+                            get_message(msg.reply_id, get_message_callback, cbreply_extra)
+                        elseif string.match(matches[2], '^%d+$') then
+                            data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
+                            save_data(_config.moderation.data, data)
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
+                            return matches[2] .. langs[msg.lang].setOwner
+                        else
+                            return resolve_username(string.gsub(matches[2], '@', ''), setowner_by_username, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                        end
                     else
-                        return resolve_username(string.gsub(matches[2], '@', ''), setowner_by_username, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                        return langs[msg.lang].require_owner
                     end
-                else
-                    return langs[msg.lang].require_owner
                 end
-            end
-            if matches[1]:lower() == 'promote' or matches[1]:lower() == "sasha promuovi" or matches[1]:lower() == "promuovi" then
-                if is_owner(msg) then
-                    if type(msg.reply_id) ~= "nil" then
-                        local cbreply_extra = {
-                            get_cmd = 'promote',
-                            msg = msg
-                        }
-                        get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                    elseif string.match(matches[2], '^%d+$') then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted user#id" .. matches[2])
-                        promote2(get_receiver(msg), 'NONAME', user_id)
+                if matches[1]:lower() == 'promote' or matches[1]:lower() == "sasha promuovi" or matches[1]:lower() == "promuovi" then
+                    if is_owner(msg) then
+                        if type(msg.reply_id) ~= "nil" then
+                            local cbreply_extra = {
+                                get_cmd = 'promote',
+                                msg = msg
+                            }
+                            get_message(msg.reply_id, get_message_callback, cbreply_extra)
+                        elseif string.match(matches[2], '^%d+$') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted user#id" .. matches[2])
+                            promote2(get_receiver(msg), 'NONAME', user_id)
+                        else
+                            local cbres_extra = {
+                                channel = get_receiver(msg),
+                                get_cmd = 'promote',
+                            }
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
+                            return resolve_username(string.gsub(matches[2], '@', ''), callbackres, cbres_extra)
+                        end
                     else
-                        local cbres_extra = {
-                            channel = get_receiver(msg),
-                            get_cmd = 'promote',
-                        }
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
-                        return resolve_username(string.gsub(matches[2], '@', ''), callbackres, cbres_extra)
+                        return langs[msg.lang].require_owner
                     end
-                else
-                    return langs[msg.lang].require_owner
                 end
-            end
-            if matches[1]:lower() == 'demote' or matches[1]:lower() == "sasha degrada" or matches[1]:lower() == "degrada" then
-                if is_owner(msg) then
-                    if type(msg.reply_id) ~= "nil" then
-                        local cbreply_extra = {
-                            get_cmd = 'demote',
-                            msg = msg
-                        }
-                        get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                    elseif string.match(matches[2], '^%d+$') then
-                        local get_cmd = 'demote'
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted user#id" .. matches[2])
-                        demote2(get_receiver(msg), matches[2], matches[2])
+                if matches[1]:lower() == 'demote' or matches[1]:lower() == "sasha degrada" or matches[1]:lower() == "degrada" then
+                    if is_owner(msg) then
+                        if type(msg.reply_id) ~= "nil" then
+                            local cbreply_extra = {
+                                get_cmd = 'demote',
+                                msg = msg
+                            }
+                            get_message(msg.reply_id, get_message_callback, cbreply_extra)
+                        elseif string.match(matches[2], '^%d+$') then
+                            local get_cmd = 'demote'
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted user#id" .. matches[2])
+                            demote2(get_receiver(msg), matches[2], matches[2])
+                        else
+                            local cbres_extra = {
+                                channel = get_receiver(msg),
+                                get_cmd = 'demote'
+                            }
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
+                            return resolve_username(string.gsub(matches[2], '@', ''), callbackres, cbres_extra)
+                        end
                     else
-                        local cbres_extra = {
-                            channel = get_receiver(msg),
-                            get_cmd = 'demote'
-                        }
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
-                        return resolve_username(string.gsub(matches[2], '@', ''), callbackres, cbres_extra)
+                        return langs[msg.lang].require_owner
                     end
-                else
-                    return langs[msg.lang].require_owner
                 end
             end
             if matches[1]:lower() == "setname" then
@@ -3380,14 +3407,16 @@ local function run(msg, matches)
                     return langs[msg.lang].require_admin
                 end
             end
-            if matches[1]:lower() == 'setrules' or matches[1]:lower() == "sasha imposta regole" then
-                if is_momod(msg) then
-                    data[tostring(msg.to.id)]['rules'] = matches[2]
-                    save_data(_config.moderation.data, data)
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] has changed group rules to [" .. matches[2] .. "]")
-                    return langs[msg.lang].newRules .. matches[2]
-                else
-                    return langs[msg.lang].require_mod
+            if not msg.api_patch then
+                if matches[1]:lower() == 'setrules' or matches[1]:lower() == "sasha imposta regole" then
+                    if is_momod(msg) then
+                        data[tostring(msg.to.id)]['rules'] = matches[2]
+                        save_data(_config.moderation.data, data)
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] has changed group rules to [" .. matches[2] .. "]")
+                        return langs[msg.lang].newRules .. matches[2]
+                    else
+                        return langs[msg.lang].require_mod
+                    end
                 end
             end
             if msg.media then
@@ -3409,26 +3438,28 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == 'clean' then
                 if is_owner(msg) then
-                    if matches[2]:lower() == 'modlist' then
-                        if next(data[tostring(msg.to.id)]['moderators']) == nil then
-                            return langs[msg.lang].noGroupMods
+                    if not msg.api_patch then
+                        if matches[2]:lower() == 'modlist' then
+                            if next(data[tostring(msg.to.id)]['moderators']) == nil then
+                                return langs[msg.lang].noGroupMods
+                            end
+                            for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
+                                data[tostring(msg.to.id)]['moderators'][tostring(k)] = nil
+                                save_data(_config.moderation.data, data)
+                            end
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned modlist")
+                            return langs[msg.lang].modlistCleaned
                         end
-                        for k, v in pairs(data[tostring(msg.to.id)]['moderators']) do
-                            data[tostring(msg.to.id)]['moderators'][tostring(k)] = nil
+                        if matches[2]:lower() == 'rules' then
+                            local data_cat = 'rules'
+                            if data[tostring(msg.to.id)][data_cat] == nil then
+                                return langs[msg.lang].noRules
+                            end
+                            data[tostring(msg.to.id)][data_cat] = nil
                             save_data(_config.moderation.data, data)
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned rules")
+                            return langs[msg.lang].rulesCleaned
                         end
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned modlist")
-                        return langs[msg.lang].modlistCleaned
-                    end
-                    if matches[2]:lower() == 'rules' then
-                        local data_cat = 'rules'
-                        if data[tostring(msg.to.id)][data_cat] == nil then
-                            return langs[msg.lang].noRules
-                        end
-                        data[tostring(msg.to.id)][data_cat] = nil
-                        save_data(_config.moderation.data, data)
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] cleaned rules")
-                        return langs[msg.lang].rulesCleaned
                     end
                     if matches[2]:lower() == 'about' then
                         local receiver = get_receiver(msg)
@@ -3472,125 +3503,127 @@ local function run(msg, matches)
                     return langs[msg.lang].require_owner
                 end
             end
-            if matches[1]:lower() == 'lock' or matches[1]:lower() == "sasha blocca" or matches[1]:lower() == "blocca" then
-                if is_momod(msg) then
-                    local target = msg.to.id
-                    if matches[2]:lower() == 'links' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked link posting ")
-                        return lock_group_links(data, msg.to.id, msg.lang)
+            if not msg.api_patch then
+                if matches[1]:lower() == 'lock' or matches[1]:lower() == "sasha blocca" or matches[1]:lower() == "blocca" then
+                    if is_momod(msg) then
+                        local target = msg.to.id
+                        if matches[2]:lower() == 'links' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked link posting ")
+                            return lock_group_links(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'spam' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked spam ")
+                            return lock_group_spam(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'flood' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked flood ")
+                            return lock_group_flood(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'arabic' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked arabic ")
+                            return lock_group_arabic(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'member' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked member ")
+                            return lock_group_member(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'rtl' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked rtl chars. in names")
+                            return lock_group_rtl(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'tgservice' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked Tgservice Actions")
+                            return lock_group_tgservice(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'sticker' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked sticker posting")
+                            return lock_group_sticker(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'contacts' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked contact posting")
+                            return lock_group_contacts(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'strict' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked enabled strict settings")
+                            return enable_strict_rules(data, msg.to.id, msg.lang)
+                        end
+                    else
+                        return langs[msg.lang].require_mod
                     end
-                    if matches[2]:lower() == 'spam' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked spam ")
-                        return lock_group_spam(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'flood' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked flood ")
-                        return lock_group_flood(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'arabic' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked arabic ")
-                        return lock_group_arabic(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'member' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked member ")
-                        return lock_group_member(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'rtl' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked rtl chars. in names")
-                        return lock_group_rtl(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'tgservice' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked Tgservice Actions")
-                        return lock_group_tgservice(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'sticker' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked sticker posting")
-                        return lock_group_sticker(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'contacts' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked contact posting")
-                        return lock_group_contacts(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'strict' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked enabled strict settings")
-                        return enable_strict_rules(data, msg.to.id, msg.lang)
-                    end
-                else
-                    return langs[msg.lang].require_mod
                 end
-            end
-            if matches[1]:lower() == 'unlock' or matches[1]:lower() == "sasha sblocca" or matches[1]:lower() == "sblocca" then
-                if is_momod(msg) then
-                    local target = msg.to.id
-                    if matches[2]:lower() == 'links' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked link posting")
-                        return unlock_group_links(data, msg.to.id, msg.lang)
+                if matches[1]:lower() == 'unlock' or matches[1]:lower() == "sasha sblocca" or matches[1]:lower() == "sblocca" then
+                    if is_momod(msg) then
+                        local target = msg.to.id
+                        if matches[2]:lower() == 'links' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked link posting")
+                            return unlock_group_links(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'spam' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked spam")
+                            return unlock_group_spam(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'flood' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked flood")
+                            return unlock_group_flood(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'arabic' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked Arabic")
+                            return unlock_group_arabic(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'member' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked member ")
+                            return unlock_group_member(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'rtl' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked RTL chars. in names")
+                            return unlock_group_rtl(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'tgservice' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked tgservice actions")
+                            return unlock_group_tgservice(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'sticker' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked sticker posting")
+                            return unlock_group_sticker(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'contacts' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked contact posting")
+                            return unlock_group_contacts(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'strict' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked disabled strict settings")
+                            return disable_strict_rules(data, msg.to.id, msg.lang)
+                        end
+                    else
+                        return langs[msg.lang].require_mod
                     end
-                    if matches[2]:lower() == 'spam' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked spam")
-                        return unlock_group_spam(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'flood' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked flood")
-                        return unlock_group_flood(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'arabic' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked Arabic")
-                        return unlock_group_arabic(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'member' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked member ")
-                        return unlock_group_member(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'rtl' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked RTL chars. in names")
-                        return unlock_group_rtl(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'tgservice' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked tgservice actions")
-                        return unlock_group_tgservice(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'sticker' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked sticker posting")
-                        return unlock_group_sticker(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'contacts' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] unlocked contact posting")
-                        return unlock_group_contacts(data, msg.to.id, msg.lang)
-                    end
-                    if matches[2]:lower() == 'strict' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] locked disabled strict settings")
-                        return disable_strict_rules(data, msg.to.id, msg.lang)
-                    end
-                else
-                    return langs[msg.lang].require_mod
                 end
-            end
-            if matches[1]:lower() == 'setflood' then
-                if is_momod(msg) then
-                    if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
-                        return langs[msg.lang].errorFloodRange
+                if matches[1]:lower() == 'setflood' then
+                    if is_momod(msg) then
+                        if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
+                            return langs[msg.lang].errorFloodRange
+                        end
+                        data[tostring(msg.to.id)]['settings']['flood_msg_max'] = matches[2]
+                        save_data(_config.moderation.data, data)
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set flood to [" .. matches[2] .. "]")
+                        return langs[msg.lang].floodSet .. matches[2]
+                    else
+                        return langs[msg.lang].require_mod
                     end
-                    data[tostring(msg.to.id)]['settings']['flood_msg_max'] = matches[2]
-                    save_data(_config.moderation.data, data)
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set flood to [" .. matches[2] .. "]")
-                    return langs[msg.lang].floodSet .. matches[2]
-                else
-                    return langs[msg.lang].require_mod
                 end
-            end
-            if matches[1]:lower() == 'public' then
-                if is_momod(msg) then
-                    if matches[2]:lower() == 'yes' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: public")
-                        return set_public_member(data, msg.to.id, msg.lang)
+                if matches[1]:lower() == 'public' then
+                    if is_momod(msg) then
+                        if matches[2]:lower() == 'yes' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: public")
+                            return set_public_member(data, msg.to.id, msg.lang)
+                        end
+                        if matches[2]:lower() == 'no' then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: not public")
+                            return unset_public_member(data, msg.to.id, msg.lang)
+                        end
+                    else
+                        return langs[msg.lang].require_mod
                     end
-                    if matches[2]:lower() == 'no' then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: not public")
-                        return unset_public_member(data, msg.to.id, msg.lang)
-                    end
-                else
-                    return langs[msg.lang].require_mod
                 end
             end
             if matches[1]:lower() == 'mute' or matches[1]:lower() == 'silenzia' then
@@ -3807,20 +3840,22 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             end
-            if matches[1]:lower() == 'settings' then
-                if is_momod(msg) then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup settings ")
-                    return show_supergroup_settings(msg.to.id, msg.lang)
-                else
-                    return langs[msg.lang].require_mod
+            if not msg.api_patch then
+                if matches[1]:lower() == 'settings' then
+                    if is_momod(msg) then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup settings ")
+                        return show_supergroup_settings(msg.to.id, msg.lang)
+                    else
+                        return langs[msg.lang].require_mod
+                    end
                 end
-            end
-            if matches[1]:lower() == 'rules' or matches[1]:lower() == "sasha regole" then
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
-                if not data[tostring(msg.to.id)]['rules'] then
-                    return langs[msg.lang].noRules
+                if matches[1]:lower() == 'rules' or matches[1]:lower() == "sasha regole" then
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
+                    if not data[tostring(msg.to.id)]['rules'] then
+                        return langs[msg.lang].noRules
+                    end
+                    return data[tostring(msg.to.id)]['settings']['set_name'] .. ' ' .. langs[msg.lang].rules .. '\n\n' .. data[tostring(msg.to.id)]['rules']
                 end
-                return data[tostring(msg.to.id)]['settings']['set_name'] .. ' ' .. langs[msg.lang].rules .. '\n\n' .. data[tostring(msg.to.id)]['rules']
             end
             if matches[1]:lower() == 'kill' and matches[2]:lower() == 'supergroup' then
                 if is_admin1(msg) then
