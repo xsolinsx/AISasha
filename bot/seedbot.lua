@@ -84,7 +84,7 @@ function msg_valid(msg)
         end
     end
 
-    if msg.from.id == 202256859 then
+    if msg.from.id == 283058260 then
         print('\27[36mNot valid: my api bot version\27[39m')
         return false
     end
@@ -111,7 +111,7 @@ function msg_valid(msg)
     end
 
     -- ignore messages from API version
-    if msg.from.id == 202256859 then
+    if msg.from.id == 283058260 then
         print('\27[36mNot valid: msg from our API version\27[39m')
         return false
     end

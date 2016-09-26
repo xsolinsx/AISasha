@@ -105,7 +105,7 @@ local function pre_process(msg)
             if not msg.api_patch then
                 for v, user in pairs(_config.sudo_users) do
                     -- exclude bot tags, autotags and tags of API version
-                    if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(user) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) and tonumber(msg.from.id) ~= 202256859 then
+                    if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(user) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) and tonumber(msg.from.id) ~= 283058260 then
                         user_info('user#id' .. user, callback_sudo_ids, { msg = msg, user = user })
                     end
                 end
