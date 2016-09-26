@@ -767,17 +767,6 @@ return {
             '#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.',
         },
 
-        apod =
-        {
-            '🅿️ APOD',
-            'Plugin per l\'Astronomy Picture of the Day.',
-            'USER',
-            '#apod|#astro [<date>]: Sasha manda l\'APOD.',
-            '(#apod|#astro)hd [<date>]: Sasha manda l\'APOD in HD.',
-            '(#apod|#astro)text [<date>]: Sasha manda la spiegazione dell\'APOD.',
-            'Se c\'è <date> ed è nel formato AAAA-MM-GG l\'APOD è di <date>.',
-        },
-
         banhammer =
         {
             '🅿️ BANHAMMER',
@@ -1941,17 +1930,6 @@ return {
             '(#backup|sasha esegui backup): Sasha makes a backup of herself and sends log to the sender.',
             '(#uploadbackup|sasha invia backup): Sasha sends her last backup.',
             '#vardump [<reply>|<msg_id>]: Sasha sends vardump of specified message.',
-        },
-
-        apod =
-        {
-            '🅿️ APOD',
-            'Plugin for the Astronomy Picture of the Day.',
-            'USER',
-            '#apod|astro [<date>]: Sasha sends APOD.',
-            '(#apod|#astro)hd [<date>]: Sasha sends APOD in HD.',
-            '(#apod|#astro)text [<date>]: Sasha sends explanation of the APOD.',
-            'If <date> is specified and it\'s in this format AAAA-MM-GG the APOD refers to <date>.',
         },
 
         banhammer =
