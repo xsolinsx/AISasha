@@ -1,14 +1,16 @@
 ﻿local function run(msg, matches)
-    local base = "http://dogr.io/"
-    local path = string.gsub(matches[1], " ", "%%20")
-    local url = base .. path .. '.png?split=false&.png'
-    local urlm = "https?://[%%%w-_%.%?%.:/%+=&]+"
+    if not msg.api_patch then
+        local base = "http://dogr.io/"
+        local path = string.gsub(matches[1], " ", "%%20")
+        local url = base .. path .. '.png?split=false&.png'
+        local urlm = "https?://[%%%w-_%.%?%.:/%+=&]+"
 
-    if string.match(url, urlm) == url then
-        local receiver = get_receiver(msg)
-        send_photo_from_url(receiver, url)
-    else
-        return langs[msg.lang].opsError
+        if string.match(url, urlm) == url then
+            local receiver = get_receiver(msg)
+            send_photo_from_url(receiver, url)
+        else
+            return langs[msg.lang].opsError
+        end
     end
 end
 

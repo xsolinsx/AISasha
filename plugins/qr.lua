@@ -26,42 +26,44 @@ local function get_hex(str)
 end
 
 local function run(msg, matches)
-    local receiver = get_receiver(msg)
+    if not msg.api_patch then
+        local receiver = get_receiver(msg)
 
-    local text = matches[1]
-    local color
-    local back
+        local text = matches[1]
+        local color
+        local back
 
-    if #matches > 1 then
-        text = matches[3]
-        color = matches[2]
-        back = matches[1]
+        if #matches > 1 then
+            text = matches[3]
+            color = matches[2]
+            back = matches[1]
+        end
+
+        local url = "http://api.qrserver.com/v1/create-qr-code/?"
+        .. "size=600x600"
+        -- fixed size otherways it's low detailed
+        .. "&data=" .. URL.escape(text:trim())
+
+        if color then
+            url = url .. "&color=" .. get_hex(color)
+        end
+        if bgcolor then
+            url = url .. "&bgcolor=" .. get_hex(back)
+        end
+
+        local response, code, headers = http.request(url)
+
+        if code ~= 200 then
+            return langs[msg.lang].opsError .. code
+        end
+
+        if #response > 0 then
+            send_photo_from_url(receiver, url)
+            return
+        end
+
+        return langs[msg.lang].opsError
     end
-
-    local url = "http://api.qrserver.com/v1/create-qr-code/?"
-    .. "size=600x600"
-    -- fixed size otherways it's low detailed
-    .. "&data=" .. URL.escape(text:trim())
-
-    if color then
-        url = url .. "&color=" .. get_hex(color)
-    end
-    if bgcolor then
-        url = url .. "&bgcolor=" .. get_hex(back)
-    end
-
-    local response, code, headers = http.request(url)
-
-    if code ~= 200 then
-        return langs[msg.lang].opsError .. code
-    end
-
-    if #response > 0 then
-        send_photo_from_url(receiver, url)
-        return
-    end
-
-    return langs[msg.lang].opsError
 end
 
 return {

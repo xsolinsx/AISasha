@@ -868,14 +868,6 @@ return {
             '(#dogify|[sasha] doge) <your/words/with/slashes>: Sasha crea un\'immagine col doge e le parole specificate.',
         },
 
-        duckduckgo =
-        {
-            '🅿️ DUCKDUCKGO',
-            'Plugin per la ricerca su duckduckgo.',
-            'USER',
-            '#duck[duck]go <terms>: Sasha cerca <terms> su DuckDuckGo.',
-        },
-
         fakecommand =
         {
             '🅿️ FAKECOMMAND',
@@ -2050,14 +2042,6 @@ return {
             'Plugin to create picture with doge.',
             'USER',
             '(#dogify|[sasha] doge) <your/words/with/slashes>: Sasha creates a pic with doge and specified words.',
-        },
-
-        duckduckgo =
-        {
-            '🅿️ DUCKDUCKGO',
-            'Plugin for the research on duckduckgo.',
-            'USER',
-            '#duck[duck]go <terms>: Sasha searches <terms> on DuckDuckGo.',
         },
 
         fakecommand =

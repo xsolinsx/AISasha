@@ -5,14 +5,16 @@
 end
 
 local function run(msg, matches)
-    local eq = URL.escape(matches[1])
+    if not msg.api_patch then
+        local eq = URL.escape(matches[1])
 
-    local url = "http://latex.codecogs.com/png.download?"
-    .. "\\dpi{300}%20\\LARGE%20" .. eq
+        local url = "http://latex.codecogs.com/png.download?"
+        .. "\\dpi{300}%20\\LARGE%20" .. eq
 
-    local receiver = get_receiver(msg)
-    local title = "Edit LaTeX on www.codecogs.com/eqnedit.php?latex=" .. eq
-    send_photo_from_url(receiver, url, send_title, { receiver, title })
+        local receiver = get_receiver(msg)
+        local title = "Edit LaTeX on www.codecogs.com/eqnedit.php?latex=" .. eq
+        send_photo_from_url(receiver, url, send_title, { receiver, title })
+    end
 end
 
 return {

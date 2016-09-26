@@ -36,27 +36,29 @@ local function get_webshot_url(param, psize)
 end
 
 local function run(msg, matches)
-    if is_momod(msg) then
-        local size = 'X'
-        if matches[2] then
-            if matches[2]:lower() == 'fmob' or matches[2]:lower() == 'f' then
-                if is_admin1(msg) then
-                    size = matches[2]
+    if not msg.api_patch then
+        if is_momod(msg) then
+            local size = 'X'
+            if matches[2] then
+                if matches[2]:lower() == 'fmob' or matches[2]:lower() == 'f' then
+                    if is_admin1(msg) then
+                        size = matches[2]
+                    else
+                        return langs[msg.lang].require_admin
+                    end
                 else
-                    return langs[msg.lang].require_admin
+                    size = matches[2]
                 end
-            else
-                size = matches[2]
             end
+            local find = get_webshot_url(matches[1], size)
+            if find then
+                local imgurl = base .. find
+                local receiver = get_receiver(msg)
+                send_photo_from_url(receiver, imgurl)
+            end
+        else
+            return langs[msg.lang].require_mod
         end
-        local find = get_webshot_url(matches[1], size)
-        if find then
-            local imgurl = base .. find
-            local receiver = get_receiver(msg)
-            send_photo_from_url(receiver, imgurl)
-        end
-    else
-        return langs[msg.lang].require_mod
     end
 end
 
