@@ -433,11 +433,6 @@ local function pre_process(msg)
     return msg
 end
 
-local function cron()
-    print('SAVING USERS/GROUPS DATABASE')
-    save_data(_config.database.db, database)
-end
-
 return {
     description = "DATABASE",
     patterns =
@@ -458,7 +453,6 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa]) (%d+)$",
         "^([Ee][Ll][Ii][Mm][Ii][Nn][Aa]) (%d+)$",
     },
-    cron = cron,
     run = run,
     pre_process = pre_process,
     min_rank = 4,

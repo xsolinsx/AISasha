@@ -4,6 +4,9 @@ package.cpath = package.cpath .. ';.luarocks/lib/lua/5.2/?.so'
 
 require("./bot/utils")
 
+last_administrator_cron = os.date('%d')
+last_redis_administrator_cron = ''
+
 -- local f = assert(io.popen('/usr/bin/git describe --tags', 'r'))
 -- f:close()
 
@@ -51,9 +54,26 @@ end
 function ok_cb(extra, success, result)
 end
 
+function update_redis_cron()
+    if redis:get('user:last_redis_administrator_cron') then
+        if redis:get('user:last_redis_administrator_cron') ~= os.date('%d') then
+            local value = os.date('%d')
+            redis:set('user:last_redis_administrator_cron', value)
+        end
+        last_redis_administrator_cron = redis:get('user:last_redis_administrator_cron')
+    else
+        local value = os.date('%d')
+        redis:set('user:last_redis_administrator_cron', value)
+        last_redis_administrator_cron = redis:get('user:last_redis_administrator_cron')
+    end
+    postpone(update_redis_cron, false, 60)
+end
+
 function on_binlog_replay_end()
     started = true
     postpone(cron_plugins, false, 60 * 5.0)
+    postpone(update_redis_cron, false, 30)
+    postpone(cron_administrator, false, 60)
     -- bot restarts every 30 min (1800 sec) so it saves database at 29th min (1740 sec)
     postpone(cron_database, false, 1740)
 
@@ -381,23 +401,58 @@ function save_data(filename, data)
     f:close()
 end
 
-function cron_database()
-    for name, plugin in pairs(plugins) do
-        -- Only plugins with cron function
-        if name == 'database' then
-            plugin.cron()
+function cron_administrator()
+    if last_administrator_cron ~= last_redis_administrator_cron then
+        -- Run cron jobs every day.
+        last_administrator_cron = last_redis_administrator_cron
+
+        -- save database
+        save_data(config.database.db, database)
+
+        -- send database
+        if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
+            send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
+        end
+
+        -- do backup
+        local time = os.time()
+        local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISashaExp --exclude=/home/pi/AISashaExp/.git --exclude=/home/pi/AISashaExp/.luarocks --exclude=/home/pi/AISashaExp/patches --exclude=/home/pi/AISashaExp/tg'):read('*all')
+        local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
+        file:write(log)
+        file:flush()
+        file:close()
+        send_large_msg_SUDOERS(langs['en'].autoSendBackupDb)
+
+        -- send last backup
+        local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
+        local backups = { }
+        if files then
+            for k, v in pairsByKeys(files) do
+                if string.match(v, '^backupAISasha%d+%.tar%.gz$') then
+                    backups[string.match(v, '%d+')] = v
+                end
+            end
+            local last_backup = ''
+            for k, v in pairsByKeys(backups) do
+                last_backup = v
+            end
+            send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
         end
     end
+    postpone(cron_administrator, false, 60 * 3)
+end
+
+function cron_database()
+    print('SAVING USERS/GROUPS DATABASE')
+    save_data(_config.database.db, database)
 end
 
 -- Call and postpone execution for cron plugins
 function cron_plugins()
     for name, plugin in pairs(plugins) do
         -- Only plugins with cron function
-        if name ~= 'database' then
-            if plugin.cron ~= nil then
-                plugin.cron()
-            end
+        if plugin.cron ~= nil then
+            plugin.cron()
         end
     end
 

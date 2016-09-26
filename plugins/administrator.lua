@@ -348,49 +348,6 @@ local function run(msg, matches)
     end
 end
 
-local function pre_process(msg)
-    -- send database and last backup every Tuesday at 12:01:01
-    local second = tonumber(os.date('%S'))
-    local minute = tonumber(os.date('%M'))
-    local hour = tonumber(os.date('%H'))
-    local day = tostring(os.date('%A'))
-    if second == 1 and minute == 1 and hour == 12 and day == 'Tuesday' then
-        -- save database
-        save_data(_config.database.db, database)
-
-        -- do backup
-        local time = os.time()
-        local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISashaExp --exclude=/home/pi/AISashaExp/.git --exclude=/home/pi/AISashaExp/.luarocks --exclude=/home/pi/AISashaExp/patches --exclude=/home/pi/AISashaExp/tg'):read('*all')
-        local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
-        file:write(log)
-        file:flush()
-        file:close()
-        send_large_msg_SUDOERS(langs[msg.lang].autoSendBackupDb)
-
-        -- send database
-        if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
-            send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
-        end
-
-        -- send last backup
-        local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
-        local backups = { }
-        if files then
-            for k, v in pairsByKeys(files) do
-                if string.match(v, '^backupAISasha%d+%.tar%.gz$') then
-                    backups[string.match(v, '%d+')] = v
-                end
-            end
-            local last_backup = ''
-            for k, v in pairsByKeys(backups) do
-                last_backup = v
-            end
-            send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
-        end
-    end
-    return msg
-end
-
 return {
     description = "ADMINISTRATOR",
     patterns =
@@ -464,7 +421,6 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] ([Rr][Ii][Mm][Uu][Oo][Vv][Ii] [Ll][Oo][Gg])$",
     },
     run = run,
-    pre_process = pre_process,
     min_rank = 3,
     syntax =
     {
