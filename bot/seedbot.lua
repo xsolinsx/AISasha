@@ -407,7 +407,7 @@ function cron_administrator()
         last_administrator_cron = last_redis_administrator_cron
 
         -- save database
-        save_data(config.database.db, database)
+        save_data(_config.database.db, database)
 
         -- send database
         if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
