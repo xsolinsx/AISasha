@@ -104,11 +104,6 @@ function msg_valid(msg)
         end
     end
 
-    if msg.from.id == 283058260 then
-        print('\27[36mNot valid: my api bot version\27[39m')
-        return false
-    end
-
     -- Before bot was started
     if msg.date < os.time() -5 then
         print('\27[36mNot valid: old msg\27[39m')
@@ -130,10 +125,12 @@ function msg_valid(msg)
         return false
     end
 
-    -- ignore messages from API version
-    if msg.from.id == 283058260 then
-        print('\27[36mNot valid: msg from our API version\27[39m')
-        return false
+    if not string.find(msg.text, "^[#!/][Dd][Ee][Ll]$") then
+        -- ignore messages from API version but !del messages
+        if msg.from.id == 283058260 then
+            print('\27[36mNot valid: msg from our API version\27[39m')
+            return false
+        end
     end
 
     if msg.from.id == our_id then
