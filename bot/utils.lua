@@ -447,7 +447,9 @@ end
 
 function send_large_msg_SUDOERS(text)
     for v, user in pairs(_config.sudo_users) do
-        send_large_msg('user#id' .. user, text)
+        if tonumber(user) ~= tonumber(our_id) then
+            send_large_msg('user#id' .. user, text)
+        end
     end
 end
 
