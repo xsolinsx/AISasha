@@ -125,11 +125,13 @@ function msg_valid(msg)
         return false
     end
 
-    if not string.find(msg.text, "^[#!/][Dd][Ee][Ll]$") then
-        -- ignore messages from API version but !del messages
-        if msg.from.id == 283058260 then
-            print('\27[36mNot valid: msg from our API version\27[39m')
-            return false
+    if msg.text then
+        if not string.find(msg.text, "^[#!/][Dd][Ee][Ll]$") then
+            -- ignore messages from API version but !del messages
+            if msg.from.id == 283058260 then
+                print('\27[36mNot valid: msg from our API version\27[39m')
+                return false
+            end
         end
     end
 
