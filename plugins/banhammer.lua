@@ -477,10 +477,10 @@ local function run(msg, matches)
         end
         return
     end
-    if is_momod(msg) then
-        if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
-            if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                if not msg.api_patch then
+    if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
+        if msg.to.type == 'chat' or msg.to.type == 'channel' then
+            if not msg.api_patch then
+                if is_momod(msg) then
                     -- /kick
                     if type(msg.reply_id) ~= "nil" then
                         if matches[2] then
@@ -508,23 +508,31 @@ local function run(msg, matches)
                     else
                         resolve_username(matches[2]:gsub('@', ''), kick_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
+                else
+                    return langs[msg.lang].require_mod
                 end
-                return
-            else
-                return langs[msg.lang].useYourGroups
             end
+            return
+        else
+            return langs[msg.lang].useYourGroups
         end
-        if matches[1]:lower() == 'kickrandom' then
+    end
+    if matches[1]:lower() == 'kickrandom' then
+        if is_momod(msg) then
             if msg.to.type == 'chat' then
                 chat_info(receiver, kickrandom_chat, { chat_id = msg.to.id })
             elseif msg.to.type == 'channel' then
                 channel_get_users(receiver, kickrandom_channel, { chat_id = msg.to.id })
             end
             return
+        else
+            return langs[msg.lang].require_mod
         end
-        if matches[1]:lower() == 'ban' or matches[1]:lower() == 'sasha banna' or matches[1]:lower() == 'sasha decompila' or matches[1]:lower() == 'banna' or matches[1]:lower() == 'decompila' or matches[1]:lower() == 'esplodi' or matches[1]:lower() == 'kaboom' then
-            if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                if not msg.api_patch then
+    end
+    if matches[1]:lower() == 'ban' or matches[1]:lower() == 'sasha banna' or matches[1]:lower() == 'sasha decompila' or matches[1]:lower() == 'banna' or matches[1]:lower() == 'decompila' or matches[1]:lower() == 'esplodi' or matches[1]:lower() == 'kaboom' then
+        if msg.to.type == 'chat' or msg.to.type == 'channel' then
+            if not msg.api_patch then
+                if is_momod(msg) then
                     -- /ban
                     if type(msg.reply_id) ~= "nil" then
                         if matches[2] then
@@ -552,15 +560,19 @@ local function run(msg, matches)
                     else
                         resolve_username(matches[2]:gsub('@', ''), ban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
+                else
+                    return langs[msg.lang].require_mod
                 end
-                return
-            else
-                return langs[msg.lang].useYourGroups
             end
+            return
+        else
+            return langs[msg.lang].useYourGroups
         end
-        if matches[1]:lower() == 'unban' or matches[1]:lower() == 'sasha sbanna' or matches[1]:lower() == 'sasha ricompila' or matches[1]:lower() == 'sasha compila' or matches[1]:lower() == 'sbanna' or matches[1]:lower() == 'ricompila' or matches[1]:lower() == 'compila' then
-            if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                if not msg.api_patch then
+    end
+    if matches[1]:lower() == 'unban' or matches[1]:lower() == 'sasha sbanna' or matches[1]:lower() == 'sasha ricompila' or matches[1]:lower() == 'sasha compila' or matches[1]:lower() == 'sbanna' or matches[1]:lower() == 'ricompila' or matches[1]:lower() == 'compila' then
+        if msg.to.type == 'chat' or msg.to.type == 'channel' then
+            if not msg.api_patch then
+                if is_momod(msg) then
                     -- /unban
                     if type(msg.reply_id) ~= "nil" then
                         if matches[2] then
@@ -586,28 +598,34 @@ local function run(msg, matches)
                     else
                         resolve_username(matches[2]:gsub('@', ''), unban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
-                end
-                return
-            else
-                return langs[msg.lang].useYourGroups
-            end
-        end
-        if matches[1]:lower() == "banlist" or matches[1]:lower() == "sasha lista ban" or matches[1]:lower() == "lista ban" then
-            if not msg.api_patch then
-                -- /banlist
-                if matches[2] and is_admin1(msg) then
-                    return ban_list(matches[2])
                 else
-                    if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                        return ban_list(msg.to.id)
-                    else
-                        return langs[msg.lang].useYourGroups
-                    end
+                    return langs[msg.lang].require_mod
                 end
             end
             return
+        else
+            return langs[msg.lang].useYourGroups
         end
-        if matches[1]:lower() == 'kickdeleted' then
+    end
+    if matches[1]:lower() == "banlist" or matches[1]:lower() == "sasha lista ban" or matches[1]:lower() == "lista ban" then
+        if not msg.api_patch then
+            -- /banlist
+            if matches[2] and is_admin1(msg) then
+                return ban_list(matches[2])
+            elseif is_momod(msg) then
+                if msg.to.type == 'chat' or msg.to.type == 'channel' then
+                    return ban_list(msg.to.id)
+                else
+                    return langs[msg.lang].useYourGroups
+                end
+            else
+                return langs[msg.lang].require_mod
+            end
+        end
+        return
+    end
+    if matches[1]:lower() == 'kickdeleted' then
+        if is_momod(msg) then
             -- /kickdeleted
             if msg.to.type == 'chat' then
                 chat_info(receiver, kick_deleted_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
@@ -615,115 +633,127 @@ local function run(msg, matches)
                 channel_get_users(receiver, kick_deleted_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
             end
             return
+        else
+            return langs[msg.lang].require_mod
         end
-        if is_owner(msg) then
-            if matches[1]:lower() == 'kickinactive' then
-                if not msg.api_patch then
-                    -- /kickinactive
-                    local num = 1
-                    if matches[2] then
-                        num = matches[2]
-                    end
-                    if msg.to.type == 'chat' then
-                        chat_info(receiver, kick_inactive_chat, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
-                    elseif msg.to.type == 'channel' then
-                        channel_get_users(receiver, kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
-                    end
+    end
+    if matches[1]:lower() == 'kickinactive' then
+        if not msg.api_patch then
+            if is_owner(msg) then
+                -- /kickinactive
+                local num = 1
+                if matches[2] then
+                    num = matches[2]
                 end
-                return
-            end
-            if matches[1]:lower() == 'kicknouser' then
-                -- /kicknouser
                 if msg.to.type == 'chat' then
-                    chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                    chat_info(receiver, kick_inactive_chat, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
                 elseif msg.to.type == 'channel' then
-                    channel_get_users(receiver, kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                    channel_get_users(receiver, kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
                 end
-                return
             end
-            if is_admin1(msg) then
-                if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
-                    if not msg.api_patch then
-                        -- /gban
-                        if type(msg.reply_id) ~= "nil" then
-                            if matches[2] then
-                                if matches[2]:lower() == 'from' then
-                                    get_message(msg.reply_id, banall_from, { receiver = receiver, executer = msg.from.id })
-                                else
-                                    get_message(msg.reply_id, banall_by_reply, { receiver = receiver, executer = msg.from.id })
-                                end
-                            else
-                                get_message(msg.reply_id, banall_by_reply, { receiver = receiver, executer = msg.from.id })
-                            end
-                            return
-                        elseif string.match(matches[2], '^%d+$') then
-                            -- ignore higher or same rank
-                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                                banall_user(matches[2])
-                                savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " Y")
-                                return langs[msg.lang].user .. matches[2] .. langs[msg.lang].gbanned
-                            else
-                                savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " N")
-                                return langs[msg.lang].require_rank
-                            end
-                        else
-                            resolve_username(matches[2]:gsub('@', ''), banall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
-                        end
-                    end
-                    return
-                end
-                if matches[1]:lower() == 'ungban' or matches[1]:lower() == 'sasha supersbanna' or matches[1]:lower() == 'supersbanna' then
-                    if not msg.api_patch then
-                        -- /ungban
-                        if type(msg.reply_id) ~= "nil" then
-                            if matches[2] then
-                                if matches[2]:lower() == 'from' then
-                                    get_message(msg.reply_id, unbanall_from, { receiver = receiver, executer = msg.from.id })
-                                else
-                                    get_message(msg.reply_id, unbanall_by_reply, { receiver = receiver, executer = msg.from.id })
-                                end
-                            else
-                                get_message(msg.reply_id, unbanall_by_reply, { receiver = receiver, executer = msg.from.id })
-                            end
-                            return
-                        elseif string.match(matches[2], '^%d+$') then
-                            -- ignore higher or same rank
-                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                                unbanall_user(matches[2])
-                                savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " Y")
-                                return langs[msg.lang].user .. matches[2] .. langs[msg.lang].ungbanned
-                            else
-                                savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " N")
-                                return langs[msg.lang].require_rank
-                            end
-                        else
-                            resolve_username(matches[2]:gsub('@', ''), unbanall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
-                        end
-                    end
-                    return
-                end
-                if matches[1]:lower() == 'gbanlist' or matches[1]:lower() == 'sasha lista superban' or matches[1]:lower() == 'lista superban' then
-                    if not msg.api_patch then
-                        -- /gbanlist
-                        local list = banall_list()
-                        local file = io.open("./groups/gbanlist.txt", "w")
-                        file:write(list)
-                        file:flush()
-                        file:close()
-                        send_document(receiver, "./groups/gbanlist.txt", ok_cb, false)
-                        send_large_msg(receiver, list)
-                        return list
-                    end
-                    return
-                end
-            else
-                return langs[msg.lang].require_admin
-            end
+            return
         else
             return langs[msg.lang].require_owner
         end
-    else
-        return langs[msg.lang].require_mod
+    end
+    if matches[1]:lower() == 'kicknouser' then
+        -- /kicknouser
+        if is_owner(msg) then
+            if msg.to.type == 'chat' then
+                chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
+            elseif msg.to.type == 'channel' then
+                channel_get_users(receiver, kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
+            end
+            return
+        else
+            return langs[msg.lang].require_owner
+        end
+    end
+    if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
+        if not msg.api_patch then
+            if is_admin1(msg) then
+                -- /gban
+                if type(msg.reply_id) ~= "nil" then
+                    if matches[2] then
+                        if matches[2]:lower() == 'from' then
+                            get_message(msg.reply_id, banall_from, { receiver = receiver, executer = msg.from.id })
+                        else
+                            get_message(msg.reply_id, banall_by_reply, { receiver = receiver, executer = msg.from.id })
+                        end
+                    else
+                        get_message(msg.reply_id, banall_by_reply, { receiver = receiver, executer = msg.from.id })
+                    end
+                    return
+                elseif string.match(matches[2], '^%d+$') then
+                    -- ignore higher or same rank
+                    if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                        banall_user(matches[2])
+                        savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " Y")
+                        return langs[msg.lang].user .. matches[2] .. langs[msg.lang].gbanned
+                    else
+                        savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " N")
+                        return langs[msg.lang].require_rank
+                    end
+                else
+                    resolve_username(matches[2]:gsub('@', ''), banall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                end
+            end
+            return
+        else
+            return langs[msg.lang].require_admin
+        end
+    end
+    if matches[1]:lower() == 'ungban' or matches[1]:lower() == 'sasha supersbanna' or matches[1]:lower() == 'supersbanna' then
+        if not msg.api_patch then
+            if is_admin1(msg) then
+                -- /ungban
+                if type(msg.reply_id) ~= "nil" then
+                    if matches[2] then
+                        if matches[2]:lower() == 'from' then
+                            get_message(msg.reply_id, unbanall_from, { receiver = receiver, executer = msg.from.id })
+                        else
+                            get_message(msg.reply_id, unbanall_by_reply, { receiver = receiver, executer = msg.from.id })
+                        end
+                    else
+                        get_message(msg.reply_id, unbanall_by_reply, { receiver = receiver, executer = msg.from.id })
+                    end
+                    return
+                elseif string.match(matches[2], '^%d+$') then
+                    -- ignore higher or same rank
+                    if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                        unbanall_user(matches[2])
+                        savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " Y")
+                        return langs[msg.lang].user .. matches[2] .. langs[msg.lang].ungbanned
+                    else
+                        savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " N")
+                        return langs[msg.lang].require_rank
+                    end
+                else
+                    resolve_username(matches[2]:gsub('@', ''), unbanall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                end
+            end
+            return
+        else
+            return langs[msg.lang].require_admin
+        end
+    end
+    if matches[1]:lower() == 'gbanlist' or matches[1]:lower() == 'sasha lista superban' or matches[1]:lower() == 'lista superban' then
+        if not msg.api_patch then
+            if is_admin1(msg) then
+                -- /gbanlist
+                local list = banall_list()
+                local file = io.open("./groups/gbanlist.txt", "w")
+                file:write(list)
+                file:flush()
+                file:close()
+                send_document(receiver, "./groups/gbanlist.txt", ok_cb, false)
+                send_large_msg(receiver, list)
+                return list
+            end
+            return
+        else
+            return langs[msg.lang].require_admin
+        end
     end
 end
 
