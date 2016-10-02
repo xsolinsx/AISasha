@@ -2723,221 +2723,223 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             end
-            -- Begin Chat mutes
-            if matches[1]:lower() == 'mute' or matches[1]:lower() == 'silenzia' then
-                if is_owner(msg) then
-                    local chat_id = msg.to.id
-                    if matches[2]:lower() == 'audio' then
-                        local msg_type = 'Audio'
-                        if not is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
-                            mute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                        end
+        end
+        -- Begin Chat mutes
+        if matches[1]:lower() == 'mute' or matches[1]:lower() == 'silenzia' then
+            if is_owner(msg) then
+                local chat_id = msg.to.id
+                if matches[2]:lower() == 'audio' then
+                    local msg_type = 'Audio'
+                    if not is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
+                        mute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
                     end
-                    if matches[2]:lower() == 'photo' then
-                        local msg_type = 'Photo'
-                        if not is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
-                            mute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                        end
-                    end
-                    if matches[2]:lower() == 'video' then
-                        local msg_type = 'Video'
-                        if not is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
-                            mute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                        end
-                    end
-                    if matches[2]:lower() == 'gifs' then
-                        local msg_type = 'Gifs'
-                        if not is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
-                            mute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                        end
-                    end
-                    if matches[2]:lower() == 'documents' then
-                        local msg_type = 'Documents'
-                        if not is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
-                            mute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                        end
-                    end
-                    if matches[2]:lower() == 'text' then
-                        local msg_type = 'Text'
-                        if not is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
-                            mute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                        end
-                    end
-                    if matches[2]:lower() == 'all' then
-                        local msg_type = 'All'
-                        if not is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
-                            mute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                        end
-                    end
-                else
-                    return langs[msg.lang].require_owner
                 end
-            end
-            if matches[1]:lower() == 'unmute' or matches[1]:lower() == 'ripristina' then
-                if is_owner(msg) then
-                    local chat_id = msg.to.id
-                    if matches[2]:lower() == 'audio' then
-                        local msg_type = 'Audio'
-                        if is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
-                            unmute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                        end
+                if matches[2]:lower() == 'photo' then
+                    local msg_type = 'Photo'
+                    if not is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
+                        mute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
                     end
-                    if matches[2]:lower() == 'photo' then
-                        local msg_type = 'Photo'
-                        if is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
-                            unmute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                        end
-                    end
-                    if matches[2]:lower() == 'video' then
-                        local msg_type = 'Video'
-                        if is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
-                            unmute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                        end
-                    end
-                    if matches[2]:lower() == 'gifs' then
-                        local msg_type = 'Gifs'
-                        if is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
-                            unmute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                        end
-                    end
-                    if matches[2]:lower() == 'documents' then
-                        local msg_type = 'Documents'
-                        if is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
-                            unmute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                        end
-                    end
-                    if matches[2]:lower() == 'text' then
-                        local msg_type = 'Text'
-                        if is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute message")
-                            unmute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                        end
-                    end
-                    if matches[2]:lower() == 'all' then
-                        local msg_type = 'All'
-                        if is_muted(chat_id, msg_type .. ': yes') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
-                            unmute(chat_id, msg_type)
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                        else
-                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                        end
-                    end
-                else
-                    return langs[msg.lang].require_owner
                 end
+                if matches[2]:lower() == 'video' then
+                    local msg_type = 'Video'
+                    if not is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
+                        mute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                    end
+                end
+                if matches[2]:lower() == 'gifs' then
+                    local msg_type = 'Gifs'
+                    if not is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
+                        mute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                    end
+                end
+                if matches[2]:lower() == 'documents' then
+                    local msg_type = 'Documents'
+                    if not is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
+                        mute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                    end
+                end
+                if matches[2]:lower() == 'text' then
+                    local msg_type = 'Text'
+                    if not is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
+                        mute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                    end
+                end
+                if matches[2]:lower() == 'all' then
+                    local msg_type = 'All'
+                    if not is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: mute " .. msg_type)
+                        mute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                    end
+                end
+            else
+                return langs[msg.lang].require_owner
             end
-            -- End Chat mutes
-            -- Begin Chat muteuser
-            if (matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce') then
-                if is_momod(msg) then
-                    local chat_id = msg.to.id
-                    local hash = "mute_user" .. chat_id
-                    local user_id = ""
-                    if type(msg.reply_id) ~= "nil" then
-                        if matches[2] then
-                            if matches[2]:lower() == 'from' then
-                                get_message(msg.reply_id, muteuser_from, { receiver = get_receiver(msg), executer = msg.from.id })
-                            else
-                                muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
-                            end
+        end
+        if matches[1]:lower() == 'unmute' or matches[1]:lower() == 'ripristina' then
+            if is_owner(msg) then
+                local chat_id = msg.to.id
+                if matches[2]:lower() == 'audio' then
+                    local msg_type = 'Audio'
+                    if is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
+                        unmute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                    end
+                end
+                if matches[2]:lower() == 'photo' then
+                    local msg_type = 'Photo'
+                    if is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
+                        unmute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                    end
+                end
+                if matches[2]:lower() == 'video' then
+                    local msg_type = 'Video'
+                    if is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
+                        unmute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                    end
+                end
+                if matches[2]:lower() == 'gifs' then
+                    local msg_type = 'Gifs'
+                    if is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
+                        unmute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                    end
+                end
+                if matches[2]:lower() == 'documents' then
+                    local msg_type = 'Documents'
+                    if is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
+                        unmute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                    end
+                end
+                if matches[2]:lower() == 'text' then
+                    local msg_type = 'Text'
+                    if is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute message")
+                        unmute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                    end
+                end
+                if matches[2]:lower() == 'all' then
+                    local msg_type = 'All'
+                    if is_muted(chat_id, msg_type .. ': yes') then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set group to: unmute " .. msg_type)
+                        unmute(chat_id, msg_type)
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                    else
+                        return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                    end
+                end
+            else
+                return langs[msg.lang].require_owner
+            end
+        end
+        -- End Chat mutes
+        -- Begin Chat muteuser
+        if (matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce') then
+            if is_momod(msg) then
+                local chat_id = msg.to.id
+                local hash = "mute_user" .. chat_id
+                local user_id = ""
+                if type(msg.reply_id) ~= "nil" then
+                    if matches[2] then
+                        if matches[2]:lower() == 'from' then
+                            get_message(msg.reply_id, muteuser_from, { receiver = get_receiver(msg), executer = msg.from.id })
                         else
                             muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
                         end
-                        return
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            if is_muted_user(msg.to.id, matches[2]) then
-                                unmute_user(msg.to.id, matches[2])
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
-                                return matches[2] .. langs[msg.lang].muteUserRemove
-                            else
-                                mute_user(msg.to.id, matches[2])
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
-                                return matches[2] .. langs[msg.lang].muteUserAdd
-                            end
+                    else
+                        muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
+                    end
+                    return
+                elseif string.match(matches[2], '^%d+$') then
+                    -- ignore higher or same rank
+                    if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                        if is_muted_user(msg.to.id, matches[2]) then
+                            unmute_user(msg.to.id, matches[2])
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
+                            return matches[2] .. langs[msg.lang].muteUserRemove
                         else
-                            return langs[msg.lang].require_rank
+                            mute_user(msg.to.id, matches[2])
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
+                            return matches[2] .. langs[msg.lang].muteUserAdd
                         end
                     else
-                        return resolve_username(string.gsub(matches[2], '@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
+                        return langs[msg.lang].require_rank
                     end
                 else
-                    return langs[msg.lang].require_mod
+                    return resolve_username(string.gsub(matches[2], '@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
                 end
+            else
+                return langs[msg.lang].require_mod
             end
-            -- End Chat muteuser
-            if (matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti") then
-                if is_momod(msg) then
-                    if not has_mutes(msg.to.id) then
-                        set_mutes(msg.to.id)
-                    end
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
-                    return mutes_list(msg.to.id, msg.to.print_name)
-                else
-                    return langs[msg.lang].require_mod
+        end
+        -- End Chat muteuser
+        if (matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti") then
+            if is_momod(msg) then
+                if not has_mutes(msg.to.id) then
+                    set_mutes(msg.to.id)
                 end
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
+                return mutes_list(msg.to.id, msg.to.print_name)
+            else
+                return langs[msg.lang].require_mod
             end
-            if (matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti") then
-                if is_momod(msg) then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
-                    return muted_user_list(msg.to.id, msg.to.print_name)
-                else
-                    return langs[msg.lang].require_mod
-                end
+        end
+        if (matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti") then
+            if is_momod(msg) then
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
+                return muted_user_list(msg.to.id, msg.to.print_name)
+            else
+                return langs[msg.lang].require_mod
             end
+        end
+        if not msg.api_patch then
             if matches[1]:lower() == 'settings' then
                 if is_momod(msg) then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group settings ")
@@ -3625,220 +3627,222 @@ local function run(msg, matches)
                         return langs[msg.lang].require_mod
                     end
                 end
-                if matches[1]:lower() == 'mute' or matches[1]:lower() == 'silenzia' then
-                    if is_owner(msg) then
-                        local chat_id = msg.to.id
-                        if matches[2]:lower() == 'audio' then
-                            local msg_type = 'Audio'
-                            if not is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
-                                mute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                            end
+            end
+            if matches[1]:lower() == 'mute' or matches[1]:lower() == 'silenzia' then
+                if is_owner(msg) then
+                    local chat_id = msg.to.id
+                    if matches[2]:lower() == 'audio' then
+                        local msg_type = 'Audio'
+                        if not is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
+                            mute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
                         end
-                        if matches[2]:lower() == 'photo' then
-                            local msg_type = 'Photo'
-                            if not is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
-                                mute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                            end
-                        end
-                        if matches[2]:lower() == 'video' then
-                            local msg_type = 'Video'
-                            if not is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
-                                mute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                            end
-                        end
-                        if matches[2]:lower() == 'gifs' then
-                            local msg_type = 'Gifs'
-                            if not is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
-                                mute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                            end
-                        end
-                        if matches[2]:lower() == 'documents' then
-                            local msg_type = 'Documents'
-                            if not is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
-                                mute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                            end
-                        end
-                        if matches[2]:lower() == 'text' then
-                            local msg_type = 'Text'
-                            if not is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
-                                mute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                            end
-                        end
-                        if matches[2]:lower() == 'all' then
-                            local msg_type = 'All'
-                            if not is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
-                                mute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
-                            end
-                        end
-                    else
-                        return langs[msg.lang].require_owner
                     end
-                end
-                if matches[1]:lower() == 'unmute' or matches[1]:lower() == 'ripristina' then
-                    if is_owner(msg) then
-                        local chat_id = msg.to.id
-                        if matches[2]:lower() == 'audio' then
-                            local msg_type = 'Audio'
-                            if is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
-                                unmute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                            end
+                    if matches[2]:lower() == 'photo' then
+                        local msg_type = 'Photo'
+                        if not is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
+                            mute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
                         end
-                        if matches[2]:lower() == 'photo' then
-                            local msg_type = 'Photo'
-                            if is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
-                                unmute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                            end
-                        end
-                        if matches[2]:lower() == 'video' then
-                            local msg_type = 'Video'
-                            if is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
-                                unmute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                            end
-                        end
-                        if matches[2]:lower() == 'gifs' then
-                            local msg_type = 'Gifs'
-                            if is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
-                                unmute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                            end
-                        end
-                        if matches[2]:lower() == 'documents' then
-                            local msg_type = 'Documents'
-                            if is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
-                                unmute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                            end
-                        end
-                        if matches[2]:lower() == 'text' then
-                            local msg_type = 'Text'
-                            if is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute message")
-                                unmute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                            end
-                        end
-                        if matches[2]:lower() == 'all' then
-                            local msg_type = 'All'
-                            if is_muted(chat_id, msg_type .. ': yes') then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
-                                unmute(chat_id, msg_type)
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
-                            else
-                                return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
-                            end
-                        end
-                    else
-                        return langs[msg.lang].require_owner
                     end
+                    if matches[2]:lower() == 'video' then
+                        local msg_type = 'Video'
+                        if not is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
+                            mute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                        end
+                    end
+                    if matches[2]:lower() == 'gifs' then
+                        local msg_type = 'Gifs'
+                        if not is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
+                            mute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                        end
+                    end
+                    if matches[2]:lower() == 'documents' then
+                        local msg_type = 'Documents'
+                        if not is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
+                            mute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                        end
+                    end
+                    if matches[2]:lower() == 'text' then
+                        local msg_type = 'Text'
+                        if not is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
+                            mute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                        end
+                    end
+                    if matches[2]:lower() == 'all' then
+                        local msg_type = 'All'
+                        if not is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: mute " .. msg_type)
+                            mute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].enabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyEnabled
+                        end
+                    end
+                else
+                    return langs[msg.lang].require_owner
                 end
-                if matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce' then
-                    if is_momod(msg) then
-                        local hash = "mute_user" .. msg.to.id
-                        if type(msg.reply_id) ~= "nil" then
-                            if matches[2] then
-                                if matches[2]:lower() == 'from' then
-                                    get_message(msg.reply_id, muteuser_from, { receiver = get_receiver(msg), executer = msg.from.id })
-                                    return
-                                else
-                                    local get_cmd = "mute_user"
-                                    get_message(msg.reply_id, get_message_callback, { receiver = get_receiver(msg), get_cmd = get_cmd, msg = msg })
-                                    return
-                                end
+            end
+            if matches[1]:lower() == 'unmute' or matches[1]:lower() == 'ripristina' then
+                if is_owner(msg) then
+                    local chat_id = msg.to.id
+                    if matches[2]:lower() == 'audio' then
+                        local msg_type = 'Audio'
+                        if is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
+                            unmute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                        end
+                    end
+                    if matches[2]:lower() == 'photo' then
+                        local msg_type = 'Photo'
+                        if is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
+                            unmute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                        end
+                    end
+                    if matches[2]:lower() == 'video' then
+                        local msg_type = 'Video'
+                        if is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
+                            unmute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                        end
+                    end
+                    if matches[2]:lower() == 'gifs' then
+                        local msg_type = 'Gifs'
+                        if is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
+                            unmute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                        end
+                    end
+                    if matches[2]:lower() == 'documents' then
+                        local msg_type = 'Documents'
+                        if is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
+                            unmute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                        end
+                    end
+                    if matches[2]:lower() == 'text' then
+                        local msg_type = 'Text'
+                        if is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute message")
+                            unmute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                        end
+                    end
+                    if matches[2]:lower() == 'all' then
+                        local msg_type = 'All'
+                        if is_muted(chat_id, msg_type .. ': yes') then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set SuperGroup to: unmute " .. msg_type)
+                            unmute(chat_id, msg_type)
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].disabled
+                        else
+                            return langs[msg.lang].mute .. msg_type .. langs[msg.lang].alreadyDisabled
+                        end
+                    end
+                else
+                    return langs[msg.lang].require_owner
+                end
+            end
+            if matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce' then
+                if is_momod(msg) then
+                    local hash = "mute_user" .. msg.to.id
+                    if type(msg.reply_id) ~= "nil" then
+                        if matches[2] then
+                            if matches[2]:lower() == 'from' then
+                                get_message(msg.reply_id, muteuser_from, { receiver = get_receiver(msg), executer = msg.from.id })
+                                return
                             else
                                 local get_cmd = "mute_user"
                                 get_message(msg.reply_id, get_message_callback, { receiver = get_receiver(msg), get_cmd = get_cmd, msg = msg })
                                 return
                             end
-                        elseif string.match(matches[2], '^%d+$') then
-                            -- ignore higher or same rank
-                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                                if is_muted_user(msg.to.id, matches[2]) then
-                                    unmute_user(msg.to.id, matches[2])
-                                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
-                                    return matches[2] .. langs[msg.lang].muteUserRemove
-                                else
-                                    mute_user(msg.to.id, matches[2])
-                                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
-                                    return matches[2] .. langs[msg.lang].muteUserAdd
-                                end
-                            else
-                                return langs[msg.lang].require_rank
-                            end
                         else
                             local get_cmd = "mute_user"
-                            resolve_username(string.gsub(matches[2], '@', ''), callbackres, { receiver = get_receiver(msg), get_cmd = get_cmd, executer = msg.from.id })
+                            get_message(msg.reply_id, get_message_callback, { receiver = get_receiver(msg), get_cmd = get_cmd, msg = msg })
+                            return
+                        end
+                    elseif string.match(matches[2], '^%d+$') then
+                        -- ignore higher or same rank
+                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                            if is_muted_user(msg.to.id, matches[2]) then
+                                unmute_user(msg.to.id, matches[2])
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
+                                return matches[2] .. langs[msg.lang].muteUserRemove
+                            else
+                                mute_user(msg.to.id, matches[2])
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
+                                return matches[2] .. langs[msg.lang].muteUserAdd
+                            end
+                        else
+                            return langs[msg.lang].require_rank
                         end
                     else
-                        return langs[msg.lang].require_mod
+                        local get_cmd = "mute_user"
+                        resolve_username(string.gsub(matches[2], '@', ''), callbackres, { receiver = get_receiver(msg), get_cmd = get_cmd, executer = msg.from.id })
                     end
+                else
+                    return langs[msg.lang].require_mod
                 end
-                if matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti" then
-                    if is_momod(msg) then
-                        if not has_mutes(msg.to.id) then
-                            set_mutes(msg.to.id)
-                        end
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
-                        return mutes_list(msg.to.id, msg.to.print_name)
-                    else
-                        return langs[msg.lang].require_mod
+            end
+            if matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti" then
+                if is_momod(msg) then
+                    if not has_mutes(msg.to.id) then
+                        set_mutes(msg.to.id)
                     end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
+                    return mutes_list(msg.to.id, msg.to.print_name)
+                else
+                    return langs[msg.lang].require_mod
                 end
-                if matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti" then
-                    if is_momod(msg) then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
-                        return muted_user_list(msg.to.id, msg.to.print_name)
-                    else
-                        return langs[msg.lang].require_mod
-                    end
+            end
+            if matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti" then
+                if is_momod(msg) then
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
+                    return muted_user_list(msg.to.id, msg.to.print_name)
+                else
+                    return langs[msg.lang].require_mod
                 end
+            end
+            if not msg.api_patch then
                 if matches[1]:lower() == 'settings' then
                     if is_momod(msg) then
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup settings ")
