@@ -25,10 +25,10 @@ function run(msg, matches)
                 end
                 if matches[1]:lower() == 'cd' then
                     if not matches[2] then
-                        redis:set('folder', '')
+                        redis:set('user:folder', '')
                         return langs[msg.lang].backHomeFolder .. BASE_FOLDER
                     else
-                        redis:set('folder', matches[2])
+                        redis:set('user:folder', matches[2])
                         return langs[msg.lang].youAreHere .. BASE_FOLDER .. matches[2]
                     end
                 end
