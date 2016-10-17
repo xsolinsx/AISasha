@@ -91,6 +91,7 @@ function run(msg, matches)
                 send_large_msg(receiver, action)
             else
                 redis:set('user:folder', '')
+                return langs[msg.lang].youAreHere .. BASE_FOLDER
             end
         end
     else
