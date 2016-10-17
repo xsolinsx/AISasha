@@ -17,7 +17,7 @@ end
 function run(msg, matches)
     if is_sudo(msg) then
         if not msg.api_patch then
-            local folder = redis:get('folder')
+            local folder = redis:get('user:folder')
             if folder then
                 local receiver = get_receiver(msg)
                 if matches[1]:lower() == 'folder' then
@@ -90,7 +90,7 @@ function run(msg, matches)
                 end
                 send_large_msg(receiver, action)
             else
-                redis:set('folder', '')
+                redis:set('user:folder', '')
             end
         end
     else
