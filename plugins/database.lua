@@ -149,7 +149,7 @@ end
 local function callback(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success and result then
-        local file = '/home/pi/AISashaExp/data/database.json'
+        local file = '/home/pi/AISasha/data/database.json'
         print('File downloaded to:', result)
         os.rename(result, file)
         print('File moved to:', file)
@@ -267,8 +267,8 @@ local function run(msg, matches)
             if matches[1]:lower() == 'uploaddb' then
                 print('SAVING USERS/GROUPS DATABASE')
                 save_data(_config.database.db, database)
-                if io.popen('find /home/pi/AISashaExp/data/database.json'):read("*all") ~= '' then
-                    send_document_SUDOERS('/home/pi/AISashaExp/data/database.json', ok_cb, false)
+                if io.popen('find /home/pi/AISasha/data/database.json'):read("*all") ~= '' then
+                    send_document_SUDOERS('/home/pi/AISasha/data/database.json', ok_cb, false)
                     return langs[msg.lang].databaseSent
                 else
                     return langs[msg.lang].databaseMissing

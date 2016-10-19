@@ -270,7 +270,7 @@ local function run(msg, matches)
                 end
                 if matches[1]:lower() == "backup" or matches[1]:lower() == "sasha esegui backup" then
                     local time = os.time()
-                    local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISashaExp --exclude=/home/pi/AISashaExp/.git --exclude=/home/pi/AISashaExp/.luarocks --exclude=/home/pi/AISashaExp/patches --exclude=/home/pi/AISashaExp/tg'):read('*all')
+                    local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISasha --exclude=/home/pi/AISasha/.git --exclude=/home/pi/AISasha/.luarocks --exclude=/home/pi/AISasha/patches --exclude=/home/pi/AISasha/tg'):read('*all')
                     local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
                     file:write(log)
                     file:flush()
