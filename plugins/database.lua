@@ -182,7 +182,7 @@ local function run(msg, matches)
                 end
             end
 
-            if (matches[1]:lower() == 'search' or matches[1]:lower() == 'sasha cerca' or matches[1]:lower() == 'cerca') and matches[2] then
+            if (matches[1]:lower() == 'dbsearch' or matches[1]:lower() == 'sasha cerca db' or matches[1]:lower() == 'cerca db') and matches[2] then
                 if database['users'][tostring(matches[2])] then
                     return serpent.block(database['users'][tostring(matches[2])], { sortkeys = false, comment = false })
                 elseif database['groups'][tostring(matches[2])] then
@@ -439,16 +439,16 @@ return {
     {
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Dd][Oo][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
-        "^[#!/]([Ss][Ee][Aa][Rr][Cc][Hh]) (%d+)$",
+        "^[#!/]([Dd][Bb][Ss][Ee][Aa][Rr][Cc][Hh]) (%d+)$",
         "^[#!/]([Aa][Dd][Dd][Rr][Ee][Cc][Oo][Rr][Dd]) ([^%s]+) (.*)$",
         "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee]) (%d+)$",
         "^[#!/]([Uu][Pp][Ll][Oo][Aa][Dd][Dd][Bb])$",
         "^[#!/]([Rr][Ee][Pp][Ll][Aa][Cc][Ee][Dd][Bb])$",
         -- dodatabase
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
-        -- search
-        "^([Ss][Aa][Ss][Hh][Aa] [Cc][Ee][Rr][Cc][Aa]) (%d+)$",
-        "^([Cc][Ee][Rr][Cc][Aa]) (%d+)$",
+        -- dbsearch
+        "^([Ss][Aa][Ss][Hh][Aa] [Cc][Ee][Rr][Cc][Aa] [Dd][Bb]) (%d+)$",
+        "^([Cc][Ee][Rr][Cc][Aa] [Dd][Bb]) (%d+)$",
         -- delete
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa]) (%d+)$",
         "^([Ee][Ll][Ii][Mm][Ii][Nn][Aa]) (%d+)$",
@@ -461,7 +461,7 @@ return {
         "SUDO",
         "#createdatabase",
         "(#dodatabase|sasha esegui database)",
-        "(#search|[sasha] cerca) <id>",
+        "(#dbsearch|[sasha] cerca db) <id>",
         "(#delete|[sasha] elimina) <id>",
         "#addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>",
         "#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]",
