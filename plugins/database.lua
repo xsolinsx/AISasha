@@ -441,7 +441,7 @@ return {
         "^[#!/]([Dd][Oo][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Dd][Bb][Ss][Ee][Aa][Rr][Cc][Hh]) (%d+)$",
         "^[#!/]([Aa][Dd][Dd][Rr][Ee][Cc][Oo][Rr][Dd]) ([^%s]+) (.*)$",
-        "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee]) (%d+)$",
+        "^[#!/]([Dd][Bb][Dd][Ee][Ll][Ee][Tt][Ee]) (%d+)$",
         "^[#!/]([Uu][Pp][Ll][Oo][Aa][Dd][Dd][Bb])$",
         "^[#!/]([Rr][Ee][Pp][Ll][Aa][Cc][Ee][Dd][Bb])$",
         -- dodatabase
