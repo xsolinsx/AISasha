@@ -1,6 +1,6 @@
 local function spam(chat, text, i)
     local function message()
-        send_msg(chat, text, ok_cb, false)
+        send_large_msg(chat, text)
     end
     postpone(message, false, i)
 end
