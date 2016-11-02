@@ -621,7 +621,7 @@ local function run(msg, matches)
                             end
                             local percentage =(groupstats.challengecaps * 100) /(groupstats.challengecylinder - temp - 1)
                             percentage = string.format('%d', percentage)
-                            reply_msg(msg.id, langs.phrases.ruletagame.safe[math.random(#langs.phrases.ruletagame.safe)] .. '\n' .. langs[msg.lang].shotsLeft .. notshotted .. shotted .. '\n' .. langs[msg.lang].ruletaDeathPercentage .. percentage .. '%\n' .. nextplayeruser .. langs[msg.lang].yourTurn, ok_cb, false)
+                            reply_msg(msg.id, langs.phrases.ruletagame.safe[math.random(#langs.phrases.ruletagame.safe)] .. '\n' .. langs[msg.lang].shotsLeft .. notshotted .. shotted .. '\n' .. langs[msg.lang].ruletaDeathPercentage .. percentage .. '%\n' .. nextplayeruser .. langs[msg.lang].yourTurn .. '\n/ruleta', ok_cb, false)
 
                             ruletadata['users'][user].score = tonumber(ruletadata['users'][user].score + 1)
 
