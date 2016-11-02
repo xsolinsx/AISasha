@@ -7,7 +7,7 @@ end
 
 local function run(msg, matches)
     if is_owner(msg) then
-        if (matches[1]:lower() == 'spam' or matches[1]:lower() == 'sasha spamma' or matches[1]:lower() == 'spamma') and matches[2] and matches[3] and matches[4] then
+        if (matches[1]:lower() == 'spam' or matches[1]:lower() == 'sasha spamma' or matches[1]:lower() == 'spamma') and matches[2] then
             if matches[3] and matches[4] then
                 local i = 0
                 while i <(tonumber(matches[2]) /(0.5 / tonumber(matches[3]))) / 2 do
