@@ -130,7 +130,8 @@ local function pre_process(msg)
                         end
                         return
                     end
-                    local is_link_msg = msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
+                    local is_link_msg = msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/") or
+                    msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.text:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
                     -- or msg.text:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.text:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.text:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                     local is_bot = msg.text:match("?[Ss][Tt][Aa][Rr][Tt]=")
                     if is_link_msg and lock_link == "yes" and not is_bot then
@@ -188,7 +189,8 @@ local function pre_process(msg)
                 if msg.media then
                     -- msg.media checks
                     if msg.media.title then
-                        local is_link_title = msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
+                        local is_link_title = msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/") or
+                        msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
                         -- or msg.media.title:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.media.title:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.media.title:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_title and lock_link == "yes" then
                             if not string.find(msg.text, data[msg.to.id].settings.set_link) then
@@ -215,7 +217,8 @@ local function pre_process(msg)
                         end
                     end
                     if msg.media.description then
-                        local is_link_desc = msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
+                        local is_link_desc = msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/") or
+                        msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
                         -- or msg.media.description:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.media.description:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.media.description:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_desc and lock_link == "yes" then
                             if not string.find(msg.text, data[msg.to.id].settings.set_link) then
@@ -243,7 +246,8 @@ local function pre_process(msg)
                     end
                     if msg.media.caption then
                         -- msg.media.caption checks
-                        local is_link_caption = msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/")
+                        local is_link_caption = msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]/") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]/") or
+                        msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
                         -- or msg.media.caption:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.media.caption:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.media.caption:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_caption and lock_link == "yes" then
                             if not string.find(msg.text, data[msg.to.id].settings.set_link) then
@@ -357,7 +361,8 @@ local function pre_process(msg)
                 end
                 if msg.fwd_from then
                     if msg.fwd_from.title then
-                        local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/")
+                        local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/") or
+                        msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
                         -- or msg.fwd_from.title:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.fwd_from.title:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.fwd_from.title:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_title and lock_link == "yes" then
                             if not string.find(msg.text, data[msg.to.id].settings.set_link) then
