@@ -10,7 +10,6 @@ local function pre_process(msg)
             -- get rid of rtl in names
             local name_log = print_name:gsub("_", " ")
             -- name for log
-            local to_chat = msg.to.type == 'chat'
             if data[tostring(msg.to.id)] and data[tostring(msg.to.id)]['settings'] then
                 settings = data[tostring(msg.to.id)]['settings']
             else
@@ -63,7 +62,7 @@ local function pre_process(msg)
             end
             if is_muted_user(msg.to.id, msg.from.id) and not msg.service then
                 delete_msg(msg.id, ok_cb, false)
-                if to_chat then
+                if msg.to.type == 'chat' then
                     kick_user(msg.from.id, msg.to.id)
                 end
                 -- clean msg but returns it
@@ -91,7 +90,7 @@ local function pre_process(msg)
             if not is_momod(msg) then
                 if msg and not msg.service and is_muted(msg.to.id, 'All: yes') then
                     delete_msg(msg.id, ok_cb, false)
-                    if to_chat then
+                    if msg.to.type == 'chat' then
                         kick_user(msg.from.id, msg.to.id)
                     end
                     -- clean msg but returns it
@@ -125,7 +124,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -140,7 +139,7 @@ local function pre_process(msg)
                             if strict == "yes" then
                                 kick_user(msg.from.id, msg.to.id)
                             end
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(msg.from.id, msg.to.id)
                             end
                             return
@@ -158,7 +157,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -170,7 +169,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -180,7 +179,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -198,7 +197,7 @@ local function pre_process(msg)
                                 if strict == "yes" then
                                     kick_user(msg.from.id, msg.to.id)
                                 end
-                                if to_chat then
+                                if msg.to.type == 'chat' then
                                     ban_user(msg.from.id, msg.to.id)
                                 end
                                 return
@@ -210,7 +209,7 @@ local function pre_process(msg)
                             if strict == "yes" then
                                 kick_user(msg.from.id, msg.to.id)
                             end
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(msg.from.id, msg.to.id)
                             end
                             return
@@ -226,7 +225,7 @@ local function pre_process(msg)
                                 if strict == "yes" then
                                     kick_user(msg.from.id, msg.to.id)
                                 end
-                                if to_chat then
+                                if msg.to.type == 'chat' then
                                     ban_user(msg.from.id, msg.to.id)
                                 end
                                 return
@@ -238,7 +237,7 @@ local function pre_process(msg)
                             if strict == "yes" then
                                 kick_user(msg.from.id, msg.to.id)
                             end
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(msg.from.id, msg.to.id)
                             end
                             return
@@ -255,7 +254,7 @@ local function pre_process(msg)
                                 if strict == "yes" then
                                     kick_user(msg.from.id, msg.to.id)
                                 end
-                                if to_chat then
+                                if msg.to.type == 'chat' then
                                     ban_user(msg.from.id, msg.to.id)
                                 end
                                 return
@@ -267,7 +266,7 @@ local function pre_process(msg)
                             if strict == "yes" then
                                 kick_user(msg.from.id, msg.to.id)
                             end
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(msg.from.id, msg.to.id)
                             end
                             return
@@ -278,7 +277,7 @@ local function pre_process(msg)
                             if strict == "yes" then
                                 kick_user(msg.from.id, msg.to.id)
                             end
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(msg.from.id, msg.to.id)
                             end
                             return
@@ -288,7 +287,7 @@ local function pre_process(msg)
                             if strict == "yes" then
                                 kick_user(msg.from.id, msg.to.id)
                             end
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(msg.from.id, msg.to.id)
                             end
                             return
@@ -299,7 +298,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -311,7 +310,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -322,7 +321,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -332,7 +331,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -343,7 +342,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -353,7 +352,7 @@ local function pre_process(msg)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
                         end
-                        if to_chat then
+                        if msg.to.type == 'chat' then
                             ban_user(msg.from.id, msg.to.id)
                         end
                         return
@@ -370,7 +369,7 @@ local function pre_process(msg)
                                 if strict == "yes" then
                                     kick_user(msg.from.id, msg.to.id)
                                 end
-                                if to_chat then
+                                if msg.to.type == 'chat' then
                                     ban_user(msg.from.id, msg.to.id)
                                 end
                                 return
@@ -382,7 +381,7 @@ local function pre_process(msg)
                             if strict == "yes" then
                                 kick_user(msg.from.id, msg.to.id)
                             end
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(msg.from.id, msg.to.id)
                             end
                             return
@@ -406,7 +405,7 @@ local function pre_process(msg)
                                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] joined and kicked (#spam name)")
                                 kick_user(msg.from.id, msg.to.id)
                             end
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] joined and banned (#spam name)")
                                 ban_user(msg.from.id, msg.to.id)
                             end
@@ -417,7 +416,7 @@ local function pre_process(msg)
                             savelog(msg.to.id, name_log .. " User [" .. msg.from.id .. "] joined and kicked (#RTL char in name)")
                             delete_msg(msg.id, ok_cb, false)
                             kick_user(user_id, msg.to.id)
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(user_id, msg.to.id)
                             end
                         end
@@ -425,7 +424,7 @@ local function pre_process(msg)
                             savelog(msg.to.id, name_log .. " User [" .. msg.from.id .. "] joined and kicked (#lockmember)")
                             delete_msg(msg.id, ok_cb, false)
                             kick_user(user_id, msg.to.id)
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(user_id, msg.to.id)
                             end
                         end
@@ -439,7 +438,7 @@ local function pre_process(msg)
                                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. user_id .. "]: added user kicked (#spam name) ")
                                 kick_user(msg.from.id, msg.to.id)
                             end
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. user_id .. "]: added user banned (#spam name) ")
                                 ban_user(msg.from.id, msg.to.id)
                             end
@@ -450,7 +449,7 @@ local function pre_process(msg)
                             savelog(msg.to.id, name_log .. " User [" .. msg.from.id .. "] added [" .. user_id .. "]: added user kicked (#RTL char in name)")
                             delete_msg(msg.id, ok_cb, false)
                             kick_user(user_id, msg.to.id)
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(user_id, msg.to.id)
                             end
                         end
@@ -458,7 +457,7 @@ local function pre_process(msg)
                             savelog(msg.to.id, name_log .. " User [" .. msg.from.id .. "] added [" .. user_id .. "]: added user kicked  (#lockmember)")
                             delete_msg(msg.id, ok_cb, false)
                             kick_user(user_id, msg.to.id)
-                            if to_chat then
+                            if msg.to.type == 'chat' then
                                 ban_user(user_id, msg.to.id)
                             end
                         end
