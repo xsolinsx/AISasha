@@ -60,6 +60,11 @@ local function pre_process(msg)
             else
                 strict = 'no'
             end
+            if settings.set_link then
+                group_link = settings.set_link
+            else
+                group_link = nil
+            end
             if is_muted_user(msg.to.id, msg.from.id) and not msg.service then
                 delete_msg(msg.id, ok_cb, false)
                 if msg.to.type == 'chat' then
@@ -134,15 +139,17 @@ local function pre_process(msg)
                     -- or msg.text:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.text:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.text:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                     local is_bot = msg.text:match("?[Ss][Tt][Aa][Rr][Tt]=")
                     if is_link_msg and lock_link == "yes" and not is_bot then
-                        if not string.find(msg.text, data[msg.to.id].settings.set_link) then
-                            delete_msg(msg.id, ok_cb, false)
-                            if strict == "yes" then
-                                kick_user(msg.from.id, msg.to.id)
+                        if group_link then
+                            if not string.find(msg.text, group_link) then
+                                delete_msg(msg.id, ok_cb, false)
+                                if strict == "yes" then
+                                    kick_user(msg.from.id, msg.to.id)
+                                end
+                                if msg.to.type == 'chat' then
+                                    ban_user(msg.from.id, msg.to.id)
+                                end
+                                return
                             end
-                            if msg.to.type == 'chat' then
-                                ban_user(msg.from.id, msg.to.id)
-                            end
-                            return
                         end
                     end
                     if msg.service then
@@ -192,15 +199,17 @@ local function pre_process(msg)
                         msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
                         -- or msg.media.title:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.media.title:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.media.title:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_title and lock_link == "yes" then
-                            if not string.find(msg.text, data[msg.to.id].settings.set_link) then
-                                delete_msg(msg.id, ok_cb, false)
-                                if strict == "yes" then
-                                    kick_user(msg.from.id, msg.to.id)
+                            if group_link then
+                                if not string.find(msg.media.title, group_link) then
+                                    delete_msg(msg.id, ok_cb, false)
+                                    if strict == "yes" then
+                                        kick_user(msg.from.id, msg.to.id)
+                                    end
+                                    if msg.to.type == 'chat' then
+                                        ban_user(msg.from.id, msg.to.id)
+                                    end
+                                    return
                                 end
-                                if msg.to.type == 'chat' then
-                                    ban_user(msg.from.id, msg.to.id)
-                                end
-                                return
                             end
                         end
                         local is_squig_title = msg.media.title:match("[\216-\219][\128-\191]")
@@ -220,15 +229,17 @@ local function pre_process(msg)
                         msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
                         -- or msg.media.description:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.media.description:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.media.description:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_desc and lock_link == "yes" then
-                            if not string.find(msg.text, data[msg.to.id].settings.set_link) then
-                                delete_msg(msg.id, ok_cb, false)
-                                if strict == "yes" then
-                                    kick_user(msg.from.id, msg.to.id)
+                            if group_link then
+                                if not string.find(msg.media.description, group_link) then
+                                    delete_msg(msg.id, ok_cb, false)
+                                    if strict == "yes" then
+                                        kick_user(msg.from.id, msg.to.id)
+                                    end
+                                    if msg.to.type == 'chat' then
+                                        ban_user(msg.from.id, msg.to.id)
+                                    end
+                                    return
                                 end
-                                if msg.to.type == 'chat' then
-                                    ban_user(msg.from.id, msg.to.id)
-                                end
-                                return
                             end
                         end
                         local is_squig_desc = msg.media.description:match("[\216-\219][\128-\191]")
@@ -249,15 +260,17 @@ local function pre_process(msg)
                         msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
                         -- or msg.media.caption:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.media.caption:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.media.caption:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_caption and lock_link == "yes" then
-                            if not string.find(msg.text, data[msg.to.id].settings.set_link) then
-                                delete_msg(msg.id, ok_cb, false)
-                                if strict == "yes" then
-                                    kick_user(msg.from.id, msg.to.id)
+                            if group_link then
+                                if not string.find(msg.media.caption, group_link) then
+                                    delete_msg(msg.id, ok_cb, false)
+                                    if strict == "yes" then
+                                        kick_user(msg.from.id, msg.to.id)
+                                    end
+                                    if msg.to.type == 'chat' then
+                                        ban_user(msg.from.id, msg.to.id)
+                                    end
+                                    return
                                 end
-                                if msg.to.type == 'chat' then
-                                    ban_user(msg.from.id, msg.to.id)
-                                end
-                                return
                             end
                         end
                         local is_squig_caption = msg.media.caption:match("[\216-\219][\128-\191]")
@@ -364,15 +377,17 @@ local function pre_process(msg)
                         msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
                         -- or msg.fwd_from.title:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.fwd_from.title:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.fwd_from.title:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_title and lock_link == "yes" then
-                            if not string.find(msg.text, data[msg.to.id].settings.set_link) then
-                                delete_msg(msg.id, ok_cb, false)
-                                if strict == "yes" then
-                                    kick_user(msg.from.id, msg.to.id)
+                            if group_link then
+                                if not string.find(msg.fwd_from.title, group_link) then
+                                    delete_msg(msg.id, ok_cb, false)
+                                    if strict == "yes" then
+                                        kick_user(msg.from.id, msg.to.id)
+                                    end
+                                    if msg.to.type == 'chat' then
+                                        ban_user(msg.from.id, msg.to.id)
+                                    end
+                                    return
                                 end
-                                if msg.to.type == 'chat' then
-                                    ban_user(msg.from.id, msg.to.id)
-                                end
-                                return
                             end
                         end
                         local is_squig_title = msg.fwd_from.title:match("[\216-\219][\128-\191]")
