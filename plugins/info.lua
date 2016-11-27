@@ -602,14 +602,12 @@ local function run(msg, matches)
                     langs[msg.lang].date .. os.date('%c') ..
                     langs[msg.lang].peer_id .. msg.to.id ..
                     langs[msg.lang].long_id .. msg.to.peer_id
-                    return text
                 elseif chat_type == 'chat' then
                     text = text .. ' 👥' ..
                     langs[msg.lang].groupName .. msg.to.title ..
                     langs[msg.lang].users .. tostring(msg.to.members_num) ..
                     langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
                     langs[msg.lang].long_id .. msg.to.peer_id
-                    return text
                 elseif chat_type == 'channel' then
                     text = text .. ' 👥' ..
                     langs[msg.lang].supergroupName .. msg.to.title
@@ -618,10 +616,64 @@ local function run(msg, matches)
                     end
                     text = text .. langs[msg.lang].peer_id .. math.abs(msg.to.id) ..
                     langs[msg.lang].long_id .. msg.to.peer_id
-                    return text
                 end
+                return text
             end
         end
+    end
+    if matches[1]:lower() == "whoami" then
+        local text = langs[msg.lang].infoWord ..
+        langs[msg.lang].youAre
+        if msg.from.title then
+            text = text .. langs[msg.lang].name .. msg.from.title
+        end
+        if msg.from.first_name then
+            text = text .. langs[msg.lang].name .. msg.from.first_name
+        end
+        if msg.from.real_first_name then
+            text = text .. langs[msg.lang].name .. msg.from.real_first_name
+        end
+        if msg.from.last_name then
+            text = text .. langs[msg.lang].surname .. msg.from.last_name
+        end
+        if msg.from.real_last_name then
+            text = text .. langs[msg.lang].surname .. msg.from.real_last_name
+        end
+        if msg.from.username then
+            text = text .. langs[msg.lang].username .. '@' .. msg.from.username
+        end
+        -- exclude bot phone
+        if our_id ~= msg.from.id then
+            --[[
+                if msg.from.phone then
+                    text = text .. langs[msg.lang].phone .. '+' .. string.sub(msg.from.phone, 1, 6) .. '******'
+                end
+                ]]
+        end
+        local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
+        text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
+        langs[msg.lang].date .. os.date('%c') ..
+        langs[msg.lang].totalMessages .. msgs
+        local otherinfo = langs[msg.lang].otherInfo
+        if is_whitelisted(msg.from.id) then
+            otherinfo = otherinfo .. 'WHITELISTED, '
+        end
+        if is_gbanned(msg.from.id) then
+            otherinfo = otherinfo .. 'GBANNED, '
+        end
+        if is_banned(msg.from.id, chat) then
+            otherinfo = otherinfo .. 'BANNED, '
+        end
+        if is_muted_user(chat, msg.from.id) then
+            otherinfo = otherinfo .. 'MUTED, '
+        end
+        if otherinfo == langs[msg.lang].otherInfo then
+            otherinfo = otherinfo .. langs[msg.lang].noOtherInfo
+        end
+        text = text .. otherinfo ..
+        langs[msg.lang].peer_id .. msg.from.id ..
+        langs[msg.lang].long_id .. msg.from.peer_id
+        return text
     end
     if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' then
         if not matches[2] then
@@ -756,6 +808,7 @@ return {
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
         "^[#!/]([Ii][Nn][Ff][Oo]) (.*)$",
         "^[#!/]([Ii][Nn][Ff][Oo])$",
+        "^[#!/]([Ww][Hh][Oo][Aa][Mm][Ii])$",
         "^[#!/]([Ww][Hh][Oo])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ee][Dd])$",
         -- groupinfo
@@ -786,6 +839,7 @@ return {
     {
         "USER",
         "#getrank|rango [<id>|<username>|<reply>]",
+        "#whoami",
         "(#info|[sasha] info)",
         "#ishere <id>|<username>",
         "(#groupinfo|[sasha] info gruppo)",
