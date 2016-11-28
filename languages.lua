@@ -1127,6 +1127,19 @@ return {
             '#lua <command>: Sasha esegue <command>.',
         },
 
+        lotteria =
+        {
+            '🅿️ LOTTERIA',
+            'Plugin per la lotteria su Chiesa di msx80.',
+            'USER',
+            '#biglietto: Sasha ti dà un biglietto.',
+            'MOD',
+            '#startlotteria: Sasha apre la biglietteria.',
+            '#stoplotteria: Sasha chiude la biglietteria.',
+            '#infolotteria: Sasha manda le informazioni sulla lotteria corrente.',
+            '#estrazione: Sasha chiude la biglietteria ed estrae il vincitore.',
+        },
+
         me =
         {
             '🅿️ ME',
