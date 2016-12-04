@@ -86,6 +86,8 @@ local function get_rules(chat_id)
 end
 
 local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
+    vardump(chat)
+    vardump(user)
     local data = load_data(_config.moderation.data)
     if string.find(goodbyewelcome, '$chatid') then
         goodbyewelcome:gsub('$chatid', chat.id)
