@@ -88,15 +88,12 @@ end
 local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
     local data = load_data(_config.moderation.data)
     if string.find(goodbyewelcome, '$chatid') then
-        print('chatid ' .. goodbyewelcome)
         goodbyewelcome = goodbyewelcome:gsub('$chatid', chat.id)
     end
     if string.find(goodbyewelcome, '$chatname') then
-        print('chatname ' .. goodbyewelcome)
         goodbyewelcome = goodbyewelcome:gsub('$chatname', chat.title)
     end
     if string.find(goodbyewelcome, '$chatusername') then
-        print('chatusername ' .. goodbyewelcome)
         if chat.username then
             goodbyewelcome = goodbyewelcome:gsub('$chatusername', '@' .. chat.username)
         else
@@ -104,29 +101,23 @@ local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
         end
     end
     if string.find(goodbyewelcome, '$rules') then
-        print('rules ' .. goodbyewelcome)
         goodbyewelcome = goodbyewelcome:gsub('$rules', get_rules(chat.id))
     end
     if string.find(goodbyewelcome, '$userid') then
-        print('userid ' .. goodbyewelcome)
         goodbyewelcome = goodbyewelcome:gsub('$userid', user.id)
     end
     if string.find(goodbyewelcome, '$firstname') then
-        print('firstname ' .. goodbyewelcome)
         goodbyewelcome = goodbyewelcome:gsub('$firstname', user.first_name)
     end
     if string.find(goodbyewelcome, '$lastname') then
-        print('lastname ' .. goodbyewelcome)
         if user.last_name then
             goodbyewelcome = goodbyewelcome:gsub('$lastname', user.last_name)
         end
     end
     if string.find(goodbyewelcome, '$printname') then
-        print('printname ' .. goodbyewelcome)
         goodbyewelcome = goodbyewelcome:gsub('$printname', user.first_name .. ' ' ..(user.last_name or '\x08'))
     end
     if string.find(goodbyewelcome, '$username') then
-        print('username ' .. goodbyewelcome)
         if user.username then
             goodbyewelcome = goodbyewelcome:gsub('$username', '@' .. user.username)
         else
@@ -186,10 +177,10 @@ local function run(msg, matches)
                 return get_goodbye(msg.to.id)
             end
             if matches[1]:lower() == 'previewwelcome' then
-                return adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, preview_user)
+                return send_large_msg(msg.to.id, adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, preview_user))
             end
             if matches[1]:lower() == 'previewgoodbye' then
-                return adjust_goodbyewelcome(get_goodbye(msg.to.id), msg.to, preview_user)
+                return send_large_msg(msg.to.id, adjust_goodbyewelcome(get_goodbye(msg.to.id), msg.to, preview_user))
             end
             if matches[1]:lower() == 'setwelcome' then
                 if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
