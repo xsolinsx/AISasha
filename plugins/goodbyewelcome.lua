@@ -115,7 +115,11 @@ local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
         end
     end
     if string.find(goodbyewelcome, '$printname') then
-        goodbyewelcome = goodbyewelcome:gsub('$printname', user.print_name:gsub('_', ' '))
+        user.print_name = user.first_name
+        if user.last_name then
+            user.print_name = user.print_name .. ' ' .. user.last_name
+        end
+        goodbyewelcome = goodbyewelcome:gsub('$printname', user.print_name)
     end
     if string.find(goodbyewelcome, '$username') then
         if user.username then
