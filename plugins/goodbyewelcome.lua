@@ -138,7 +138,6 @@ local function run(msg, matches)
             postpone(post_multiple_kick_false, false, 30)
         end
         if msg.action then
-            vardump(msg.action)
             if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg.to.id) ~= langs[msg.lang].noSetValue then
                 local hash
                 if msg.to.type == 'channel' then
@@ -152,7 +151,7 @@ local function run(msg, matches)
                 if hashonredis then
                     if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg.to.id)) and tonumber(get_memberswelcome(msg.to.id)) ~= 0 then
                         local function post_msg()
-                            send_large_msg(get_receiver(msg), adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, msg.action.user), ok_cb, false)
+                            send_large_msg(get_receiver(msg), adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, msg.action.user or msg.action.link_issuer), ok_cb, false)
                         end
                         postpone(post_msg, false, 1)
                         redis:getset(hash, 0)
