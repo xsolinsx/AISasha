@@ -156,7 +156,7 @@ local function run(msg, matches)
                 if hashonredis then
                     if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg.to.id)) and tonumber(get_memberswelcome(msg.to.id)) ~= 0 then
                         local function post_msg()
-                            send_large_msg(get_receiver(msg), adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, msg.action.link_issuer or msg.action.user), ok_cb, false)
+                            send_large_msg(get_receiver(msg), adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, msg.action.user or msg.from), ok_cb, false)
                         end
                         postpone(post_msg, false, 1)
                         redis:getset(hash, 0)
