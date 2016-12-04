@@ -88,40 +88,49 @@ end
 local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
     local data = load_data(_config.moderation.data)
     if string.find(goodbyewelcome, '$chatid') then
-        goodbyewelcome:gsub('$chatid', chat.id)
+        print('chatid ' .. goodbyewelcome)
+        goodbyewelcome = goodbyewelcome:gsub('$chatid', chat.id)
     end
     if string.find(goodbyewelcome, '$chatname') then
-        goodbyewelcome:gsub('$chatname', chat.title)
+        print('chatname ' .. goodbyewelcome)
+        goodbyewelcome = goodbyewelcome:gsub('$chatname', chat.title)
     end
     if string.find(goodbyewelcome, '$chatusername') then
+        print('chatusername ' .. goodbyewelcome)
         if chat.username then
-            goodbyewelcome:gsub('$chatusername', '@' .. chat.username)
+            goodbyewelcome = goodbyewelcome:gsub('$chatusername', '@' .. chat.username)
         else
-            goodbyewelcome:gsub('$chatusername', chat.title)
+            goodbyewelcome = goodbyewelcome:gsub('$chatusername', chat.title)
         end
     end
     if string.find(goodbyewelcome, '$rules') then
-        goodbyewelcome:gsub('$rules', get_rules(chat.id))
+        print('rules ' .. goodbyewelcome)
+        goodbyewelcome = goodbyewelcome:gsub('$rules', get_rules(chat.id))
     end
     if string.find(goodbyewelcome, '$userid') then
-        goodbyewelcome:gsub('$userid', user.id)
+        print('userid ' .. goodbyewelcome)
+        goodbyewelcome = goodbyewelcome:gsub('$userid', user.id)
     end
     if string.find(goodbyewelcome, '$firstname') then
-        goodbyewelcome:gsub('$firstname', user.first_name)
+        print('firstname ' .. goodbyewelcome)
+        goodbyewelcome = goodbyewelcome:gsub('$firstname', user.first_name)
     end
     if string.find(goodbyewelcome, '$lastname') then
+        print('lastname ' .. goodbyewelcome)
         if user.last_name then
-            goodbyewelcome:gsub('$lastname', user.last_name)
+            goodbyewelcome = goodbyewelcome:gsub('$lastname', user.last_name)
         end
     end
     if string.find(goodbyewelcome, '$printname') then
-        goodbyewelcome:gsub('$printname', user.first_name .. ' ' ..(user.last_name or '\x08'))
+        print('printname ' .. goodbyewelcome)
+        goodbyewelcome = goodbyewelcome:gsub('$printname', user.first_name .. ' ' ..(user.last_name or '\x08'))
     end
     if string.find(goodbyewelcome, '$username') then
+        print('username ' .. goodbyewelcome)
         if user.username then
-            goodbyewelcome:gsub('$username', '@' .. user.username)
+            goodbyewelcome = goodbyewelcome:gsub('$username', '@' .. user.username)
         else
-            goodbyewelcome:gsub('$username', user.first_name)
+            goodbyewelcome = goodbyewelcome:gsub('$username', user.first_name)
         end
     end
 end
