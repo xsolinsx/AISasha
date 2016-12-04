@@ -138,6 +138,7 @@ local function run(msg, matches)
             postpone(post_multiple_kick_false, false, 30)
         end
         if msg.action then
+            vardump(msg.action)
             if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg.to.id) ~= langs[msg.lang].noSetValue then
                 local hash
                 if msg.to.type == 'channel' then
@@ -167,6 +168,7 @@ local function run(msg, matches)
                 end
                 postpone(post_msg, false, 1)
             end
+            return
         end
         if is_momod(msg) then
             if matches[1]:lower() == 'getwelcome' then
