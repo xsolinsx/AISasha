@@ -101,11 +101,7 @@ local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
         end
     end
     if string.find(goodbyewelcome, '$rules') then
-        if not data[tostring(chat_id)]['rules'] then
-            local lang = get_lang(chat_id)
-            goodbyewelcome:gsub('$rules', langs[lang].noRules)
-        end
-        goodbyewelcome:gsub('$rules', data[tostring(chat_id)]['rules'])
+        goodbyewelcome:gsub('$rules', get_rules(chat.id))
     end
     if string.find(goodbyewelcome, '$userid') then
         goodbyewelcome:gsub('$userid', user.id)
