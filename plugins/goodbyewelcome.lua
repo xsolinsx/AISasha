@@ -182,10 +182,10 @@ local function run(msg, matches)
                 return get_goodbye(msg.to.id)
             end
             if matches[1]:lower() == 'previewwelcome' then
-                return send_large_msg(get_receiver(msg), adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, preview_user), ok_cb, false)
+                return adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, preview_user)
             end
             if matches[1]:lower() == 'previewgoodbye' then
-                return send_large_msg(get_receiver(msg), adjust_goodbyewelcome(get_goodbye(msg.to.id), msg.to, preview_user), ok_cb, false)
+                return adjust_goodbyewelcome(get_goodbye(msg.to.id), msg.to, preview_user)
             end
             if matches[1]:lower() == 'setwelcome' then
                 if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
