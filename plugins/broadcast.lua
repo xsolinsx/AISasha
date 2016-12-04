@@ -38,8 +38,8 @@ return {
     syntax =
     {
         "ADMIN",
-        "#br <group_id> <text>: Sasha invia <text> a <group_id>.",
+        "#br <group_id> <text>",
         "SUDO",
-        "#broadcast <text>: Sasha invia <text> a tutti i gruppi.",
+        "#broadcast <text>",
     },
 }
