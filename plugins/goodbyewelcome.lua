@@ -88,15 +88,12 @@ end
 local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
     local data = load_data(_config.moderation.data)
     if string.find(goodbyewelcome, '$chatid') then
-        print('chatid')
         goodbyewelcome:gsub('$chatid', chat.id)
     end
     if string.find(goodbyewelcome, '$chatname') then
-        print('chatname')
         goodbyewelcome:gsub('$chatname', chat.title)
     end
     if string.find(goodbyewelcome, '$chatusername') then
-        print('chatusername')
         if chat.username then
             goodbyewelcome:gsub('$chatusername', '@' .. chat.username)
         else
@@ -104,29 +101,23 @@ local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
         end
     end
     if string.find(goodbyewelcome, '$rules') then
-        print('rules')
         goodbyewelcome:gsub('$rules', get_rules(chat.id))
     end
     if string.find(goodbyewelcome, '$userid') then
-        print('userid')
         goodbyewelcome:gsub('$userid', user.id)
     end
     if string.find(goodbyewelcome, '$firstname') then
-        print('firstname')
         goodbyewelcome:gsub('$firstname', user.first_name)
     end
     if string.find(goodbyewelcome, '$lastname') then
-        print('lastname')
         if user.last_name then
             goodbyewelcome:gsub('$lastname', user.last_name)
         end
     end
     if string.find(goodbyewelcome, '$printname') then
-        print('printname')
-        goodbyewelcome:gsub('$printname', user.print_name:gsub('_', ' '))
+        goodbyewelcome:gsub('$printname', user.first_name .. ' ' ..(user.last_name or '\x08'))
     end
     if string.find(goodbyewelcome, '$username') then
-        print('username')
         if user.username then
             goodbyewelcome:gsub('$username', '@' .. user.username)
         else
