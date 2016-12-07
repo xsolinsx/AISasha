@@ -1,6 +1,37 @@
--- id 1054285638
+local function estrai(t, chat_id, msg_id, n)
+    local hash = 'lotteria:' .. chat_id
+    local tab = { }
+    if n == false then
+        for k, v in pairs(t) do
+            table.insert(tab, v)
+            redis:hdel(hash, k)
+        end
+        if #tab > 0 then
+            reply_msg(msg_id, 'Ci sono ' .. #tab .. ' partecipanti.\nIl vincitore è... ' .. tab[math.random(#tab)] .. '!\nQuesta era l\'ultima estrazione :)', ok_cb, false)
+        else
+            reply_msg(msg.id, 'Non ci sono partecipanti o la biglietteria non è stata aperta.', ok_cb, false)
+        end
+    else
+        for k, v in pairs(t) do
+            table.insert(tab, v)
+        end
+        local rnd = math.random(#tab)
+        local i = 0
+        for k, v in pairs(t) do
+            i = i + 1
+            if i == rnd then
+                reply_msg(msg_id, 'Ci sono ' .. #tab .. ' partecipanti.\nIl vincitore è... ' .. v .. '!\nProseguiamo con la prossima estrazione :)', ok_cb, false)
+                redis:hdel(hash, k)
+                return
+            end
+        end
+    end
+end
+
+-- id 1078810985
 local function run(msg, matches)
-    if msg.to.id == 1054285638 then
+    if msg.to.id == 1078810985 then
+        local n
         local hash = 'lotteria:' .. msg.to.id
         local hash2 = 'lotteria:' .. msg.to.id .. ':attiva'
         if matches[1]:lower() == 'biglietto' then
@@ -52,29 +83,16 @@ local function run(msg, matches)
             end
         elseif matches[1]:lower() == 'estrazione' then
             if is_momod(msg) then
+                if msg.text:match('%d$') then
+                    n = true
+                else
+                    n = false
+                end
                 if redis:get(hash2) then
                     redis:del(hash2)
-                    local t = { }
-                    for k, v in pairs(redis:hgetall(hash)) do
-                        table.insert(t, v)
-                        redis:hdel(hash, k)
-                    end
-                    if #t > 0 then
-                        reply_msg(msg.id, 'Ci sono ' .. #t .. ' partecipanti.\nIl vincitore è... ' .. t[math.random(#t)] .. '!\nCongratulazioni!', ok_cb, false)
-                    else
-                        reply_msg(msg.id, 'Non ci sono partecipanti o la biglietteria non è stata aperta.', ok_cb, false)
-                    end
+                    estrai(redis:hgetall(hash), msg.to.id, msg.id, n)
                 else
-                    local t = { }
-                    for k, v in pairs(redis:hgetall(hash)) do
-                        table.insert(t, v)
-                        redis:hdel(hash, k)
-                    end
-                    if #t > 0 then
-                        reply_msg(msg.id, 'Ci sono ' .. #t .. ' partecipanti.\nIl vincitore è... ' .. t[math.random(#t)] .. '!\nCongratulazioni!', ok_cb, false)
-                    else
-                        reply_msg(msg.id, 'Non ci sono partecipanti o la biglietteria non è stata aperta.', ok_cb, false)
-                    end
+                    estrai(redis:hgetall(hash), msg.to.id, msg.id, n)
                 end
             else
                 return langs[msg.lang].require_mod
