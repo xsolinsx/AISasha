@@ -247,6 +247,7 @@ return {
         backupSent = 'Ti sto inviando il backup.',
         backupMissing = 'Backup mancante.',
         autoSendBackupDb = 'Ti sto inviando il backup automatico.',
+        apiReboot = 'AISashaAPI Ucciso.',
 
         -- anti_spam.lua --
         blockedForSpam = ' bloccato (SPAM).',
@@ -754,6 +755,7 @@ return {
             '(#addlog|sasha aggiungi log): Sasha aggiunge il log.',
             '(#remlog|sasha rimuovi log): Sasha rimuove il log.',
             '#checkspeed: Sasha calcola la velocità con cui processa i messaggi.',
+            '(#rebootapi|sasha riavvia api): Sasha riavvia la sua versione API.',
             'SUDO',
             '(#contactlist|sasha lista contatti) (txt|json): Sasha manda la lista dei contatti.',
             '(#dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.',
@@ -1452,6 +1454,7 @@ return {
         backupSent = 'I\'m sending you the backup.',
         backupMissing = 'Backup missing.',
         autoSendBackupDb = 'I\'m sending you the automatic backup.',
+        apiReboot = 'AISashaAPI Killed.',
 
         -- anti_spam.lua --
         blockedForSpam = ' blocked (SPAM).',
@@ -1935,6 +1938,7 @@ return {
             '(#addlog|sasha aggiungi log): Sasha adds log.',
             '(#remlog|sasha rimuovi log): Sasha removes log.',
             '#checkspeed: Sasha calculates how much time she needs to process messages.',
+            '(#rebootapi|sasha riavvia api): Sasha reboots her API version.',
             'SUDO',
             '(#contactlist|sasha lista contatti) (txt|json): Sasha sends contacts list.',
             '(#dialoglist|sasha lista chat) (txt|json): Sasha sends chats list.',

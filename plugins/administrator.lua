@@ -180,6 +180,10 @@ local function run(msg, matches)
             redis:set("bot:photo", "waiting")
             return langs[msg.lang].sendNewPic
         end
+        if matches[1]:lower() == "rebootapi" or matches[1]:lower() == "sasha riavvia api" then
+            io.popen('kill -9 $(pgrep lua)'):read('*all')
+            return langs[msg.lang].apiReboot
+        end
         if matches[1] == "markread" or matches[1]:lower() == "sasha segna letto" then
             if matches[2] == "on" then
                 redis:set("bot:markread", "on")
@@ -375,6 +379,7 @@ return {
         "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp]) (.*)$",
         "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp])$",
         "^[#!/]([Cc][Hh][Ee][Cc][Kk][Ss][Pp][Ee][Ee][Dd])$",
+        "^[#!/]([Rr][Ee][Bb][Oo][Oo][Tt][Aa][Pp][Ii])$",
         "%[(photo)%]",
         -- pm
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii][Aa]) (%d+) (.*)$",
@@ -414,11 +419,13 @@ return {
         -- uploadbackup
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Aa] [Bb][Aa][Cc][Kk][Uu][Pp])$",
         -- updateid
-        "^[Ss][Aa][Ss][Hh][Aa] ([Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ll][Oo][Nn][Gg][Ii][Dd])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ll][Oo][Nn][Gg][Ii][Dd])$",
         -- addlog
-        "^[Ss][Aa][Ss][Hh][Aa] ([Aa][Gg][Gg][Ii][Uu][Nn][Gg][Ii] [Ll][Oo][Gg])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Uu][Nn][Gg][Ii] [Ll][Oo][Gg])$",
         -- remlog
-        "^[Ss][Aa][Ss][Hh][Aa] ([Rr][Ii][Mm][Uu][Oo][Vv][Ii] [Ll][Oo][Gg])$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Mm][Uu][Oo][Vv][Ii] [Ll][Oo][Gg])$",
+        -- rebootapi
+        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Aa][Vv][Ii][Aa] [Aa][Pp][Ii])$",
     },
     run = run,
     min_rank = 3,
@@ -435,6 +442,7 @@ return {
         "(#addlog|sasha aggiungi log)",
         "(#remlog|sasha rimuovi log)",
         "#checkspeed",
+        "(#rebootapi|sasha riavvia api)",
         "SUDO",
         "(#contactlist|sasha lista contatti) (txt|json)",
         "(#dialoglist|sasha lista chat) (txt|json)",
