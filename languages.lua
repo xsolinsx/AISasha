@@ -1136,7 +1136,7 @@ return {
             '🅿️ LOTTERIA',
             'Plugin per la lotteria su Chiesa di msx80.',
             'USER',
-            '#biglietto: Sasha ti dà un biglietto.',
+            '#ticket: Sasha ti dà un biglietto.',
             'MOD',
             '#startlotteria: Sasha apre la biglietteria.',
             '#stoplotteria: Sasha chiude la biglietteria.',

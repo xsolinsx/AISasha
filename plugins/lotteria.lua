@@ -34,7 +34,7 @@ local function run(msg, matches)
         local n
         local hash = 'lotteria:' .. msg.to.id
         local hash2 = 'lotteria:' .. msg.to.id .. ':attiva'
-        if matches[1]:lower() == 'biglietto' then
+        if matches[1]:lower() == 'ticket' then
             if redis:get(hash2) then
                 if redis:hget(hash, msg.from.id) then
                     reply_msg(msg.id, 'Hai già preso il biglietto!', ok_cb, false)
@@ -105,7 +105,7 @@ return {
     description = "LOTTERIA",
     patterns =
     {
-        "^[#!/]([Bb][Ii][Gg][Ll][Ii][Ee][Tt][Tt][Oo])$",
+        "^[#!/]([Tt][Ii][Cc][Kk][Ee][Tt])$",
         "^[#!/]([Ss][Tt][Aa][Rr][Tt][Ll][Oo][Tt][Tt][Ee][Rr][Ii][Aa])$",
         "^[#!/]([Ss][Tt][Oo][Pp][Ll][Oo][Tt][Tt][Ee][Rr][Ii][Aa])$",
         "^[#!/]([Ii][Nn][Ff][Oo][Ll][Oo][Tt][Tt][Ee][Rr][Ii][Aa])$",
@@ -116,7 +116,7 @@ return {
     syntax =
     {
         "USER",
-        "#biglietto",
+        "#ticket",
         "MOD",
         "#startlotteria",
         "#stoplotteria",
