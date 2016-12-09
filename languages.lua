@@ -1141,7 +1141,7 @@ return {
             '#startlotteria: Sasha apre la biglietteria.',
             '#stoplotteria: Sasha chiude la biglietteria.',
             '#infolotteria: Sasha manda le informazioni sulla lotteria corrente.',
-            '#estrazione: Sasha chiude la biglietteria ed estrae il vincitore.',
+            '#estrazione<numero>: Sasha chiude la biglietteria ed estrae il vincitore.',
         },
 
         me =

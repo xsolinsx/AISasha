@@ -109,7 +109,7 @@ return {
         "^[#!/]([Ss][Tt][Aa][Rr][Tt][Ll][Oo][Tt][Tt][Ee][Rr][Ii][Aa])$",
         "^[#!/]([Ss][Tt][Oo][Pp][Ll][Oo][Tt][Tt][Ee][Rr][Ii][Aa])$",
         "^[#!/]([Ii][Nn][Ff][Oo][Ll][Oo][Tt][Tt][Ee][Rr][Ii][Aa])$",
-        "^[#!/]([Ee][Ss][Tt][Rr][Aa][Zz][Ii][Oo][Nn][Ee])$",
+        "^[#!/]([Ee][Ss][Tt][Rr][Aa][Zz][Ii][Oo][Nn][Ee])%d*$",
     },
     run = run,
     min_rank = 0,
@@ -121,6 +121,6 @@ return {
         "#startlotteria",
         "#stoplotteria",
         "#infolotteria",
-        "#estrazione",
+        "#estrazione<numero>",
     },
 }
