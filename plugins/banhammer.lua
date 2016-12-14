@@ -650,11 +650,12 @@ local function run(msg, matches)
                 elseif msg.to.type == 'channel' then
                     channel_get_users(receiver, kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
                 end
+                return
+            else
+                return langs[msg.lang].require_owner
             end
-            return
-        else
-            return langs[msg.lang].require_owner
         end
+        return
     end
     if matches[1]:lower() == 'kicknouser' then
         -- /kicknouser
@@ -697,11 +698,12 @@ local function run(msg, matches)
                 else
                     resolve_username(matches[2]:gsub('@', ''), banall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                 end
+                return
+            else
+                return langs[msg.lang].require_admin
             end
-            return
-        else
-            return langs[msg.lang].require_admin
         end
+        return
     end
     if matches[1]:lower() == 'ungban' or matches[1]:lower() == 'sasha supersbanna' or matches[1]:lower() == 'supersbanna' then
         if not msg.api_patch then
@@ -731,11 +733,12 @@ local function run(msg, matches)
                 else
                     resolve_username(matches[2]:gsub('@', ''), unbanall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                 end
+                return
+            else
+                return langs[msg.lang].require_admin
             end
-            return
-        else
-            return langs[msg.lang].require_admin
         end
+        return
     end
     if matches[1]:lower() == 'gbanlist' or matches[1]:lower() == 'sasha lista superban' or matches[1]:lower() == 'lista superban' then
         if not msg.api_patch then
@@ -749,14 +752,13 @@ local function run(msg, matches)
                 send_document(receiver, "./groups/gbanlist.txt", ok_cb, false)
                 send_large_msg(receiver, list)
                 return list
+            else
+                return langs[msg.lang].require_admin
             end
-            return
-        else
-            return langs[msg.lang].require_admin
         end
+        return
     end
 end
-
 local function pre_process(msg)
     local data = load_data(_config.moderation.data)
     -- SERVICE MESSAGE
