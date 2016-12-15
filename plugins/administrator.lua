@@ -16,7 +16,6 @@ end
 
 -- Function to add log supergroup
 local function logadd(msg)
-    local data = load_data(_config.moderation.data)
     local receiver = get_receiver(msg)
     local GBan_log = 'GBan_log'
     if not data[tostring(GBan_log)] then
@@ -32,7 +31,6 @@ end
 
 -- Function to remove log supergroup
 local function logrem(msg)
-    local data = load_data(_config.moderation.data)
     local receiver = get_receiver(msg)
     local GBan_log = 'GBan_log'
     if not data[tostring(GBan_log)] then
@@ -331,7 +329,6 @@ local function run(msg, matches)
             end
         end
         if matches[1]:lower() == 'updateid' or matches[1]:lower() == 'sasha aggiorna longid' then
-            local data = load_data(_config.moderation.data)
             local long_id = data[tostring(msg.to.id)]['long_id']
             if not long_id then
                 data[tostring(msg.to.id)]['long_id'] = msg.to.peer_id

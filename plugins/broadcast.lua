@@ -11,7 +11,6 @@
         if matches[1] == 'broadcast' then
             if is_sudo(msg) then
                 -- Only sudo!
-                local data = load_data(_config.moderation.data)
                 for k, v in pairs(data['groups']) do
                     local function post_msg()
                         send_large_msg('chat#id' .. v, matches[2])

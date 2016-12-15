@@ -659,7 +659,6 @@ end
 function is_realm(msg)
     local var = false
     local realms = 'realms'
-    local data = load_data(_config.moderation.data)
     local chat = msg.to.id
     if data[tostring(realms)] then
         if data[tostring(realms)][tostring(chat)] then
@@ -672,7 +671,6 @@ end
 -- Check if this chat is a group or not
 function is_group(msg)
     local var = false
-    local data = load_data(_config.moderation.data)
     local groups = 'groups'
     local chat = msg.to.id
     if data[tostring(groups)] then
@@ -687,7 +685,6 @@ end
 
 function is_super_group(msg)
     local var = false
-    local data = load_data(_config.moderation.data)
     local groups = 'groups'
     local chat = msg.to.id
     if data[tostring(groups)] then
@@ -702,7 +699,6 @@ end
 
 function is_log_group(msg)
     local var = false
-    local data = load_data(_config.moderation.data)
     local GBan_log = 'GBan_log'
     if data[tostring(GBan_log)] then
         if data[tostring(GBan_log)][tostring(msg.to.id)] then
@@ -781,7 +777,6 @@ function get_rank(user_id, chat_id)
             if not is_sudo( { from = { id = user_id } }) then
                 if not is_admin2(user_id) then
                     local higher_rank = rank_table["USER"]
-                    local data = load_data(_config.moderation.data)
                     if data['groups'] then
                         -- if there are any groups check for everyone of them the rank of the user and choose the higher one
                         for id_string in pairs(data['groups']) do
@@ -846,7 +841,6 @@ end
 -- Check if user is admin or not
 function is_admin1(msg)
     local var = false
-    local data = load_data(_config.moderation.data)
     local user_id = msg.from.id
     local admins = 'admins'
     if data[tostring(admins)] then
@@ -869,7 +863,6 @@ end
 
 function is_admin2(user_id)
     local var = false
-    local data = load_data(_config.moderation.data)
     local admins = 'admins'
     if data[tostring(admins)] then
         if data[tostring(admins)][tostring(user_id)] then
@@ -892,7 +885,6 @@ end
 -- Check if user is the owner of that group or not
 function is_owner(msg)
     local var = false
-    local data = load_data(_config.moderation.data)
     local user_id = msg.from.id
     if data[tostring(msg.to.id)] then
         if data[tostring(msg.to.id)]['set_owner'] then
@@ -923,7 +915,6 @@ end
 
 function is_owner2(user_id, group_id)
     local var = false
-    local data = load_data(_config.moderation.data)
     if data[tostring(group_id)] then
         if data[tostring(group_id)]['set_owner'] then
             if data[tostring(group_id)]['set_owner'] == tostring(user_id) then
@@ -954,7 +945,6 @@ end
 -- Check if user is the mod of that group or not
 function is_momod(msg)
     local var = false
-    local data = load_data(_config.moderation.data)
     local user_id = msg.from.id
     if data[tostring(msg.to.id)] then
         if data[tostring(msg.to.id)]['moderators'] then
@@ -993,7 +983,6 @@ end
 
 function is_momod2(user_id, group_id)
     local var = false
-    local data = load_data(_config.moderation.data)
     if data[tostring(group_id)] then
         if data[tostring(group_id)]['moderators'] then
             if data[tostring(group_id)]['moderators'][tostring(user_id)] then
@@ -1030,7 +1019,6 @@ function is_momod2(user_id, group_id)
 end
 
 function set_warn(user_id, chat_id, value)
-    local data = load_data(_config.moderation.data)
     local lang = get_lang(chat_id)
     if tonumber(value) < 0 or tonumber(value) > 10 then
         return langs[lang].errorWarnRange
@@ -1043,7 +1031,6 @@ function set_warn(user_id, chat_id, value)
 end
 
 function get_warn(chat_id)
-    local data = load_data(_config.moderation.data)
     local lang = get_lang(chat_id)
     local warn_max = data[tostring(chat_id)]['settings']['warn_max']
     if not warn_max then
@@ -1323,7 +1310,6 @@ function mutes_list(chat_id, group_name)
     for k, v in pairsByKeys(list) do
         text = text .. langs[lang].mute .. v .. "\n"
     end
-    local data = load_data(_config.moderation.data)
     if data[tostring(chat_id)] then
         local settings = data[tostring(chat_id)]['settings']
         text = text .. langs[lang].strictrules .. settings.strict

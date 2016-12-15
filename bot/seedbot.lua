@@ -63,7 +63,11 @@ function on_binlog_replay_end()
     plugins = { }
     load_plugins()
 
-    database = load_data(_config.database.db)
+    print('Loading database.json')
+    database = load_data(config.database.db)
+
+    print('Loading moderation.json')
+    data = load_data(config.moderation.data)
     start_time = os.date('%c')
 end
 

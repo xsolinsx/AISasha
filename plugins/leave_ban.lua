@@ -1,7 +1,6 @@
 ﻿local function run(msg, matches)
     if msg.action then
         if msg.action.type then
-            local data = load_data(_config.moderation.data)
             if data[tostring(msg.to.id)] then
                 if data[tostring(msg.to.id)]['settings'] then
                     if data[tostring(msg.to.id)]['settings']['leave_ban'] then

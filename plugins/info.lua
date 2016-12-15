@@ -694,7 +694,6 @@ local function run(msg, matches)
     if not msg.api_patch then
         if matches[1]:lower() == 'grouplink' or matches[1]:lower() == 'sasha link gruppo' or matches[1]:lower() == 'link gruppo' and matches[2] then
             if is_admin1(msg) then
-                local data = load_data(_config.moderation.data)
                 local group_link = data[tostring(matches[2])]['settings']['set_link']
                 if not group_link then
                     return langs[msg.lang].noLinkAvailable

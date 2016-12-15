@@ -5,7 +5,6 @@ group_type = ''
 -- INPM
 local function all_chats(msg)
     i = 1
-    local data = load_data(_config.moderation.data)
     local groups = 'groups'
     if not data[tostring(groups)] then
         return langs[msg.lang].noGroups
@@ -116,7 +115,6 @@ local function killchannel(extra, success, result)
 end
 
 local function admin_promote(user, user_id, lang)
-    local data = load_data(_config.moderation.data)
     if not data.admins then
         data.admins = { }
         save_data(_config.moderation.data, data)
@@ -138,7 +136,6 @@ local function admin_promote(user, user_id, lang)
 end
 
 local function admin_demote(user, user_id, lang)
-    local data = load_data(_config.moderation.data)
     if not data.admins then
         data.admins = { }
         save_data(_config.moderation.data, data)
@@ -176,7 +173,6 @@ local function demote_admin_by_username(extra, success, result)
 end
 
 local function admin_list(lang)
-    local data = load_data(_config.moderation.data)
     if not data.admins then
         data.admins = { }
         save_data(_config.moderation.data, data)
@@ -189,7 +185,6 @@ local function admin_list(lang)
 end
 
 local function groups_list(msg)
-    local data = load_data(_config.moderation.data)
     if not data.groups then
         return langs[msg.lang].noGroups
     end
@@ -428,7 +423,6 @@ end
 
 -- show group settings
 local function realm_group_settings(target, lang)
-    local data = load_data(_config.moderation.data)
     local settings = data[tostring(target)]['settings']
     local text = langs[lang].groupSettings .. target .. ":" ..
     langs[lang].nameLock .. settings.lock_name ..
@@ -439,7 +433,6 @@ end
 
 -- show SuperGroup settings
 local function realm_supergroup_settings(target, lang)
-    local data = load_data(_config.moderation.data)
     if data[tostring(target)]['settings'] then
         if not data[tostring(target)]['settings']['lock_rtl'] then
             data[tostring(target)]['settings']['lock_rtl'] = 'no'
@@ -464,7 +457,6 @@ local function realm_supergroup_settings(target, lang)
 end
 
 local function realms_list(msg)
-    local data = load_data(_config.moderation.data)
     if not data.realms then
         return langs[msg.lang].noRealms
     end
@@ -495,7 +487,6 @@ end
 
 -- INGROUP
 local function set_group_photo(msg, success, result)
-    local data = load_data(_config.moderation.data)
     local receiver = get_receiver(msg)
     if success then
         local file = 'data/photos/chat_photo_' .. msg.to.id .. '.jpg'
@@ -515,7 +506,6 @@ local function set_group_photo(msg, success, result)
 end
 
 local function check_member_autorealm(extra, success, result)
-    local data = extra.data
     local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
@@ -546,7 +536,6 @@ local function check_member_autorealm(extra, success, result)
 end
 
 local function check_member_realm_add(extra, success, result)
-    local data = extra.data
     local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
@@ -577,7 +566,6 @@ local function check_member_realm_add(extra, success, result)
 end
 
 function check_member_group(extra, success, result)
-    local data = extra.data
     local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
@@ -610,7 +598,6 @@ function check_member_group(extra, success, result)
 end
 
 local function check_member_modadd(extra, success, result)
-    local data = extra.data
     local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
@@ -644,7 +631,6 @@ local function check_member_modadd(extra, success, result)
 end
 
 local function check_member_realmrem(extra, success, result)
-    local data = extra.data
     local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.id
@@ -665,7 +651,6 @@ local function check_member_realmrem(extra, success, result)
 end
 
 local function check_member_modrem(extra, success, result)
-    local data = extra.data
     local msg = extra.msg
     for k, v in pairs(result.members) do
         local member_id = v.peer_id
@@ -686,54 +671,47 @@ local function check_member_modrem(extra, success, result)
 end
 
 local function modadd(msg)
-    local data = load_data(_config.moderation.data)
     if is_group(msg) then
         return langs[msg.lang].groupAlreadyAdded
     end
-    chat_info(get_receiver(msg), check_member_modadd, { receiver = get_receiver(msg), data = data, msg = msg })
+    chat_info(get_receiver(msg), check_member_modadd, { receiver = get_receiver(msg), msg = msg })
 end
 
 local function realmadd(msg)
-    local data = load_data(_config.moderation.data)
     if is_realm(msg) then
         return langs[msg.lang].realmAlreadyAdded
     end
-    chat_info(get_receiver(msg), check_member_realm_add, { receiver = get_receiver(msg), data = data, msg = msg })
+    chat_info(get_receiver(msg), check_member_realm_add, { receiver = get_receiver(msg), msg = msg })
 end
 
 local function modrem(msg)
-    local data = load_data(_config.moderation.data)
     if not is_group(msg) then
         return langs[msg.lang].groupNotAdded
     end
-    chat_info(get_receiver(msg), check_member_modrem, { receiver = get_receiver(msg), data = data, msg = msg })
+    chat_info(get_receiver(msg), check_member_modrem, { receiver = get_receiver(msg), msg = msg })
 end
 
 local function realmrem(msg)
-    local data = load_data(_config.moderation.data)
     if not is_realm(msg) then
         return langs[msg.lang].realmNotAdded
     end
-    chat_info(get_receiver(msg), check_member_realmrem, { receiver = get_receiver(msg), data = data, msg = msg })
+    chat_info(get_receiver(msg), check_member_realmrem, { receiver = get_receiver(msg), msg = msg })
 end
 
 local function automodadd(msg)
-    local data = load_data(_config.moderation.data)
     if msg.action.type == 'chat_created' then
-        chat_info(get_receiver(msg), check_member_group, { receiver = get_receiver(msg), data = data, msg = msg })
+        chat_info(get_receiver(msg), check_member_group, { receiver = get_receiver(msg), msg = msg })
     end
 end
 
 local function autorealmadd(msg)
-    local data = load_data(_config.moderation.data)
     if msg.action.type == 'chat_created' then
-        chat_info(get_receiver(msg), check_member_autorealm, { receiver = get_receiver(msg), data = data, msg = msg })
+        chat_info(get_receiver(msg), check_member_autorealm, { receiver = get_receiver(msg), msg = msg })
     end
 end
 
 local function promote(receiver, member_username, member_id)
     local lang = get_lang(string.match(receiver, '%d+'))
-    local data = load_data(_config.moderation.data)
     local group = string.gsub(receiver, 'chat#id', '')
     if not data[group] then
         return send_large_msg(receiver, langs[lang].groupNotAdded)
@@ -748,7 +726,6 @@ end
 
 local function demote(receiver, member_username, member_id)
     local lang = get_lang(string.match(receiver, '%d+'))
-    local data = load_data(_config.moderation.data)
     local group = string.gsub(receiver, 'chat#id', '')
     if not data[group] then
         return send_large_msg(receiver, langs[lang].groupNotAdded)
@@ -763,7 +740,6 @@ end
 
 local function promote2(receiver, member_username, user_id)
     local lang = get_lang(string.match(receiver, '%d+'))
-    local data = load_data(_config.moderation.data)
     local group = string.gsub(receiver, 'channel#id', '')
     local member_tag_username = member_username
     if not data[group] then
@@ -779,7 +755,6 @@ end
 
 local function demote2(receiver, member_username, user_id)
     local lang = get_lang(string.match(receiver, '%d+'))
-    local data = load_data(_config.moderation.data)
     local group = string.gsub(receiver, 'channel#id', '')
     if not data[group] then
         return send_large_msg(receiver, langs[lang].supergroupNotAdded)
@@ -847,7 +822,6 @@ local function demote_by_reply(extra, success, result)
 end
 
 local function modlist(msg)
-    local data = load_data(_config.moderation.data)
     local groups = "groups"
     if not data[tostring(groups)][tostring(msg.to.id)] then
         return langs[msg.lang].groupNotAdded
@@ -933,7 +907,6 @@ local function muteuser_by_username(extra, success, result)
 end
 
 local function show_group_settingsmod(target, lang)
-    local data = load_data(_config.moderation.data)
     if data[tostring(target)] then
         if data[tostring(target)]['settings']['flood_msg_max'] then
             NUM_MSG_MAX = tonumber(data[tostring(target)]['settings']['flood_msg_max'])
@@ -990,7 +963,6 @@ local function setowner_by_reply(extra, success, result)
     if get_reply_receiver(result) == extra.receiver then
         local msg = result
         local lang = get_lang(msg.to.id)
-        local data = load_data(_config.moderation.data)
         local name_log = msg.from.print_name:gsub("_", " ")
         data[tostring(msg.to.id)]['set_owner'] = tostring(msg.from.id)
         save_data(_config.moderation.data, data)
@@ -1006,7 +978,6 @@ local function chat_setowner_by_username(extra, success, result)
     if success == 0 then
         return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
     end
-    local data = load_data(_config.moderation.data)
     data[tostring(string.match(extra.receiver, '%d+'))]['set_owner'] = tostring(result.peer_id)
     save_data(_config.moderation.data, data)
     send_large_msg(extra.receiver, result.peer_id .. langs[lang].setOwner)
@@ -1022,7 +993,6 @@ end
 -- Check members #Add supergroup
 local function check_member_super(extra, success, result)
     local receiver = extra.receiver
-    local data = extra.data
     local msg = extra.msg
     if success == 0 then
         send_large_msg(receiver, langs[msg.lang].promoteBotAdmin)
@@ -1069,7 +1039,6 @@ end
 -- Check Members #rem supergroup
 local function check_member_superrem(extra, success, result)
     local receiver = extra.receiver
-    local data = extra.data
     local msg = extra.msg
     for k, v in pairs(result) do
         local member_id = v.id
@@ -1092,16 +1061,14 @@ end
 
 -- Function to Add supergroup
 local function superadd(msg)
-    local data = load_data(_config.moderation.data)
     local receiver = get_receiver(msg)
-    channel_get_users(receiver, check_member_super, { receiver = receiver, data = data, msg = msg })
+    channel_get_users(receiver, check_member_super, { receiver = receiver, msg = msg })
 end
 
 -- Function to remove supergroup
 local function superrem(msg)
-    local data = load_data(_config.moderation.data)
     local receiver = get_receiver(msg)
-    channel_get_users(receiver, check_member_superrem, { receiver = receiver, data = data, msg = msg })
+    channel_get_users(receiver, check_member_superrem, { receiver = receiver, msg = msg })
 end
 
 -- Get and output admins and bots in supergroup
@@ -1129,7 +1096,6 @@ function get_message_callback(extra, success, result)
     if get_reply_receiver(result) == get_receiver(extra.msg) then
         local get_cmd = extra.get_cmd
         local msg = extra.msg
-        local data = load_data(_config.moderation.data)
         local print_name = user_print_name(msg.from):gsub("?", "")
         local name_log = print_name:gsub("_", " ")
         if get_cmd == "promoteadmin" then
@@ -1247,7 +1213,6 @@ local function in_channel_cb(extra, success, result)
     local get_cmd = extra.get_cmd
     local receiver = extra.receiver
     local msg = extra.msg
-    local data = load_data(_config.moderation.data)
     local print_name = user_print_name(extra.msg.from):gsub("?", "")
     local name_log = print_name:gsub("_", " ")
     local member = extra.username
@@ -1366,7 +1331,6 @@ local function setowner_by_username(extra, success, result)
     if success == 0 then
         return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
     end
-    local data = load_data(_config.moderation.data)
     data[tostring(extra.chat_id)]['set_owner'] = tostring(result.peer_id)
     save_data(_config.moderation.data, data)
     savelog(extra.chat_id, result.print_name .. " [" .. result.peer_id .. "] set as owner")
@@ -1376,7 +1340,6 @@ end
 
 -- 'Set supergroup photo' function
 local function set_supergroup_photo(msg, success, result)
-    local data = load_data(_config.moderation.data)
     if not data[tostring(msg.to.id)] then
         return
     end
@@ -1408,7 +1371,6 @@ end
 
 -- Show supergroup settings; function
 local function show_supergroup_settings(target, lang)
-    local data = load_data(_config.moderation.data)
     if data[tostring(target)] then
         if data[tostring(target)]['settings']['flood_msg_max'] then
             NUM_MSG_MAX = tonumber(data[tostring(target)]['settings']['flood_msg_max'])
@@ -1829,8 +1791,6 @@ local function contact_mods_callback(extra, success, result)
         end
     end
 
-    local data = load_data(_config.moderation.data)
-
     -- owner
     local owner = data[tostring(msg.to.id)]['set_owner']
     if owner then
@@ -1892,7 +1852,6 @@ end
 
 local function contact_mods(msg)
     local already_contacted = { }
-    local data = load_data(_config.moderation.data)
 
     local text = langs[msg.lang].receiver .. msg.to.print_name:gsub("_", " ") .. ' [' .. msg.to.id .. ']\n' .. langs[msg.lang].sender
     if msg.from.username then
@@ -1963,7 +1922,6 @@ end
 
 local function run(msg, matches)
     local name_log = user_print_name(msg.from)
-    local data = load_data(_config.moderation.data)
     if not msg.api_patch then
         if matches[1]:lower() == 'type' then
             if is_momod(msg) then

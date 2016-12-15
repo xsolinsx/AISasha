@@ -29,7 +29,6 @@ end
 
 local function run(msg, matches)
     if is_admin1(msg) then
-        local data = load_data(_config.moderation.data)
         local receiver = get_receiver(msg)
         if not is_realm(msg) then
             if data[tostring(msg.to.id)]['settings']['lock_member'] == 'yes' and not is_admin1(msg) then
