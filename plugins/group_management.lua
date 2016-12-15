@@ -3050,6 +3050,25 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             end
+            if matches[1]:lower() == 'setwarn' and matches[2] then
+                if is_momod(msg) then
+                    local txt = set_warn(msg.from.id, msg.to.id, matches[2])
+                    if matches[2] == '0' then
+                        return langs[msg.lang].neverWarn
+                    else
+                        return txt
+                    end
+                else
+                    return langs[msg.lang].require_mod
+                end
+            end
+            if matches[1]:lower() == 'getwarn' then
+                if is_momod(msg) then
+                    return get_warn(msg.to.id)
+                else
+                    return langs[msg.lang].require_mod
+                end
+            end
         end
         if matches[1]:lower() == 'clean' then
             if is_owner(msg) then
@@ -4007,6 +4026,8 @@ return {
         "^[#!/]([Rr][Uu][Ll][Ee][Ss])$",
         "^[#!/]([Aa][Bb][Oo][Uu][Tt])$",
         "^[#!/]([Ss][Ee][Tt][Ff][Ll][Oo][Oo][Dd]) (%d+)$",
+        "^[#!/]([Ss][Ee][Tt][Ww][Aa][Rr][Nn]) (%d+)$",
+        "^[#!/]([Gg][Ee][Tt][Ww][Aa][Rr][Nn])$",
         "^[#!/]([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss])$",
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee]) (.*)$",
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee])",
@@ -4113,6 +4134,8 @@ return {
         "(#newlink|sasha crea link)",
         "(#link|sasha link)",
         "#setflood <value>",
+        "#setwarn <value>",
+        "#getwarn",
         "GROUPS",
         "(#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts",
         "(#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts",

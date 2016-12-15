@@ -223,6 +223,16 @@ return {
         mute = 'Muto ',
         noAutoKick = 'Non puoi rimuoverti da solo.',
         noAutoBan = 'Non puoi bannarti da solo.',
+        errorWarnRange = 'Errore, il range è [0-10].',
+        warnSet = 'Il warn è stato impostato a ',
+        neverWarn = 'Gli avvertimenti non funzioneranno più.',
+        noWarnSet = 'Il warn non è ancora stato impostato.',
+        cantWarnHigher = 'Non puoi avvertire un mod/owner/admin/sudo!',
+        warned = 'Sei stato avvertito X volte, datti una regolata!',
+        unwarned = 'Ti è stato tolto un avvertimento, continua così!',
+        alreadyZeroWarnings = 'Sei già a zero avvertimenti.',
+        zeroWarnings = 'I tuoi avvertimenti sono stati azzerati.',
+        yourWarnings = 'Sei a quota X avvertimenti su un massimo di Y.',
 
         -- administrator.lua --
         sendNewPic = 'Mandami la nuova foto.',
@@ -718,18 +728,6 @@ return {
         deleted = ' eliminato.',
         gDeleted = ' variabile globale eliminata.',
 
-        -- warn.lua --
-        errorWarnRange = 'Errore, il range è [0-10].',
-        warnSet = 'Il warn è stato impostato a ',
-        neverWarn = 'Gli avvertimenti non funzioneranno più.',
-        noWarnSet = 'Il warn non è ancora stato impostato.',
-        cantWarnHigher = 'Non puoi avvertire un mod/owner/admin/sudo!',
-        warned = 'Sei stato avvertito X volte, datti una regolata!',
-        unwarned = 'Ti è stato tolto un avvertimento, continua così!',
-        alreadyZeroWarnings = 'Sei già a zero avvertimenti.',
-        zeroWarnings = 'I tuoi avvertimenti sono stati azzerati.',
-        yourWarnings = 'Sei a quota X avvertimenti su un massimo di Y.',
-
         -- whitelist.lua --
         userBot = 'Utente/Bot ',
         whitelistRemoved = ' rimosso dalla whitelist.',
@@ -778,6 +776,10 @@ return {
             'USER',
             '(#kickme|sasha (uccidimi|esplodimi|sparami|decompilami|bannami)): Sasha rimuove l\'utente.',
             'MOD',
+            '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from: Sasha manda il numero di avvertimenti ricevuti dall\'utente.',
+            '(#warn|[sasha] avverti) <id>|<username>|<reply>|from: Sasha avverte l\'utente.',
+            '#unwarn <id>|<username>|<reply>|from: Sasha diminuisce di uno gli avvertimenti dell\'utente.',
+            '(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from: Sasha azzera gli avvertimenti dell\'utente.',
             '(#kick|spara|[sasha] uccidi) <id>|<username>|<reply>|from: Sasha rimuove l\'utente specificato.',
             '(#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>|from: Sasha banna l\'utente specificato e lo rimuove, se tenta di rientrare viene nuovamente rimosso.',
             '(#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>|from: Sasha sbanna l\'utente specificato.',
@@ -966,6 +968,8 @@ return {
             '(#newlink|sasha crea link): Sasha crea il link del gruppo.',
             '(#link|sasha link): Sasha mostra il link del gruppo.',
             '#setflood <value>: Sasha imposta il flood massimo del gruppo a <value>.',
+            '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>, se zero gli avvertimenti non funzioneranno più.',
+            '#getwarn: Sasha manda il numero di avvertimenti massimi.',
             'GRUPPI',
             '(#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha blocca l\'opzione specificata.',
             '(#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha sblocca l\'opzione specificata.',
@@ -1351,19 +1355,6 @@ return {
             '(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>: Sasha mostra la definizione di <text> dall\'Urban Dictionary.',
         },
 
-        warn =
-        {
-            '🅿️ WARN',
-            'Plugin per la gestione degli avvertimenti.',
-            'MOD',
-            '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>, se zero gli avvertimenti non funzioneranno più.',
-            '#getwarn: Sasha manda il numero di avvertimenti massimi.',
-            '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from: Sasha manda il numero di avvertimenti ricevuti dall\'utente.',
-            '(#warn|[sasha] avverti) <id>|<username>|<reply>|from: Sasha avverte l\'utente.',
-            '#unwarn <id>|<username>|<reply>|from: Sasha diminuisce di uno gli avvertimenti dell\'utente.',
-            '(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from: Sasha azzera gli avvertimenti dell\'utente.',
-        },
-
         webshot =
         {
             '🅿️ WEBSHOT',
@@ -1432,6 +1423,16 @@ return {
         disabled = ' disabled',
         noAutoKick = 'You can\'t kick yourself.',
         noAutoBan = 'You can\'t ban yourself.',
+        errorWarnRange = 'Error, range is [0-10].',
+        warnSet = 'Warn has been set to ',
+        neverWarn = 'Warn will not work anymore.',
+        noWarnSet = 'Warn hasn\t been set yet.',
+        cantWarnHigher = 'You can\'t warn mod/owner/admin/sudo!',
+        warned = 'You\'ve been warned X times, calm down!',
+        unwarned = 'One warn has been deleted, keep it up!',
+        alreadyZeroWarnings = 'You\'re already at zero warns.',
+        zeroWarnings = 'Your warns has been removed.',
+        yourWarnings = 'You\'re at X warns on Y.',
 
         -- administrator.lua --
         sendNewPic = 'Send me the new picture.',
@@ -1903,18 +1904,6 @@ return {
         deleted = ' deleted.',
         gDeleted = ' global variable deleted.',
 
-        -- warn.lua --
-        errorWarnRange = 'Error, range is [0-10].',
-        warnSet = 'Warn has been set to ',
-        neverWarn = 'Warn will not work anymore.',
-        noWarnSet = 'Warn hasn\t been set yet.',
-        cantWarnHigher = 'You can\'t warn mod/owner/admin/sudo!',
-        warned = 'You\'ve been warned X times, calm down!',
-        unwarned = 'One warn has been deleted, keep it up!',
-        alreadyZeroWarnings = 'You\'re already at zero warns.',
-        zeroWarnings = 'Your warns has been removed.',
-        yourWarnings = 'You\'re at X warns on Y.',
-
         -- whitelist.lua --
         userBot = 'User/Bot ',
         whitelistRemoved = ' removed from whitelist.',
@@ -1963,6 +1952,10 @@ return {
             'USER',
             '(#kickme|sasha (uccidimi|esplodimi|sparami|decompilami|bannami)): Sasha kicks sender.',
             'MOD',
+            '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from: Sasha sends user\'s warns.',
+            '(#warn|[sasha] avverti) <id>|<username>|<reply>|from: Sasha warns specified user.',
+            '#unwarn <id>|<username>|<reply>|from: Sasha removes one warn from specified user.',
+            '(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from: Sasha removes all warns from specified user.',
             '(#kick|spara|[sasha] uccidi) <id>|<username>|<reply>|from: Sasha kicks specified user.',
             '(#ban|esplodi|kaboom|[sasha] banna|[sasha] decompila) <id>|<username>|<reply>|from: Sasha kicks and bans specified user, if he tries to join again it\'s automatically kicked.',
             '(#unban|[sasha] sbanna|[sasha] [ri]compila) <id>|<username>|<reply>|from: Sasha unbans specified user.',
@@ -2151,6 +2144,8 @@ return {
             '(#newlink|sasha crea link): Sasha creates group\'s link.',
             '(#link|sasha link): Sasha sends group\'s link.',
             '#setflood <value>: Sasha sets <value> as max flood.',
+            '#setwarn <value>: Sasha sets max warns to <value>, if zero warns will not work.',
+            '#getwarn: Sasha sends max warns value.',
             'GROUPS',
             '(#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha locks specified parameter.',
             '(#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts: Sasha unlocks specified parameter.',
@@ -2521,19 +2516,6 @@ return {
             'Plugin for the interaction with the Urban Dictionary.',
             'USER',
             '(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>: Sasha searches <text> in the Urban Dictionary.',
-        },
-
-        warn =
-        {
-            '🅿️ WARN',
-            'Plugin for the management of warns.',
-            'MOD',
-            '#setwarn <value>: Sasha sets max warns to <value>, if zero warns will not work.',
-            '#getwarn: Sasha sends max warns value.',
-            '(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from: Sasha sends user\'s warns.',
-            '(#warn|[sasha] avverti) <id>|<username>|<reply>|from: Sasha warns specified user.',
-            '#unwarn <id>|<username>|<reply>|from: Sasha removes one warn from specified user.',
-            '(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from: Sasha removes all warns from specified user.',
         },
 
         webshot =

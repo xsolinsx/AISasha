@@ -1029,15 +1029,89 @@ function is_momod2(user_id, group_id)
     return var
 end
 
--- Returns the name of the sender
-function kick_user_any(user_id, chat_id)
-    if tonumber(user_id) ~= tonumber(our_id) then
-        local channel = 'channel#id' .. chat_id
-        local chat = 'chat#id' .. chat_id
-        local user = 'user#id' .. user_id
-        chat_del_user(chat, user, ok_cb, true)
-        channel_kick(channel, user, ok_cb, false)
+function set_warn(user_id, chat_id, value)
+    local data = load_data(_config.moderation.data)
+    local lang = get_lang(chat_id)
+    if tonumber(value) < 0 or tonumber(value) > 10 then
+        return langs[lang].errorWarnRange
     end
+    local warn_max = value
+    data[tostring(chat_id)]['settings']['warn_max'] = warn_max
+    save_data(_config.moderation.data, data)
+    savelog(chat_id, " [" .. user_id .. "] set warn to [" .. value .. "]")
+    return langs[lang].warnSet .. value
+end
+
+function get_warn(chat_id)
+    local data = load_data(_config.moderation.data)
+    local lang = get_lang(chat_id)
+    local warn_max = data[tostring(chat_id)]['settings']['warn_max']
+    if not warn_max then
+        return langs[lang].noWarnSet
+    end
+    return langs[lang].warnSet .. warn_max
+end
+
+function get_user_warns(user_id, chat_id)
+    local lang = get_lang(chat_id)
+    local hashonredis = redis:get(chat_id .. ':warn:' .. user_id)
+    local warn_msg = langs[lang].yourWarnings
+    local warn_chat = string.match(get_warn(chat_id), "%d+")
+
+    if hashonredis then
+        warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', tostring(hashonredis))
+        send_large_msg('chat#id' .. chat_id, warn_msg)
+        send_large_msg('channel#id' .. chat_id, warn_msg)
+    else
+        warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', '0')
+        send_large_msg('chat#id' .. chat_id, warn_msg)
+        send_large_msg('channel#id' .. chat_id, warn_msg)
+    end
+end
+
+function warn_user(user_id, chat_id)
+    local lang = get_lang(chat_id)
+    local warn_chat = string.match(get_warn(chat_id), "%d+")
+    redis:incr(chat_id .. ':warn:' .. user_id)
+    local hashonredis = redis:get(chat_id .. ':warn:' .. user_id)
+    if not hashonredis then
+        redis:set(chat_id .. ':warn:' .. user_id, 1)
+        send_large_msg('chat#id' .. chat_id, string.gsub(langs[lang].warned, 'X', '1'))
+        send_large_msg('channel#id' .. chat_id, string.gsub(langs[lang].warned, 'X', '1'))
+        hashonredis = 1
+    end
+    if tonumber(warn_chat) ~= 0 then
+        if tonumber(hashonredis) >= tonumber(warn_chat) then
+            redis:getset(chat_id .. ':warn:' .. user_id, 0)
+            local function post_kick()
+                kick_user_any(user_id, chat_id)
+            end
+            postpone(post_kick, false, 3)
+        end
+        send_large_msg('chat#id' .. chat_id, string.gsub(langs[lang].warned, 'X', tostring(hashonredis)))
+        send_large_msg('channel#id' .. chat_id, string.gsub(langs[lang].warned, 'X', tostring(hashonredis)))
+    end
+end
+
+function unwarn_user(user_id, chat_id)
+    local lang = get_lang(chat_id)
+    local warns = redis:get(chat_id .. ':warn:' .. user_id)
+    if tonumber(warns) <= 0 then
+        redis:set(chat_id .. ':warn:' .. user_id, 0)
+        send_large_msg('chat#id' .. chat_id, langs[lang].alreadyZeroWarnings)
+        send_large_msg('channel#id' .. chat_id, langs[lang].alreadyZeroWarnings)
+    else
+        redis:set(chat_id .. ':warn:' .. user_id, warns - 1)
+        send_large_msg('chat#id' .. chat_id, langs[lang].unwarned)
+        send_large_msg('channel#id' .. chat_id, langs[lang].unwarned)
+    end
+end
+
+function unwarnall_user(user_id, chat_id)
+    local lang = get_lang(chat_id)
+    redis:set(chat_id .. ':warn:' .. user_id, 0)
+    send_large_msg('chat#id' .. chat_id, langs[lang].zeroWarnings)
+    send_large_msg('channel#id' .. chat_id, langs[lang].zeroWarnings)
 end
 
 -- Returns the name of the sender
@@ -1055,6 +1129,17 @@ function kick_user(user_id, chat_id)
     local user = 'user#id' .. user_id
     chat_del_user(chat, user, ok_cb, false)
     channel_kick(channel, user, ok_cb, false)
+end
+
+-- Returns the name of the sender
+function kick_user_any(user_id, chat_id)
+    if tonumber(user_id) ~= tonumber(our_id) then
+        local channel = 'channel#id' .. chat_id
+        local chat = 'chat#id' .. chat_id
+        local user = 'user#id' .. user_id
+        chat_del_user(chat, user, ok_cb, true)
+        channel_kick(channel, user, ok_cb, false)
+    end
 end
 
 -- Ban
