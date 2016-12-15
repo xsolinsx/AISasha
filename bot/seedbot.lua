@@ -64,6 +64,7 @@ function on_binlog_replay_end()
     load_plugins()
 
     database = load_data(_config.database.db)
+    start_time = os.date('%c')
 end
 
 function msg_valid(msg)

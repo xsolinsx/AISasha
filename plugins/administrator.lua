@@ -180,10 +180,6 @@ local function run(msg, matches)
             redis:set("bot:photo", "waiting")
             return langs[msg.lang].sendNewPic
         end
-        if matches[1]:lower() == "rebootapi" or matches[1]:lower() == "sasha riavvia api" then
-            io.popen('kill -9 $(pgrep lua)'):read('*all')
-            return langs[msg.lang].apiReboot
-        end
         if matches[1] == "markread" or matches[1]:lower() == "sasha segna letto" then
             if matches[2] == "on" then
                 redis:set("bot:markread", "on")
@@ -194,6 +190,12 @@ local function run(msg, matches)
                 return langs[msg.lang].markRead .. " > off"
             end
             return
+        end
+        if matches[1]:lower() == "ping" then
+            return 'Pong'
+        end
+        if matches[1]:lower() == "laststart" then
+            return start_time
         end
         if not msg.api_patch then
             if matches[1]:lower() == "pm" or matches[1]:lower() == "sasha messaggia" then
@@ -218,6 +220,10 @@ local function run(msg, matches)
             import_chat_link(hash, ok_cb, false)
         end
         if is_sudo(msg) then
+            if matches[1]:lower() == "rebootapi" or matches[1]:lower() == "sasha riavvia api" then
+                io.popen('kill -9 $(pgrep lua)'):read('*all')
+                return langs[msg.lang].apiReboot
+            end
             if matches[1]:lower() == "contactlist" or matches[1]:lower() == "sasha lista contatti" then
                 if not matches[2] then
                     get_contact_list(get_contact_list_callback, { target = msg.from.id, filetype = "txt" })
@@ -380,6 +386,8 @@ return {
         "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp])$",
         "^[#!/]([Cc][Hh][Ee][Cc][Kk][Ss][Pp][Ee][Ee][Dd])$",
         "^[#!/]([Rr][Ee][Bb][Oo][Oo][Tt][Aa][Pp][Ii])$",
+        "^[#!/]([Pp][Ii][Nn][Gg])$",
+        "^[#!/]([Ll][Aa][Ss][Tt][Ss][Tt][Aa][Rr][Tt])$",
         "%[(photo)%]",
         -- pm
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii][Aa]) (%d+) (.*)$",
@@ -442,7 +450,8 @@ return {
         "(#addlog|sasha aggiungi log)",
         "(#remlog|sasha rimuovi log)",
         "#checkspeed",
-        "(#rebootapi|sasha riavvia api)",
+        "#ping",
+        "#laststart",
         "SUDO",
         "(#contactlist|sasha lista contatti) (txt|json)",
         "(#dialoglist|sasha lista chat) (txt|json)",
@@ -453,6 +462,7 @@ return {
         "(#sync_gbans|sasha sincronizza superban)",
         "(#backup|sasha esegui backup)",
         "(#uploadbackup|sasha invia backup)",
+        "(#rebootapi|sasha riavvia api)",
         "#vardump [<reply>|<msg_id>]",
     },
 }
