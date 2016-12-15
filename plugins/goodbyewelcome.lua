@@ -97,7 +97,7 @@ local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
         if chat.username then
             goodbyewelcome = goodbyewelcome:gsub('$chatusername', '@' .. chat.username)
         else
-            goodbyewelcome = goodbyewelcome:gsub('$chatusername', chat.title)
+            goodbyewelcome = goodbyewelcome:gsub('$chatusername', 'NO CHAT USERNAME')
         end
     end
     if string.find(goodbyewelcome, '$rules') then
@@ -125,7 +125,7 @@ local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
         if user.username then
             goodbyewelcome = goodbyewelcome:gsub('$username', '@' .. user.username)
         else
-            goodbyewelcome = goodbyewelcome:gsub('$username', user.first_name)
+            goodbyewelcome = goodbyewelcome:gsub('$username', 'NO USERNAME')
         end
     end
     return goodbyewelcome
