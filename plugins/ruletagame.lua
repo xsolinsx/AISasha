@@ -1,3 +1,5 @@
+multiple_messages = { }
+
 local function get_challenge(chat_id)
     local Whashonredis = redis:get('ruleta:' .. chat_id .. ':challenger')
     local Xhashonredis = redis:get('ruleta:' .. chat_id .. ':challenged')
@@ -505,11 +507,19 @@ local function run(msg, matches)
         end
 
         if msg.fwd_from then
-            local function post_kick()
-                kick_user_any(user, chat)
+            if not multiple_messages[tostring(msg.from.id)] then
+                -- set multiple_messages of the user as true, after 30 seconds it's set to false to restore warning and kick
+                multiple_messages[tostring(msg.from.id)] = true
+                local function post_multiple_messages_false()
+                    multiple_messages[tostring(msg.from.id)] = false
+                end
+                postpone(post_multiple_messages_false, false, 30)
+                local function post_kick()
+                    kick_user_any(user, chat)
+                end
+                postpone(post_kick, false, 1)
+                reply_msg(msg.id, langs[msg.lang].forwardingRuleta, ok_cb, false)
             end
-            postpone(post_kick, false, 1)
-            reply_msg(msg.id, langs[msg.lang].forwardingRuleta, ok_cb, false)
         else
             if matches[1]:lower() == 'godruleta' then
                 if userstats.score > 10 then

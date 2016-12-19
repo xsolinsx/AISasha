@@ -125,7 +125,7 @@ local function run(msg, matches)
     if not msg.api_patch then
         -- multiple_kicks
         if matches[1]:lower() == 'kickdeleted' or matches[1]:lower() == 'kickinactive' or matches[1]:lower() == 'kicknouser' then
-            -- set multiple_kicks of the group as true, after 5 seconds it's set to false to restore goodbye
+            -- set multiple_kicks of the group as true, after 30 seconds it's set to false to restore goodbye
             multiple_kicks[tostring(msg.to.id)] = true
             local function post_multiple_kick_false()
                 multiple_kicks[tostring(msg.to.id)] = false
