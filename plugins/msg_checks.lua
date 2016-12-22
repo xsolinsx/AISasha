@@ -123,7 +123,7 @@ local function pre_process(msg)
                     -- msg.text checks
                     local _nl, ctrl_chars = string.gsub(msg.text, '%c', '')
                     local _nl, real_digits = string.gsub(msg.text, '%d', '')
-                    if lock_spam == "yes" and string.len(msg.text) > 2049 or ctrl_chars > 40 or real_digits > 2000 then
+                    if lock_spam == "yes" and(string.len(msg.text) > 2049 or ctrl_chars > 40 or real_digits > 2000) then
                         delete_msg(msg.id, ok_cb, false)
                         if strict == "yes" then
                             kick_user(msg.from.id, msg.to.id)
