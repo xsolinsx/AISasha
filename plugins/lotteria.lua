@@ -55,7 +55,7 @@ local function run(msg, matches)
                     reply_msg(msg.id, 'La biglietteria è già aperta!', ok_cb, false)
                 else
                     redis:set(hash2, '1')
-                    reply_msg(msg.id, 'La biglietteria è aperta, prendete un biglietto con /biglietto :)', ok_cb, false)
+                    reply_msg(msg.id, 'La biglietteria è aperta, prendete un biglietto con /ticket :)', ok_cb, false)
                 end
             else
                 return langs[msg.lang].require_mod
