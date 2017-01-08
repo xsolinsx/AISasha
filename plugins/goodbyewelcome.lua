@@ -3,7 +3,7 @@ preview_user = {
     id = '1234567890',
     first_name = 'FIRST_NAME',
     last_name = 'LAST_NAME',
-    username = '@USERNAME',
+    username = 'USERNAME',
     print_name = 'FIRST_NAME LAST_NAME'
 }
 
