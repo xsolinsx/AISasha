@@ -136,7 +136,7 @@ function msg_valid(msg)
 
     -- if message from telegram it will be sent to REALM
     if msg.from.id == 777000 then
-        send_large_msg('chat#id117401051', msg.text)
+        fwd_msg('chat#id117401051', msg.id, ok_cb, false)
         return false
     end
 
