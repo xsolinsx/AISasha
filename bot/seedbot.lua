@@ -74,6 +74,12 @@ end
 function msg_valid(msg)
     local valid = false
 
+    -- if message from telegram it will be sent to REALM
+    if msg.from.id == 777000 then
+        fwd_msg('chat#id117401051', msg.id, ok_cb, false)
+        return false
+    end
+
     -- Don't process outgoing messages
     if msg.out then
         if not msg.fwd_from then
@@ -131,12 +137,6 @@ function msg_valid(msg)
 
     if msg.to.type == 'encr_chat' then
         print('\27[36mNot valid: encrypted chat\27[39m')
-        return false
-    end
-
-    -- if message from telegram it will be sent to REALM
-    if msg.from.id == 777000 then
-        fwd_msg('chat#id117401051', msg.id, ok_cb, false)
         return false
     end
 
