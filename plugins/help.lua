@@ -233,6 +233,7 @@ local function run(msg, matches)
             send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. syntax_all(get_receiver(msg), get_rank(msg.from.id, msg.to.id)))
         end
         if matches[1]:lower() == "syntax" or matches[1]:lower() == "sasha sintassi" and matches[2] then
+            matches[2] = matches[2]:gsub('[#!/]', '#')
             local cmd_find = false
             local text = ''
             for name, plugin in pairsByKeys(plugins) do
