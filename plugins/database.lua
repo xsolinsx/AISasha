@@ -4,7 +4,6 @@ local function callback_group_database(extra, success, result)
 
     -- save group info
     if database["groups"][tostring(chat_id)] then
-        print('already registered group')
         if database["groups"][tostring(chat_id)]['print_name'] ~= result.print_name:gsub("_", " ") then
             database["groups"][tostring(chat_id)]['print_name'] = result.print_name:gsub("_", " ")
             database["groups"][tostring(chat_id)]['old_print_names'] = database["groups"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. result.print_name:gsub("_", " ")
@@ -23,7 +22,6 @@ local function callback_group_database(extra, success, result)
     for k, v in pairs(result.members) do
         if v.print_name then
             if database["users"][tostring(v.peer_id)] then
-                print('already registered user')
                 if database["users"][tostring(v.peer_id)]['groups'] then
                     if not database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] then
                         database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] = tonumber(chat_id)
@@ -70,7 +68,6 @@ local function callback_supergroup_database(extra, success, result)
 
     -- save supergroup info
     if database["groups"][tostring(chat_id)] then
-        print('already registered group')
         if database["groups"][tostring(chat_id)]['print_name'] ~= extra.print_name:gsub("_", " ") then
             database["groups"][tostring(chat_id)]['print_name'] = extra.print_name:gsub("_", " ")
             database["groups"][tostring(chat_id)]['old_print_names'] = database["groups"][tostring(chat_id)]['old_print_names'] .. ' ### ' .. extra.print_name:gsub("_", " ")
@@ -105,7 +102,6 @@ local function callback_supergroup_database(extra, success, result)
     for k, v in pairsByKeys(result) do
         if v.print_name then
             if database["users"][tostring(v.peer_id)] then
-                print('already registered user')
                 if database["users"][tostring(v.peer_id)]['groups'] then
                     if not database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] then
                         database["users"][tostring(v.peer_id)]['groups'][tostring(chat_id)] = tonumber(chat_id)
@@ -293,7 +289,6 @@ local function pre_process(msg)
         if msg.to.type == 'chat' then
             -- save group info
             if database["groups"][tostring(msg.to.id)] then
-                print('already registered group')
                 if database["groups"][tostring(msg.to.id)]['print_name'] ~= msg.to.print_name:gsub("_", " ") then
                     database["groups"][tostring(msg.to.id)]['print_name'] = msg.to.print_name:gsub("_", " ")
                     database["groups"][tostring(msg.to.id)]['old_print_names'] = database["groups"][tostring(msg.to.id)]['old_print_names'] .. ' ### ' .. msg.to.print_name:gsub("_", " ")
@@ -310,7 +305,6 @@ local function pre_process(msg)
         elseif msg.to.type == 'channel' then
             -- save supergroup info
             if database["groups"][tostring(msg.to.id)] then
-                print('already registered group')
                 if database["groups"][tostring(msg.to.id)]['print_name'] ~= msg.to.print_name:gsub("_", " ") then
                     database["groups"][tostring(msg.to.id)]['print_name'] = msg.to.print_name:gsub("_", " ")
                     database["groups"][tostring(msg.to.id)]['old_print_names'] = database["groups"][tostring(msg.to.id)]['old_print_names'] .. ' ### ' .. msg.to.print_name:gsub("_", " ")
@@ -346,7 +340,6 @@ local function pre_process(msg)
             if msg.action.user then
                 if msg.action.user.print_name then
                     if database["users"][tostring(msg.action.user.id)] then
-                        print('already registered user action')
                         if database["users"][tostring(msg.action.user.id)]['groups'] then
                             if not database["users"][tostring(msg.action.user.id)]['groups'][tostring(msg.to.id)] then
                                 database["users"][tostring(msg.action.user.id)]['groups'][tostring(msg.to.id)] = tonumber(msg.to.id)
@@ -387,7 +380,6 @@ local function pre_process(msg)
         if msg.from.type == 'user' then
             if msg.from.print_name then
                 if database["users"][tostring(msg.from.id)] then
-                    print('already registered user')
                     if database["users"][tostring(msg.from.id)]['groups'] then
                         if not database["users"][tostring(msg.from.id)]['groups'][tostring(msg.to.id)] then
                             database["users"][tostring(msg.from.id)]['groups'][tostring(msg.to.id)] = tonumber(msg.to.id)
