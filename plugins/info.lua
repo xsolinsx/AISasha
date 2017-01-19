@@ -825,6 +825,7 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo]) (.*)$",
         -- who
+        "^[#!/]([Mm][Ee][Mm][Bb][Ee][Rr][Ss])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Mm][Ee][Mm][Bb][Rr][Ii])$",
         "^([Ll][Ii][Ss][Tt][Aa] [Mm][Ee][Mm][Bb][Rr][Ii])$",
         -- kicked
