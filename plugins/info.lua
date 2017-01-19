@@ -703,16 +703,16 @@ local function run(msg, matches)
                 return langs[msg.lang].require_admin
             end
         end
-    end
-    if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] then
-        if is_momod(msg) then
-            if chat_type == 'channel' then
-                channel_get_users(receiver, callback_supergroup_members, { receiver = receiver })
-            elseif chat_type == 'chat' then
-                chat_info(receiver, callback_group_members, { receiver = receiver })
+        if (matches[1]:lower() == "who" or matches[1]:lower() == "members" or matches[1]:lower() == "sasha lista membri" or matches[1]:lower() == "lista membri") and not matches[2] then
+            if is_momod(msg) then
+                if chat_type == 'channel' then
+                    channel_get_users(receiver, callback_supergroup_members, { receiver = receiver })
+                elseif chat_type == 'chat' then
+                    chat_info(receiver, callback_group_members, { receiver = receiver })
+                end
+            else
+                return langs[msg.lang].require_mod
             end
-        else
-            return langs[msg.lang].require_mod
         end
     end
     if matches[1]:lower() == "kicked" or matches[1]:lower() == "sasha lista rimossi" or matches[1]:lower() == "lista rimossi" then
