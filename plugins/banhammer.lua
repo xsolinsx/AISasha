@@ -837,15 +837,17 @@ local function run(msg, matches)
         end
     end
     if matches[1]:lower() == 'kickrandom' then
-        if is_momod(msg) then
-            if msg.to.type == 'chat' then
-                chat_info(receiver, kickrandom_chat, { chat_id = msg.to.id })
-            elseif msg.to.type == 'channel' then
-                channel_get_users(receiver, kickrandom_channel, { chat_id = msg.to.id })
+        if not msg.api_patch then
+            if is_momod(msg) then
+                if msg.to.type == 'chat' then
+                    chat_info(receiver, kickrandom_chat, { chat_id = msg.to.id })
+                elseif msg.to.type == 'channel' then
+                    channel_get_users(receiver, kickrandom_channel, { chat_id = msg.to.id })
+                end
+                return
+            else
+                return langs[msg.lang].require_mod
             end
-            return
-        else
-            return langs[msg.lang].require_mod
         end
     end
     if matches[1]:lower() == 'ban' or matches[1]:lower() == 'sasha banna' or matches[1]:lower() == 'sasha decompila' or matches[1]:lower() == 'banna' or matches[1]:lower() == 'decompila' or matches[1]:lower() == 'esplodi' or matches[1]:lower() == 'kaboom' then
@@ -944,16 +946,18 @@ local function run(msg, matches)
         return
     end
     if matches[1]:lower() == 'kickdeleted' then
-        if is_momod(msg) then
-            -- /kickdeleted
-            if msg.to.type == 'chat' then
-                chat_info(receiver, kick_deleted_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
-            elseif msg.to.type == 'channel' then
-                channel_get_users(receiver, kick_deleted_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
+        if not msg.api_patch then
+            if is_momod(msg) then
+                -- /kickdeleted
+                if msg.to.type == 'chat' then
+                    chat_info(receiver, kick_deleted_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                elseif msg.to.type == 'channel' then
+                    channel_get_users(receiver, kick_deleted_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                end
+                return
+            else
+                return langs[msg.lang].require_mod
             end
-            return
-        else
-            return langs[msg.lang].require_mod
         end
     end
     if matches[1]:lower() == 'kickinactive' then
@@ -977,16 +981,18 @@ local function run(msg, matches)
         return
     end
     if matches[1]:lower() == 'kicknouser' then
-        -- /kicknouser
-        if is_owner(msg) then
-            if msg.to.type == 'chat' then
-                chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
-            elseif msg.to.type == 'channel' then
-                channel_get_users(receiver, kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
+        if not msg.api_patch then
+            if is_owner(msg) then
+                -- /kicknouser
+                if msg.to.type == 'chat' then
+                    chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                elseif msg.to.type == 'channel' then
+                    channel_get_users(receiver, kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                end
+                return
+            else
+                return langs[msg.lang].require_owner
             end
-            return
-        else
-            return langs[msg.lang].require_owner
         end
     end
     if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
