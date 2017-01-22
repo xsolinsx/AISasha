@@ -3010,6 +3010,7 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == 'setwarn' and matches[2] then
                 if is_momod(msg) then
+                    print('im here')
                     local txt = set_warn(msg.from.id, msg.to.id, matches[2])
                     if matches[2] == '0' then
                         return langs[msg.lang].neverWarn
