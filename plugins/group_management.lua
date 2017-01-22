@@ -1920,7 +1920,7 @@ local function contact_mods(msg)
     end
 end
 
-local function set_warn(user_id, chat_id, value)
+local function set_warn_func(user_id, chat_id, value)
     print('in')
     local lang = get_lang(chat_id)
     if tonumber(value) < 0 or tonumber(value) > 10 then
@@ -3027,7 +3027,7 @@ local function run(msg, matches)
             if matches[1]:lower() == 'setwarn' and matches[2] then
                 if is_momod(msg) then
                     print('im here')
-                    local txt = set_warn(msg.from.id, msg.to.id, matches[2])
+                    local txt = set_warn_func(msg.from.id, msg.to.id, matches[2])
                     if matches[2] == '0' then
                         return langs[msg.lang].neverWarn
                     else
