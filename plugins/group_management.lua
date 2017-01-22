@@ -1920,22 +1920,6 @@ local function contact_mods(msg)
     end
 end
 
-local function set_warn_func(user_id, chat_id, value)
-    print('in')
-    local lang = get_lang(chat_id)
-    if tonumber(value) < 0 or tonumber(value) > 10 then
-        print('error')
-        return langs[lang].errorWarnRange
-    end
-    print(value)
-    data[tostring(chat_id)]['settings']['warn_max'] = value
-    print(data[tostring(chat_id)]['settings']['warn_max'])
-    save_data(_config.moderation.data, data)
-    print(data[tostring(chat_id)]['settings']['warn_max'])
-    savelog(chat_id, " [" .. user_id .. "] set warn to [" .. value .. "]")
-    return langs[lang].warnSet .. value
-end
-
 local function run(msg, matches)
     local name_log = user_print_name(msg.from)
     if not msg.api_patch then
@@ -3026,12 +3010,21 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == 'setwarn' and matches[2] then
                 if is_momod(msg) then
-                    print('im here')
-                    local txt = set_warn_func(msg.from.id, msg.to.id, matches[2])
+                    print('in')
+                    if tonumber(matches[2]) < 0 or tonumber(matches[2]) > 10 then
+                        print('error')
+                        return langs[msg.lang].errorWarnRange
+                    end
+                    print(matches[2])
+                    data[tostring(msg.to.id)]['settings']['warn_max'] = matches[2]
+                    print(data[tostring(msg.to.id)]['settings']['warn_max'])
+                    save_data(_config.moderation.data, data)
+                    print(data[tostring(msg.to.id)]['settings']['warn_max'])
+                    savelog(msg.to.id, " [" .. msg.from.id .. "] set warn to [" .. matches[2] .. "]")
                     if matches[2] == '0' then
                         return langs[msg.lang].neverWarn
                     else
-                        return txt
+                        return langs[msg.lang].warnSet .. matches[2]
                     end
                 else
                     return langs[msg.lang].require_mod
