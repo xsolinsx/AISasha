@@ -3010,21 +3010,11 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == 'setwarn' and matches[2] then
                 if is_momod(msg) then
-                    print('in')
-                    if tonumber(matches[2]) < 0 or tonumber(matches[2]) > 10 then
-                        print('error')
-                        return langs[msg.lang].errorWarnRange
-                    end
-                    print(matches[2])
-                    data[tostring(msg.to.id)]['settings']['warn_max'] = matches[2]
-                    print(data[tostring(msg.to.id)]['settings']['warn_max'])
-                    save_data(_config.moderation.data, data)
-                    print(data[tostring(msg.to.id)]['settings']['warn_max'])
-                    savelog(msg.to.id, " [" .. msg.from.id .. "] set warn to [" .. matches[2] .. "]")
+                    local txt = set_warn(msg.from.id, msg.to.id, matches[2])
                     if matches[2] == '0' then
                         return langs[msg.lang].neverWarn
                     else
-                        return langs[msg.lang].warnSet .. matches[2]
+                        return txt
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -3596,6 +3586,25 @@ local function run(msg, matches)
                         save_data(_config.moderation.data, data)
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set flood to [" .. matches[2] .. "]")
                         return langs[msg.lang].floodSet .. matches[2]
+                    else
+                        return langs[msg.lang].require_mod
+                    end
+                end
+                if matches[1]:lower() == 'setwarn' and matches[2] then
+                    if is_momod(msg) then
+                        local txt = set_warn(msg.from.id, msg.to.id, matches[2])
+                        if matches[2] == '0' then
+                            return langs[msg.lang].neverWarn
+                        else
+                            return txt
+                        end
+                    else
+                        return langs[msg.lang].require_mod
+                    end
+                end
+                if matches[1]:lower() == 'getwarn' then
+                    if is_momod(msg) then
+                        return get_warn(msg.to.id)
                     else
                         return langs[msg.lang].require_mod
                     end

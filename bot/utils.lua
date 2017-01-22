@@ -1018,6 +1018,18 @@ function is_momod2(user_id, group_id)
     return var
 end
 
+function set_warn(user_id, chat_id, value)
+    local lang = get_lang(chat_id)
+    if tonumber(value) < 0 or tonumber(value) > 10 then
+        return langs[lang].errorWarnRange
+    end
+    local warn_max = value
+    data[tostring(chat_id)]['settings']['warn_max'] = warn_max
+    save_data(_config.moderation.data, data)
+    savelog(chat_id, " [" .. user_id .. "] set warn to [" .. value .. "]")
+    return langs[lang].warnSet .. value
+end
+
 function get_warn(chat_id)
     local lang = get_lang(chat_id)
     local warn_max = data[tostring(chat_id)]['settings']['warn_max']
