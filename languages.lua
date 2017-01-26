@@ -1317,7 +1317,7 @@ return {
             '🅿️ TAGALL',
             'Plugin per taggare tutti i membri con un username.',
             'OWNER',
-            '(#tagall|sasha tagga tutti) <text>: Sasha tagga tutti i membri del gruppo con username e scrive <text>.',
+            '(#tagall|sasha tagga tutti) <text>: Sasha scrive <text> e tagga tutti i membri del gruppo con username.',
         },
 
         tempmessage =
@@ -2481,7 +2481,7 @@ return {
             '🅿️ TAGALL',
             'Plugin to tag all users with username.',
             'OWNER',
-            '(#tagall|sasha tagga tutti) <text>: Sasha tags all group\'s members and writes <text>.',
+            '(#tagall|sasha tagga tutti) <text>: Sasha writes <text> tags all group\'s members.',
         },
 
         tempmessage =

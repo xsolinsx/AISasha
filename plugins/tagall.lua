@@ -25,18 +25,20 @@ local function tagall_channel(extra, success, result)
 end
 
 local function run(msg, matches)
-    if is_owner(msg) then
-        if matches[1] then
-            if msg.to.type == 'chat' then
-                local receiver = 'chat#id' .. msg.to.id
-                chat_info(receiver, tagall_chat, { chat_id = msg.to.id, msg_text = matches[1] })
-            elseif msg.to.type == 'channel' then
-                local chan =("%s#id%s"):format(msg.to.type, msg.to.id)
-                channel_get_users(chan, tagall_channel, { chat_id = msg.to.id, msg_text = matches[1] })
+    if not msg.api_patch then
+        if is_owner(msg) then
+            if matches[1] then
+                if msg.to.type == 'chat' then
+                    local receiver = 'chat#id' .. msg.to.id
+                    chat_info(receiver, tagall_chat, { chat_id = msg.to.id, msg_text = matches[1] })
+                elseif msg.to.type == 'channel' then
+                    local chan =("%s#id%s"):format(msg.to.type, msg.to.id)
+                    channel_get_users(chan, tagall_channel, { chat_id = msg.to.id, msg_text = matches[1] })
+                end
             end
+        else
+            return langs[msg.lang].require_owner
         end
-    else
-        return langs[msg.lang].require_owner
     end
 end
 
