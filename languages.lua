@@ -433,6 +433,7 @@ return {
         aliasSaved = 'Alias salvato.',
         aliasDeleted = 'Alias eliminato.',
         noAliasFound = 'Nessun gruppo trovato con quell\'alias.',
+        ok = 'Ok.',
         -- ex inrealm.lua --
         none = 'Nessuno',
         realm = 'Regno ',
@@ -1632,6 +1633,7 @@ return {
         aliasSaved = 'Alias saved.',
         aliasDeleted = 'Alias deleted.',
         noAliasFound = 'No group with that alias.',
+        ok = 'Ok.',
         -- ex inrealm.lua --
         none = 'No one',
         realm = 'Realm ',

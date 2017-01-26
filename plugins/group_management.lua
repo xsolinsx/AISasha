@@ -1970,13 +1970,15 @@ local function run(msg, matches)
                         return langs[msg.lang].chatNotFound
                     end
                     chat_add_user('chat#id' .. matches[2], 'user#id' .. msg.from.id, ok_cb, false)
-                    return channel_invite('channel#id' .. matches[2], 'user#id' .. msg.from.id, ok_cb, false)
+                    channel_invite('channel#id' .. matches[2], 'user#id' .. msg.from.id, ok_cb, false)
+                    return send_large_msg(get_receiver(msg), langs[msg.lang].ok)
                 else
                     local hash = 'groupalias'
                     local value = redis:hget(hash, matches[2]:lower())
                     if value then
                         chat_add_user('chat#id' .. value, 'user#id' .. msg.from.id, ok_cb, false)
-                        return channel_invite('channel#id' .. value, 'user#id' .. msg.from.id, ok_cb, false)
+                        channel_invite('channel#id' .. value, 'user#id' .. msg.from.id, ok_cb, false)
+                        return send_large_msg(get_receiver(msg), langs[msg.lang].ok)
                     else
                         return langs[msg.lang].noAliasFound
                     end
