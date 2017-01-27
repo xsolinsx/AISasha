@@ -898,6 +898,7 @@ return {
             'Plugin per la gestione dei gruppi.',
             -- COMMON
             'USER',
+            '#getwarn: Sasha manda il numero di avvertimenti massimi.',
             '(#rules|sasha regole): Sasha mostra le regole del gruppo.',
             '(#about|sasha descrizione): Sasha mostra la descrizione del gruppo.',
             '(#modlist|[sasha] lista mod): Sasha mostra la lista dei moderatori.',
@@ -917,7 +918,6 @@ return {
             '(#newlink|sasha crea link): Sasha crea il link del gruppo.',
             '#setflood <value>: Sasha imposta il flood massimo del gruppo a <value>.',
             '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>, se zero gli avvertimenti non funzioneranno più.',
-            '#getwarn: Sasha manda il numero di avvertimenti massimi.',
             '(#lock|[sasha] blocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha blocca l\'impostazione specificata.',
             '(#unlock|[sasha] sblocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha sblocca l\'impostazione specificata.',
             'SUPERGRUPPI',
@@ -2019,6 +2019,7 @@ return {
             'Plugin for the management of groups.',
             -- COMMON
             'USER',
+            '#getwarn: Sasha sends max warns value.',
             '(#rules|sasha regole): Sasha sends group\'s rules.',
             '(#about|sasha descrizione): Sasha sends group\'s about.',
             '(#modlist|[sasha] lista mod): Sasha sends moderators list.',
@@ -2038,7 +2039,6 @@ return {
             '(#newlink|sasha crea link): Sasha creates group\'s link.',
             '#setflood <value>: Sasha sets <value> as max flood.',
             '#setwarn <value>: Sasha sets max warns to <value>, if zero warns will not work.',
-            '#getwarn: Sasha sends max warns value.',
             '(#lock|[sasha] blocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha locks specified setting.',
             '(#unlock|[sasha] sblocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha unlocks specified setting.',
             'SUPERGROUPS',

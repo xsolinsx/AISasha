@@ -2428,11 +2428,7 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == 'getwarn' then
-                if is_momod(msg) then
-                    return get_warn(msg.to.id)
-                else
-                    return langs[msg.lang].require_mod
-                end
+                return get_warn(msg.to.id)
             end
         end
         if matches[1]:lower() == 'clean' then
@@ -2940,11 +2936,7 @@ local function run(msg, matches)
                     end
                 end
                 if matches[1]:lower() == 'getwarn' then
-                    if is_momod(msg) then
-                        return get_warn(msg.to.id)
-                    else
-                        return langs[msg.lang].require_mod
-                    end
+                    return get_warn(msg.to.id)
                 end
             end
             if matches[1]:lower() == 'mute' or matches[1]:lower() == 'silenzia' then
@@ -3283,6 +3275,7 @@ return {
     syntax =
     {
         "USER",
+        "#getwarn",
         "(#rules|sasha regole)",
         "(#about|sasha descrizione)",
         "(#modlist|[sasha] lista mod)",
@@ -3302,7 +3295,6 @@ return {
         "(#newlink|sasha crea link)",
         "#setflood <value>",
         "#setwarn <value>",
-        "#getwarn",
         "(#lock|[sasha] blocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
         "(#unlock|[sasha] sblocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
         "SUPERGROUPS",
