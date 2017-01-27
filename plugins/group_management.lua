@@ -2361,15 +2361,20 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == 'link' or matches[1]:lower() == 'sasha link' then
-                if is_momod(msg) then
-                    local group_link = data[tostring(msg.to.id)].settings['set_link']
-                    if not group_link then
-                        return langs[msg.lang].createLinkInfo
+                if data[tostring(msg.chat.id)].settings.set_link then
+                    if data[tostring(msg.chat.id)].settings.lock_group_link then
+                        if msg.from.is_mod then
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.chat.id)].settings.set_link .. "]")
+                            return msg.to.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
+                        else
+                            return langs[msg.lang].require_mod
+                        end
+                    else
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.chat.id)].settings.set_link .. "]")
+                        return msg.chat.title .. '\n' .. data[tostring(msg.chat.id)].settings.set_link
                     end
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
-                    return msg.to.title .. '\n' .. group_link
                 else
-                    return langs[msg.lang].require_mod
+                    return langs[msg.lang].sendMeLink
                 end
             end
             if matches[1]:lower() == 'owner' then
@@ -2611,15 +2616,20 @@ local function run(msg, matches)
                     end
                 end
                 if matches[1]:lower() == 'link' or matches[1]:lower() == "sasha link" then
-                    if is_momod(msg) then
-                        local group_link = data[tostring(msg.to.id)].settings['set_link']
-                        if not group_link then
-                            return langs[msg.lang].createLinkInfo
+                    if data[tostring(msg.chat.id)].settings.set_link then
+                        if data[tostring(msg.chat.id)].settings.lock_group_link then
+                            if msg.from.is_mod then
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.chat.id)].settings.set_link .. "]")
+                                return msg.to.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
+                            else
+                                return langs[msg.lang].require_mod
+                            end
+                        else
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.chat.id)].settings.set_link .. "]")
+                            return msg.chat.title .. '\n' .. data[tostring(msg.chat.id)].settings.set_link
                         end
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. group_link .. "]")
-                        return msg.to.title .. '\n' .. group_link
                     else
-                        return langs[msg.lang].require_mod
+                        return langs[msg.lang].sendMeLink
                     end
                 end
             end
@@ -3293,22 +3303,19 @@ return {
         "#setflood <value>",
         "#setwarn <value>",
         "#getwarn",
-        "GROUPS",
-        "(#lock|[sasha] blocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts",
-        "(#unlock|[sasha] sblocca) name|member|photo|flood|arabic|bots|leave|links|rtl|sticker|contacts",
+        "(#lock|[sasha] blocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
+        "(#unlock|[sasha] sblocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
         "SUPERGROUPS",
         "(#bots|[sasha] lista bot)",
         "#del <reply>",
-        "(#lock|[sasha] blocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict",
-        "(#unlock|[sasha] sblocca) links|spam|flood|arabic|member|rtl|tgservice|sticker|contacts|strict",
         "OWNER",
         "#log",
         "(#setlink|sasha imposta link) <link>",
         "(#unsetlink|sasha elimina link)",
         "(#promote|[sasha] promuovi) <username>|<reply>",
         "(#demote|[sasha] degrada) <username>|<reply>",
-        "#mute|silenzia all|text|documents|gifs|video|photo|audio",
-        "#unmute|ripristina all|text|documents|gifs|video|photo|audio",
+        "#mute|silenzia all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|voice",
+        "#unmute|ripristina all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|voice",
         "#setowner <id>|<username>|<reply>",
         "GROUPS",
         "#clean modlist|rules|about",
