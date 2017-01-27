@@ -200,14 +200,14 @@ local function run(msg, matches)
                 send_large_msg("user#id" .. matches[2], matches[3])
                 return langs[msg.lang].pmSent
             end
-            if matches[1]:lower() == "pmblock" or matches[1]:lower() == "sasha blocca" then
+            if matches[1]:lower() == "pmblock" or matches[1]:lower() == "sasha blocca pm" then
                 if is_admin2(matches[2]) then
                     return langs[msg.lang].cantBlockAdmin
                 end
                 block_user("user#id" .. matches[2], ok_cb, false)
                 return langs[msg.lang].userBlocked
             end
-            if matches[1]:lower() == "pmunblock" or matches[1]:lower() == "sasha sblocca" then
+            if matches[1]:lower() == "pmunblock" or matches[1]:lower() == "sasha sblocca pm" then
                 unblock_user("user#id" .. matches[2], ok_cb, false)
                 return langs[msg.lang].userUnblocked
             end
@@ -389,9 +389,9 @@ return {
         -- pm
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii][Aa]) (%d+) (.*)$",
         -- pmunblock
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (%d+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Bb][Ll][Oo][Cc][Cc][Aa] [Pp][Mm]) (%d+)$",
         -- pmblock
-        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Ll][Oo][Cc][Cc][Aa]) (%d+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Ll][Oo][Cc][Cc][Aa] [Pp][Mm]) (%d+)$",
         -- markread
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ee][Gg][Nn][Aa] [Ll][Ee][Tt][Tt][Oo]) ([Oo][Nn])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ee][Gg][Nn][Aa] [Ll][Ee][Tt][Tt][Oo]) ([Oo][Ff][Ff])$",
@@ -439,8 +439,8 @@ return {
         "ADMIN",
         "(#pm|sasha messaggia) <user_id> <msg>",
         "#import <group_link>",
-        "(#block|sasha blocca) <user_id>",
-        "(#unblock|sasha sblocca) <user_id>",
+        "(#pmblock|sasha blocca pm) <user_id>",
+        "(#pmunblock|sasha sblocca pm) <user_id>",
         "(#markread|sasha segna letto) (on|off)",
         "(#setbotphoto|sasha cambia foto)",
         "(#updateid|sasha aggiorna longid)",
