@@ -1249,7 +1249,7 @@ function has_mutes(chat_id)
             return true
         end
     end
-    if setMutes(chat_id) then
+    if set_mutes(chat_id) then
         return true
     else
         return false
@@ -1259,7 +1259,7 @@ end
 function is_muted(chat_id, msg_type)
     if data[tostring(chat_id)] then
         if data[tostring(chat_id)].settings then
-            if hasMutes(chat_id) then
+            if has_mutes(chat_id) then
                 if data[tostring(chat_id)].settings.mutes[msg_type:lower()] ~= nil then
                     return data[tostring(chat_id)].settings.mutes[msg_type:lower()]
                 end
@@ -1273,7 +1273,7 @@ function mute(chat_id, msg_type)
     local lang = get_lang(chat_id)
     if data[tostring(chat_id)] then
         if data[tostring(chat_id)].settings then
-            if hasMutes(chat_id) then
+            if has_mutes(chat_id) then
                 if data[tostring(chat_id)].settings.mutes[msg_type:lower()] ~= nil then
                     if data[tostring(chat_id)].settings.mutes[msg_type:lower()] then
                         return msg_type:lower() .. langs[lang].alreadyMuted
@@ -1294,7 +1294,7 @@ function unmute(chat_id, msg_type)
     local lang = get_lang(chat_id)
     if data[tostring(chat_id)] then
         if data[tostring(chat_id)].settings then
-            if hasMutes(chat_id) then
+            if has_mutes(chat_id) then
                 if data[tostring(chat_id)].settings.mutes[msg_type:lower()] ~= nil then
                     if data[tostring(chat_id)].settings.mutes[msg_type:lower()] then
                         data[tostring(chat_id)].settings.mutes[msg_type:lower()] = false
