@@ -40,7 +40,7 @@ local function run(msg, matches)
     end
     if (matches[1]:lower() == 'delword' or matches[1]:lower() == 'sasha censura' or matches[1]:lower() == 'censura') and matches[2] then
         if is_momod(msg) then
-            return setunset_delword(msg, matches[2])
+            return setunset_delword(msg, matches[2]:lower())
         else
             return langs[msg.lang].require_mod
         end
