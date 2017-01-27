@@ -2374,7 +2374,7 @@ local function run(msg, matches)
                         end
                     else
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.to.id)].settings.set_link .. "]")
-                        return msg.chat.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
+                        return msg.to.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
                     end
                 else
                     return langs[msg.lang].sendMeLink
@@ -2625,7 +2625,7 @@ local function run(msg, matches)
                             end
                         else
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.to.id)].settings.set_link .. "]")
-                            return msg.chat.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
+                            return msg.to.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
                         end
                     else
                         return langs[msg.lang].sendMeLink

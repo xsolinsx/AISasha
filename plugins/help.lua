@@ -243,7 +243,6 @@ local function run(msg, matches)
             send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. syntax_all(get_receiver(msg), get_rank(msg.from.id, msg.to.id)))
         end
         if matches[1]:lower() == "syntax" or matches[1]:lower() == "sasha sintassi" and matches[2] then
-            mystat('/syntax <command>')
             matches[2] = matches[2]:gsub('[#!/]', '#')
             local text = syntax_all(get_receiver(msg), get_rank(msg.from.id, msg.to.id), matches[2])
             if text == '' then
