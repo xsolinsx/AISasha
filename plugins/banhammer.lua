@@ -1141,7 +1141,7 @@ local function pre_process(msg)
                     end
                 end
                 if msg.action.user.username ~= nil then
-                    if string.sub(msg.action.user.username:lower(), -3) == 'bot' and not is_momod(msg) and bots_protection == "yes" then
+                    if string.sub(msg.action.user.username:lower(), -3) == 'bot' and not is_momod(msg) and bots_protection then
                         --- Will kick bots added by normal users
                         local print_name = user_print_name(msg.from):gsub("‮", "")
                         local name = print_name:gsub("_", "")

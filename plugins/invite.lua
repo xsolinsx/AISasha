@@ -31,7 +31,7 @@ local function run(msg, matches)
     if is_admin1(msg) then
         local receiver = get_receiver(msg)
         if not is_realm(msg) then
-            if data[tostring(msg.to.id)]['settings']['lock_member'] == 'yes' and not is_admin1(msg) then
+            if data[tostring(msg.to.id)]['settings']['lock_member'] and not is_admin1(msg) then
                 return langs[msg.lang].privateGroup
             end
         end

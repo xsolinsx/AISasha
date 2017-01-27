@@ -55,7 +55,7 @@ local function pre_process(msg)
     -- Load moderation data
     if data[tostring(msg.to.id)] then
         -- Check if flood is on or off
-        if data[tostring(msg.to.id)]['settings']['flood'] == 'no' then
+        if data[tostring(msg.to.id)].settings.flood then
             return msg
         end
     end

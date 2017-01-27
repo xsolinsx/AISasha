@@ -1233,55 +1233,82 @@ end
 
 -- Begin Chat Mutes
 function set_mutes(chat_id)
-    mutes = { [1] = "Audio: no", [2] = "Photo: no", [3] = "All: no", [4] = "Documents: no", [5] = "Text: no", [6] = "Video: no", [7] = "Gifs: no" }
-    local hash = 'mute:' .. chat_id
-    for k, v in pairsByKeys(mutes) do
-        setting = v
-        redis:sadd(hash, setting)
+    local lang = get_lang(chat_id)
+    if data[tostring(chat_id)] then
+        if data[tostring(chat_id)].settings then
+            data[tostring(chat_id)].settings.mutes = { ["all"] = false, ["audio"] = false, ["contact"] = false, ["document"] = false, ["gif"] = false, ["location"] = false, ["photo"] = false, ["sticker"] = false, ["text"] = false, ["tgservice"] = false, ["video"] = false, ["voice"] = false }
+            save_data(config.moderation.data, data)
+            return langs[lang].mutesSet
+        end
     end
 end
 
 function has_mutes(chat_id)
-    mutes = { [1] = "Audio: no", [2] = "Photo: no", [3] = "All: no", [4] = "Documents: no", [5] = "Text: no", [6] = "Video: no", [7] = "Gifs: no" }
-    local hash = 'mute:' .. chat_id
-    for k, v in pairsByKeys(mutes) do
-        setting = v
-        local has_mutes = redis:sismember(hash, setting)
-        return has_mutes or false
+    if data[tostring(chat_id)] then
+        if data[tostring(chat_id)].settings.mutes then
+            return true
+        end
+    end
+    if setMutes(chat_id) then
+        return true
+    else
+        return false
     end
 end
 
-function rem_mutes(chat_id)
-    local hash = 'mute:' .. chat_id
-    redis:del(hash)
+function is_muted(chat_id, msg_type)
+    if data[tostring(chat_id)] then
+        if data[tostring(chat_id)].settings then
+            if hasMutes(chat_id) then
+                if data[tostring(chat_id)].settings.mutes[msg_type:lower()] ~= nil then
+                    return data[tostring(chat_id)].settings.mutes[msg_type:lower()]
+                end
+            end
+        end
+    end
+    return false
 end
 
 function mute(chat_id, msg_type)
-    local hash = 'mute:' .. chat_id
-    local yes = "yes"
-    local no = 'no'
-    local old_setting = msg_type .. ': ' .. no
-    local setting = msg_type .. ': ' .. yes
-    redis:srem(hash, old_setting)
-    redis:sadd(hash, setting)
-end
-
-function is_muted(chat_id, msg_type)
-    local hash = 'mute:' .. chat_id
-    local setting = msg_type
-    local muted = redis:sismember(hash, setting)
-    return muted or false
+    local lang = get_lang(chat_id)
+    if data[tostring(chat_id)] then
+        if data[tostring(chat_id)].settings then
+            if hasMutes(chat_id) then
+                if data[tostring(chat_id)].settings.mutes[msg_type:lower()] ~= nil then
+                    if data[tostring(chat_id)].settings.mutes[msg_type:lower()] then
+                        return msg_type:lower() .. langs[lang].alreadyMuted
+                    else
+                        data[tostring(chat_id)].settings.mutes[msg_type:lower()] = true
+                        save_data(config.moderation.data, data)
+                        return msg_type:lower() .. langs[lang].muted
+                    end
+                else
+                    return langs[lang].noSuchMuteType
+                end
+            end
+        end
+    end
 end
 
 function unmute(chat_id, msg_type)
-    -- Save on redis
-    local hash = 'mute:' .. chat_id
-    local yes = 'yes'
-    local no = 'no'
-    local old_setting = msg_type .. ': ' .. yes
-    local setting = msg_type .. ': ' .. no
-    redis:srem(hash, old_setting)
-    redis:sadd(hash, setting)
+    local lang = get_lang(chat_id)
+    if data[tostring(chat_id)] then
+        if data[tostring(chat_id)].settings then
+            if hasMutes(chat_id) then
+                if data[tostring(chat_id)].settings.mutes[msg_type:lower()] ~= nil then
+                    if data[tostring(chat_id)].settings.mutes[msg_type:lower()] then
+                        data[tostring(chat_id)].settings.mutes[msg_type:lower()] = false
+                        save_data(config.moderation.data, data)
+                        return msg_type:lower() .. langs[lang].unmuted
+                    else
+                        return msg_type:lower() .. langs[lang].alreadyUnmuted
+                    end
+                else
+                    return langs[lang].noSuchMuteType
+                end
+            end
+        end
+    end
 end
 
 function mute_user(chat_id, user_id)
