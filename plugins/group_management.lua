@@ -1881,17 +1881,20 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == 'settings' and data[tostring(matches[2])].settings then
-                if is_admin1(msg) then
-                    return showSettings(matches[2], msg.lang)
+                if matches[2] then
+                    if data[tostring(matches[2])].settings then
+                        if is_admin1(msg) then
+                            return showSettings(matches[2], msg.lang)
+                        else
+                            return langs[msg.lang].require_admin
+                        end
+                    end
                 else
-                    return langs[msg.lang].require_admin
-                end
-            end
-            if matches[1]:lower() == 'supersettings' and data[tostring(matches[2])].settings then
-                if is_admin1(msg) then
-                    return showSettings(matches[2], msg.lang)
-                else
-                    return langs[msg.lang].require_admin
+                    if is_momod(msg) then
+                        return showSettings(msg.to.id, msg.lang)
+                    else
+                        return langs[msg.lang].require_mod
+                    end
                 end
             end
             if matches[1]:lower() == 'setgprules' then
