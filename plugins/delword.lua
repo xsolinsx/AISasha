@@ -35,14 +35,16 @@ local function list_censorships(msg)
 end
 
 local function run(msg, matches)
-    if matches[1]:lower() == 'dellist' or matches[1]:lower() == 'sasha lista censure' or matches[1]:lower() == 'lista censure' then
-        return list_censorships(msg)
-    end
-    if (matches[1]:lower() == 'delword' or matches[1]:lower() == 'sasha censura' or matches[1]:lower() == 'censura') and matches[2] then
-        if is_momod(msg) then
-            return setunset_delword(msg, matches[2]:lower())
-        else
-            return langs[msg.lang].require_mod
+    if not msg.api_patch then
+        if matches[1]:lower() == 'dellist' or matches[1]:lower() == 'sasha lista censure' or matches[1]:lower() == 'lista censure' then
+            return list_censorships(msg)
+        end
+        if (matches[1]:lower() == 'delword' or matches[1]:lower() == 'sasha censura' or matches[1]:lower() == 'censura') and matches[2] then
+            if is_momod(msg) then
+                return setunset_delword(msg, matches[2]:lower())
+            else
+                return langs[msg.lang].require_mod
+            end
         end
     end
 end
