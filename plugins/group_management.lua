@@ -1880,7 +1880,7 @@ local function run(msg, matches)
                     return langs[msg.lang].require_admin
                 end
             end
-            if matches[1]:lower() == 'settings' and data[tostring(matches[2])].settings then
+            if matches[1]:lower() == 'settings' then
                 if matches[2] then
                     if data[tostring(matches[2])].settings then
                         if is_admin1(msg) then
