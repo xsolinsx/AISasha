@@ -1237,7 +1237,7 @@ function set_mutes(chat_id)
     if data[tostring(chat_id)] then
         if data[tostring(chat_id)].settings then
             data[tostring(chat_id)].settings.mutes = { ["all"] = false, ["audio"] = false, ["contact"] = false, ["document"] = false, ["gif"] = false, ["location"] = false, ["photo"] = false, ["sticker"] = false, ["text"] = false, ["tgservice"] = false, ["video"] = false, ["voice"] = false }
-            save_data(config.moderation.data, data)
+            save_data(_config.moderation.data, data)
             return langs[lang].mutesSet
         end
     end
@@ -1279,7 +1279,7 @@ function mute(chat_id, msg_type)
                         return msg_type:lower() .. langs[lang].alreadyMuted
                     else
                         data[tostring(chat_id)].settings.mutes[msg_type:lower()] = true
-                        save_data(config.moderation.data, data)
+                        save_data(_config.moderation.data, data)
                         return msg_type:lower() .. langs[lang].muted
                     end
                 else
@@ -1298,7 +1298,7 @@ function unmute(chat_id, msg_type)
                 if data[tostring(chat_id)].settings.mutes[msg_type:lower()] ~= nil then
                     if data[tostring(chat_id)].settings.mutes[msg_type:lower()] then
                         data[tostring(chat_id)].settings.mutes[msg_type:lower()] = false
-                        save_data(config.moderation.data, data)
+                        save_data(_config.moderation.data, data)
                         return msg_type:lower() .. langs[lang].unmuted
                     else
                         return msg_type:lower() .. langs[lang].alreadyUnmuted
