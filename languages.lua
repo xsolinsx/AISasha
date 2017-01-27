@@ -800,7 +800,8 @@ return {
             'Plugin per la censura delle parole.',
             'USER',
             '(#dellist|[sasha] lista censura): Sasha manda una lista di parole o pattern censurati.',
-            'OWNER',
+            'MOD',
+            'Per maggiori informazioni sui patterns vedi lua.org/pil/20.2.html',
             '(#delword|[sasha] censura) <word>|<pattern>: Sasha mette|toglie una censura su <word>|<pattern>, quando verrà scritta una cosa censurata nei supergruppi Sasha eliminerà il messaggio mentre nei gruppi rimuoverà il membro.',
         },
 
@@ -1147,11 +1148,11 @@ return {
             '🅿️ QR',
             'Plugin per creare QR Code.',
             'USER',
-            '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha crea il QR Code di <text>, se specificato colora il QR Code.',
             'I colori possono essere specificati come segue:',
             'Testo => red|green|blue|purple|black|white|gray.',
             'Notazione Esadecimale => ("a56729" è marrone).',
             'Notazione Decimale => ("255-192-203" è rosa).',
+            '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha crea il QR Code di <text>, se specificato colora il QR Code.',
         },
 
         reactions =
@@ -1199,6 +1200,7 @@ return {
             '🅿️ SET',
             'Plugin per salvare cose.',
             'MOD',
+            'Per settare una frase usare "_" al posto di " ".',
             '(#set|[sasha] setta) <var_name> <text>: Sasha salva <text> come risposta a <var_name>.',
             '(#setmedia|[sasha] setta media) <var_name>: Sasha salva il media (foto o audio) che le verrà inviato come risposta a <var_name>.',
             '(#cancel|[sasha] annulla): Sasha annulla un #setmedia.',
@@ -1921,7 +1923,8 @@ return {
             'Plugin for the management of censorships.',
             'USER',
             '(#dellist|[sasha] lista censura): Sasha sends a list of censored words or patterns.',
-            'OWNER',
+            'MOD',
+            'For more information on patterns see lua.org/pil/20.2.html',
             '(#delword|[sasha] censura) <word>|<pattern>: Sasha puts|removes a censorship on <word>|<pattern>, when someone writes it in supergroups the message is deleted and in normal groups the user is kicked.',
         },
 
@@ -2255,11 +2258,11 @@ return {
             '🅿️ QR',
             'Plugin to create QR Codes.',
             'USER',
-            '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha creates QR Code of <text>, if specified it colors QR Code.',
             'Colors can be specified as follows:',
             'Text => red|green|blue|purple|black|white|gray.',
-            'Hexadecimal => ("a56729" è marrone).',
-            'Decimal => ("255-192-203" è rosa).',
+            'Hexadecimal => ("a56729" it\'s brown).',
+            'Decimal => ("255-192-203" it\'s pink).',
+            '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha creates QR Code of <text>, if specified it colors QR Code.',
         },
 
         reactions =
@@ -2307,6 +2310,7 @@ return {
             '🅿️ SET',
             'Plugin to save things.',
             'MOD',
+            'To set a phrase use "_" instead of " ".',
             '(#set|[sasha] setta) <var_name> <text>: Sasha saves <text> as answer to <var_name>.',
             '(#setmedia|[sasha] setta media) <var_name>: Sasha saves the media (audio or picture) that will be sent as answer to <var_name>.',
             '(#cancel|[sasha] annulla): Sasha cancels #setmedia.',
