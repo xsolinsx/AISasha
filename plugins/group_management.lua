@@ -2364,17 +2364,17 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == 'link' or matches[1]:lower() == 'sasha link' then
-                if data[tostring(msg.chat.id)].settings.set_link then
-                    if data[tostring(msg.chat.id)].settings.lock_group_link then
+                if data[tostring(msg.to.id)].settings.set_link then
+                    if data[tostring(msg.to.id)].settings.lock_group_link then
                         if msg.from.is_mod then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.chat.id)].settings.set_link .. "]")
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.to.id)].settings.set_link .. "]")
                             return msg.to.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
                         else
                             return langs[msg.lang].require_mod
                         end
                     else
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.chat.id)].settings.set_link .. "]")
-                        return msg.chat.title .. '\n' .. data[tostring(msg.chat.id)].settings.set_link
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.to.id)].settings.set_link .. "]")
+                        return msg.chat.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
                     end
                 else
                     return langs[msg.lang].sendMeLink
@@ -2615,17 +2615,17 @@ local function run(msg, matches)
                     end
                 end
                 if matches[1]:lower() == 'link' or matches[1]:lower() == "sasha link" then
-                    if data[tostring(msg.chat.id)].settings.set_link then
-                        if data[tostring(msg.chat.id)].settings.lock_group_link then
+                    if data[tostring(msg.to.id)].settings.set_link then
+                        if data[tostring(msg.to.id)].settings.lock_group_link then
                             if msg.from.is_mod then
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.chat.id)].settings.set_link .. "]")
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.to.id)].settings.set_link .. "]")
                                 return msg.to.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
                             else
                                 return langs[msg.lang].require_mod
                             end
                         else
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.chat.id)].settings.set_link .. "]")
-                            return msg.chat.title .. '\n' .. data[tostring(msg.chat.id)].settings.set_link
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.to.id)].settings.set_link .. "]")
+                            return msg.chat.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
                         end
                     else
                         return langs[msg.lang].sendMeLink
