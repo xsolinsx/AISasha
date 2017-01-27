@@ -352,7 +352,6 @@ local function showSettings(target, lang)
             langs[lang].botsLock .. tostring(settings.lock_bots) ..
             langs[lang].floodLock .. tostring(settings.flood) ..
             langs[lang].floodSensibility .. tostring(settings.flood_max) ..
-            --
             langs[lang].grouplinkLock .. tostring(settings.lock_group_link) ..
             langs[lang].leaveLock .. tostring(settings.lock_leave) ..
             langs[lang].linksLock .. tostring(settings.lock_link) ..
