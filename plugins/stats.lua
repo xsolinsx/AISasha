@@ -12,7 +12,7 @@ end
 
 -- Returns chat's total messages
 local function get_msgs_chat(chat_id)
-    local hash = 'chatmsgs:' .. msg.to.tg_cli_id
+    local hash = 'chatmsgs:' .. chat_id
     local msgs = redis:get(hash)
     if not msgs then
         return 0
