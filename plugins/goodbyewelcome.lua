@@ -118,6 +118,13 @@ local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
             goodbyewelcome = goodbyewelcome:gsub('$username', 'NO USERNAME')
         end
     end
+    if string.find(goodbyewelcome, '$grouplink') then
+        if data[tostring(chat.id)].settings.set_link then
+            goodbyewelcome = goodbyewelcome:gsub('$grouplink', data[tostring(chat.id)].settings.set_link)
+        else
+            goodbyewelcome = goodbyewelcome:gsub('$grouplink', 'NO GROUP LINK SET')
+        end
+    end
     return goodbyewelcome
 end
 

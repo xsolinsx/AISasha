@@ -196,10 +196,10 @@ return {
     syntax =
     {
         "MOD",
-        "(#set|[sasha] setta) <var_name> <text>",
-        "(#setmedia|[sasha] setta media) <var_name>",
+        "(#set|[sasha] setta) <var_name>|<pattern> <text>",
+        "(#setmedia|[sasha] setta media) <var_name>|<pattern>",
         "(#cancel|[sasha] annulla)",
         "ADMIN",
-        "#setglobal <var_name> <text>",
+        "#setglobal <var_name>|<pattern> <text>",
     },
 }

@@ -67,8 +67,8 @@ return {
     syntax =
     {
         "MOD",
-        "(#unset|[sasha] unsetta) <var_name>",
+        "(#unset|[sasha] unsetta) <var_name>|<pattern>",
         "ADMIN",
-        "#unsetglobal <var_name>",
+        "#unsetglobal <var_name>|<pattern>",
     },
 }
