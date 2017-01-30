@@ -2366,7 +2366,7 @@ local function run(msg, matches)
             if matches[1]:lower() == 'link' or matches[1]:lower() == 'sasha link' then
                 if data[tostring(msg.to.id)].settings.set_link then
                     if data[tostring(msg.to.id)].settings.lock_group_link then
-                        if msg.from.is_mod then
+                        if is_momod(msg) then
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.to.id)].settings.set_link .. "]")
                             return msg.to.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
                         else
@@ -2617,7 +2617,7 @@ local function run(msg, matches)
                 if matches[1]:lower() == 'link' or matches[1]:lower() == "sasha link" then
                     if data[tostring(msg.to.id)].settings.set_link then
                         if data[tostring(msg.to.id)].settings.lock_group_link then
-                            if msg.from.is_mod then
+                            if is_momod(msg) then
                                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group link [" .. data[tostring(msg.to.id)].settings.set_link .. "]")
                                 return msg.to.title .. '\n' .. data[tostring(msg.to.id)].settings.set_link
                             else
