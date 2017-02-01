@@ -279,6 +279,15 @@ return {
         sendMeMedia = 'Mandami ora il media che vuoi che io inoltri.',
         mediaForwarded = 'Media inoltrato.',
 
+        -- check_tag.lua --
+        tagalertGroupEnabled = 'Tagalert abilitato su questo gruppo.',
+        tagalertGroupDisabled = 'Tagalert disabilitato su questo gruppo.',
+        tagalertUserRegistered = 'Registrazione a tagalert effettuata.',
+        tagalertUserUnregistered = 'Deregistrazione a tagalert effettuata.',
+        tagalertNicknameSet = 'Nickname alternativo impostato.',
+        tagalertNicknameUnset = 'Nickname alternativo eliminato.',
+        tagalertRegistrationNeeded = 'Registrazione a tagalert necessaria.',
+
         -- database.lua --
         dbCreated = 'Database creato.',
         dataLeaked = 'Data leaked.',
@@ -778,6 +787,20 @@ return {
             'SUDO',
             '#broadcast <text>: Sasha invia <text> a tutti i gruppi.',
         },
+
+        --[[check_tag =
+        {
+            '🅿️ CHECK_TAG',
+            'Plugin per mandare le notifiche di tags (NOTIFICHE ABILITATE ANCHE PER GLI UTENTI ESTERNI AL GRUPPO).',
+            'USER',
+            '#registertagalert: Sasha ti registra al tagalert, se non hai un username setta un nickname.',
+            '#unregistertagalert: Sasha elimina la tua registrazione.',
+            '#setnickname <nickname>: Sasha imposta <nickname> come alternativa all\'username.',
+            '#unsetnickname: Sasha elimina il tuo nickname (rimani registrato).',
+            'OWNER',
+            '#enabletagalert: Sasha abilita la funzione per il gruppo (disabilitata per default).',
+            '#disabletagalert: Sasha disabilita la funzione per il gruppo.',
+        },]]
 
         database =
         {
@@ -1428,6 +1451,15 @@ return {
         sendMeMedia = 'Send me the media you want me to forward.',
         mediaForwarded = 'Media forwarded.',
 
+        -- check_tag.lua --
+        tagalertGroupEnabled = 'Tagalert enabled on this group.',
+        tagalertGroupDisabled = 'Tagalert disabled on this group.',
+        tagalertUserRegistered = 'Registration to tagalert completed.',
+        tagalertUserUnregistered = 'Unregistration to tagalert completed.',
+        tagalertNicknameSet = 'Alternative nickname set.',
+        tagalertNicknameUnset = 'Alternative nickname unset.',
+        tagalertRegistrationNeeded = 'Tagalert registration needed.',
+
         -- database.lua --
         dbCreated = 'Database created.',
         dataLeaked = 'Data leaked.',
@@ -1903,6 +1935,20 @@ return {
             'SUDO',
             '#broadcast <text>: Sasha sends <text> to all groups.',
         },
+
+        --[[check_tag =
+        {
+            '🅿️ CHECK_TAG',
+            'Plugin to send tag notifications (NOTIFICATIONS ARE ENABLED ALSO FOR USERS NOT IN THIS GROUP).',
+            'USER',
+            '#registertagalert: Sasha registers you to the tagalert, if you haven\'t got an username set a nickname.',
+            '#unregistertagalert: Sasha deletes your registration.',
+            '#setnickname <nickname>: Sasha sets <nickname> as an alternative to username.',
+            '#unsetnickname: Sasha deletes your nickname (registration not affected).',
+            'OWNER',
+            '#enabletagalert: Sasha enables the function for this group (disabled by default).',
+            '#disabletagalert: Sasha disables the function for this group.',
+        },]]
 
         database =
         {

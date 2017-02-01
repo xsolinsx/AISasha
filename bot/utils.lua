@@ -1363,3 +1363,23 @@ function muted_user_list(chat_id, group_name)
     return text
 end
 -- End Chat Mutes
+
+function id_to_api(obj)
+    if obj.type then
+        if obj.type == 'user' then
+            return tonumber(obj.id)
+        elseif obj.type == 'chat' then
+            return tonumber('-' .. tostring(obj.id))
+        elseif obj.type == 'channel' then
+            return tonumber('-100' .. tostring(obj.id))
+        end
+    elseif obj.peer_type then
+        if obj.peer_type == 'user' then
+            return tonumber(obj.peer_id)
+        elseif obj.peer_type == 'chat' then
+            return tonumber('-' .. tostring(obj.peer_id))
+        elseif obj.peer_type == 'channel' then
+            return tonumber('-100' .. tostring(obj.peer_id))
+        end
+    end
+end
