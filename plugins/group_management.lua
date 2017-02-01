@@ -2410,7 +2410,7 @@ local function run(msg, matches)
                     if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
                         return langs[msg.lang].errorFloodRange
                     end
-                    data[tostring(msg.to.id)].settings['flood_msg_max'] = matches[2]
+                    data[tostring(msg.to.id)].settings['flood_max'] = matches[2]
                     save_data(_config.moderation.data, data)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set flood to [" .. matches[2] .. "]")
                     return langs[msg.lang].floodSet .. matches[2]
@@ -2918,7 +2918,7 @@ local function run(msg, matches)
                         if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
                             return langs[msg.lang].errorFloodRange
                         end
-                        data[tostring(msg.to.id)].settings['flood_msg_max'] = matches[2]
+                        data[tostring(msg.to.id)].settings['flood_max'] = matches[2]
                         save_data(_config.moderation.data, data)
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set flood to [" .. matches[2] .. "]")
                         return langs[msg.lang].floodSet .. matches[2]

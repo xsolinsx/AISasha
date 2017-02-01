@@ -66,8 +66,8 @@ local function pre_process(msg)
         local msgs = tonumber(redis:get(hash) or 0)
         local NUM_MSG_MAX = 5
         if data[tostring(msg.to.id)] then
-            if data[tostring(msg.to.id)]['settings']['flood_msg_max'] then
-                NUM_MSG_MAX = tonumber(data[tostring(msg.to.id)]['settings']['flood_msg_max'])
+            if data[tostring(msg.to.id)]['settings']['flood_max'] then
+                NUM_MSG_MAX = tonumber(data[tostring(msg.to.id)]['settings']['flood_max'])
                 -- Obtain group flood sensitivity
             end
         end
