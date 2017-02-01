@@ -72,7 +72,7 @@ local function pre_process(msg)
             end
         end
         local max_msg = NUM_MSG_MAX * 1
-        if msgs > max_msg then
+        if msgs >= max_msg then
             local user = msg.from.id
             local chat = msg.to.id
             local whitelist = "whitelist"
