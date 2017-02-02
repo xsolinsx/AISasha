@@ -1,8 +1,8 @@
 local function test_text(text, group_link)
     text = text:gsub(group_link:lower(), '')
     local is_now_link = text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or text:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/") or
-    text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or text:match("[Tt][Ll][Gg][Rr][Mm]%.[Dd][Oo][Gg]/")
-    or text:match("[Tt]%.[Mm][Ee]/")
+    text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or text:match("[Tt]%.[Mm][Ee]/")
+    or text:match("[Cc][Hh][Aa][Tt]%.[Ww][Hh][Aa][Tt][Ss][Aa][Pp][Pp]%.[Cc][Oo][Mm]/")
     if is_now_link then
         return true
     end
@@ -13,11 +13,10 @@ local function test_bot(text)
     text = text:gsub("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/[%w_]+?[Ss][Tt][Aa][Rr][Tt]=", '')
     text = text:gsub("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/[%w_]+?[Ss][Tt][Aa][Rr][Tt]=", '')
     text = text:gsub("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/[%w_]+?[Ss][Tt][Aa][Rr][Tt]=", '')
-    text = text:gsub("[Tt][Ll][Gg][Rr][Mm]%.[Dd][Oo][Gg]/[%w_]+?[Ss][Tt][Aa][Rr][Tt]=", '')
     text = text:gsub("[Tt]%.[Mm][Ee]/[%w_]+?[Ss][Tt][Aa][Rr][Tt]=", '')
     local is_now_link = text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or text:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/") or
-    text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or text:match("[Tt][Ll][Gg][Rr][Mm]%.[Dd][Oo][Gg]/")
-    or text:match("[Tt]%.[Mm][Ee]/")
+    text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or text:match("[Tt]%.[Mm][Ee]/")
+    or text:match("[Cc][Hh][Aa][Tt]%.[Ww][Hh][Aa][Tt][Ss][Aa][Pp][Pp]%.[Cc][Oo][Mm]/")
     if is_now_link then
         return true
     end
@@ -132,8 +131,8 @@ local function pre_process(msg)
                         return
                     end
                     local is_link_msg = msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or msg.text:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/") or
-                    msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.text:match("[Tt][Ll][Gg][Rr][Mm]%.[Dd][Oo][Gg]/")
-                    or msg.text:match("[Tt]%.[Mm][Ee]/")
+                    msg.text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.text:match("[Tt]%.[Mm][Ee]/")
+                    or msg.text:match("[Cc][Hh][Aa][Tt]%.[Ww][Hh][Aa][Tt][Ss][Aa][Pp][Pp]%.[Cc][Oo][Mm]/")
                     -- or msg.text:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.text:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.text:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                     if is_link_msg and lock_link then
                         local link_found = false
@@ -209,8 +208,8 @@ local function pre_process(msg)
                     -- msg.media checks
                     if msg.media.title then
                         local is_link_title = msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/") or
-                        msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.media.title:match("[Tt][Ll][Gg][Rr][Mm]%.[Dd][Oo][Gg]/")
-                        or msg.media.title:match("[Tt]%.[Mm][Ee]/")
+                        msg.media.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.media.title:match("[Tt]%.[Mm][Ee]/")
+                        or msg.media.title:match("[Cc][Hh][Aa][Tt]%.[Ww][Hh][Aa][Tt][Ss][Aa][Pp][Pp]%.[Cc][Oo][Mm]/")
                         -- or msg.media.title:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.media.title:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.media.title:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_title and lock_link then
                             local link_found = false
@@ -256,8 +255,8 @@ local function pre_process(msg)
                     end
                     if msg.media.description then
                         local is_link_description = msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/") or
-                        msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.media.description:match("[Tt][Ll][Gg][Rr][Mm]%.[Dd][Oo][Gg]/")
-                        or msg.media.description:match("[Tt]%.[Mm][Ee]/")
+                        msg.media.description:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.media.description:match("[Tt]%.[Mm][Ee]/")
+                        or msg.media.description:match("[Cc][Hh][Aa][Tt]%.[Ww][Hh][Aa][Tt][Ss][Aa][Pp][Pp]%.[Cc][Oo][Mm]/")
                         -- or msg.media.description:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.media.description:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.media.description:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_description and lock_link then
                             local link_found = false
@@ -304,8 +303,8 @@ local function pre_process(msg)
                     if msg.media.caption then
                         -- msg.media.caption checks
                         local is_link_caption = msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/") or
-                        msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.media.caption:match("[Tt][Ll][Gg][Rr][Mm]%.[Dd][Oo][Gg]/")
-                        or msg.media.caption:match("[Tt]%.[Mm][Ee]/")
+                        msg.media.caption:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.media.caption:match("[Tt]%.[Mm][Ee]/")
+                        or msg.media.caption:match("[Cc][Hh][Aa][Tt]%.[Ww][Hh][Aa][Tt][Ss][Aa][Pp][Pp]%.[Cc][Oo][Mm]/")
                         -- or msg.media.caption:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.media.caption:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.media.caption:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_caption and lock_link then
                             local link_found = false
@@ -438,8 +437,8 @@ local function pre_process(msg)
                 if msg.fwd_from then
                     if msg.fwd_from.title then
                         local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/") or
-                        msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm]%.[Dd][Oo][Gg]/")
-                        or msg.fwd_from.title:match("[Tt]%.[Mm][Ee]/")
+                        msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Dd][Oo][Gg]/") or msg.fwd_from.title:match("[Tt]%.[Mm][Ee]/")
+                        or msg.fwd_from.title:match("[Cc][Hh][Aa][Tt]%.[Ww][Hh][Aa][Tt][Ss][Aa][Pp][Pp]%.[Cc][Oo][Mm]/")
                         -- or msg.fwd_from.title:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.fwd_from.title:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.fwd_from.title:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
                         if is_link_title and lock_link then
                             local link_found = false
