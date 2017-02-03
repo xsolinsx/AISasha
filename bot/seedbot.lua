@@ -215,15 +215,15 @@ function match_plugin(plugin, plugin_name, msg)
             if pattern ~= "^!!tgservice" and pattern ~= "%[(document)%]" and pattern ~= "%[(photo)%]" and pattern ~= "%[(video)%]" and pattern ~= "%[(audio)%]" and pattern ~= "%[(contact)%]" and pattern ~= "%[(geo)%]" then
                 if msg.to.type == 'user' then
                     if disabled then
-                        savelog(msg.from.id .. ' PM', msg.from.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text:gsub('%', '%%') .. '" received but plugin is disabled on chat.')
+                        savelog(msg.from.id .. ' PM', msg.from.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" received but plugin is disabled on chat.')
                     else
-                        savelog(msg.from.id .. ' PM', msg.from.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text:gsub('%', '%%') .. '" executed.')
+                        savelog(msg.from.id .. ' PM', msg.from.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" executed.')
                     end
                 else
                     if disabled then
-                        savelog(msg.to.id, msg.to.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.to.id .. ']' .. ' Sender: ' .. msg.from.print_name:gsub('_', ' ') .. ' [' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text:gsub('%', '%%') .. '" received but plugin is disabled on chat.')
+                        savelog(msg.to.id, msg.to.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.to.id .. ']' .. ' Sender: ' .. msg.from.print_name:gsub('_', ' ') .. ' [' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" received but plugin is disabled on chat.')
                     else
-                        savelog(msg.to.id, msg.to.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.to.id .. ']' .. ' Sender: ' .. msg.from.print_name:gsub('_', ' ') .. ' [' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text:gsub('%', '%%') .. '" executed.')
+                        savelog(msg.to.id, msg.to.print_name:gsub('_', ' ') .. ' ID: ' .. '[' .. msg.to.id .. ']' .. ' Sender: ' .. msg.from.print_name:gsub('_', ' ') .. ' [' .. msg.from.id .. ']' .. '\nCommand "' .. msg.text .. '" executed.')
                     end
                 end
             end
