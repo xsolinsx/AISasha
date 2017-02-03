@@ -12,26 +12,20 @@ local function all_chats(msg)
     local message = langs[msg.lang].groupsJoin
     for k, v in pairsByKeys(data[tostring(groups)]) do
         local group_id = v
-        if data[tostring(group_id)] then
-            for m, n in pairsByKeys(data[tostring(group_id)]) do
-                if type(m) == 'string' then
-                    if m == 'set_name' then
-                        name = n:gsub("", "")
-                        chat_name = name:gsub("?", "")
-                        group_name_id = name .. '\n(ID: ' .. group_id .. ')\n'
-                        if name:match("[\216-\219][\128-\191]") then
-                            group_info = i .. '. \n' .. group_name_id
-                        else
-                            group_info = i .. '. ' .. group_name_id
-                        end
-                        i = i + 1
-                    end
+        for m, n in pairsByKeys(data[tostring(group_id)]) do
+            if m == 'set_name' then
+                name = n:gsub("", "")
+                chat_name = name:gsub("?", "")
+                group_name_id = name .. '\n(ID: ' .. group_id .. ')\n'
+                if name:match("[\216-\219][\128-\191]") then
+                    group_info = i .. '. \n' .. group_name_id
+                else
+                    group_info = i .. '. ' .. group_name_id
                 end
+                i = i + 1
             end
         end
-        if group_info then
-            message = message .. group_info
-        end
+        message = message .. group_info
     end
 
     i = 1
@@ -42,26 +36,20 @@ local function all_chats(msg)
     message = message .. '\n\n' .. langs[msg.lang].realmsJoin
     for k, v in pairsByKeys(data[tostring(realms)]) do
         local realm_id = v
-        if data[tostring(realm_id)] then
-            for m, n in pairsByKeys(data[tostring(realm_id)]) do
-                if type(m) == 'string' then
-                    if m == 'set_name' then
-                        name = n:gsub("", "")
-                        chat_name = name:gsub("?", "")
-                        realm_name_id = name .. '\n(ID: ' .. realm_id .. ')\n'
-                        if name:match("[\216-\219][\128-\191]") then
-                            realm_info = i .. '. \n' .. realm_name_id
-                        else
-                            realm_info = i .. '. ' .. realm_name_id
-                        end
-                        i = i + 1
-                    end
+        for m, n in pairsByKeys(data[tostring(realm_id)]) do
+            if m == 'set_name' then
+                name = n:gsub("", "")
+                chat_name = name:gsub("?", "")
+                realm_name_id = name .. '\n(ID: ' .. realm_id .. ')\n'
+                if name:match("[\216-\219][\128-\191]") then
+                    realm_info = i .. '. \n' .. realm_name_id
+                else
+                    realm_info = i .. '. ' .. realm_name_id
                 end
+                i = i + 1
             end
         end
-        if realm_info then
-            message = message .. realm_info
-        end
+        message = message .. realm_info
     end
     local file = io.open("./groups/lists/all_listed_groups.txt", "w")
     file:write(message)
