@@ -720,7 +720,7 @@ function savelog(group, logtxt)
     end )
     if not res then
         -- send to log
-        send_large_msg('channel#id1043389864', 'An #error occurred.\n' .. err .. '\n' .. group .. ': ' .. vardump(logtxt))
+        send_large_msg('channel#id1043389864', 'An #error occurred.\n' .. err or '' .. '\n' .. group or '' .. ': ' .. vardump(logtxt) or '')
     end
 end
 
