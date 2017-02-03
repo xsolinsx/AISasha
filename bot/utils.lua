@@ -711,8 +711,7 @@ function is_log_group(msg)
 end
 
 function savelog(group, logtxt)
-    pcall()(
-    function()
+    local res, err = pcall( function()
         local text =(os.date("[ %c ]=>  " .. logtxt .. "\n \n"))
         local file = io.open("./groups/logs/" .. group .. "log.txt", "a")
 
