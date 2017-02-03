@@ -29,7 +29,9 @@ local function all_chats(msg)
                 end
             end
         end
-        message = message .. group_info
+        if group_info then
+            message = message .. group_info
+        end
     end
 
     i = 1
@@ -57,7 +59,9 @@ local function all_chats(msg)
                 end
             end
         end
-        message = message .. realm_info
+        if realm_info then
+            message = message .. realm_info
+        end
     end
     local file = io.open("./groups/lists/all_listed_groups.txt", "w")
     file:write(message)
