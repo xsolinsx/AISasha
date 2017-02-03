@@ -233,9 +233,19 @@ function match_plugin(plugin, plugin_name, msg)
             end
             -- Function exists
             if plugin.run then
-                local result = plugin.run(msg, matches)
+                --[[local result = plugin.run(msg, matches)
                 if result then
                     send_large_msg(receiver, result)
+                end]]
+                local res, err = pcall( function()
+                    local result = plugin.run(msg, matches)
+                    if result then
+                        send_large_msg(receiver, result)
+                    end
+                end )
+                if not res then
+                    -- send to log
+                    send_large_msg('channel#id1043389864', 'An #error occurred.\n' .. err .. '\n' .. vardump(msg))
                 end
             end
             -- One patterns matches
