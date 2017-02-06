@@ -50,7 +50,8 @@ local function run(msg, matches)
     if msg.to.id == 1078810985 then
         if matches[1]:lower() == 'estrazionerandom' then
             if is_momod(msg) then
-                return channel_get_users(get_receiver(msg), randomChoice, { chat_id = msg.to.id })
+                channel_get_users(get_receiver(msg), randomChoice, { chat_id = msg.to.id })
+                return
             else
                 return langs[msg.lang].require_mod
             end
