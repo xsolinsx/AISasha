@@ -228,11 +228,11 @@ return {
         neverWarn = 'Gli avvertimenti non funzioneranno più.',
         noWarnSet = 'Il warn non è ancora stato impostato.',
         cantWarnHigher = 'Non puoi avvertire un mod/owner/admin/sudo!',
-        warned = 'Sei stato avvertito X volte, datti una regolata!',
-        unwarned = 'Ti è stato tolto un avvertimento, continua così!',
-        alreadyZeroWarnings = 'Sei già a zero avvertimenti.',
-        zeroWarnings = 'I tuoi avvertimenti sono stati azzerati.',
-        yourWarnings = 'Sei a quota X avvertimenti su un massimo di Y.',
+        warned = 'X avvertimenti, datti una regolata!',
+        unwarned = '-1 avvertimento, continua così!',
+        alreadyZeroWarnings = 'Già a zero avvertimenti.',
+        zeroWarnings = 'Avvertimenti azzerati.',
+        yourWarnings = 'X avvertimenti su un massimo di Y.',
 
         -- administrator.lua --
         sendNewPic = 'Mandami la nuova foto.',
@@ -1401,11 +1401,11 @@ return {
         neverWarn = 'Warn will not work anymore.',
         noWarnSet = 'Warn hasn\t been set yet.',
         cantWarnHigher = 'You can\'t warn mod/owner/admin/sudo!',
-        warned = 'You\'ve been warned X times, calm down!',
+        warned = 'Warned X times, calm down!',
         unwarned = 'One warn has been deleted, keep it up!',
-        alreadyZeroWarnings = 'You\'re already at zero warns.',
-        zeroWarnings = 'Your warns has been removed.',
-        yourWarnings = 'You\'re at X warns on Y.',
+        alreadyZeroWarnings = 'Already zero warnings.',
+        zeroWarnings = 'Warnings removed.',
+        yourWarnings = 'X warnings on Y.',
 
         -- administrator.lua --
         sendNewPic = 'Send me the new picture.',
