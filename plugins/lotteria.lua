@@ -33,11 +33,8 @@ local function randomChoice(extra, success, result)
     local id
     while not done do
         id = result[math.random(#result)].peer_id
-        print(id)
         if database['users'][tostring(id)] then
-            print(1)
             if database['users'][tostring(id)].username then
-                print(2)
                 send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. database['users'][tostring(id)].username .. ' ID: ' .. id)
                 done = true
             end
