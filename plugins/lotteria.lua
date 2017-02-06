@@ -29,12 +29,16 @@ local function estrai(t, chat_id, msg_id, n)
 end
 
 local function randomChoice(extra, success, result)
-    local id = result[math.random(#result)].peer_id
-    local user_data = serpent.block(database['users'][tostring(id)], { sortkeys = false, comment = false })
-    if user_data then
-        send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. user_data.username .. ' ID: ' .. id)
-    else
-        send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. id)
+    local done = false
+    while not done do
+        local id = result[math.random(#result)].peer_id
+        local user_data = serpent.block(database['users'][tostring(id)], { sortkeys = false, comment = false })
+        if user_data then
+            if user_data.username then
+                send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. user_data.username .. ' ID: ' .. id)
+                done = true
+            end
+        end
     end
 end
 
