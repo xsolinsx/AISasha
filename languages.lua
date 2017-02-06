@@ -1113,6 +1113,7 @@ return {
             'USER',
             '#ticket: Sasha ti dà un biglietto.',
             'MOD',
+            '#estrazionerandom: Sasha estrae un membro a caso del gruppo.',
             '#startlotteria: Sasha apre la biglietteria.',
             '#stoplotteria: Sasha chiude la biglietteria.',
             '#infolotteria: Sasha manda le informazioni sulla lotteria corrente.',

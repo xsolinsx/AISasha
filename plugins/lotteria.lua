@@ -28,9 +28,25 @@ local function estrai(t, chat_id, msg_id, n)
     end
 end
 
+local function randomChoice(extra, success, result)
+    local user_data = serpent.block(database['users'][tostring(result[math.random(#result)].peer_id)], { sortkeys = false, comment = false })
+    if user_data then
+        send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. user_data)
+    else
+        send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. result[math.random(#result)].peer_id)
+    end
+end
+
 -- id 1078810985
 local function run(msg, matches)
     if msg.to.id == 1078810985 then
+        if matches[1]:lower() == 'estrazionerandom' then
+            if is_momod(msg) then
+                return channel_get_users(get_receiver(msg), randomChoice, { chat_id = msg.to.id })
+            else
+                return langs[msg.lang].require_mod
+            end
+        end
         local n
         local hash = 'lotteria:' .. msg.to.id
         local hash2 = 'lotteria:' .. msg.to.id .. ':attiva'
@@ -109,6 +125,7 @@ return {
         "^[#!/]([Ss][Tt][Aa][Rr][Tt][Ll][Oo][Tt][Tt][Ee][Rr][Ii][Aa])$",
         "^[#!/]([Ss][Tt][Oo][Pp][Ll][Oo][Tt][Tt][Ee][Rr][Ii][Aa])$",
         "^[#!/]([Ii][Nn][Ff][Oo][Ll][Oo][Tt][Tt][Ee][Rr][Ii][Aa])$",
+        "^[#!/]([Ee][Ss][Tt][Rr][Aa][Zz][Ii][Oo][Nn][Ee][Rr][Aa][Nn][Dd][Oo][Mm])$",
         "^[#!/]([Ee][Ss][Tt][Rr][Aa][Zz][Ii][Oo][Nn][Ee])%d*$",
     },
     run = run,
@@ -118,6 +135,7 @@ return {
         "USER",
         "#ticket",
         "MOD",
+        "#estrazionerandom",
         "#startlotteria",
         "#stoplotteria",
         "#infolotteria",
