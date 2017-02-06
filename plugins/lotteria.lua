@@ -37,7 +37,13 @@ local function randomChoice(extra, success, result)
             if database['users'][tostring(id)].username then
                 send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. database['users'][tostring(id)].username .. ' ID: ' .. id)
                 done = true
+            else
+                send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ NO USERNAME ' .. database['users'][tostring(id)].print_name .. ' ID: ' .. id)
+                done = true
             end
+        else
+            send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ Utente non presente nel database ID: ' .. id)
+            done = true
         end
     end
 end
