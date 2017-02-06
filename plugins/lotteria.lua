@@ -30,10 +30,11 @@ end
 
 local function randomChoice(extra, success, result)
     local id
+    local user_data
     while true do
         id = result[math.random(#result)].peer_id
         print(id)
-        local user_data = serpent.block(database['users'][tostring(id)], { sortkeys = false, comment = false })
+        user_data = serpent.block(database['users'][tostring(id)], { sortkeys = false, comment = false })
         if user_data then
             if user_data.username then
                 send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. user_data.username .. ' ID: ' .. id)
