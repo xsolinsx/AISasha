@@ -29,8 +29,10 @@ local function estrai(t, chat_id, msg_id, n)
 end
 
 local function randomChoice(extra, success, result)
+    local id
     while true do
-        local id = result[math.random(#result)].peer_id
+        id = result[math.random(#result)].peer_id
+        print(id)
         local user_data = serpent.block(database['users'][tostring(id)], { sortkeys = false, comment = false })
         if user_data then
             if user_data.username then
