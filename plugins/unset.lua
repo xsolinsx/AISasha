@@ -33,15 +33,13 @@ end
 
 local function run(msg, matches)
     if not msg.api_patch then
-        local name = string.sub(matches[2], 1, 50)
-
         if is_momod(msg) then
             if matches[1]:lower() == 'unset' or matches[1]:lower() == 'sasha unsetta' or matches[1]:lower() == 'unsetta' then
-                return unset_var(msg, name:lower(), false)
+                return unset_var(msg, string.gsub(string.sub(matches[2], 1, 50), '_', ''):lower(), false)
             end
             if is_admin1(msg) then
                 if matches[1]:lower() == 'unsetglobal' then
-                    unset_var(msg, name:lower(), true)
+                    unset_var(msg, string.gsub(string.sub(matches[2], 1, 50), '_', ''):lower(), true)
                 end
             else
                 return langs[msg.lang].require_admin
@@ -56,11 +54,11 @@ return {
     description = "UNSET",
     patterns =
     {
-        "^[#!/]([Uu][Nn][Ss][Ee][Tt]) ([^%s]+)$",
-        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll]) ([^%s]+)$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt]) (.*)$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll]) (.*)$",
         -- unset
-        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Nn][Ss][Ee][Tt][Tt][Aa]) ([^%s]+)$",
-        "^([Uu][Nn][Ss][Ee][Tt][Tt][Aa]) ([^%s]+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Nn][Ss][Ee][Tt][Tt][Aa]) (.*)$",
+        "^([Uu][Nn][Ss][Ee][Tt][Tt][Aa]) (.*)$",
     },
     run = run,
     min_rank = 1,
