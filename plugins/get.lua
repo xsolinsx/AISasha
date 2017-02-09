@@ -265,6 +265,7 @@ local function pre_process(msg, matches)
                     end
                 end
                 if found then
+                    print('GET FOUND')
                     if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
                         -- if not media
                         reply_msg(msg.id, get_value(msg, word:lower()), ok_cb, false)
