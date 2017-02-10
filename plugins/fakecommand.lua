@@ -9,7 +9,7 @@ local function run(msg, matches)
             if fakerank <= rank then
                 -- yes
                 -- remove "[#!/]<rank> " from message so it's like a normal message
-                local copied_msg = msg
+                local copied_msg = clone_table(msg)
                 copied_msg.text = copied_msg.text:gsub('#' .. matches[1] .. ' ', '')
                 copied_msg.text = copied_msg.text:gsub('!' .. matches[1] .. ' ', '')
                 copied_msg.text = copied_msg.text:gsub('/' .. matches[1] .. ' ', '')

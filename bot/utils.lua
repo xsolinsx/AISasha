@@ -724,6 +724,17 @@ function savelog(group, logtxt)
     end
 end
 
+function clone_table(t)
+    -- doing "table1 = table2" in lua = create a pointer to table2
+    local new_t = { }
+    local i, v = next(t, nil)
+    while i do
+        new_t[i] = v
+        i, v = next(t, i)
+    end
+    return new_t
+end
+
 function user_print_name(user)
     if user.print_name then
         return user.print_name
