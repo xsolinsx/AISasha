@@ -37,7 +37,7 @@ end
 local function run(msg, matches)
     if matches[1]:lower() == "setbot" or matches[1]:lower() == "sasha imposta bot" and string.sub(matches[2]:lower(), -3) == 'bot' then
         if is_admin1(msg) then
-            resolve_username(matches[2]:gsub("@", ""), callback_setbot, { chatid = msg.to.id })
+            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callback_setbot, { chatid = msg.to.id })
             return
         else
             return langs[msg.lang].require_admin
@@ -45,7 +45,7 @@ local function run(msg, matches)
     end
     if matches[1]:lower() == "unsetbot" or matches[1]:lower() == "sasha rimuovi bot" and string.sub(matches[2]:lower(), -3) == 'bot' then
         if is_momod(msg) then
-            resolve_username(matches[2]:gsub("@", ""), callback_unsetbot, { chatid = msg.to.id })
+            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callback_unsetbot, { chatid = msg.to.id })
             return
         else
             return langs[msg.lang].require_owner

@@ -62,9 +62,7 @@ local function run(msg, matches)
                     end
                 else
                     local receiver = get_receiver(msg)
-                    local username = matches[2]
-                    local username = string.gsub(matches[2], '@', '')
-                    resolve_username(username, whitelist_res, { receiver = receiver })
+                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), whitelist_res, { receiver = receiver })
                 end
             else
                 local hash = 'whitelist'

@@ -51,7 +51,7 @@ local function run(msg, matches)
                 chat_add_user(receiver, 'user#id' .. matches[2], ok_cb, false)
                 channel_invite(receiver, 'user#id' .. matches[2], ok_cb, false)
             else
-                resolve_username(matches[2]:gsub('@', ''), invite_by_username, { receiver = receiver })
+                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), invite_by_username, { receiver = receiver })
             end
         else
             return langs[msg.lang].useYourGroups

@@ -400,7 +400,7 @@ local function run(msg, matches)
             if type(msg.reply_id) ~= "nil" then
                 get_message(msg.reply_id, Challenge_by_reply, { challenger = user, msg = msg })
             elseif matches[2] then
-                resolve_username(matches[2]:gsub("@", ""), Challenge_by_username, { challenger = user, chat_id = chat, msg = msg })
+                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), Challenge_by_username, { challenger = user, chat_id = chat, msg = msg })
             end
             return
         end

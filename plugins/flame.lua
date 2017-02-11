@@ -136,7 +136,7 @@ local function run(msg, matches)
                             if string.gsub(matches[2], '@', ''):lower() == 'aisasha' then
                                 return langs[msg.lang].noAutoFlame
                             end
-                            resolve_username(string.gsub(matches[2], '@', ''), flame_by_username, { executer = msg.from.id, chat_id = msg.to.id, chat_type = msg.to.type, receiver = get_receiver(msg) })
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), flame_by_username, { executer = msg.from.id, chat_id = msg.to.id, chat_type = msg.to.type, receiver = get_receiver(msg) })
                         end
                     end
                 elseif matches[1]:lower() == 'stopflame' or matches[1]:lower() == 'sasha stop flame' or matches[1]:lower() == 'stop flame' then

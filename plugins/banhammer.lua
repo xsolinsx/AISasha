@@ -667,7 +667,7 @@ local function run(msg, matches)
                     elseif string.match(matches[2], '^%d+$') then
                         get_user_warns(msg.from.id, msg.to.id)
                     else
-                        resolve_username(string.gsub(matches[2], '@', ''), getWarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), getWarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                     return
                 else
@@ -706,7 +706,7 @@ local function run(msg, matches)
                             return langs[msg.lang].require_rank
                         end
                     else
-                        resolve_username(string.gsub(matches[2], '@', ''), warn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), warn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                     return
                 else
@@ -746,7 +746,7 @@ local function run(msg, matches)
                             return langs[msg.lang].require_rank
                         end
                     else
-                        resolve_username(string.gsub(matches[2], '@', ''), unwarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unwarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -785,7 +785,7 @@ local function run(msg, matches)
                             return langs[msg.lang].require_rank
                         end
                     else
-                        resolve_username(string.gsub(matches[2], '@', ''), unwarnall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unwarnall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -825,7 +825,7 @@ local function run(msg, matches)
                             return langs[msg.lang].require_rank
                         end
                     else
-                        resolve_username(matches[2]:gsub('@', ''), kick_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), kick_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -879,7 +879,7 @@ local function run(msg, matches)
                             return langs[msg.lang].require_rank
                         end
                     else
-                        resolve_username(matches[2]:gsub('@', ''), ban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), ban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -917,7 +917,7 @@ local function run(msg, matches)
                             return langs[msg.lang].require_rank
                         end
                     else
-                        resolve_username(matches[2]:gsub('@', ''), unban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -1021,7 +1021,7 @@ local function run(msg, matches)
                         return langs[msg.lang].require_rank
                     end
                 else
-                    resolve_username(matches[2]:gsub('@', ''), banall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), banall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                 end
                 return
             else
@@ -1056,7 +1056,7 @@ local function run(msg, matches)
                         return langs[msg.lang].require_rank
                     end
                 else
-                    resolve_username(matches[2]:gsub('@', ''), unbanall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unbanall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                 end
                 return
             else

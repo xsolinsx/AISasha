@@ -1785,7 +1785,7 @@ local function run(msg, matches)
                         print("user " .. matches[2] .. " has been promoted as admin")
                         return admin_promote(matches[2], matches[2], msg.lang)
                     else
-                        return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
+                        return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
                     end
                 else
                     return langs[msg.lang].require_sudo
@@ -1797,7 +1797,7 @@ local function run(msg, matches)
                         print("user " .. matches[2] .. " has been demoted")
                         return admin_demote(matches[2], matches[2], msg.lang)
                     else
-                        return resolve_username(string.gsub(matches[2], '@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
+                        return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
                     end
                 else
                     return langs[msg.lang].require_sudo
@@ -2151,7 +2151,7 @@ local function run(msg, matches)
                             return promote(get_receiver(msg), 'NONAME', matches[2])
                         else
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
-                            return resolve_username(string.gsub(matches[2], '@', ''), chat_promote_by_username, { receiver = get_receiver(msg) })
+                            return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_promote_by_username, { receiver = get_receiver(msg) })
                         end
                     else
                         return langs[msg.lang].require_owner
@@ -2165,7 +2165,7 @@ local function run(msg, matches)
                             return demote(get_receiver(msg), 'NONAME', matches[2])
                         else
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
-                            return resolve_username(string.gsub(matches[2], '@', ''), chat_demote_by_username, { receiver = get_receiver(msg) })
+                            return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_demote_by_username, { receiver = get_receiver(msg) })
                         end
                     else
                         return langs[msg.lang].require_owner
@@ -2290,7 +2290,7 @@ local function run(msg, matches)
                         return langs[msg.lang].require_rank
                     end
                 else
-                    return resolve_username(string.gsub(matches[2], '@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
+                    return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
                 end
             else
                 return langs[msg.lang].require_mod
@@ -2399,7 +2399,7 @@ local function run(msg, matches)
                         return matches[2] .. langs[msg.lang].setOwner
                     else
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set @" .. string.gsub(matches[2], '@', '') .. " as owner")
-                        return resolve_username(string.gsub(matches[2], '@', ''), chat_setowner_by_username, { receiver = get_receiver(msg) })
+                        return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_setowner_by_username, { receiver = get_receiver(msg) })
                     end
                 else
                     return langs[msg.lang].require_owner
@@ -2677,7 +2677,7 @@ local function run(msg, matches)
                             get_cmd = 'demoteadmin'
                         }
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted admin @" .. string.gsub(matches[2], '@', ''))
-                        resolve_username(string.gsub(matches[2], '@', ''), callbackres, cbres_extra)
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
                     end
                 else
                     return langs[msg.lang].require_owner
@@ -2698,7 +2698,7 @@ local function run(msg, matches)
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
                             return matches[2] .. langs[msg.lang].setOwner
                         else
-                            return resolve_username(string.gsub(matches[2], '@', ''), setowner_by_username, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                            return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), setowner_by_username, { receiver = get_receiver(msg), chat_id = msg.to.id })
                         end
                     else
                         return langs[msg.lang].require_owner
@@ -2721,7 +2721,7 @@ local function run(msg, matches)
                                 get_cmd = 'promote',
                             }
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
-                            return resolve_username(string.gsub(matches[2], '@', ''), callbackres, cbres_extra)
+                            return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
                         end
                     else
                         return langs[msg.lang].require_owner
@@ -2745,7 +2745,7 @@ local function run(msg, matches)
                                 get_cmd = 'demote'
                             }
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
-                            return resolve_username(string.gsub(matches[2], '@', ''), callbackres, cbres_extra)
+                            return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
                         end
                     else
                         return langs[msg.lang].require_owner
@@ -2997,7 +2997,7 @@ local function run(msg, matches)
                         end
                     else
                         local get_cmd = "mute_user"
-                        resolve_username(string.gsub(matches[2], '@', ''), callbackres, { receiver = get_receiver(msg), get_cmd = get_cmd, executer = msg.from.id })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, { receiver = get_receiver(msg), get_cmd = get_cmd, executer = msg.from.id })
                     end
                 else
                     return langs[msg.lang].require_mod

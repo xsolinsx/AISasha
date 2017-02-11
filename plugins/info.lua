@@ -471,7 +471,7 @@ local function run(msg, matches)
                 if string.match(matches[2], '^%d+$') then
                     return langs[msg.lang].rank .. reverse_rank_table[get_rank(matches[2], chat) + 1]
                 else
-                    return resolve_username(string.gsub(matches[2], '@', ''), get_rank_by_username, { receiver = receiver, chat_id = chat })
+                    return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), get_rank_by_username, { receiver = receiver, chat_id = chat })
                 end
             else
                 return langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
@@ -514,7 +514,7 @@ local function run(msg, matches)
                         user_info('user#id' .. matches[2], info_by_id, { chat_id = msg.to.id, receiver = receiver })
                         return
                     else
-                        resolve_username(matches[2]:gsub("@", ""), info_by_username, { chat_id = msg.to.id, receiver = receiver })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), info_by_username, { chat_id = msg.to.id, receiver = receiver })
                         return
                     end
                 else

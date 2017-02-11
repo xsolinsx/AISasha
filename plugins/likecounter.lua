@@ -181,7 +181,7 @@ local function run(msg, matches)
                     elseif string.match(matches[2], '^%d+$') then
                         like(likedata, chat, user)
                     else
-                        resolve_username(matches[2]:gsub('@', ''), like_by_username, { chat = chat, likedata = likedata })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), like_by_username, { chat = chat, likedata = likedata })
                     end
                 elseif matches[1]:lower() == 'dislike' or matches[1]:lower() == '1down' then
                     if type(msg.reply_id) ~= "nil" then
@@ -198,7 +198,7 @@ local function run(msg, matches)
                     elseif string.match(matches[2], '^%d+$') then
                         dislike(likedata, chat, user)
                     else
-                        resolve_username(matches[2]:gsub('@', ''), dislike_by_username, { chat = chat, likedata = likedata })
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), dislike_by_username, { chat = chat, likedata = likedata })
                     end
                 end
             end
