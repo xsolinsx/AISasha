@@ -35,11 +35,11 @@ local function run(msg, matches)
     if not msg.api_patch then
         if is_momod(msg) then
             if matches[1]:lower() == 'unset' or matches[1]:lower() == 'sasha unsetta' or matches[1]:lower() == 'unsetta' then
-                return unset_var(msg, string.gsub(string.sub(matches[2], 1, 50), '_', ' '):lower(), false)
+                return unset_var(msg, string.gsub(string.sub(matches[2], 1, 50), ' ', '_'):lower(), false)
             end
             if is_admin1(msg) then
                 if matches[1]:lower() == 'unsetglobal' then
-                    unset_var(msg, string.gsub(string.sub(matches[2], 1, 50), '_', ' '):lower(), true)
+                    unset_var(msg, string.gsub(string.sub(matches[2], 1, 50), ' ', '_'):lower(), true)
                 end
             else
                 return langs[msg.lang].require_admin
