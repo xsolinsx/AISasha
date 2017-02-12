@@ -72,7 +72,6 @@ function on_binlog_replay_end()
 end
 
 function msg_valid(msg)
-    local valid = false
 
     -- if message from telegram it will be sent to REALM
     if msg.from.id == 777000 then
@@ -80,6 +79,7 @@ function msg_valid(msg)
         return false
     end
 
+    local valid = false
     -- Don't process outgoing messages
     if msg.out then
         if not msg.fwd_from then
@@ -116,14 +116,20 @@ function msg_valid(msg)
         return false
     end
 
-    if msg.text then
-        if not string.find(msg.text, "^[#!/][Dd][Ee][Ll]$") then
-            -- ignore messages from API version but !del messages
-            if msg.from.id == 283058260 then
-                print('\27[36mNot valid: msg from our API version\27[39m')
-                return false
+    local del = false
+    if msg.from.id == 283058260 then
+        if msg.to.id ~= our_id then
+            if msg.text then
+                if string.find(msg.text, "^[#!/][Dd][Ee][Ll]$") then
+                    del = true
+                end
             end
         end
+    end
+    if not del then
+        -- ignore messages from API version but !del messages
+        print('\27[36mNot valid: msg from our API version in a group\27[39m')
+        return false
     end
 
     if msg.from.id == our_id then
