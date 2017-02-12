@@ -116,20 +116,19 @@ function msg_valid(msg)
         return false
     end
 
-    local del = false
     if msg.from.id == 283058260 then
         if msg.to.id ~= our_id then
             if msg.text then
-                if string.find(msg.text, "^[#!/][Dd][Ee][Ll]$") then
-                    del = true
+                if not string.find(msg.text, "^[#!/][Dd][Ee][Ll]$") then
+                    -- ignore messages from API version but !del messages
+                    print('\27[36mNot valid: msg from our API version in a group\27[39m')
+                    return false
                 end
             end
+            -- ignore messages from API version but !del messages
+            print('\27[36mNot valid: msg from our API version in a group\27[39m')
+            return false
         end
-    end
-    if not del then
-        -- ignore messages from API version but !del messages
-        print('\27[36mNot valid: msg from our API version in a group\27[39m')
-        return false
     end
 
     if msg.from.id == our_id then
