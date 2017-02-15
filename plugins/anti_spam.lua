@@ -62,7 +62,7 @@ local function pre_process(msg)
 
     -- Check flood
     if msg.from.type == 'user' then
-        local hash = 'user:' .. msg.from.id .. ':msgs'
+        local hash = 'cli:user:' .. msg.from.id .. ':msgs'
         local msgs = tonumber(redis:get(hash) or 0)
         local NUM_MSG_MAX = 5
         if data[tostring(msg.to.id)] then
