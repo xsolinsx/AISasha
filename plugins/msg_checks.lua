@@ -138,20 +138,18 @@ local function pre_process(msg)
                         local link_found = false
                         local is_bot = msg.text:match("?[Ss][Tt][Aa][Rr][Tt]=")
                         if is_bot then
-                            if test_bot(msg.text:lower()) then
-                                link_found = true
-                            end
+                            link_found = test_bot(msg.text:lower())
                         end
-                        if group_link then
-                            if not string.find(msg.text:lower(), group_link:lower()) then
-                                link_found = true
-                            else
-                                if test_text(msg.text:lower(), group_link:lower()) then
+                        if link_found then
+                            if group_link then
+                                if not string.find(msg.text:lower(), group_link:lower()) then
                                     link_found = true
+                                else
+                                    link_found = test_text(msg.text:lower(), group_link:lower())
                                 end
+                            else
+                                link_found = true
                             end
-                        else
-                            link_found = true
                         end
                         if link_found then
                             delete_msg(msg.id, ok_cb, false)
@@ -215,20 +213,18 @@ local function pre_process(msg)
                             local link_found = false
                             local is_bot = msg.media.title:match("?[Ss][Tt][Aa][Rr][Tt]=")
                             if is_bot then
-                                if test_bot(msg.media.title:lower()) then
-                                    link_found = true
-                                end
+                                link_found = test_bot(msg.media.title:lower())
                             end
-                            if group_link then
-                                if not string.find(msg.media.title:lower(), group_link:lower()) then
-                                    link_found = true
-                                else
-                                    if test_text(msg.media.title:lower(), group_link:lower()) then
+                            if link_found then
+                                if group_link then
+                                    if not string.find(msg.media.title:lower(), group_link:lower()) then
                                         link_found = true
+                                    else
+                                        link_found = test_text(msg.media.title:lower(), group_link:lower())
                                     end
+                                else
+                                    link_found = true
                                 end
-                            else
-                                link_found = true
                             end
                             if link_found then
                                 delete_msg(msg.id, ok_cb, false)
@@ -262,20 +258,18 @@ local function pre_process(msg)
                             local link_found = false
                             local is_bot = msg.media.description:match("?[Ss][Tt][Aa][Rr][Tt]=")
                             if is_bot then
-                                if test_bot(msg.media.description:lower()) then
-                                    link_found = true
-                                end
+                                link_found = test_bot(msg.media.description:lower())
                             end
-                            if group_link then
-                                if not string.find(msg.media.description:lower(), group_link:lower()) then
-                                    link_found = true
-                                else
-                                    if test_text(msg.media.description:lower(), group_link:lower()) then
+                            if link_found then
+                                if group_link then
+                                    if not string.find(msg.media.description:lower(), group_link:lower()) then
                                         link_found = true
+                                    else
+                                        link_found = test_text(msg.media.description:lower(), group_link:lower())
                                     end
+                                else
+                                    link_found = true
                                 end
-                            else
-                                link_found = true
                             end
                             if link_found then
                                 delete_msg(msg.id, ok_cb, false)
@@ -310,20 +304,18 @@ local function pre_process(msg)
                             local link_found = false
                             local is_bot = msg.media.caption:match("?[Ss][Tt][Aa][Rr][Tt]=")
                             if is_bot then
-                                if test_bot(msg.media.caption:lower()) then
-                                    link_found = true
-                                end
+                                link_found = test_bot(msg.media.caption:lower())
                             end
-                            if group_link then
-                                if not string.find(msg.media.caption:lower(), group_link:lower()) then
-                                    link_found = true
-                                else
-                                    if test_text(msg.media.caption:lower(), group_link:lower()) then
+                            if link_found then
+                                if group_link then
+                                    if not string.find(msg.media.caption:lower(), group_link:lower()) then
                                         link_found = true
+                                    else
+                                        link_found = test_text(msg.media.caption:lower(), group_link:lower())
                                     end
+                                else
+                                    link_found = true
                                 end
-                            else
-                                link_found = true
                             end
                             if link_found then
                                 delete_msg(msg.id, ok_cb, false)
@@ -338,17 +330,6 @@ local function pre_process(msg)
                         end
                         local is_squig_caption = msg.media.caption:match("[\216-\219][\128-\191]")
                         if is_squig_caption and lock_arabic then
-                            delete_msg(msg.id, ok_cb, false)
-                            if strict then
-                                kick_user(msg.from.id, msg.to.id)
-                            end
-                            if msg.to.type == 'chat' then
-                                ban_user(msg.from.id, msg.to.id)
-                            end
-                            return
-                        end
-                        local is_username_caption = msg.media.caption:match("^@[%a%d]")
-                        if is_username_caption and lock_link then
                             delete_msg(msg.id, ok_cb, false)
                             if strict then
                                 kick_user(msg.from.id, msg.to.id)
@@ -444,20 +425,18 @@ local function pre_process(msg)
                             local link_found = false
                             local is_bot = msg.fwd_from.title:match("?[Ss][Tt][Aa][Rr][Tt]=")
                             if is_bot then
-                                if test_bot(msg.fwd_from.title:lower()) then
-                                    link_found = true
-                                end
+                                link_found = test_bot(msg.fwd_from.title:lower())
                             end
-                            if group_link then
-                                if not string.find(msg.fwd_from.title:lower(), group_link:lower()) then
-                                    link_found = true
-                                else
-                                    if test_text(msg.fwd_from.title:lower(), group_link:lower()) then
+                            if link_found then
+                                if group_link then
+                                    if not string.find(msg.fwd_from.title:lower(), group_link:lower()) then
                                         link_found = true
+                                    else
+                                        link_found = test_text(msg.fwd_from.title:lower(), group_link:lower())
                                     end
+                                else
+                                    link_found = true
                                 end
-                            else
-                                link_found = true
                             end
                             if link_found then
                                 delete_msg(msg.id, ok_cb, false)
@@ -468,24 +447,6 @@ local function pre_process(msg)
                                     ban_user(msg.from.id, msg.to.id)
                                 end
                                 return
-                            end
-                        end
-                        local is_link_title = msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm]%.[Mm][Ee]/") or
-                        msg.fwd_from.title:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]/") or msg.fwd_from.title:match("[Tt][Ll][Gg][Rr][Mm].[Dd][Oo][Gg]/")
-                        or msg.fwd_from.title:match("[Tt].[Mm][Ee]/")
-                        -- or msg.fwd_from.title:match("[Aa][Dd][Ff]%.[Ll][Yy]/") or msg.fwd_from.title:match("[Bb][Ii][Tt]%.[Ll][Yy]/") or msg.fwd_from.title:match("[Gg][Oo][Oo]%.[Gg][Ll]/")
-                        if is_link_title and lock_link then
-                            if group_link then
-                                if not string.find(msg.fwd_from.title, group_link) then
-                                    delete_msg(msg.id, ok_cb, false)
-                                    if strict then
-                                        kick_user(msg.from.id, msg.to.id)
-                                    end
-                                    if msg.to.type == 'chat' then
-                                        ban_user(msg.from.id, msg.to.id)
-                                    end
-                                    return
-                                end
                             end
                         end
                         local is_squig_title = msg.fwd_from.title:match("[\216-\219][\128-\191]")
