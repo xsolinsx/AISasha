@@ -187,8 +187,6 @@ function pre_process_msg(msg)
     msg = plugins.delword.pre_process(msg)
     print('Preprocess', 'msg_checks')
     msg = plugins.msg_checks.pre_process(msg)
-    print('Preprocess', 'onservice')
-    msg = plugins.onservice.pre_process(msg)
     for name, plugin in pairs(plugins) do
         if plugin.pre_process and msg then
             if plugin.description ~= 'ANTI_SPAM' and plugin.description ~= 'DELWORD' and plugin.description ~= 'MSG_CHECKS' and plugin.description ~= 'ONSERVICE' then
