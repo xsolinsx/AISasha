@@ -35,6 +35,7 @@ function on_msg_receive(msg)
         end
     end
     msg = pre_process_service_msg(msg)
+    msg = pre_process_media_msg(msg)
     if msg_valid(msg) then
         msg = pre_process_msg(msg)
         if msg then
@@ -171,12 +172,29 @@ function pre_process_service_msg(msg)
     return msg
 end
 
+function pre_process_media_msg(msg)
+    if not msg.text and msg.media then
+        msg.text = '[' .. msg.media.type .. ']'
+    end
+    return msg
+end
+
 -- Apply plugin.pre_process function
 function pre_process_msg(msg)
+    print(clr.white .. 'Preprocess', 'anti_spam')
+    msg = plugins.anti_spam.pre_process(msg)
+    print(clr.white .. 'Preprocess', 'delword')
+    msg = plugins.delword.pre_process(msg)
+    print(clr.white .. 'Preprocess', 'msg_checks')
+    msg = plugins.msg_checks.pre_process(msg)
+    print(clr.white .. 'Preprocess', 'onservice')
+    msg = plugins.onservice.pre_process(msg)
     for name, plugin in pairs(plugins) do
         if plugin.pre_process and msg then
-            print('Preprocess', name)
-            msg = plugin.pre_process(msg)
+            if plugin.description ~= 'ANTI_SPAM' and plugin.description ~= 'DELWORD' and plugin.description ~= 'MSG_CHECKS' and plugin.description ~= 'ONSERVICE' then
+                print(clr.white .. 'Preprocess', name)
+                msg = plugin.pre_process(msg)
+            end
         end
     end
     return msg
@@ -300,7 +318,6 @@ function create_config()
             "onservice",
             "check_tag",
             "strings",
-            "preprocess_media",
             "administrator",
             "database",
             "bot",
@@ -308,7 +325,6 @@ function create_config()
             "banhammer",
             "stats",
             "plugins",
-            "owners",
             "set",
             "unset",
             "help",
@@ -316,11 +332,9 @@ function create_config()
             "broadcast",
             "invite",
             "info",
-            "leave_ban",
             "whitelist",
             "feedback",
             "tagall",
-            "duckduckgo",
             "goodbyewelcome",
         },
         sudo_users =

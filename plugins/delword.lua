@@ -49,85 +49,87 @@ local function run(msg, matches)
     end
 end
 
-local function pre_process(msg, matches)
-    if not is_momod(msg) then
-        local found = false
-        local vars = list_censorships(msg)
+local function pre_process(msg)
+    if msg then
+        if not is_momod(msg) then
+            local found = false
+            local vars = list_censorships(msg)
 
-        if vars ~= nil then
-            local t = vars:split('\n')
-            for i, word in pairs(t) do
-                local temp = word:lower()
-                if msg.text then
-                    if not string.match(msg.text, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                        if string.match(msg.text:lower(), temp) then
-                            found = true
-                        end
-                    end
-                end
-                if msg.media then
-                    if msg.media.title then
-                        if not string.match(msg.media.title, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                            if string.match(msg.media.title:lower(), temp) then
-                                found = true
-                            end
-                        end
-                    end
-                    if msg.media.description then
-                        if not string.match(msg.media.description, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                            if string.match(msg.media.description:lower(), temp) then
-                                found = true
-                            end
-                        end
-                    end
-                    if msg.media.caption then
-                        if not string.match(msg.media.caption, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                            if string.match(msg.media.caption:lower(), temp) then
-                                found = true
-                            end
-                        end
-                    end
-                end
-                if msg.fwd_from then
-                    if msg.fwd_from.title then
-                        if not string.match(msg.fwd_from.title, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
-                            if string.match(msg.fwd_from.title:lower(), temp) then
-                                found = true
-                            end
-                        end
-                    end
-                end
-                if found then
-                    delete_msg(msg.id, ok_cb, false)
-                    if msg.to.type == 'chat' then
-                        kick_user(msg.from.id, msg.to.id)
-                    end
-                    -- clean msg but returns it
+            if vars ~= nil then
+                local t = vars:split('\n')
+                for i, word in pairs(t) do
+                    local temp = word:lower()
                     if msg.text then
-                        msg.text = ''
+                        if not string.match(msg.text, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
+                            if string.match(msg.text:lower(), temp) then
+                                found = true
+                            end
+                        end
                     end
                     if msg.media then
                         if msg.media.title then
-                            msg.media.title = ''
+                            if not string.match(msg.media.title, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
+                                if string.match(msg.media.title:lower(), temp) then
+                                    found = true
+                                end
+                            end
                         end
                         if msg.media.description then
-                            msg.media.description = ''
+                            if not string.match(msg.media.description, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
+                                if string.match(msg.media.description:lower(), temp) then
+                                    found = true
+                                end
+                            end
                         end
                         if msg.media.caption then
-                            msg.media.caption = ''
+                            if not string.match(msg.media.caption, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
+                                if string.match(msg.media.caption:lower(), temp) then
+                                    found = true
+                                end
+                            end
                         end
                     end
                     if msg.fwd_from then
                         if msg.fwd_from.title then
-                            msg.fwd_from.title = ''
+                            if not string.match(msg.fwd_from.title, "^[#!/]([Dd][Ee][Ll][Ww][Oo][Rr][Dd]) (.*)$") then
+                                if string.match(msg.fwd_from.title:lower(), temp) then
+                                    found = true
+                                end
+                            end
                         end
                     end
-                    return msg
+                    if found then
+                        delete_msg(msg.id, ok_cb, false)
+                        if msg.to.type == 'chat' then
+                            kick_user(msg.from.id, msg.to.id)
+                        end
+                        -- clean msg but returns it
+                        if msg.text then
+                            msg.text = ''
+                        end
+                        if msg.media then
+                            if msg.media.title then
+                                msg.media.title = ''
+                            end
+                            if msg.media.description then
+                                msg.media.description = ''
+                            end
+                            if msg.media.caption then
+                                msg.media.caption = ''
+                            end
+                        end
+                        if msg.fwd_from then
+                            if msg.fwd_from.title then
+                                msg.fwd_from.title = ''
+                            end
+                        end
+                        return msg
+                    end
                 end
             end
         end
+        return msg
     end
-    return msg
 end
 
 return {

@@ -187,35 +187,39 @@ local function run(msg, matches)
 end
 
 local function pre_process(msg)
-    if msg.to.type == 'chat' or msg.to.type == 'channel' then
-        local hash
-        local tokick
-        if msg.to.type == 'channel' then
-            hash = 'channel:flame' .. msg.to.id
-            tokick = 'channel:tokick' .. msg.to.id
-        end
-        if msg.to.type == 'chat' then
-            hash = 'chat:flame' .. msg.to.id
-            tokick = 'chat:tokick' .. msg.to.id
-        end
-        if tostring(msg.from.id) == tostring(redis:get(tokick)) then
-            redis:incr(hash)
-            local hashonredis = redis:get(hash)
-            if hashonredis then
-                reply_msg(msg.id, langs.phrases.flame[tonumber(hashonredis)], ok_cb, false)
-                if tonumber(hashonredis) == #langs.phrases.flame then
-                    local user_id = redis:get(tokick)
-                    local function post_kick()
-                        kick_user_any(user_id, msg.to.id)
+    if msg then
+        if not msg.api_patch then
+            if msg.to.type == 'chat' or msg.to.type == 'channel' then
+                local hash
+                local tokick
+                if msg.to.type == 'channel' then
+                    hash = 'channel:flame' .. msg.to.id
+                    tokick = 'channel:tokick' .. msg.to.id
+                end
+                if msg.to.type == 'chat' then
+                    hash = 'chat:flame' .. msg.to.id
+                    tokick = 'chat:tokick' .. msg.to.id
+                end
+                if tostring(msg.from.id) == tostring(redis:get(tokick)) then
+                    redis:incr(hash)
+                    local hashonredis = redis:get(hash)
+                    if hashonredis then
+                        reply_msg(msg.id, langs.phrases.flame[tonumber(hashonredis)], ok_cb, false)
+                        if tonumber(hashonredis) == #langs.phrases.flame then
+                            local user_id = redis:get(tokick)
+                            local function post_kick()
+                                kick_user_any(user_id, msg.to.id)
+                            end
+                            postpone(post_kick, false, 3)
+                            redis:del(hash)
+                            redis:del(tokick)
+                        end
                     end
-                    postpone(post_kick, false, 3)
-                    redis:del(hash)
-                    redis:del(tokick)
                 end
             end
         end
+        return msg
     end
-    return msg
 end
 
 return {

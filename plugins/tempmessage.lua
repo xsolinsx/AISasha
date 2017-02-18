@@ -97,15 +97,17 @@ local function run(msg, matches)
 end
 
 local function pre_process(msg)
-    if redis:get('temp:' .. msg.to.id) then
-        -- if there was a tempmsg
-        if not redis:get(msg.to.id) then
-            -- if the time is finished
-            delete_msg(redis:get('temp:' .. msg.to.id), ok_cb, false)
-            redis:del('temp:' .. msg.to.id)
+    if msg then
+        if redis:get('temp:' .. msg.to.id) then
+            -- if there was a tempmsg
+            if not redis:get(msg.to.id) then
+                -- if the time is finished
+                delete_msg(redis:get('temp:' .. msg.to.id), ok_cb, false)
+                redis:del('temp:' .. msg.to.id)
+            end
         end
+        return msg
     end
-    return msg
 end
 
 return {

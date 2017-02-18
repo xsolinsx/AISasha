@@ -88,24 +88,26 @@ local function run(msg, matches)
 end
 
 local function pre_process(msg)
-    if msg.to.type == 'user' then
-        local chat = ''
-        local bot = ''
-        local t = list_botinteract(msg):split('\n')
-        for i, v in pairs(t) do
-            chat, bot = v:match("(%d+):(%d+)")
-            if tonumber(msg.from.id) == tonumber(bot) then
-                -- if not msg.media then
-                --    fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
-                --    fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
-                -- else
-                fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
-                fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
-                -- end
+    if msg then
+        if msg.to.type == 'user' then
+            local chat = ''
+            local bot = ''
+            local t = list_botinteract(msg):split('\n')
+            for i, v in pairs(t) do
+                chat, bot = v:match("(%d+):(%d+)")
+                if tonumber(msg.from.id) == tonumber(bot) then
+                    -- if not msg.media then
+                    --    fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
+                    --    fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
+                    -- else
+                    fwd_msg('chat#id' .. chat, msg.id, ok_cb, false)
+                    fwd_msg('channel#id' .. chat, msg.id, ok_cb, false)
+                    -- end
+                end
             end
         end
+        return msg
     end
-    return msg
 end
 
 return {
