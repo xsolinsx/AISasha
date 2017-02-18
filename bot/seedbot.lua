@@ -181,18 +181,18 @@ end
 
 -- Apply plugin.pre_process function
 function pre_process_msg(msg)
-    print(clr.white .. 'Preprocess', 'anti_spam')
+    print('Preprocess', 'anti_spam')
     msg = plugins.anti_spam.pre_process(msg)
-    print(clr.white .. 'Preprocess', 'delword')
+    print('Preprocess', 'delword')
     msg = plugins.delword.pre_process(msg)
-    print(clr.white .. 'Preprocess', 'msg_checks')
+    print('Preprocess', 'msg_checks')
     msg = plugins.msg_checks.pre_process(msg)
-    print(clr.white .. 'Preprocess', 'onservice')
+    print('Preprocess', 'onservice')
     msg = plugins.onservice.pre_process(msg)
     for name, plugin in pairs(plugins) do
         if plugin.pre_process and msg then
             if plugin.description ~= 'ANTI_SPAM' and plugin.description ~= 'DELWORD' and plugin.description ~= 'MSG_CHECKS' and plugin.description ~= 'ONSERVICE' then
-                print(clr.white .. 'Preprocess', name)
+                print('Preprocess', name)
                 msg = plugin.pre_process(msg)
             end
         end
