@@ -414,6 +414,7 @@ local function pre_process(msg)
                                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] joined and banned (#spam name)")
                                             ban_user(msg.from.id, msg.to.id)
                                         end
+                                        return nil
                                     end
                                 end
                                 if lock_rtl then
@@ -425,6 +426,7 @@ local function pre_process(msg)
                                         if msg.to.type == 'chat' then
                                             ban_user(user_id, msg.to.id)
                                         end
+                                        return nil
                                     end
                                 end
                                 if lock_member then
@@ -434,6 +436,7 @@ local function pre_process(msg)
                                     if msg.to.type == 'chat' then
                                         ban_user(user_id, msg.to.id)
                                     end
+                                    return nil
                                 end
                             end
                             if action == 'chat_add_user' then
@@ -452,6 +455,7 @@ local function pre_process(msg)
                                                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. user_id .. "]: added user banned (#spam name) ")
                                                 ban_user(msg.from.id, msg.to.id)
                                             end
+                                            return nil
                                         end
                                     end
                                     if lock_rtl then
@@ -463,6 +467,7 @@ local function pre_process(msg)
                                             if msg.to.type == 'chat' then
                                                 ban_user(user_id, msg.to.id)
                                             end
+                                            return nil
                                         end
                                     end
                                     if lock_member then
@@ -472,6 +477,7 @@ local function pre_process(msg)
                                         if msg.to.type == 'chat' then
                                             ban_user(user_id, msg.to.id)
                                         end
+                                        return nil
                                     end
                                 end
                             end
@@ -479,6 +485,7 @@ local function pre_process(msg)
                                 if lock_leave then
                                     if not is_momod2(msg.action.user.id, msg.to.id) then
                                         ban_user(msg.action.user.id, msg.to.id)
+                                        return nil
                                     end
                                 end
                             end
