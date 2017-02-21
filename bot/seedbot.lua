@@ -19,7 +19,6 @@ function on_msg_receive(msg)
     msg.lang = get_lang(msg.to.id)
 
     local receiver = get_receiver(msg)
-    print(receiver)
     -- reaction writing
     if redis:get('writing') then
         send_typing(receiver, ok_cb, false)
@@ -47,6 +46,7 @@ function on_msg_receive(msg)
             end
         end
     end
+    print(receiver)
 end
 
 function ok_cb(extra, success, result)
