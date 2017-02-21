@@ -41,7 +41,7 @@ local function callback_group_members(extra, success, result)
     file:flush()
     file:close()
     send_large_msg(extra.receiver, text)
-    send_document(extra.receiver, "./groups/lists/" .. msg.to.id .. "memberlist.txt", ok_cb, false)
+    send_document(extra.receiver, "./groups/lists/" .. string.match(extra.receiver, '%d+') .. "memberlist.txt", ok_cb, false)
 end
 
 local function callback_supergroup_members(extra, success, result)
@@ -67,7 +67,7 @@ local function callback_supergroup_members(extra, success, result)
     file:flush()
     file:close()
     send_large_msg(extra.receiver, text)
-    send_document(extra.receiver, "./groups/lists/" .. msg.to.id .. "memberlist.txt", ok_cb, false)
+    send_document(extra.receiver, "./groups/lists/" .. string.match(extra.receiver, '%d+') .. "memberlist.txt", ok_cb, false)
 end
 
 local function callback_kicked(extra, success, result)
