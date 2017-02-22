@@ -418,6 +418,7 @@ local function run(msg, matches)
             accepted = tonumber(challenge[3])
             rounds = tonumber(challenge[4])
         end
+        vardump(challenge)
 
         if matches[1]:lower() == 'challengeinfo' then
             if challenge then
