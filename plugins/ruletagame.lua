@@ -449,6 +449,7 @@ local function run(msg, matches)
                 ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
                 ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
                 save_data(_config.ruleta.db, ruletadata)
+                reply_msg(msg.id, text, ok_cb, false)
             else
                 local text = langs[msg.lang].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
                 langs[msg.lang].challenged .. redis:get('ruletachallenged:' .. chat)
@@ -461,8 +462,8 @@ local function run(msg, matches)
                 else
                     text = langs[msg.lang].wrongPlayer:gsub('X', redis:get('ruletachallenged:' .. chat))
                 end
+                reply_msg(msg.id, text, ok_cb, false)
             end
-            reply_msg(msg.id, text, ok_cb, false)
             return
         end
 
