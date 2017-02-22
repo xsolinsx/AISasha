@@ -1,12 +1,12 @@
 multiple_messages = { }
 
 local function get_challenge(chat_id)
-    local Whashonredis = redis:get('ruleta:' .. chat_id .. ':challenger')
-    local Xhashonredis = redis:get('ruleta:' .. chat_id .. ':challenged')
-    local Yhashonredis = redis:get('ruleta:' .. chat_id .. ':accepted')
-    local Zhashonredis = redis:get('ruleta:' .. chat_id .. ':rounds')
-    if Whashonredis and Xhashonredis and Yhashonredis and Zhashonredis then
-        return { Whashonredis, Xhashonredis, Yhashonredis, Zhashonredis }
+    local challenger_id = redis:get('ruleta:' .. chat_id .. ':challenger')
+    local challenged_id = redis:get('ruleta:' .. chat_id .. ':challenged')
+    local challenge_accepted = redis:get('ruleta:' .. chat_id .. ':accepted')
+    local current_round = redis:get('ruleta:' .. chat_id .. ':rounds')
+    if challenger_id and challenged_id and challenge_accepted and current_round then
+        return { challenger_id, challenged_id, challenge_accepted, current_round }
     end
     return false
 end
@@ -401,6 +401,8 @@ local function run(msg, matches)
                 get_message(msg.reply_id, Challenge_by_reply, { challenger = user, msg = msg })
             elseif matches[2] then
                 resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), Challenge_by_username, { challenger = user, chat_id = chat, msg = msg })
+            else
+                start_challenge(msg.from.id, 0, msg.from.username or string.gsub(msg.from.print_name, '_', ' '), 'WAITING', msg.to.id)
             end
             return
         end
@@ -436,16 +438,29 @@ local function run(msg, matches)
         end
 
         if (matches[1]:lower() == 'accept' or matches[1]:lower() == 'accetta') and challenge and accepted == 0 then
-            local text = langs[msg.lang].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
-            langs[msg.lang].challenged .. redis:get('ruletachallenged:' .. chat)
-            if redis:get('ruleta:' .. chat .. ':challenged') == user then
+            if challenged == 0 then
+                local text = langs[msg.lang].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
+                langs[msg.lang].challenged .. msg.from.username or string.gsub(msg.from.print_name, '_', ' ')
+                challenged = user
+                redis:set('ruleta:' .. chat .. ':challenged', user)
+                redis:set('ruletachallenged:' .. chat, msg.from.username or string.gsub(msg.from.print_name, '_', ' '))
                 redis:set('ruleta:' .. chat .. ':accepted', 1)
                 redis:set('ruleta:' .. chat .. ':rounds', groupstats.challengecylinder)
                 ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
                 ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
                 save_data(_config.ruleta.db, ruletadata)
             else
-                text = langs[msg.lang].wrongPlayer:gsub('X', redis:get('ruletachallenged:' .. chat))
+                local text = langs[msg.lang].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
+                langs[msg.lang].challenged .. redis:get('ruletachallenged:' .. chat)
+                if redis:get('ruleta:' .. chat .. ':challenged') == user then
+                    redis:set('ruleta:' .. chat .. ':accepted', 1)
+                    redis:set('ruleta:' .. chat .. ':rounds', groupstats.challengecylinder)
+                    ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
+                    ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
+                    save_data(_config.ruleta.db, ruletadata)
+                else
+                    text = langs[msg.lang].wrongPlayer:gsub('X', redis:get('ruletachallenged:' .. chat))
+                end
             end
             reply_msg(msg.id, text, ok_cb, false)
             return
@@ -723,7 +738,7 @@ return {
         "#mystats|#punti",
         "#ruleta",
         "#godruleta",
-        "#challenge|#sfida <username>|<reply>",
+        "#challenge|#sfida [<username>|<reply>]",
         "#accept|#accetta",
         "#reject|#rifiuta",
         "#challengeinfo",
