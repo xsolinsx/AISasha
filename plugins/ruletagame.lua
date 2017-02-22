@@ -418,7 +418,6 @@ local function run(msg, matches)
             accepted = tonumber(challenge[3])
             rounds = tonumber(challenge[4])
         end
-        vardump(challenge)
 
         if matches[1]:lower() == 'challengeinfo' then
             if challenge then
@@ -439,7 +438,7 @@ local function run(msg, matches)
         end
 
         if (matches[1]:lower() == 'accept' or matches[1]:lower() == 'accetta') and challenge and accepted == 0 then
-            if challenged == 0 then
+            if tonumber(challenged) == 0 then
                 local text = langs[msg.lang].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
                 langs[msg.lang].challenged .. msg.from.username or string.gsub(msg.from.print_name, '_', ' ')
                 challenged = user
