@@ -445,23 +445,27 @@ local function run(msg, matches)
 
         if (matches[1]:lower() == 'accept' or matches[1]:lower() == 'accetta') and challenge and accepted == 0 then
             if tonumber(challenged) == 0 then
-                local name = ''
-                if msg.from.username then
-                    name = '@' .. msg.from.username
+                if tonumber(user) ~= tonumber(challenger) then
+                    local name = ''
+                    if msg.from.username then
+                        name = '@' .. msg.from.username
+                    else
+                        name = string.gsub(msg.from.print_name, '_', ' ')
+                    end
+                    local text = langs[msg.lang].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
+                    langs[msg.lang].challenged .. name
+                    challenged = user
+                    redis:set('ruleta:' .. chat .. ':challenged', user)
+                    redis:set('ruletachallenged:' .. chat, msg.from.username or string.gsub(msg.from.print_name, '_', ' '))
+                    redis:set('ruleta:' .. chat .. ':accepted', 1)
+                    redis:set('ruleta:' .. chat .. ':rounds', groupstats.challengecylinder)
+                    ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
+                    ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
+                    save_data(_config.ruleta.db, ruletadata)
+                    reply_msg(msg.id, text, ok_cb, false)
                 else
-                    name = string.gsub(msg.from.print_name, '_', ' ')
+                    reply_msg(msg.id, langs[msg.lang].cantChallengeYourself, ok_cb, false)
                 end
-                local text = langs[msg.lang].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
-                langs[msg.lang].challenged .. name
-                challenged = user
-                redis:set('ruleta:' .. chat .. ':challenged', user)
-                redis:set('ruletachallenged:' .. chat, msg.from.username or string.gsub(msg.from.print_name, '_', ' '))
-                redis:set('ruleta:' .. chat .. ':accepted', 1)
-                redis:set('ruleta:' .. chat .. ':rounds', groupstats.challengecylinder)
-                ruletadata['users'][challenger].duels = tonumber(ruletadata['users'][challenger].duels + 1)
-                ruletadata['users'][challenged].duels = tonumber(ruletadata['users'][challenged].duels + 1)
-                save_data(_config.ruleta.db, ruletadata)
-                reply_msg(msg.id, text, ok_cb, false)
             else
                 local text = langs[msg.lang].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
                 langs[msg.lang].challenged .. redis:get('ruletachallenged:' .. chat)
