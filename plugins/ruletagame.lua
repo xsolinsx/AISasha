@@ -402,7 +402,13 @@ local function run(msg, matches)
             elseif matches[2] then
                 resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), Challenge_by_username, { challenger = user, chat_id = chat, msg = msg })
             else
-                start_challenge(msg.from.id, 0, msg.from.username or string.gsub(msg.from.print_name, '_', ' '), langs[msg.lang].everyone, msg.to.id)
+                local name = ''
+                if msg.from.username then
+                    name = '@' .. msg.from.username
+                else
+                    name = string.gsub(msg.from.print_name, '_', ' ')
+                end
+                start_challenge(msg.from.id, 0, name, langs[msg.lang].everyone, msg.to.id)
             end
             return
         end
@@ -439,8 +445,14 @@ local function run(msg, matches)
 
         if (matches[1]:lower() == 'accept' or matches[1]:lower() == 'accetta') and challenge and accepted == 0 then
             if tonumber(challenged) == 0 then
+                local name = ''
+                if msg.from.username then
+                    name = '@' .. msg.from.username
+                else
+                    name = string.gsub(msg.from.print_name, '_', ' ')
+                end
                 local text = langs[msg.lang].challenger .. redis:get('ruletachallenger:' .. chat) .. '\n' ..
-                langs[msg.lang].challenged .. msg.from.username or string.gsub(msg.from.print_name, '_', ' ')
+                langs[msg.lang].challenged .. name
                 challenged = user
                 redis:set('ruleta:' .. chat .. ':challenged', user)
                 redis:set('ruletachallenged:' .. chat, msg.from.username or string.gsub(msg.from.print_name, '_', ' '))
