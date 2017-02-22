@@ -650,6 +650,7 @@ return {
         challengeCapsNumber = 'Proiettili sfida: ',
         forwardingRuleta = 'L\'inoltro dei messaggi su ruleta non è consentito.',
         ruletaDeathPercentage = 'Le probabilità di morire sono del ',
+        everyone = 'chiunque',
 
         -- set.lua --
         saved = ' salvato.',
@@ -1799,6 +1800,7 @@ return {
         challengeCapsNumber = 'Challenge bullets: ',
         forwardingRuleta = 'Forwarding in ruleta is not allowed.',
         ruletaDeathPercentage = 'Chances to die are ',
+        everyone = 'everyone',
 
         -- set.lua --
         saved = ' saved.',

@@ -402,7 +402,7 @@ local function run(msg, matches)
             elseif matches[2] then
                 resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), Challenge_by_username, { challenger = user, chat_id = chat, msg = msg })
             else
-                start_challenge(msg.from.id, 0, msg.from.username or string.gsub(msg.from.print_name, '_', ' '), 'WAITING', msg.to.id)
+                start_challenge(msg.from.id, 0, msg.from.username or string.gsub(msg.from.print_name, '_', ' '), langs[msg.lang].everyone, msg.to.id)
             end
             return
         end
