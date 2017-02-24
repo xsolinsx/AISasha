@@ -1250,7 +1250,7 @@ return {
             '🅿️ SPAM',
             'Plugin per spammare fastidiosamente.',
             'OWNER',
-            '(#spam|[sasha] spamma) [<messages> <seconds>] <text>: Sasha inzia a spammare <text>, se specificato per <messages> volte ogni <seconds> secondi.',
+            '(#spam|[sasha] spamma) [<messages> <seconds>] <reply>|<text>: Sasha inzia a spammare <reply>|<text>, se specificato <messages> messaggi uno ogni <seconds> secondi, altrimenti 5 messaggi uno ogni 2 secondi.',
         },
 
         stats =
@@ -2386,7 +2386,7 @@ return {
             '🅿️ SPAM',
             'Plugin for spamming.',
             'OWNER',
-            '(#spam|[sasha] spamma) [<messages> <seconds>] <text>: Sasha starts spamming <text> for <messages> times every <seconds> seconds.',
+            '(#spam|[sasha] spamma) [<messages> <seconds>] <reply>|<text>: Sasha starts spamming <reply>|<text> if specified for <messages> times every <seconds> seconds, otherwise 5 messages one every 2 seconds.',
         },
 
         stats =
