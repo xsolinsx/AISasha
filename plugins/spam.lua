@@ -6,10 +6,10 @@ local function send_spam(receiver, text, i)
 end
 
 local function forward_spam(receiver, message_id, i)
-    local function message()
+    local function fwd_message()
         fwd_msg(receiver, message_id, ok_cb, false)
     end
-    postpone(message, false, i)
+    postpone(fwd_message, false, i)
 end
 
 local function cycle_spam(receiver, text, messages, time_between_messages)
@@ -24,7 +24,7 @@ local function cycle_spam_forward(receiver, message_to_forward, messages, time_b
     local i = 0
     while i <(tonumber(messages or 5) /(0.5 / tonumber(time_between_messages or 2))) / 2 do
         i = i + tonumber(time_between_messages or 2)
-        forward_spam(receiver, text, i)
+        forward_spam(receiver, message_to_forward, i)
     end
 end
 
