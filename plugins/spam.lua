@@ -29,8 +29,7 @@ local function cycle_spam_forward(receiver, message_to_forward, messages, time_b
 end
 
 local function run(msg, matches)
-    if (matches[1]:lower() == 'spam' or matches[1]:lower() == 'sasha spamma' or matches[1]:lower() == 'spamma') and matches[2] then
-        -- if matches[1]:lower() == 'spam' or matches[1]:lower() == 'sasha spamma' or matches[1]:lower() == 'spamma' then
+    if matches[1]:lower() == 'spam' or matches[1]:lower() == 'sasha spamma' or matches[1]:lower() == 'spamma' then
         if is_owner(msg) then
             if type(msg.reply_id) ~= "nil" then
                 if matches[2] and matches[3] then
