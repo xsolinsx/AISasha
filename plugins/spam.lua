@@ -24,7 +24,7 @@ local function cycle_spam_forward(receiver, message_to_forward, messages, time_b
     local i = 0
     while i <(tonumber(messages or 5) /(0.5 / tonumber(time_between_messages or 2))) / 2 do
         i = i + tonumber(time_between_messages or 2)
-        send_spam(receiver, text, i)
+        forward_spam(receiver, text, i)
     end
 end
 
