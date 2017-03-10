@@ -605,7 +605,7 @@ return {
 
         -- onservice.lua --
         notMyGroup = 'Questo non è un mio gruppo, addio.',
-        apiReboot = 'AISashaAPI Ucciso.',
+        apiReboot = 'AISashaAPI uccisa da',
 
         -- patch_for_api.lua --
         groupPatched = 'Patch per l\'utilizzo simultaneo di Sasha API e Sasha Utente eseguita. Sarà sempre possibile eseguire i comandi con Sasha Utente usando il tag in questo modo "@AISasha <command>", così facendo Sasha API ignorerà il messaggio.',
@@ -1762,7 +1762,7 @@ return {
 
         -- onservice.lua --
         notMyGroup = 'This is not one of my groups, bye.',
-        apiReboot = 'AISashaAPI Killed.',
+        apiReboot = 'AISashaAPI killed by ',
 
         -- patch_for_api.lua --
         groupPatched = 'Patch to use API Sasha and Sasha User executed. Everyone will be able to execute Sasha User commands by using her tag like this "@AISasha <command>", in this way API Sasha will ignore the message.',
