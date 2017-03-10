@@ -67,19 +67,9 @@ ruletagame.lua
 	ruletachallenged:<chat_id>
 	user:<user_id>
 seedbot.lua
-	bot:general
-	api:last_redis_cron
-	api:last_redis_db_cron
-	api:last_redis_administrator_cron
-	chat:<chat_id>:userlast
-	chat:<chat_id>:userstats
-	chat:<chat_id>:usermedia
-	chat:<chat_id>:totalmsgs
-	user:<user_id>
-	chat:<chat_id>:cb
-	group:<chat_id>:variables
-	supergroup:<chat_id>:variables
-	banned:<chat_id>
+	writing
+	apipatch
+	bot:markread
 set.lua
 	gvariables
 	user:<chat_id>:variables
@@ -101,7 +91,13 @@ unset.lua
 	chat:<chat_id>:variables
 	channel:<chat_id>:variables
 utils.lua
-	commands:stats
 	lang:<chat_id>
+	<chat_id>:warn:<user_id>
+	banned:<chat_id>
+	gbanned
+	user:<user_id>
+	whitelist
+	mute_user:<chat_id>
+	mute:<chat_id>
 whitelist.lua
 	whitelist
