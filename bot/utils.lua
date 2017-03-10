@@ -843,6 +843,20 @@ function compare_ranks(executer, target, chat_id)
     end
 end
 
+function is_reboot_allowed(msg)
+    local ids = redis:hkeys('rebootallowed')
+    for i = 1, #ids do
+        if tonumber(msg.from.id) == tonumber(ids[i]) then
+            return true
+        end
+    end
+    if is_sudo(msg) then
+        return true
+    end
+
+    return false
+end
+
 -- User has privileges
 function is_sudo(msg)
     local var = false

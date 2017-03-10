@@ -218,9 +218,21 @@ local function run(msg, matches)
             import_chat_link(hash, ok_cb, false)
         end
         if is_sudo(msg) then
-            if matches[1]:lower() == "rebootapi" or matches[1]:lower() == "sasha riavvia api" then
-                io.popen('kill -9 $(pgrep lua)'):read('*all')
-                return langs[msg.lang].apiReboot
+            if matches[1]:lower() == "authorizereboot" and matches[2] then
+                redis:hset('rebootallowed', matches[2], matches[2])
+                return langs[msg.lang].userAuthorized
+            end
+            if matches[1]:lower() == "deauthorizereboot" and matches[2] then
+                redis:hdel('rebootallowed', matches[2])
+                return langs[msg.lang].userDeauthorized
+            end
+            if matches[1]:lower() == "list reboot authorized" then
+                local ids = redis:hkeys('rebootallowed')
+                local text = ''
+                for i = 1, #ids do
+                    text = text .. ids[i] .. '\n'
+                end
+                return text
             end
             if matches[1]:lower() == "contactlist" or matches[1]:lower() == "sasha lista contatti" then
                 if not matches[2] then
@@ -382,9 +394,11 @@ return {
         "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp]) (.*)$",
         "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp])$",
         "^[#!/]([Cc][Hh][Ee][Cc][Kk][Ss][Pp][Ee][Ee][Dd])$",
-        "^[#!/]([Rr][Ee][Bb][Oo][Oo][Tt][Aa][Pp][Ii])$",
         "^[#!/]([Pp][Ii][Nn][Gg])$",
         "^[#!/]([Ll][Aa][Ss][Tt][Ss][Tt][Aa][Rr][Tt])$",
+        "^[#!/]([Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Rr][Ee][Bb][Oo][Oo][Tt]) (%d+)$",
+        "^[#!/]([Dd][Ee][Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Rr][Ee][Bb][Oo][Oo][Tt]) (%d+)$",
+        "^[#!/]([Ll][Ii][Ss][Tt] [Rr][Ee][Bb][Oo][Oo][Tt] [Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Dd])$",
         "%[(photo)%]",
         -- pm
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii][Aa]) (%d+) (.*)$",
@@ -429,8 +443,6 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Uu][Nn][Gg][Ii] [Ll][Oo][Gg])$",
         -- remlog
         "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Mm][Uu][Oo][Vv][Ii] [Ll][Oo][Gg])$",
-        -- rebootapi
-        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Aa][Vv][Ii][Aa] [Aa][Pp][Ii])$",
     },
     run = run,
     min_rank = 3,
@@ -459,8 +471,10 @@ return {
         "(#sync_gbans|sasha sincronizza superban)",
         "(#backup|sasha esegui backup)",
         "(#uploadbackup|sasha invia backup)",
-        "(#rebootapi|sasha riavvia api)",
         "#vardump [<reply>|<msg_id>]",
+        "#authorizereboot <user_id>",
+        "#deauthorizereboot <user_id>",
+        "#list reboot authorized",
     },
 }
 -- By @imandaneshi :)

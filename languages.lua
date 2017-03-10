@@ -193,6 +193,7 @@ return {
     {
         -- global --
         require_sudo = '🚫 Questo comando richiede i privilegi di sudo.',
+        require_authorized_or_sudo = '🚫 Questo comando richiede che tu sia autorizzato o i privilegi di sudo.',
         require_admin = '🚫 Questo comando richiede privilegi da admin o superiori.',
         require_owner = '🚫 Questo comando richiede privilegi da owner o superiori.',
         require_mod = '🚫 Questo comando richiede privilegi da moderatore o superiori.',
@@ -257,7 +258,8 @@ return {
         backupSent = 'Ti sto inviando il backup.',
         backupMissing = 'Backup mancante.',
         autoSendBackupDb = 'Ti sto inviando il backup automatico.',
-        apiReboot = 'AISashaAPI Ucciso.',
+        userAuthorized = 'Utente autorizzato.',
+        userDeauthorized = 'Utente deautorizzato.',
 
         -- anti_spam.lua --
         blockedForSpam = ' bloccato (SPAM).',
@@ -603,6 +605,7 @@ return {
 
         -- onservice.lua --
         notMyGroup = 'Questo non è un mio gruppo, addio.',
+        apiReboot = 'AISashaAPI Ucciso.',
 
         -- patch_for_api.lua --
         groupPatched = 'Patch per l\'utilizzo simultaneo di Sasha API e Sasha Utente eseguita. Sarà sempre possibile eseguire i comandi con Sasha Utente usando il tag in questo modo "@AISasha <command>", così facendo Sasha API ignorerà il messaggio.',
@@ -724,8 +727,10 @@ return {
             '(#sync_gbans|sasha sincronizza superban): Sasha sincronizza la lista dei superban con quella offerta da TeleSeed.',
             '(#backup|sasha esegui backup): Sasha esegue un backup di se stessa e invia il log al richiedente.',
             '(#uploadbackup|sasha invia backup): Sasha invia il suo ultimo backup.',
-            '(#rebootapi|sasha riavvia api): Sasha riavvia la sua versione API.',
             '#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.',
+            '#authorizereboot <user_id>: Sasha autorizza <user_id> a riavviare la sua versione API.',
+            '#deauthorizereboot <user_id>: Sasha deautorizza <user_id> a riavviare la sua versione API.',
+            '#list reboot authorized: Sasha manda la lista di utenti autorizzati a riavviare la sua versione API.',
         },
 
         banhammer =
@@ -1135,6 +1140,8 @@ return {
             'Plugin per far abbandonare un gruppo a Sasha.',
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha lascia il gruppo.',
+            "SUDO",
+            '(#rebootapi|sasha riavvia api): Sasha riavvia la sua versione API.',
         },
 
         patch_for_api =
@@ -1363,6 +1370,7 @@ return {
     {
         -- global --
         require_sudo = '🚫 This plugin requires sudo privileges.',
+        require_authorized_or_sudo = '🚫 This plugin requires that you have been authorized or sudo privileges.',
         require_admin = '🚫 This plugin requires admin privileges or higher.',
         require_owner = '🚫 This plugin requires owner privileges or higher.',
         require_mod = '🚫 This plugin requires mod privileges or higher.',
@@ -1431,7 +1439,8 @@ return {
         backupSent = 'I\'m sending you the backup.',
         backupMissing = 'Backup missing.',
         autoSendBackupDb = 'I\'m sending you the automatic backup.',
-        apiReboot = 'AISashaAPI Killed.',
+        userAuthorized = 'Utente authorized.',
+        userDeauthorized = 'Utente deauthorized.',
 
         -- anti_spam.lua --
         blockedForSpam = ' blocked (SPAM).',
@@ -1753,6 +1762,7 @@ return {
 
         -- onservice.lua --
         notMyGroup = 'This is not one of my groups, bye.',
+        apiReboot = 'AISashaAPI Killed.',
 
         -- patch_for_api.lua --
         groupPatched = 'Patch to use API Sasha and Sasha User executed. Everyone will be able to execute Sasha User commands by using her tag like this "@AISasha <command>", in this way API Sasha will ignore the message.',
@@ -1874,8 +1884,10 @@ return {
             '(#sync_gbans|sasha sincronizza superban): Sasha syncs gbans list with the one offered by TeleSeed.',
             '(#backup|sasha esegui backup): Sasha makes a backup of herself and sends log to the sender.',
             '(#uploadbackup|sasha invia backup): Sasha sends her last backup.',
-            '(#rebootapi|sasha riavvia api): Sasha reboots her API version.',
             '#vardump [<reply>|<msg_id>]: Sasha sends vardump of specified message.',
+            '#authorizereboot <user_id>: Sasha authorize <user_id> to reboot her API version.',
+            '#deauthorizereboot <user_id>: Sasha deauthorize <user_id> to reboot her API version.',
+            '#list reboot authorized: Sasha sends the list of users that are authorized to reboot her API version.',
         },
 
         banhammer =
@@ -2271,6 +2283,8 @@ return {
             'Plugin to make Sasha leave a group.',
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha leaves the group.',
+            "SUDO",
+            '(#rebootapi|sasha riavvia api): Sasha reboots her API version.',
         },
 
         patch_for_api =
