@@ -5,13 +5,13 @@ local function flame_by_username(extra, success, result)
     end
     local hash
     local tokick
-    if extra.chat_type == 'channel' then
-        hash = 'channel:flame' .. extra.chat_id
-        tokick = 'channel:tokick' .. extra.chat_id
-    end
     if extra.chat_type == 'chat' then
         hash = 'chat:flame' .. extra.chat_id
         tokick = 'chat:tokick' .. extra.chat_id
+    end
+    if extra.chat_type == 'channel' then
+        hash = 'channel:flame' .. extra.chat_id
+        tokick = 'channel:tokick' .. extra.chat_id
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -28,13 +28,13 @@ local function flame_by_reply(extra, success, result)
     local tokick
     local lang = get_lang(result.to.peer_id)
     if get_reply_receiver(result) == extra.receiver then
-        if result.to.peer_type == 'channel' then
-            hash = 'channel:flame' .. result.to.peer_id
-            tokick = 'channel:tokick' .. result.to.peer_id
-        end
         if result.to.peer_type == 'chat' then
             hash = 'chat:flame' .. result.to.peer_id
             tokick = 'chat:tokick' .. result.to.peer_id
+        end
+        if result.to.peer_type == 'channel' then
+            hash = 'channel:flame' .. result.to.peer_id
+            tokick = 'channel:tokick' .. result.to.peer_id
         end
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.from.peer_id, result.to.peer_id) then
@@ -54,13 +54,13 @@ local function flame_from(extra, success, result)
     local tokick
     local lang = get_lang(result.to.peer_id)
     if get_reply_receiver(result) == extra.receiver then
-        if result.to.peer_type == 'channel' then
-            hash = 'channel:flame' .. result.to.peer_id
-            tokick = 'channel:tokick' .. result.to.peer_id
-        end
         if result.to.peer_type == 'chat' then
             hash = 'chat:flame' .. result.to.peer_id
             tokick = 'chat:tokick' .. result.to.peer_id
+        end
+        if result.to.peer_type == 'channel' then
+            hash = 'channel:flame' .. result.to.peer_id
+            tokick = 'channel:tokick' .. result.to.peer_id
         end
         -- ignore higher or same rank
         if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
@@ -116,13 +116,13 @@ local function run(msg, matches)
                         if string.match(matches[2], '^%d+$') then
                             local hash
                             local tokick
-                            if msg.to.type == 'channel' then
-                                hash = 'channel:flame' .. msg.to.id
-                                tokick = 'channel:tokick' .. msg.to.id
-                            end
                             if msg.to.type == 'chat' then
                                 hash = 'chat:flame' .. msg.to.id
                                 tokick = 'chat:tokick' .. msg.to.id
+                            end
+                            if msg.to.type == 'channel' then
+                                hash = 'channel:flame' .. msg.to.id
+                                tokick = 'channel:tokick' .. msg.to.id
                             end
                             -- ignore higher or same rank
                             if compare_ranks(msg.from.id, matches[2], msg.to.id) then
@@ -142,13 +142,13 @@ local function run(msg, matches)
                 elseif matches[1]:lower() == 'stopflame' or matches[1]:lower() == 'sasha stop flame' or matches[1]:lower() == 'stop flame' then
                     local hash
                     local tokick
-                    if msg.to.type == 'channel' then
-                        hash = 'channel:flame' .. msg.to.id
-                        tokick = 'channel:tokick' .. msg.to.id
-                    end
                     if msg.to.type == 'chat' then
                         hash = 'chat:flame' .. msg.to.id
                         tokick = 'chat:tokick' .. msg.to.id
+                    end
+                    if msg.to.type == 'channel' then
+                        hash = 'channel:flame' .. msg.to.id
+                        tokick = 'channel:tokick' .. msg.to.id
                     end
                     -- ignore higher or same rank
                     if compare_ranks(msg.from.id, redis:get(tokick), msg.to.id) then
@@ -161,13 +161,13 @@ local function run(msg, matches)
                 elseif matches[1]:lower() == 'flameinfo' or matches[1]:lower() == 'sasha info flame' or matches[1]:lower() == 'info flame' then
                     local hash
                     local tokick
-                    if msg.to.type == 'channel' then
-                        hash = 'channel:flame' .. msg.to.id
-                        tokick = 'channel:tokick' .. msg.to.id
-                    end
                     if msg.to.type == 'chat' then
                         hash = 'chat:flame' .. msg.to.id
                         tokick = 'chat:tokick' .. msg.to.id
+                    end
+                    if msg.to.type == 'channel' then
+                        hash = 'channel:flame' .. msg.to.id
+                        tokick = 'channel:tokick' .. msg.to.id
                     end
                     local hashonredis = redis:get(hash)
                     local user = redis:get(tokick)
@@ -192,13 +192,13 @@ local function pre_process(msg)
             if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 local hash
                 local tokick
-                if msg.to.type == 'channel' then
-                    hash = 'channel:flame' .. msg.to.id
-                    tokick = 'channel:tokick' .. msg.to.id
-                end
                 if msg.to.type == 'chat' then
                     hash = 'chat:flame' .. msg.to.id
                     tokick = 'chat:tokick' .. msg.to.id
+                end
+                if msg.to.type == 'channel' then
+                    hash = 'channel:flame' .. msg.to.id
+                    tokick = 'channel:tokick' .. msg.to.id
                 end
                 if tostring(msg.from.id) == tostring(redis:get(tokick)) then
                     redis:incr(hash)

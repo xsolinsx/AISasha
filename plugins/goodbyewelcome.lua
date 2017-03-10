@@ -142,11 +142,11 @@ local function run(msg, matches)
         if msg.action then
             if (msg.action.type == "chat_add_user" or msg.action.type == "chat_add_user_link") and get_memberswelcome(msg.to.id) ~= langs[msg.lang].noSetValue then
                 local hash
-                if msg.to.type == 'channel' then
-                    hash = 'channel:welcome' .. msg.to.id
-                end
                 if msg.to.type == 'chat' then
                     hash = 'chat:welcome' .. msg.to.id
+                end
+                if msg.to.type == 'channel' then
+                    hash = 'channel:welcome' .. msg.to.id
                 end
                 redis:incr(hash)
                 local hashonredis = redis:get(hash)

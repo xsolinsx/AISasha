@@ -1,9 +1,9 @@
 local function get_censorships_hash(msg)
-    if msg.to.type == 'channel' then
-        return 'channel:' .. msg.to.id .. ':censorships'
-    end
     if msg.to.type == 'chat' then
         return 'chat:' .. msg.to.id .. ':censorships'
+    end
+    if msg.to.type == 'channel' then
+        return 'channel:' .. msg.to.id .. ':censorships'
     end
     return false
 end

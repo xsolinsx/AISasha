@@ -29,6 +29,12 @@ local function pre_process(msg)
             end
         end
 
+        if msg.to.type == 'user' then
+            -- User is on chat
+            local hash = 'PM:' .. msg.from.id
+            redis:sadd(hash, msg.from.id)
+        end
+
         -- Save stats on Redis
         if msg.to.type == 'chat' then
             -- User is on chat
@@ -40,12 +46,6 @@ local function pre_process(msg)
         if msg.to.type == 'channel' then
             -- User is on channel
             local hash = 'channel:' .. msg.to.id .. ':users'
-            redis:sadd(hash, msg.from.id)
-        end
-
-        if msg.to.type == 'user' then
-            -- User is on chat
-            local hash = 'PM:' .. msg.from.id
             redis:sadd(hash, msg.from.id)
         end
 

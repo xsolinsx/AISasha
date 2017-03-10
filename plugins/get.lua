@@ -5,14 +5,14 @@
         end
         return false
     else
-        if msg.to.type == 'channel' then
-            return 'channel:' .. msg.to.id .. ':variables'
+        if msg.to.type == 'user' then
+            return 'user:' .. msg.from.id .. ':variables'
         end
         if msg.to.type == 'chat' then
             return 'chat:' .. msg.to.id .. ':variables'
         end
-        if msg.to.type == 'user' then
-            return 'user:' .. msg.from.id .. ':variables'
+        if msg.to.type == 'channel' then
+            return 'channel:' .. msg.to.id .. ':variables'
         end
         return false
     end

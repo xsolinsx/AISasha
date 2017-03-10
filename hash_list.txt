@@ -1,0 +1,107 @@
+administrator.lua
+	bot:photo
+	bot:markread
+	user:<chat_id>
+anti_spam.lua
+	user:<user_id>
+	PM:<user_id> or chat:<chat_id>:users or channel:<user_id>:users
+	msgs:<user_id>:<chat_id>
+	cli:user:<user_id>:msgs
+	whitelist
+	gban:spam<user_id>
+banhammer.lua
+	banned:<chat_id>
+	user:<user_id>
+	msgs:<user_id>:<chat_id>
+	addedbanuser:<chat_id>:<user_id>
+botinteract.lua
+	botinteract
+	<chat_id>
+delword.lua
+	chat:<chat_id>:censorships
+	channel:<chat_id>:censorships
+filemanager.lua
+	user:folder
+flame.lua
+	chat:flame:<chat_id>
+    chat:tokick:<chat_id>
+	channel:flame:<chat_id>
+    channel:tokick:<chat_id>
+get.lua
+	gvariables
+	user:<chat_id>:variables
+	chat:<chat_id>:variables
+	channel:<chat_id>:variables
+	<chat_id>:gvariables
+goodbyewelcome.lua
+	chat:welcome<chat_id>
+	channel:welcome<chat_id>
+group_management.lua
+	groupalias
+	msgs:<user_id>:<chat_id>
+	picture:changed:<chat_id>:<user_id>
+	name:changed:<chat_id>:<user_id>
+	mute_user:<chat_id>
+help.lua
+	msgs:<user_id>:<chat_id>
+info.lua
+	msgs:<user_id>:<chat_id>
+likecounter.lua
+	user:<user_id>
+lotteria.lua
+	lotteria:<chat_id>
+	lotteria:<chat_id>:attiva
+me.lua
+	msgs:<user_id>:<chat_id>
+patch_for_api.lua
+	apipatch
+reactions.lua
+	writing
+ruletagame.lua
+	ruleta:<chat_id>:challenger
+	ruleta:<chat_id>:challenged
+	ruleta:<chat_id>:accepted
+	ruleta:<chat_id>:rounds
+	ruletachallenge:<chat_id>:player
+	ruletachallenger:<chat_id>
+	ruletachallenged:<chat_id>
+	user:<user_id>
+seedbot.lua
+	bot:general
+	api:last_redis_cron
+	api:last_redis_db_cron
+	api:last_redis_administrator_cron
+	chat:<chat_id>:userlast
+	chat:<chat_id>:userstats
+	chat:<chat_id>:usermedia
+	chat:<chat_id>:totalmsgs
+	user:<user_id>
+	chat:<chat_id>:cb
+	group:<chat_id>:variables
+	supergroup:<chat_id>:variables
+	banned:<chat_id>
+set.lua
+	gvariables
+	user:<chat_id>:variables
+	chat:<chat_id>:variables
+	channel:<chat_id>:variables
+stats.lua
+	user:<user_id>
+	msgs:<user_id>:<chat_id>
+	chatmsgs:<chat_id>
+	chat:<chat_id>:users
+	channel:<chat_id>:users
+strings.lua
+	lang:<chat_id>
+tempmessage.lua
+	temp:<chat_id>
+unset.lua
+	gvariables
+	user:<chat_id>:variables
+	chat:<chat_id>:variables
+	channel:<chat_id>:variables
+utils.lua
+	commands:stats
+	lang:<chat_id>
+whitelist.lua
+	whitelist
