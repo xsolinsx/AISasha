@@ -18,8 +18,8 @@ local function run(msg, matches)
     elseif matches[1]:lower() == 'rebootapi' or matches[1]:lower() == 'sasha riavvia api' then
         if is_reboot_allowed(msg) then
             io.popen('kill -9 $(pgrep lua)'):read('*all')
-            send_large_msg_SUDOERS(langs[msg.lang].apiReboot .. msg.from.print_name .. ' ' .. msg.from.id)
-            return langs[msg.lang].apiReboot .. msg.from.print_name .. ' ' .. msg.from.id
+            send_large_msg_SUDOERS(langs[msg.lang].apiReboot .. msg.from.print_name:gsub('_', ' ') .. ' ' .. msg.from.id)
+            return langs[msg.lang].apiReboot .. msg.from.print_name:gsub('_', ' ') .. ' ' .. msg.from.id
         else
             return langs[msg.lang].require_authorized_or_sudo
         end
