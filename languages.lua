@@ -449,6 +449,7 @@ return {
         none = 'Nessuno',
         realm = 'Regno ',
         group = 'Gruppo ',
+        supergroup = 'Supergruppo ',
         created = ' creato.',
         chatTypeNotFound = 'Tipo chat non trovato.',
         usersIn = 'Utenti in ',
@@ -1628,7 +1629,8 @@ return {
         -- ex inrealm.lua --
         none = 'No one',
         realm = 'Realm ',
-        group = 'Groups ',
+        group = 'Group ',
+        supergroup = 'Supergroup ',
         created = ' created.',
         chatTypeNotFound = 'Chat type not found.',
         usersIn = 'Users in ',

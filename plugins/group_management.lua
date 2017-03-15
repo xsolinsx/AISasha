@@ -74,11 +74,11 @@ end
 local function create_group(group_creator, group_name, lang)
     create_group_chat(group_creator, group_name, ok_cb, false)
     if group_type == 'group' then
-        return langs[msg.lang].realm .. string.gsub(group_name, '_', ' ') .. langs[msg.lang].created
-        -- elseif group_type == 'supergroup' then
-        -- return langs[lang].supergroup .. string.gsub(group_name, '_', ' ') .. langs[lang].created
+        return langs[msg.lang].group .. string.gsub(group_name, '_', ' ') .. langs[msg.lang].created
+    elseif group_type == 'supergroup' then
+        return langs[lang].supergroup .. string.gsub(group_name, '_', ' ') .. langs[lang].created
     elseif group_type == 'realm' then
-        return langs[lang].group .. string.gsub(group_name, '_', ' ') .. langs[lang].created
+        return langs[lang].realm .. string.gsub(group_name, '_', ' ') .. langs[lang].created
     end
 end
 
