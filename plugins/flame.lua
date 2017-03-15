@@ -130,7 +130,7 @@ local function run(msg, matches)
                                 redis:set(tokick, matches[2]);
                                 return langs[msg.lang].hereIAm
                             else
-                                send_large_msg(get_receiver(msg), langs[msg.lang].require_rank)
+                                return langs[msg.lang].require_rank
                             end
                         elseif string.find(matches[2], '@') then
                             if string.gsub(matches[2], '@', ''):lower() == 'aisasha' then
@@ -151,12 +151,14 @@ local function run(msg, matches)
                         tokick = 'channel:tokick' .. msg.to.id
                     end
                     -- ignore higher or same rank
-                    if compare_ranks(msg.from.id, redis:get(tokick), msg.to.id) then
-                        redis:del(hash)
-                        redis:del(tokick)
-                        return langs[msg.lang].stopFlame
-                    else
-                        send_large_msg(get_receiver(msg), langs[msg.lang].require_rank)
+                    if redis:get(tokick) then
+                        if compare_ranks(msg.from.id, redis:get(tokick), msg.to.id) then
+                            redis:del(hash)
+                            redis:del(tokick)
+                            return langs[msg.lang].stopFlame
+                        else
+                            return langs[msg.lang].require_rank
+                        end
                     end
                 elseif matches[1]:lower() == 'flameinfo' or matches[1]:lower() == 'sasha info flame' or matches[1]:lower() == 'info flame' then
                     local hash
