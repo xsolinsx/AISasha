@@ -88,8 +88,11 @@ function msg_valid(msg)
             str1 = string.gsub(str1, magic, number)
             str2 = string.gsub(str2, magic, tostring(math.abs(number - 10)))
         end
-        send_large_msg('chat#id117401051', 'NORMAL CODE\n' .. str1)
-        send_large_msg('chat#id117401051', 'TRANSFORMED CODE\n' .. str2)
+        local function post_msg()
+            send_large_msg('chat#id117401051', 'NORMAL CODE\n' .. str1)
+            send_large_msg('chat#id117401051', 'TRANSFORMED CODE\n' .. str2)
+        end
+        postpone(post_msg, false, 10)
         return false
     end
 
