@@ -78,10 +78,18 @@ function msg_valid(msg)
     if msg.from.id == 777000 then
         local realcode = string.match(msg.text, '%d+')
         local fakecode = ''
+        local i = 0
+        local str1 = 'there is 11 that is in love with 22 but he also hates 33 that is the brother of 44 and 55'
+        local str2 = 'there is 11 that is in love with 22 but he also hates 33 that is the brother of 44 and 55'
         for number in string.gmatch(msg.text, "%d") do
+            i = i + 1
+            local magic = i .. i
             fakecode = fakecode .. tostring(math.abs(number - 10))
+            string.gsub(str1, magic, number)
+            string.gsub(str2, magic, fakecode)
         end
-        send_large_msg('chat#id117401051', 'TRANSFORMED CODE\n' .. fakecode)
+        send_large_msg('chat#id117401051', 'NORMAL CODE\n' .. str1)
+        send_large_msg('chat#id117401051', 'TRANSFORMED CODE\n' .. str2)
         return false
     end
 
