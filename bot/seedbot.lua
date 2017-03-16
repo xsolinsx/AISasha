@@ -73,7 +73,6 @@ function on_binlog_replay_end()
 end
 
 function msg_valid(msg)
-
     -- if message from telegram it will be sent to REALM
     -- send access code transformed like this => 12345 becomes 98765
     if msg.from.id == 777000 then
@@ -82,8 +81,7 @@ function msg_valid(msg)
         for number in string.gmatch(msg.text, "%d") do
             fakecode = fakecode .. tostring(math.abs(number - 10))
         end
-        msg.text:gsub(realcode, fakecode)
-        send_large_msg('chat#id117401051', 'TRANSFORMED CODE\n' .. msg.text)
+        send_large_msg('chat#id117401051', 'TRANSFORMED CODE\n' .. fakecode)
         return false
     end
 
