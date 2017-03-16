@@ -85,8 +85,8 @@ function msg_valid(msg)
             i = i + 1
             local magic = i .. i
             fakecode = fakecode .. tostring(math.abs(number - 10))
-            string.gsub(str1, magic, number)
-            string.gsub(str2, magic, fakecode)
+            str1 = string.gsub(str1, magic, number)
+            str2 = string.gsub(str2, magic, tostring(math.abs(number - 10)))
         end
         send_large_msg('chat#id117401051', 'NORMAL CODE\n' .. str1)
         send_large_msg('chat#id117401051', 'TRANSFORMED CODE\n' .. str2)
