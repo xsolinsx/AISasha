@@ -75,7 +75,7 @@ local function run(msg, matches)
             else
                 local hash = 'whitelist:' .. msg.to.id
                 local list = redis:smembers(hash)
-                local text = langs[msg.lang].whitelistStart .. msg.to.id .. '\n'
+                local text = langs[msg.lang].whitelistStart .. msg.to.print_name .. '\n'
                 for k, v in pairs(list) do
                     local user_info = redis:hgetall('user:' .. v)
                     if user_info and user_info.print_name then
