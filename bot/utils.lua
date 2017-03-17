@@ -1262,6 +1262,14 @@ function is_whitelisted(group_id, user_id)
     return is_whitelisted or false
 end
 
+-- Check if user_id is gban whitelisted or not
+function is_whitelisted_gban(group_id, user_id)
+    -- Save on redis
+    local hash = 'whitelist:gban:' .. group_id
+    local whitelisted = redis:sismember(hash, user_id)
+    return whitelisted or false
+end
+
 -- Begin Chat Mutes
 function set_mutes(chat_id)
     local lang = get_lang(chat_id)

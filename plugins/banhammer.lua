@@ -1094,7 +1094,7 @@ local function pre_process(msg)
                 if msg.action.type == 'chat_add_user_link' then
                     local user_id = msg.from.id
                     print('Checking invited user ' .. user_id)
-                    if is_banned(user_id, msg.to.id) or is_gbanned(user_id) then
+                    if is_banned(user_id, msg.to.id) or(is_gbanned(user_id) and not is_whitelisted_gban(msg.to.id, user_id)) then
                         -- Check it with redis
                         print('User is banned!')
                         local print_name = user_print_name(msg.from):gsub("‮", "")
@@ -1108,7 +1108,7 @@ local function pre_process(msg)
                 if msg.action.type == 'chat_add_user' then
                     local user_id = msg.action.user.id
                     print('Checking invited user ' .. user_id)
-                    if is_banned(user_id, msg.to.id) and not is_momod2(msg.from.id, msg.to.id) or is_gbanned(user_id) and not is_admin2(msg.from.id) then
+                    if is_banned(user_id, msg.to.id) and not is_momod2(msg.from.id, msg.to.id) or(is_gbanned(user_id) and(not is_admin2(msg.from.id) or not is_whitelisted_gban(msg.to.id, user_id))) then
                         -- Check it with redis
                         print('User is banned!')
                         local print_name = user_print_name(msg.from):gsub("‮", "")
@@ -1166,7 +1166,7 @@ local function pre_process(msg)
             -- end
             local user_id = msg.from.id
             local chat_id = msg.to.id
-            if is_banned(user_id, msg.to.id) or is_gbanned(user_id) then
+            if is_banned(user_id, msg.to.id) or(is_gbanned(user_id) and not is_whitelisted_gban(msg.to.id, msg.from.id)) then
                 -- Check it with redis
                 print('Banned user talking!')
                 local print_name = user_print_name(msg.from):gsub("‮", "")

@@ -697,6 +697,10 @@ return {
         whitelistAdded = ' aggiunto alla whitelist.',
         whitelistCleaned = 'Whitelist svuotata.',
         whitelistStart = 'Whitelist ',
+        whitelistGbanRemoved = ' rimosso dalla whitelist dei gban.',
+        whitelistGbanAdded = ' aggiunto alla whitelist dei gban.',
+        whitelistGbanCleaned = 'Whitelist gban svuotata.',
+        whitelistGbanStart = 'Whitelist gban ',
 
         ------------
         -- Usages --
@@ -1360,12 +1364,15 @@ return {
         whitelist =
         {
             '🅿️ WHITELIST',
-            'Plugin per la gestione della whitelist.',
+            'Plugin per la gestione delle whitelist.',
             "USER",
             '#whitelist: Sasha manda la whitelist.',
+            "#whitelistgban: Sasha manda la whitelist dei gban.",
             'OWNER',
             '#whitelist <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist.',
+            "#whitelistgban <id>|<username>|<reply>: Sasha aggiunge|rimuove l\'utente specificato alla|dalla whitelist dei gban.",
             '#clean whitelist: Sasha pulisce la whitelist.',
+            "#clean whitelistgban: Sasha pulisce la whitelist dei gban.",
         },
     },
     -- ####
@@ -1853,10 +1860,14 @@ return {
 
         -- whitelist.lua --
         userBot = 'User/Bot ',
-        whitelistRemoved = ' removed from whitelist.',
-        whitelistAdded = ' added to whitelist.',
+        whitelistRemoved = ' removed from the whitelist.',
+        whitelistAdded = ' added to the whitelist.',
         whitelistCleaned = 'Whitelist cleaned.',
         whitelistStart = 'Whitelist ',
+        whitelistGbanRemoved = ' removed from the gban whitelist.',
+        whitelistGbanAdded = ' added to the gban whitelist.',
+        whitelistGbanCleaned = 'Gban whitelist cleaned.',
+        whitelistGbanStart = 'Gban whitelist ',
 
         ------------
         -- Usages --
@@ -2506,12 +2517,15 @@ return {
         whitelist =
         {
             '🅿️ WHITELIST',
-            'Plugin for the management of the whitelist.',
+            'Plugin for the management of the whitelists.',
             "USER",
-            '#whitelist: Sasha sends the whitelist.',
+            '#whitelist: Sasha sends the whitelist',
+            "#whitelistgban: Sasha sends the gban whitelist.",
             'OWNER',
-            '#whitelist <id>|<username>|<reply>: Sasha adds|removes specified user to|from whitelist.',
-            '#clean whitelist: Sasha cleans whitelist.',
+            '#whitelist <id>|<username>|<reply>: adds|removes specified user to|from the whitelist.',
+            "#whitelistgban <id>|<username>|<reply>: adds|removes specified user to|from the gban whitelist.",
+            '#clean whitelist: Sasha cleans the whitelist.',
+            "#clean whitelistgban: Sasha cleans the gban whitelist.",
         },
     },
 }

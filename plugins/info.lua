@@ -176,6 +176,9 @@ local function info_by_username(extra, success, result)
         if is_whitelisted(extra.chat_id, result.peer_id) then
             otherinfo = otherinfo .. 'WHITELISTED '
         end
+        if is_whitelisted_gban(extra.chat_id, result.peer_id) then
+            otherinfo = otherinfo .. 'GBANWHITELISTED '
+        end
         if is_gbanned(result.peer_id) then
             otherinfo = otherinfo .. 'GBANNED '
         end
@@ -240,6 +243,9 @@ local function info_by_reply(extra, success, result)
             if is_whitelisted(extra.chat_id, result.action.user.peer_id) then
                 otherinfo = otherinfo .. 'WHITELISTED '
             end
+            if is_whitelisted_gban(extra.chat_id, result.action.user.peer_id) then
+                otherinfo = otherinfo .. 'GBANWHITELISTED '
+            end
             if is_gbanned(result.action.user.peer_id) then
                 otherinfo = otherinfo .. 'GBANNED '
             end
@@ -286,6 +292,9 @@ local function info_by_reply(extra, success, result)
             local otherinfo = langs[lang].otherInfo
             if is_whitelisted(extra.chat_id, result.from.peer_id) then
                 otherinfo = otherinfo .. 'WHITELISTED '
+            end
+            if is_whitelisted_gban(extra.chat_id, result.from.peer_id) then
+                otherinfo = otherinfo .. 'GBANWHITELISTED '
             end
             if is_gbanned(result.from.peer_id) then
                 otherinfo = otherinfo .. 'GBANNED '
@@ -355,6 +364,9 @@ local function info_by_from(extra, success, result)
             if is_whitelisted(extra.chat_id, result.fwd_from.peer_id) then
                 otherinfo = otherinfo .. 'WHITELISTED '
             end
+            if is_whitelisted_gban(extra.chat_id, result.fwd_from.peer_id) then
+                otherinfo = otherinfo .. 'GBANWHITELISTED '
+            end
             if is_gbanned(result.fwd_from.peer_id) then
                 otherinfo = otherinfo .. 'GBANNED '
             end
@@ -412,6 +424,9 @@ local function info_by_id(extra, success, result)
     local otherinfo = langs[lang].otherInfo
     if is_whitelisted(extra.chat_id, result.peer_id) then
         otherinfo = otherinfo .. 'WHITELISTED '
+    end
+    if is_whitelisted_gban(extra.chat_id, result.peer_id) then
+        otherinfo = otherinfo .. 'GBANWHITELISTED '
     end
     if is_gbanned(result.peer_id) then
         otherinfo = otherinfo .. 'GBANNED '
@@ -557,6 +572,9 @@ local function run(msg, matches)
                 if is_whitelisted(msg.to.id, msg.from.id) then
                     otherinfo = otherinfo .. 'WHITELISTED, '
                 end
+                if is_whitelisted_gban(msg.to.id, msg.from.id) then
+                    otherinfo = otherinfo .. 'GBANWHITELISTED '
+                end
                 if is_gbanned(msg.from.id) then
                     otherinfo = otherinfo .. 'GBANNED, '
                 end
@@ -657,6 +675,9 @@ local function run(msg, matches)
         local otherinfo = langs[msg.lang].otherInfo
         if is_whitelisted(msg.to.id, msg.from.id) then
             otherinfo = otherinfo .. 'WHITELISTED, '
+        end
+        if is_whitelisted_gban(msg.to.id, msg.from.id) then
+            otherinfo = otherinfo .. 'GBANWHITELISTED '
         end
         if is_gbanned(msg.from.id) then
             otherinfo = otherinfo .. 'GBANNED, '
@@ -771,6 +792,9 @@ local function pre_process(msg)
                     local otherinfo = langs[msg.lang].otherInfo
                     if is_whitelisted(msg.to.id, msg.fwd_from.peer_id) then
                         otherinfo = otherinfo .. 'WHITELISTED '
+                    end
+                    if is_whitelisted_gban(msg.to.id, msg.fwd_from.peer_id) then
+                        otherinfo = otherinfo .. 'GBANWHITELISTED '
                     end
                     if is_gbanned(msg.fwd_from.peer_id) then
                         otherinfo = otherinfo .. 'GBANNED '
