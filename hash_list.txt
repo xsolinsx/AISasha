@@ -7,7 +7,7 @@ anti_spam.lua
 	PM:<user_id> or chat:<chat_id>:users or channel:<user_id>:users
 	msgs:<user_id>:<chat_id>
 	cli:user:<user_id>:msgs
-	whitelist
+	whitelist:<group_id>
 	gban:spam<user_id>
 banhammer.lua
 	banned:<chat_id>
@@ -96,8 +96,8 @@ utils.lua
 	banned:<chat_id>
 	gbanned
 	user:<user_id>
-	whitelist
+	whitelist:<group_id>
 	mute_user:<chat_id>
 	mute:<chat_id>
 whitelist.lua
-	whitelist
+	whitelist:<group_id>
