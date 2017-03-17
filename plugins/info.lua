@@ -554,7 +554,7 @@ local function run(msg, matches)
                 langs[msg.lang].date .. os.date('%c') ..
                 langs[msg.lang].totalMessages .. msgs
                 local otherinfo = langs[msg.lang].otherInfo
-                if is_whitelisted(extra.chat_id, msg.from.id) then
+                if is_whitelisted(msg.to.id, msg.from.id) then
                     otherinfo = otherinfo .. 'WHITELISTED, '
                 end
                 if is_gbanned(msg.from.id) then
@@ -655,7 +655,7 @@ local function run(msg, matches)
         langs[msg.lang].date .. os.date('%c') ..
         langs[msg.lang].totalMessages .. msgs
         local otherinfo = langs[msg.lang].otherInfo
-        if is_whitelisted(extra.chat_id, msg.from.id) then
+        if is_whitelisted(msg.to.id, msg.from.id) then
             otherinfo = otherinfo .. 'WHITELISTED, '
         end
         if is_gbanned(msg.from.id) then
@@ -769,7 +769,7 @@ local function pre_process(msg)
                     text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, msg.to.id) + 1] ..
                     langs[msg.lang].date .. os.date('%c')
                     local otherinfo = langs[msg.lang].otherInfo
-                    if is_whitelisted(extra.chat_id, msg.fwd_from.peer_id) then
+                    if is_whitelisted(msg.to.id, msg.fwd_from.peer_id) then
                         otherinfo = otherinfo .. 'WHITELISTED '
                     end
                     if is_gbanned(msg.fwd_from.peer_id) then
