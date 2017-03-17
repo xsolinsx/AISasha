@@ -200,8 +200,11 @@ return {
     patterns =
     {
         "^[#!/]([Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt][Gg][Bb][Aa][Nn])$",
         "^[#!/]([Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt]) (.*)$",
-        "^[#!/]([Cc][Ll][Ee][Aa][Nn] [Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt])$"
+        "^[#!/]([Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt][Gg][Bb][Aa][Nn]) (.*)$",
+        "^[#!/]([Cc][Ll][Ee][Aa][Nn] [Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt])$",
+        "^[#!/]([Cc][Ll][Ee][Aa][Nn] [Ww][Hh][Ii][Tt][Ee][Ll][Ii][Ss][Tt][Gg][Bb][Aa][Nn])$",
     },
     run = run,
     min_rank = 0,
@@ -209,8 +212,11 @@ return {
     {
         "USER",
         "#whitelist",
+        "#whitelistgban",
         "OWNER",
         "#whitelist <id>|<username>|<reply>",
+        "#whitelistgban <id>|<username>|<reply>",
         "#clean whitelist",
+        "#clean whitelistgban",
     },
 }
