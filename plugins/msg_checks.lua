@@ -80,7 +80,7 @@ local function pre_process(msg)
     -- Begin 'RondoMsgChecks' text checks by @rondoozle
     if msg then
         if is_group(msg) or is_super_group(msg) then
-            if not is_whitelisted(extra.chat_id, msg.from.id) then
+            if not is_whitelisted(msg.to.id, msg.from.id) then
                 -- if regular user
                 local print_name = user_print_name(msg.from):gsub("‮", "")
                 -- get rid of rtl in names
