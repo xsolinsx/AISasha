@@ -450,7 +450,7 @@ local function kickrandom_chat(extra, success, result)
     while not kickable do
         id = result.members[math.random(#result.members)].peer_id
         print(id)
-        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, extra.chat_id) or is_whitelisted(id)) then
+        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, extra.chat_id) or is_whitelisted(extra.chat_id, id)) then
             kickable = true
             send_large_msg('chat#id' .. extra.chat_id, 'ℹ️ ' .. id .. ' ' .. langs[lang].kicked)
             local function post_kick()
@@ -471,7 +471,7 @@ local function kickrandom_channel(extra, success, result)
     while not kickable do
         id = result[math.random(#result)].peer_id
         print(id)
-        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, extra.chat_id) or is_whitelisted(id)) then
+        if not(tonumber(id) == tonumber(our_id) or is_momod2(id, extra.chat_id) or is_whitelisted(extra.chat_id, id)) then
             kickable = true
             send_large_msg('channel#id' .. extra.chat_id, 'ℹ️ ' .. id .. ' ' .. langs[lang].kicked)
             local function post_kick()

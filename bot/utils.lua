@@ -1255,9 +1255,9 @@ function banall_list()
 end
 
 -- Whitelist
-function is_whitelisted(user_id)
+function is_whitelisted(group_id, user_id)
     -- Save on redis
-    local hash = 'whitelist'
+    local hash = 'whitelist:' .. group_id
     local is_whitelisted = redis:sismember(hash, user_id)
     return is_whitelisted or false
 end
