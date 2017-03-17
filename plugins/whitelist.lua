@@ -43,7 +43,7 @@ end
 
 local function run(msg, matches)
     if not msg.api_patch then
-        if matches[1]:lower() == "whitelist" and is_admin1(msg) then
+        if matches[1]:lower() == "whitelist" then
             local hash = "whitelist:" .. msg.to.id
             local user_id = ""
             if type(msg.reply_id) ~= "nil" then
