@@ -218,6 +218,9 @@ local function run(msg, matches)
             import_chat_link(hash, ok_cb, false)
         end
         if is_sudo(msg) then
+            if matches[1]:lower() == "update" then
+                return io.popen('git pull'):read('*all')
+            end
             if matches[1]:lower() == "authorizereboot" and matches[2] then
                 redis:hset('rebootallowed', matches[2], matches[2])
                 return langs[msg.lang].userAuthorized
@@ -388,6 +391,7 @@ return {
         -- sync your global bans with seed
         "^[#!/]([Bb][Aa][Cc][Kk][Uu][Pp])$",
         "^[#!/]([Uu][Pp][Ll][Oo][Aa][Dd][Bb][Aa][Cc][Kk][Uu][Pp])$",
+        "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee])$",
         "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Ii][Dd])$",
         "^[#!/]([Aa][Dd][Dd][Ll][Oo][Gg])$",
         "^[#!/]([Rr][Ee][Mm][Ll][Oo][Gg])$",
@@ -471,6 +475,7 @@ return {
         "(#sync_gbans|sasha sincronizza superban)",
         "(#backup|sasha esegui backup)",
         "(#uploadbackup|sasha invia backup)",
+        "#update",
         "#vardump [<reply>|<msg_id>]",
         "#authorizereboot <user_id>",
         "#deauthorizereboot <user_id>",
