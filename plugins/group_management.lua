@@ -215,7 +215,7 @@ local function adjustSettingType(setting_type)
     if setting_type == 'arabic' then
         setting_type = 'lock_arabic'
     end
-    if setting_type == 'bot' then
+    if setting_type == 'bots' then
         setting_type = 'lock_bots'
     end
     if setting_type == 'flood' then
@@ -303,7 +303,7 @@ local function checkMatchesLockUnlock(txt)
     if txt:lower() == 'arabic' then
         return true
     end
-    if txt:lower() == 'bot' then
+    if txt:lower() == 'bots' then
         return true
     end
     if txt:lower() == 'flood' then
@@ -3298,8 +3298,8 @@ return {
         "(#newlink|sasha crea link)",
         "#setflood <value>",
         "#setwarn <value>",
-        "(#lock|[sasha] blocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
-        "(#unlock|[sasha] sblocca) arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
+        "(#lock|[sasha] blocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
+        "(#unlock|[sasha] sblocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
         "SUPERGROUPS",
         "(#bots|[sasha] lista bot)",
         "#del <reply>",
@@ -3349,8 +3349,8 @@ return {
         "(#setrules|sasha imposta regole) <group_id> <text>",
         "#setname <realm_name>",
         "#setname|#setgpname <group_id> <group_name>",
-        "(#lock|[sasha] blocca) <group_id> arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
-        "(#unlock|[sasha] sblocca) <group_id> arabic|bot|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
+        "(#lock|[sasha] blocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
+        "(#unlock|[sasha] sblocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
         "#settings <group_id>",
         "#type",
         "#kill group|supergroup|realm <group_id>",
