@@ -455,12 +455,15 @@ end
 
 -- Same as send_large_msg_callback but friendly params
 function send_large_msg(destination, text)
-    string.gsub(text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
-    local extra = {
-        destination = destination,
-        text = text
-    }
-    send_large_msg_callback(extra, true)
+    local tmp = tostring(text)
+    if tmp then
+        string.gsub(tmp, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
+        local extra = {
+            destination = destination,
+            text = tmp
+        }
+        send_large_msg_callback(extra, true)
+    end
 end
 
 -- If text is longer than 4096 chars, send multiple msg.
