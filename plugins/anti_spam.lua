@@ -79,9 +79,11 @@ local function pre_process(msg)
             else
                 local NUM_MSG_MAX = 5
                 if data[tostring(msg.to.id)] then
-                    if data[tostring(msg.to.id)]['settings']['flood_max'] then
-                        NUM_MSG_MAX = tonumber(data[tostring(msg.to.id)]['settings']['flood_max'])
-                        -- Obtain group flood sensitivity
+                    if data[tostring(msg.to.id)]['settings'] then
+                        if data[tostring(msg.to.id)]['settings']['flood_max'] then
+                            NUM_MSG_MAX = tonumber(data[tostring(msg.to.id)]['settings']['flood_max'])
+                            -- Obtain group flood sensitivity
+                        end
                     end
                 end
                 local max_msg = NUM_MSG_MAX * 1
