@@ -1171,9 +1171,9 @@ local function pre_process(msg)
                 print('Banned user talking!')
                 local print_name = user_print_name(msg.from):gsub("‮", "")
                 local name = print_name:gsub("_", "")
+                kick_user(user_id, chat_id)
                 savelog(msg.to.id, name .. " [" .. msg.from.id .. "] banned user is talking !")
                 -- Save to logs
-                kick_user(user_id, chat_id)
                 msg.text = ''
             end
         end
