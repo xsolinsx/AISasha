@@ -481,12 +481,14 @@ local function run(msg, matches)
     if not msg.api_patch then
         if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
             if type(msg.reply_id) ~= "nil" then
-                return get_message(msg.reply_id, get_rank_by_reply, { receiver = receiver })
+                get_message(msg.reply_id, get_rank_by_reply, { receiver = receiver })
+                return
             elseif matches[2] then
                 if string.match(matches[2], '^%d+$') then
                     return langs[msg.lang].rank .. reverse_rank_table[get_rank(matches[2], chat) + 1]
                 else
-                    return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), get_rank_by_username, { receiver = receiver, chat_id = chat })
+                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), get_rank_by_username, { receiver = receiver, chat_id = chat })
+                    return
                 end
             else
                 return langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
