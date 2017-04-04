@@ -96,7 +96,7 @@ install() {
 
 if [ "$1" = "install" ]; then
   install
-elif [ "$1" = "update" ] then
+elif [ "$1" = "update" ]; then
   update
 else
   if [ ! -f ./tg/telegram.h ]; then
