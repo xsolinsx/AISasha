@@ -2146,9 +2146,11 @@ local function run(msg, matches)
                 if matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi' then
                     if is_owner(msg) then
                         if type(msg.reply_id) ~= "nil" then
-                            msgr = get_message(msg.reply_id, promote_by_reply, { receiver = get_receiver(msg) })
+                            get_message(msg.reply_id, promote_by_reply, { receiver = get_receiver(msg) })
+                            return
                         elseif string.match(matches[2], '^%d+$') then
-                            return promote(get_receiver(msg), 'NONAME', matches[2])
+                            promote(get_receiver(msg), 'NONAME', matches[2])
+                            return
                         else
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
                             return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_promote_by_username, { receiver = get_receiver(msg) })
@@ -2160,9 +2162,11 @@ local function run(msg, matches)
                 if matches[1]:lower() == 'demote' or matches[1]:lower() == 'sasha degrada' or matches[1]:lower() == 'degrada' then
                     if is_owner(msg) then
                         if type(msg.reply_id) ~= "nil" then
-                            msgr = get_message(msg.reply_id, demote_by_reply, { receiver = get_receiver(msg) })
+                            get_message(msg.reply_id, demote_by_reply, { receiver = get_receiver(msg) })
+                            return
                         elseif string.match(matches[2], '^%d+$') then
-                            return demote(get_receiver(msg), 'NONAME', matches[2])
+                            demote(get_receiver(msg), 'NONAME', matches[2])
+                            return
                         else
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
                             return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_demote_by_username, { receiver = get_receiver(msg) })
