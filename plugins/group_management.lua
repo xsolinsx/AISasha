@@ -1144,6 +1144,27 @@ local function callback(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
+-- Get and output admins and bots in supergroup
+local function callback_updategroupinfo(extra, success, result)
+    local chat_id = tostring(string.match(extra.receiver, '%d+'))
+    local lang = get_lang(chat_id)
+    for k, v in pairsByKeys(result) do
+        data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
+    end
+    send_large_msg(extra.receiver, langs[lang].groupInfoUpdated)
+end
+
+-- Get and output admins and bots in supergroup
+local function callback_syncmodlist(extra, success, result)
+    local chat_id = tostring(string.match(extra.receiver, '%d+'))
+    local lang = get_lang(chat_id)
+    data[tostring(string.match(extra.receiver, '%d+'))]['moderators'] = { }
+    for k, v in pairsByKeys(result) do
+        data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
+    end
+    send_large_msg(extra.receiver, langs[lang].modListSynced)
+end
+
 -- Start by reply actions
 function get_message_callback(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
@@ -2543,6 +2564,25 @@ local function run(msg, matches)
                         member_type = 'Admins'
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup Admins list")
                         channel_get_admins(get_receiver(msg), callback, { receiver = get_receiver(msg), msg = msg, member_type = member_type })
+                        return
+                    else
+                        return langs[msg.lang].require_owner
+                    end
+                end
+                if matches[1]:lower() == "updategroupinfo" then
+                    if is_mod(msg) then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] updated group name and modlist")
+                        channel_get_admins(get_receiver(msg), callback_updategroupinfo, { receiver = get_receiver(msg) })
+                        return
+                    else
+                        return langs[msg.lang].require_mod
+                    end
+                end
+                if matches[1]:lower() == "syncmodlist" then
+                    if is_owner(msg) then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] synced modlist")
+                        channel_get_admins(get_receiver(msg), callback_syncmodlist, { receiver = get_receiver(msg) })
+                        return
                     else
                         return langs[msg.lang].require_owner
                     end
@@ -2725,8 +2765,9 @@ local function run(msg, matches)
                                 get_cmd = 'promote',
                             }
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
-                            return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
                         end
+                        return
                     else
                         return langs[msg.lang].require_owner
                     end
@@ -2749,8 +2790,9 @@ local function run(msg, matches)
                                 get_cmd = 'demote'
                             }
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
-                            return resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
                         end
+                        return
                     else
                         return langs[msg.lang].require_owner
                     end
@@ -3214,6 +3256,8 @@ return {
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt]%.[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         "^[#!/]([Uu][Nn][Ss][Ee][Tt][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ll][Ii][Nn][Kk])$",
+        "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
+        "^[#!/]([Ss][Yy][Nn][Cc][Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ss][Ee][Tt][Rr][Uu][Ll][Ee][Ss]) (.*)$",
         "^[#!/]([Ss][Ee][Tt][Aa][Bb][Oo][Uu][Tt]) (.*)$",
         "^[#!/]([Oo][Ww][Nn][Ee][Rr])$",
@@ -3291,6 +3335,7 @@ return {
         "(#link|sasha link)",
         "MOD",
         "#type",
+        "#updategroupinfo",
         "#setname <group_name>",
         "#setphoto",
         "(#setrules|sasha imposta regole) <text>",
@@ -3308,6 +3353,7 @@ return {
         "(#bots|[sasha] lista bot)",
         "#del <reply>",
         "OWNER",
+        "#syncmodlist",
         "#log",
         "(#setlink|sasha imposta link) <link>",
         "(#unsetlink|sasha elimina link)",
