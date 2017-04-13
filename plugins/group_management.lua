@@ -1145,15 +1145,21 @@ local function callback(extra, success, result)
 end
 
 local function callback_updategroupinfo(extra, success, result)
+    print('in')
     local chat_id = tostring(string.match(extra.receiver, '%d+'))
     local lang = get_lang(chat_id)
+    print('pre_cycle')
     for k, v in pairsByKeys(result) do
+        print('cycle ' .. k)
         if v.first_name then
             data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
         end
     end
+    print('post_cycle')
     save_data(_config.moderation.data, data)
+    print('post_save')
     send_large_msg(extra.receiver, langs[lang].groupInfoUpdated)
+    print('post_message')
 end
 
 local function callback_syncmodlist(extra, success, result)
