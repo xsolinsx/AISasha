@@ -1145,21 +1145,15 @@ local function callback(extra, success, result)
 end
 
 local function callback_updategroupinfo(extra, success, result)
-    print('in')
     local chat_id = tostring(string.match(extra.receiver, '%d+'))
     local lang = get_lang(chat_id)
-    print('pre_cycle')
     for k, v in pairsByKeys(result) do
-        print('cycle ' .. k)
         if v.first_name then
             data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
         end
     end
-    print('post_cycle')
     save_data(_config.moderation.data, data)
-    print('post_save')
     send_large_msg(extra.receiver, langs[lang].groupInfoUpdated)
-    print('post_message')
 end
 
 local function callback_syncmodlist(extra, success, result)
@@ -2580,7 +2574,7 @@ local function run(msg, matches)
                     end
                 end
                 if matches[1]:lower() == "updategroupinfo" then
-                    if is_mod(msg) then
+                    if is_momod(msg) then
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] updated group name and modlist")
                         channel_get_admins(get_receiver(msg), callback_updategroupinfo, { receiver = get_receiver(msg) })
                         return
@@ -3222,6 +3216,8 @@ return {
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn])",
         "^[#!/]([Ss][Ee][Tt][Uu][Ss][Ee][Rr][Nn][Aa][Mm][Ee]) (.*)$",
+        "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
+        "^[#!/]([Ss][Yy][Nn][Cc][Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Dd][Ee][Ll])$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Ss][Uu][Pp][Ee][Rr][Gg][Rr][Oo][Uu][Pp])$",
         "^([Pp][Ee][Ee][Rr]_[Ii][Dd])$",
@@ -3266,8 +3262,6 @@ return {
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt]%.[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
         "^[#!/]([Uu][Nn][Ss][Ee][Tt][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ll][Ii][Nn][Kk])$",
-        "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
-        "^[#!/]([Ss][Yy][Nn][Cc][Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ss][Ee][Tt][Rr][Uu][Ll][Ee][Ss]) (.*)$",
         "^[#!/]([Ss][Ee][Tt][Aa][Bb][Oo][Uu][Tt]) (.*)$",
         "^[#!/]([Oo][Ww][Nn][Ee][Rr])$",
