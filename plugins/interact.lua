@@ -18,7 +18,7 @@ local function run(msg, matches)
         if matches[1]:lower() == 'sasha come va?' then
             reply_msg(msg.id, langs.phrases.interact.howareyou[math.random(#langs.phrases.interact.howareyou)], ok_cb, false)
         end
-        if matches[1]:lower() == 'sasha' and string.match(matches[2], '.*%?') then
+        if (matches[1]:lower() == 'sasha' and string.match(matches[2], '.*%?')) or matches[1]:lower() == '@aisasha' then
             local rnd = math.random(0, 2)
             if rnd == 0 then
                 reply_msg(msg.id, langs.phrases.interact.no[math.random(#langs.phrases.interact.no)], ok_cb, false)
@@ -42,6 +42,7 @@ return {
         -- echo
         "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Pp][Ee][Tt][Ii]) +(.+)$",
         -- react
+        "^(@[Aa][Ii][Ss][Aa][Ss][Hh][Aa])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Oo][Mm][Ee] [Vv][Aa]%?)$",
         "^([Ss][Aa][Ss][Hh][Aa])(.*%?)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Tt][Ii] [Aa][Mm][Oo])$",
