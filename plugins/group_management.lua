@@ -1144,24 +1144,24 @@ local function callback(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
--- Get and output admins and bots in supergroup
 local function callback_updategroupinfo(extra, success, result)
     local chat_id = tostring(string.match(extra.receiver, '%d+'))
     local lang = get_lang(chat_id)
     for k, v in pairsByKeys(result) do
         data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
     end
+    save_data(_config.moderation.data, data)
     send_large_msg(extra.receiver, langs[lang].groupInfoUpdated)
 end
 
--- Get and output admins and bots in supergroup
 local function callback_syncmodlist(extra, success, result)
     local chat_id = tostring(string.match(extra.receiver, '%d+'))
     local lang = get_lang(chat_id)
-    data[tostring(string.match(extra.receiver, '%d+'))]['moderators'] = { }
+    data[chat_id]['moderators'] = { }
     for k, v in pairsByKeys(result) do
         data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
     end
+    save_data(_config.moderation.data, data)
     send_large_msg(extra.receiver, langs[lang].modListSynced)
 end
 
@@ -3335,7 +3335,6 @@ return {
         "(#link|sasha link)",
         "MOD",
         "#type",
-        "#updategroupinfo",
         "#setname <group_name>",
         "#setphoto",
         "(#setrules|sasha imposta regole) <text>",
@@ -3351,9 +3350,9 @@ return {
         "(#unlock|[sasha] sblocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
         "SUPERGROUPS",
         "(#bots|[sasha] lista bot)",
+        "#updategroupinfo",
         "#del <reply>",
         "OWNER",
-        "#syncmodlist",
         "#log",
         "(#setlink|sasha imposta link) <link>",
         "(#unsetlink|sasha elimina link)",
@@ -3366,6 +3365,7 @@ return {
         "#clean modlist|rules|about",
         "SUPERGROUPS",
         "(#getadmins|[sasha] lista admin)",
+        "#syncmodlist",
         "#promoteadmin <id>|<username>|<reply>",
         "#demoteadmin <id>|<username>|<reply>",
         "#clean rules|about|modlist|mutelist",
