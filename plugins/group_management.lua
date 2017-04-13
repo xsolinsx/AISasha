@@ -1148,7 +1148,9 @@ local function callback_updategroupinfo(extra, success, result)
     local chat_id = tostring(string.match(extra.receiver, '%d+'))
     local lang = get_lang(chat_id)
     for k, v in pairsByKeys(result) do
-        data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
+        if v.first_name then
+            data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
+        end
     end
     save_data(_config.moderation.data, data)
     send_large_msg(extra.receiver, langs[lang].groupInfoUpdated)
@@ -1159,7 +1161,9 @@ local function callback_syncmodlist(extra, success, result)
     local lang = get_lang(chat_id)
     data[chat_id]['moderators'] = { }
     for k, v in pairsByKeys(result) do
-        data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
+        if v.first_name then
+            data[chat_id]['moderators'][tostring(v.peer_id)] = v.username or v.first_name
+        end
     end
     save_data(_config.moderation.data, data)
     send_large_msg(extra.receiver, langs[lang].modListSynced)
