@@ -18,7 +18,7 @@ local function run(msg, matches)
         if matches[1]:lower() == 'sasha come va?' then
             reply_msg(msg.id, langs.phrases.interact.howareyou[math.random(#langs.phrases.interact.howareyou)], ok_cb, false)
         end
-        if (matches[1]:lower() == 'sasha' and string.match(matches[2], '.*%?')) or matches[1]:lower() == '@aisasha' then
+        if matches[1]:lower() == 'sasha' and string.match(matches[2], '.*%?') then
             local rnd = math.random(0, 2)
             if rnd == 0 then
                 reply_msg(msg.id, langs.phrases.interact.no[math.random(#langs.phrases.interact.no)], ok_cb, false)
@@ -30,6 +30,16 @@ local function run(msg, matches)
         end
         if matches[1]:lower() == 'sasha ti amo' or matches[1]:lower() == 'ti amo sasha' then
             reply_msg(msg.id, langs.phrases.interact.iloveyou[math.random(#langs.phrases.interact.iloveyou)], ok_cb, false)
+        end
+    end
+    if matches[1]:lower() == '@aisasha' then
+        local rnd = math.random(0, 2)
+        if rnd == 0 then
+            reply_msg(msg.id, langs.phrases.interact.no[math.random(#langs.phrases.interact.no)], ok_cb, false)
+        elseif rnd == 1 then
+            reply_msg(msg.id, langs.phrases.interact.idontknow[math.random(#langs.phrases.interact.idontknow)], ok_cb, false)
+        elseif rnd == 2 then
+            reply_msg(msg.id, langs.phrases.interact.yes[math.random(#langs.phrases.interact.yes)], ok_cb, false)
         end
     end
 end
