@@ -1,7 +1,8 @@
 ﻿local function get_rank_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     local rank = get_rank(result.peer_id, extra.chat_id)
     send_large_msg(extra.receiver, langs[lang].rank .. reverse_rank_table[rank + 1])

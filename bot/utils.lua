@@ -547,13 +547,14 @@ function enable_channel(receiver, to_id)
     end
 
     if _config.disabled_channels[receiver] == nil then
-        return send_large_msg(receiver, langs[lang].botOn)
+        send_large_msg(receiver, langs[lang].botOn)
+        return
     end
 
     _config.disabled_channels[receiver] = false
 
     save_config()
-    return send_large_msg(receiver, langs[lang].botOn)
+    send_large_msg(receiver, langs[lang].botOn)
 end
 
 function disable_channel(receiver, to_id)
@@ -566,7 +567,7 @@ function disable_channel(receiver, to_id)
     _config.disabled_channels[receiver] = true
 
     save_config()
-    return send_large_msg(receiver, langs[lang].botOff)
+    send_large_msg(receiver, langs[lang].botOff)
 end
 
 -- Returns a table with matches or nil

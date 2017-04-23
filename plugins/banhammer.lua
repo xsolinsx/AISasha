@@ -1,7 +1,8 @@
 local function warn_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -48,7 +49,8 @@ end
 local function unwarn_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -95,7 +97,8 @@ end
 local function unwarnall_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -142,7 +145,8 @@ end
 local function getWarn_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     get_user_warns(result.peer_id, extra.chat_id)
     savelog(extra.chat_id, "[" .. extra.executer .. "] get warns of " .. result.peer_id .. " Y")
@@ -171,7 +175,8 @@ end
 local function kick_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -230,7 +235,8 @@ end
 local function ban_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -289,7 +295,8 @@ end
 local function unban_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -342,7 +349,8 @@ end
 local function banall_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then
@@ -395,7 +403,8 @@ end
 local function unbanall_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     -- ignore higher or same rank
     if compare_ranks(extra.executer, result.peer_id, extra.chat_id) then

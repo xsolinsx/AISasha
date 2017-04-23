@@ -153,7 +153,8 @@ end
 local function promote_admin_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     send_large_msg(extra.receiver, admin_promote(result.username, result.peer_id, lang))
 end
@@ -161,7 +162,8 @@ end
 local function demote_admin_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     send_large_msg(extra.receiver, admin_demote(result.username, result.peer_id, lang))
 end
@@ -515,7 +517,8 @@ local function check_member_autorealm(extra, success, result)
             end
             data[tostring(realms)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
-            return send_large_msg(extra.receiver, langs[msg.lang].welcomeNewRealm)
+            send_large_msg(extra.receiver, langs[msg.lang].welcomeNewRealm)
+            return
         end
     end
 end
@@ -579,7 +582,8 @@ local function check_member_realm_add(extra, success, result)
             end
             data[tostring(realms)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
-            return send_large_msg(extra.receiver, langs[msg.lang].realmAdded)
+            send_large_msg(extra.receiver, langs[msg.lang].realmAdded)
+            return
         end
     end
 end
@@ -643,7 +647,8 @@ function check_member_group(extra, success, result)
             end
             data[tostring(groups)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
-            return send_large_msg(extra.receiver, langs[msg.lang].promotedOwner)
+            send_large_msg(extra.receiver, langs[msg.lang].promotedOwner)
+            return
         end
     end
 end
@@ -707,7 +712,8 @@ local function check_member_modadd(extra, success, result)
             end
             data[tostring(groups)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
-            return send_large_msg(extra.receiver, langs[msg.lang].groupAddedOwner)
+            send_large_msg(extra.receiver, langs[msg.lang].groupAddedOwner)
+            return
         end
     end
 end
@@ -727,7 +733,8 @@ local function check_member_realmrem(extra, success, result)
             end
             data[tostring(realms)][tostring(msg.to.id)] = nil
             save_data(_config.moderation.data, data)
-            return send_large_msg(extra.receiver, langs[msg.lang].realmRemoved)
+            send_large_msg(extra.receiver, langs[msg.lang].realmRemoved)
+            return
         end
     end
 end
@@ -747,7 +754,8 @@ local function check_member_modrem(extra, success, result)
             end
             data[tostring(groups)][tostring(msg.to.id)] = nil
             save_data(_config.moderation.data, data)
-            return send_large_msg(extra.receiver, langs[msg.lang].groupRemoved)
+            send_large_msg(extra.receiver, langs[msg.lang].groupRemoved)
+            return
         end
     end
 end
@@ -796,28 +804,32 @@ local function promote(receiver, member_username, member_id)
     local lang = get_lang(string.match(receiver, '%d+'))
     local group = string.gsub(receiver, 'chat#id', '')
     if not data[group] then
-        return send_large_msg(receiver, langs[lang].groupNotAdded)
+        send_large_msg(receiver, langs[lang].groupNotAdded)
+        return
     end
     if data[group]['moderators'][tostring(member_id)] then
-        return send_large_msg(receiver, member_username .. langs[lang].alreadyMod)
+        send_large_msg(receiver, member_username .. langs[lang].alreadyMod)
+        return
     end
     data[group]['moderators'][tostring(member_id)] = member_username
     save_data(_config.moderation.data, data)
-    return send_large_msg(receiver, member_username .. langs[lang].promoteMod)
+    send_large_msg(receiver, member_username .. langs[lang].promoteMod)
 end
 
 local function demote(receiver, member_username, member_id)
     local lang = get_lang(string.match(receiver, '%d+'))
     local group = string.gsub(receiver, 'chat#id', '')
     if not data[group] then
-        return send_large_msg(receiver, langs[lang].groupNotAdded)
+        send_large_msg(receiver, langs[lang].groupNotAdded)
+        return
     end
     if not data[group]['moderators'][tostring(member_id)] then
-        return send_large_msg(receiver, member_username .. langs[lang].notMod)
+        send_large_msg(receiver, member_username .. langs[lang].notMod)
+        return
     end
     data[group]['moderators'][tostring(member_id)] = nil
     save_data(_config.moderation.data, data)
-    return send_large_msg(receiver, member_username .. langs[lang].demoteMod)
+    send_large_msg(receiver, member_username .. langs[lang].demoteMod)
 end
 
 local function promote2(receiver, member_username, user_id)
@@ -825,10 +837,12 @@ local function promote2(receiver, member_username, user_id)
     local group = string.gsub(receiver, 'channel#id', '')
     local member_tag_username = member_username
     if not data[group] then
-        return send_large_msg(receiver, langs[lang].supergroupNotAdded)
+        send_large_msg(receiver, langs[lang].supergroupNotAdded)
+        return
     end
     if data[group]['moderators'][tostring(user_id)] then
-        return send_large_msg(receiver, member_username .. langs[lang].alreadyMod)
+        send_large_msg(receiver, member_username .. langs[lang].alreadyMod)
+        return
     end
     data[group]['moderators'][tostring(user_id)] = member_tag_username
     save_data(_config.moderation.data, data)
@@ -839,10 +853,12 @@ local function demote2(receiver, member_username, user_id)
     local lang = get_lang(string.match(receiver, '%d+'))
     local group = string.gsub(receiver, 'channel#id', '')
     if not data[group] then
-        return send_large_msg(receiver, langs[lang].supergroupNotAdded)
+        send_large_msg(receiver, langs[lang].supergroupNotAdded)
+        return
     end
     if not data[group]['moderators'][tostring(user_id)] then
-        return send_large_msg(receiver, member_username .. langs[lang].notMod)
+        send_large_msg(receiver, member_username .. langs[lang].notMod)
+        return
     end
     data[group]['moderators'][tostring(user_id)] = nil
     save_data(_config.moderation.data, data)
@@ -852,7 +868,8 @@ end
 local function chat_promote_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     return promote(extra.receiver, '@' .. result.username, result.peer_id)
 end
@@ -860,7 +877,8 @@ end
 local function chat_demote_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     return demote(extra.receiver, '@' .. result.username, result.peer_id)
 end
@@ -1006,7 +1024,8 @@ end
 local function chat_setowner_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     data[tostring(string.match(extra.receiver, '%d+'))]['set_owner'] = tostring(result.peer_id)
     save_data(_config.moderation.data, data)
@@ -1192,7 +1211,8 @@ function get_message_callback(extra, success, result)
             local user_id = result.from.peer_id
             local channel_id = "channel#id" .. result.to.peer_id
             if is_admin2(result.from.peer_id) then
-                return send_large_msg(channel_id, langs[msg.lang].cantDemoteOtherAdmin)
+                send_large_msg(channel_id, langs[msg.lang].cantDemoteOtherAdmin)
+                return
             end
             channel_demote(channel_id, "user#id" .. user_id, ok_cb, false)
             if result.from.username then
@@ -1359,7 +1379,8 @@ local function callbackres(extra, success, result)
 		send_large_msg(receiver, text)
   end]]
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     if get_cmd == "promote" then
         local receiver = extra.channel
@@ -1376,7 +1397,8 @@ local function callbackres(extra, success, result)
         local user_id = "user#id" .. result.peer_id
         local channel_id = extra.channel
         if is_admin2(result.peer_id) then
-            return send_large_msg(channel_id, langs[lang].cantDemoteOtherAdmin)
+            send_large_msg(channel_id, langs[lang].cantDemoteOtherAdmin)
+            return
         end
         channel_demote(channel_id, user_id, ok_cb, false)
         if result.username then
@@ -1408,7 +1430,8 @@ end
 local function setowner_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     data[tostring(extra.chat_id)]['set_owner'] = tostring(result.peer_id)
     save_data(_config.moderation.data, data)
@@ -1799,7 +1822,8 @@ local function run(msg, matches)
                     end
                     data[tostring(groups)][tostring(matches[2])] = nil
                     save_data(_config.moderation.data, data)
-                    return send_large_msg(get_receiver(msg), langs[msg.lang].chat .. matches[2] .. langs[msg.lang].removed)
+                    send_large_msg(get_receiver(msg), langs[msg.lang].chat .. matches[2] .. langs[msg.lang].removed)
+                    return
                 else
                     return langs[msg.lang].require_admin
                 end
@@ -1835,7 +1859,8 @@ local function run(msg, matches)
                     local lang = get_lang(matches[2])
                     local text = matches[3] .. langs[msg.lang].setOwner
                     send_large_msg("chat#id" .. matches[2], text)
-                    return send_large_msg("channel#id" .. matches[2], text)
+                    send_large_msg("channel#id" .. matches[2], text)
+                    return
                 else
                     return langs[msg.lang].require_admin
                 end
@@ -2360,7 +2385,8 @@ local function run(msg, matches)
                 local function callback(extra, success, result)
                     local receiver = 'chat#' .. msg.to.id
                     if success == 0 then
-                        return send_large_msg(receiver, langs[msg.lang].errorCreateLink)
+                        send_large_msg(receiver, langs[msg.lang].errorCreateLink)
+                        return
                     end
                     send_large_msg(receiver, langs[msg.lang].linkCreated)
                     data[tostring(msg.to.id)].settings['set_link'] = result
@@ -2716,8 +2742,10 @@ local function run(msg, matches)
                         if compare_ranks(msg.from.id, matches[2], msg.to.id) then
                             channel_demote(get_receiver(msg), user_id, ok_cb, false)
                             send_large_msg(get_receiver(msg), result.peer_id .. langs[msg.lang].demoteSupergroupMod)
+                            return
                         else
-                            return send_large_msg(get_receiver(msg), langs[msg.lang].cantDemoteOtherAdmin)
+                            send_large_msg(get_receiver(msg), langs[msg.lang].cantDemoteOtherAdmin)
+                            return
                         end
                     else
                         local cbres_extra = {

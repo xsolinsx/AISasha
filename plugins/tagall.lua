@@ -8,7 +8,7 @@ local function tagall_chat(extra, success, result)
             end
         end
     end
-    return send_large_msg('chat#id' .. chat_id, text, ok_cb, true)
+    send_large_msg('chat#id' .. chat_id, text, ok_cb, true)
 end
 
 local function tagall_channel(extra, success, result)
@@ -21,7 +21,7 @@ local function tagall_channel(extra, success, result)
             end
         end
     end
-    return send_large_msg('channel#id' .. chat_id, text, ok_cb, true)
+    send_large_msg('channel#id' .. chat_id, text, ok_cb, true)
 end
 
 local function run(msg, matches)

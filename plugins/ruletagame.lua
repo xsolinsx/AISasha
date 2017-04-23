@@ -87,7 +87,8 @@ end
 local function Challenge_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     if tonumber(result.peer_id) == tonumber(our_id) then
         -- Ignore bot

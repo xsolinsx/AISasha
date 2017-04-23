@@ -1,7 +1,8 @@
 local function flame_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id, '%d+')
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     local hash
     local tokick

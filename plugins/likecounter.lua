@@ -31,7 +31,8 @@ end
 local function like_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     like(extra.likedata, extra.chat, result.peer_id)
 end
@@ -57,7 +58,8 @@ end
 local function dislike_by_username(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if success == 0 then
-        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
     dislike(extra.likedata, extra.chat, result.peer_id)
 end
