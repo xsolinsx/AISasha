@@ -211,18 +211,18 @@ return {
     patterns =
     {
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Ll][Ii][Kk][Ee][Ss][Dd][Bb])$",
-        "^[#!/]([Ll][Ii][Kk][Ee]) (.*)$",
+        "^[#!/]([Ll][Ii][Kk][Ee]) ([^%s]+)$",
         "^[#!/]([Ll][Ii][Kk][Ee])$",
-        "^[#!/]([Dd][Ii][Ss][Ll][Ii][Kk][Ee]) (.*)$",
+        "^[#!/]([Dd][Ii][Ss][Ll][Ii][Kk][Ee]) ([^%s]+)$",
         "^[#!/]([Dd][Ii][Ss][Ll][Ii][Kk][Ee])$",
         "^[#!/]([Ll][Ii][Kk][Ee][Ss])$",
         "^[#!/]([Aa][Dd][Dd][Ll][Ii][Kk][Ee][Ss]) (%d+) (%d+)$",
         "^[#!/]([Rr][Ee][Mm][Ll][Ii][Kk][Ee][Ss]) (%d+) (%d+)$",
         -- like
-        "^[#!/](1[Uu][Pp]) (.*)$",
+        "^[#!/](1[Uu][Pp]) ([^%s]+)$",
         "^[#!/](1[Uu][Pp])$",
         -- dislike
-        "^[#!/](1[Dd][Oo][Ww][Nn]) (.*)$",
+        "^[#!/](1[Dd][Oo][Ww][Nn]) ([^%s]+)$",
         "^[#!/](1[Dd][Oo][Ww][Nn])$",
     },
     run = run,

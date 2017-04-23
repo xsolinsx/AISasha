@@ -830,10 +830,10 @@ return {
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo]) (%d+)$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ll][Ii][Nn][Kk]) (%d+)$",
-        "^[#!/]([Ii][Ss][Hh][Ee][Rr][Ee]) (.*)$",
-        "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) (.*)$",
+        "^[#!/]([Ii][Ss][Hh][Ee][Rr][Ee]) ([^%s]+)$",
+        "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk]) ([^%s]+)$",
         "^[#!/]([Gg][Ee][Tt][Rr][Aa][Nn][Kk])$",
-        "^[#!/]([Ii][Nn][Ff][Oo]) (.*)$",
+        "^[#!/]([Ii][Nn][Ff][Oo]) ([^%s]+)$",
         "^[#!/]([Ii][Nn][Ff][Oo])$",
         "^[#!/]([Ww][Hh][Oo][Aa][Mm][Ii])$",
         "^[#!/]([Ww][Hh][Oo])$",
@@ -847,11 +847,11 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Nn][Kk] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
         "^([Ll][Ii][Nn][Kk] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
         -- getrank
-        "^([Rr][Aa][Nn][Gg][Oo]) (.*)$",
+        "^([Rr][Aa][Nn][Gg][Oo]) ([^%s]+)$",
         "^([Rr][Aa][Nn][Gg][Oo])$",
         -- info
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo]) ([^%s]+)$",
         -- who
         "^[#!/]([Mm][Ee][Mm][Bb][Ee][Rr][Ss])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Mm][Ee][Mm][Bb][Rr][Ii])$",

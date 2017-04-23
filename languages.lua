@@ -548,31 +548,6 @@ return {
         userGbanned = 'L\'utente è bannato globalmente.',
         privateGroup = 'Il gruppo è privato.',
 
-        --[[
-        -- knivesgame.lua --
-        knivesAlreadySignedUp = 'Sei già registrato, usa /ruleta per morire.',
-        knivesSignedUp = 'Sei stato registrato, have a nice death.',
-        knivesDeleted = 'Sei stato eliminato dalla ruleta.',
-        knivesRequireSignUp = 'Prima di morire devi registrarti, usa /registerme.',
-        knivesGroupDeleted = 'Gruppo disabilitato per ruleta.',
-        knivesRequirePoints = 'Richiede almeno 11 punti.',
-        knivesRequireZeroPoints = 'Non puoi eliminarti se sei in negativo col punteggio.',
-        roundsLeft = 'Round rimasti: ',
-        shotsLeft = 'Colpi rimasti: ',
-        capsChanged = 'Proiettili nella pistola: ',
-        challengeCapsChanged = 'Proiettili nella pistola da sfida: ',
-        cylinderChanged = 'Nuovo tamburo da: ',
-        challengeCylinderChanged = 'Nuovo tamburo sfida da: ',
-        errorCapsRange = 'Errore, il range è [1-X].',
-        errorCylinderRange = 'Errore, il range è [5-10].',
-        cylinderCapacity = 'Capienza tamburo: ',
-        challengeCylinderCapacity = 'Capienza tamburo sfida: ',
-        capsNumber = 'Proiettili: ',
-        challengeCapsNumber = 'Proiettili sfida: ',
-        forwardingRuleta = 'L\'inoltro dei messaggi su ruleta non è consentito.',
-        ruletaDeathPercentage = 'Le probabilità di morire sono del ',
-        ]]
-
         -- likecounter.lua --
         forwardingLike = 'L\'inoltro dei messaggi per i like non è consentito.',
         likesdbCreated = 'Database likecounter creato.',
@@ -1069,36 +1044,6 @@ return {
             'ADMIN',
             '(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invita l\'utente specificato.',
         },
-
-        --[[
-        knivesgame =
-        {
-            '🅿️ KNIVESGAME',
-            'Plugin per il gioco dei coltelli.',
-            'USER',
-            'Knives by AISasha. Knives è il lancio dei coltelli, Sasha lancia i coltelli con una certa precisione, se ti centra sei fuori altrimenti rimani.',
-            '#registerme|#registrami: Sasha registra l\'utente al gioco.',
-            '#deleteme|#eliminami: Sasha elimina i dati dell\'utente.',
-            '#knivesinfo: Sasha manda le informazioni di knives.',
-            '#mystats|#punti: Sasha manda le statistiche dell\'utente.',
-            '#knives: Sasha cerca di ucciderti.',
-            '#challenge|#sfida <username>|<reply>: Sasha avvia una sfida tra il mittente e l\'utente specificato, il vincitore vincerà 20 punti mentre il perdente ne perderà 20.',
-            '#accept|#accetta: Sasha conferma la sfida.',
-            '#reject|#rifiuta: Sasha cancella la sfida, se la sfida è già stata avviata ed è cancellata da uno dei giocatori esso perde 20 punti e viene ucciso.',
-            '#challengeinfo: Sasha manda le informazioni della sfida in corso.',
-            '#leaderboard|#classifica [(attempts|tentativi)|(deaths|morti)|(streak|serie)|(challenges|sfide)|(victories|vittorie)|(defeats|sconfitte)]: Sasha manda la classifica del parametro specificato, se nulla è specificato manderà quella dei punteggi.',
-            'MOD',
-            '#setaccuracy <value>: Sasha imposta la precisione a <value>.',
-            '#setchallengeaccuracy <value>: Sasha imposta la precisione nelle sfide a <value>.',
-            'ADMIN',
-            '(#registergroupknives|registra gruppo knives): Sasha abilita il gruppo a giocare a knives.',
-            '(#deletegroup|elimina gruppo): Sasha disabilita il gruppo per knives.',
-            'SUDO',
-            '#createknivesdb: Sasha crea il database di knives.',
-            '#addpoints <id> <value>: Sasha aggiunge <value> punti all\'utente specificato.',
-            '#rempoints <id> <value>: Sasha sottrae <value> punti all\'utente specificato.',
-        },
-        ]]
 
         likecounter =
         {
@@ -2241,36 +2186,6 @@ return {
             'ADMIN',
             '(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invites specified user.',
         },
-
-        --[[
-        knivesgame =
-        {
-            '🅿️ KNIVESGAME',
-            'Plugin for knives game.',
-            'USER',
-            'Knives by AISasha. Knives is the throwing knives game, Sasha throws a knife with a certain accuracy, if she hits you you\'re out, otherwise you stay.',
-            '#registerme|#registrami: Sasha registers user to the game.',
-            '#deleteme|#eliminami: Sasha deletes user from the game.',
-            '#knivesinfo: Sasha sends knife\'s info.',
-            '#mystats|#punti: Sasha sends user stats.',
-            '#knives: Sasha tries to kill you.',
-            '#challenge|#sfida <username>|<reply>: Sasha starts a challenge between sender and specified user, the winner will win 20 points while the loser will lose 20 points.',
-            '#accept|#accetta: Sasha confirms challenge.',
-            '#reject|#rifiuta: Sasha deletes challenge, if the challenge is confirmed and deleted by one of the two player he will lose 20 points.',
-            '#challengeinfo: Sasha sends current challenge info.',
-            '#leaderboard|#classifica [(attempts|tentativi)|(deaths|morti)|(streak|serie)|(challenges|sfide)|(victories|vittorie)|(defeats|sconfitte)]: Sasha sends the leaderboard of the specified parameter, if nothing is specified the leaederboard will show scores.',
-            'MOD',
-            '#setaccuracy <value>: Sasha sets <value> as accuracy.',
-            '#setchallengeaccuracy <value>: Sasha sets <value> as challenge accuracy.',
-            'ADMIN',
-            '(#registergroupknives|registra gruppo knives): Sasha enables group to play knives.',
-            '(#deletegroup|elimina gruppo): Sasha disables group to play knives.',
-            'SUDO',
-            '#createknivesdb:  Sasha creates knives database.',
-            '#addpoints <id> <value>: Sasha adds <value> points to specified user.',
-            '#rempoints <id> <value>: Sasha subtracts <value> points to specified user.',
-        },
-        ]]
 
         likecounter =
         {

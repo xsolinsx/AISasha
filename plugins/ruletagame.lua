@@ -704,7 +704,7 @@ return {
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Rr][Uu][Ll][Ee][Tt][Aa][Dd][Bb])$",
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Gg][Rr][Oo][Uu][Pp][Rr][Uu][Ll][Ee][Tt][Aa])$",
         "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Gg][Rr][Oo][Uu][Pp][Rr][Uu][Ll][Ee][Tt][Aa])$",
-        "^[#!/]([Ll][Ee][Aa][Dd][Ee][Rr][Bb][Oo][Aa][Rr][Dd]) (.*)$",
+        "^[#!/]([Ll][Ee][Aa][Dd][Ee][Rr][Bb][Oo][Aa][Rr][Dd]) ([^%s]+)$",
         "^[#!/]([Ll][Ee][Aa][Dd][Ee][Rr][Bb][Oo][Aa][Rr][Dd])$",
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Ee][Rr][Mm][Ee])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Tt][Aa][Ii][Nn][Ff][Oo])$",
@@ -715,7 +715,7 @@ return {
         "^[#!/]([Dd][Ee][Ll][Ee][Tt][Ee][Mm][Ee])$",
         "^[#!/]([Mm][Yy][Ss][Tt][Aa][Tt][Ss])$",
         "^[#!/]?([Gg][Oo][Dd][Rr][Uu][Ll][Ee][Tt][Aa])$",
-        "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee]) (.*)$",
+        "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee]) ([^%s]+)$",
         "^[#!/]([Cc][Hh][Aa][Ll][Ll][Ee][Nn][Gg][Ee])$",
         "^[#!/]([Aa][Cc][Cc][Ee][Pp][Tt])$",
         "^[#!/]([Rr][Ee][Jj][Ee][Cc][Tt])$",
@@ -728,7 +728,7 @@ return {
         -- deletegroup
         "^([Ee][Ll][Ii][Mm][Ii][Nn][Aa] [Gg][Rr][Uu][Pp][Pp][Oo] [Rr][Uu][Ll][Ee][Tt][Aa])$",
         -- leaderboard
-        "^[#!/]([Cc][Ll][Aa][Ss][Ss][Ii][Ff][Ii][Cc][Aa]) (.*)$",
+        "^[#!/]([Cc][Ll][Aa][Ss][Ss][Ii][Ff][Ii][Cc][Aa]) ([^%s]+)$",
         "^[#!/]([Cc][Ll][Aa][Ss][Ss][Ii][Ff][Ii][Cc][Aa])$",
         -- registerme
         "^[#!/]([Rr][Ee][Gg][Ii][Ss][Tt][Rr][Aa][Mm][Ii])$",
@@ -737,7 +737,7 @@ return {
         -- mystats
         "^[#!/]([Pp][Uu][Nn][Tt][Ii])$",
         -- challenge
-        "^[#!/]([Ss][Ff][Ii][Dd][Aa]) (.*)$",
+        "^[#!/]([Ss][Ff][Ii][Dd][Aa]) ([^%s]+)$",
         "^[#!/]([Ss][Ff][Ii][Dd][Aa])$",
         -- accept
         "^[#!/]([Aa][Cc][Cc][Ee][Tt][Tt][Aa])$",
@@ -759,7 +759,7 @@ return {
         "#accept|#accetta",
         "#reject|#rifiuta",
         "#challengeinfo",
-        "#leaderboard",
+        "#leaderboard [(attempts|tentativi)|(deaths|morti)|(streak|serie)|(challenges|sfide)|(victories|vittorie)|(defeats|sconfitte)]",
         "MOD",
         "#setcaps <value>",
         "#setchallengecaps <value>",

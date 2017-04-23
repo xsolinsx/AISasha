@@ -3159,11 +3159,8 @@ return {
         "^[#!/]([Gg][Ee][Tt][Aa][Ll][Ii][Aa][Ss][Ll][Ii][Ss][Tt])$",
         -- join
         "^[#!/]([Jj][Oo][Ii][Nn]) (.*)$",
-        "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee][Mm][Ee]) (%d+)$",
         "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee][Mm][Ee]) (.*)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (%d+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*)$",
-        "^([Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (%d+)$",
         "^([Ii][Nn][Vv][Ii][Tt][Aa][Mm][Ii]) (.*)$",
 
         -- INREALM
@@ -3174,14 +3171,12 @@ return {
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Ss][Uu][Pp][Ee][Rr][Gg][Rr][Oo][Uu][Pp]) (%d+)$",
         "^[#!/]([Kk][Ii][Ll][Ll]) ([Rr][Ee][Aa][Ll][Mm]) (%d+)$",
         "^[#!/]([Rr][Ee][Mm]) (%d+)$",
-        "^[#!/]([Aa][Dd][Dd][Aa][Dd][Mm][Ii][Nn]) (.*)$",
-        "^[#!/]([Rr][Ee][Mm][Oo][Vv][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
-        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee][Ss][Uu][Pp][Pp][Oo][Rr][Tt]) (.*)$",
-        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Ss][Uu][Pp][Pp][Oo][Rr][Tt]) (.*)$",
+        "^[#!/]([Aa][Dd][Dd][Aa][Dd][Mm][Ii][Nn]) ([^%s]+)$",
+        "^[#!/]([Rr][Ee][Mm][Oo][Vv][Ee][Aa][Dd][Mm][Ii][Nn]) ([^%s]+)$",
         "^[#!/]([Ss][Ee][Tt][Gg][Pp][Oo][Ww][Nn][Ee][Rr]) (%d+) (%d+)$",-- (group id) (owner id)
-        "^[#!/]([Ll][Ii][Ss][Tt]) (.*)$",
-        "^[#!/]([Ll][Oo][Cc][Kk]) (%d+) (.*)$",
-        "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (%d+) (.*)$",
+        "^[#!/]([Ll][Ii][Ss][Tt]) ([^%s]+)$",
+        "^[#!/]([Ll][Oo][Cc][Kk]) (%d+) ([^%s]+)$",
+        "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (%d+) ([^%s]+)$",
         "^[#!/]([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss]) (%d+)$",
         "^[#!/]([Ss][Uu][Pp][Ee][Rr][Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss]) (%d+)$",
         "^[#!/]([Ss][Ee][Tt][Gg][Pp][Rr][Uu][Ll][Ee][Ss]) (%d+) (.*)$",
@@ -3195,11 +3190,11 @@ return {
         -- createrealm
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Rr][Ee][Aa] [Rr][Ee][Gg][Nn][Oo]) (.*)$",
         -- lock
-        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) (.*)$",
-        "^([Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) ([^%s]+)$",
+        "^([Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) ([^%s]+)$",
         -- unlock
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) (.*)$",
-        "^([Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) ([^%s]+)$",
+        "^([Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (%d+) ([^%s]+)$",
 
         -- INGROUP
         "^[#!/]([Aa][Dd][Dd]) ([Rr][Ee][Aa][Ll][Mm])$",
@@ -3211,9 +3206,9 @@ return {
         "^[#!/]([Gg][Ee][Tt][Aa][Dd][Mm][Ii][Nn][Ss])$",
         "^[#!/]([Bb][Oo][Tt][Ss])$",
         "^[#!/]([Tt][Oo][Ss][Uu][Pp][Ee][Rr])$",
-        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
+        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) ([^%s]+)$",
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn])",
-        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) (.*)$",
+        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn]) ([^%s]+)$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee][Aa][Dd][Mm][Ii][Nn])",
         "^[#!/]([Ss][Ee][Tt][Uu][Ss][Ee][Rr][Nn][Aa][Mm][Ee]) (.*)$",
         "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
@@ -3242,17 +3237,17 @@ return {
         "^[#!/]([Ss][Ee][Tt][Ww][Aa][Rr][Nn]) (%d+)$",
         "^[#!/]([Gg][Ee][Tt][Ww][Aa][Rr][Nn])$",
         "^[#!/]([Ss][Ee][Tt][Tt][Ii][Nn][Gg][Ss])$",
-        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee]) (.*)$",
+        "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee]) ([^%s]+)$",
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee])",
-        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee]) (.*)$",
+        "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee]) ([^%s]+)$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee])",
-        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr]) (.*)$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr]) ([^%s]+)$",
         "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr])",
         "^[#!/]([Mm][Uu][Tt][Ee][Ll][Ii][Ss][Tt])",
         "^[#!/]([Mm][Uu][Tt][Ee][Ss][Ll][Ii][Ss][Tt])",
-        "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) (.*)",
-        "^[#!/]([Mm][Uu][Tt][Ee]) (.*)",
-        "^[#!/]([Pp][Uu][Bb][Ll][Ii][Cc]) (.*)$",
+        "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) ([^%s]+)",
+        "^[#!/]([Mm][Uu][Tt][Ee]) ([^%s]+)",
+        "^[#!/]([Pp][Uu][Bb][Ll][Ii][Cc]) ([^%s]+)$",
         "^[#!/]([Ss][Ee][Tt][Nn][Aa][Mm][Ee]) (.*)$",
         "^[#!/]([Nn][Ee][Ww][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
@@ -3265,11 +3260,11 @@ return {
         "^[#!/]([Ss][Ee][Tt][Rr][Uu][Ll][Ee][Ss]) (.*)$",
         "^[#!/]([Ss][Ee][Tt][Aa][Bb][Oo][Uu][Tt]) (.*)$",
         "^[#!/]([Oo][Ww][Nn][Ee][Rr])$",
-        "^[#!/]([Ll][Oo][Cc][Kk]) (.*)$",
-        "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) (.*)$",
+        "^[#!/]([Ll][Oo][Cc][Kk]) ([^%s]+)$",
+        "^[#!/]([Uu][Nn][Ll][Oo][Cc][Kk]) ([^%s]+)$",
         "^[#!/]([Mm][Oo][Dd][Ll][Ii][Ss][Tt])$",
-        "^[#!/]([Cc][Ll][Ee][Aa][Nn]) (.*)$",
-        "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr]) (.*)$",
+        "^[#!/]([Cc][Ll][Ee][Aa][Nn]) ([^%s]+)$",
+        "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr]) ([^%s]+)$",
         "^[#!/]([Ss][Ee][Tt][Oo][Ww][Nn][Ee][Rr])$",
         "^[#!/]([Ss][Ee][Tt][Pp][Hh][Oo][Tt][Oo])$",
         "%[(photo)%]",
@@ -3279,25 +3274,25 @@ return {
         -- about
         "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Ss][Cc][Rr][Ii][Zz][Ii][Oo][Nn][Ee])$",
         -- promote
-        "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])$",
-        "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) (.*)$",
+        "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii]) ([^%s]+)$",
         "^([Pp][Rr][Oo][Mm][Uu][Oo][Vv][Ii])$",
         -- demote
-        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Dd][Ee][Gg][Rr][Aa][Dd][Aa])$",
-        "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa]) (.*)$",
+        "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa]) ([^%s]+)$",
         "^([Dd][Ee][Gg][Rr][Aa][Dd][Aa])$",
         -- setrules
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Rr][Ee][Gg][Oo][Ll][Ee]) (.*)$",
         -- setabout
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Mm][Pp][Oo][Ss][Tt][Aa] [Dd][Ee][Ss][Cc][Rr][Ii][Zz][Ii][Oo][Nn][Ee]) (.*)$",
         -- lock
-        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
-        "^([Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Bb][Ll][Oo][Cc][Cc][Aa]) ([^%s]+)$",
+        "^([Bb][Ll][Oo][Cc][Cc][Aa]) ([^%s]+)$",
         -- unlock
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
-        "^([Ss][Bb][Ll][Oo][Cc][Cc][Aa]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Bb][Ll][Oo][Cc][Cc][Aa]) ([^%s]+)$",
+        "^([Ss][Bb][Ll][Oo][Cc][Cc][Aa]) ([^%s]+)$",
         -- modlist
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Mm][Oo][Dd])$",
         "^([Ll][Ii][Ss][Tt][Aa] [Mm][Oo][Dd])$",
@@ -3319,7 +3314,7 @@ return {
         "^([Rr][Ii][Pp][Rr][Ii][Ss][Tt][Ii][Nn][Aa]) ([^%s]+)$",
         -- muteuser
         "^([Vv][Oo][Cc][Ee])$",
-        "^([Vv][Oo][Cc][Ee]) (.*)$",
+        "^([Vv][Oo][Cc][Ee]) ([^%s]+)$",
         -- muteslist
         "^([Ll][Ii][Ss][Tt][Aa] [Mm][Uu][Tt][Ii])$",
         -- mutelist

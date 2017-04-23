@@ -116,8 +116,8 @@ return {
     {
         "^(%$)(.*)$",
         "^[#!/]([Ss][Ee][Nn][Dd][Mm][Ee][Dd][Ii][Aa])$",
-        "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
-        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Bb][Oo][Tt]) (.*)$",
+        "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt]) ([^%s]+)$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Bb][Oo][Tt]) ([^%s]+)$",
         "^[#!/]([Uu][Nn][Dd][Oo])$",
         "%[(document)%]",
         "%[(photo)%]",

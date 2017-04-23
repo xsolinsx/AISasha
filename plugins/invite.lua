@@ -65,16 +65,16 @@ return {
     description = "INVITE",
     patterns =
     {
-        "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee]) (.*)$",
+        "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee]) ([^%s]+)$",
         "^[#!/]([Ii][Nn][Vv][Ii][Tt][Ee])$",
         -- add|invite
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Tt][Aa])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa]) (.*)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa])$",
-        "^([Ii][Nn][Vv][Ii][Tt][Aa]) (.*)$",
+        "^([Ii][Nn][Vv][Ii][Tt][Aa]) ([^%s]+)$",
         "^([Ii][Nn][Vv][Ii][Tt][Aa])$",
-        "^([Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa]) (.*)$",
+        "^([Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa]) ([^%s]+)$",
         "^([Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa])$",
     },
     run = run,
