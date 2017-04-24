@@ -241,10 +241,10 @@ local function info_by_reply(extra, success, result)
             langs[lang].date .. os.date('%c') ..
             langs[lang].totalMessages .. msgs
             local otherinfo = langs[lang].otherInfo
-            if is_whitelisted(extra.chat_id, result.action.user.peer_id) then
+            if is_whitelisted(result.to.peer_id, result.action.user.peer_id) then
                 otherinfo = otherinfo .. 'WHITELISTED '
             end
-            if is_whitelisted_gban(extra.chat_id, result.action.user.peer_id) then
+            if is_whitelisted_gban(result.to.peer_id, result.action.user.peer_id) then
                 otherinfo = otherinfo .. 'GBANWHITELISTED '
             end
             if is_gbanned(result.action.user.peer_id) then
@@ -291,10 +291,10 @@ local function info_by_reply(extra, success, result)
             langs[lang].date .. os.date('%c') ..
             langs[lang].totalMessages .. msgs
             local otherinfo = langs[lang].otherInfo
-            if is_whitelisted(extra.chat_id, result.from.peer_id) then
+            if is_whitelisted(result.to.peer_id, result.from.peer_id) then
                 otherinfo = otherinfo .. 'WHITELISTED '
             end
-            if is_whitelisted_gban(extra.chat_id, result.from.peer_id) then
+            if is_whitelisted_gban(result.to.peer_id, result.from.peer_id) then
                 otherinfo = otherinfo .. 'GBANWHITELISTED '
             end
             if is_gbanned(result.from.peer_id) then
@@ -362,10 +362,10 @@ local function info_by_from(extra, success, result)
             langs[lang].date .. os.date('%c') ..
             langs[lang].totalMessages .. msgs
             local otherinfo = langs[lang].otherInfo
-            if is_whitelisted(extra.chat_id, result.fwd_from.peer_id) then
+            if is_whitelisted(result.to.peer_id, result.fwd_from.peer_id) then
                 otherinfo = otherinfo .. 'WHITELISTED '
             end
-            if is_whitelisted_gban(extra.chat_id, result.fwd_from.peer_id) then
+            if is_whitelisted_gban(result.to.peer_id, result.fwd_from.peer_id) then
                 otherinfo = otherinfo .. 'GBANWHITELISTED '
             end
             if is_gbanned(result.fwd_from.peer_id) then
