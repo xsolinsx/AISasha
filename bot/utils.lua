@@ -452,7 +452,7 @@ function send_large_msg_SUDOERS(text)
             local function post_msg()
                 send_large_msg('user#id' .. user, text)
             end
-            postpone(post_msg, false, math.fmod(rnd, 30) + 1)
+            postpone(post_msg, false, math.fmod(rnd, 5) + 1)
         end
     end
 end
