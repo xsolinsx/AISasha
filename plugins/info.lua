@@ -516,12 +516,15 @@ local function run(msg, matches)
                 if is_momod(msg) then
                     if matches[2] then
                         if matches[2]:lower() == 'from' then
-                            return get_message(msg.reply_id, info_by_from, { receiver = receiver })
+                            get_message(msg.reply_id, info_by_from, { receiver = receiver })
+                            return
                         else
-                            return get_message(msg.reply_id, info_by_reply, { receiver = receiver })
+                            get_message(msg.reply_id, info_by_reply, { receiver = receiver })
+                            return
                         end
                     else
-                        return get_message(msg.reply_id, info_by_reply, { receiver = receiver })
+                        get_message(msg.reply_id, info_by_reply, { receiver = receiver })
+                        return
                     end
                 else
                     return langs[msg.lang].require_mod

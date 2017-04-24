@@ -2760,6 +2760,7 @@ local function run(msg, matches)
                         }
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted admin @" .. string.gsub(matches[2], '@', ''))
                         resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
+                        return
                     end
                 else
                     return langs[msg.lang].require_owner
@@ -2805,6 +2806,7 @@ local function run(msg, matches)
                             }
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
                             resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
+                            return
                         end
                         return
                     else
@@ -2830,6 +2832,7 @@ local function run(msg, matches)
                             }
                             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
                             resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
+                            return
                         end
                         return
                     else
@@ -3083,6 +3086,7 @@ local function run(msg, matches)
                     else
                         local get_cmd = "mute_user"
                         resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, { receiver = get_receiver(msg), get_cmd = get_cmd, executer = msg.from.id })
+                        return
                     end
                 else
                     return langs[msg.lang].require_mod
