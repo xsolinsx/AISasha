@@ -448,7 +448,11 @@ end
 function send_large_msg_SUDOERS(text)
     for v, user in pairs(_config.sudo_users) do
         if tonumber(user) ~= tonumber(our_id) then
-            send_large_msg('user#id' .. user, text)
+            local rnd = math.random(1000)
+            local function post_msg()
+                send_large_msg('user#id' .. user, text)
+            end
+            postpone(post_msg, false, math.fmod(rnd, 30) + 1)
         end
     end
 end
