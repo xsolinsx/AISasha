@@ -86,110 +86,112 @@ end
 
 local function run(msg, matches)
     if not msg.api_patch then
-        if matches[1]:lower() == "whitelist" then
-            local hash = "whitelist:" .. msg.to.id
-            local user_id = ""
-            if type(msg.reply_id) ~= "nil" then
-                if is_owner(msg) then
-                    local receiver = get_receiver(msg)
-                    get_message(msg.reply_id, whitelist_reply, { receiver = receiver })
-                else
-                    return langs[msg.lang].require_owner
-                end
-            elseif matches[2] then
-                if is_owner(msg) then
-                    if string.match(matches[2], '^%d+$') then
-                        local user_id = matches[2]
-                        local is_whitelisted = redis:sismember(hash, user_id)
-                        if is_whitelisted then
-                            redis:srem(hash, user_id)
-                            return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistRemoved
+        if msg.to.type == 'chat' or msg.to.type == 'channel' then
+            if matches[1]:lower() == "whitelist" then
+                local hash = "whitelist:" .. msg.to.id
+                local user_id = ""
+                if type(msg.reply_id) ~= "nil" then
+                    if is_owner(msg) then
+                        local receiver = get_receiver(msg)
+                        get_message(msg.reply_id, whitelist_reply, { receiver = receiver })
+                    else
+                        return langs[msg.lang].require_owner
+                    end
+                elseif matches[2] then
+                    if is_owner(msg) then
+                        if string.match(matches[2], '^%d+$') then
+                            local user_id = matches[2]
+                            local is_whitelisted = redis:sismember(hash, user_id)
+                            if is_whitelisted then
+                                redis:srem(hash, user_id)
+                                return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistRemoved
+                            else
+                                redis:sadd(hash, user_id)
+                                return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistAdded
+                            end
                         else
-                            redis:sadd(hash, user_id)
-                            return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistAdded
+                            local receiver = get_receiver(msg)
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), whitelist_res, { receiver = receiver })
                         end
                     else
-                        local receiver = get_receiver(msg)
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), whitelist_res, { receiver = receiver })
+                        return langs[msg.lang].require_owner
                     end
                 else
-                    return langs[msg.lang].require_owner
-                end
-            else
-                local hash = 'whitelist:' .. msg.to.id
-                local list = redis:smembers(hash)
-                local text = langs[msg.lang].whitelistStart .. msg.to.print_name .. '\n'
-                for k, v in pairs(list) do
-                    local user_info = redis:hgetall('user:' .. v)
-                    if user_info and user_info.print_name then
-                        local print_name = string.gsub(user_info.print_name, "_", " ")
-                        text = text .. k .. " - " .. print_name .. " [" .. v .. "]\n"
-                    else
-                        text = text .. k .. " - " .. v .. "\n"
-                    end
-                end
-                return text
-            end
-        end
-        if matches[1]:lower() == "clean whitelist" then
-            if is_owner(msg) then
-                redis:del('whitelist:' .. msg.to.id)
-                return langs[msg.lang].whitelistCleaned
-            else
-                return langs[msg.lang].require_owner
-            end
-        end
-        if matches[1]:lower() == "whitelistgban" then
-            local hash = "whitelist:gban:" .. msg.to.id
-            local user_id = ""
-            if type(msg.reply_id) ~= "nil" then
-                if is_owner(msg) then
-                    local receiver = get_receiver(msg)
-                    get_message(msg.reply_id, whitelist_gban_reply, { receiver = receiver })
-                else
-                    return langs[msg.lang].require_owner
-                end
-            elseif matches[2] then
-                if is_owner(msg) then
-                    if string.match(matches[2], '^%d+$') then
-                        local user_id = matches[2]
-                        local is_whitelisted = redis:sismember(hash, user_id)
-                        if is_whitelisted then
-                            redis:srem(hash, user_id)
-                            return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistGbanRemoved
+                    local hash = 'whitelist:' .. msg.to.id
+                    local list = redis:smembers(hash)
+                    local text = langs[msg.lang].whitelistStart .. msg.to.print_name .. '\n'
+                    for k, v in pairs(list) do
+                        local user_info = redis:hgetall('user:' .. v)
+                        if user_info and user_info.print_name then
+                            local print_name = string.gsub(user_info.print_name, "_", " ")
+                            text = text .. k .. " - " .. print_name .. " [" .. v .. "]\n"
                         else
-                            redis:sadd(hash, user_id)
-                            return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistGbanAdded
+                            text = text .. k .. " - " .. v .. "\n"
+                        end
+                    end
+                    return text
+                end
+            end
+            if matches[1]:lower() == "clean whitelist" then
+                if is_owner(msg) then
+                    redis:del('whitelist:' .. msg.to.id)
+                    return langs[msg.lang].whitelistCleaned
+                else
+                    return langs[msg.lang].require_owner
+                end
+            end
+            if matches[1]:lower() == "whitelistgban" then
+                local hash = "whitelist:gban:" .. msg.to.id
+                local user_id = ""
+                if type(msg.reply_id) ~= "nil" then
+                    if is_owner(msg) then
+                        local receiver = get_receiver(msg)
+                        get_message(msg.reply_id, whitelist_gban_reply, { receiver = receiver })
+                    else
+                        return langs[msg.lang].require_owner
+                    end
+                elseif matches[2] then
+                    if is_owner(msg) then
+                        if string.match(matches[2], '^%d+$') then
+                            local user_id = matches[2]
+                            local is_whitelisted = redis:sismember(hash, user_id)
+                            if is_whitelisted then
+                                redis:srem(hash, user_id)
+                                return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistGbanRemoved
+                            else
+                                redis:sadd(hash, user_id)
+                                return langs[msg.lang].userBot .. user_id .. langs[msg.lang].whitelistGbanAdded
+                            end
+                        else
+                            local receiver = get_receiver(msg)
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), whitelist_gban_res, { receiver = receiver })
                         end
                     else
-                        local receiver = get_receiver(msg)
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), whitelist_gban_res, { receiver = receiver })
+                        return langs[msg.lang].require_owner
                     end
+                else
+                    local hash = 'whitelist:gban:' .. msg.to.id
+                    local list = redis:smembers(hash)
+                    local text = langs[msg.lang].whitelistGbanStart .. msg.to.print_name .. '\n'
+                    for k, v in pairs(list) do
+                        local user_info = redis:hgetall('user:' .. v)
+                        if user_info and user_info.print_name then
+                            local print_name = string.gsub(user_info.print_name, "_", " ")
+                            text = text .. k .. " - " .. print_name .. " [" .. v .. "]\n"
+                        else
+                            text = text .. k .. " - " .. v .. "\n"
+                        end
+                    end
+                    return text
+                end
+            end
+            if matches[1]:lower() == "clean whitelistgban" then
+                if is_owner(msg) then
+                    redis:del('whitelist:gban:' .. msg.to.id)
+                    return langs[msg.lang].whitelistGbanCleaned
                 else
                     return langs[msg.lang].require_owner
                 end
-            else
-                local hash = 'whitelist:gban:' .. msg.to.id
-                local list = redis:smembers(hash)
-                local text = langs[msg.lang].whitelistGbanStart .. msg.to.print_name .. '\n'
-                for k, v in pairs(list) do
-                    local user_info = redis:hgetall('user:' .. v)
-                    if user_info and user_info.print_name then
-                        local print_name = string.gsub(user_info.print_name, "_", " ")
-                        text = text .. k .. " - " .. print_name .. " [" .. v .. "]\n"
-                    else
-                        text = text .. k .. " - " .. v .. "\n"
-                    end
-                end
-                return text
-            end
-        end
-        if matches[1]:lower() == "clean whitelistgban" then
-            if is_owner(msg) then
-                redis:del('whitelist:gban:' .. msg.to.id)
-                return langs[msg.lang].whitelistGbanCleaned
-            else
-                return langs[msg.lang].require_owner
             end
         end
     end

@@ -50,3 +50,4 @@ data/tmp/*.*
 *.suo
 *.user
 *.luaproj
+/plugins/localtest.lua
