@@ -493,46 +493,6 @@ local function kickrandom_channel(extra, success, result)
     end
 end
 
-local function kick_nouser_chat(extra, success, result)
-    local kicked = 0
-    local lang = get_lang(extra.chat_id)
-
-    for k, v in pairs(result.members) do
-        if not v.username then
-            local rnd = math.random(1000)
-            local function post_kick()
-                kick_user(v.peer_id, extra.chat_id)
-            end
-            postpone(post_kick, false, math.fmod(rnd, 30) + 1)
-            kicked = kicked + 1
-        end
-    end
-    local function post_msg()
-        send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
-    end
-    postpone(post_msg, false, 1)
-end
-
-local function kick_nouser_channel(extra, success, result)
-    local kicked = 0
-    local lang = get_lang(extra.chat_id)
-
-    for k, v in pairs(result) do
-        if not v.username then
-            local rnd = math.random(1000)
-            local function post_kick()
-                kick_user(v.peer_id, extra.chat_id)
-            end
-            postpone(post_kick, false, math.fmod(rnd, 30) + 1)
-            kicked = kicked + 1
-        end
-    end
-    local function post_msg()
-        send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
-    end
-    postpone(post_msg, false, 1)
-end
-
 local function kick_deleted_chat(extra, success, result)
     local kicked = 0
     local lang = get_lang(extra.chat_id)
@@ -577,6 +537,66 @@ local function kick_deleted_channel(extra, success, result)
     postpone(post_msg, false, 1)
 end
 
+local function kick_nouser_chat(extra, success, result)
+    local kicked = 0
+    local lang = get_lang(extra.chat_id)
+    local ids = ''
+
+    for k, v in pairs(result.members) do
+        if not v.username then
+            ids = ids .. v.peer_id .. ' '
+            local rnd = math.random(1000)
+            local function post_kick()
+                kick_user(v.peer_id, extra.chat_id)
+            end
+            postpone(post_kick, false, math.fmod(rnd, 30) + 1)
+            kicked = kicked + 1
+        end
+    end
+    local function post_msg()
+        send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
+    local function post_msg_unban()
+        if ids ~= '' then
+            send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
+        end
+    end
+    if extra.api_patch then
+        postpone(post_msg_unban, false, 2)
+    end
+end
+
+local function kick_nouser_channel(extra, success, result)
+    local kicked = 0
+    local lang = get_lang(extra.chat_id)
+    local ids = ''
+
+    for k, v in pairs(result) do
+        if not v.username then
+            ids = ids .. v.peer_id .. ' '
+            local rnd = math.random(1000)
+            local function post_kick()
+                kick_user(v.peer_id, extra.chat_id)
+            end
+            postpone(post_kick, false, math.fmod(rnd, 30) + 1)
+            kicked = kicked + 1
+        end
+    end
+    local function post_msg()
+        send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
+    local function post_msg_unban()
+        if ids ~= '' then
+            send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
+        end
+    end
+    if extra.api_patch then
+        postpone(post_msg_unban, false, 2)
+    end
+end
+
 local function user_msgs(user_id, chat_id)
     local user_info
     local uhash = 'user:' .. user_id
@@ -589,11 +609,13 @@ end
 local function kick_inactive_chat(extra, success, result)
     local kicked = 0
     local lang = get_lang(extra.chat_id)
+    local ids = ''
 
     for k, v in pairs(result.members) do
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
             local user_info = user_msgs(v.peer_id, extra.chat_id)
             if tonumber(user_info) < tonumber(extra.num) then
+                ids = ids .. v.peer_id .. ' '
                 local rnd = math.random(1000)
                 local function post_kick()
                     kick_user(v.peer_id, extra.chat_id)
@@ -607,16 +629,26 @@ local function kick_inactive_chat(extra, success, result)
         send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
     end
     postpone(post_msg, false, 1)
+    local function post_msg_unban()
+        if ids ~= '' then
+            send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
+        end
+    end
+    if extra.api_patch then
+        postpone(post_msg_unban, false, 2)
+    end
 end
 
 local function kick_inactive_channel(extra, success, result)
     local kicked = 0
     local lang = get_lang(extra.chat_id)
+    local ids = ''
 
     for k, v in pairs(result) do
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
             local user_info = user_msgs(v.peer_id, extra.chat_id)
             if tonumber(user_info) < tonumber(extra.num) then
+                ids = ids .. v.peer_id .. ' '
                 local rnd = math.random(1000)
                 local function post_kick()
                     kick_user(v.peer_id, extra.chat_id)
@@ -630,6 +662,14 @@ local function kick_inactive_channel(extra, success, result)
         send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
     end
     postpone(post_msg, false, 1)
+    local function post_msg_unban()
+        if ids ~= '' then
+            send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
+        end
+    end
+    if extra.api_patch then
+        postpone(post_msg_unban, false, 2)
+    end
 end
 
 local function run(msg, matches)
@@ -978,9 +1018,9 @@ local function run(msg, matches)
                     num = matches[2]
                 end
                 if msg.to.type == 'chat' then
-                    chat_info(receiver, kick_inactive_chat, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
+                    chat_info(receiver, kick_inactive_chat, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg), api_patch = msg.api_patch })
                 elseif msg.to.type == 'channel' then
-                    channel_get_users(receiver, kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
+                    channel_get_users(receiver, kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg), api_patch = msg.api_patch })
                 end
                 return
             else
@@ -994,9 +1034,9 @@ local function run(msg, matches)
             if is_owner(msg) then
                 -- /kicknouser
                 if msg.to.type == 'chat' then
-                    chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                    chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id, api_patch = msg.api_patch })
                 elseif msg.to.type == 'channel' then
-                    channel_get_users(receiver, kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                    channel_get_users(receiver, kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id, api_patch = msg.api_patch })
                 end
                 return
             else
