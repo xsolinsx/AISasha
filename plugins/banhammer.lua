@@ -643,6 +643,7 @@ local function kick_inactive_channel(extra, success, result)
             end
         end
     end
+    print(ids)
     send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
     local function post_msg_unban()
         if ids ~= '' then
