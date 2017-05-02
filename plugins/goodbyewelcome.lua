@@ -16,7 +16,7 @@ end
 
 local function get_welcome(chat_id)
     if not data[tostring(chat_id)]['welcome'] then
-        return ''
+        return
     end
     local welcome = data[tostring(chat_id)]['welcome']
     return welcome
@@ -24,7 +24,7 @@ end
 
 local function unset_welcome(chat_id)
     local lang = get_lang(chat_id)
-    data[tostring(chat_id)]['welcome'] = ''
+    data[tostring(chat_id)]['welcome'] = nil
     save_data(_config.moderation.data, data)
     return langs[lang].welcomeRemoved
 end
@@ -54,7 +54,7 @@ end
 
 local function get_goodbye(chat_id)
     if not data[tostring(chat_id)]['goodbye'] then
-        return ''
+        return
     end
     local goodbye = data[tostring(chat_id)]['goodbye']
     return goodbye
@@ -62,7 +62,7 @@ end
 
 local function unset_goodbye(chat_id)
     local lang = get_lang(chat_id)
-    data[tostring(chat_id)]['goodbye'] = ''
+    data[tostring(chat_id)]['goodbye'] = nil
     save_data(_config.moderation.data, data)
     return langs[lang].goodbyeRemoved
 end
@@ -151,7 +151,7 @@ local function run(msg, matches)
                 redis:incr(hash)
                 local hashonredis = redis:get(hash)
                 if hashonredis then
-                    if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg.to.id)) and tonumber(get_memberswelcome(msg.to.id)) ~= 0 then
+                    if tonumber(hashonredis) >= tonumber(get_memberswelcome(msg.to.id)) and tonumber(get_memberswelcome(msg.to.id)) ~= 0 and get_welcome(msg.to.id) then
                         local function post_msg()
                             send_large_msg(get_receiver(msg), adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, msg.action.user or msg.from), ok_cb, false)
                         end
@@ -163,7 +163,7 @@ local function run(msg, matches)
                 end
             end
             -- if there's someone kicked in the group with multiple_kicks = true it doesn't send goodbye messages
-            if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) ~= '' and not multiple_kicks[tostring(msg.to.id)] then
+            if msg.action.type == "chat_del_user" and get_goodbye(msg.to.id) and not multiple_kicks[tostring(msg.to.id)] then
                 local function post_msg()
                     send_large_msg(get_receiver(msg), adjust_goodbyewelcome(get_goodbye(msg.to.id), msg.to, msg.action.user), ok_cb, false)
                 end
@@ -179,10 +179,14 @@ local function run(msg, matches)
                 return get_goodbye(msg.to.id)
             end
             if matches[1]:lower() == 'previewwelcome' then
-                return adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, preview_user)
+                if get_welcome(msg.to.id) then
+                    return adjust_goodbyewelcome(get_welcome(msg.to.id), msg.to, preview_user)
+                end
             end
             if matches[1]:lower() == 'previewgoodbye' then
-                return adjust_goodbyewelcome(get_goodbye(msg.to.id), msg.to, preview_user)
+                if get_goodbye(msg.to.id) then
+                    return adjust_goodbyewelcome(get_goodbye(msg.to.id), msg.to, preview_user)
+                end
             end
             if matches[1]:lower() == 'setwelcome' then
                 if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
