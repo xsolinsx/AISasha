@@ -637,7 +637,7 @@ local function kick_inactive_channel(extra, success, result)
             end
         end
     end
-    print(ids)
+    print(ids, extra.api_patch)
     send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
     if extra.api_patch then
         if ids ~= '' then
