@@ -547,15 +547,16 @@ local function kick_nouser_chat(extra, success, result)
             kicked = kicked + 1
         end
     end
+    print(ids)
     send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
     local function post_msg_unban()
-        if ids ~= '' then
-            send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
+        if extra.api_patch then
+            if ids ~= '' then
+                send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
+            end
         end
     end
-    if extra.api_patch then
-        postpone(post_msg_unban, false, 2)
-    end
+    postpone(post_msg_unban, false, 2)
 end
 
 local function kick_nouser_channel(extra, success, result)
@@ -574,15 +575,16 @@ local function kick_nouser_channel(extra, success, result)
             kicked = kicked + 1
         end
     end
+    print(ids)
     send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
     local function post_msg_unban()
-        if ids ~= '' then
-            send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
+        if extra.api_patch then
+            if ids ~= '' then
+                send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
+            end
         end
     end
-    if extra.api_patch then
-        postpone(post_msg_unban, false, 2)
-    end
+    postpone(post_msg_unban, false, 2)
 end
 
 local function user_msgs(user_id, chat_id)
@@ -613,15 +615,16 @@ local function kick_inactive_chat(extra, success, result)
             end
         end
     end
+    print(ids)
     send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
     local function post_msg_unban()
-        if ids ~= '' then
-            send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
+        if extra.api_patch then
+            if ids ~= '' then
+                send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
+            end
         end
     end
-    if extra.api_patch then
-        postpone(post_msg_unban, false, 2)
-    end
+    postpone(post_msg_unban, false, 2)
 end
 
 local function kick_inactive_channel(extra, success, result)
@@ -646,13 +649,13 @@ local function kick_inactive_channel(extra, success, result)
     print(ids)
     send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
     local function post_msg_unban()
-        if ids ~= '' then
-            send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
+        if extra.api_patch then
+            if ids ~= '' then
+                send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
+            end
         end
     end
-    if extra.api_patch then
-        postpone(post_msg_unban, false, 2)
-    end
+    postpone(post_msg_unban, false, 1)
 end
 
 local function run(msg, matches)
