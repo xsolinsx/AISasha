@@ -251,6 +251,13 @@ local function run(msg, matches)
                 send_large_msg(get_receiver(msg), langs[msg.lang].helpIntro .. text)
             end
         end
+        if matches[1]:lower() == "faq" then
+            if not matches[2] then
+                return langs[msg.lang].faqList
+            else
+                return langs[msg.lang].faq[tonumber(matches[2])]
+            end
+        end
     end
 end
 
@@ -288,5 +295,6 @@ return {
         "(#helpall|sasha aiuto tutto)",
         "(#syntax|sasha sintassi) <filter>",
         "(#syntaxall|sasha sintassi tutto)",
+        "#faq[<n>]",
     },
 }

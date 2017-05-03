@@ -241,9 +241,6 @@ local function adjustSettingType(setting_type)
     if setting_type == 'photo' then
         setting_type = 'lock_photo'
     end
-    if setting_type == 'public' then
-        setting_type = 'public'
-    end
     if setting_type == 'rtl' then
         setting_type = 'lock_rtl'
     end
@@ -329,9 +326,6 @@ local function checkMatchesLockUnlock(txt)
     if txt:lower() == 'photo' then
         return true
     end
-    if txt:lower() == 'public' then
-        return true
-    end
     if txt:lower() == 'rtl' then
         return true
     end
@@ -360,7 +354,6 @@ local function showSettings(target, lang)
             langs[lang].membersLock .. tostring(settings.lock_member) ..
             langs[lang].nameLock .. tostring(settings.lock_name) ..
             langs[lang].photoLock .. tostring(settings.lock_photo) ..
-            langs[lang].public .. tostring(settings.public) ..
             langs[lang].rtlLock .. tostring(settings.lock_rtl) ..
             langs[lang].spamLock .. tostring(settings.lock_spam) ..
             langs[lang].strictrules .. tostring(settings.strict) ..
@@ -465,14 +458,14 @@ local function check_member_autorealm(extra, success, result)
         if member_id ~= our_id then
             -- Group configuration
             data[tostring(msg.to.id)] = {
-                goodbye = "",
+                goodbye = nil,
                 group_type = 'Realm',
                 long_id = msg.to.peer_id,
                 moderators = { },
-                rules = "",
+                rules = nil,
                 set_name = string.gsub(msg.to.title,'_',' '),
                 set_owner = tostring(member_id),
-                set_photo = '',
+                set_photo = nil,
                 settings =
                 {
                     flood = true,
@@ -502,11 +495,10 @@ local function check_member_autorealm(extra, success, result)
                         video = false,
                         voice = false,
                     },
-                    public = false,
                     strict = false,
                     warn_max = 3,
                 },
-                welcome = "",
+                welcome = nil,
                 welcomemembers = 0,
             }
             save_data(_config.moderation.data, data)
@@ -530,14 +522,14 @@ local function check_member_realm_add(extra, success, result)
         if member_id ~= our_id then
             -- Group configuration
             data[tostring(msg.to.id)] = {
-                goodbye = "",
+                goodbye = nil,
                 group_type = 'Realm',
                 long_id = msg.to.peer_id,
                 moderators = { },
-                rules = "",
+                rules = nil,
                 set_name = string.gsub(msg.to.title,'_',' '),
                 set_owner = tostring(member_id),
-                set_photo = '',
+                set_photo = nil,
                 settings =
                 {
                     flood = true,
@@ -567,11 +559,10 @@ local function check_member_realm_add(extra, success, result)
                         video = false,
                         voice = false,
                     },
-                    public = false,
                     strict = false,
                     warn_max = 3,
                 },
-                welcome = "",
+                welcome = nil,
                 welcomemembers = 0,
             }
             save_data(_config.moderation.data, data)
@@ -595,14 +586,14 @@ function check_member_group(extra, success, result)
         if member_id ~= our_id then
             -- Group configuration
             data[tostring(msg.to.id)] = {
-                goodbye = "",
+                goodbye = nil,
                 group_type = 'Group',
                 long_id = msg.to.peer_id,
                 moderators = { },
-                rules = "",
+                rules = nil,
                 set_name = string.gsub(msg.to.title,'_',' '),
                 set_owner = tostring(member_id),
-                set_photo = '',
+                set_photo = nil,
                 settings =
                 {
                     flood = true,
@@ -632,11 +623,10 @@ function check_member_group(extra, success, result)
                         video = false,
                         voice = false,
                     },
-                    public = false,
                     strict = false,
                     warn_max = 3,
                 },
-                welcome = "",
+                welcome = nil,
                 welcomemembers = 0,
             }
             save_data(_config.moderation.data, data)
@@ -660,14 +650,14 @@ local function check_member_modadd(extra, success, result)
         if member_id ~= our_id then
             -- Group configuration
             data[tostring(msg.to.id)] = {
-                goodbye = "",
+                goodbye = nil,
                 group_type = 'Group',
                 long_id = msg.to.peer_id,
                 moderators = { },
-                rules = "",
+                rules = nil,
                 set_name = string.gsub(msg.to.title,'_',' '),
                 set_owner = tostring(member_id),
-                set_photo = '',
+                set_photo = nil,
                 settings =
                 {
                     flood = true,
@@ -697,11 +687,10 @@ local function check_member_modadd(extra, success, result)
                         video = false,
                         voice = false,
                     },
-                    public = false,
                     strict = false,
                     warn_max = 3,
                 },
-                welcome = "",
+                welcome = nil,
                 welcomemembers = 0,
             }
             save_data(_config.moderation.data, data)
@@ -1051,14 +1040,14 @@ local function check_member_super(extra, success, result)
         if member_id ~= our_id then
             -- SuperGroup configuration
             data[tostring(msg.to.id)] = {
-                goodbye = "",
+                goodbye = nil,
                 group_type = 'SuperGroup',
                 long_id = msg.to.peer_id,
                 moderators = { },
-                rules = "",
+                rules = nil,
                 set_name = string.gsub(msg.to.title,'_',' '),
                 set_owner = tostring(member_id),
-                set_photo = '',
+                set_photo = nil,
                 settings =
                 {
                     flood = true,
@@ -1088,11 +1077,10 @@ local function check_member_super(extra, success, result)
                         video = false,
                         voice = false,
                     },
-                    public = false,
                     strict = false,
                     warn_max = 3,
                 },
-                welcome = "",
+                welcome = nil,
                 welcomemembers = 0,
             }
             save_data(_config.moderation.data, data)
@@ -2895,10 +2883,12 @@ local function run(msg, matches)
                 end
             end
             if msg.media then
-                if msg.media.type == 'photo' and data[tostring(msg.to.id)].set_photo == 'waiting' and is_momod(msg) then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set new SuperGroup photo")
-                    load_photo(msg.id, set_supergroup_photo, msg)
-                    return
+                if data[tostring(msg.to.id)].set_photo then
+                    if msg.media.type == 'photo' and data[tostring(msg.to.id)].set_photo == 'waiting' and is_momod(msg) then
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set new SuperGroup photo")
+                        load_photo(msg.id, set_supergroup_photo, msg)
+                        return
+                    end
                 end
             end
             if matches[1]:lower() == 'setphoto' then
@@ -3286,7 +3276,6 @@ return {
         "^[#!/]([Mm][Uu][Tt][Ee][Ss][Ll][Ii][Ss][Tt])",
         "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) ([^%s]+)",
         "^[#!/]([Mm][Uu][Tt][Ee]) ([^%s]+)",
-        "^[#!/]([Pp][Uu][Bb][Ll][Ii][Cc]) ([^%s]+)$",
         "^[#!/]([Ss][Ee][Tt][Nn][Aa][Mm][Ee]) (.*)$",
         "^[#!/]([Nn][Ee][Ww][Ll][Ii][Nn][Kk])$",
         "^[#!/]([Ss][Ee][Tt][Ll][Ii][Nn][Kk]) ([Hh][Tt][Tt][Pp][Ss]://[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm]%.[Mm][Ee]/[Jj][Oo][Ii][Nn][Cc][Hh][Aa][Tt]/%S+)$",
@@ -3384,8 +3373,8 @@ return {
         "(#newlink|sasha crea link)",
         "#setflood <value>",
         "#setwarn <value>",
-        "(#lock|[sasha] blocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
-        "(#unlock|[sasha] sblocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
+        "(#lock|[sasha] blocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict",
+        "(#unlock|[sasha] sblocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict",
         "SUPERGROUPS",
         "(#bots|[sasha] lista bot)",
         "#updategroupinfo",
@@ -3437,8 +3426,8 @@ return {
         "(#setrules|sasha imposta regole) <group_id> <text>",
         "#setname <realm_name>",
         "#setname|#setgpname <group_id> <group_name>",
-        "(#lock|[sasha] blocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
-        "(#unlock|[sasha] sblocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict",
+        "(#lock|[sasha] blocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict",
+        "(#unlock|[sasha] sblocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict",
         "#settings <group_id>",
         "#type",
         "#kill group|supergroup|realm <group_id>",

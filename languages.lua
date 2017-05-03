@@ -581,7 +581,6 @@ return {
         membersLock = '\nBlocco membri: ',
         nameLock = '\nBlocco nome: ',
         photoLock = '\nBlocco foto: ',
-        public = '\nPubblico: ',
         rtlLock = '\nBlocco RTL: ',
         spamLock = '\nBlocco spam: ',
         strictrules = '\nPugno di ferro: ',
@@ -688,6 +687,77 @@ return {
         whitelistGbanAdded = ' aggiunto alla whitelist dei gban.',
         whitelistGbanCleaned = 'Whitelist gban svuotata.',
         whitelistGbanStart = 'Whitelist gban ',
+
+        -- FAQ
+        faqList = '/faq1 limiti @AISasha.\n' ..
+        '/faq2 limiti @AISashaBot.\n' ..
+        '/faq3 utilizzo in contemporanea di @AISasha e @AISashaBot.\n' ..
+        '/faq4 madelineproto.\n' ..
+        '/faq5 lista warn.\n' ..
+        '/faq6 comandi solo di @AISasha.\n' ..
+        '/faq7 due o più owner.\n' ..
+        '/faq8 rango intermedio mod e owner.\n' ..
+        '/faq9 tagalert @AISasha.\n' ..
+        '/faq10 impostaazioni gruppo divise tra i due bot.\n' ..
+        '/faq11 significato impostazioni.\n' ..
+        '/faq12 ruleta @AISashaBot.\n' ..
+        '/faq13 api_patch.\n' ..
+        '/faq14 spam @AISashaBot.',
+        faq =
+        {
+            [1] = 'D: Limiti sasha utente (@AISasha)?\n' ..
+            'R: *Freeze\n' ..
+            '*Comandi per risposta a volte non funzionanti (soluzione = inoltra e usa <command> from).\n' ..
+            '*Kick = ban.\n' ..
+            '*In gruppi con più di 200 membri non riceve più messaggi se non viene messo il tag all\'inizio (di conseguenza lock e mute non funzionano più).\n' ..
+            'Meno aggiornata rispetto ad @AISashaBot (solitamente dovuto a telegram-cli).\n' ..
+            '* = Dovuti a telegram-cli, se sapete come risolvere qualcuno di questi scrivete a @EricSolinas.\n',
+            [2] = 'D: Limiti sasha api (@AISashaBot)?\n' ..
+            'R: *Impossibilità di eliminare messaggi (se non tramite @AISasha).\n' ..
+            '*Impossibilità di ottenere i membri di gruppi e supergruppi.\n' ..
+            '*Impossibilità di leggere i messaggi di altri bot.\n' ..
+            'Freeze (più rari di quelli di @AISasha, utenti fidati appena si accorgono la riavviano).\n' ..
+            '* = Dovuti alle API di telegram.\n',
+            [3] = 'D: Perchè usi @AISasha e @AISashaBot insieme?\n' ..
+            'R: Perchè così facendo posso minimizzare i limiti di entrambe.\n' ..
+            'Grazie ad @AISashaBot => comandi per risposta sempre funzionanti, kick e ban non sono più la stessa cosa, problema dei 200 membri risolto.\n',
+            'Grazie ad @AISasha => eliminazione di messaggi, pericolo di bot api spammer/flooder minimizzato.\n',
+            [4] = 'D: Perchè non usi MadelineProto?\n' ..
+            'R: Non mi piace il PHP e le API di telegram sono ufficiali, quelle di MadelineProto no.',
+            [5] = 'D: Perchè non c\'è una lista di utenti warnati?\n' ..
+            'R: Perchè diventerebbe una lista enorme in alcuni gruppi, oltretutto owner/mod potrebbero essere influenzati dalla lista stessa al momento del warn.',
+            [6] = 'D: Perchè per alcuni comandi devo usare obbligatoriamente @AISasha?\n' ..
+            'R: Solitamente è perchè i bot API sono limitati in maniera più restrittiva (/faq2).',
+            [7] = 'D: Perchè non possono esserci più owner di un solo gruppo?\n' ..
+            'R: Telegram non ammette nemmeno il passaggio di proprietà di un gruppo (attualmente) e non gestisce così le cose.',
+            [8] = 'D: Puoi aggiungere un rango intermedio tra mod e owner?\n' ..
+            'R: No, ogni owner deve controllare i propri moderatori, aggiungere ranghi intermedi non farebbe altro che creare confusione.',
+            [9] = 'D: Perchè il tagalert non è disponibile su @AISasha?\n' ..
+            'R: Telegram gestisce in maniera differente i messaggi di utenti e bot, quelli dei bot sono più semplici da gestire per la funzione di tagalert.',
+            [10] = 'D: Perchè le impostazioni dei due bot sono divise?\n' ..
+            'R: Per comodità di sviluppo (gli id dei gruppi e supergruppi sono differenti per utenti e bot, lo stesso vale per altri parametri).',
+            [11] = 'D: Cosa significano le impostazioni?\n' ..
+            'R: Arabic => caratteri arabi.\n' ..
+            'Bots => altri bot (controllati con le ultime lettere dell\'username).\n' ..
+            'Flood => N messaggi in 2 secondi.\n' ..
+            'Grouplink => permettere o no ai normali utenti di ottenere il link del gruppo con il comando /link.\n' ..
+            'Leave => abbandono del gruppo.\n' ..
+            'Link => link di altri gruppi.\n' ..
+            'Member => entrata di nuovi membri.\n' ..
+            'Name => nome gruppo.\n' ..
+            'Photo => foto gruppo.\n' ..
+            'RTL => caratteri right to left (quelli che fanno apparire i messaggi scritti al contrario).\n' ..
+            'Spam => messaggio più lungo di 2048 caratteri o con più di 40 simboli* oppure nomi più lunghi di 70 caratteri o con più di 40 simboli*.\n' ..
+            'Strict => aumento di "pena" da kick a ban.\n' ..
+            'Per i gruppi normali la "pena" è sempre il ban\n' ..
+            '* = emoji, caratteri di controllo ecc...',
+            [12] = 'D: Perchè non porti ruleta anche su @AISashaAPI?\n' ..
+            'R: Perchè sono sicuro al 90% che il numero di kick sarebbe talmente alto da violare i limiti imposti da telegram causando così malfunzionamenti.',
+            [13] = 'D: Cos\'è l\'api_patch?\n' ..
+            'R: L\'api_patch è una modalità di utilizzo di @AISasha che dà la giusta integrazione con @AISashaBot senza creare confusione.',
+            [14] = 'D: Perchè non porti spam anche su @AISashaAPI?\n' ..
+            'R: Perchè sono sicuro al 90% che il numero di messaggi inviati sarebbe talmente alto da violare i limiti imposti da telegram causando così malfunzionamenti, inoltre inviare messaggi dopo tot tempo non è così semplice in LUA.',
+        },
 
         ------------
         -- Usages --
@@ -941,8 +1011,8 @@ return {
             '(#newlink|sasha crea link): Sasha crea il link del gruppo.',
             '#setflood <value>: Sasha imposta il flood massimo del gruppo a <value>.',
             '#setwarn <value>: Sasha imposta gli avvertimenti massimi a <value>, se zero gli avvertimenti non funzioneranno più.',
-            '(#lock|[sasha] blocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha blocca l\'impostazione specificata.',
-            '(#unlock|[sasha] sblocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha sblocca l\'impostazione specificata.',
+            '(#lock|[sasha] blocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict: Sasha blocca l\'impostazione specificata.',
+            '(#unlock|[sasha] sblocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict: Sasha sblocca l\'impostazione specificata.',
             'SUPERGRUPPI',
             '(#bots|[sasha] lista bot): Sasha manda la lista dei bot.',
             '#updategroupinfo: Sasha aggiorna nome e moderatori del gruppo.',
@@ -994,8 +1064,8 @@ return {
             '(#setrules|sasha imposta regole) <group_id> <text>: Sasha cambia le regole di <group_id> in <text>.',
             '#setname <realm_name>: Sasha cambia il nome del regno in <realm_name>.',
             '#setname|#setgpname <group_id> <group_name>: Sasha cambia il nome di <group_id> in <group_name>.',
-            '(#lock|[sasha] blocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha blocca l\'impostazione specificata di <group_id>.',
-            '(#unlock|[sasha] sblocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha sblocca l\'impostazione specificata di <group_id>.',
+            '(#lock|[sasha] blocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict: Sasha blocca l\'impostazione specificata di <group_id>.',
+            '(#unlock|[sasha] sblocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict: Sasha sblocca l\'impostazione specificata di <group_id>.',
             '#settings <group_id>: Sasha manda le impostazioni di <group_id>.',
             '#type: Sasha mostra il tipo del gruppo.',
             '#kill group|supergroup|realm <group_id>: Sasha rimuove tutti i membri di <group_id> e <group_id>.',
@@ -1017,6 +1087,7 @@ return {
             '(#helpall|sasha aiuto tutto): Sasha mostra tutti i comandi di tutti i plugin.',
             '(#syntax|sasha sintassi) <filter>: Sasha mostra la sintassi dei comandi che corrispondono a <filter>.',
             '(#syntaxall|sasha sintassi tutto): Sasha mostra la sintassi di tutti i comandi di tutti i plugin.',
+            '#faq[<n>]: Sasha mostra le Frequently asked questions, se <n> è specificato manda la risposta.',
         },
 
         info =
@@ -1723,7 +1794,6 @@ return {
         membersLock = '\nLock members: ',
         nameLock = '\nLock name: ',
         photoLock = '\nLock photo: ',
-        public = '\nPublic: ',
         rtlLock = '\nLock RTL: ',
         spamLock = '\nLock spam: ',
         strictrules = '\nStrict rules: ',
@@ -1830,6 +1900,77 @@ return {
         whitelistGbanAdded = ' added to the gban whitelist.',
         whitelistGbanCleaned = 'Gban whitelist cleaned.',
         whitelistGbanStart = 'Gban whitelist ',
+
+        -- FAQ
+        faqList = '/faq1 @AISasha limits.\n' ..
+        '/faq2 @AISashaBot limits.\n' ..
+        '/faq3 contemporary use of @AISasha and @AISashaBot.\n' ..
+        '/faq4 madelineproto.\n' ..
+        '/faq5 warns list.\n' ..
+        '/faq6 @AISasha\'s only commands.\n' ..
+        '/faq7 two or more owners.\n' ..
+        '/faq8 intermediate rank between mod and owner.\n' ..
+        '/faq9 tagalert @AISasha.\n' ..
+        '/faq10 group settings divided between the bots.\n' ..
+        '/faq11 settings meaning.\n' ..
+        '/faq12 ruleta @AISashaBot.\n' ..
+        '/faq13 api_patch.\n' ..
+        '/faq14 spam @AISashaBot.',
+        faq =
+        {
+            [1] = 'D: Sasha user\'s limits (@AISasha)?\n' ..
+            'R: *Freeze\n' ..
+            '*Commands by reply sometimes don\'t work (solution = forward and use <command> from).\n' ..
+            '*Kick = ban.\n' ..
+            '*In groups with more than 200 members she doesn\'t receive messages anymore if not tagged at the beginning of the message (so locks and mutes don\'t work anymore).\n' ..
+            'Less updated compared to @AISashaBot (usually due to telegram-cli).\n' ..
+            '* = Due to telegram-cli, if you know how to solve any of these problems contact @EricSolinas.\n',
+            [2] = 'D: Sasha api\'s limits (@AISashaBot)?\n' ..
+            'R: *Can\'t delete messages (without @AISasha).\n' ..
+            '*Can\'t obtain group members.\n' ..
+            '*Can\'t read other bots\' messages.\n' ..
+            'Freeze (more rare than @AISasha\'s ones, trusted users reboot her as soon as possible).\n' ..
+            '* = Due to telegram\'s api.\n',
+            [3] = 'D: Why do you use @AISasha and @AISashaBot together?\n' ..
+            'R: Because in this way I can minimize the limits of both.\n' ..
+            'Thanks to @AISashaBot => reply commands always working, kick and ban are not the same thing anymore, problem of 200 members solved.\n',
+            'Thanks to @AISasha => deleting messages, api spammer/flooder risk minimized.\n',
+            [4] = 'D: Why don\'t you use MadelineProto?\n' ..
+            'R: I don\'t like PHP and telegram\'s API are officials, MadelineProto\'s are not.',
+            [5] = 'D: Why there\'s no warns list?\n' ..
+            'R: Because it would be a giant list in some groups, also owner/mod could be influenced at the moment of giving warns.',
+            [6] = 'D: Why do I have to use @AISasha for certain commands?\n' ..
+            'R: Usually because API bots are much more limited (/faq2).',
+            [7] = 'D: Why there can\'t be two or more owners in the same group?\n' ..
+            'R: Telegram doesn\'t even allow transferring the ownership of the group (at this time) and it doesn\'t manage groups like that.',
+            [8] = 'D: Can you add an intermediate rank between mod and owner?\n' ..
+            'R: No, every owner has to control their moderators, adding intermediate ranks would just confound people.',
+            [9] = 'D: Why there\'s no tagalert on @AISasha?\n' ..
+            'R: Telegram manage differently users and bots messages, bots\' ones are more predisposed to a function like tagalert.',
+            [10] = 'D: Why settings of the two bots are divided?\n' ..
+            'R: Because of development facilitations (groups and supergroups ids are not the same for bots and users like other parameters).',
+            [11] = 'D: What do settings mean?\n' ..
+            'R: Arabic => arabic characters.\n' ..
+            'Bots => other bots (checked with the last letters of the username).\n' ..
+            'Flood => N messages in 2 seconds.\n' ..
+            'Grouplink => normal users obtaining group\'s link using /link.\n' ..
+            'Leave => group leave.\n' ..
+            'Link => other groups\' links.\n' ..
+            'Member => new members.\n' ..
+            'Name => group\'s name.\n' ..
+            'Photo => group\'s photo.\n' ..
+            'RTL => right to left characters (those that reverse messages).\n' ..
+            'Spam => message longer than 2048 characters or with more than 40 simbols* or names longer than 70 characters or with more than 40 simbols*.\n' ..
+            'Strict => increase punishment from kick to ban.\n' ..
+            'For normal groups it\'s always ban.\n' ..
+            '* = emojis, control characters etc...',
+            [12] = 'D: Why don\'t you port ruleta on @AISashaAPI?\n' ..
+            'R: Because I\'m 90% sure that kicks number would be high enough to hit telegram limits causing problems.',
+            [13] = 'D: What is the api_patch?\n' ..
+            'R: The api_patch is a way in which @AISasha integrates barely perfectly @AISashaBot without creating confusion.',
+            [14] = 'D: Why don\'t you port spam on @AISashaAPI?\n' ..
+            'R: Because I\'m 90% sure that sent messages number would be high enough to hit telegram limits causing problems, also sending messages every x time is not so simple in LUA.',
+        },
 
         ------------
         -- Usages --
@@ -2083,8 +2224,8 @@ return {
             '(#newlink|sasha crea link): Sasha creates group\'s link.',
             '#setflood <value>: Sasha sets <value> as max flood.',
             '#setwarn <value>: Sasha sets max warns to <value>, if zero warns will not work.',
-            '(#lock|[sasha] blocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha locks specified setting.',
-            '(#unlock|[sasha] sblocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha unlocks specified setting.',
+            '(#lock|[sasha] blocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict: Sasha locks specified setting.',
+            '(#unlock|[sasha] sblocca) arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict: Sasha unlocks specified setting.',
             'SUPERGROUPS',
             '(#bots|[sasha] lista bot): Sasha sends bots list.',
             '#updategroupinfo: Sasha updates group name and mods.',
@@ -2136,8 +2277,8 @@ return {
             '(#setrules|sasha imposta regole) <group_id> <text>: Sasha changes <group_id>\'s rules with <text>.',
             '#setname <realm_name>: Sasha changes realm\'s name with <realm_name>.',
             '#setname|#setgpname <group_id> <group_name>: Sasha changes <group_id>\'s name with <group_name>.',
-            '(#lock|[sasha] blocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha locks <group_id>\'s specified setting.',
-            '(#unlock|[sasha] sblocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|public|rtl|spam|strict: Sasha unlocks <group_id>\'s specified setting.',
+            '(#lock|[sasha] blocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict: Sasha locks <group_id>\'s specified setting.',
+            '(#unlock|[sasha] sblocca) <group_id> arabic|bots|flood|grouplink|leave|link|member|name|photo|rtl|spam|strict: Sasha unlocks <group_id>\'s specified setting.',
             '#settings <group_id>: Sasha sends <group_id>\'s settings.',
             '#type: Sasha sends group\'s type.',
             '#kill group|supergroup|realm <group_id>: Sasha kicks all members of <group_id> and removes <group_id>.',
@@ -2159,6 +2300,7 @@ return {
             '(#helpall|sasha aiuto tutto): Sasha sends help of all plugins.',
             '(#syntax|sasha sintassi) <filter>: Sasha sends syntax of all commands that matches with <filter>.',
             '(#syntaxall|sasha sintassi tutto): Sasha sends syntax of all commands of all plugins.',
+            '#faq[<n>]: Sasha shows Frequently asked questions, if <n> specified she sends the answer.',
         },
 
         info =
