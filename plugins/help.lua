@@ -273,6 +273,7 @@ return {
         "^[#!/]([Ss][Uu][Dd][Oo][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ff][Aa][Qq])$",
         "^[#!/]([Ff][Aa][Qq])(%d+)$",
+        "^[#!/]([Ff][Aa][Qq])(%d+)@[Aa][Ii][Ss][Aa][Ss][Hh][Aa][Bb][Oo][Tt]$",
         -- helpall
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Ii][Uu][Tt][Oo] [Tt][Uu][Tt][Tt][Oo])$",
         -- help
