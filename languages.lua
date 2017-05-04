@@ -698,7 +698,7 @@ return {
         '/faq7 due o più owner.\n' ..
         '/faq8 rango intermedio mod e owner.\n' ..
         '/faq9 tagalert @AISasha.\n' ..
-        '/faq10 impostaazioni gruppo divise tra i due bot.\n' ..
+        '/faq10 impostazioni gruppo divise tra i due bot.\n' ..
         '/faq11 significato impostazioni.\n' ..
         '/faq12 ruleta @AISashaBot.\n' ..
         '/faq13 api_patch.\n' ..
