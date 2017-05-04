@@ -720,7 +720,7 @@ return {
             '* = Dovuti alle API di telegram.\n',
             [3] = 'D: Perchè usi @AISasha e @AISashaBot insieme?\n' ..
             'R: Perchè così facendo posso minimizzare i limiti di entrambe.\n' ..
-            'Grazie ad @AISashaBot => comandi per risposta sempre funzionanti, kick e ban non sono più la stessa cosa, problema dei 200 membri risolto.\n',
+            'Grazie ad @AISashaBot => comandi per risposta sempre funzionanti, kick e ban non sono più la stessa cosa, problema dei 200 membri risolto.\n' ..
             'Grazie ad @AISasha => eliminazione di messaggi, pericolo di bot api spammer/flooder minimizzato.\n',
             [4] = 'D: Perchè non usi MadelineProto?\n' ..
             'R: Non mi piace il PHP e le API di telegram sono ufficiali, quelle di MadelineProto no.',
@@ -1933,7 +1933,7 @@ return {
             '* = Due to telegram\'s api.\n',
             [3] = 'D: Why do you use @AISasha and @AISashaBot together?\n' ..
             'R: Because in this way I can minimize the limits of both.\n' ..
-            'Thanks to @AISashaBot => reply commands always working, kick and ban are not the same thing anymore, problem of 200 members solved.\n',
+            'Thanks to @AISashaBot => reply commands always working, kick and ban are not the same thing anymore, problem of 200 members solved.\n' ..
             'Thanks to @AISasha => deleting messages, api spammer/flooder risk minimized.\n',
             [4] = 'D: Why don\'t you use MadelineProto?\n' ..
             'R: I don\'t like PHP and telegram\'s API are officials, MadelineProto\'s are not.',
