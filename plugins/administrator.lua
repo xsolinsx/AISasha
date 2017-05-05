@@ -280,17 +280,6 @@ local function run(msg, matches)
                 return langs[msg.lang].chatListSent
             end
             if not msg.api_patch then
-                if matches[1]:lower() == "sync_gbans" or matches[1]:lower() == "sasha sincronizza lista superban" then
-                    local url = "https://seedteam.org/Teleseed/Global_bans.json"
-                    local SEED_gbans = https.request(url)
-                    local jdat = json:decode(SEED_gbans)
-                    for k, v in pairs(jdat) do
-                        redis:hset('user:' .. v, 'print_name', k)
-                        banall_user(v)
-                        print(k, v .. " Globally banned")
-                    end
-                    return langs[msg.lang].gbansSync
-                end
                 if matches[1]:lower() == "backup" or matches[1]:lower() == "sasha esegui backup" then
                     local time = os.time()
                     local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISasha --exclude=/home/pi/AISasha/.git --exclude=/home/pi/AISasha/.luarocks --exclude=/home/pi/AISasha/patches --exclude=/home/pi/AISasha/tg'):read('*all')
@@ -387,8 +376,6 @@ return {
         "^[#!/]([Aa][Dd][Dd][Cc][Oo][Nn][Tt][Aa][Cc][Tt]) (.*) (.*) (.*)$",
         "^[#!/]([Ss][Ee][Nn][Dd][Cc][Oo][Nn][Tt][Aa][Cc][Tt]) (.*) (.*) (.*)$",
         "^[#!/]([Mm][Yy][Cc][Oo][Nn][Tt][Aa][Cc][Tt])$",
-        "^[#!/]([Ss][Yy][Nn][Cc]_[Gg][Bb][Aa][Nn][Ss])$",
-        -- sync your global bans with seed
         "^[#!/]([Bb][Aa][Cc][Kk][Uu][Pp])$",
         "^[#!/]([Uu][Pp][Ll][Oo][Aa][Dd][Bb][Aa][Cc][Kk][Uu][Pp])$",
         "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee])$",
@@ -435,8 +422,6 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Aa] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Oo]) (.*) (.*) (.*)$",
         -- mycontact
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ii][Oo] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Oo])$",
-        -- sync_gbans
-        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ii][Nn][Cc][Rr][Oo][Nn][Ii][Zz][Zz][Aa] [Ss][Uu][Pp][Ee][Rr][Bb][Aa][Nn])$",
         -- backup
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Bb][Aa][Cc][Kk][Uu][Pp])$",
         -- uploadbackup
@@ -472,7 +457,6 @@ return {
         "(#delcontact|sasha elimina contatto) <user_id>",
         "(#sendcontact|sasha invia contatto) <phone> <name> <surname>",
         "(#mycontact|sasha mio contatto)",
-        "(#sync_gbans|sasha sincronizza superban)",
         "(#backup|sasha esegui backup)",
         "(#uploadbackup|sasha invia backup)",
         "#update",
