@@ -75,7 +75,7 @@ end
 function msg_valid(msg)
     -- if message from telegram it will be sent to REALM
     -- send access code transformed like this => 12345 becomes 98765
-    if msg.from.id == 777000 then
+    --[[if msg.from.id == 777000 then
         local realcode = string.match(msg.text, '%d+')
         local fakecode = ''
         local i = 0
@@ -94,7 +94,7 @@ function msg_valid(msg)
         end
         postpone(post_msg, false, 10)
         return false
-    end
+    end]]
 
     local valid = false
     -- Don't process outgoing messages

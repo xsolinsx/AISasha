@@ -452,7 +452,7 @@ local function channel_callback_info(extra, success, result)
     local title = langs[lang].supergroupName .. result.title
     local user_num = langs[lang].users .. tostring(result.participants_count)
     local admin_num = langs[lang].admins .. tostring(result.admins_count)
-    local kicked_num = langs[lang].kickedUsers .. tostring(result.kicked_count)
+    local kicked_num = langs[lang].bannedUsers .. tostring(result.kicked_count)
     local channel_id = langs[lang].peer_id .. result.peer_id
     local long_id = langs[lang].long_id .. result.id
     if result.username then
