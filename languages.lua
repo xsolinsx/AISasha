@@ -688,6 +688,9 @@ return {
         whitelistGbanCleaned = 'Whitelist gban svuotata.',
         whitelistGbanStart = 'Whitelist gban ',
 
+        -- use @AISashaAPI
+        useAISashaAPI = 'Comando disattivato per colpa delle segnalazioni.\nUsa @AISashaAPI',
+
         -- FAQ
         faqList = '/faq1 limiti @AISasha.\n' ..
         '/faq2 limiti @AISashaBot.\n' ..
@@ -1899,6 +1902,9 @@ return {
         whitelistGbanAdded = ' added to the gban whitelist.',
         whitelistGbanCleaned = 'Gban whitelist cleaned.',
         whitelistGbanStart = 'Gban whitelist ',
+
+        -- use @AISashaAPI
+        useAISashaAPI = 'Deactivated command because of reports.\nUse @AISashaAPI.',
 
         -- FAQ
         faqList = '/faq1 @AISasha limits.\n' ..

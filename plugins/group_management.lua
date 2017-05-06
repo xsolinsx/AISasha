@@ -1662,11 +1662,12 @@ local function run(msg, matches)
             end
         end
         if matches[1]:lower() == 'admins' then
-            if msg.to.type == 'channel' then
+            send_large_msg(get_receiver(msg), langs[msg.lang].useAISashaAPI)
+            --[[if msg.to.type == 'channel' then
                 return channel_get_admins(get_receiver(msg), contact_mods_callback, { msg = msg })
             elseif msg.to.type == 'chat' then
                 return contact_mods(msg)
-            end
+            end]]
         end
     end
 
