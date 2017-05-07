@@ -1,7 +1,3 @@
-local function callback(extra)
-    send_large_msg(extra.receiver, extra.text, ok_cb, false)
-end
-
 local function run(msg, matches)
     if not msg.api_patch then
         local receiver = get_receiver(msg)
@@ -25,12 +21,9 @@ local function run(msg, matches)
         .. '\n' .. langs[msg.lang].pokeHeight .. height .. " m"
 
         if pokemon.sprites then
-            local extra = {
-                receiver = receiver,
-                text = text
-            }
-            send_photo_from_url(receiver, pokemon.sprites.front_default, callback, extra)
+            send_photo_from_url(receiver, pokemon.sprites.front_default, ok_cb)
         end
+        return text
     end
 end
 
