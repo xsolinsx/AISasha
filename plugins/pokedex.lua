@@ -1,14 +1,3 @@
-local images_enabled = true;
-
-local function get_sprite(path)
-    local url = "http://pokeapi.co/" .. path
-    print(url)
-    local b, c = http.request(url)
-    local data = json:decode(b)
-    local image = data.image
-    return image
-end
-
 local function callback(extra)
     send_msg(extra.receiver, extra.text, ok_cb, false)
 end
@@ -35,22 +24,13 @@ local function run(msg, matches)
         .. '\n' .. langs[msg.lang].pokeWeight .. weight .. " kg"
         .. '\n' .. langs[msg.lang].pokeHeight .. height .. " m"
 
-        local image = nil
-
-        if images_enabled and pokemon.sprites and pokemon.sprites[1] then
-            local sprite = pokemon.sprites['front_default'].resource_uri
-            image = get_sprite(sprite)
-        end
-
-        if image then
-            image = "http://pokeapi.co" .. image
+        if pokemon.sprites then
             local extra = {
                 receiver = receiver,
                 text = text
             }
-            send_photo_from_url(receiver, image, callback, extra)
+            send_photo_from_url(receiver, pokemon.sprites.front_default, callback, extra)
         end
-        return text
     end
 end
 
