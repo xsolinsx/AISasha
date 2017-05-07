@@ -191,7 +191,15 @@ end
 
 local function pre_process(msg)
     if msg then
+        local continue = false
         if not msg.api_patch then
+            continue = true
+        elseif msg.from.username then
+            if string.sub(msg.from.username:lower(), -3) == 'bot' then
+                continue = true
+            end
+        end
+        if continue then
             if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 local hash
                 local tokick

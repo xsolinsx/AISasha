@@ -2623,23 +2623,23 @@ local function run(msg, matches)
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group modlist")
                     return modlist(msg)
                 end
+                if matches[1]:lower() == 'del' then
+                    if is_momod(msg) or tostring(msg.from.id) == '283058260' then
+                        if type(msg.reply_id) ~= "nil" then
+                            delete_msg(msg.id, ok_cb, false)
+                            delete_msg(msg.reply_id, ok_cb, false)
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted a message by reply")
+                        end
+                    else
+                        return langs[msg.lang].require_mod
+                    end
+                end
             end
             if matches[1]:lower() == "bots" or matches[1]:lower() == "sasha lista bot" or matches[1]:lower() == "lista bot" then
                 if is_momod(msg) then
                     member_type = 'Bots'
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup bots list")
                     channel_get_bots(get_receiver(msg), callback, { receiver = get_receiver(msg), msg = msg, member_type = member_type })
-                else
-                    return langs[msg.lang].require_mod
-                end
-            end
-            if matches[1]:lower() == 'del' then
-                if is_momod(msg) or tostring(msg.from.id) == '283058260' then
-                    if type(msg.reply_id) ~= "nil" then
-                        delete_msg(msg.id, ok_cb, false)
-                        delete_msg(msg.reply_id, ok_cb, false)
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted a message by reply")
-                    end
                 else
                     return langs[msg.lang].require_mod
                 end
