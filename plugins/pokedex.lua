@@ -1,5 +1,5 @@
 local function callback(extra)
-    send_msg(extra.receiver, extra.text, ok_cb, false)
+    send_large_msg(extra.receiver, extra.text, ok_cb, false)
 end
 
 local function run(msg, matches)
