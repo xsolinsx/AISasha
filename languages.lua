@@ -716,15 +716,14 @@ return {
             'Meno aggiornata rispetto ad @AISashaBot (solitamente dovuto a telegram-cli).\n' ..
             '* = Dovuti a telegram-cli, se sapete come risolvere qualcuno di questi scrivete a @EricSolinas.\n',
             [2] = 'D: Limiti sasha api (@AISashaBot)?\n' ..
-            'R: *Impossibilità di eliminare messaggi (se non tramite @AISasha).\n' ..
-            '*Impossibilità di ottenere i membri di gruppi e supergruppi.\n' ..
+            'R: *Impossibilità di ottenere i membri di gruppi e supergruppi.\n' ..
             '*Impossibilità di leggere i messaggi di altri bot.\n' ..
             'Freeze (più rari di quelli di @AISasha, utenti fidati appena si accorgono la riavviano).\n' ..
             '* = Dovuti alle API di telegram.\n',
             [3] = 'D: Perchè usi @AISasha e @AISashaBot insieme?\n' ..
             'R: Perchè così facendo posso minimizzare i limiti di entrambe.\n' ..
             'Grazie ad @AISashaBot => comandi per risposta sempre funzionanti, kick e ban non sono più la stessa cosa, problema dei 200 membri risolto.\n' ..
-            'Grazie ad @AISasha => eliminazione di messaggi, pericolo di bot api spammer/flooder minimizzato.\n',
+            'Grazie ad @AISasha => pericolo di bot api spammer/flooder minimizzato.\n',
             [4] = 'D: Perchè non usi MadelineProto?\n' ..
             'R: Non mi piace il PHP e le API di telegram sono ufficiali, quelle di MadelineProto no.',
             [5] = 'D: Perchè non c\'è una lista di utenti warnati?\n' ..
@@ -1931,15 +1930,14 @@ return {
             'Less updated compared to @AISashaBot (usually due to telegram-cli).\n' ..
             '* = Due to telegram-cli, if you know how to solve any of these problems contact @EricSolinas.\n',
             [2] = 'D: Sasha api\'s limits (@AISashaBot)?\n' ..
-            'R: *Can\'t delete messages (without @AISasha).\n' ..
-            '*Can\'t obtain group members.\n' ..
+            'R: *Can\'t obtain group members.\n' ..
             '*Can\'t read other bots\' messages.\n' ..
             'Freeze (more rare than @AISasha\'s ones, trusted users reboot her as soon as possible).\n' ..
             '* = Due to telegram\'s api.\n',
             [3] = 'D: Why do you use @AISasha and @AISashaBot together?\n' ..
             'R: Because in this way I can minimize the limits of both.\n' ..
             'Thanks to @AISashaBot => reply commands always working, kick and ban are not the same thing anymore, problem of 200 members solved.\n' ..
-            'Thanks to @AISasha => deleting messages, api spammer/flooder risk minimized.\n',
+            'Thanks to @AISasha => api spammer/flooder risk minimized.\n',
             [4] = 'D: Why don\'t you use MadelineProto?\n' ..
             'R: I don\'t like PHP and telegram\'s API are officials, MadelineProto\'s are not.',
             [5] = 'D: Why there\'s no warns list?\n' ..
