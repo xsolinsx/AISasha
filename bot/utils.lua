@@ -1386,7 +1386,7 @@ function mutes_list(chat_id, group_name)
     end
     if data[tostring(chat_id)] then
         local settings = data[tostring(chat_id)]['settings']
-        text = text .. langs[lang].strictrules .. settings.strict
+        text = text .. langs[lang].strictrules .. tostring(settings.strict)
     end
     return text
 end
