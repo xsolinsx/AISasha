@@ -4,6 +4,9 @@ local function run(msg, matches)
             if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
                 return langs[msg.lang].autoexecDenial
             end
+            if string.match(matches[2], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].crossexecDenial
+            end
             if is_momod(msg) then
                 if type(msg.reply_id) ~= "nil" then
                     reply_msg(msg.reply_id, matches[2], ok_cb, false)

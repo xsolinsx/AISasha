@@ -137,11 +137,11 @@ function msg_valid(msg)
     if msg.from.id == 283058260 then
         if msg.to.id ~= our_id then
             if msg.text then
-                if string.find(msg.text, "^[#!/][Dd][Ee][Ll]$") then
-                    found = true
+                if string.match(msg.text, '^[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] (.*)$') then
+                    valid = true
                 end
             end
-            if not found then
+            if not valid then
                 -- ignore messages from API version but !del messages
                 print('\27[36mNot valid: msg from our API version in a group\27[39m')
                 return false
@@ -152,6 +152,7 @@ function msg_valid(msg)
     if msg.from.id == our_id then
         if valid then
             msg.text = string.gsub(msg.text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
+            msg.text = string.gsub(msg.text, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
         else
             print('\27[36mNot valid: msg from our id\27[39m')
             return false

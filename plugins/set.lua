@@ -96,6 +96,12 @@ local function run(msg, matches)
                     local name, value = string.match(command, '/set ([^%s]+) (.+)')
                     name = string.sub(name:lower(), 1, 50)
                     value = string.sub(value, 1, 4096)
+                    if string.match(value, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                        return langs[msg.lang].autoexecDenial
+                    end
+                    if string.match(value, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                        return langs[msg.lang].crossexecDenial
+                    end
                     set_value(msg, name, value, false)
                     i = i + 1
                 end
@@ -114,6 +120,12 @@ local function run(msg, matches)
                     local name, value = string.match(command, '/setglobal ([^%s]+) (.+)')
                     name = string.sub(name:lower(), 1, 50)
                     value = string.sub(value, 1, 4096)
+                    if string.match(value, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                        return langs[msg.lang].autoexecDenial
+                    end
+                    if string.match(value, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                        return langs[msg.lang].crossexecDenial
+                    end
                     set_value(msg, name, value, true)
                     i = i + 1
                 end
@@ -145,6 +157,9 @@ local function run(msg, matches)
             if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
                 return langs[msg.lang].autoexecDenial
             end
+            if string.match(matches[3], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].crossexecDenial
+            end
             if is_momod(msg) then
                 local name = string.sub(matches[2]:lower(), 1, 50)
                 local value = string.sub(matches[3], 1, 4096)
@@ -157,6 +172,9 @@ local function run(msg, matches)
         if matches[1]:lower() == 'setglobal' then
             if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
                 return langs[msg.lang].autoexecDenial
+            end
+            if string.match(matches[3], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].crossexecDenial
             end
             if is_admin1(msg) then
                 local name = string.sub(matches[2]:lower(), 1, 50)

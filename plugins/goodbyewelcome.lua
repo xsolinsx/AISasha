@@ -192,11 +192,17 @@ local function run(msg, matches)
                 if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
                     return langs[msg.lang].autoexecDenial
                 end
+                if string.match(matches[2], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                    return langs[msg.lang].crossexecDenial
+                end
                 return set_welcome(msg.to.id, matches[2])
             end
             if matches[1]:lower() == 'setgoodbye' then
                 if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
                     return langs[msg.lang].autoexecDenial
+                end
+                if string.match(matches[2], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                    return langs[msg.lang].crossexecDenial
                 end
                 return set_goodbye(msg.to.id, matches[2])
             end

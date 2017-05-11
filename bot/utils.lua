@@ -462,6 +462,7 @@ function send_large_msg(destination, text)
     local tmp = tostring(text)
     if tmp then
         string.gsub(tmp, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
+        string.gsub(tmp, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
         local extra = {
             destination = destination,
             text = tmp
@@ -500,6 +501,7 @@ end
 
 function post_large_msg(destination, text)
     string.gsub(msg.text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
+    string.gsub(msg.text, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
     local extra = {
         destination = destination,
         text = text
