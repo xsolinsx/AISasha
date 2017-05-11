@@ -713,10 +713,12 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, getWarn_by_reply, { receiver = receiver, executer = msg.from.id })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        get_user_warns(msg.from.id, msg.to.id)
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), getWarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            get_user_warns(msg.from.id, msg.to.id)
+                        else
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), getWarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
+                        end
                     end
                     return
                 else
@@ -745,17 +747,19 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, warn_by_reply, { receiver = receiver, executer = msg.from.id })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            warn_user(matches[2], msg.to.id)
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                warn_user(matches[2], msg.to.id)
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
+                            else
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
+                                return langs[msg.lang].require_rank
+                            end
                         else
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] warned user " .. matches[2])
-                            return langs[msg.lang].require_rank
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), warn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), warn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                     return
                 else
@@ -784,18 +788,20 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, unwarn_by_reply, { receiver = receiver, executer = msg.from.id })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            unwarn_user(matches[2], msg.to.id)
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
-                            return
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                unwarn_user(matches[2], msg.to.id)
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
+                                return
+                            else
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
+                                return langs[msg.lang].require_rank
+                            end
                         else
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarned user " .. matches[2])
-                            return langs[msg.lang].require_rank
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unwarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unwarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -823,18 +829,20 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, unwarnall_by_reply, { receiver = receiver, executer = msg.from.id })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            unwarnall_user(matches[2], msg.to.id)
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
-                            return
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                unwarnall_user(matches[2], msg.to.id)
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
+                                return
+                            else
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
+                                return langs[msg.lang].require_rank
+                            end
                         else
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unwarnedall user " .. matches[2])
-                            return langs[msg.lang].require_rank
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unwarnall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unwarnall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -860,21 +868,23 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, kick_by_reply, { receiver = receiver, executer = msg.from.id })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            local function post_kick()
-                                kick_user(matches[2], msg.to.id)
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                local function post_kick()
+                                    kick_user(matches[2], msg.to.id)
+                                end
+                                postpone(post_kick, false, 3)
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] kicked user " .. matches[2] .. " Y")
+                                return langs.phrases.banhammer[math.random(#langs.phrases.banhammer)]
+                            else
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] kicked user " .. matches[2] .. " N")
+                                return langs[msg.lang].require_rank
                             end
-                            postpone(post_kick, false, 3)
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] kicked user " .. matches[2] .. " Y")
-                            return langs.phrases.banhammer[math.random(#langs.phrases.banhammer)]
                         else
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] kicked user " .. matches[2] .. " N")
-                            return langs[msg.lang].require_rank
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), kick_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), kick_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -914,21 +924,23 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, ban_by_reply, { receiver = receiver, executer = msg.from.id })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            local function post_kick()
-                                ban_user(matches[2], msg.to.id)
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                local function post_kick()
+                                    ban_user(matches[2], msg.to.id)
+                                end
+                                postpone(post_kick, false, 3)
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] banned user " .. matches[2] .. " Y")
+                                return langs[msg.lang].user .. matches[2] .. langs[msg.lang].banned .. '\n' .. langs.phrases.banhammer[math.random(#langs.phrases.banhammer)]
+                            else
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] banned user " .. matches[2] .. " N")
+                                return langs[msg.lang].require_rank
                             end
-                            postpone(post_kick, false, 3)
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] banned user " .. matches[2] .. " Y")
-                            return langs[msg.lang].user .. matches[2] .. langs[msg.lang].banned .. '\n' .. langs.phrases.banhammer[math.random(#langs.phrases.banhammer)]
                         else
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] banned user " .. matches[2] .. " N")
-                            return langs[msg.lang].require_rank
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), ban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), ban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -954,19 +966,21 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, unban_by_reply, { receiver = receiver, executer = msg.from.id })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            local hash = 'banned:' .. msg.to.id
-                            redis:srem(hash, matches[2])
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unbanned user " .. matches[2] .. " Y")
-                            return langs[msg.lang].user .. matches[2] .. langs[msg.lang].unbanned
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                local hash = 'banned:' .. msg.to.id
+                                redis:srem(hash, matches[2])
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unbanned user " .. matches[2] .. " Y")
+                                return langs[msg.lang].user .. matches[2] .. langs[msg.lang].unbanned
+                            else
+                                savelog(msg.to.id, "[" .. msg.from.id .. "] unbanned user " .. matches[2] .. " N")
+                                return langs[msg.lang].require_rank
+                            end
                         else
-                            savelog(msg.to.id, "[" .. msg.from.id .. "] unbanned user " .. matches[2] .. " N")
-                            return langs[msg.lang].require_rank
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unban_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
                 else
                     return langs[msg.lang].require_mod
@@ -1059,18 +1073,20 @@ local function run(msg, matches)
                         get_message(msg.reply_id, banall_by_reply, { receiver = receiver, executer = msg.from.id })
                     end
                     return
-                elseif string.match(matches[2], '^%d+$') then
-                    -- ignore higher or same rank
-                    if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                        banall_user(matches[2])
-                        savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " Y")
-                        return langs[msg.lang].user .. matches[2] .. langs[msg.lang].gbanned
+                elseif matches[2] and matches[2] ~= '' then
+                    if string.match(matches[2], '^%d+$') then
+                        -- ignore higher or same rank
+                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                            banall_user(matches[2])
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " Y")
+                            return langs[msg.lang].user .. matches[2] .. langs[msg.lang].gbanned
+                        else
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " N")
+                            return langs[msg.lang].require_rank
+                        end
                     else
-                        savelog(msg.to.id, "[" .. msg.from.id .. "] globally banned user " .. matches[2] .. " N")
-                        return langs[msg.lang].require_rank
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), banall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
-                else
-                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), banall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                 end
                 return
             else
@@ -1094,18 +1110,20 @@ local function run(msg, matches)
                         get_message(msg.reply_id, unbanall_by_reply, { receiver = receiver, executer = msg.from.id })
                     end
                     return
-                elseif string.match(matches[2], '^%d+$') then
-                    -- ignore higher or same rank
-                    if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                        unbanall_user(matches[2])
-                        savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " Y")
-                        return langs[msg.lang].user .. matches[2] .. langs[msg.lang].ungbanned
+                elseif matches[2] and matches[2] ~= '' then
+                    if string.match(matches[2], '^%d+$') then
+                        -- ignore higher or same rank
+                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                            unbanall_user(matches[2])
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " Y")
+                            return langs[msg.lang].user .. matches[2] .. langs[msg.lang].ungbanned
+                        else
+                            savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " N")
+                            return langs[msg.lang].require_rank
+                        end
                     else
-                        savelog(msg.to.id, "[" .. msg.from.id .. "] globally unbanned user " .. matches[2] .. " N")
-                        return langs[msg.lang].require_rank
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unbanall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                     end
-                else
-                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), unbanall_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                 end
                 return
             else

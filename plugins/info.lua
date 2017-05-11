@@ -484,7 +484,7 @@ local function run(msg, matches)
             if type(msg.reply_id) ~= "nil" then
                 get_message(msg.reply_id, get_rank_by_reply, { receiver = receiver })
                 return
-            elseif matches[2] then
+            elseif matches[2] and matches[2] ~= '' then
                 if string.match(matches[2], '^%d+$') then
                     return langs[msg.lang].rank .. reverse_rank_table[get_rank(matches[2], chat) + 1]
                 else
@@ -529,7 +529,7 @@ local function run(msg, matches)
                 else
                     return langs[msg.lang].require_mod
                 end
-            elseif matches[2] then
+            elseif matches[2] and matches[2] ~= '' then
                 if is_momod(msg) then
                     if string.match(matches[2], '^%d+$') then
                         user_info('user#id' .. matches[2], info_by_id, { chat_id = msg.to.id, receiver = receiver })

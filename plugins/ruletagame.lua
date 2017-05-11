@@ -404,7 +404,7 @@ local function run(msg, matches)
         if matches[1]:lower() == 'challenge' or matches[1]:lower() == 'sfida' then
             if type(msg.reply_id) ~= "nil" then
                 get_message(msg.reply_id, Challenge_by_reply, { challenger = user, msg = msg })
-            elseif matches[2] then
+            elseif matches[2] and matches[2] ~= '' then
                 resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), Challenge_by_username, { challenger = user, chat_id = chat, msg = msg })
             else
                 local name = ''

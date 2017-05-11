@@ -48,11 +48,13 @@ local function run(msg, matches)
                 else
                     get_message(msg.reply_id, invite_by_reply, { receiver = receiver })
                 end
-            elseif string.match(matches[2], '^%d+$') then
-                chat_add_user(receiver, 'user#id' .. matches[2], ok_cb, false)
-                channel_invite(receiver, 'user#id' .. matches[2], ok_cb, false)
-            else
-                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), invite_by_username, { receiver = receiver })
+            elseif matches[2] and matches[2] ~= '' then
+                if string.match(matches[2], '^%d+$') then
+                    chat_add_user(receiver, 'user#id' .. matches[2], ok_cb, false)
+                    channel_invite(receiver, 'user#id' .. matches[2], ok_cb, false)
+                else
+                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), invite_by_username, { receiver = receiver })
+                end
             end
         else
             return langs[msg.lang].useYourGroups
