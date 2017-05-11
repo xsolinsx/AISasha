@@ -481,8 +481,8 @@ function send_large_msg_callback(extra, success, result)
     local text_len = string.len(text)
     local num_msg = math.ceil(text_len / text_max)
 
-    string.gsub(text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
-    string.gsub(text, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
+    text = text:gsub('[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
+    text = text:gsub('[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
 
     if num_msg <= 1 then
         send_msg(destination, text, ok_cb, false)
@@ -516,8 +516,8 @@ function post_large_msg_callback(extra, success, result)
     local text_len = string.len(text)
     local num_msg = math.ceil(text_len / text_max)
 
-    string.gsub(text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
-    string.gsub(text, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
+    text = text:gsub('[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
+    text = text:gsub('[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
 
     if num_msg <= 1 then
         post_msg(destination, text, ok_cb, false)
