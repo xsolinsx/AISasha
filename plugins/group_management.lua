@@ -1092,7 +1092,8 @@ local function check_member_super(extra, success, result)
             data[tostring(groups)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
             local text = langs[msg.lang].supergroupAdded
-            return reply_msg(msg.id, text, ok_cb, false)
+            reply_msg(msg.id, text, ok_cb, false)
+            return
         end
     end
 end
@@ -1115,7 +1116,8 @@ local function check_member_superrem(extra, success, result)
             data[tostring(groups)][tostring(msg.to.id)] = nil
             save_data(_config.moderation.data, data)
             local text = langs[msg.lang].supergroupRemoved
-            return reply_msg(msg.id, text, ok_cb, false)
+            reply_msg(msg.id, text, ok_cb, false)
+            return
         end
     end
 end
@@ -1656,7 +1658,8 @@ local function run(msg, matches)
         if matches[1]:lower() == 'log' then
             if is_owner(msg) then
                 savelog(msg.to.id, "log file created by owner/admin")
-                return send_document(get_receiver(msg), "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
+                send_document(get_receiver(msg), "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
+                return
             else
                 return langs[msg.lang].require_owner
             end
@@ -1895,7 +1898,7 @@ local function run(msg, matches)
                         if msg.action.user.id ~= 283058260 then
                             -- if not admin and not bot then
                             if not is_admin1(msg) and not msg.from.id == our_id then
-                                return chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
+                                return kick_user(msg.action.user.id, msg.to.id)
                             end
                         end
                     end
@@ -1994,7 +1997,8 @@ local function run(msg, matches)
     if msg.to.type == 'chat' then
         if matches[1]:lower() == 'tosuper' then
             if is_admin1(msg) then
-                return chat_upgrade(get_receiver(msg), ok_cb, false)
+                chat_upgrade(get_receiver(msg), ok_cb, false)
+                return
             else
                 return langs[msg.lang].require_admin
             end
@@ -2071,7 +2075,8 @@ local function run(msg, matches)
                     return
                 end
                 if settings.lock_member and not is_owner2(msg.action.user.id, msg.to.id) then
-                    return chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
+                    chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
+                    return
                 elseif settings.lock_member and tonumber(msg.from.id) == tonumber(our_id) then
                     return
                 elseif settings.lock_member then
@@ -2105,7 +2110,8 @@ local function run(msg, matches)
                     end
 
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to delete picture but failed  ")
-                    return chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                    chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                    return
                 elseif settings.lock_photo then
                     return
                 end
@@ -2132,7 +2138,8 @@ local function run(msg, matches)
                     end
 
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to change picture but failed  ")
-                    return chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                    chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                    return
                 elseif settings.lock_photo then
                     return
                 end
@@ -2158,7 +2165,8 @@ local function run(msg, matches)
                             end
                         end
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to change name but failed  ")
-                        return rename_chat('chat#id' .. msg.to.id, data[tostring(msg.to.id)].set_name, ok_cb, false)
+                        rename_chat('chat#id' .. msg.to.id, data[tostring(msg.to.id)].set_name, ok_cb, false)
+                        return
                     end
                 elseif settings.lock_name then
                     return
@@ -2388,7 +2396,8 @@ local function run(msg, matches)
                 end
                 local receiver = 'chat#' .. msg.to.id
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] revoked group link ")
-                return export_chat_link(receiver, callback, true)
+                export_chat_link(receiver, callback, true)
+                return
             else
                 return langs[msg.lang].require_mod
             end
@@ -2559,7 +2568,8 @@ local function run(msg, matches)
             if matches[1]:lower() == 'add' and not matches[2] then
                 if is_admin1(msg) then
                     if is_super_group(msg) then
-                        return reply_msg(msg.id, langs[msg.lang].supergroupAlreadyAdded, ok_cb, false)
+                        reply_msg(msg.id, langs[msg.lang].supergroupAlreadyAdded, ok_cb, false)
+                        return
                     end
                     print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") added")
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added SuperGroup")
@@ -2573,7 +2583,8 @@ local function run(msg, matches)
             if matches[1]:lower() == 'rem' and is_admin1(msg) and not matches[2] then
                 if is_admin1(msg) then
                     if not is_super_group(msg) then
-                        return reply_msg(msg.id, langs[msg.lang].supergroupRemoved, ok_cb, false)
+                        reply_msg(msg.id, langs[msg.lang].supergroupRemoved, ok_cb, false)
+                        return
                     end
                     print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed")
                     superrem(msg)
@@ -2660,6 +2671,7 @@ local function run(msg, matches)
                     end
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to create a new SuperGroup link")
                     export_channel_link(get_receiver(msg), callback_link, false)
+                    return
                 else
                     return langs[msg.lang].require_mod
                 end

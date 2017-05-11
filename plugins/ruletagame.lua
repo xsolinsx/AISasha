@@ -61,10 +61,12 @@ local function Challenge_by_reply(extra, success, result)
         local lang = get_lang(result.to.peer_id)
         if tonumber(result.from.peer_id) == tonumber(our_id) then
             -- Ignore bot
-            return reply_msg(extra.msg.id, langs[lang].cantChallengeMe, ok_cb, false)
+            reply_msg(extra.msg.id, langs[lang].cantChallengeMe, ok_cb, false)
+            return
         end
         if tonumber(extra.challenger) == tonumber(result.from.peer_id) then
-            return reply_msg(extra.msg.id, langs[lang].cantChallengeYourself, ok_cb, false)
+            reply_msg(extra.msg.id, langs[lang].cantChallengeYourself, ok_cb, false)
+            return
         end
         local challenger = ''
         local challenged = ''
@@ -92,10 +94,12 @@ local function Challenge_by_username(extra, success, result)
     end
     if tonumber(result.peer_id) == tonumber(our_id) then
         -- Ignore bot
-        return reply_msg(extra.msg.id, langs[lang].cantChallengeMe, ok_cb, false)
+        reply_msg(extra.msg.id, langs[lang].cantChallengeMe, ok_cb, false)
+        return
     end
     if tonumber(extra.msg.from.id) == tonumber(result.peer_id) then
-        return reply_msg(extra.msg.id, langs[lang].cantChallengeYourself, ok_cb, false)
+        reply_msg(extra.msg.id, langs[lang].cantChallengeYourself, ok_cb, false)
+        return
     end
     local challenger = ''
     local challenged = ''
