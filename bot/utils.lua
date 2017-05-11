@@ -461,8 +461,6 @@ end
 function send_large_msg(destination, text)
     local tmp = tostring(text)
     if tmp then
-        string.gsub(tmp, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
-        string.gsub(tmp, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
         local extra = {
             destination = destination,
             text = tmp
@@ -483,6 +481,9 @@ function send_large_msg_callback(extra, success, result)
     local text_len = string.len(text)
     local num_msg = math.ceil(text_len / text_max)
 
+    string.gsub(text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
+    string.gsub(text, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
+
     if num_msg <= 1 then
         send_msg(destination, text, ok_cb, false)
     else
@@ -500,8 +501,6 @@ function send_large_msg_callback(extra, success, result)
 end
 
 function post_large_msg(destination, text)
-    string.gsub(msg.text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
-    string.gsub(msg.text, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
     local extra = {
         destination = destination,
         text = text
@@ -516,6 +515,9 @@ function post_large_msg_callback(extra, success, result)
     local text = extra.text
     local text_len = string.len(text)
     local num_msg = math.ceil(text_len / text_max)
+
+    string.gsub(text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
+    string.gsub(text, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
 
     if num_msg <= 1 then
         post_msg(destination, text, ok_cb, false)
