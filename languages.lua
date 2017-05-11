@@ -217,8 +217,7 @@ return {
         unbanned = ' unbannato.',
         gbanned = ' bannato globalmente.',
         ungbanned = ' unbannato globalmente.',
-        autoexecDenial = 'Non puoi usare autoexec tramite un altro comando.',
-        crossexecDenial = 'Non puoi usare crossexec tramite un altro comando.',
+        autocrossexecDenial = 'Non puoi usarlo tramite un altro comando.',
         oldMessage = 'Risposta troppo vecchia, non posso eseguire il comando, prova con "<command> <id>" o "<command> <username>" o inoltrando il messaggio desiderato e rispondendo ad esso con "<command> from".',
 
         -- seedbot.lua --
@@ -1427,8 +1426,7 @@ return {
         unbanned = ' unbanned.',
         gbanned = ' globally banned.',
         ungbanned = ' globally unbanned.',
-        autoexecDenial = 'You can\'t use autoexec from another command.',
-        crossexecDenial = 'You can\'t use crossexec from another command.',
+        autocrossexecDenial = 'You can\'t use it from another command.',
         oldMessage = 'Reply too old, I can\'t execute the command, try with "<command> <id>" or "<command> <username>" or forwarding the message and reply to it with "<command> from".',
 
         -- seedbot.lua --
