@@ -73,29 +73,6 @@ function on_binlog_replay_end()
 end
 
 function msg_valid(msg)
-    -- if message from telegram it will be sent to REALM
-    -- send access code transformed like this => 12345 becomes 98765
-    --[[if msg.from.id == 777000 then
-        local realcode = string.match(msg.text, '%d+')
-        local fakecode = ''
-        local i = 0
-        local str1 = 'there is 11 that is in love with 22 but he also hates 33 that is the brother of 44 and 55'
-        local str2 = 'there is 11 that is in love with 22 but he also hates 33 that is the brother of 44 and 55'
-        for number in string.gmatch(msg.text, "%d") do
-            i = i + 1
-            local magic = i .. i
-            fakecode = fakecode .. tostring(math.abs(number - 10))
-            str1 = string.gsub(str1, magic, number)
-            str2 = string.gsub(str2, magic, tostring(math.abs(number - 10)))
-        end
-        local function post_msg()
-            send_large_msg('chat#id117401051', 'NORMAL CODE\n')
-            send_large_msg('chat#id117401051', 'TRANSFORMED CODE\n')
-        end
-        postpone(post_msg, false, 10)
-        return false
-    end]]
-
     local autovalid = false
     -- Don't process outgoing messages
     if msg.out then
