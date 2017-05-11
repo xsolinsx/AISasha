@@ -1382,17 +1382,18 @@ end
 -- Returns chat_id mute list
 function mutes_list(chat_id, group_name)
     local lang = get_lang(chat_id)
-    local hash = 'mute:' .. chat_id
-    local list = redis:smembers(hash)
-    local text = langs[lang].mutedTypesStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
-    for k, v in pairsByKeys(list) do
-        text = text .. langs[lang].mute .. v .. "\n"
-    end
     if data[tostring(chat_id)] then
-        local settings = data[tostring(chat_id)]['settings']
-        text = text .. langs[lang].strictrules .. tostring(settings.strict)
+        if data[tostring(chat_id)].settings then
+            if hasMutes(chat_id) then
+                local text = langs[lang].mutedTypesStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
+                for k, v in pairsByKeys(data[tostring(chat_id)].settings.mutes) do
+                    text = text .. langs[lang].mute .. k .. ': ' .. tostring(v) .. "\n"
+                end
+                text = text .. langs[lang].strictrules .. tostring(data[tostring(chat_id)].settings.strict)
+                return text
+            end
+        end
     end
-    return text
 end
 
 -- Returns chat_user mute list
