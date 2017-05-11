@@ -1,4 +1,42 @@
-﻿local function get_rank_by_username(extra, success, result)
+﻿local function id_by_username(extra, success, result)
+    if success == 0 then
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
+    end
+    send_large_msg(extra.receiver, result.peer_id)
+end
+
+local function id_by_reply(extra, success, result)
+    if get_reply_receiver(result) == extra.receiver then
+        local text = ''
+        local action = false
+        if result.action then
+            if result.action.type ~= 'chat_add_user_link' then
+                action = true
+            end
+        end
+
+        if action and result.action.user then
+            text = result.action.user.peer_id
+        else
+            text = result.from.peer_id
+        end
+        send_large_msg(extra.receiver, text)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
+end
+
+local function id_by_from(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_reply_receiver(result) == extra.receiver then
+        send_large_msg(extra.receiver, result.fwd_from.peer_id)
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
+end
+
+local function get_rank_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
         send_large_msg(extra.receiver, langs[lang].noUsernameFound)
@@ -480,6 +518,35 @@ local function run(msg, matches)
     local chat_type = msg.to.type
 
     if not msg.api_patch then
+        if matches[1]:lower() == "id" then
+            if type(msg.reply_id) ~= "nil" then
+                if is_momod(msg) then
+                    if matches[2] then
+                        if matches[2]:lower() == 'from' then
+                            get_message(msg.reply_id, id_by_from, { receiver = receiver })
+                            return
+                        else
+                            get_message(msg.reply_id, id_by_reply, { receiver = receiver })
+                            return
+                        end
+                    else
+                        get_message(msg.reply_id, id_by_reply, { receiver = receiver })
+                        return
+                    end
+                else
+                    return langs[msg.lang].require_mod
+                end
+            elseif matches[2] and matches[2] ~= '' then
+                if is_momod(msg) then
+                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), id_by_username, { receiver = receiver })
+                    return
+                else
+                    return langs[msg.lang].require_mod
+                end
+            else
+                return msg.from.id .. '\n' .. msg.to.id
+            end
+        end
         if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
             if type(msg.reply_id) ~= "nil" then
                 get_message(msg.reply_id, get_rank_by_reply, { receiver = receiver })
@@ -831,6 +898,8 @@ return {
     description = "INFO",
     patterns =
     {
+        "^[#!/]([Ii][Dd])$",
+        "^[#!/]([Ii][Dd]) ([^%s]+)$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo]) (%d+)$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ii][Nn][Ff][Oo])$",
         "^[#!/]([Gg][Rr][Oo][Uu][Pp][Ll][Ii][Nn][Kk]) (%d+)$",
@@ -870,12 +939,14 @@ return {
     syntax =
     {
         "USER",
-        "#getrank|rango [<id>|<username>|<reply>]",
+        "#id",
+        "#getrank|rango [<id>|<username>|<reply>|from]",
         "#whoami",
         "(#info|[sasha] info)",
         "#ishere <id>|<username>",
         "(#groupinfo|[sasha] info gruppo)",
         "MOD",
+        "#id <username>|<reply>|from",
         "(#info|[sasha] info) <id>|<username>|<reply>|from",
         "(#who|#members|[sasha] lista membri)",
         "(#kicked|[sasha] lista rimossi)",
