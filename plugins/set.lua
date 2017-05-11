@@ -66,28 +66,28 @@ local function callback(extra, success, result)
 end
 
 local function run(msg, matches)
-    if not msg.api_patch then
-        local hash = get_variables_hash(msg, false)
-        if msg.media then
-            if hash then
-                local name = redis:hget(hash, 'waiting')
-                if name then
-                    if is_momod(msg) then
-                        if msg.media.type == 'photo' then
-                            return load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
-                        elseif msg.media.type == 'audio' then
-                            return load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
-                        end
-                    else
-                        return langs[msg.lang].require_mod
+    local hash = get_variables_hash(msg, false)
+    if msg.media then
+        if hash then
+            local name = redis:hget(hash, 'waiting')
+            if name then
+                if is_momod(msg) then
+                    if msg.media.type == 'photo' then
+                        return load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                    elseif msg.media.type == 'audio' then
+                        return load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
                     end
+                else
+                    return langs[msg.lang].require_mod
                 end
-                return
-            else
-                return langs[msg.lang].nothingToSet
             end
+            return
+        else
+            return langs[msg.lang].nothingToSet
         end
+    end
 
+    if not msg.api_patch then
         if matches[1]:lower() == 'importgroupsets' and matches[2] then
             if is_owner(msg) then
                 local tab = matches[2]:split('\nXXXxxxXXX\n')
