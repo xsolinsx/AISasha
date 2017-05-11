@@ -73,10 +73,11 @@ local function run(msg, matches)
             if name then
                 if is_momod(msg) then
                     if msg.media.type == 'photo' then
-                        return load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                        load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
                     elseif msg.media.type == 'audio' then
-                        return load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                        load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
                     end
+                    return
                 else
                     return langs[msg.lang].require_mod
                 end
