@@ -113,7 +113,7 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, flame_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
                         end
-                    elseif matches[2] then
+                    elseif matches[2] and matches[2] ~= '' then
                         if string.match(matches[2], '^%d+$') then
                             local hash
                             local tokick

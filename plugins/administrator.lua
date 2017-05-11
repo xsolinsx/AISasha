@@ -316,7 +316,7 @@ local function run(msg, matches)
                 if matches[1]:lower() == 'vardump' then
                     if type(msg.reply_id) ~= "nil" then
                         msgr = get_message(msg.reply_id, vardump_msg, { receiver = get_receiver(msg), name = 'reply' })
-                    elseif matches[2] then
+                    elseif matches[2] and matches[2] ~= '' then
                         msgr = get_message(matches[2], vardump_msg, { receiver = get_receiver(msg), name = 'msg_id' })
                     else
                         msg.to.phone = ''

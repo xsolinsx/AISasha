@@ -96,19 +96,21 @@ function msg_valid(msg)
         return false
     end]]
 
-    local valid = false
+    local autovalid = false
     -- Don't process outgoing messages
     if msg.out then
         if not msg.fwd_from then
             if msg.text then
                 if string.match(msg.text, '^[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] (.*)$') then
-                    valid = true
+                    autovalid = true
                 end
             end
         end
-        if not valid then
+        if not autovalid then
             print('\27[36mNot valid: msg from us\27[39m')
             return false
+        else
+            msg.text = string.gsub(msg.text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
         end
     end
 
@@ -133,28 +135,30 @@ function msg_valid(msg)
         return false
     end
 
-    local found = false
-    if msg.from.id == 283058260 then
-        if msg.to.id ~= our_id then
-            if msg.text then
-                if string.find(msg.text, "^[#!/][Dd][Ee][Ll]$") then
-                    found = true
-                end
-            end
-            if not found then
-                -- ignore messages from API version but !del messages
-                print('\27[36mNot valid: msg from our API version in a group\27[39m')
-                return false
-            end
+    if msg.from.id == our_id then
+        if not autovalid then
+            print('\27[36mNot valid: msg from our id\27[39m')
+            return false
         end
     end
 
-    if msg.from.id == our_id then
-        if valid then
-            msg.text = string.gsub(msg.text, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc] ', '')
-        else
-            print('\27[36mNot valid: msg from our id\27[39m')
-            return false
+    if msg.from.id == 283058260 then
+        if msg.to.id ~= our_id then
+            local crossvalid = false
+            if not msg.fwd_from then
+                if msg.text then
+                    if string.match(msg.text, '^[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] (.*)$') then
+                        crossvalid = true
+                    end
+                end
+            end
+            if not crossvalid then
+                -- ignore messages from API version but !del messages
+                print('\27[36mNot valid: msg from our API version in a group\27[39m')
+                return false
+            else
+                msg.text = string.gsub(msg.text, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')
+            end
         end
     end
 
@@ -163,7 +167,7 @@ function msg_valid(msg)
         return false
     end
 
-    if is_channel_disabled(get_receiver(msg)) and not is_momod(msg) then
+    if is_channel_disabled(get_receiver(msg)) and not is_owner(msg) then
         print('\27[36mNot valid: channel disabled\27[39m')
         return false
     end

@@ -2,7 +2,10 @@ local function run(msg, matches)
     if not msg.api_patch then
         if (matches[1]:lower() == 'echo' or matches[1]:lower() == 'sasha ripeti') and matches[2] then
             if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-                return langs[msg.lang].autoexecDenial
+                return langs[msg.lang].autocrossexecDenial
+            end
+            if string.match(matches[2], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].autocrossexecDenial
             end
             if is_momod(msg) then
                 if type(msg.reply_id) ~= "nil" then

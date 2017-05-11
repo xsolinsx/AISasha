@@ -1092,7 +1092,8 @@ local function check_member_super(extra, success, result)
             data[tostring(groups)][tostring(msg.to.id)] = msg.to.id
             save_data(_config.moderation.data, data)
             local text = langs[msg.lang].supergroupAdded
-            return reply_msg(msg.id, text, ok_cb, false)
+            reply_msg(msg.id, text, ok_cb, false)
+            return
         end
     end
 end
@@ -1115,7 +1116,8 @@ local function check_member_superrem(extra, success, result)
             data[tostring(groups)][tostring(msg.to.id)] = nil
             save_data(_config.moderation.data, data)
             local text = langs[msg.lang].supergroupRemoved
-            return reply_msg(msg.id, text, ok_cb, false)
+            reply_msg(msg.id, text, ok_cb, false)
+            return
         end
     end
 end
@@ -1656,7 +1658,8 @@ local function run(msg, matches)
         if matches[1]:lower() == 'log' then
             if is_owner(msg) then
                 savelog(msg.to.id, "log file created by owner/admin")
-                return send_document(get_receiver(msg), "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
+                send_document(get_receiver(msg), "./groups/logs/" .. msg.to.id .. "log.txt", ok_cb, false)
+                return
             else
                 return langs[msg.lang].require_owner
             end
@@ -1895,7 +1898,7 @@ local function run(msg, matches)
                         if msg.action.user.id ~= 283058260 then
                             -- if not admin and not bot then
                             if not is_admin1(msg) and not msg.from.id == our_id then
-                                return chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
+                                return kick_user(msg.action.user.id, msg.to.id)
                             end
                         end
                     end
@@ -1994,7 +1997,8 @@ local function run(msg, matches)
     if msg.to.type == 'chat' then
         if matches[1]:lower() == 'tosuper' then
             if is_admin1(msg) then
-                return chat_upgrade(get_receiver(msg), ok_cb, false)
+                chat_upgrade(get_receiver(msg), ok_cb, false)
+                return
             else
                 return langs[msg.lang].require_admin
             end
@@ -2071,7 +2075,8 @@ local function run(msg, matches)
                     return
                 end
                 if settings.lock_member and not is_owner2(msg.action.user.id, msg.to.id) then
-                    return chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
+                    chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
+                    return
                 elseif settings.lock_member and tonumber(msg.from.id) == tonumber(our_id) then
                     return
                 elseif settings.lock_member then
@@ -2105,7 +2110,8 @@ local function run(msg, matches)
                     end
 
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to delete picture but failed  ")
-                    return chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                    chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                    return
                 elseif settings.lock_photo then
                     return
                 end
@@ -2132,7 +2138,8 @@ local function run(msg, matches)
                     end
 
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to change picture but failed  ")
-                    return chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                    chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                    return
                 elseif settings.lock_photo then
                     return
                 end
@@ -2158,7 +2165,8 @@ local function run(msg, matches)
                             end
                         end
                         savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to change name but failed  ")
-                        return rename_chat('chat#id' .. msg.to.id, data[tostring(msg.to.id)].set_name, ok_cb, false)
+                        rename_chat('chat#id' .. msg.to.id, data[tostring(msg.to.id)].set_name, ok_cb, false)
+                        return
                     end
                 elseif settings.lock_name then
                     return
@@ -2189,13 +2197,15 @@ local function run(msg, matches)
                         if type(msg.reply_id) ~= "nil" then
                             get_message(msg.reply_id, promote_by_reply, { receiver = get_receiver(msg) })
                             return
-                        elseif string.match(matches[2], '^%d+$') then
-                            promote(get_receiver(msg), 'NONAME', matches[2])
-                            return
-                        else
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
-                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_promote_by_username, { receiver = get_receiver(msg) })
-                            return
+                        elseif matches[2] and matches[2] ~= '' then
+                            if string.match(matches[2], '^%d+$') then
+                                promote(get_receiver(msg), 'NONAME', matches[2])
+                                return
+                            else
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
+                                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_promote_by_username, { receiver = get_receiver(msg) })
+                                return
+                            end
                         end
                     else
                         return langs[msg.lang].require_owner
@@ -2206,13 +2216,15 @@ local function run(msg, matches)
                         if type(msg.reply_id) ~= "nil" then
                             get_message(msg.reply_id, demote_by_reply, { receiver = get_receiver(msg) })
                             return
-                        elseif string.match(matches[2], '^%d+$') then
-                            demote(get_receiver(msg), 'NONAME', matches[2])
-                            return
-                        else
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
-                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_demote_by_username, { receiver = get_receiver(msg) })
-                            return
+                        elseif matches[2] and matches[2] ~= '' then
+                            if string.match(matches[2], '^%d+$') then
+                                demote(get_receiver(msg), 'NONAME', matches[2])
+                                return
+                            else
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
+                                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_demote_by_username, { receiver = get_receiver(msg) })
+                                return
+                            end
                         end
                     else
                         return langs[msg.lang].require_owner
@@ -2321,24 +2333,26 @@ local function run(msg, matches)
                         muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
                     end
                     return
-                elseif string.match(matches[2], '^%d+$') then
-                    -- ignore higher or same rank
-                    if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                        if is_muted_user(msg.to.id, matches[2]) then
-                            unmute_user(msg.to.id, matches[2])
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
-                            return matches[2] .. langs[msg.lang].muteUserRemove
+                elseif matches[2] and matches[2] ~= '' then
+                    if string.match(matches[2], '^%d+$') then
+                        -- ignore higher or same rank
+                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                            if is_muted_user(msg.to.id, matches[2]) then
+                                unmute_user(msg.to.id, matches[2])
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
+                                return matches[2] .. langs[msg.lang].muteUserRemove
+                            else
+                                mute_user(msg.to.id, matches[2])
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
+                                return matches[2] .. langs[msg.lang].muteUserAdd
+                            end
                         else
-                            mute_user(msg.to.id, matches[2])
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
-                            return matches[2] .. langs[msg.lang].muteUserAdd
+                            return langs[msg.lang].require_rank
                         end
                     else
-                        return langs[msg.lang].require_rank
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
+                        return
                     end
-                else
-                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
-                    return
                 end
             else
                 return langs[msg.lang].require_mod
@@ -2388,7 +2402,8 @@ local function run(msg, matches)
                 end
                 local receiver = 'chat#' .. msg.to.id
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] revoked group link ")
-                return export_chat_link(receiver, callback, true)
+                export_chat_link(receiver, callback, true)
+                return
             else
                 return langs[msg.lang].require_mod
             end
@@ -2440,16 +2455,18 @@ local function run(msg, matches)
             if matches[1]:lower() == 'setowner' then
                 if is_owner(msg) then
                     if type(msg.reply_id) ~= "nil" then
-                        msgr = get_message(msg.reply_id, setowner_by_reply, { receiver = get_receiver(msg) })
-                    elseif string.match(matches[2], '^%d+$') then
-                        data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
-                        save_data(_config.moderation.data, data)
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
-                        return matches[2] .. langs[msg.lang].setOwner
-                    else
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set @" .. string.gsub(matches[2], '@', '') .. " as owner")
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_setowner_by_username, { receiver = get_receiver(msg) })
-                        return
+                        get_message(msg.reply_id, setowner_by_reply, { receiver = get_receiver(msg) })
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
+                            save_data(_config.moderation.data, data)
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
+                            return matches[2] .. langs[msg.lang].setOwner
+                        else
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set @" .. string.gsub(matches[2], '@', '') .. " as owner")
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), chat_setowner_by_username, { receiver = get_receiver(msg) })
+                            return
+                        end
                     end
                 else
                     return langs[msg.lang].require_owner
@@ -2559,7 +2576,8 @@ local function run(msg, matches)
             if matches[1]:lower() == 'add' and not matches[2] then
                 if is_admin1(msg) then
                     if is_super_group(msg) then
-                        return reply_msg(msg.id, langs[msg.lang].supergroupAlreadyAdded, ok_cb, false)
+                        reply_msg(msg.id, langs[msg.lang].supergroupAlreadyAdded, ok_cb, false)
+                        return
                     end
                     print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") added")
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added SuperGroup")
@@ -2573,7 +2591,8 @@ local function run(msg, matches)
             if matches[1]:lower() == 'rem' and is_admin1(msg) and not matches[2] then
                 if is_admin1(msg) then
                     if not is_super_group(msg) then
-                        return reply_msg(msg.id, langs[msg.lang].supergroupRemoved, ok_cb, false)
+                        reply_msg(msg.id, langs[msg.lang].supergroupRemoved, ok_cb, false)
+                        return
                     end
                     print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed")
                     superrem(msg)
@@ -2660,6 +2679,7 @@ local function run(msg, matches)
                     end
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to create a new SuperGroup link")
                     export_channel_link(get_receiver(msg), callback_link, false)
+                    return
                 else
                     return langs[msg.lang].require_mod
                 end
@@ -2709,14 +2729,16 @@ local function run(msg, matches)
                             msg = msg
                         }
                         get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                    elseif string.match(matches[2], '^%d+$') then
-                        local get_cmd = 'promoteadmin'
-                        local msg = msg
-                        channel_get_users(get_receiver(msg), in_channel_cb, { get_cmd = get_cmd, receiver = get_receiver(msg), msg = msg, user_id = matches[2] })
-                    else
-                        local get_cmd = 'promoteadmin'
-                        local msg = msg
-                        channel_get_users(get_receiver(msg), in_channel_cb, { get_cmd = get_cmd, receiver = get_receiver(msg), msg = msg, username = string.gsub(matches[2], '@', '') })
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            local get_cmd = 'promoteadmin'
+                            local msg = msg
+                            channel_get_users(get_receiver(msg), in_channel_cb, { get_cmd = get_cmd, receiver = get_receiver(msg), msg = msg, user_id = matches[2] })
+                        else
+                            local get_cmd = 'promoteadmin'
+                            local msg = msg
+                            channel_get_users(get_receiver(msg), in_channel_cb, { get_cmd = get_cmd, receiver = get_receiver(msg), msg = msg, username = string.gsub(matches[2], '@', '') })
+                        end
                     end
                 else
                     return langs[msg.lang].require_owner
@@ -2730,26 +2752,28 @@ local function run(msg, matches)
                             msg = msg
                         }
                         get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                    elseif string.match(matches[2], '^%d+$') then
-                        local receiver = get_receiver(msg)
-                        local user_id = "user#id" .. matches[2]
-                        local get_cmd = 'demoteadmin'
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            channel_demote(get_receiver(msg), user_id, ok_cb, false)
-                            send_large_msg(get_receiver(msg), result.peer_id .. langs[msg.lang].demoteSupergroupMod)
-                            return
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            local receiver = get_receiver(msg)
+                            local user_id = "user#id" .. matches[2]
+                            local get_cmd = 'demoteadmin'
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                channel_demote(get_receiver(msg), user_id, ok_cb, false)
+                                send_large_msg(get_receiver(msg), result.peer_id .. langs[msg.lang].demoteSupergroupMod)
+                                return
+                            else
+                                send_large_msg(get_receiver(msg), langs[msg.lang].cantDemoteOtherAdmin)
+                                return
+                            end
                         else
-                            send_large_msg(get_receiver(msg), langs[msg.lang].cantDemoteOtherAdmin)
+                            local cbres_extra = {
+                                channel = get_receiver(msg),
+                                get_cmd = 'demoteadmin'
+                            }
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted admin @" .. string.gsub(matches[2], '@', ''))
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
                             return
                         end
-                    else
-                        local cbres_extra = {
-                            channel = get_receiver(msg),
-                            get_cmd = 'demoteadmin'
-                        }
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted admin @" .. string.gsub(matches[2], '@', ''))
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
-                        return
                     end
                 else
                     return langs[msg.lang].require_owner
@@ -2764,14 +2788,16 @@ local function run(msg, matches)
                                 msg = msg
                             }
                             get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                        elseif string.match(matches[2], '^%d+$') then
-                            data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
-                            save_data(_config.moderation.data, data)
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
-                            return matches[2] .. langs[msg.lang].setOwner
-                        else
-                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), setowner_by_username, { receiver = get_receiver(msg), chat_id = msg.to.id })
-                            return
+                        elseif matches[2] and matches[2] ~= '' then
+                            if string.match(matches[2], '^%d+$') then
+                                data[tostring(msg.to.id)]['set_owner'] = tostring(matches[2])
+                                save_data(_config.moderation.data, data)
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set [" .. matches[2] .. "] as owner")
+                                return matches[2] .. langs[msg.lang].setOwner
+                            else
+                                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), setowner_by_username, { receiver = get_receiver(msg), chat_id = msg.to.id })
+                                return
+                            end
                         end
                     else
                         return langs[msg.lang].require_owner
@@ -2785,17 +2811,19 @@ local function run(msg, matches)
                                 msg = msg
                             }
                             get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                        elseif string.match(matches[2], '^%d+$') then
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted user#id" .. matches[2])
-                            promote2(get_receiver(msg), 'NONAME', user_id)
-                        else
-                            local cbres_extra = {
-                                channel = get_receiver(msg),
-                                get_cmd = 'promote',
-                            }
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
-                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
-                            return
+                        elseif matches[2] and matches[2] ~= '' then
+                            if string.match(matches[2], '^%d+$') then
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted user#id" .. matches[2])
+                                promote2(get_receiver(msg), 'NONAME', user_id)
+                            else
+                                local cbres_extra = {
+                                    channel = get_receiver(msg),
+                                    get_cmd = 'promote',
+                                }
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted @" .. string.gsub(matches[2], '@', ''))
+                                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
+                                return
+                            end
                         end
                         return
                     else
@@ -2810,18 +2838,20 @@ local function run(msg, matches)
                                 msg = msg
                             }
                             get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                        elseif string.match(matches[2], '^%d+$') then
-                            local get_cmd = 'demote'
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted user#id" .. matches[2])
-                            demote2(get_receiver(msg), matches[2], matches[2])
-                        else
-                            local cbres_extra = {
-                                channel = get_receiver(msg),
-                                get_cmd = 'demote'
-                            }
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
-                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
-                            return
+                        elseif matches[2] and matches[2] ~= '' then
+                            if string.match(matches[2], '^%d+$') then
+                                local get_cmd = 'demote'
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted user#id" .. matches[2])
+                                demote2(get_receiver(msg), matches[2], matches[2])
+                            else
+                                local cbres_extra = {
+                                    channel = get_receiver(msg),
+                                    get_cmd = 'demote'
+                                }
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted @" .. string.gsub(matches[2], '@', ''))
+                                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
+                                return
+                            end
                         end
                         return
                     else
@@ -3059,25 +3089,27 @@ local function run(msg, matches)
                             get_message(msg.reply_id, get_message_callback, { receiver = get_receiver(msg), get_cmd = get_cmd, msg = msg })
                             return
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        -- ignore higher or same rank
-                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                            if is_muted_user(msg.to.id, matches[2]) then
-                                unmute_user(msg.to.id, matches[2])
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
-                                return matches[2] .. langs[msg.lang].muteUserRemove
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            -- ignore higher or same rank
+                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                if is_muted_user(msg.to.id, matches[2]) then
+                                    unmute_user(msg.to.id, matches[2])
+                                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
+                                    return matches[2] .. langs[msg.lang].muteUserRemove
+                                else
+                                    mute_user(msg.to.id, matches[2])
+                                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
+                                    return matches[2] .. langs[msg.lang].muteUserAdd
+                                end
                             else
-                                mute_user(msg.to.id, matches[2])
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
-                                return matches[2] .. langs[msg.lang].muteUserAdd
+                                return langs[msg.lang].require_rank
                             end
                         else
-                            return langs[msg.lang].require_rank
+                            local get_cmd = "mute_user"
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, { receiver = get_receiver(msg), get_cmd = get_cmd, executer = msg.from.id })
+                            return
                         end
-                    else
-                        local get_cmd = "mute_user"
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, { receiver = get_receiver(msg), get_cmd = get_cmd, executer = msg.from.id })
-                        return
                     end
                 else
                     return langs[msg.lang].require_mod

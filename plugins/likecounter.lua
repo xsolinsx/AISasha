@@ -180,10 +180,12 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, like_by_reply, { likedata = likedata, receiver = get_receiver(msg) })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        like(likedata, chat, user)
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), like_by_username, { chat = chat, likedata = likedata })
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            like(likedata, chat, user)
+                        else
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), like_by_username, { chat = chat, likedata = likedata })
+                        end
                     end
                 elseif matches[1]:lower() == 'dislike' or matches[1]:lower() == '1down' then
                     if type(msg.reply_id) ~= "nil" then
@@ -197,10 +199,12 @@ local function run(msg, matches)
                         else
                             get_message(msg.reply_id, dislike_by_reply, { likedata = likedata, receiver = get_receiver(msg) })
                         end
-                    elseif string.match(matches[2], '^%d+$') then
-                        dislike(likedata, chat, user)
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), dislike_by_username, { chat = chat, likedata = likedata })
+                    elseif matches[2] and matches[2] ~= '' then
+                        if string.match(matches[2], '^%d+$') then
+                            dislike(likedata, chat, user)
+                        else
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), dislike_by_username, { chat = chat, likedata = likedata })
+                        end
                     end
                 end
             end

@@ -97,7 +97,7 @@ local function run(msg, matches)
                     else
                         return langs[msg.lang].require_owner
                     end
-                elseif matches[2] then
+                elseif matches[2] and matches[2] ~= '' then
                     if is_owner(msg) then
                         if string.match(matches[2], '^%d+$') then
                             local user_id = matches[2]
@@ -150,7 +150,7 @@ local function run(msg, matches)
                     else
                         return langs[msg.lang].require_owner
                     end
-                elseif matches[2] then
+                elseif matches[2] and matches[2] ~= '' then
                     if is_owner(msg) then
                         if string.match(matches[2], '^%d+$') then
                             local user_id = matches[2]
