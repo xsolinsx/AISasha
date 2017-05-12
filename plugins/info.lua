@@ -37,7 +37,7 @@ local function id_by_from(extra, success, result)
 end
 
 local function username_by_id(extra, success, result)
-    send_large_msg(extra.receiver, result.peer_id)
+    send_large_msg(extra.receiver, result.username or('NOUSER' .. result.print_name))
 end
 
 local function username_by_reply(extra, success, result)
@@ -51,9 +51,9 @@ local function username_by_reply(extra, success, result)
         end
 
         if action and result.action.user then
-            text = result.action.user.peer_id
+            text = result.action.user.username or('NOUSER' .. result.action.user.print_name)
         else
-            text = result.from.peer_id
+            text = result.from.username or('NOUSER' .. result.from.print_name)
         end
         send_large_msg(extra.receiver, text)
     else
@@ -64,7 +64,7 @@ end
 local function username_by_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if get_reply_receiver(result) == extra.receiver then
-        send_large_msg(extra.receiver, result.fwd_from.peer_id)
+        send_large_msg(extra.receiver, result.fwd_from.username or('NOUSER' .. result.fwd_from.print_name))
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
