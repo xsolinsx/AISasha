@@ -562,7 +562,7 @@ local function kick_nouser_chat(extra, success, result)
             send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
         end
     end
-    if extra.api_patch then
+    if redis:sismember('apipatch', extra.chat_id) then
         postpone(post_msg_unban, false, 2)
     end
 end
@@ -592,16 +592,23 @@ local function kick_nouser_channel(extra, success, result)
             send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
         end
     end
-    if extra.api_patch then
+    if redis:sismember('apipatch', extra.chat_id) then
         postpone(post_msg_unban, false, 2)
     end
 end
 
-local function user_msgs(user_id, chat_id)
+local function user_msgs(user_id, chat_id, chat_type)
+    local api_patch = redis:sismember('apipatch', chat_id) or false
+
     local user_info
     local uhash = 'user:' .. user_id
     local user = redis:hgetall(uhash)
     local um_hash = 'msgs:' .. user_id .. ':' .. chat_id
+    if chat_type == 'channel' then
+        um_hash = 'msgs:' .. user_id .. ':-100' .. chat_id
+    elseif chat_type == 'chat' then
+        um_hash = 'msgs:' .. user_id .. ':-' .. chat_id
+    end
     user_info = tonumber(redis:get(um_hash) or 0)
     return user_info
 end
@@ -613,7 +620,7 @@ local function kick_inactive_chat(extra, success, result)
 
     for k, v in pairs(result.members) do
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
-            local user_info = user_msgs(v.peer_id, extra.chat_id)
+            local user_info = user_msgs(v.peer_id, extra.chat_id, 'chat')
             if tonumber(user_info) < tonumber(extra.num) then
                 ids = ids .. v.peer_id .. ' '
                 local rnd = math.random(1000)
@@ -634,7 +641,7 @@ local function kick_inactive_chat(extra, success, result)
             send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
         end
     end
-    if extra.api_patch then
+    if redis:sismember('apipatch', extra.chat_id) then
         postpone(post_msg_unban, false, 2)
     end
 end
@@ -646,7 +653,7 @@ local function kick_inactive_channel(extra, success, result)
 
     for k, v in pairs(result) do
         if tonumber(v.peer_id) ~= tonumber(our_id) and not is_momod2(v.peer_id, extra.chat_id) then
-            local user_info = user_msgs(v.peer_id, extra.chat_id)
+            local user_info = user_msgs(v.peer_id, extra.chat_id, 'channel')
             if tonumber(user_info) < tonumber(extra.num) then
                 ids = ids .. v.peer_id .. ' '
                 local rnd = math.random(1000)
@@ -667,7 +674,7 @@ local function kick_inactive_channel(extra, success, result)
             send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
         end
     end
-    if extra.api_patch then
+    if redis:sismember('apipatch', extra.chat_id) then
         postpone(post_msg_unban, false, 2)
     end
 end
@@ -1032,9 +1039,9 @@ local function run(msg, matches)
                     num = matches[2]
                 end
                 if msg.to.type == 'chat' then
-                    chat_info(receiver, kick_inactive_chat, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg), api_patch = redis:sismember('apipatch', msg.to.id) })
+                    chat_info(receiver, kick_inactive_chat, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
                 elseif msg.to.type == 'channel' then
-                    channel_get_users(receiver, kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg), api_patch = redis:sismember('apipatch', msg.to.id) })
+                    channel_get_users(receiver, kick_inactive_channel, { chat_id = msg.to.id, num = num, receiver = get_receiver(msg) })
                 end
                 return
             else
@@ -1048,9 +1055,9 @@ local function run(msg, matches)
             if is_owner(msg) then
                 -- /kicknouser
                 if msg.to.type == 'chat' then
-                    chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id, api_patch = redis:sismember('apipatch', msg.to.id) })
+                    chat_info(receiver, kick_nouser_chat, { receiver = get_receiver(msg), chat_id = msg.to.id })
                 elseif msg.to.type == 'channel' then
-                    channel_get_users(receiver, kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id, api_patch = redis:sismember('apipatch', msg.to.id) })
+                    channel_get_users(receiver, kick_nouser_channel, { receiver = get_receiver(msg), chat_id = msg.to.id })
                 end
                 return
             else

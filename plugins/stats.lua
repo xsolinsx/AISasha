@@ -1,9 +1,16 @@
 ﻿-- Returns a table with `name` and `msgs`
-local function get_msgs_user_chat(user_id, chat_id)
-    local user_info = { }
+local function get_msgs_user_chat(user_id, chat_id, chat_type)
+    local api_patch = redis:sismember('apipatch', chat_id) or false
+
+    local user_info
     local uhash = 'user:' .. user_id
     local user = redis:hgetall(uhash)
     local um_hash = 'msgs:' .. user_id .. ':' .. chat_id
+    if chat_type == 'channel' then
+        um_hash = 'msgs:' .. user_id .. ':-100' .. chat_id
+    elseif chat_type == 'chat' then
+        um_hash = 'msgs:' .. user_id .. ':-' .. chat_id
+    end
     user_info.msgs = tonumber(redis:get(um_hash) or 0)
     user_info.name = user_print_name(user):gsub('_', ' ') .. ' [' .. user_id .. ']'
     user_info.id = user_id
@@ -46,7 +53,7 @@ local function callback_group_members(extra, success, result)
     for k, v in pairs(result.members) do
         if tonumber(v.peer_id) ~= tonumber(our_id) then
             local user_id = v.peer_id
-            local user_info = get_msgs_user_chat(user_id, extra.chat_id)
+            local user_info = get_msgs_user_chat(user_id, extra.chat_id, 'chat')
             local percentage =(user_info.msgs * 100) / chattotal
             user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
@@ -67,7 +74,7 @@ local function callback_group_members(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
-local function chat_stats(chat_id)
+local function chat_stats(chat_id, chat_type)
     local lang = get_lang(chat_id)
     -- Users on chat
     local chattotal = 0
@@ -84,7 +91,7 @@ local function chat_stats(chat_id)
     for i = 1, #users do
         if tonumber(users[i]) ~= tonumber(our_id) then
             local user_id = users[i]
-            local user_info = get_msgs_user_chat(user_id, chat_id)
+            local user_info = get_msgs_user_chat(user_id, chat_id, 'chat')
             local percentage =(user_info.msgs * 100) / chattotal
             user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
@@ -108,7 +115,7 @@ local function chat_stats(chat_id)
     -- text
 end
 
-local function chat_stats2(chat_id)
+local function chat_stats2(chat_id, chat_type)
     local lang = get_lang(chat_id)
     -- Users on chat
     local chattotal = 0
@@ -125,7 +132,7 @@ local function chat_stats2(chat_id)
     for i = 1, #users do
         if tonumber(users[i]) ~= tonumber(our_id) then
             local user_id = users[i]
-            local user_info = get_msgs_user_chat(user_id, chat_id)
+            local user_info = get_msgs_user_chat(user_id, chat_id, 'chat')
             local percentage =(user_info.msgs * 100) / chattotal
             user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
@@ -173,7 +180,7 @@ local function callback_supergroup_members(extra, success, result)
     for k, v in pairsByKeys(result) do
         if tonumber(v.peer_id) ~= tonumber(our_id) then
             local user_id = v.peer_id
-            local user_info = get_msgs_user_chat(user_id, extra.chat_id)
+            local user_info = get_msgs_user_chat(user_id, extra.chat_id, 'channel')
             local percentage =(user_info.msgs * 100) / chattotal
             user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
@@ -194,7 +201,7 @@ local function callback_supergroup_members(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
-local function channel_stats(chat_id)
+local function channel_stats(chat_id, chat_type)
     local lang = get_lang(chat_id)
     -- Users on chat
     local chattotal = 0
@@ -211,7 +218,7 @@ local function channel_stats(chat_id)
     for i = 1, #users do
         if tonumber(users[i]) ~= tonumber(our_id) then
             local user_id = users[i]
-            local user_info = get_msgs_user_chat(user_id, chat_id)
+            local user_info = get_msgs_user_chat(user_id, chat_id, 'channel')
             local percentage =(user_info.msgs * 100) / chattotal
             user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
@@ -235,7 +242,7 @@ local function channel_stats(chat_id)
     -- text
 end
 
-local function channel_stats2(chat_id)
+local function channel_stats2(chat_id, chat_type)
     local lang = get_lang(chat_id)
     -- Users on chat
     local chattotal = 0
@@ -252,7 +259,7 @@ local function channel_stats2(chat_id)
     for i = 1, #users do
         if tonumber(users[i]) ~= tonumber(our_id) then
             local user_id = users[i]
-            local user_info = get_msgs_user_chat(user_id, chat_id)
+            local user_info = get_msgs_user_chat(user_id, chat_id, 'channel')
             local percentage =(user_info.msgs * 100) / chattotal
             user_info.percentage = string.format('%d', percentage)
             table.insert(users_info, user_info)
