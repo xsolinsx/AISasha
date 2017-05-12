@@ -2,7 +2,7 @@
 local function get_msgs_user_chat(user_id, chat_id, chat_type)
     local api_patch = redis:sismember('apipatch', chat_id) or false
 
-    local user_info
+    local user_info = { }
     local uhash = 'user:' .. user_id
     local user = redis:hgetall(uhash)
     local um_hash = 'msgs:' .. user_id .. ':' .. chat_id
