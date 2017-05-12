@@ -37,7 +37,7 @@ local function id_by_from(extra, success, result)
 end
 
 local function username_by_id(extra, success, result)
-    send_large_msg(extra.receiver, result.username or('NOUSER' .. result.print_name))
+    send_large_msg(extra.receiver, result.username or('NOUSER ' ..(result.first_name or result.title) .. ' ' ..(result.last_name or '')))
 end
 
 local function username_by_reply(extra, success, result)
@@ -51,9 +51,9 @@ local function username_by_reply(extra, success, result)
         end
 
         if action and result.action.user then
-            text = result.action.user.username or('NOUSER' .. result.action.user.print_name)
+            text = result.action.user.username or('NOUSER ' .. result.action.user.first_name .. ' ' ..(result.action.user.last_name or ''))
         else
-            text = result.from.username or('NOUSER' .. result.from.print_name)
+            text = result.from.username or('NOUSER ' .. result.from.first_name .. ' ' ..(result.from.last_name or ''))
         end
         send_large_msg(extra.receiver, text)
     else
@@ -64,7 +64,7 @@ end
 local function username_by_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if get_reply_receiver(result) == extra.receiver then
-        send_large_msg(extra.receiver, result.fwd_from.username or('NOUSER' .. result.fwd_from.print_name))
+        send_large_msg(extra.receiver, result.fwd_from.username or('NOUSER ' ..(result.fwd_from.first_name or result.fwd_from.title) .. ' ' ..(result.fwd_from.last_name or '')))
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
@@ -607,7 +607,7 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             else
-                return(msg.from.username or msg.from.print_name) .. '\n' ..(msg.to.id or msg.to.title)
+                return(msg.from.username or('NOUSER ' .. msg.from.first_name .. ' ' ..(msg.from.last_name or ''))) .. '\n' ..(msg.to.username or('NOUSER ' .. msg.to.title))
             end
         end
         if matches[1]:lower() == "getrank" or matches[1]:lower() == "rango" then
