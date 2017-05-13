@@ -703,9 +703,10 @@ return {
         '/faq9 tagalert @AISasha.\n' ..
         '/faq10 impostazioni gruppo divise tra i due bot.\n' ..
         '/faq11 significato impostazioni.\n' ..
-        '/faq12 ruleta @AISashaBot.\n' ..
-        '/faq13 api_patch.\n' ..
-        '/faq14 spam @AISashaBot.',
+        '/faq12 significato muti.\n' ..
+        '/faq13 ruleta @AISashaBot.\n' ..
+        '/faq14 api_patch.\n' ..
+        '/faq15 spam @AISashaBot.',
         faq =
         {
             [1] = 'D: Limiti sasha utente (@AISasha)?\n' ..
@@ -713,6 +714,7 @@ return {
             '*Comandi per risposta a volte non funzionanti (soluzione = inoltra e usa <command> from).\n' ..
             '*Kick = ban.\n' ..
             '*In gruppi con più di 200 membri non riceve più messaggi se non viene messo il tag all\'inizio (di conseguenza lock e mute non funzionano più).\n' ..
+            '*Non legge i messaggi modificati.\n' ..
             'Meno aggiornata rispetto ad @AISashaBot (solitamente dovuto a telegram-cli).\n' ..
             '* = Dovuti a telegram-cli, se sapete come risolvere qualcuno di questi scrivete a @EricSolinas.\n',
             [2] = 'D: Limiti sasha api (@AISashaBot)?\n' ..
@@ -753,11 +755,25 @@ return {
             'Strict => aumento di "pena" da kick a ban.\n' ..
             'Per i gruppi normali la "pena" è sempre il ban\n' ..
             '* = emoji, caratteri di controllo ecc...',
-            [12] = 'D: Perchè non porti ruleta anche su @AISashaAPI?\n' ..
+            [12] = 'D: Cosa significano i muti?\n' ..
+            'R: All => tutto.\n' ..
+            'Audio => audio (non note vocali).\n' ..
+            'Contact => contatti.\n' ..
+            'Document => documenti generici (qualsiasi file inviato come tale).\n' ..
+            'Gif => gifs.\n' ..
+            'Location => posizioni.\n' ..
+            'Photo => foto.\n' ..
+            'Sticker => stickers.\n' ..
+            'Text => testo sia normale che sotto i media.\n' ..
+            'Tgservice => messaggi di servizio (non funzionante per @AISashaBot nei supergruppi*).\n' ..
+            'Video => video.\n' ..
+            'Voice => note vocali.\n' ..
+            '* = limitazione di telegram.',
+            [13] = 'D: Perchè non porti ruleta anche su @AISashaAPI?\n' ..
             'R: Perchè sono sicuro al 90% che il numero di kick sarebbe talmente alto da violare i limiti imposti da telegram causando così malfunzionamenti.',
-            [13] = 'D: Cos\'è l\'api_patch?\n' ..
+            [14] = 'D: Cos\'è l\'api_patch?\n' ..
             'R: L\'api_patch è una modalità di utilizzo di @AISasha che dà la giusta integrazione con @AISashaBot senza creare confusione.',
-            [14] = 'D: Perchè non porti spam anche su @AISashaAPI?\n' ..
+            [15] = 'D: Perchè non porti spam anche su @AISashaAPI?\n' ..
             'R: Perchè sono sicuro al 90% che il numero di messaggi inviati sarebbe talmente alto da violare i limiti imposti da telegram causando così malfunzionamenti, inoltre inviare messaggi dopo tot tempo non è così semplice in LUA.',
         },
 
@@ -1921,9 +1937,10 @@ return {
         '/faq9 tagalert @AISasha.\n' ..
         '/faq10 group settings divided between the bots.\n' ..
         '/faq11 settings meaning.\n' ..
-        '/faq12 ruleta @AISashaBot.\n' ..
-        '/faq13 api_patch.\n' ..
-        '/faq14 spam @AISashaBot.',
+        '/faq12 mutes meaning.\n' ..
+        '/faq13 ruleta @AISashaBot.\n' ..
+        '/faq14 api_patch.\n' ..
+        '/faq15 spam @AISashaBot.',
         faq =
         {
             [1] = 'D: Sasha user\'s limits (@AISasha)?\n' ..
@@ -1931,6 +1948,7 @@ return {
             '*Commands by reply sometimes don\'t work (solution = forward and use <command> from).\n' ..
             '*Kick = ban.\n' ..
             '*In groups with more than 200 members she doesn\'t receive messages anymore if not tagged at the beginning of the message (so locks and mutes don\'t work anymore).\n' ..
+            '*Can\'t read edited messages.\n' ..
             'Less updated compared to @AISashaBot (usually due to telegram-cli).\n' ..
             '* = Due to telegram-cli, if you know how to solve any of these problems contact @EricSolinas.\n',
             [2] = 'D: Sasha api\'s limits (@AISashaBot)?\n' ..
@@ -1971,11 +1989,25 @@ return {
             'Strict => increase punishment from kick to ban.\n' ..
             'For normal groups it\'s always ban.\n' ..
             '* = emojis, control characters etc...',
-            [12] = 'D: Why don\'t you port ruleta on @AISashaAPI?\n' ..
+            [12] = 'D: What do mutes mean?\n' ..
+            'R: All => everything.\n' ..
+            'Audio => audios (not voice notes).\n' ..
+            'Contact => contacts.\n' ..
+            'Document => generic documents (everything sent as a file).\n' ..
+            'Gif => gifs.\n' ..
+            'Location => positions.\n' ..
+            'Photo => photos.\n' ..
+            'Sticker => stickers.\n' ..
+            'Text => normal text or captions.\n' ..
+            'Tgservice => service messages (not working for @AISashaBot on supergroups*).\n' ..
+            'Video => videos.\n' ..
+            'Voice => voice notes.\n' ..
+            '* = telegram\'s limitation.',
+            [13] = 'D: Why don\'t you port ruleta on @AISashaAPI?\n' ..
             'R: Because I\'m 90% sure that kicks number would be high enough to hit telegram limits causing problems.',
-            [13] = 'D: What is the api_patch?\n' ..
+            [14] = 'D: What is the api_patch?\n' ..
             'R: The api_patch is a way in which @AISasha integrates barely perfectly @AISashaBot without creating confusion.',
-            [14] = 'D: Why don\'t you port spam on @AISashaAPI?\n' ..
+            [15] = 'D: Why don\'t you port spam on @AISashaAPI?\n' ..
             'R: Because I\'m 90% sure that sent messages number would be high enough to hit telegram limits causing problems, also sending messages every x time is not so simple in LUA.',
         },
 
