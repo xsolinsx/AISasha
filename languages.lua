@@ -715,6 +715,7 @@ return {
             '*Kick = ban.\n' ..
             '*In gruppi con più di 200 membri non riceve più messaggi se non viene messo il tag all\'inizio (di conseguenza lock e mute non funzionano più).\n' ..
             '*Non legge i messaggi modificati.\n' ..
+            '*Non legge le mentions (i tag di utenti senza username).\n' ..
             'Meno aggiornata rispetto ad @AISashaBot (solitamente dovuto a telegram-cli).\n' ..
             '* = Dovuti a telegram-cli, se sapete come risolvere qualcuno di questi scrivete a @EricSolinas.\n',
             [2] = 'D: Limiti sasha api (@AISashaBot)?\n' ..
@@ -1949,6 +1950,7 @@ return {
             '*Kick = ban.\n' ..
             '*In groups with more than 200 members she doesn\'t receive messages anymore if not tagged at the beginning of the message (so locks and mutes don\'t work anymore).\n' ..
             '*Can\'t read edited messages.\n' ..
+            '*Can\'t read mentions (tags of users without an username).\n' ..
             'Less updated compared to @AISashaBot (usually due to telegram-cli).\n' ..
             '* = Due to telegram-cli, if you know how to solve any of these problems contact @EricSolinas.\n',
             [2] = 'D: Sasha api\'s limits (@AISashaBot)?\n' ..
