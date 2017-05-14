@@ -270,6 +270,7 @@ return {
         autoSendBackupDb = 'Ti sto inviando il backup automatico.',
         userAuthorized = 'Utente autorizzato.',
         userDeauthorized = 'Utente deautorizzato.',
+        dataReloaded = 'Dati gruppi ricaricati.',
 
         -- anti_spam.lua --
         blockedForSpam = ' bloccato (SPAM).',
@@ -812,6 +813,7 @@ return {
             '#authorizereboot <user_id>: Sasha autorizza <user_id> a riavviare la sua versione API.',
             '#deauthorizereboot <user_id>: Sasha deautorizza <user_id> a riavviare la sua versione API.',
             '#list reboot authorized: Sasha manda la lista di utenti autorizzati a riavviare la sua versione API.',
+            '#reloaddata: Sasha ricarica i dati dei gruppi.',
         },
 
         banhammer =
@@ -1504,6 +1506,7 @@ return {
         autoSendBackupDb = 'I\'m sending you the automatic backup.',
         userAuthorized = 'Utente authorized.',
         userDeauthorized = 'Utente deauthorized.',
+        dataReloaded = 'Groups\' data reloaded.',
 
         -- anti_spam.lua --
         blockedForSpam = ' blocked (SPAM).',
@@ -2047,6 +2050,7 @@ return {
             '#authorizereboot <user_id>: Sasha authorize <user_id> to reboot her API version.',
             '#deauthorizereboot <user_id>: Sasha deauthorize <user_id> to reboot her API version.',
             '#list reboot authorized: Sasha sends the list of users that are authorized to reboot her API version.',
+            '#reloaddata: Sasha reloads groups\' data.',
         },
 
         banhammer =

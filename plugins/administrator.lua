@@ -218,6 +218,10 @@ local function run(msg, matches)
             import_chat_link(hash, ok_cb, false)
         end
         if is_sudo(msg) then
+            if matches[1]:lower() == "reloaddata" then
+                data = load_data(_config.moderation.data)
+                return langs[msg.lang].dataReloaded
+            end
             if matches[1]:lower() == "update" then
                 return io.popen('git pull'):read('*all')
             end
@@ -390,6 +394,7 @@ return {
         "^[#!/]([Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Rr][Ee][Bb][Oo][Oo][Tt]) (%d+)$",
         "^[#!/]([Dd][Ee][Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Rr][Ee][Bb][Oo][Oo][Tt]) (%d+)$",
         "^[#!/]([Ll][Ii][Ss][Tt] [Rr][Ee][Bb][Oo][Oo][Tt] [Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Dd])$",
+        "^[#!/]([Rr][Ee][Ll][Oo][Aa][Dd][Dd][Aa][Tt][Aa])$",
         "%[(photo)%]",
         -- pm
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii][Aa]) (%d+) (.*)$",
@@ -464,6 +469,7 @@ return {
         "#authorizereboot <user_id>",
         "#deauthorizereboot <user_id>",
         "#list reboot authorized",
+        "#reloaddata",
     },
 }
 -- By @imandaneshi :)
