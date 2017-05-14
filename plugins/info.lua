@@ -262,7 +262,7 @@ local function info_by_username(extra, success, result)
             otherinfo = otherinfo .. 'MUTED '
         end
         if string.match(get_user_warns(result.peer_id, extra.chat_id), '%d+') then
-            otherinfo = otherinfo .. string.match(getUserWarns(result.peer_id, extra.chat_id), '%d+') .. ' WARN '
+            otherinfo = otherinfo .. string.match(get_user_warns(result.peer_id, extra.chat_id), '%d+') .. ' WARN '
         end
         if otherinfo == langs[lang].otherInfo then
             otherinfo = otherinfo .. langs[lang].noOtherInfo
@@ -332,7 +332,7 @@ local function info_by_reply(extra, success, result)
                 otherinfo = otherinfo .. 'MUTED '
             end
             if string.match(get_user_warns(result.action.user.peer_id, result.to.peer_id), '%d+') then
-                otherinfo = otherinfo .. string.match(getUserWarns(result.action.user.peer_id, result.to.peer_id), '%d+') .. ' WARN '
+                otherinfo = otherinfo .. string.match(get_user_warns(result.action.user.peer_id, result.to.peer_id), '%d+') .. ' WARN '
             end
             if otherinfo == langs[lang].otherInfo then
                 otherinfo = otherinfo .. langs[lang].noOtherInfo
@@ -385,7 +385,7 @@ local function info_by_reply(extra, success, result)
                 otherinfo = otherinfo .. 'MUTED '
             end
             if string.match(get_user_warns(result.from.peer_id, result.to.peer_id), '%d+') then
-                otherinfo = otherinfo .. string.match(getUserWarns(result.from.peer_id, result.to.peer_id), '%d+') .. ' WARN '
+                otherinfo = otherinfo .. string.match(get_user_warns(result.from.peer_id, result.to.peer_id), '%d+') .. ' WARN '
             end
             if otherinfo == langs[lang].otherInfo then
                 otherinfo = otherinfo .. langs[lang].noOtherInfo
@@ -459,7 +459,7 @@ local function info_by_from(extra, success, result)
                 otherinfo = otherinfo .. 'MUTED '
             end
             if string.match(get_user_warns(result.fwd_from.peer_id, result.to.peer_id), '%d+') then
-                otherinfo = otherinfo .. string.match(getUserWarns(result.fwd_from.peer_id, result.to.peer_id), '%d+') .. ' WARN '
+                otherinfo = otherinfo .. string.match(get_user_warns(result.fwd_from.peer_id, result.to.peer_id), '%d+') .. ' WARN '
             end
             if otherinfo == langs[lang].otherInfo then
                 otherinfo = otherinfo .. langs[lang].noOtherInfo
@@ -523,7 +523,7 @@ local function info_by_id(extra, success, result)
         otherinfo = otherinfo .. 'MUTED '
     end
     if string.match(get_user_warns(result.peer_id, extra.chat_id), '%d+') then
-        otherinfo = otherinfo .. string.match(getUserWarns(result.peer_id, extra.chat_id), '%d+') .. ' WARN '
+        otherinfo = otherinfo .. string.match(get_user_warns(result.peer_id, extra.chat_id), '%d+') .. ' WARN '
     end
     if otherinfo == langs[lang].otherInfo then
         otherinfo = otherinfo .. langs[lang].noOtherInfo
@@ -736,7 +736,7 @@ local function run(msg, matches)
                     otherinfo = otherinfo .. 'MUTED, '
                 end
                 if string.match(get_user_warns(msg.from.id, chat), '%d+') then
-                    otherinfo = otherinfo .. string.match(getUserWarns(msg.from.id, chat), '%d+') .. ' WARN '
+                    otherinfo = otherinfo .. string.match(get_user_warns(msg.from.id, chat), '%d+') .. ' WARN '
                 end
                 if otherinfo == langs[msg.lang].otherInfo then
                     otherinfo = otherinfo .. langs[msg.lang].noOtherInfo
@@ -843,7 +843,7 @@ local function run(msg, matches)
             otherinfo = otherinfo .. 'MUTED, '
         end
         if string.match(get_user_warns(msg.from.id, chat), '%d+') then
-            otherinfo = otherinfo .. string.match(getUserWarns(msg.from.id, chat), '%d+') .. ' WARN '
+            otherinfo = otherinfo .. string.match(get_user_warns(msg.from.id, chat), '%d+') .. ' WARN '
         end
         if otherinfo == langs[msg.lang].otherInfo then
             otherinfo = otherinfo .. langs[msg.lang].noOtherInfo
@@ -963,7 +963,7 @@ local function pre_process(msg)
                         otherinfo = otherinfo .. 'MUTED '
                     end
                     if string.match(get_user_warns(msg.fwd_from.peer_id, msg.to.id), '%d+') then
-                        otherinfo = otherinfo .. string.match(getUserWarns(msg.fwd_from.peer_id, msg.to.id), '%d+') .. ' WARN '
+                        otherinfo = otherinfo .. string.match(get_user_warns(msg.fwd_from.peer_id, msg.to.id), '%d+') .. ' WARN '
                     end
                     if otherinfo == langs[msg.lang].otherInfo then
                         otherinfo = otherinfo .. langs[msg.lang].noOtherInfo
