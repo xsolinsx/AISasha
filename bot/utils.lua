@@ -1090,13 +1090,9 @@ function get_user_warns(user_id, chat_id)
 
     if hashonredis then
         warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', tostring(hashonredis))
-        send_large_msg('chat#id' .. chat_id, warn_msg)
-        send_large_msg('channel#id' .. chat_id, warn_msg)
         return warn_msg
     else
         warn_msg = string.gsub(string.gsub(warn_msg, 'Y', warn_chat), 'X', '0')
-        send_large_msg('chat#id' .. chat_id, warn_msg)
-        send_large_msg('channel#id' .. chat_id, warn_msg)
         return warn_msg
     end
 end

@@ -148,14 +148,15 @@ local function getWarn_by_username(extra, success, result)
         send_large_msg(extra.receiver, langs[lang].noUsernameFound)
         return
     end
-    get_user_warns(result.peer_id, extra.chat_id)
+    send_large_msg('chat#id' .. extra.chat_id, get_user_warns(result.peer_id, extra.chat_id))
+    send_large_msg('channel#id' .. extra.chat_id, get_user_warns(result.peer_id, extra.chat_id))
     savelog(extra.chat_id, "[" .. extra.executer .. "] get warns of " .. result.peer_id .. " Y")
 end
 
 local function getWarn_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if get_reply_receiver(result) == extra.receiver then
-        get_user_warns(result.from.peer_id, result.to.peer_id)
+        send_large_msg(extra.receiver, get_user_warns(result.from.peer_id, result.to.peer_id))
         savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.from.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)
@@ -165,7 +166,7 @@ end
 local function getWarn_from(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if get_reply_receiver(result) == extra.receiver then
-        get_user_warns(result.fwd_from.peer_id, result.to.peer_id)
+        send_large_msg(extra.receiver, get_user_warns(result.fwd_from.peer_id, result.to.peer_id))
         savelog(result.to.peer_id, "[" .. extra.executer .. "] get warns of " .. result.fwd_from.peer_id .. " Y")
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)
@@ -722,7 +723,7 @@ local function run(msg, matches)
                         end
                     elseif matches[2] and matches[2] ~= '' then
                         if string.match(matches[2], '^%d+$') then
-                            get_user_warns(msg.from.id, msg.to.id)
+                            send_large_msg(get_receiver(msg), get_user_warns(msg.from.id, msg.to.id))
                         else
                             resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), getWarn_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = receiver })
                         end
