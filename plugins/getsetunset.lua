@@ -1,4 +1,4 @@
-﻿local function get_variables_hash(msg, global)
+local function get_variables_hash(msg, global)
     if global then
         if not redis:get(msg.to.id .. ':gvariables') then
             return 'gvariables'
@@ -15,6 +15,24 @@
             return 'channel:' .. msg.to.id .. ':variables'
         end
         return false
+    end
+end
+
+local function list_variables(msg, global)
+    local hash = nil
+    if global then
+        hash = get_variables_hash(msg, true)
+    else
+        hash = get_variables_hash(msg, false)
+    end
+
+    if hash then
+        local names = redis:hkeys(hash)
+        local text = ''
+        for i = 1, #names do
+            text = text .. names[i]:gsub('_', ' ') .. '\n'
+        end
+        return text
     end
 end
 
@@ -39,28 +57,180 @@ local function get_value(msg, var_name)
     end
 end
 
-local function list_variables(msg, global)
-    local hash = nil
+local function get_rules(chat_id)
+    local lang = get_lang(chat_id)
+    if not data[tostring(chat_id)]['rules'] then
+        return langs[lang].noRules
+    end
+    local rules = data[tostring(chat_id)]['rules']
+    return rules
+end
+
+local function adjust_value(value, chat, user)
+    if string.find(value, '$chatid') then
+        value = value:gsub('$chatid', chat.id)
+    end
+    if string.find(value, '$chatname') then
+        value = value:gsub('$chatname', chat.title)
+    end
+    if string.find(value, '$chatusername') then
+        if chat.username then
+            value = value:gsub('$chatusername', '@' .. chat.username)
+        else
+            value = value:gsub('$chatusername', 'NO CHAT USERNAME')
+        end
+    end
+    if string.find(value, '$rules') then
+        value = value:gsub('$rules', get_rules(chat.id))
+    end
+    if string.find(value, '$userid') then
+        value = value:gsub('$userid', user.id)
+    end
+    if string.find(value, '$firstname') then
+        value = value:gsub('$firstname', user.first_name)
+    end
+    if string.find(value, '$lastname') then
+        if user.last_name then
+            value = value:gsub('$lastname', user.last_name)
+        end
+    end
+    if string.find(value, '$printname') then
+        user.print_name = user.first_name
+        if user.last_name then
+            user.print_name = user.print_name .. ' ' .. user.last_name
+        end
+        value = value:gsub('$printname', user.print_name)
+    end
+    if string.find(value, '$username') then
+        if user.username then
+            value = value:gsub('$username', '@' .. user.username)
+        else
+            value = value:gsub('$username', 'NO USERNAME')
+        end
+    end
+    if string.find(value, '$grouplink') then
+        if data[tostring(chat.id)].settings.set_link then
+            value = value:gsub('$grouplink', data[tostring(chat.id)].settings.set_link)
+        else
+            value = value:gsub('$grouplink', 'NO GROUP LINK SET')
+        end
+    end
+    return value
+end
+
+local function set_unset_variables_hash(msg, global)
     if global then
-        hash = get_variables_hash(msg, true)
+        return 'gvariables'
     else
-        hash = get_variables_hash(msg, false)
+        if msg.to.type == 'user' then
+            return 'user:' .. msg.from.id .. ':variables'
+        end
+        if msg.to.type == 'chat' then
+            return 'chat:' .. msg.to.id .. ':variables'
+        end
+        if msg.to.type == 'channel' then
+            return 'channel:' .. msg.to.id .. ':variables'
+        end
+        return false
+    end
+end
+
+local function set_value(msg, name, value, global)
+    if (not name or not value) then
+        return langs[msg.lang].errorTryAgain
     end
 
+    local hash = set_unset_variables_hash(msg, global)
     if hash then
-        local names = redis:hkeys(hash)
-        local text = ''
-        for i = 1, #names do
-            text = text .. names[i]:gsub('_', ' ') .. '\n'
+        redis:hset(hash, name, value)
+        if global then
+            return name .. langs[msg.lang].gSaved
+        else
+            return name .. langs[msg.lang].saved
         end
-        return text
+    end
+end
+
+local function set_media(msg, name)
+    if not name then
+        return langs[msg.lang].errorTryAgain
+    end
+
+    local hash = set_unset_variables_hash(msg)
+    if hash then
+        redis:hset(hash, 'waiting', name)
+        return langs[msg.lang].sendMedia
+    end
+end
+
+local function unset_var(msg, name, global)
+    if (not name) then
+        return langs[msg.lang].errorTryAgain
+    end
+
+    local hash = set_unset_variables_hash(msg, global)
+    if hash then
+        redis:hdel(hash, name)
+        if global then
+            return name .. langs[msg.lang].gDeleted
+        else
+            return name .. langs[msg.lang].deleted
+        end
+    end
+end
+
+local function callback(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if success and result then
+        local file
+        if extra.media == 'photo' then
+            file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.jpg'
+        elseif extra.media == 'audio' then
+            file = 'data/savedmedia/' .. extra.hash .. extra.name .. '.ogg'
+        end
+        file = file:gsub(':', '.')
+        print('File downloaded to:', result)
+        os.rename(result, file)
+        print('File moved to:', file)
+        redis:hset(extra.hash, extra.name, file)
+        redis:hdel(extra.hash, 'waiting')
+        print(file)
+        send_large_msg(extra.receiver, langs[lang].mediaSaved)
+    else
+        send_large_msg(extra.receiver, langs[lang].errorDownloading .. extra.hash .. ' - ' .. extra.name .. ' - ' .. extra.receiver)
     end
 end
 
 local function run(msg, matches)
+    local hash = set_unset_variables_hash(msg, false)
+    if msg.media then
+        if hash then
+            local name = redis:hget(hash, 'waiting')
+            if name then
+                if is_momod(msg) then
+                    if msg.media.type == 'photo' then
+                        load_photo(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                    elseif msg.media.type == 'audio' then
+                        load_document(msg.id, callback, { receiver = get_receiver(msg), hash = hash, name = name, media = msg.media.type })
+                    end
+                    return
+                else
+                    return langs[msg.lang].require_mod
+                end
+            end
+            return
+        else
+            return langs[msg.lang].nothingToSet
+        end
+    end
+
     if not msg.api_patch then
-        if (matches[1]:lower() == 'get' or matches[1]:lower() == 'getlist' or matches[1]:lower() == 'sasha lista') then
-            return list_variables(msg, false)
+        if matches[1]:lower() == 'get' or matches[1]:lower() == 'getlist' or matches[1]:lower() == 'sasha lista' then
+            if not matches[2] then
+                return list_variables(msg, false)
+            else
+                return get_value(msg, matches[2]:lower())
+            end
         end
 
         if (matches[1]:lower() == 'getglobal' or matches[1]:lower() == 'getgloballist' or matches[1]:lower() == 'sasha lista globali') then
@@ -120,6 +290,118 @@ local function run(msg, matches)
                 return langs[msg.lang].globalDisable
             else
                 return langs[msg.lang].require_owner
+            end
+        end
+        if matches[1]:lower() == 'importgroupsets' and matches[2] then
+            if is_owner(msg) then
+                local tab = matches[2]:split('\nXXXxxxXXX\n')
+                local i = 0
+                for k, command in pairs(tab) do
+                    local name, value = string.match(command, '/set ([^%s]+) (.+)')
+                    name = string.sub(name:lower(), 1, 50)
+                    value = string.sub(value, 1, 4096)
+                    if string.match(value, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                        return langs[msg.lang].autocrossexecDenial
+                    end
+                    if string.match(value, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                        return langs[msg.lang].autocrossexecDenial
+                    end
+                    set_value(msg, name, value, false)
+                    i = i + 1
+                end
+                return i .. langs[msg.lang].setsRestored
+            else
+                return langs[msg.lang].require_owner
+            end
+        end
+
+        if matches[1]:lower() == 'importglobalsets' and matches[2] then
+            if is_admin1(msg) then
+                local tab = matches[2]:split('\nXXXxxxXXX\n')
+                local i = 0
+                vardump(tab)
+                for k, command in pairs(tab) do
+                    local name, value = string.match(command, '/setglobal ([^%s]+) (.+)')
+                    name = string.sub(name:lower(), 1, 50)
+                    value = string.sub(value, 1, 4096)
+                    if string.match(value, '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                        return langs[msg.lang].autocrossexecDenial
+                    end
+                    if string.match(value, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                        return langs[msg.lang].autocrossexecDenial
+                    end
+                    set_value(msg, name, value, true)
+                    i = i + 1
+                end
+                return i .. langs[msg.lang].globalSetsRestored
+            else
+                return langs[msg.lang].require_admin
+            end
+        end
+
+        if matches[1]:lower() == 'cancel' or matches[1]:lower() == 'sasha annulla' or matches[1]:lower() == 'annulla' then
+            if is_momod(msg) then
+                redis:hdel(hash, 'waiting')
+                return langs[msg.lang].cancelled
+            else
+                return langs[msg.lang].require_mod
+            end
+        end
+
+        if matches[1]:lower() == 'setmedia' or matches[1]:lower() == 'sasha setta media' or matches[1]:lower() == 'setta media' then
+            if is_momod(msg) then
+                local name = string.sub(matches[2]:lower(), 1, 50)
+                return set_media(msg, name)
+            else
+                return langs[msg.lang].require_mod
+            end
+        end
+
+        if matches[1]:lower() == 'set' or matches[1]:lower() == 'sasha setta' or matches[1]:lower() == 'setta' then
+            if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].autocrossexecDenial
+            end
+            if string.match(matches[3], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].autocrossexecDenial
+            end
+            if is_momod(msg) then
+                local name = string.sub(matches[2]:lower(), 1, 50)
+                local value = string.sub(matches[3], 1, 4096)
+                return set_value(msg, name, value, false)
+            else
+                return langs[msg.lang].require_mod
+            end
+        end
+
+        if matches[1]:lower() == 'setglobal' then
+            if string.match(matches[3], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].autocrossexecDenial
+            end
+            if string.match(matches[3], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                return langs[msg.lang].autocrossexecDenial
+            end
+            if is_admin1(msg) then
+                local name = string.sub(matches[2]:lower(), 1, 50)
+                local value = string.sub(matches[3], 1, 4096)
+                return set_value(msg, name, value, true)
+            else
+                return langs[msg.lang].require_admin
+            end
+        end
+
+        if matches[1]:lower() == 'unset' or matches[1]:lower() == 'sasha unsetta' or matches[1]:lower() == 'unsetta' then
+            if is_momod(msg) then
+                return unset_var(msg, string.gsub(string.sub(matches[2], 1, 50), ' ', '_'):lower(), false)
+            else
+                return langs[msg.lang].require_mod
+            end
+        end
+
+        if matches[1]:lower() == 'unsetglobal' then
+            if is_admin1(msg) then
+                unset_var(msg, string.gsub(string.sub(matches[2], 1, 50), ' ', '_'):lower(), true)
+            else
+                return langs[msg.lang].require_admin
             end
         end
     end
@@ -190,7 +472,7 @@ local function pre_process(msg, matches)
                     if found then
                         if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
                             -- if not media
-                            reply_msg(msg.id, get_value(msg, word:lower()), ok_cb, false)
+                            reply_msg(msg.id, adjust_value(get_value(msg, word:lower()), msg.to, msg.from), ok_cb, false)
                         elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
                             -- if picture
                             if io.popen('find ' .. answer):read("*all") ~= '' then
@@ -269,7 +551,7 @@ local function pre_process(msg, matches)
                         print('GET FOUND')
                         if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
                             -- if not media
-                            reply_msg(msg.id, get_value(msg, word:lower()), ok_cb, false)
+                            reply_msg(msg.id, adjust_value(get_value(msg, word:lower()), msg.to, msg.from), ok_cb, false)
                         elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
                             -- if picture
                             if io.popen('find ' .. answer):read("*all") ~= '' then
@@ -293,18 +575,46 @@ return {
     description = "GET",
     patterns =
     {
+        --- GET
+        "^[#!/]([Gg][Ee][Tt]) (.*)$",
         "^[#!/]([Gg][Ee][Tt][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Gg][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ll][Ii][Ss][Tt])$",
         "^[#!/]([Ee][Nn][Aa][Bb][Ll][Ee][Gg][Ll][Oo][Bb][Aa][Ll])$",
         "^[#!/]([Dd][Ii][Ss][Aa][Bb][Ll][Ee][Gg][Ll][Oo][Bb][Aa][Ll])$",
-        "^[#!/]([Ee][Xx][Pp][Oo][Rr][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ss][Ee][Tt][Ss])$",
-        "^[#!/]([Ee][Xx][Pp][Oo][Rr][Tt][Gg][Rr][Oo][Uu][Pp][Ss][Ee][Tt][Ss])$",
+        -- "^[#!/]([Ee][Xx][Pp][Oo][Rr][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ss][Ee][Tt][Ss])$",
+        -- "^[#!/]([Ee][Xx][Pp][Oo][Rr][Tt][Gg][Rr][Oo][Uu][Pp][Ss][Ee][Tt][Ss])$",
         -- getlist
         "^[#!/]([Gg][Ee][Tt])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa])$",
         -- getgloballist
         "^[#!/]([Gg][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll])$",
         "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Gg][Ll][Oo][Bb][Aa][Ll][Ii])$",
+
+        --- SET
+        "^[#!/]([Ss][Ee][Tt]) ([^%s]+) (.+)$",
+        "^[#!/]([Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll]) ([^%s]+) (.+)$",
+        "^[#!/]([Ss][Ee][Tt][Mm][Ee][Dd][Ii][Aa]) ([^%s]+)$",
+        "^[#!/]([Cc][Aa][Nn][Cc][Ee][Ll])$",
+        -- "^[#!/]([Ii][Mm][Pp][Oo][Rr][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ss][Ee][Tt][Ss]) (.+)$",
+        -- "^[#!/]([Ii][Mm][Pp][Oo][Rr][Tt][Gg][Rr][Oo][Uu][Pp][Ss][Ee][Tt][Ss]) (.+)$",
+        "%[(photo)%]",
+        "%[(audio)%]",
+        -- set
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ee][Tt][Tt][Aa]) ([^%s]+) (.+)$",
+        "^([Ss][Ee][Tt][Tt][Aa]) ([^%s]+) (.+)$",
+        -- setmedia
+        "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ee][Tt][Tt][Aa] [Mm][Ee][Dd][Ii][Aa]) ([^%s]+)$",
+        "^([Ss][Ee][Tt][Tt][Aa] [Mm][Ee][Dd][Ii][Aa]) ([^%s]+)$",
+        -- cancel
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Nn][Nn][Uu][Ll][Ll][Aa])$",
+        "^([Aa][Nn][Nn][Uu][Ll][Ll][Aa])$",
+
+        --- UNSET
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt]) (.*)$",
+        "^[#!/]([Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll]) (.*)$",
+        -- unset
+        "^([Ss][Aa][Ss][Hh][Aa] [Uu][Nn][Ss][Ee][Tt][Tt][Aa]) (.*)$",
+        "^([Uu][Nn][Ss][Ee][Tt][Tt][Aa]) (.*)$",
     },
     pre_process = pre_process,
     run = run,
@@ -312,10 +622,19 @@ return {
     syntax =
     {
         "USER",
-        "(#getlist|#get|sasha lista)",
+        "#get <var_name>",
+        "(#get|#getlist|sasha lista)",
         "(#getgloballist|#getglobal|sasha lista globali)",
+        "MOD",
+        "(#set|[sasha] setta) <var_name>|<pattern> <text>",
+        "(#setmedia|[sasha] setta media) <var_name>|<pattern>",
+        "(#cancel|[sasha] annulla)",
+        "(#unset|[sasha] unsetta) <var_name>|<pattern>",
         "OWNER",
         "#enableglobal",
         "#disableglobal",
+        "ADMIN",
+        "#setglobal <var_name>|<pattern> <text>",
+        "#unsetglobal <var_name>|<pattern>",
     },
 }
