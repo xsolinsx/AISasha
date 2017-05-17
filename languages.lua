@@ -411,7 +411,7 @@ return {
         globalSetsRestored = ' global sets ripristinati.',
         deleted = ' eliminato.',
         gDeleted = ' variabile globale eliminata.',
-        getCommand = 'Se scrivi X ti risponderò ',
+        getCommand = 'Se scrivi "X" ti risponderò ',
 
         -- goodbyewelcome.lua --
         newWelcome = 'Nuovo messaggio di benvenuto:\n',
@@ -622,6 +622,8 @@ return {
         pluginNotDisabled = '✔️ Questo plugin non è disabilitato su questa chat.',
         pluginEnabledAgain = ' nuovamente abilitato.',
         pluginsReloaded = '💊 Plugins ricaricati.',
+        pluginsList = 'Lista plugins: ',
+        pluginsIntro = 'Legenda plugins:\n💻 Di sistema\n✅ Abilitato\n🚫 Disabilitato\n❌ Disabilitato nella chat\n✔️ Già abilitato\n✖️ Già disabilitato\n❔ Non esistente',
 
         -- pokedex.lua --
         noPoke = 'Nessun pokémon trovato.',
@@ -1224,12 +1226,13 @@ return {
             'OWNER',
             '(#plugins|[sasha] lista plugins): Sasha mostra una lista di tutti i plugins.',
             '(#disabledlist|([sasha] lista disabilitati|disattivati)): Sasha mostra una lista dei plugins disabilitati su questa chat.',
-            '(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> chat: Sasha riabilita <plugin> su questa chat.',
-            '(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat: Sasha disabilita <plugin> su questa chat.',
+            '(#enable|[sasha] abilita|[sasha] attiva) <plugin> chat: Sasha riabilita <plugin> su questa chat.',
+            '(#disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat: Sasha disabilita <plugin> su questa chat.',
             'SUDO',
-            '(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]: Sasha abilita <plugin>, se specificato solo su questa chat.',
-            '(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]: Sasha disabilita <plugin>, se specificato solo su questa chat.',
-            '(#[plugin[s]] reload|[sasha] ricarica): Sasha ricarica tutti i plugins.',
+            '(#plugins|[sasha] lista plugins) [chat]: Sasha mostra una lista di tutti i plugins, se [chat] è specificato permette di modificare la lista del gruppo in cui è stato eseguito il comando.',
+            '(#enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]: Sasha abilita <plugin>, se specificato solo su questa chat.',
+            '(#disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]: Sasha disabilita <plugin>, se specificato solo su questa chat.',
+            '(#reload|[sasha] ricarica): Sasha ricarica tutti i plugins.',
         },
 
         pokedex =
@@ -1624,7 +1627,7 @@ return {
         globalSetsRestored = ' global sets restored.',
         deleted = ' deleted.',
         gDeleted = ' global variable deleted.',
-        getCommand = 'If you write X I will answer ',
+        getCommand = 'If you write "X" I will answer ',
 
         -- goodbyewelcome.lua --
         newWelcome = 'New welcome message:\n',
@@ -1836,6 +1839,8 @@ return {
         pluginNotDisabled = '✔️ This plugin is not disabled on chat.',
         pluginEnabledAgain = ' enabled on chat again.',
         pluginsReloaded = '💊 Plugins reloaded.',
+        pluginsList = 'Plugins\' list: ',
+        pluginsIntro = 'Plugins\' legend:\n💻 System\n✅ Enabled\n🚫 Disabled\n❌ Disabled on chat\n✔️ Already enabled\n✖️ Already disabled\n❔ Not existent',
 
         -- pokedex.lua --
         noPoke = 'No pokémon found.',
@@ -2424,12 +2429,13 @@ return {
             'OWNER',
             '(#plugins|[sasha] lista plugins): Sasha sends a list of all plugins.',
             '(#disabledlist|([sasha] lista disabilitati|disattivati)): Sasha sends disabled plugins list.',
-            '(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> chat: Sasha re enables <plugin> on this chat.',
-            '(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat: Sasha disables <plugin> on this chat.',
+            '(#enable|[sasha] abilita|[sasha] attiva) <plugin> chat: Sasha re enables <plugin> on this chat.',
+            '(#disable|[sasha] disabilita|[sasha] disattiva) <plugin> chat: Sasha disables <plugin> on this chat.',
             'SUDO',
-            '(#[plugin[s]] enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]: Sasha enables <plugin>, if the specified just on chat.',
-            '(#[plugin[s]] disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]: Sasha disables <plugin>, if the specified just on chat.',
-            '(#[plugin[s]] reload|[sasha] ricarica): Sasha reloads all plugins.',
+            '(#plugins|[sasha] lista plugins) [chat]: Sasha sends a list of all plugins, if [chat] is specified it allows to see the plugins\' list of the group in which the command was executed.',
+            '(#enable|[sasha] abilita|[sasha] attiva) <plugin> [chat]: Sasha enables <plugin>, if the specified just on chat.',
+            '(#disable|[sasha] disabilita|[sasha] disattiva) <plugin> [chat]: Sasha disables <plugin>, if the specified just on chat.',
+            '(#reload|[sasha] ricarica): Sasha reloads all plugins.',
         },
 
         pokedex =
