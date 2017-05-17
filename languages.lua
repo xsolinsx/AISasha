@@ -401,6 +401,17 @@ return {
         -- get.lua --
         globalEnable = 'Variabili globali abilitate su questa chat.',
         globalDisable = 'Variabili globali disabilitate su questa chat.',
+        saved = ' salvato.',
+        gSaved = ' variabile globale salvata.',
+        sendMedia = 'Mandami il media che vuoi salvare (audio o foto).',
+        cancelled = 'Annullato.',
+        nothingToSet = 'Niente da salvare.',
+        mediaSaved = 'Media salvato.',
+        setsRestored = ' sets ripristinati.',
+        globalSetsRestored = ' global sets ripristinati.',
+        deleted = ' eliminato.',
+        gDeleted = ' variabile globale eliminata.',
+        getCommand = 'Se scrivi X ti risponderò ',
 
         -- goodbyewelcome.lua --
         newWelcome = 'Nuovo messaggio di benvenuto:\n',
@@ -643,16 +654,6 @@ return {
         ruletaDeathPercentage = 'Le probabilità di morire sono del ',
         everyone = 'chiunque',
 
-        -- set.lua --
-        saved = ' salvato.',
-        gSaved = ' variabile globale salvata.',
-        sendMedia = 'Mandami il media che vuoi salvare (audio o foto).',
-        cancelled = 'Annullato.',
-        nothingToSet = 'Niente da salvare.',
-        mediaSaved = 'Media salvato.',
-        setsRestored = ' sets ripristinati.',
-        globalSetsRestored = ' global sets ripristinati.',
-
         --[[
         -- spam.lua --
         msgSet = 'Messaggio impostato.',
@@ -673,10 +674,6 @@ return {
 
         -- tempmessage.lua --
         wrongTimeFormat = 'Formato timer errato.',
-
-        -- unset.lua --
-        deleted = ' eliminato.',
-        gDeleted = ' variabile globale eliminata.',
 
         -- whitelist.lua --
         userBot = 'Utente/Bot ',
@@ -1617,6 +1614,17 @@ return {
         -- get.lua --
         globalEnable = 'Global variables enabled on this chat.',
         globalDisable = 'Global variables disabled on this chat.',
+        saved = ' saved.',
+        gSaved = ' global variable saved.',
+        sendMedia = 'Send me the media you want to save (audio or picture).',
+        cancelled = 'Cancelled.',
+        nothingToSet = 'Nothing to set.',
+        mediaSaved = 'Media saved.',
+        setsRestored = ' sets restored.',
+        globalSetsRestored = ' global sets restored.',
+        deleted = ' deleted.',
+        gDeleted = ' global variable deleted.',
+        getCommand = 'If you write X I will answer ',
 
         -- goodbyewelcome.lua --
         newWelcome = 'New welcome message:\n',
@@ -1860,16 +1868,6 @@ return {
         ruletaDeathPercentage = 'Chances to die are ',
         everyone = 'everyone',
 
-        -- set.lua --
-        saved = ' saved.',
-        gSaved = ' global variable saved.',
-        sendMedia = 'Send me the media you want to save (audio or picture).',
-        cancelled = 'Cancelled.',
-        nothingToSet = 'Nothing to set.',
-        mediaSaved = 'Media saved.',
-        setsRestored = ' sets restored.',
-        globalSetsRestored = ' global sets restored.',
-
         -- spam.lua --
         --[[
         msgSet = 'Message set.',
@@ -1890,10 +1888,6 @@ return {
 
         -- tempmessage.lua --
         wrongTimeFormat = 'Wrong time format.',
-
-        -- unset.lua --
-        deleted = ' deleted.',
-        gDeleted = ' global variable deleted.',
 
         -- whitelist.lua --
         userBot = 'User/Bot ',
