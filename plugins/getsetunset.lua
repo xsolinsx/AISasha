@@ -229,7 +229,12 @@ local function run(msg, matches)
             if not matches[2] then
                 return list_variables(msg, false)
             else
-                return langs[msg.lang].getCommand:gsub('X', matches[2]:lower()) .. get_value(msg, matches[2]:lower())
+                local value = get_value(msg, matches[2]:lower())
+                if value then
+                    return langs[msg.lang].getCommand:gsub('X', matches[2]:lower()) .. value
+                else
+                    return langs[msg.lang].noSetValue
+                end
             end
         end
 
