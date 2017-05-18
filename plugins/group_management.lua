@@ -397,7 +397,10 @@ local function checkMatchesMuteUnmute(txt)
     if txt:lower() == 'video' then
         return true
     end
-    if txt:lower() == 'voice' then
+    if txt:lower() == 'video_note' then
+        return true
+    end
+    if txt:lower() == 'voice_note' then
         return true
     end
     return false
@@ -493,7 +496,8 @@ local function check_member_autorealm(extra, success, result)
                         text = false,
                         tgservice = false,
                         video = false,
-                        voice = false,
+                        video_note = false,
+                        voice_note = false,
                     },
                     strict = false,
                     warn_max = 3,
@@ -557,7 +561,8 @@ local function check_member_realm_add(extra, success, result)
                         text = false,
                         tgservice = false,
                         video = false,
-                        voice = false,
+                        video_note = false,
+                        voice_note = false,
                     },
                     strict = false,
                     warn_max = 3,
@@ -621,7 +626,8 @@ function check_member_group(extra, success, result)
                         text = false,
                         tgservice = false,
                         video = false,
-                        voice = false,
+                        video_note = false,
+                        voice_note = false,
                     },
                     strict = false,
                     warn_max = 3,
@@ -685,7 +691,8 @@ local function check_member_modadd(extra, success, result)
                         text = false,
                         tgservice = false,
                         video = false,
-                        voice = false,
+                        video_note = false,
+                        voice_note = false,
                     },
                     strict = false,
                     warn_max = 3,
@@ -1075,7 +1082,8 @@ local function check_member_super(extra, success, result)
                         text = false,
                         tgservice = false,
                         video = false,
-                        voice = false,
+                        video_note = false,
+                        voice_note = false,
                     },
                     strict = false,
                     warn_max = 3,
@@ -3419,8 +3427,8 @@ return {
         "(#unsetlink|sasha elimina link)",
         "(#promote|[sasha] promuovi) <username>|<reply>",
         "(#demote|[sasha] degrada) <username>|<reply>",
-        "#mute|silenzia all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|voice",
-        "#unmute|ripristina all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|voice",
+        "#mute|silenzia all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|video_note|voice_note",
+        "#unmute|ripristina all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|video_note|voice_note",
         "#setowner <id>|<username>|<reply>",
         "GROUPS",
         "#clean modlist|rules|about",

@@ -767,8 +767,9 @@ return {
             'Sticker => stickers.\n' ..
             'Text => testo sia normale che sotto i media.\n' ..
             'Tgservice => messaggi di servizio (non funzionante per @AISashaBot nei supergruppi*).\n' ..
-            'Video => video.\n' ..
-            'Voice => note vocali.\n' ..
+            'Video => video (non video messaggi).\n' ..
+            'Video_note => video messaggi.\n' ..
+            'Voice_note => note vocali.\n' ..
             '* = limitazione di telegram.',
             [13] = 'D: Perchè non porti ruleta anche su @AISashaAPI?\n' ..
             'R: Perchè sono sicuro al 90% che il numero di kick sarebbe talmente alto da violare i limiti imposti da telegram causando così malfunzionamenti.',
@@ -984,7 +985,7 @@ return {
             'Per maggiori informazioni sui patterns vedi lua.org/pil/20.2.html',
             'Possono essere usati dei marcatori che verranno sostituiti quando sarà inviata la risposta: $chatid, $chatname, $chatusername, $rules, $userid, $firstname, $lastname, $printname, $username, $grouplink',
             '(#set|[sasha] setta) <var_name>|<pattern> <text>: Sasha salva <text> come risposta a <var_name>|<pattern>.',
-            '(#setmedia|[sasha] setta media) <var_name>|<pattern> <reply>: Sasha salva il media (foto, video, audio, nota vocale, documento, sticker) in <reply> come risposta a <var_name>|<pattern>.',
+            '(#setmedia|[sasha] setta media) <var_name>|<pattern> <reply>: Sasha salva il media (foto, audio) in <reply> come risposta a <var_name>|<pattern>.',
             '(#unset|[sasha] unsetta) <var_name>|<pattern>: Sasha elimina <var_name>|<pattern>.',
             'OWNER',
             '#enableglobal: Sasha abilita i get globali sulla chat.',
@@ -1050,8 +1051,8 @@ return {
             '(#unsetlink|sasha elimina link): Sasha elimina il link salvato.',
             '(#promote|[sasha] promuovi) <username>|<reply>: Sasha promuove a moderatore l\'utente specificato.',
             '(#demote|[sasha] degrada) <username>|<reply>: Sasha degrada l\'utente specificato.',
-            '#mute|silenzia all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|voice: Sasha imposta il muto sulla variabile specificata.',
-            '#unmute|ripristina all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|voice: Sasha rimuove il muto sulla variabile specificata.',
+            '#mute|silenzia all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|video_note|voice_note: Sasha imposta il muto sulla variabile specificata.',
+            '#unmute|ripristina all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|video_note|voice_note: Sasha rimuove il muto sulla variabile specificata.',
             '#setowner <id>|<username>|<reply>: Sasha imposta l\'utente specificato come proprietario.',
             'GRUPPI',
             '#clean modlist|rules|about: Sasha pulisce il parametro specificato.',
@@ -1984,8 +1985,9 @@ return {
             'Sticker => stickers.\n' ..
             'Text => normal text or captions.\n' ..
             'Tgservice => service messages (not working for @AISashaBot on supergroups*).\n' ..
-            'Video => videos.\n' ..
-            'Voice => voice notes.\n' ..
+            'Video => videos (not video messages).\n' ..
+            'Video_note => video messages.\n' ..
+            'Voice_note => voice notes.\n' ..
             '* = telegram\'s limitation.',
             [13] = 'D: Why don\'t you port ruleta on @AISashaAPI?\n' ..
             'R: Because I\'m 90% sure that kicks number would be high enough to hit telegram limits causing problems.',
@@ -2201,7 +2203,7 @@ return {
             'For more information on patterns see lua.org/pil/20.2.html',
             'There are some markers that will be replaced when the answer is sent: $chatid, $chatname, $chatusername, $rules, $userid, $firstname, $lastname, $printname, $username, $grouplink',
             '(#set|[sasha] setta) <var_name>|<pattern> <text>: Sasha saves <text> as answer to <var_name>|<pattern>.',
-            '(#setmedia|[sasha] setta media) <var_name>|<pattern>: Sasha saves the media (photo, video, audio, voice note, document, sticker) in <reply> as answer to <var_name>|<pattern>.',
+            '(#setmedia|[sasha] setta media) <var_name>|<pattern>: Sasha saves the media (photo, audio) in <reply> as answer to <var_name>|<pattern>.',
             '(#unset|[sasha] unsetta) <var_name>|<pattern>: Sasha deletes <var_name>|<pattern>.',
             'OWNER',
             '#enableglobal: Sasha enables global gets on chat.',
@@ -2267,8 +2269,8 @@ return {
             '(#unsetlink|sasha elimina link): Sasha deletes the saved link.',
             '(#promote|[sasha] promuovi) <username>|<reply>: Sasha promotes to mod the specified user.',
             '(#demote|[sasha] degrada) <username>|<reply>: Sasha demotes from mod the specified user.',
-            '#mute|silenzia all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|voice: Sasha mute the specified parameter.',
-            '#unmute|ripristina all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|voice: Sasha unmute the specified parameter.',
+            '#mute|silenzia all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|video_note|voice_note: Sasha mute the specified parameter.',
+            '#unmute|ripristina all|audio|contact|document|gif|location|photo|sticker|text|tgservice|video|video_note|voice_note: Sasha unmute the specified parameter.',
             '#setowner <id>|<username>|<reply>: Sasha sets the specified user as owner.',
             'GROUPS',
             '#clean modlist|rules|about: Sasha cleans the specified parameter.',

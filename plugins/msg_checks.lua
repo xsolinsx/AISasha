@@ -137,7 +137,8 @@ local function pre_process(msg)
                         local mute_text = is_muted(msg.to.id, 'text')
                         local mute_tgservice = is_muted(msg.to.id, 'tgservice')
                         local mute_video = is_muted(msg.to.id, 'video')
-                        local mute_voice = is_muted(msg.to.id, 'voice')
+                        local mute_video_note = is_muted(msg.to.id, 'video_note')
+                        local mute_voice_note = is_muted(msg.to.id, 'voice_note')
                         if is_muted_user(msg.to.id, msg.from.id) and not msg.service then
                             delete_msg(msg.id, ok_cb, false)
                             if msg.to.type == 'chat' then
@@ -352,7 +353,7 @@ local function pre_process(msg)
                                     end
                                     return nil
                                 end
-                                if (mute_audio or mute_voice) and msg.media.type:match("audio") and not msg.service then
+                                if (mute_audio or mute_voice_note) and msg.media.type:match("audio") and not msg.service then
                                     delete_msg(msg.id, ok_cb, false)
                                     if strict then
                                         kick_user(msg.from.id, msg.to.id)
@@ -363,7 +364,7 @@ local function pre_process(msg)
                                     return nil
                                 end
                                 local is_video_caption = msg.media.caption and msg.media.caption:lower(".mp4", "video")
-                                if mute_video and msg.media.type:match("video") and not msg.service then
+                                if (mute_video or mute_video_note) and msg.media.type:match("video") and not msg.service then
                                     delete_msg(msg.id, ok_cb, false)
                                     if strict then
                                         kick_user(msg.from.id, msg.to.id)

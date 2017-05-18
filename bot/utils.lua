@@ -1290,7 +1290,7 @@ function set_mutes(chat_id)
     local lang = get_lang(chat_id)
     if data[tostring(chat_id)] then
         if data[tostring(chat_id)].settings then
-            data[tostring(chat_id)].settings.mutes = { ["all"] = false, ["audio"] = false, ["contact"] = false, ["document"] = false, ["gif"] = false, ["location"] = false, ["photo"] = false, ["sticker"] = false, ["text"] = false, ["tgservice"] = false, ["video"] = false, ["voice"] = false }
+            data[tostring(chat_id)].settings.mutes = { ["all"] = false, ["audio"] = false, ["contact"] = false, ["document"] = false, ["gif"] = false, ["location"] = false, ["photo"] = false, ["sticker"] = false, ["text"] = false, ["tgservice"] = false, ["video"] = false, ["video_note"] = false, ["voice_note"] = false }
             save_data(_config.moderation.data, data)
             return langs[lang].mutesSet
         end
