@@ -1387,7 +1387,7 @@ function mutes_list(chat_id, group_name)
     local lang = get_lang(chat_id)
     if data[tostring(chat_id)] then
         if data[tostring(chat_id)].settings then
-            if hasMutes(chat_id) then
+            if has_mutes(chat_id) then
                 local text = langs[lang].mutedTypesStart .. group_name:gsub('_', ' ') .. " [" .. chat_id .. "]\n\n"
                 for k, v in pairsByKeys(data[tostring(chat_id)].settings.mutes) do
                     text = text .. langs[lang].mute .. k .. ': ' .. tostring(v) .. "\n"
