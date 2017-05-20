@@ -2302,30 +2302,46 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             end
-        end
-        -- Begin Chat mutes
-        if matches[1]:lower() == 'mute' or matches[1]:lower() == 'silenzia' then
-            if is_owner(msg) then
-                if checkMatchesMuteUnmute(matches[2]) then
-                    return mute(msg.to.id, matches[2]:lower())
+            if matches[1]:lower() == 'settings' then
+                if is_momod(msg) then
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group settings ")
+                    return showSettings(msg.to.id, msg.lang)
+                else
+                    return langs[msg.lang].require_mod
                 end
-                return
-            else
-                return langs[msg.lang].require_owner
+            end
+            if matches[1]:lower() == 'mute' or matches[1]:lower() == 'silenzia' then
+                if is_owner(msg) then
+                    if checkMatchesMuteUnmute(matches[2]) then
+                        return mute(msg.to.id, matches[2]:lower())
+                    end
+                    return
+                else
+                    return langs[msg.lang].require_owner
+                end
+            end
+            if matches[1]:lower() == 'unmute' or matches[1]:lower() == 'ripristina' then
+                if is_owner(msg) then
+                    if checkMatchesMuteUnmute(matches[2]) then
+                        return unmute(msg.to.id, matches[2]:lower())
+                    end
+                    return
+                else
+                    return langs[msg.lang].require_owner
+                end
+            end
+            if matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti" then
+                if is_momod(msg) then
+                    if not has_mutes(msg.to.id) then
+                        set_mutes(msg.to.id)
+                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
+                    return mutes_list(msg.to.id, msg.to.print_name)
+                else
+                    return langs[msg.lang].require_mod
+                end
             end
         end
-        if matches[1]:lower() == 'unmute' or matches[1]:lower() == 'ripristina' then
-            if is_owner(msg) then
-                if checkMatchesMuteUnmute(matches[2]) then
-                    return unmute(msg.to.id, matches[2]:lower())
-                end
-                return
-            else
-                return langs[msg.lang].require_owner
-            end
-        end
-        -- End Chat mutes
-        -- Begin Chat muteuser
         if (matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce') then
             if is_momod(msg) then
                 local chat_id = msg.to.id
@@ -2367,34 +2383,12 @@ local function run(msg, matches)
                 return langs[msg.lang].require_mod
             end
         end
-        -- End Chat muteuser
-        if (matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti") then
-            if is_momod(msg) then
-                if not has_mutes(msg.to.id) then
-                    set_mutes(msg.to.id)
-                end
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
-                return mutes_list(msg.to.id, msg.to.print_name)
-            else
-                return langs[msg.lang].require_mod
-            end
-        end
         if (matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti") then
             if is_momod(msg) then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
                 return muted_user_list(msg.to.id, msg.to.print_name)
             else
                 return langs[msg.lang].require_mod
-            end
-        end
-        if not msg.api_patch then
-            if matches[1]:lower() == 'settings' then
-                if is_momod(msg) then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group settings ")
-                    return showSettings(msg.to.id, msg.lang)
-                else
-                    return langs[msg.lang].require_mod
-                end
             end
         end
         if matches[1]:lower() == 'newlink' and not is_realm(msg) then
