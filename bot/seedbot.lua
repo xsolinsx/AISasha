@@ -36,6 +36,9 @@ function on_msg_receive(msg)
     msg = pre_process_service_msg(msg)
     msg = pre_process_media_msg(msg)
     if msg_valid(msg) then
+        if msg.api_patch then
+            print('API PATCH ENABLED')
+        end
         msg = pre_process_msg(msg)
         if msg then
             match_plugins(msg)

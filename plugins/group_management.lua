@@ -1685,32 +1685,32 @@ local function run(msg, matches)
     -- INPM
     -- TODO: add lock and unlock join
     if is_sudo(msg) or msg.to.type == 'user' then
-        if matches[1]:lower() == 'join' or matches[1]:lower() == 'inviteme' or matches[1]:lower() == 'sasha invitami' or matches[1]:lower() == 'invitami' then
-            if is_admin1(msg) then
-                if string.match(matches[2], '^%d+$') then
-                    if not data[tostring(matches[2])] then
-                        return langs[msg.lang].chatNotFound
-                    end
-                    chat_add_user('chat#id' .. matches[2], 'user#id' .. msg.from.id, ok_cb, false)
-                    channel_invite('channel#id' .. matches[2], 'user#id' .. msg.from.id, ok_cb, false)
-                    return langs[msg.lang].ok
-                else
-                    local hash = 'groupalias'
-                    local value = redis:hget(hash, matches[2]:lower())
-                    if value then
-                        chat_add_user('chat#id' .. value, 'user#id' .. msg.from.id, ok_cb, false)
-                        channel_invite('channel#id' .. value, 'user#id' .. msg.from.id, ok_cb, false)
+        if not msg.api_patch then
+            if matches[1]:lower() == 'join' or matches[1]:lower() == 'inviteme' or matches[1]:lower() == 'sasha invitami' or matches[1]:lower() == 'invitami' then
+                if is_admin1(msg) then
+                    if string.match(matches[2], '^%d+$') then
+                        if not data[tostring(matches[2])] then
+                            return langs[msg.lang].chatNotFound
+                        end
+                        chat_add_user('chat#id' .. matches[2], 'user#id' .. msg.from.id, ok_cb, false)
+                        channel_invite('channel#id' .. matches[2], 'user#id' .. msg.from.id, ok_cb, false)
                         return langs[msg.lang].ok
                     else
-                        return langs[msg.lang].noAliasFound
+                        local hash = 'groupalias'
+                        local value = redis:hget(hash, matches[2]:lower())
+                        if value then
+                            chat_add_user('chat#id' .. value, 'user#id' .. msg.from.id, ok_cb, false)
+                            channel_invite('channel#id' .. value, 'user#id' .. msg.from.id, ok_cb, false)
+                            return langs[msg.lang].ok
+                        else
+                            return langs[msg.lang].noAliasFound
+                        end
                     end
+                else
+                    return langs[msg.lang].require_admin
                 end
-            else
-                return langs[msg.lang].require_admin
             end
-        end
 
-        if not msg.api_patch then
             if matches[1]:lower() == 'allchats' then
                 if is_admin1(msg) then
                     return all_chats(msg)
