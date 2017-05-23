@@ -77,6 +77,7 @@ local function get_rules(chat_id)
 end
 
 local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
+    -- user
     if string.find(goodbyewelcome, '$chatid') then
         goodbyewelcome = goodbyewelcome:gsub('$chatid', chat.id)
     end
@@ -93,6 +94,15 @@ local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
     if string.find(goodbyewelcome, '$rules') then
         goodbyewelcome = goodbyewelcome:gsub('$rules', get_rules(chat.id))
     end
+    if string.find(goodbyewelcome, '$grouplink') then
+        if data[tostring(chat.id)].settings.set_link then
+            goodbyewelcome = goodbyewelcome:gsub('$grouplink', data[tostring(chat.id)].settings.set_link)
+        else
+            goodbyewelcome = goodbyewelcome:gsub('$grouplink', 'NO GROUP LINK SET')
+        end
+    end
+
+    -- user
     if string.find(goodbyewelcome, '$userid') then
         goodbyewelcome = goodbyewelcome:gsub('$userid', user.id)
     end
@@ -116,13 +126,6 @@ local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
             goodbyewelcome = goodbyewelcome:gsub('$username', '@' .. user.username)
         else
             goodbyewelcome = goodbyewelcome:gsub('$username', 'NO USERNAME')
-        end
-    end
-    if string.find(goodbyewelcome, '$grouplink') then
-        if data[tostring(chat.id)].settings.set_link then
-            goodbyewelcome = goodbyewelcome:gsub('$grouplink', data[tostring(chat.id)].settings.set_link)
-        else
-            goodbyewelcome = goodbyewelcome:gsub('$grouplink', 'NO GROUP LINK SET')
         end
     end
     return goodbyewelcome

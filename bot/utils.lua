@@ -1438,3 +1438,40 @@ function id_to_api(obj)
         end
     end
 end
+
+function doSendBackup()
+    local time = os.time()
+    local tar_command = 'tar -zcvf backupRaspberryPi' .. time .. '.tar.gz ' ..
+    -- desktop
+    '/home/pi/Desktop ' ..
+    -- sasha user
+    '/home/pi/AISasha --exclude=/home/pi/AISasha/.git --exclude=/home/pi/AISasha/.luarocks --exclude=/home/pi/AISasha/patches --exclude=/home/pi/AISasha/tg ' ..
+    -- sasha bot
+    '/home/pi/AISashaAPI --exclude=/home/pi/AISashaAPI/.git ' ..
+    -- bot for reported
+    '/home/pi/MyBotForReported  --exclude=/home/pi/MyBotForReported/.git ' ..
+    -- redis database
+    '/var/lib/redis'
+    -- save redis db
+    redis:bgsave()
+    local log = io.popen('cd "/home/pi/BACKUPS/" && ' .. tar_command):read('*all')
+    local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
+    file:write(log)
+    file:flush()
+    file:close()
+    -- send last backup
+    local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
+    local backups = { }
+    if files then
+        for k, v in pairsByKeys(files) do
+            if string.match(v, '^backupRaspberryPi%d+%.tar%.gz$') then
+                backups[string.match(v, '%d+')] = v
+            end
+        end
+        local last_backup = ''
+        for k, v in pairsByKeys(backups) do
+            last_backup = v
+        end
+        send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup)
+    end
+end

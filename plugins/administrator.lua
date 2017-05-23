@@ -285,37 +285,8 @@ local function run(msg, matches)
             end
             if not msg.api_patch then
                 if matches[1]:lower() == "backup" or matches[1]:lower() == "sasha esegui backup" then
-                    local time = os.time()
-                    local log = io.popen('cd "/home/pi/BACKUPS/" && tar -zcvf backupAISasha' .. time .. '.tar.gz /home/pi/AISasha --exclude=/home/pi/AISasha/.git --exclude=/home/pi/AISasha/.luarocks --exclude=/home/pi/AISasha/patches --exclude=/home/pi/AISasha/tg'):read('*all')
-                    local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
-                    file:write(log)
-                    file:flush()
-                    file:close()
-                    send_document_SUDOERS("/home/pi/BACKUPS/backupLog" .. time .. ".txt", ok_cb, false)
+                    doSendBackup()
                     return langs[msg.lang].backupDone
-                end
-                if matches[1]:lower() == "uploadbackup" or matches[1]:lower() == "sasha invia backup" then
-                    local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
-                    if files then
-                        local backups = { }
-                        for k, v in pairsByKeys(files) do
-                            if string.match(v, '^backupAISasha%d+%.tar%.gz$') then
-                                backups[string.match(v, '%d+')] = v
-                            end
-                        end
-                        if backups then
-                            local last_backup = ''
-                            for k, v in pairsByKeys(backups) do
-                                last_backup = v
-                            end
-                            send_document_SUDOERS('/home/pi/BACKUPS/' .. last_backup, ok_cb, false)
-                            return langs[msg.lang].backupSent
-                        else
-                            return langs[msg.lang].backupMissing
-                        end
-                    else
-                        return langs[msg.lang].backupMissing
-                    end
                 end
                 if matches[1]:lower() == 'vardump' then
                     if type(msg.reply_id) ~= "nil" then
@@ -381,7 +352,6 @@ return {
         "^[#!/]([Ss][Ee][Nn][Dd][Cc][Oo][Nn][Tt][Aa][Cc][Tt]) (.*) (.*) (.*)$",
         "^[#!/]([Mm][Yy][Cc][Oo][Nn][Tt][Aa][Cc][Tt])$",
         "^[#!/]([Bb][Aa][Cc][Kk][Uu][Pp])$",
-        "^[#!/]([Uu][Pp][Ll][Oo][Aa][Dd][Bb][Aa][Cc][Kk][Uu][Pp])$",
         "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee])$",
         "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Ii][Dd])$",
         "^[#!/]([Aa][Dd][Dd][Ll][Oo][Gg])$",
@@ -429,8 +399,6 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ii][Oo] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Oo])$",
         -- backup
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Bb][Aa][Cc][Kk][Uu][Pp])$",
-        -- uploadbackup
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Aa] [Bb][Aa][Cc][Kk][Uu][Pp])$",
         -- updateid
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ll][Oo][Nn][Gg][Ii][Dd])$",
         -- addlog
@@ -463,7 +431,6 @@ return {
         "(#sendcontact|sasha invia contatto) <phone> <name> <surname>",
         "(#mycontact|sasha mio contatto)",
         "(#backup|sasha esegui backup)",
-        "(#uploadbackup|sasha invia backup)",
         "#update",
         "#vardump [<reply>|<msg_id>]",
         "#authorizereboot <user_id>",
