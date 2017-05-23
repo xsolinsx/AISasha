@@ -229,12 +229,127 @@ local function run(msg, matches)
             if not matches[2] then
                 return list_variables(msg, false)
             else
-                local value = get_value(msg, matches[2]:lower())
-                if value then
-                    return langs[msg.lang].getCommand:gsub('X', matches[2]:lower()) .. value
-                else
-                    return langs[msg.lang].noSetValue
+                local vars = list_variables(msg, true)
+                if vars ~= nil then
+                    local t = vars:split('\n')
+                    for i, word in pairs(t) do
+                        local found = false
+                        local temp = word:lower()
+                        if msg.text then
+                            if string.match(msg.text:lower(), temp) then
+                                local value = get_value(msg, temp)
+                                if value then
+                                    answer = value
+                                    found = true
+                                end
+                            end
+                        end
+                        if msg.media then
+                            if msg.media.title then
+                                if string.match(msg.media.title:lower(), temp) then
+                                    local value = get_value(msg, temp)
+                                    if value then
+                                        answer = value
+                                        found = true
+                                    end
+                                end
+                            end
+                            if msg.media.description then
+                                if string.match(msg.media.description:lower(), temp) then
+                                    local value = get_value(msg, temp)
+                                    if value then
+                                        answer = value
+                                        found = true
+                                    end
+                                end
+                            end
+                            if msg.media.caption then
+                                if string.match(msg.media.caption:lower(), temp) then
+                                    local value = get_value(msg, temp)
+                                    if value then
+                                        answer = value
+                                        found = true
+                                    end
+                                end
+                            end
+                        end
+                        if msg.fwd_from then
+                            if msg.fwd_from.title then
+                                if string.match(msg.fwd_from.title:lower(), temp) then
+                                    local value = get_value(msg, temp)
+                                    if value then
+                                        answer = value
+                                        found = true
+                                    end
+                                end
+                            end
+                        end
+                        if found then
+                            return langs[msg.lang].getCommand:gsub('X', word:lower()) .. answer
+                        end
+                    end
                 end
+                local vars = list_variables(msg, false)
+                if vars ~= nil then
+                    local t = vars:split('\n')
+                    for i, word in pairs(t) do
+                        local found = false
+                        local temp = word:lower()
+                        if msg.text then
+                            if string.match(msg.text:lower(), temp) then
+                                local value = get_value(msg, temp)
+                                if value then
+                                    answer = value
+                                    found = true
+                                end
+                            end
+                        end
+                        if msg.media then
+                            if msg.media.title then
+                                if string.match(msg.media.title:lower(), temp) then
+                                    local value = get_value(msg, temp)
+                                    if value then
+                                        answer = value
+                                        found = true
+                                    end
+                                end
+                            end
+                            if msg.media.description then
+                                if string.match(msg.media.description:lower(), temp) then
+                                    local value = get_value(msg, temp)
+                                    if value then
+                                        answer = value
+                                        found = true
+                                    end
+                                end
+                            end
+                            if msg.media.caption then
+                                if string.match(msg.media.caption:lower(), temp) then
+                                    local value = get_value(msg, temp)
+                                    if value then
+                                        answer = value
+                                        found = true
+                                    end
+                                end
+                            end
+                        end
+                        if msg.fwd_from then
+                            if msg.fwd_from.title then
+                                if string.match(msg.fwd_from.title:lower(), temp) then
+                                    local value = get_value(msg, temp)
+                                    if value then
+                                        answer = value
+                                        found = true
+                                    end
+                                end
+                            end
+                        end
+                        if found then
+                            return langs[msg.lang].getCommand:gsub('X', word:lower()) .. answer
+                        end
+                    end
+                end
+                return langs[msg.lang].noSetValue
             end
         end
 
