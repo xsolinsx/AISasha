@@ -72,6 +72,8 @@ local function pre_process(msg)
                 if msgs >= max_msg then
                     print("Pass2")
                     send_large_msg("user#id" .. msg.from.id, langs[msg.lang].user .. "[" .. msg.from.id .. "]" .. langs[msg.lang].blockedForSpam)
+                    -- log
+                    send_large_msg("channel#id1043389864", langs[msg.lang].user .. "[" .. msg.from.id .. "]" .. langs[msg.lang].blockedForSpam)
                     savelog(msg.from.id .. " PM", "User [" .. msg.from.id .. "] blocked for spam.")
                     -- block_user("user#id" .. msg.from.id, ok_cb, false)
                     -- Block user if spammed in private
