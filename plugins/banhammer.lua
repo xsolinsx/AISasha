@@ -605,9 +605,9 @@ local function user_msgs(user_id, chat_id, chat_type)
     local uhash = 'user:' .. user_id
     local user = redis:hgetall(uhash)
     local um_hash = 'msgs:' .. user_id .. ':' .. chat_id
-    if chat_type == 'channel' then
+    if api_patch and chat_type == 'channel' then
         um_hash = 'msgs:' .. user_id .. ':-100' .. chat_id
-    elseif chat_type == 'chat' then
+    elseif api_patch and chat_type == 'chat' then
         um_hash = 'msgs:' .. user_id .. ':-' .. chat_id
     end
     user_info = tonumber(redis:get(um_hash) or 0)
