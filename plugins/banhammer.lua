@@ -554,10 +554,6 @@ local function kick_nouser_chat(extra, success, result)
             kicked = kicked + 1
         end
     end
-    local function post_msg()
-        send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
-    end
-    postpone(post_msg, false, 1)
     local function post_msg_unban()
         if ids ~= '' then
             send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
@@ -566,6 +562,10 @@ local function kick_nouser_chat(extra, success, result)
     if redis:sismember('apipatch', extra.chat_id) then
         postpone(post_msg_unban, false, 2)
     end
+    local function post_msg()
+        send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function kick_nouser_channel(extra, success, result)
@@ -584,10 +584,6 @@ local function kick_nouser_channel(extra, success, result)
             kicked = kicked + 1
         end
     end
-    local function post_msg()
-        send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
-    end
-    postpone(post_msg, false, 1)
     local function post_msg_unban()
         if ids ~= '' then
             send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
@@ -596,6 +592,10 @@ local function kick_nouser_channel(extra, success, result)
     if redis:sismember('apipatch', extra.chat_id) then
         postpone(post_msg_unban, false, 2)
     end
+    local function post_msg()
+        send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function user_msgs(user_id, chat_id, chat_type)
@@ -633,10 +633,6 @@ local function kick_inactive_chat(extra, success, result)
             end
         end
     end
-    local function post_msg()
-        send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
-    end
-    postpone(post_msg, false, 1)
     local function post_msg_unban()
         if ids ~= '' then
             send_large_msg('chat#id' .. extra.chat_id, '/multipleunban ' .. ids)
@@ -645,6 +641,10 @@ local function kick_inactive_chat(extra, success, result)
     if redis:sismember('apipatch', extra.chat_id) then
         postpone(post_msg_unban, false, 2)
     end
+    local function post_msg()
+        send_large_msg('chat#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function kick_inactive_channel(extra, success, result)
@@ -666,10 +666,6 @@ local function kick_inactive_channel(extra, success, result)
             end
         end
     end
-    local function post_msg()
-        send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
-    end
-    postpone(post_msg, false, 1)
     local function post_msg_unban()
         if ids ~= '' then
             send_large_msg('channel#id' .. extra.chat_id, '/multipleunban ' .. ids)
@@ -678,6 +674,10 @@ local function kick_inactive_channel(extra, success, result)
     if redis:sismember('apipatch', extra.chat_id) then
         postpone(post_msg_unban, false, 2)
     end
+    local function post_msg()
+        send_large_msg('channel#id' .. extra.chat_id, langs[lang].massacre:gsub('X', kicked))
+    end
+    postpone(post_msg, false, 1)
 end
 
 local function run(msg, matches)
