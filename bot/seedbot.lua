@@ -133,8 +133,8 @@ function msg_valid(msg)
                 end
             end
             if not crossvalid then
-                -- ignore messages from API version but !del messages
-                print('\27[36mNot valid: msg from our API version in a group\27[39m')
+                -- ignore messages from BOT version but crossexec messages
+                print('\27[36mNot valid: msg from our BOT version in a group\27[39m')
                 return false
             else
                 msg.text = string.gsub(msg.text, '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc] ', '')

@@ -605,8 +605,8 @@ return {
         apiReboot = 'AISashaAPI uccisa da ',
 
         -- patch_for_api.lua --
-        groupPatched = 'Patch per l\'utilizzo simultaneo di Sasha API e Sasha Utente eseguita. Sarà sempre possibile eseguire i comandi con Sasha Utente usando il tag in questo modo "@AISasha <command>", così facendo Sasha API ignorerà il messaggio.',
-        groupUnpatched = 'Patch per l\'utilizzo simultaneo di Sasha API e Sasha Utente rimossa. Si prega di fare attenzione ai conflitti tra i due bot.',
+        groupPatched = 'Patch per l\'utilizzo simultaneo di Sasha BOT e Sasha Utente eseguita. Sarà sempre possibile eseguire i comandi con Sasha Utente usando il tag in questo modo "@AISasha <command>", così facendo Sasha BOT ignorerà il messaggio.',
+        groupUnpatched = 'Patch per l\'utilizzo simultaneo di Sasha BOT e Sasha Utente rimossa. Si prega di fare attenzione ai conflitti tra i due bot.',
 
         -- plugins.lua --
         enabled = ' abilitato.',
@@ -730,7 +730,7 @@ return {
             [5] = 'D: Perchè non c\'è una lista di utenti warnati?\n' ..
             'R: Perchè diventerebbe una lista enorme in alcuni gruppi, oltretutto owner/mod potrebbero essere influenzati dalla lista stessa al momento del warn.',
             [6] = 'D: Perchè per alcuni comandi devo usare obbligatoriamente @AISasha?\n' ..
-            'R: Solitamente è perchè i bot API sono limitati in maniera più restrittiva (/faq2).',
+            'R: Solitamente è perchè i bot sono limitati in maniera più restrittiva (/faq2).',
             [7] = 'D: Perchè non possono esserci più owner di un solo gruppo?\n' ..
             'R: Telegram non ammette nemmeno il passaggio di proprietà di un gruppo (attualmente) e non gestisce così le cose.',
             [8] = 'D: Puoi aggiungere un rango intermedio tra mod e owner?\n' ..
@@ -807,9 +807,9 @@ return {
             '(#backup|sasha esegui backup): Sasha esegue un backup del raspberry e lo invia ai sudo.',
             '#update: Sasha si aggiorna.',
             '#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.',
-            '#authorizereboot <user_id>: Sasha autorizza <user_id> a riavviare la sua versione API.',
-            '#deauthorizereboot <user_id>: Sasha deautorizza <user_id> a riavviare la sua versione API.',
-            '#list reboot authorized: Sasha manda la lista di utenti autorizzati a riavviare la sua versione API.',
+            '#authorizereboot <user_id>: Sasha autorizza <user_id> a riavviare la sua versione BOT.',
+            '#deauthorizereboot <user_id>: Sasha deautorizza <user_id> a riavviare la sua versione BOT.',
+            '#list reboot authorized: Sasha manda la lista di utenti autorizzati a riavviare la sua versione BOT.',
             '#reloaddata: Sasha ricarica i dati dei gruppi.',
         },
 
@@ -1209,7 +1209,7 @@ return {
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha lascia il gruppo.',
             "SUDO",
-            '(#rebootapi|sasha riavvia api): Sasha riavvia la sua versione API.',
+            '(#rebootapi|sasha riavvia api): Sasha riavvia la sua versione BOT.',
         },
 
         patch_for_api =
@@ -1823,8 +1823,8 @@ return {
         apiReboot = 'AISashaAPI killed by ',
 
         -- patch_for_api.lua --
-        groupPatched = 'Patch to use API Sasha and Sasha User executed. Everyone will be able to execute Sasha User commands by using her tag like this "@AISasha <command>", in this way API Sasha will ignore the message.',
-        groupUnpatched = 'Patch to use API Sasha and Sasha User removed. Be careful of conflicts between the two.',
+        groupPatched = 'Patch to use Sasha BOT and Sasha User executed. Everyone will be able to execute Sasha User commands by using her tag like this "@AISasha <command>", in this way Sasha BOT will ignore the message.',
+        groupUnpatched = 'Patch to use Sasha BOT and Sasha User removed. Be careful of conflicts between the two.',
 
         -- plugins.lua --
         enabled = ' enabled.',
@@ -1948,7 +1948,7 @@ return {
             [5] = 'D: Why there\'s no warns list?\n' ..
             'R: Because it would be a giant list in some groups, also owner/mod could be influenced at the moment of giving warns.',
             [6] = 'D: Why do I have to use @AISasha for certain commands?\n' ..
-            'R: Usually because API bots are much more limited (/faq2).',
+            'R: Usually because bots are much more limited (/faq2).',
             [7] = 'D: Why there can\'t be two or more owners in the same group?\n' ..
             'R: Telegram doesn\'t even allow transferring the ownership of the group (at this time) and it doesn\'t manage groups like that.',
             [8] = 'D: Can you add an intermediate rank between mod and owner?\n' ..
@@ -2025,9 +2025,9 @@ return {
             '(#backup|sasha esegui backup): Sasha makes the raspberry backup and sends it to sudoers.',
             '#update: Sasha updates herself.',
             '#vardump [<reply>|<msg_id>]: Sasha sends vardump of the specified message.',
-            '#authorizereboot <user_id>: Sasha authorize <user_id> to reboot her API version.',
-            '#deauthorizereboot <user_id>: Sasha deauthorize <user_id> to reboot her API version.',
-            '#list reboot authorized: Sasha sends the list of users that are authorized to reboot her API version.',
+            '#authorizereboot <user_id>: Sasha authorize <user_id> to reboot her BOT version.',
+            '#deauthorizereboot <user_id>: Sasha deauthorize <user_id> to reboot her BOT version.',
+            '#list reboot authorized: Sasha sends the list of users that are authorized to reboot her BOT version.',
             '#reloaddata: Sasha reloads groups\' data.',
         },
 
@@ -2413,7 +2413,7 @@ return {
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha leaves the group.',
             "SUDO",
-            '(#rebootapi|sasha riavvia api): Sasha reboots her API version.',
+            '(#rebootapi|sasha riavvia api): Sasha reboots her BOT version.',
         },
 
         patch_for_api =
