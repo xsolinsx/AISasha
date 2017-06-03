@@ -815,7 +815,7 @@ local function pre_process(msg, matches)
 end
 
 return {
-    description = "GET",
+    description = "GETSETUNSET",
     patterns =
     {
         --- GET
