@@ -229,7 +229,7 @@ local function run(msg, matches)
                 -- Re-enable a plugin for this chat
                 if is_owner(msg) then
                     print("enable " .. matches[2] .. ' on this chat')
-                    return reenable_plugin_on_chat(matches[2], msg.to.id)
+                    return reenable_plugin_on_chat(matches[2], get_receiver(msg))
                 else
                     return langs[msg.lang].require_owner
                 end
@@ -252,7 +252,7 @@ local function run(msg, matches)
                         return langs[msg.lang].systemPlugin
                     end
                     print("disable " .. matches[2] .. ' on this chat')
-                    return disable_plugin_on_chat(matches[2], msg.to.id)
+                    return disable_plugin_on_chat(matches[2], get_receiver(msg))
                 else
                     return langs[msg.lang].require_owner
                 end
@@ -273,7 +273,7 @@ local function run(msg, matches)
         -- Show on chat disabled plugin
         if matches[1]:lower() == 'disabledlist' or matches[1]:lower() == 'lista disabilitati' or matches[1]:lower() == 'lista disattivati' then
             if is_owner(msg) then
-                return list_disabled_plugin_on_chat(msg.to.id)
+                return list_disabled_plugin_on_chat(get_receiver(msg))
             else
                 return langs[msg.lang].require_owner
             end
