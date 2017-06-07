@@ -15,11 +15,12 @@ local function set_welcome(chat_id, welcome)
 end
 
 local function get_welcome(chat_id)
-    if not data[tostring(chat_id)]['welcome'] then
-        return
+    if data[tostring(chat_id)] then
+        if data[tostring(chat_id)]['welcome'] then
+            local welcome = data[tostring(chat_id)]['welcome']
+            return welcome
+        end
     end
-    local welcome = data[tostring(chat_id)]['welcome']
-    return welcome
 end
 
 local function unset_welcome(chat_id)
@@ -53,11 +54,12 @@ local function set_goodbye(chat_id, goodbye)
 end
 
 local function get_goodbye(chat_id)
-    if not data[tostring(chat_id)]['goodbye'] then
-        return
+    if data[tostring(chat_id)] then
+        if data[tostring(chat_id)]['goodbye'] then
+            local goodbye = data[tostring(chat_id)]['goodbye']
+            return goodbye
+        end
     end
-    local goodbye = data[tostring(chat_id)]['goodbye']
-    return goodbye
 end
 
 local function unset_goodbye(chat_id)
