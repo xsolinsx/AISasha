@@ -1863,7 +1863,7 @@ local function run(msg, matches)
                         local text = matches[3] .. langs[msg.lang].setOwner
                         send_large_msg("chat#id" .. matches[2], text)
                         send_large_msg("channel#id" .. matches[2], text)
-                        return
+                        return text
                     end
                 else
                     return langs[msg.lang].require_admin
