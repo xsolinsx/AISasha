@@ -1856,13 +1856,15 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == 'setgpowner' and matches[2] and matches[3] then
                 if is_admin1(msg) then
-                    data[tostring(matches[2])]['set_owner'] = matches[3]
-                    save_data(_config.moderation.data, data)
-                    local lang = get_lang(matches[2])
-                    local text = matches[3] .. langs[msg.lang].setOwner
-                    send_large_msg("chat#id" .. matches[2], text)
-                    send_large_msg("channel#id" .. matches[2], text)
-                    return
+                    if data[tostring(matches[2])] then
+                        data[tostring(matches[2])]['set_owner'] = matches[3]
+                        save_data(_config.moderation.data, data)
+                        local lang = get_lang(matches[2])
+                        local text = matches[3] .. langs[msg.lang].setOwner
+                        send_large_msg("chat#id" .. matches[2], text)
+                        send_large_msg("channel#id" .. matches[2], text)
+                        return
+                    end
                 else
                     return langs[msg.lang].require_admin
                 end
