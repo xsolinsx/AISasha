@@ -19,12 +19,6 @@ function on_msg_receive(msg)
     msg.lang = get_lang(msg.to.id)
 
     local receiver = get_receiver(msg)
-    -- reaction writing
-    if redis:get('writing') then
-        send_typing(receiver, ok_cb, false)
-    else
-        send_typing_abort(receiver, ok_cb, false)
-    end
     -- vardump(msg)
     msg.api_patch = redis:sismember('apipatch', msg.to.id) or false
     if msg.text then

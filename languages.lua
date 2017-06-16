@@ -1256,14 +1256,6 @@ return {
             '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha crea il QR Code di <text>, se specificato colora il QR Code.',
         },
 
-        reactions =
-        {
-            '🅿️ REACTIONS',
-            'Plugin per far reagire Sasha.',
-            'SUDO',
-            '#writing on|off: Sasha (fa finta|smette di far finta) di scrivere.',
-        },
-
         ruletagame =
         {
             '🅿️ RULETAGAME',
@@ -2458,14 +2450,6 @@ return {
             'Hexadecimal => ("a56729" it\'s brown).',
             'Decimal => ("255-192-203" it\'s pink).',
             '(#qr|sasha qr) ["<background_color>" "<data_color>"] <text>: Sasha creates QR Code of <text>, if the specified it colors QR Code.',
-        },
-
-        reactions =
-        {
-            '🅿️ REACTIONS',
-            'Plugin to make Sasha reacts.',
-            'SUDO',
-            '#writing on|off: Sasha (pretends|stops pretending) to write.',
         },
 
         ruletagame =
