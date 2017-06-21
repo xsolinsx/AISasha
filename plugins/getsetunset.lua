@@ -66,122 +66,105 @@ local function get_rules(chat_id)
     return rules
 end
 
---[[
 local function adjust_value_reply(extra, success, result)
+    local value = extra.value
+    local chat = extra.to
+    local user = extra.from
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_reply_receiver(result) == get_receiver(extra.msg) then
-        local msg = extra.msg
-        msg.reply_to_message = result
-        if get_cmd == "promoteadmin" then
-            local user_id = result.from.peer_id
-            local channel_id = "channel#id" .. result.to.peer_id
-            channel_set_admin(channel_id, "user#id" .. user_id, ok_cb, false)
-            if result.from.username then
-                text = "@" .. result.from.username .. langs[msg.lang].promoteSupergroupMod
-            else
-                text = user_id .. langs[msg.lang].promoteSupergroupMod
-            end
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted: [" .. user_id .. "] as admin by reply")
-            send_large_msg(channel_id, text)
-        elseif get_cmd == "demoteadmin" then
-            local user_id = result.from.peer_id
-            local channel_id = "channel#id" .. result.to.peer_id
-            if is_admin2(result.from.peer_id) then
-                send_large_msg(channel_id, langs[msg.lang].cantDemoteOtherAdmin)
-                return
-            end
-            channel_demote(channel_id, "user#id" .. user_id, ok_cb, false)
-            if result.from.username then
-                text = "@" .. result.from.username .. langs[msg.lang].demoteSupergroupMod
-            else
-                text = user_id .. langs[msg.lang].demoteSupergroupMod
-            end
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted: [" .. user_id .. "] as admin by reply")
-            send_large_msg(channel_id, text)
-        elseif get_cmd == "setowner" then
-            local group_owner = data[tostring(result.to.peer_id)]['set_owner']
-            if group_owner then
-                local channel_id = 'channel#id' .. result.to.peer_id
-                if not is_admin2(tonumber(group_owner)) then
-                    local user = "user#id" .. group_owner
-                    channel_demote(channel_id, user, ok_cb, false)
-                end
-                local user_id = "user#id" .. result.from.peer_id
-                channel_set_admin(channel_id, user_id, ok_cb, false)
-                data[tostring(result.to.peer_id)]['set_owner'] = tostring(result.from.peer_id)
-                save_data(_config.moderation.data, data)
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set: [" .. result.from.peer_id .. "] as owner by reply")
-                if result.from.username then
-                    text = "@" .. result.from.username .. " " .. result.from.peer_id .. langs[msg.lang].setOwner
-                else
-                    text = result.from.peer_id .. langs[msg.lang].setOwner
-                end
-                send_large_msg(channel_id, text)
-            end
-        elseif get_cmd == "promote" then
-            local receiver = result.to.peer_id
-            local full_name =(result.from.first_name or '') .. ' ' ..(result.from.last_name or '')
-            local member_name = full_name:gsub("?", "")
-            local member_username = member_name:gsub("_", " ")
-            if result.from.username then
-                member_username = '@' .. result.from.username
-            end
-            local member_id = result.from.peer_id
-            if result.to.peer_type == 'channel' then
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted mod: @" .. member_username .. "[" .. result.from.peer_id .. "] by reply")
-                promote2("channel#id" .. result.to.peer_id, member_username, member_id)
-                -- channel_set_mod(channel_id, user, ok_cb, false)
-            end
-        elseif get_cmd == "demote" then
-            local full_name =(result.from.first_name or '') .. ' ' ..(result.from.last_name or '')
-            local member_name = full_name:gsub("?", "")
-            local member_username = member_name:gsub("_", " ")
-            if result.from.username then
-                member_username = '@' .. result.from.username
-            end
-            local member_id = result.from.peer_id
-            -- local user = "user#id"..result.peer_id
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted mod: @" .. member_username .. "[" .. result.from.peer_id .. "] by reply")
-            demote2("channel#id" .. result.to.peer_id, member_username, member_id)
-            -- channel_demote(channel_id, user, ok_cb, false)
-        elseif get_cmd == 'mute_user' then
-            if result.service then
-                if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
-                    if result.action.user then
-                        user_id = result.action.user.peer_id
-                    end
-                end
-                if result.action.type == 'chat_add_user_link' then
-                    if result.from then
-                        user_id = result.from.peer_id
-                    end
-                end
-            else
-                user_id = result.from.peer_id
-            end
-            local receiver = extra.receiver
-            local chat_id = msg.to.id
-            print(user_id)
-            print(chat_id)
 
-            -- ignore higher or same rank
-            if compare_ranks(msg.from.id, user_id, chat_id) then
-                if is_muted_user(chat_id, user_id) then
-                    unmute_user(chat_id, user_id)
-                    send_large_msg(receiver, user_id .. langs[msg.lang].muteUserRemove)
-                else
-                    mute_user(chat_id, user_id)
-                    send_large_msg(receiver, user_id .. langs[msg.lang].muteUserAdd)
-                end
-            else
-                send_large_msg(receiver, langs[msg.lang].require_rank)
+    value = adjust_value(value, chat, user)
+
+    local replyuser = user
+    local fwd_chat = chat
+    local fwd_user = user
+    if get_reply_receiver(result) == get_receiver(extra.msg) then
+        -- replyuser
+        if result then
+            replyuser = result.from
+        end
+        -- forward chat
+        if result.fwd_from then
+            if result.fwd_from.peer_type == 'chat' or result.fwd_from.peer_type == 'channel' then
+                fwd_chat = result.fwd_from
             end
         end
-    else
-        send_large_msg(extra.receiver, langs[lang].oldMessage)
+        -- forward user
+        if result.fwd_from then
+            if result.fwd_from.peer_type == 'user' then
+                fwd_user = result.fwd_from
+            end
+        end
     end
+    -- replyuser
+    if string.find(value, '$replyuserid') then
+        value = value:gsub('$replyuserid', replyuser.peer_id or replyuser.id)
+    end
+    if string.find(value, '$replyfirstname') then
+        value = value:gsub('$replyfirstname', replyuser.first_name)
+    end
+    if string.find(value, '$replylastname') then
+        if replyuser.last_name then
+            value = value:gsub('$replylastname', replyuser.last_name)
+        end
+    end
+    if string.find(value, '$replyprintname') then
+        replyuser.print_name = replyuser.first_name
+        if replyuser.last_name then
+            replyuser.print_name = replyuser.print_name .. ' ' .. replyuser.last_name
+        end
+        value = value:gsub('$replyprintname', replyuser.print_name)
+    end
+    if string.find(value, '$replyusername') then
+        if replyuser.username then
+            value = value:gsub('$replyusername', '@' .. replyuser.username)
+        else
+            value = value:gsub('$replyusername', 'NO USERNAME')
+        end
+    end
+
+    -- forward chat
+    if string.find(value, '$forwardchatid') then
+        value = value:gsub('$forwardchatid', fwd_chat.peer_id or fwd_chat.id)
+    end
+    if string.find(value, '$forwardchatname') then
+        value = value:gsub('$forwardchatname', fwd_chat.title)
+    end
+    if string.find(value, '$forwardchatusername') then
+        if fwd_chat.username then
+            value = value:gsub('$forwardchatusername', '@' .. fwd_chat.username)
+        else
+            value = value:gsub('$forwardchatusername', 'NO CHAT USERNAME')
+        end
+    end
+
+    -- forward user
+    if string.find(value, '$forwarduserid') then
+        value = value:gsub('$forwarduserid', fwd_user.peer_id or fwd_user.id)
+    end
+    if string.find(value, '$forwardfirstname') then
+        value = value:gsub('$forwardfirstname', fwd_user.first_name)
+    end
+    if string.find(value, '$forwardlastname') then
+        if fwd_user.last_name then
+            value = value:gsub('$forwardlastname', fwd_user.last_name)
+        end
+    end
+    if string.find(value, '$forwardprintname') then
+        fwd_user.print_name = fwd_user.first_name
+        if fwd_user.last_name then
+            fwd_user.print_name = fwd_user.print_name .. ' ' .. fwd_user.last_name
+        end
+        value = value:gsub('$forwardprintname', fwd_user.print_name)
+    end
+    if string.find(value, '$forwardusername') then
+        if fwd_user.username then
+            value = value:gsub('$forwardusername', '@' .. fwd_user.username)
+        else
+            value = value:gsub('$forwardusername', 'NO USERNAME')
+        end
+    end
+    reply_msg(extra.msg_id, value, ok_cb, false)
 end
-]]
 
 local function adjust_value(value, chat, user)
     if string.find(value, '$chatid') then
@@ -709,7 +692,11 @@ local function pre_process(msg, matches)
                     if found then
                         if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
                             -- if not media
-                            reply_msg(msg.id, adjust_value(get_value(msg, word:lower()), msg.to, msg.from), ok_cb, false)
+                            if msg.reply_id then
+                                get_message(msg.reply_id, adjust_value_reply, { msg_id = msg.id, receiver = get_receiver(msg), from = msg.from, to = msg.to, value = get_value(msg, word:lower()) })
+                            else
+                                reply_msg(msg.id, adjust_value(get_value(msg, word:lower()), msg.to, msg.from), ok_cb, false)
+                            end
                             return msg
                         elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
                             -- if picture
@@ -791,7 +778,11 @@ local function pre_process(msg, matches)
                         print('GET FOUND')
                         if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
                             -- if not media
-                            reply_msg(msg.id, adjust_value(get_value(msg, word:lower()), msg.to, msg.from), ok_cb, false)
+                            if msg.reply_id then
+                                get_message(msg.reply_id, adjust_value_reply, { msg_id = msg.id, receiver = get_receiver(msg), from = msg.from, to = msg.to, value = get_value(msg, word:lower()) })
+                            else
+                                reply_msg(msg.id, adjust_value(get_value(msg, word:lower()), msg.to, msg.from), ok_cb, false)
+                            end
                             return msg
                         elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
                             -- if picture

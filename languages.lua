@@ -396,7 +396,7 @@ return {
         defeatsLeaderboard = 'Classifica sconfitte\n',
         likesLeaderboard = 'Classifica like\n',
 
-        -- get.lua --
+        -- getsetunset.lua --
         globalEnable = 'Variabili globali abilitate su questa chat.',
         globalDisable = 'Variabili globali disabilitate su questa chat.',
         saved = ' salvato.',
@@ -980,7 +980,13 @@ return {
             'MOD',
             'Per [un]settare una frase usare "_" al posto di " ".',
             'Per maggiori informazioni sui patterns vedi lua.org/pil/20.2.html',
-            'Possono essere usati dei marcatori che verranno sostituiti quando sarà inviata la risposta: $chatid, $chatname, $chatusername, $rules, $userid, $firstname, $lastname, $printname, $username, $grouplink',
+            'Possono essere usati dei marcatori che verranno sostituiti quando sarà inviata la risposta: '
+            .. '$chatid, $chatname, $chatusername, $rules, $grouplink, '
+            .. '$userid, $firstname, $lastname, $printname, $username, '
+            .. '$replyuserid, $replyfirstname, $replylastname, $replyprintname, $replyusername, '
+            .. '$forwardchatid, $forwardchatname, $forwardchatusername, '
+            .. '$forwarduserid, $forwardfirstname, $forwardlastname, $forwardprintname, $forwardusername.'
+            .. '\nSe alcuni marcatori non potessero essere risolti (reply, forwardchat, forward) verrebbero usati quelli normali (chat, user).',
             '(#set|[sasha] setta) <var_name>|<pattern> <text>: Sasha salva <text> come risposta a <var_name>|<pattern>.',
             '(#setmedia|[sasha] setta media) <var_name>|<pattern> <reply>: Sasha salva il media (foto, audio) in <reply> come risposta a <var_name>|<pattern>.',
             '(#unset|[sasha] unsetta) <var_name>|<pattern>: Sasha elimina <var_name>|<pattern>.',
@@ -1605,7 +1611,7 @@ return {
         defeatsLeaderboard = 'Defeats leaderboard\n',
         likesLeaderboard = 'Likes leaderboard\n',
 
-        -- get.lua --
+        -- getsetunset.lua --
         globalEnable = 'Global variables enabled on this chat.',
         globalDisable = 'Global variables disabled on this chat.',
         saved = ' saved.',
@@ -2190,7 +2196,13 @@ return {
             'MOD',
             'To [un]set a phrase use "_" instead of " ".',
             'For more information on patterns see lua.org/pil/20.2.html',
-            'There are some markers that will be replaced when the answer is sent: $chatid, $chatname, $chatusername, $rules, $userid, $firstname, $lastname, $printname, $username, $grouplink',
+            'There are some markers that will be replaced when the answer is sent: '
+            .. '$chatid, $chatname, $chatusername, $rules, $grouplink, '
+            .. '$userid, $firstname, $lastname, $printname, $username, '
+            .. '$replyuserid, $replyfirstname, $replylastname, $replyprintname, $replyusername, '
+            .. '$forwardchatid, $forwardchatname, $forwardchatusername, '
+            .. '$forwarduserid, $forwardfirstname, $forwardlastname, $forwardprintname, $forwardusername.'
+            .. '\nIf some markers can\'t be solved (reply, forwardchat, forward) normal ones will be used (chat, user).',
             '(#set|[sasha] setta) <var_name>|<pattern> <text>: Sasha saves <text> as answer to <var_name>|<pattern>.',
             '(#setmedia|[sasha] setta media) <var_name>|<pattern>: Sasha saves the media (photo, audio) in <reply> as answer to <var_name>|<pattern>.',
             '(#unset|[sasha] unsetta) <var_name>|<pattern>: Sasha deletes <var_name>|<pattern>.',
