@@ -166,6 +166,9 @@ end
 
 local function channel_callback_ishere(extra, success, result)
     vardump(result)
+    vardump(success)
+    vardump(extra)
+    print('in')
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     local user = extra.user
     local text = langs[lang].ishereNo
