@@ -182,7 +182,8 @@ local function chat_callback_ishere(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
-local function channel_callback_ishere(extra, success, result)
+local function channel_callback_ishere_test(extra, success, result)
+    vardump(result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     local user = extra.user
     local text = langs[lang].ishereNo
@@ -647,7 +648,7 @@ local function run(msg, matches)
                 print('id')
                 if chat_type == 'channel' then
                     print('channel')
-                    channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2] })
+                    channel_get_users(receiver, channel_callback_ishere_test, { receiver = receiver, user = matches[2] })
                 elseif chat_type == 'chat' then
                     chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2] })
                 end
@@ -655,7 +656,7 @@ local function run(msg, matches)
                 print('username')
                 if chat_type == 'channel' then
                     print('channel')
-                    channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
+                    channel_get_users(receiver, channel_callback_ishere_test, { receiver = receiver, user = matches[2]:gsub('@', '') })
                 elseif chat_type == 'chat' then
                     chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
                 end
