@@ -164,11 +164,11 @@ local function callback_kicked(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
-local function chat_callback_ishere(extra, success, result)
+local function channel_callback_ishere(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     local user = extra.user
     local text = langs[lang].ishereNo
-    for k, v in pairs(result.members) do
+    for k, v in pairsByKeys(result) do
         if tonumber(user) then
             if tonumber(v.peer_id) == tonumber(user) then
                 text = langs[lang].ishereYes
@@ -182,12 +182,11 @@ local function chat_callback_ishere(extra, success, result)
     send_large_msg(extra.receiver, text)
 end
 
-local function channel_callback_ishere_test(extra, success, result)
-    vardump(result)
+local function chat_callback_ishere(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     local user = extra.user
     local text = langs[lang].ishereNo
-    for k, v in pairsByKeys(result) do
+    for k, v in pairs(result.members) do
         if tonumber(user) then
             if tonumber(v.peer_id) == tonumber(user) then
                 text = langs[lang].ishereYes
@@ -641,22 +640,16 @@ local function run(msg, matches)
                 return langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
             end
         end
-        vardump(matches)
         if matches[1]:lower() == 'ishere' and matches[2] then
-            print('in')
             if string.match(matches[2], '^%d+$') then
-                print('id')
                 if chat_type == 'channel' then
-                    print('channel')
-                    channel_get_users(receiver, channel_callback_ishere_test, { receiver = receiver, user = matches[2] })
+                    channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2] })
                 elseif chat_type == 'chat' then
                     chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2] })
                 end
             else
-                print('username')
                 if chat_type == 'channel' then
-                    print('channel')
-                    channel_get_users(receiver, channel_callback_ishere_test, { receiver = receiver, user = matches[2]:gsub('@', '') })
+                    channel_get_users(receiver, channel_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
                 elseif chat_type == 'chat' then
                     chat_info(receiver, chat_callback_ishere, { receiver = receiver, user = matches[2]:gsub('@', '') })
                 end
