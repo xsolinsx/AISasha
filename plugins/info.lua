@@ -165,6 +165,7 @@ local function callback_kicked(extra, success, result)
 end
 
 local function channel_callback_ishere(extra, success, result)
+    vardump(result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     local user = extra.user
     local text = langs[lang].ishereNo
