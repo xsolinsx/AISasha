@@ -640,6 +640,7 @@ local function run(msg, matches)
                 return langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
             end
         end
+        vardump(matches)
         if matches[1]:lower() == 'ishere' and matches[2] then
             print('in')
             if string.match(matches[2], '^%d+$') then
