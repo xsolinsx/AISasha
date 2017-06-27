@@ -1306,39 +1306,15 @@ end
 -- End by reply actions
 
 -- Begin non-channel_invite username actions
-local function in_channel_cb(extra, success, result)
-    local get_cmd = extra.get_cmd
-    local receiver = extra.receiver
-    local msg = extra.msg
-    local print_name = user_print_name(extra.msg.from):gsub("?", "")
-    local name_log = print_name:gsub("_", " ")
-    local member = extra.username
-    local memberid = extra.user_id
-    if member then
-        text = langs[msg.lang].none .. '@' .. member .. langs[msg.lang].inThisSupergroup
-    else
-        text = langs[msg.lang].none .. memberid .. langs[msg.lang].inThisSupergroup
+local function promote_telegram_admin_by_username(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if success == 0 then
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
     end
-    if get_cmd == "promoteadmin" then
-        for k, v in pairs(result) do
-            vusername = v.username
-            vpeer_id = tostring(v.peer_id)
-            if vusername == member or vpeer_id == memberid then
-                local user_id = "user#id" .. v.peer_id
-                local channel_id = "channel#id" .. extra.msg.to.id
-                channel_set_admin(channel_id, user_id, ok_cb, false)
-                if v.username then
-                    text = "@" .. v.username .. " " .. v.peer_id .. langs[msg.lang].promoteSupergroupMod
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set admin @" .. v.username .. " [" .. v.peer_id .. "]")
-                else
-                    text = v.peer_id .. langs[msg.lang].promoteSupergroupMod
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set admin " .. v.peer_id)
-                end
-            end
-            send_large_msg(channel_id, text)
-        end
-    end
-    send_large_msg(receiver, text)
+    channel_set_admin(extra.receiver, 'user#id' .. result.peer_id, ok_cb, false)
+    send_large_msg(extra.receiver, "@" .. result.username .. " " .. result.peer_id .. langs[lang].promoteSupergroupMod)
+    savelog(extra.chat_id, "[" .. extra.executer .. "] set admin @" .. result.username .. " [" .. result.peer_id .. "]")
 end
 -- End non-channel_invite username actions
 
@@ -2736,13 +2712,10 @@ local function run(msg, matches)
                         get_message(msg.reply_id, get_message_callback, cbreply_extra)
                     elseif matches[2] and matches[2] ~= '' then
                         if string.match(matches[2], '^%d+$') then
-                            local get_cmd = 'promoteadmin'
-                            local msg = msg
-                            channel_get_users(get_receiver(msg), in_channel_cb, { get_cmd = get_cmd, receiver = get_receiver(msg), msg = msg, user_id = matches[2] })
+                            channel_set_admin(get_receiver(msg), 'user#id' .. matches[2], ok_cb, false)
+                            send_large_msg(get_receiver(msg), matches[2] .. langs[msg.lang].promoteSupergroupMod)
                         else
-                            local get_cmd = 'promoteadmin'
-                            local msg = msg
-                            channel_get_users(get_receiver(msg), in_channel_cb, { get_cmd = get_cmd, receiver = get_receiver(msg), msg = msg, username = string.gsub(matches[2], '@', '') })
+                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_telegram_admin_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = get_receiver(msg) })
                         end
                     end
                 else
