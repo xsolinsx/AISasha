@@ -2644,7 +2644,7 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             end
-            if matches[1]:lower() == 'newlink' or matches[1]:lower() == "sasha crea link" or matches[1]:lower() == "crea link" then
+            if matches[1]:lower() == 'newlink' or matches[1]:lower() == "sasha crea link" then
                 if is_momod(msg) then
                     local function callback_link(extra, success, result)
                         local receiver = get_receiver(msg)
