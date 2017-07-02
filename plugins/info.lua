@@ -1000,14 +1000,6 @@ return {
         "^[#!/]([Ww][Hh][Oo][Aa][Mm][Ii])$",
         "^[#!/]([Ww][Hh][Oo])$",
         "^[#!/]([Kk][Ii][Cc][Kk][Ee][Dd])$",
-        -- groupinfo
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
-        "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
-        "^([Ii][Nn][Ff][Oo] [Gg][Rr][Uu][Pp][Pp][Oo])$",
-        -- grouplink
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Nn][Kk] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
-        "^([Ll][Ii][Nn][Kk] [Gg][Rr][Uu][Pp][Pp][Oo]) (%d+)$",
         -- getrank
         "^([Rr][Aa][Nn][Gg][Oo]) ([^%s]+)$",
         "^([Rr][Aa][Nn][Gg][Oo])$",
@@ -1042,7 +1034,7 @@ return {
         "(#who|#members|[sasha] lista membri)",
         "(#kicked|[sasha] lista rimossi)",
         "ADMIN",
-        "(#groupinfo|[sasha] info gruppo) <group_id>",
-        "(#grouplink|[sasha] link gruppo) <group_id>",
+        "#groupinfo <group_id>",
+        "#grouplink <group_id>",
     },
 }

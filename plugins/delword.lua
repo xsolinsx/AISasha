@@ -161,7 +161,7 @@ return {
     syntax =
     {
         "USER",
-        "(#dellist|[sasha] lista censura)",
+        "(#dellist|[sasha] lista censure)",
         "OWNER",
         "(#delword|[sasha] censura) <word>|<pattern>",
     },

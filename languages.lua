@@ -785,25 +785,19 @@ return {
             '🅿️ ADMINISTRATOR',
             'Plugin per amministratori di Sasha.',
             'ADMIN',
-            '(#pm|sasha messaggia) <user_id> <msg>: Sasha invia <msg> a <user_id>.',
+            '#pm <user_id> <msg>: Sasha invia <msg> a <user_id>.',
             '#import <group_link>: Sasha entra nel gruppo tramite <group_link>.',
             '(#pmblock|sasha blocca pm) <user_id>: Sasha blocca <user_id>.',
             '(#pmunblock|sasha sblocca pm) <user_id>: Sasha sblocca <user_id>.',
             '(#markread|sasha segna letto) (on|off): Sasha segna come [non] letti i messaggi ricevuti.',
             '(#setbotphoto|sasha cambia foto): Sasha chiede la foto da settare come profilo.',
-            '(#updateid|sasha aggiorna longid): Sasha salva il long_id.',
-            '(#addlog|sasha aggiungi log): Sasha aggiunge il log.',
-            '(#remlog|sasha rimuovi log): Sasha rimuove il log.',
+            '#list admins|groups|realms: Sasha mostra una lista della variabile specificata.',
             '#checkspeed: Sasha calcola la velocità con cui processa i messaggi.',
             '#ping: Sasha risponde con "Pong".',
             '#laststart: Sasha manda la data dell\'avvio.',
             'SUDO',
-            '(#contactlist|sasha lista contatti) (txt|json): Sasha manda la lista dei contatti.',
-            '(#dialoglist|sasha lista chat) (txt|json): Sasha manda la lista delle chat.',
-            '(#addcontact|sasha aggiungi contatto) <phone> <name> <surname>: Sasha aggiunge il contatto specificato.',
-            '(#delcontact|sasha elimina contatto) <user_id>: Sasha elimina il contatto <user_id>.',
-            '(#sendcontact|sasha invia contatto) <phone> <name> <surname>: Sasha invia il contatto specificato.',
-            '(#mycontact|sasha mio contatto): Sasha invia il contatto del richiedente.',
+            '#addadmin <user_id>|<username>: Sasha promuove l\'utente specificato ad amminstratore.',
+            '#removeadmin <user_id>|<username>: Sasha degrada l\'utente specificato.',
             '(#backup|sasha esegui backup): Sasha esegue un backup del raspberry e lo invia ai sudo.',
             '#update: Sasha si aggiorna.',
             '#vardump [<reply>|<msg_id>]: Sasha esegue il vardump del messaggio specificato.',
@@ -874,20 +868,6 @@ return {
             '#broadcast <text>: Sasha invia <text> a tutti i gruppi.',
         },
 
-        --[[check_tag =
-        {
-            '🅿️ CHECK_TAG',
-            'Plugin per mandare le notifiche di tags (NOTIFICHE ABILITATE ANCHE PER GLI UTENTI ESTERNI AL GRUPPO).',
-            'USER',
-            '#registertagalert: Sasha ti registra al tagalert, se non hai un username setta un nickname.',
-            '#unregistertagalert: Sasha elimina la tua registrazione.',
-            '#setnickname <nickname>: Sasha imposta <nickname> come alternativa all\'username.',
-            '#unsetnickname: Sasha elimina il tuo nickname (rimani registrato).',
-            'OWNER',
-            '#enabletagalert: Sasha abilita la funzione per il gruppo (disabilitata per default).',
-            '#disabletagalert: Sasha disabilita la funzione per il gruppo.',
-        },]]
-
         database =
         {
             '🅿️ DATABASE',
@@ -895,8 +875,8 @@ return {
             'SUDO',
             '#createdatabase: Sasha crea il database.',
             '(#dodatabase|sasha esegui database): Sasha salva i dati di tutti gli utenti del gruppo e i dati del gruppo.',
-            '(#dbsearch|[sasha] cerca db) <id>: Sasha cerca <id> nel database.',
-            '(#dbdelete|[sasha] elimina db) <id>: Sasha elimina <id> dal database.',
+            '#dbsearch <id>: Sasha cerca <id> nel database.',
+            '#dbdelete <id>: Sasha elimina <id> dal database.',
             '#addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>: Sasha aggiunge manualmente al database l\'utente specificato.',
             '#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]: Sasha aggiunge manualmente al database il gruppo specificato.',
             '#uploaddb: Sasha manda il database.',
@@ -908,7 +888,7 @@ return {
             '🅿️ DELWORD',
             'Plugin per la censura delle parole.',
             'USER',
-            '(#dellist|[sasha] lista censura): Sasha manda una lista di parole o pattern censurati.',
+            '(#dellist|[sasha] lista censure): Sasha manda una lista di parole o pattern censurati.',
             'MOD',
             'Per maggiori informazioni sui patterns vedi lua.org/pil/20.2.html',
             '(#delword|[sasha] censura) <word>|<pattern>: Sasha mette|toglie una censura su <word>|<pattern>, quando verrà scritta una cosa censurata nei supergruppi Sasha eliminerà il messaggio mentre nei gruppi bannerà il membro.',
@@ -1104,10 +1084,6 @@ return {
             '#type: Sasha mostra il tipo del gruppo.',
             '#kill group|supergroup|realm <group_id>: Sasha rimuove tutti i membri di <group_id> e <group_id>.',
             '#rem <group_id>: Sasha rimuove il gruppo.',
-            '#list admins|groups|realms: Sasha mostra una lista della variabile specificata.',
-            'SUDO',
-            '#addadmin <user_id>|<username>: Sasha promuove l\'utente specificato ad amminstratore.',
-            '#removeadmin <user_id>|<username>: Sasha degrada l\'utente specificato.',
         },
 
         help =
@@ -1143,8 +1119,8 @@ return {
             '(#who|#members|[sasha] lista membri): Sasha manda la lista degli utenti.',
             '(#kicked|[sasha] lista rimossi): Sasha manda la lista degli utenti rimossi.',
             'ADMIN',
-            '(#groupinfo|[sasha] info gruppo) <group_id>: Sasha manda le info del gruppo specificato.',
-            '(#grouplink|[sasha] link gruppo) <group_id>: Sasha manda il link del gruppo specificato.',
+            '#groupinfo <group_id>: Sasha manda le info del gruppo specificato.',
+            '#grouplink <group_id>: Sasha manda il link del gruppo specificato.',
         },
 
         interact =
@@ -1338,7 +1314,7 @@ return {
             'OWNER',
             '(#setlang|lingua) (it|en): Sasha imposta la lingua in cui deve parlare in questo gruppo.',
             'SUDO',
-            '(#reloadstrings|[sasha] aggiorna stringhe): Sasha aggiorna le stringhe di testo.',
+            '(#reloadstrings|#reloadlangs): Sasha aggiorna le stringhe di testo.',
         },
 
         tagall =
@@ -1372,7 +1348,7 @@ return {
             '🅿️ URBANDICTIONARY',
             'Plugin per interagire con l\'Urban Dictionary.',
             'USER',
-            '(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>: Sasha mostra la definizione di <text> dall\'Urban Dictionary.',
+            '(#urbandictionary|#urban|#ud) <text>: Sasha mostra la definizione di <text> dall\'Urban Dictionary.',
         },
 
         webshot =
@@ -2001,25 +1977,19 @@ return {
             '🅿️ ADMINISTRATOR',
             'Plugin for Sasha\'s administrators.',
             'ADMIN',
-            '(#pm|sasha messaggia) <user_id> <msg>: Sasha writes <msg> to <user_id>.',
+            '#pm <user_id> <msg>: Sasha writes <msg> to <user_id>.',
             '#import <group_link>: Sasha joins <group_link>.',
             '(#pmblock|sasha blocca pm) <user_id>: Sasha blocks <user_id>.',
             '(#pmunblock|sasha sblocca pm) <user_id>: Sasha unblocks <user_id>.',
             '(#markread|sasha segna letto) (on|off): Sasha marks as [not] read messages that receives.',
             '(#setbotphoto|sasha cambia foto): Sasha waits for a pic to set as bot\'s profile.',
-            '(#updateid|sasha aggiorna longid): Sasha saves long_id.',
-            '(#addlog|sasha aggiungi log): Sasha adds log.',
-            '(#remlog|sasha rimuovi log): Sasha removes log.',
+            '#list admins|groups|realms: Sasha sends list of the specified parameter.',
             '#checkspeed: Sasha calculates how much time she needs to process messages.',
             '#ping: Sasha answers with "Pong".',
             '#laststart: Sasha sends last start date.',
             'SUDO',
-            '(#contactlist|sasha lista contatti) (txt|json): Sasha sends contacts list.',
-            '(#dialoglist|sasha lista chat) (txt|json): Sasha sends chats list.',
-            '(#addcontact|sasha aggiungi contatto) <phone> <name> <surname>: Sasha adds the specified contact.',
-            '(#delcontact|sasha elimina contatto) <user_id>: Sasha deletes contact of <user_id>.',
-            '(#sendcontact|sasha invia contatto) <phone> <name> <surname>: Sasha sends contact with the specified information.',
-            '(#mycontact|sasha mio contatto): Sasha sends sender contact.',
+            '#addadmin <user_id>|<username>: Sasha promotes the specified user to administrator.',
+            '#removeadmin <user_id>|<username>: Sasha demotes the specified user from administrator.',
             '(#backup|sasha esegui backup): Sasha makes the raspberry backup and sends it to sudoers.',
             '#update: Sasha updates herself.',
             '#vardump [<reply>|<msg_id>]: Sasha sends vardump of the specified message.',
@@ -2090,20 +2060,6 @@ return {
             '#broadcast <text>: Sasha sends <text> to all groups.',
         },
 
-        --[[check_tag =
-        {
-            '🅿️ CHECK_TAG',
-            'Plugin to send tag notifications (NOTIFICATIONS ARE ENABLED ALSO FOR USERS NOT IN THIS GROUP).',
-            'USER',
-            '#registertagalert: Sasha registers you to the tagalert, if you haven\'t got an username set a nickname.',
-            '#unregistertagalert: Sasha deletes your registration.',
-            '#setnickname <nickname>: Sasha sets <nickname> as an alternative to username.',
-            '#unsetnickname: Sasha deletes your nickname (registration not affected).',
-            'OWNER',
-            '#enabletagalert: Sasha enables the function for this group (disabled by default).',
-            '#disabletagalert: Sasha disables the function for this group.',
-        },]]
-
         database =
         {
             '🅿️ DATABASE',
@@ -2111,8 +2067,8 @@ return {
             'SUDO',
             '#createdatabase: Sasha creates the database.',
             '(#dodatabase|sasha esegui database): Sasha saves all info of all users of group and group info.',
-            '(#dbsearch|[sasha] cerca db) <id>: Sasha searches for <id> in the database.',
-            '(#dbdelete|[sasha] elimina db) <id>: Sasha deletes <id> from the database.',
+            '#dbsearch <id>: Sasha searches for <id> in the database.',
+            '#dbdelete <id>: Sasha deletes <id> from the database.',
             '#addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>: Sasha manually adds the specified user to the database.',
             '#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]: Sasha manually adds the specified group to the database.',
             '#uploaddb: Sasha uploads the database.',
@@ -2124,7 +2080,7 @@ return {
             '🅿️ DELWORD',
             'Plugin for the management of censorships.',
             'USER',
-            '(#dellist|[sasha] lista censura): Sasha sends a list of censored words or patterns.',
+            '(#dellist|[sasha] lista censure): Sasha sends a list of censored words or patterns.',
             'MOD',
             'For more information on patterns see lua.org/pil/20.2.html',
             '(#delword|[sasha] censura) <word>|<pattern>: Sasha puts|removes a censorship on <word>|<pattern>, when someone writes it in supergroups the message is deleted and in normal groups the user is kicked.',
@@ -2320,10 +2276,6 @@ return {
             '#type: Sasha sends group\'s type.',
             '#kill group|supergroup|realm <group_id>: Sasha kicks all members of <group_id> and removes <group_id>.',
             '#rem <group_id>: Sasha removes group.',
-            '#list admins|groups|realms: Sasha sends list of the specified parameter.',
-            'SUDO',
-            '#addadmin <user_id>|<username>: Sasha promotes the specified user to administrator.',
-            '#removeadmin <user_id>|<username>: Sasha demotes the specified user from administrator.',
         },
 
         help =
@@ -2359,8 +2311,8 @@ return {
             '(#who|#members|[sasha] lista membri): Sasha users list.',
             '(#kicked|[sasha] lista rimossi): Sasha sends kicked users list.',
             'ADMIN',
-            '(#groupinfo|[sasha] info gruppo) <group_id>: Sasha sends info of the specified group.',
-            '(#grouplink|[sasha] link gruppo) <group_id>: Sasha sends link of the specified group.',
+            '#groupinfo <group_id>: Sasha sends info of the specified group.',
+            '#grouplink <group_id>: Sasha sends link of the specified group.',
         },
 
         interact =
@@ -2540,7 +2492,7 @@ return {
             'OWNER',
             '(#setlang|lingua) (it|en): Sasha sets the language she has to talk in this group.',
             'SUDO',
-            '(#reloadstrings|[sasha] aggiorna stringhe): Sasha updates strings.',
+            '(#reloadstrings|#reloadlangs): Sasha updates strings.',
         },
 
         tagall =
@@ -2574,7 +2526,7 @@ return {
             '🅿️ URBANDICTIONARY',
             'Plugin for the interaction with the Urban Dictionary.',
             'USER',
-            '(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>: Sasha searches <text> in the Urban Dictionary.',
+            '(#urbandictionary|#urban|#ud) <text>: Sasha searches <text> in the Urban Dictionary.',
         },
 
         webshot =

@@ -108,110 +108,6 @@ local function killchannel(extra, success, result)
     leave_channel('channel#id' .. extra.chat_id, ok_cb, false)
 end
 
-local function admin_promote(user, user_id, lang)
-    if not data.admins then
-        data.admins = { }
-        save_data(_config.moderation.data, data)
-    end
-    if data.admins[tostring(user_id)] then
-        if string.match(user, '^%d+$') then
-            return user_id .. langs[lang].alreadyAdmin
-        else
-            return '@' .. user .. langs[lang].alreadyAdmin
-        end
-    end
-    data.admins[tostring(user_id)] = user
-    save_data(_config.moderation.data, data)
-    if string.match(user, '^%d+$') then
-        return user_id .. langs[lang].promoteAdmin
-    else
-        return '@' .. user .. langs[lang].promoteAdmin
-    end
-end
-
-local function admin_demote(user, user_id, lang)
-    if not data.admins then
-        data.admins = { }
-        save_data(_config.moderation.data, data)
-    end
-    if not data.admins[tostring(user_id)] then
-        if string.match(user, '^%d+$') then
-            return user_id .. langs[lang].notAdmin
-        else
-            return '@' .. user .. langs[lang].notAdmin
-        end
-    end
-    data.admins[tostring(user_id)] = nil
-    save_data(_config.moderation.data, data)
-    if string.match(user, '^%d+$') then
-        return user_id .. langs[lang].demoteAdmin
-    else
-        return '@' .. user .. langs[lang].demoteAdmin
-    end
-end
-
-local function promote_admin_by_username(extra, success, result)
-    local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if success == 0 then
-        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
-        return
-    end
-    send_large_msg(extra.receiver, admin_promote(result.username, result.peer_id, lang))
-end
-
-local function demote_admin_by_username(extra, success, result)
-    local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if success == 0 then
-        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
-        return
-    end
-    send_large_msg(extra.receiver, admin_demote(result.username, result.peer_id, lang))
-end
-
-local function admin_list(lang)
-    if not data.admins then
-        data.admins = { }
-        save_data(_config.moderation.data, data)
-    end
-    local message = langs[lang].adminListStart
-    for k, v in pairs(data.admins) do
-        message = message .. '@' .. v .. ' - ' .. k .. '\n'
-    end
-    return message
-end
-
-local function groups_list(msg)
-    if not data.groups then
-        return langs[msg.lang].noGroups
-    end
-    local message = langs[msg.lang].groupListStart
-    for k, v in pairs(data.groups) do
-        if data[tostring(v)] then
-            for m, n in pairs(data[tostring(v)]) do
-                if m == 'set_name' then
-                    name = n
-                end
-            end
-            local group_owner = "No owner"
-            if data[tostring(v)]['set_owner'] then
-                group_owner = tostring(data[tostring(v)]['set_owner'])
-            end
-            local group_link = "No link"
-            if data[tostring(v)].settings['set_link'] then
-                group_link = data[tostring(v)].settings['set_link']
-            end
-            message = message .. name .. ' ' .. v .. ' - ' .. group_owner .. '\n{' .. group_link .. "}\n"
-        end
-    end
-    local file = io.open("./groups/lists/groups.txt", "w")
-    file:write(message)
-    file:flush()
-    file:close()
-    return message
-end
-
-
-
 -- begin LOCK/UNLOCK FUNCTIONS
 local function adjustSettingType(setting_type)
     if setting_type == 'arabic' then
@@ -404,34 +300,6 @@ local function checkMatchesMuteUnmute(txt)
         return true
     end
     return false
-end
-
-local function realms_list(msg)
-    if not data.realms then
-        return langs[msg.lang].noRealms
-    end
-    local message = langs[msg.lang].realmListStart
-    for k, v in pairs(data.realms) do
-        for m, n in pairs(data[tostring(v)]) do
-            if m == 'set_name' then
-                name = n
-            end
-        end
-        local group_owner = "No owner"
-        if data[tostring(v)]['admins_in'] then
-            group_owner = tostring(data[tostring(v)]['admins_in'])
-        end
-        local group_link = "No link"
-        if data[tostring(v)].settings['set_link'] then
-            group_link = data[tostring(v)].settings['set_link']
-        end
-        message = message .. name .. ' ' .. v .. ' - ' .. group_owner .. '\n{' .. group_link .. "}\n"
-    end
-    local file = io.open("./groups/lists/realms.txt", "w")
-    file:write(message)
-    file:flush()
-    file:close()
-    return message
 end
 
 -- INGROUP
@@ -1804,32 +1672,6 @@ local function run(msg, matches)
                     return langs[msg.lang].require_admin
                 end
             end
-            if matches[1]:lower() == 'addadmin' then
-                if is_sudo(msg) then
-                    if string.match(matches[2], '^%d+$') then
-                        print("user " .. matches[2] .. " has been promoted as admin")
-                        return admin_promote(matches[2], matches[2], msg.lang)
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
-                        return
-                    end
-                else
-                    return langs[msg.lang].require_sudo
-                end
-            end
-            if matches[1]:lower() == 'removeadmin' then
-                if is_sudo(msg) then
-                    if string.match(matches[2], '^%d+$') then
-                        print("user " .. matches[2] .. " has been demoted")
-                        return admin_demote(matches[2], matches[2], msg.lang)
-                    else
-                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
-                        return
-                    end
-                else
-                    return langs[msg.lang].require_sudo
-                end
-            end
             if matches[1]:lower() == 'setgpowner' and matches[2] and matches[3] then
                 if is_admin1(msg) then
                     if data[tostring(matches[2])] then
@@ -1840,39 +1682,6 @@ local function run(msg, matches)
                         send_large_msg("chat#id" .. matches[2], text)
                         send_large_msg("channel#id" .. matches[2], text)
                         return text
-                    end
-                else
-                    return langs[msg.lang].require_admin
-                end
-            end
-            if matches[1]:lower() == 'list' then
-                if is_admin1(msg) then
-                    if matches[2]:lower() == 'admins' then
-                        return admin_list(msg.lang)
-                    elseif matches[2]:lower() == 'groups' then
-                        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                            groups_list(msg)
-                            send_document("chat#id" .. msg.to.id, "./groups/lists/groups.txt", ok_cb, false)
-                            send_document("channel#id" .. msg.to.id, "./groups/lists/groups.txt", ok_cb, false)
-                            -- return group_list(msg)
-                        elseif msg.to.type == 'user' then
-                            groups_list(msg)
-                            send_document("user#id" .. msg.from.id, "./groups/lists/groups.txt", ok_cb, false)
-                            -- return group_list(msg)
-                        end
-                        return langs[msg.lang].groupListCreated
-                    elseif matches[2]:lower() == 'realms' then
-                        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-                            realms_list(msg)
-                            send_document("chat#id" .. msg.to.id, "./groups/lists/realms.txt", ok_cb, false)
-                            send_document("channel#id" .. msg.to.id, "./groups/lists/realms.txt", ok_cb, false)
-                            -- return realms_list(msg)
-                        elseif msg.to.type == 'user' then
-                            realms_list(msg)
-                            send_document("user#id" .. msg.from.id, "./groups/lists/realms.txt", ok_cb, false)
-                            -- return realms_list(msg)
-                        end
-                        return langs[msg.lang].realmListCreated
                     end
                 else
                     return langs[msg.lang].require_admin
@@ -3441,9 +3250,5 @@ return {
         "#type",
         "#kill group|supergroup|realm <group_id>",
         "#rem <group_id>",
-        "#list admins|groups|realms",
-        "SUDO",
-        "#addadmin <user_id>|<username>",
-        "#removeadmin <user_id>|<username>",
     },
 }

@@ -1,3 +1,133 @@
+local function admin_promote(user, user_id, lang)
+    if not data.admins then
+        data.admins = { }
+        save_data(_config.moderation.data, data)
+    end
+    if data.admins[tostring(user_id)] then
+        if string.match(user, '^%d+$') then
+            return user_id .. langs[lang].alreadyAdmin
+        else
+            return '@' .. user .. langs[lang].alreadyAdmin
+        end
+    end
+    data.admins[tostring(user_id)] = user
+    save_data(_config.moderation.data, data)
+    if string.match(user, '^%d+$') then
+        return user_id .. langs[lang].promoteAdmin
+    else
+        return '@' .. user .. langs[lang].promoteAdmin
+    end
+end
+
+local function admin_demote(user, user_id, lang)
+    if not data.admins then
+        data.admins = { }
+        save_data(_config.moderation.data, data)
+    end
+    if not data.admins[tostring(user_id)] then
+        if string.match(user, '^%d+$') then
+            return user_id .. langs[lang].notAdmin
+        else
+            return '@' .. user .. langs[lang].notAdmin
+        end
+    end
+    data.admins[tostring(user_id)] = nil
+    save_data(_config.moderation.data, data)
+    if string.match(user, '^%d+$') then
+        return user_id .. langs[lang].demoteAdmin
+    else
+        return '@' .. user .. langs[lang].demoteAdmin
+    end
+end
+
+local function promote_admin_by_username(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if success == 0 then
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
+    end
+    send_large_msg(extra.receiver, admin_promote(result.username, result.peer_id, lang))
+end
+
+local function demote_admin_by_username(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if success == 0 then
+        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+        return
+    end
+    send_large_msg(extra.receiver, admin_demote(result.username, result.peer_id, lang))
+end
+
+local function admin_list(lang)
+    if not data.admins then
+        data.admins = { }
+        save_data(_config.moderation.data, data)
+    end
+    local message = langs[lang].adminListStart
+    for k, v in pairs(data.admins) do
+        message = message .. '@' .. v .. ' - ' .. k .. '\n'
+    end
+    return message
+end
+
+local function groups_list(msg)
+    if not data.groups then
+        return langs[msg.lang].noGroups
+    end
+    local message = langs[msg.lang].groupListStart
+    for k, v in pairs(data.groups) do
+        if data[tostring(v)] then
+            for m, n in pairs(data[tostring(v)]) do
+                if m == 'set_name' then
+                    name = n
+                end
+            end
+            local group_owner = "No owner"
+            if data[tostring(v)]['set_owner'] then
+                group_owner = tostring(data[tostring(v)]['set_owner'])
+            end
+            local group_link = "No link"
+            if data[tostring(v)].settings['set_link'] then
+                group_link = data[tostring(v)].settings['set_link']
+            end
+            message = message .. name .. ' ' .. v .. ' - ' .. group_owner .. '\n{' .. group_link .. "}\n"
+        end
+    end
+    local file = io.open("./groups/lists/groups.txt", "w")
+    file:write(message)
+    file:flush()
+    file:close()
+    return message
+end
+
+local function realms_list(msg)
+    if not data.realms then
+        return langs[msg.lang].noRealms
+    end
+    local message = langs[msg.lang].realmListStart
+    for k, v in pairs(data.realms) do
+        for m, n in pairs(data[tostring(v)]) do
+            if m == 'set_name' then
+                name = n
+            end
+        end
+        local group_owner = "No owner"
+        if data[tostring(v)]['admins_in'] then
+            group_owner = tostring(data[tostring(v)]['admins_in'])
+        end
+        local group_link = "No link"
+        if data[tostring(v)].settings['set_link'] then
+            group_link = data[tostring(v)].settings['set_link']
+        end
+        message = message .. name .. ' ' .. v .. ' - ' .. group_owner .. '\n{' .. group_link .. "}\n"
+    end
+    local file = io.open("./groups/lists/realms.txt", "w")
+    file:write(message)
+    file:flush()
+    file:close()
+    return message
+end
+
 local function set_bot_photo(msg, success, result)
     local receiver = get_receiver(msg)
     if success then
@@ -14,124 +144,10 @@ local function set_bot_photo(msg, success, result)
     end
 end
 
--- Function to add log supergroup
-local function logadd(msg)
-    local receiver = get_receiver(msg)
-    local GBan_log = 'GBan_log'
-    if not data[tostring(GBan_log)] then
-        data[tostring(GBan_log)] = { }
-        save_data(_config.moderation.data, data)
-    end
-    data[tostring(GBan_log)][tostring(msg.to.id)] = msg.to.peer_id
-    save_data(_config.moderation.data, data)
-    local text = langs[msg.lang].logSet
-    reply_msg(msg.id, text, ok_cb, false)
-    return
-end
-
--- Function to remove log supergroup
-local function logrem(msg)
-    local receiver = get_receiver(msg)
-    local GBan_log = 'GBan_log'
-    if not data[tostring(GBan_log)] then
-        data[tostring(GBan_log)] = nil
-        save_data(_config.moderation.data, data)
-    end
-    data[tostring(GBan_log)][tostring(msg.to.id)] = nil
-    save_data(_config.moderation.data, data)
-    local text = langs[msg.lang].logUnset
-    reply_msg(msg.id, text, ok_cb, false)
-    return
-end
-
-
 local function parsed_url(link)
     local parsed_link = URL.parse(link)
     local parsed_path = URL.parse_path(parsed_link.path)
     return parsed_path[2]
-end
-
-local function get_contact_list_callback(extra, success, result)
-    local text = " "
-    for k, v in pairs(result) do
-        if v.print_name and v.id and v.phone then
-            text = text .. string.gsub(v.print_name, "_", " ") .. " [" .. v.peer_id .. "] = " .. v.phone .. "\n"
-        end
-    end
-    if (extra.filetype == "txt") then
-        local file = io.open("contact_list.txt", "w")
-        file:write(text)
-        file:flush()
-        file:close()
-        send_document("user#id" .. extra.target, "contact_list.txt", ok_cb, false)
-        -- .txt format
-    end
-    if (extra.filetype == "json") then
-        local file = io.open("contact_list.json", "w")
-        file:write(json:encode_pretty(result))
-        file:flush()
-        file:close()
-        send_document("user#id" .. extra.target, "contact_list.json", ok_cb, false)
-        -- json format
-    end
-end
-
-local function get_dialog_list_callback(extra, success, result)
-    local text = ""
-    for k, v in pairsByKeys(result) do
-        if v.peer then
-            if v.peer.type == "chat" then
-                text = text .. "group{" .. v.peer.title .. "}[" .. v.peer.id .. "](" .. v.peer.members_num .. ")"
-            else
-                if v.peer.print_name and v.peer.id then
-                    text = text .. "user{" .. v.peer.print_name .. "}[" .. v.peer.id .. "]"
-                end
-                if v.peer.username then
-                    text = text .. "(" .. v.peer.username .. ")"
-                end
-                if v.peer.phone then
-                    text = text .. "'" .. v.peer.phone .. "'"
-                end
-            end
-        end
-        if v.message then
-            text = text .. '\nlast msg >\nmsg id = ' .. v.message.id
-            if v.message.text then
-                text = text .. "\n text = " .. v.message.text
-            end
-            if v.message.action then
-                text = text .. "\n" .. serpent.block(v.message.action, { comment = false })
-            end
-            if v.message.from then
-                if v.message.from.print_name then
-                    text = text .. "\n From > \n" .. string.gsub(v.message.from.print_name, "_", " ") .. "[" .. v.message.from.id .. "]"
-                end
-                if v.message.from.username then
-                    text = text .. "( " .. v.message.from.username .. " )"
-                end
-                if v.message.from.phone then
-                    text = text .. "' " .. v.message.from.phone .. " '"
-                end
-            end
-        end
-        text = text .. "\n\n"
-    end
-    if (extra.filetype == "txt") then
-        local file = io.open("dialog_list.txt", "w")
-        file:write(text)
-        file:flush()
-        file:close()
-        send_document("user#id" .. extra.target, "dialog_list.txt", ok_cb, false)
-        -- .txt format
-    end
-    if (extra.filetype == "json") then
-        local file = io.open("dialog_list.json", "w")
-        file:write(json:encode_pretty(result))
-        file:flush()
-        file:close()
-        send_document("user#id" .. extra.target, "dialog_list.json", ok_cb, false)
-        -- json format
-    end
 end
 
 local function vardump_msg(extra, success, result)
@@ -196,7 +212,7 @@ local function run(msg, matches)
             return start_time
         end
         if not msg.api_patch then
-            if matches[1]:lower() == "pm" or matches[1]:lower() == "sasha messaggia" then
+            if matches[1]:lower() == "pm" then
                 send_large_msg("user#id" .. matches[2], matches[3])
                 return langs[msg.lang].pmSent
             end
@@ -217,7 +233,44 @@ local function run(msg, matches)
             local hash = parsed_url(matches[2])
             import_chat_link(hash, ok_cb, false)
         end
+        if matches[1]:lower() == 'list' then
+            if matches[2]:lower() == 'admins' then
+                return admin_list(msg.lang)
+            elseif matches[2]:lower() == 'groups' then
+                -- groups_list(msg)
+                -- send_document("user#id" .. msg.from.id, "./groups/lists/groups.txt", ok_cb, false)
+                -- send_document("chat#id" .. msg.to.id, "./groups/lists/groups.txt", ok_cb, false)
+                -- send_document("channel#id" .. msg.to.id, "./groups/lists/groups.txt", ok_cb, false)
+                -- return langs[msg.lang].groupListCreated
+                return group_list(msg)
+            elseif matches[2]:lower() == 'realms' then
+                -- realms_list(msg)
+                -- send_document("user#id" .. msg.from.id, "./groups/lists/realms.txt", ok_cb, false)
+                -- send_document("chat#id" .. msg.to.id, "./groups/lists/realms.txt", ok_cb, false)
+                -- send_document("channel#id" .. msg.to.id, "./groups/lists/realms.txt", ok_cb, false)
+                -- return langs[msg.lang].realmListCreated
+                return realms_list(msg)
+            end
+        end
         if is_sudo(msg) then
+            if matches[1]:lower() == 'addadmin' then
+                if string.match(matches[2], '^%d+$') then
+                    print("user " .. matches[2] .. " has been promoted as admin")
+                    return admin_promote(matches[2], matches[2], msg.lang)
+                else
+                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
+                    return
+                end
+            end
+            if matches[1]:lower() == 'removeadmin' then
+                if string.match(matches[2], '^%d+$') then
+                    print("user " .. matches[2] .. " has been demoted")
+                    return admin_demote(matches[2], matches[2], msg.lang)
+                else
+                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_admin_by_username, { receiver = get_receiver(msg) })
+                    return
+                end
+            end
             if matches[1]:lower() == "reloaddata" then
                 data = load_data(_config.moderation.data)
                 return langs[msg.lang].dataReloaded
@@ -240,48 +293,6 @@ local function run(msg, matches)
                     text = text .. ids[i] .. '\n'
                 end
                 return text
-            end
-            if matches[1]:lower() == "contactlist" or matches[1]:lower() == "sasha lista contatti" then
-                if not matches[2] then
-                    get_contact_list(get_contact_list_callback, { target = msg.from.id, filetype = "txt" })
-                else
-                    get_contact_list(get_contact_list_callback, { target = msg.from.id, filetype = matches[2]:lower() })
-                end
-                return langs[msg.lang].contactListSent
-            end
-            if matches[1]:lower() == "delcontact" or matches[1]:lower() == "sasha elimina contatto" and matches[2] then
-                del_contact("user#id" .. matches[2], ok_cb, false)
-                return langs[msg.lang].user .. matches[2] .. langs[msg.lang].removedFromContacts
-            end
-            if matches[1]:lower() == "addcontact" or matches[1]:lower() == "sasha aggiungi contatto" and matches[2] then
-                phone = matches[2]
-                first_name = matches[3]
-                last_name = matches[4]
-                add_contact(phone, first_name, last_name, ok_cb, false)
-                return langs[msg.lang].user .. phone .. langs[msg.lang].addedToContacts
-            end
-            if matches[1]:lower() == "sendcontact" or matches[1]:lower() == "sasha invia contatto" then
-                phone = matches[2]
-                first_name = matches[3]
-                last_name = matches[4]
-                send_contact(get_receiver(msg), phone, first_name, last_name, ok_cb, false)
-            end
-            if matches[1]:lower() == "mycontact" or matches[1]:lower() == "sasha mio contatto" then
-                if not msg.from.phone then
-                    return langs[msg.lang].contactMissing
-                end
-                phone = msg.from.phone
-                first_name =(msg.from.first_name or msg.from.phone)
-                last_name =(msg.from.last_name or msg.from.id)
-                send_contact(get_receiver(msg), phone, first_name, last_name, ok_cb, false)
-            end
-            if matches[1]:lower() == "dialoglist" or matches[1]:lower() == "sasha lista chat" then
-                if not matches[2] then
-                    get_dialog_list(get_dialog_list_callback, { target = msg.from.id, filetype = "txt" })
-                else
-                    get_dialog_list(get_dialog_list_callback, { target = msg.from.id, filetype = matches[2]:lower() })
-                end
-                return langs[msg.lang].chatListSent
             end
             if not msg.api_patch then
                 if matches[1]:lower() == "backup" or matches[1]:lower() == "sasha esegui backup" then
@@ -307,30 +318,6 @@ local function run(msg, matches)
                 return os.date('%S', os.difftime(tonumber(os.time()), tonumber(msg.date)))
             end
         end
-        if matches[1]:lower() == 'updateid' or matches[1]:lower() == 'sasha aggiorna longid' then
-            local long_id = data[tostring(msg.to.id)]['long_id']
-            if not long_id then
-                data[tostring(msg.to.id)]['long_id'] = msg.to.peer_id
-                save_data(_config.moderation.data, data)
-                return langs[msg.lang].longidUpdate
-            end
-        end
-        if matches[1]:lower() == 'addlog' or matches[1]:lower() == 'sasha aggiungi log' and not matches[2] then
-            if is_log_group(msg) then
-                return langs[msg.lang].alreadyLog
-            end
-            print("Log_SuperGroup " .. msg.to.title .. "(" .. msg.to.id .. ") added")
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")
-            logadd(msg)
-        end
-        if matches[1]:lower() == 'remlog' or matches[1]:lower() == 'sasha rimuovi log' and not matches[2] then
-            if not is_log_group(msg) then
-                return langs[msg.lang].notLog
-            end
-            print("Log_SuperGroup " .. msg.to.title .. "(" .. msg.to.id .. ") removed")
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added Log_SuperGroup")
-            logrem(msg)
-        end
     end
 end
 
@@ -345,15 +332,8 @@ return {
         "^[#!/]([Mm][Aa][Rr][Kk][Rr][Ee][Aa][Dd]) ([Oo][Nn])$",
         "^[#!/]([Mm][Aa][Rr][Kk][Rr][Ee][Aa][Dd]) ([Oo][Ff][Ff])$",
         "^[#!/]([Ss][Ee][Tt][Bb][Oo][Tt][Pp][Hh][Oo][Tt][Oo])$",
-        "^[#!/]([Cc][Oo][Nn][Tt][Aa][Cc][Tt][Ll][Ii][Ss][Tt])$",
-        "^[#!/]([Dd][Ii][Aa][Ll][Oo][Gg][Ll][Ii][Ss][Tt])$",
-        "^[#!/]([Dd][Ee][Ll][Cc][Oo][Nn][Tt][Aa][Cc][Tt]) (%d+)$",
-        "^[#!/]([Aa][Dd][Dd][Cc][Oo][Nn][Tt][Aa][Cc][Tt]) (.*) (.*) (.*)$",
-        "^[#!/]([Ss][Ee][Nn][Dd][Cc][Oo][Nn][Tt][Aa][Cc][Tt]) (.*) (.*) (.*)$",
-        "^[#!/]([Mm][Yy][Cc][Oo][Nn][Tt][Aa][Cc][Tt])$",
         "^[#!/]([Bb][Aa][Cc][Kk][Uu][Pp])$",
         "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee])$",
-        "^[#!/]([Uu][Pp][Dd][Aa][Tt][Ee][Ii][Dd])$",
         "^[#!/]([Aa][Dd][Dd][Ll][Oo][Gg])$",
         "^[#!/]([Rr][Ee][Mm][Ll][Oo][Gg])$",
         "^[#!/]([Vv][Aa][Rr][Dd][Uu][Mm][Pp]) (.*)$",
@@ -377,59 +357,25 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Ss][Ee][Gg][Nn][Aa] [Ll][Ee][Tt][Tt][Oo]) ([Oo][Ff][Ff])$",
         -- setbotphoto
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Aa][Mm][Bb][Ii][Aa] [Ff][Oo][Tt][Oo])$",
-        -- contactlist
-        "^[#!/]([Cc][Oo][Nn][Tt][Aa][Cc][Tt][Ll][Ii][Ss][Tt]) ([Tt][Xx][Tt])$",
-        "^[#!/]([Cc][Oo][Nn][Tt][Aa][Cc][Tt][Ll][Ii][Ss][Tt]) ([Jj][Ss][Oo][Nn])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Ii])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Ii]) ([Tt][Xx][Tt])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Ii]) ([Jj][Ss][Oo][Nn])$",
-        -- dialoglist
-        "^[#!/]([Dd][Ii][Aa][Ll][Oo][Gg][Ll][Ii][Ss][Tt]) ([Tt][Xx][Tt])$",
-        "^[#!/]([Dd][Ii][Aa][Ll][Oo][Gg][Ll][Ii][Ss][Tt]) ([Jj][Ss][Oo][Nn])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Cc][Hh][Aa][Tt])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Cc][Hh][Aa][Tt]) ([Tt][Xx][Tt])$",
-        "^([Ss][Aa][Ss][Hh][Aa] [Ll][Ii][Ss][Tt][Aa] [Cc][Hh][Aa][Tt]) ([Jj][Ss][Oo][Nn])$",
-        -- delcontact
-        "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ll][Ii][Mm][Ii][Nn][Aa] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Oo]) (%d+)$",
-        -- addcontact
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Uu][Nn][Gg][Ii] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Oo]) (.*) (.*) (.*)$",
-        -- sendcontact
-        "^([Ss][Aa][Ss][Hh][Aa] [Ii][Nn][Vv][Ii][Aa] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Oo]) (.*) (.*) (.*)$",
-        -- mycontact
-        "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ii][Oo] [Cc][Oo][Nn][Tt][Aa][Tt][Tt][Oo])$",
         -- backup
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Bb][Aa][Cc][Kk][Uu][Pp])$",
-        -- updateid
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ll][Oo][Nn][Gg][Ii][Dd])$",
-        -- addlog
-        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Uu][Nn][Gg][Ii] [Ll][Oo][Gg])$",
-        -- remlog
-        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Mm][Uu][Oo][Vv][Ii] [Ll][Oo][Gg])$",
     },
     run = run,
     min_rank = 3,
     syntax =
     {
         "ADMIN",
-        "(#pm|sasha messaggia) <user_id> <msg>",
+        "#pm <user_id> <msg>",
         "#import <group_link>",
         "(#pmblock|sasha blocca pm) <user_id>",
         "(#pmunblock|sasha sblocca pm) <user_id>",
         "(#markread|sasha segna letto) (on|off)",
         "(#setbotphoto|sasha cambia foto)",
-        "(#updateid|sasha aggiorna longid)",
-        "(#addlog|sasha aggiungi log)",
-        "(#remlog|sasha rimuovi log)",
+        "#list admins|groups|realms",
         "#checkspeed",
         "#ping",
         "#laststart",
         "SUDO",
-        "(#contactlist|sasha lista contatti) (txt|json)",
-        "(#dialoglist|sasha lista chat) (txt|json)",
-        "(#addcontact|sasha aggiungi contatto) <phone> <name> <surname>",
-        "(#delcontact|sasha elimina contatto) <user_id>",
-        "(#sendcontact|sasha invia contatto) <phone> <name> <surname>",
-        "(#mycontact|sasha mio contatto)",
         "(#backup|sasha esegui backup)",
         "#update",
         "#vardump [<reply>|<msg_id>]",
@@ -437,6 +383,8 @@ return {
         "#deauthorizereboot <user_id>",
         "#list reboot authorized",
         "#reloaddata",
+        "#addadmin <user_id>|<username>",
+        "#removeadmin <user_id>|<username>",
     },
 }
 -- By @imandaneshi :)

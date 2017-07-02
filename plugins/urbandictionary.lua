@@ -31,15 +31,12 @@ return {
         "^[#!/][Uu][Rr][Bb][Aa][Nn][Dd][Ii][Cc][Tt][Ii][Oo][Nn][Aa][Rr][Yy] (.+)$",
         "^[#!/][Uu][Rr][Bb][Aa][Nn] (.+)$",
         "^[#!/][Uu][Dd] (.+)$",
-        -- urban dictionary
-        "^[Ss][Aa][Ss][Hh][Aa] [Uu][Rr][Bb][Aa][Nn] (.+)$",
-        "^[Ss][Aa][Ss][Hh][Aa] [Uu][Dd] (.+)$",
     },
     run = run,
     min_rank = 0,
     syntax =
     {
         "USER",
-        "(#urbandictionary|#urban|#ud|[sasha] urban|[sasha] ud) <text>",
+        "(#urbandictionary|#urban|#ud) <text>",
     },
 }

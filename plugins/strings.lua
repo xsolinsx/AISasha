@@ -11,7 +11,7 @@ local function run(msg, matches)
                 return langs[msg.lang].require_owner
             end
         end
-        if matches[1]:lower() == 'reloadstrings' or matches[1]:lower() == 'sasha aggiorna stringhe' or matches[1]:lower() == 'aggiorna stringhe' then
+        if matches[1]:lower() == 'reloadstrings' or matches[1]:lower() == 'reloadlangs' then
             if is_sudo(msg) then
                 print('Loading languages.lua...')
                 langs = dofile('languages.lua')
@@ -30,12 +30,10 @@ return {
         '^[#!/]([Ss][Ee][Tt][Ll][Aa][Nn][Gg]) ([Ii][Tt])$',
         '^[#!/]([Ss][Ee][Tt][Ll][Aa][Nn][Gg]) ([Ee][Nn])$',
         '^[#!/]([Rr][Ee][Ll][Oo][Aa][Dd][Ss][Tt][Rr][Ii][Nn][Gg][Ss])$',
+        '^[#!/]([Rr][Ee][Ll][Oo][Aa][Dd][Ll][Aa][Nn][Gg][Ss])$',
         -- setlang
         '^([Ll][Ii][Nn][Gg][Uu][Aa]) ([Ii][Tt])$',
         '^([Ll][Ii][Nn][Gg][Uu][Aa]) ([Ee][Nn])$',
-        -- reloadstrings
-        '^([Ss][Aa][Ss][Hh][Aa] [Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
-        '^([Aa][Gg][Gg][Ii][Oo][Rr][Nn][Aa] [Ss][Tt][Rr][Ii][Nn][Gg][Hh][Ee])$',
     },
     run = run,
     min_rank = 0,
@@ -46,6 +44,6 @@ return {
         "OWNER",
         "(#setlang|lingua) (it|en)",
         "SUDO",
-        "(#reloadstrings|[sasha] aggiorna stringhe)",
+        "(#reloadstrings|#reloadlangs)",
     },
 }
