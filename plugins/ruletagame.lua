@@ -396,7 +396,8 @@ local function run(msg, matches)
             langs[msg.lang].wonduels .. userstats.wonduels .. '\n' ..
             langs[msg.lang].lostduels .. userstats.lostduels .. '\n' ..
             langs[msg.lang].actualstreak .. userstats.actualstreak .. '\n' ..
-            langs[msg.lang].longeststreak .. userstats.longeststreak
+            langs[msg.lang].longeststreak .. userstats.longeststreak .. '\n' ..
+            langs[msg.lang].luck .. tostring((tonumber(userstats.score) * 100) / tonumber(userstats.attempts)) .. '%'
             reply_msg(msg.id, stats, ok_cb, false)
             return
         end
@@ -772,8 +773,8 @@ return {
         "#setcylinder <value>",
         "#setchallengecylinder <value>",
         "ADMIN",
-        "#registergroupruleta|#registra gruppo ruleta",
-        "#deletegroupruleta|#elimina gruppo ruleta",
+        "#registergroupruleta|registra gruppo ruleta",
+        "#deletegroupruleta|elimina gruppo ruleta",
         "SUDO",
         "#createruletadb",
         "#addpoints <id> <value>",
