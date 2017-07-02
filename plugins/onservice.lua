@@ -15,7 +15,7 @@ local function run(msg, matches)
                 return langs[msg.lang].require_admin
             end
         end
-    elseif matches[1]:lower() == 'rebootapi' or matches[1]:lower() == 'sasha riavvia api' then
+    elseif matches[1]:lower() == 'rebootapi' then
         if is_reboot_allowed(msg) then
             io.popen('kill -9 $(pgrep lua)'):read('*all')
             send_large_msg_SUDOERS(langs[msg.lang].apiReboot .. msg.from.print_name:gsub('_', ' ') .. ' ' .. msg.from.id)
@@ -40,8 +40,6 @@ return {
         -- leave
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Bb][Bb][Aa][Nn][Dd][Oo][Nn][Aa]) (%d+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Bb][Bb][Aa][Nn][Dd][Oo][Nn][Aa])$",
-        -- rebootapi
-        "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Aa][Vv][Ii][Aa] [Aa][Pp][Ii])$",
         "^!!tgservice (.+)$",
     },
     run = run,
@@ -51,6 +49,6 @@ return {
         "ADMIN",
         "(#leave|sasha abbandona) [<group_id>]",
         "SUDO",
-        "(#rebootapi|sasha riavvia api)",
+        "#rebootapi",
     },
 }

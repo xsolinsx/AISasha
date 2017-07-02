@@ -1192,7 +1192,7 @@ return {
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha lascia il gruppo.',
             "SUDO",
-            '(#rebootapi|sasha riavvia api): Sasha riavvia la sua versione BOT.',
+            '#rebootapi: Sasha riavvia la sua versione BOT.',
         },
 
         patch_for_api =
@@ -2371,7 +2371,7 @@ return {
             'ADMIN',
             '(#leave|sasha abbandona) [<group_id>]: Sasha leaves the group.',
             "SUDO",
-            '(#rebootapi|sasha riavvia api): Sasha reboots her BOT version.',
+            '#rebootapi: Sasha reboots her BOT version.',
         },
 
         patch_for_api =
