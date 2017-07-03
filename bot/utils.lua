@@ -764,8 +764,8 @@ end
 function get_lang(chat_id)
     local lang = redis:get('lang:' .. chat_id)
     if not lang then
-        redis:set('lang:' .. chat_id, 'it')
-        lang = 'it'
+        redis:set('lang:' .. chat_id, 'en')
+        lang = 'en'
     end
     return lang
 end
