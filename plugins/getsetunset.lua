@@ -630,91 +630,7 @@ end
 local function pre_process(msg, matches)
     if msg then
         if not msg.api_patch then
-            local vars = list_variables(msg, true)
-            local answer = nil
-
-            if vars ~= nil then
-                local t = vars:split('\n')
-                for i, word in pairs(t) do
-                    local found = false
-                    local temp = word:lower()
-                    if msg.text then
-                        if not string.match(msg.text, "^[#!/][Gg][Ee][Tt] (.*)$") and not string.match(msg.text, "^[#!/][Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll] ([^%s]+)$") and not string.match(msg.text, "^[#!/]([Ii][Mm][Pp][Oo][Rr][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ss][Ee][Tt][Ss]) (.+)$") then
-                            if string.match(msg.text:lower(), temp) then
-                                local value = get_value(msg, temp)
-                                if value then
-                                    answer = value
-                                    found = true
-                                end
-                            end
-                        end
-                    end
-                    if msg.media then
-                        if msg.media.title then
-                            if string.match(msg.media.title:lower(), temp) then
-                                local value = get_value(msg, temp)
-                                if value then
-                                    answer = value
-                                    found = true
-                                end
-                            end
-                        end
-                        if msg.media.description then
-                            if string.match(msg.media.description:lower(), temp) then
-                                local value = get_value(msg, temp)
-                                if value then
-                                    answer = value
-                                    found = true
-                                end
-                            end
-                        end
-                        if msg.media.caption then
-                            if string.match(msg.media.caption:lower(), temp) then
-                                local value = get_value(msg, temp)
-                                if value then
-                                    answer = value
-                                    found = true
-                                end
-                            end
-                        end
-                    end
-                    if msg.fwd_from then
-                        if msg.fwd_from.title then
-                            if string.match(msg.fwd_from.title:lower(), temp) then
-                                local value = get_value(msg, temp)
-                                if value then
-                                    answer = value
-                                    found = true
-                                end
-                            end
-                        end
-                    end
-                    if found then
-                        if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
-                            -- if not media
-                            if msg.reply_id then
-                                get_message(msg.reply_id, adjust_value_reply, { msg_id = msg.id, receiver = get_receiver(msg), from = msg.from, to = msg.to, value = get_value(msg, word:lower()) })
-                            else
-                                reply_msg(msg.id, adjust_value(get_value(msg, word:lower()), msg.to, msg.from), ok_cb, false)
-                            end
-                            return msg
-                        elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
-                            -- if picture
-                            if io.popen('find ' .. answer):read("*all") ~= '' then
-                                send_photo(get_receiver(msg), answer, ok_cb, false)
-                                return msg
-                            end
-                        elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.ogg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.ogg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.ogg$") then
-                            -- if audio
-                            if io.popen('find ' .. answer):read("*all") ~= '' then
-                                send_audio(get_receiver(msg), answer, ok_cb, false)
-                                return msg
-                            end
-                        end
-                    end
-                end
-            end
-
+            -- local
             local vars = list_variables(msg, false)
             local answer = nil
 
@@ -776,6 +692,91 @@ local function pre_process(msg, matches)
                     end
                     if found then
                         print('GET FOUND')
+                        if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
+                            -- if not media
+                            if msg.reply_id then
+                                get_message(msg.reply_id, adjust_value_reply, { msg_id = msg.id, receiver = get_receiver(msg), from = msg.from, to = msg.to, value = get_value(msg, word:lower()) })
+                            else
+                                reply_msg(msg.id, adjust_value(get_value(msg, word:lower()), msg.to, msg.from), ok_cb, false)
+                            end
+                            return msg
+                        elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.jpg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.jpg$") then
+                            -- if picture
+                            if io.popen('find ' .. answer):read("*all") ~= '' then
+                                send_photo(get_receiver(msg), answer, ok_cb, false)
+                                return msg
+                            end
+                        elseif string.match(answer, "^(.*)user%.(%d+)%.variables(.*)%.ogg$") or string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)%.ogg$") or string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)%.ogg$") then
+                            -- if audio
+                            if io.popen('find ' .. answer):read("*all") ~= '' then
+                                send_audio(get_receiver(msg), answer, ok_cb, false)
+                                return msg
+                            end
+                        end
+                    end
+                end
+            end
+            -- global
+            local vars = list_variables(msg, true)
+            local answer = nil
+
+            if vars ~= nil then
+                local t = vars:split('\n')
+                for i, word in pairs(t) do
+                    local found = false
+                    local temp = word:lower()
+                    if msg.text then
+                        if not string.match(msg.text, "^[#!/][Gg][Ee][Tt] (.*)$") and not string.match(msg.text, "^[#!/][Uu][Nn][Ss][Ee][Tt][Gg][Ll][Oo][Bb][Aa][Ll] ([^%s]+)$") and not string.match(msg.text, "^[#!/]([Ii][Mm][Pp][Oo][Rr][Tt][Gg][Ll][Oo][Bb][Aa][Ll][Ss][Ee][Tt][Ss]) (.+)$") then
+                            if string.match(msg.text:lower(), temp) then
+                                local value = get_value(msg, temp)
+                                if value then
+                                    answer = value
+                                    found = true
+                                end
+                            end
+                        end
+                    end
+                    if msg.media then
+                        if msg.media.title then
+                            if string.match(msg.media.title:lower(), temp) then
+                                local value = get_value(msg, temp)
+                                if value then
+                                    answer = value
+                                    found = true
+                                end
+                            end
+                        end
+                        if msg.media.description then
+                            if string.match(msg.media.description:lower(), temp) then
+                                local value = get_value(msg, temp)
+                                if value then
+                                    answer = value
+                                    found = true
+                                end
+                            end
+                        end
+                        if msg.media.caption then
+                            if string.match(msg.media.caption:lower(), temp) then
+                                local value = get_value(msg, temp)
+                                if value then
+                                    answer = value
+                                    found = true
+                                end
+                            end
+                        end
+                    end
+                    if msg.fwd_from then
+                        if msg.fwd_from.title then
+                            if string.match(msg.fwd_from.title:lower(), temp) then
+                                local value = get_value(msg, temp)
+                                if value then
+                                    answer = value
+                                    found = true
+                                end
+                            end
+                        end
+                    end
+                    if found then
                         if not string.match(answer, "^(.*)user%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)chat%.(%d+)%.variables(.*)$") and not string.match(answer, "^(.*)channel%.(%d+)%.variables(.*)$") then
                             -- if not media
                             if msg.reply_id then
