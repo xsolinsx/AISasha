@@ -263,7 +263,7 @@ function match_plugin(plugin, plugin_name, msg)
                 end )
                 if not res then
                     -- send to log
-                    send_large_msg('channel#id1043389864', 'An #error occurred.\n' .. err or '' .. '\n' .. vardump(msg) or '')
+                    send_large_msg('channel#id1043389864', 'An #error occurred.\n' ..(err or '') .. '\n' ..(vardump(msg) or ''))
                 end
             end
             -- One patterns matches
