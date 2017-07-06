@@ -522,11 +522,12 @@ local function run(msg, matches)
                     end
                     postpone(post_kick, false, 1)
                 end
+                reject_challenge(user, chat)
             elseif not is_momod(msg) then
                 reply_msg(msg.id, langs[msg.lang].wrongPlayer:gsub('X', redis:get('ruletachallenged:' .. chat)), ok_cb, false)
-                return
+            else
+                reject_challenge(user, chat)
             end
-            reject_challenge(user, chat)
             return
         end
 
