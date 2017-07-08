@@ -2510,63 +2510,61 @@ local function run(msg, matches)
                         return langs[msg.lang].sendMeLink
                     end
                 end
-            end
-            if matches[1]:lower() == 'promoteadmin' then
-                if is_owner(msg) then
-                    if type(msg.reply_id) ~= "nil" then
-                        local cbreply_extra = {
-                            get_cmd = 'promoteadmin',
-                            msg = msg
-                        }
-                        get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                    elseif matches[2] and matches[2] ~= '' then
-                        if string.match(matches[2], '^%d+$') then
-                            channel_set_admin(get_receiver(msg), 'user#id' .. matches[2], ok_cb, false)
-                            send_large_msg(get_receiver(msg), matches[2] .. langs[msg.lang].promoteSupergroupMod)
-                        else
-                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_telegram_admin_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = get_receiver(msg) })
-                        end
-                    end
-                else
-                    return langs[msg.lang].require_owner
-                end
-            end
-            if matches[1]:lower() == 'demoteadmin' then
-                if is_owner(msg) then
-                    if type(msg.reply_id) ~= "nil" then
-                        local cbreply_extra = {
-                            get_cmd = 'demoteadmin',
-                            msg = msg
-                        }
-                        get_message(msg.reply_id, get_message_callback, cbreply_extra)
-                    elseif matches[2] and matches[2] ~= '' then
-                        if string.match(matches[2], '^%d+$') then
-                            local receiver = get_receiver(msg)
-                            local user_id = "user#id" .. matches[2]
-                            local get_cmd = 'demoteadmin'
-                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                                channel_demote(get_receiver(msg), user_id, ok_cb, false)
-                                send_large_msg(get_receiver(msg), result.peer_id .. langs[msg.lang].demoteSupergroupMod)
-                                return
+                if matches[1]:lower() == 'promoteadmin' then
+                    if is_owner(msg) then
+                        if type(msg.reply_id) ~= "nil" then
+                            local cbreply_extra = {
+                                get_cmd = 'promoteadmin',
+                                msg = msg
+                            }
+                            get_message(msg.reply_id, get_message_callback, cbreply_extra)
+                        elseif matches[2] and matches[2] ~= '' then
+                            if string.match(matches[2], '^%d+$') then
+                                channel_set_admin(get_receiver(msg), 'user#id' .. matches[2], ok_cb, false)
+                                send_large_msg(get_receiver(msg), matches[2] .. langs[msg.lang].promoteSupergroupMod)
                             else
-                                send_large_msg(get_receiver(msg), langs[msg.lang].cantDemoteOtherAdmin)
+                                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_telegram_admin_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = get_receiver(msg) })
+                            end
+                        end
+                    else
+                        return langs[msg.lang].require_owner
+                    end
+                end
+                if matches[1]:lower() == 'demoteadmin' then
+                    if is_owner(msg) then
+                        if type(msg.reply_id) ~= "nil" then
+                            local cbreply_extra = {
+                                get_cmd = 'demoteadmin',
+                                msg = msg
+                            }
+                            get_message(msg.reply_id, get_message_callback, cbreply_extra)
+                        elseif matches[2] and matches[2] ~= '' then
+                            if string.match(matches[2], '^%d+$') then
+                                local receiver = get_receiver(msg)
+                                local user_id = "user#id" .. matches[2]
+                                local get_cmd = 'demoteadmin'
+                                if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                                    channel_demote(get_receiver(msg), user_id, ok_cb, false)
+                                    send_large_msg(get_receiver(msg), result.peer_id .. langs[msg.lang].demoteSupergroupMod)
+                                    return
+                                else
+                                    send_large_msg(get_receiver(msg), langs[msg.lang].cantDemoteOtherAdmin)
+                                    return
+                                end
+                            else
+                                local cbres_extra = {
+                                    channel = get_receiver(msg),
+                                    get_cmd = 'demoteadmin'
+                                }
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted admin @" .. string.gsub(matches[2], '@', ''))
+                                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
                                 return
                             end
-                        else
-                            local cbres_extra = {
-                                channel = get_receiver(msg),
-                                get_cmd = 'demoteadmin'
-                            }
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted admin @" .. string.gsub(matches[2], '@', ''))
-                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, cbres_extra)
-                            return
                         end
+                    else
+                        return langs[msg.lang].require_owner
                     end
-                else
-                    return langs[msg.lang].require_owner
                 end
-            end
-            if not msg.api_patch then
                 if matches[1]:lower() == 'setowner' then
                     if is_owner(msg) then
                         if type(msg.reply_id) ~= "nil" then
