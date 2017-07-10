@@ -2177,28 +2177,26 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             end
-        end
-        if matches[1]:lower() == 'newlink' and not is_realm(msg) then
-            if is_momod(msg) then
-                local function callback(extra, success, result)
-                    local receiver = 'chat#' .. msg.to.id
-                    if success == 0 then
-                        send_large_msg(receiver, langs[msg.lang].errorCreateLink)
-                        return
+            if matches[1]:lower() == 'newlink' and not is_realm(msg) then
+                if is_momod(msg) then
+                    local function callback(extra, success, result)
+                        local receiver = 'chat#' .. msg.to.id
+                        if success == 0 then
+                            send_large_msg(receiver, langs[msg.lang].errorCreateLink)
+                            return
+                        end
+                        send_large_msg(receiver, langs[msg.lang].linkCreated)
+                        data[tostring(msg.to.id)].settings['set_link'] = result
+                        save_data(_config.moderation.data, data)
                     end
-                    send_large_msg(receiver, langs[msg.lang].linkCreated)
-                    data[tostring(msg.to.id)].settings['set_link'] = result
-                    save_data(_config.moderation.data, data)
+                    local receiver = 'chat#' .. msg.to.id
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] revoked group link ")
+                    export_chat_link(receiver, callback, true)
+                    return
+                else
+                    return langs[msg.lang].require_mod
                 end
-                local receiver = 'chat#' .. msg.to.id
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] revoked group link ")
-                export_chat_link(receiver, callback, true)
-                return
-            else
-                return langs[msg.lang].require_mod
             end
-        end
-        if not msg.api_patch then
             if (matches[1]:lower() == 'setlink' or matches[1]:lower() == "sasha imposta link") and matches[2] then
                 if is_owner(msg) then
                     data[tostring(msg.to.id)].settings['set_link'] = matches[2]
