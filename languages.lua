@@ -1130,6 +1130,7 @@ return {
             'Plugin per l\'interazione con gli utenti.',
             'MOD',
             '(#echo|sasha ripeti) [<reply>]<text>: Sasha ripete <text>, se in risposta ad un messaggio sasha risponde a quel messaggio.',
+            '#delecho [<reply>]<text>: Sasha ripete <text>, se in risposta ad un messaggio sasha risponde a quel messaggio, ed elimina il comando.',
         },
 
         invite =
@@ -2323,13 +2324,14 @@ return {
             'Plugin for the interaction with users.',
             'MOD',
             '(#echo|sasha ripeti) [<reply>]<text>: Sasha repeat <text>, if in reply of a message she replies to that message.',
+            '#delecho [<reply>]<text>: Sasha repeats <text>, if in reply of a message she replies to that message, and deletes the command.',
         },
 
         invite =
         {
             '🅿️ INVITE',
             'Plugin to invite users.',
-            --  'OWNER',
+            -- 'OWNER',
             'ADMIN',
             '(#invite|[sasha] invita|[sasha] resuscita) <id>|<username>|<reply>: Sasha invites the specified user.',
         },

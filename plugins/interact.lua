@@ -1,13 +1,31 @@
 local function run(msg, matches)
     if not msg.api_patch then
         if (matches[1]:lower() == 'echo' or matches[1]:lower() == 'sasha ripeti') and matches[2] then
-            if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
-                return langs[msg.lang].autocrossexecDenial
-            end
-            if string.match(matches[2], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
-                return langs[msg.lang].autocrossexecDenial
-            end
             if is_momod(msg) then
+                if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                    return langs[msg.lang].autocrossexecDenial
+                end
+                if string.match(matches[2], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                    return langs[msg.lang].autocrossexecDenial
+                end
+                if type(msg.reply_id) ~= "nil" then
+                    reply_msg(msg.reply_id, matches[2], ok_cb, false)
+                else
+                    return matches[2]
+                end
+            else
+                return langs[msg.lang].require_mod
+            end
+        end
+        if matches[1]:lower() == 'delecho' and matches[2] then
+            if msg.from.is_mod then
+                if string.match(matches[2], '[Aa][Uu][Tt][Oo][Ee][Xx][Ee][Cc]') then
+                    return langs[msg.lang].autocrossexecDenial
+                end
+                if string.match(matches[2], '[Cc][Rr][Oo][Ss][Ss][Ee][Xx][Ee][Cc]') then
+                    return langs[msg.lang].autocrossexecDenial
+                end
+                delete_msg(msg.id, ok_cb, false)
                 if type(msg.reply_id) ~= "nil" then
                     reply_msg(msg.reply_id, matches[2], ok_cb, false)
                 else
@@ -52,6 +70,7 @@ return {
     patterns =
     {
         "^[#!/]([Ee][Cc][Hh][Oo]) +(.+)$",
+        "^[#!/]([Dd][Ee][Ll][Ee][Cc][Hh][Oo]) +(.+)$",
         -- echo
         "^([Ss][Aa][Ss][Hh][Aa] [Rr][Ii][Pp][Ee][Tt][Ii]) +(.+)$",
         -- react
@@ -67,5 +86,6 @@ return {
     {
         "MOD",
         "(#echo|sasha ripeti) <text>",
+        "#delecho <text>",
     },
 }
