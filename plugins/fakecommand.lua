@@ -1,8 +1,8 @@
 -- no "SUDO" because there's no rank higher than "SUDO" (yes there's "BOT" but it's not a real rank)
 -- "USER" can't use this because there's no rank lower than "USER"
 local function run(msg, matches)
-    if is_momod(msg) then
-        if not msg.api_patch then
+    if not msg.api_patch then
+        if is_momod(msg) then
             local rank = get_rank(msg.from.id, msg.to.id)
             local fakerank = rank_table[matches[1]:upper()]
             print(rank, fakerank)
@@ -20,9 +20,9 @@ local function run(msg, matches)
                 -- no
                 return langs[msg.lang].fakecommandYouTried
             end
+        else
+            return langs[msg.lang].require_mod
         end
-    else
-        return langs[msg.lang].require_mod
     end
 end
 
