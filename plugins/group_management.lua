@@ -1054,10 +1054,17 @@ local function callback_syncmodlist(extra, success, result)
     send_large_msg(extra.receiver, langs[lang].modListSynced)
 end
 
+local function check_admin_success(extra, success, result)
+    if success then
+        send_large_msg(channel_id, text)
+    end
+end
+
 -- Start by reply actions
-function get_message_callback(extra, success, result)
+local function get_message_callback(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if get_reply_receiver(result) == get_receiver(extra.msg) then
+        local text = ''
         local get_cmd = extra.get_cmd
         local msg = extra.msg
         local print_name = user_print_name(msg.from):gsub("?", "")
@@ -1065,14 +1072,13 @@ function get_message_callback(extra, success, result)
         if get_cmd == "promoteadmin" then
             local user_id = result.from.peer_id
             local channel_id = "channel#id" .. result.to.peer_id
-            channel_set_admin(channel_id, "user#id" .. user_id, ok_cb, false)
             if result.from.username then
                 text = "@" .. result.from.username .. langs[msg.lang].promoteSupergroupMod
             else
                 text = user_id .. langs[msg.lang].promoteSupergroupMod
             end
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] promoted: [" .. user_id .. "] as admin by reply")
-            send_large_msg(channel_id, text)
+            channel_set_admin(channel_id, "user#id" .. user_id, check_admin_success, { receiver = channel_id, text = text })
         elseif get_cmd == "demoteadmin" then
             local user_id = result.from.peer_id
             local channel_id = "channel#id" .. result.to.peer_id
@@ -1080,14 +1086,13 @@ function get_message_callback(extra, success, result)
                 send_large_msg(channel_id, langs[msg.lang].cantDemoteOtherAdmin)
                 return
             end
-            channel_demote(channel_id, "user#id" .. user_id, ok_cb, false)
             if result.from.username then
                 text = "@" .. result.from.username .. langs[msg.lang].demoteSupergroupMod
             else
                 text = user_id .. langs[msg.lang].demoteSupergroupMod
             end
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted: [" .. user_id .. "] as admin by reply")
-            send_large_msg(channel_id, text)
+            channel_demote(channel_id, "user#id" .. user_id, check_admin_success, { receiver = channel_id, text = text })
         elseif get_cmd == "setowner" then
             local group_owner = data[tostring(result.to.peer_id)]['set_owner']
             if group_owner then
@@ -1097,16 +1102,15 @@ function get_message_callback(extra, success, result)
                     channel_demote(channel_id, user, ok_cb, false)
                 end
                 local user_id = "user#id" .. result.from.peer_id
-                channel_set_admin(channel_id, user_id, ok_cb, false)
-                data[tostring(result.to.peer_id)]['set_owner'] = tostring(result.from.peer_id)
-                save_data(_config.moderation.data, data)
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set: [" .. result.from.peer_id .. "] as owner by reply")
                 if result.from.username then
                     text = "@" .. result.from.username .. " " .. result.from.peer_id .. langs[msg.lang].setOwner
                 else
                     text = result.from.peer_id .. langs[msg.lang].setOwner
                 end
-                send_large_msg(channel_id, text)
+                channel_set_admin(channel_id, user_id, check_admin_success, { receiver = channel_id, text = text })
+                data[tostring(result.to.peer_id)]['set_owner'] = tostring(result.from.peer_id)
+                save_data(_config.moderation.data, data)
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] set: [" .. result.from.peer_id .. "] as owner by reply")
             end
         elseif get_cmd == "promote" then
             local receiver = result.to.peer_id
@@ -1180,9 +1184,7 @@ local function promote_telegram_admin_by_username(extra, success, result)
         send_large_msg(extra.receiver, langs[lang].noUsernameFound)
         return
     end
-    channel_set_admin(extra.receiver, 'user#id' .. result.peer_id, ok_cb, false)
-    send_large_msg(extra.receiver, "@" .. result.username .. " " .. result.peer_id .. langs[lang].promoteSupergroupMod)
-    savelog(extra.chat_id, "[" .. extra.executer .. "] set admin @" .. result.username .. " [" .. result.peer_id .. "]")
+    channel_set_admin(extra.receiver, 'user#id' .. result.peer_id, check_admin_success, { receiver = extra.receiver, text = "@" .. result.username .. " " .. result.peer_id .. langs[lang].promoteSupergroupMod })
 end
 -- End non-channel_invite username actions
 
@@ -1195,35 +1197,13 @@ local function callbackres(extra, success, result)
     if extra.channel then
         lang = get_lang(string.match(extra.channel, '%d+'))
     end
+    if success == 0 then
+        return send_large_msg(extra.receiver, langs[lang].noUsernameFound)
+    end
+    local text = ''
     local member_id = result.peer_id
     local member_username = "@" .. result.username
     local get_cmd = extra.get_cmd
-    --[[elseif get_cmd == "setowner" then
-    local receiver = extra.channel
-		local channel = string.gsub(receiver, 'channel#id', '')
-		local from_id = extra.from_id
-		local group_owner = data[tostring(channel)]['set_owner']
-		if group_owner then
-			local user = "user#id"..group_owner
-			if not is_admin2(group_owner) then
-				channel_demote(receiver, user, ok_cb, false)
-			end
-			local user_id = "user#id"..result.peer_id
-			channel_set_admin(receiver, user_id, ok_cb, false)
-			data[tostring(channel)]['set_owner'] = tostring(result.peer_id)
-			save_data(_config.moderation.data, data)
-			savelog(channel, name_log.." ["..from_id.."] set ["..result.peer_id.."] as owner by username")
-		if result.username then
-			text = member_username.." "..result.peer_id..langs[lang].setOwner
-		else
-			text = result.peer_id..langs[lang].setOwner
-		end
-		send_large_msg(receiver, text)
-  end]]
-    if success == 0 then
-        send_large_msg(extra.receiver, langs[lang].noUsernameFound)
-        return
-    end
     if get_cmd == "promote" then
         local receiver = extra.channel
         local user_id = result.peer_id
@@ -1242,13 +1222,12 @@ local function callbackres(extra, success, result)
             send_large_msg(channel_id, langs[lang].cantDemoteOtherAdmin)
             return
         end
-        channel_demote(channel_id, user_id, ok_cb, false)
         if result.username then
             text = "@" .. result.username .. langs[lang].demoteSupergroupMod
         else
             text = result.peer_id .. langs[lang].demoteSupergroupMod
         end
-        send_large_msg(channel_id, text)
+        channel_demote(channel_id, user_id, check_admin_success, { receiver = channel_id, text = text })
     elseif get_cmd == 'mute_user' then
         local user_id = result.peer_id
         local receiver = extra.receiver
@@ -2518,8 +2497,7 @@ local function run(msg, matches)
                             get_message(msg.reply_id, get_message_callback, cbreply_extra)
                         elseif matches[2] and matches[2] ~= '' then
                             if string.match(matches[2], '^%d+$') then
-                                channel_set_admin(get_receiver(msg), 'user#id' .. matches[2], ok_cb, false)
-                                send_large_msg(get_receiver(msg), matches[2] .. langs[msg.lang].promoteSupergroupMod)
+                                channel_set_admin(get_receiver(msg), 'user#id' .. matches[2], check_admin_success, { receiver = get_receiver(msg), text = matches[2] .. langs[msg.lang].promoteSupergroupMod })
                             else
                                 resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), promote_telegram_admin_by_username, { executer = msg.from.id, chat_id = msg.to.id, receiver = get_receiver(msg) })
                             end
@@ -2542,8 +2520,7 @@ local function run(msg, matches)
                                 local user_id = "user#id" .. matches[2]
                                 local get_cmd = 'demoteadmin'
                                 if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                                    channel_demote(get_receiver(msg), user_id, ok_cb, false)
-                                    send_large_msg(get_receiver(msg), result.peer_id .. langs[msg.lang].demoteSupergroupMod)
+                                    channel_demote(get_receiver(msg), user_id, check_admin_success, { receiver = get_receiver(msg), text = result.peer_id .. langs[msg.lang].demoteSupergroupMod })
                                     return
                                 else
                                     send_large_msg(get_receiver(msg), langs[msg.lang].cantDemoteOtherAdmin)
