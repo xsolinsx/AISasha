@@ -397,7 +397,7 @@ local function run(msg, matches)
             langs[msg.lang].lostduels .. userstats.lostduels .. '\n' ..
             langs[msg.lang].actualstreak .. userstats.actualstreak .. '\n' ..
             langs[msg.lang].longeststreak .. userstats.longeststreak .. '\n' ..
-            langs[msg.lang].luck .. tostring((tonumber(userstats.score) * 100) / tonumber(userstats.attempts)) .. '%'
+            langs[msg.lang].scoreAttemptsRatio .. tostring((tonumber(userstats.score) * 100) / tonumber(userstats.attempts)) .. '/100'
             reply_msg(msg.id, stats, ok_cb, false)
             return
         end
