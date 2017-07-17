@@ -9,9 +9,11 @@ preview_user = {
 
 local function set_welcome(chat_id, welcome)
     local lang = get_lang(chat_id)
-    data[tostring(chat_id)]['welcome'] = welcome
-    save_data(_config.moderation.data, data)
-    return langs[lang].newWelcome .. welcome
+    if data[tostring(chat_id)] then
+        data[tostring(chat_id)]['welcome'] = welcome
+        save_data(_config.moderation.data, data)
+        return langs[lang].newWelcome .. welcome
+    end
 end
 
 local function get_welcome(chat_id)
@@ -25,32 +27,40 @@ end
 
 local function unset_welcome(chat_id)
     local lang = get_lang(chat_id)
-    data[tostring(chat_id)]['welcome'] = nil
-    save_data(_config.moderation.data, data)
-    return langs[lang].welcomeRemoved
+    if data[tostring(chat_id)] then
+        data[tostring(chat_id)]['welcome'] = nil
+        save_data(_config.moderation.data, data)
+        return langs[lang].welcomeRemoved
+    end
 end
 
 local function set_memberswelcome(chat_id, value)
     local lang = get_lang(chat_id)
-    data[tostring(chat_id)]['welcomemembers'] = value
-    save_data(_config.moderation.data, data)
-    return string.gsub(langs[lang].newWelcomeNumber, 'X', tostring(value))
+    if data[tostring(chat_id)] then
+        data[tostring(chat_id)]['welcomemembers'] = value
+        save_data(_config.moderation.data, data)
+        return string.gsub(langs[lang].newWelcomeNumber, 'X', tostring(value))
+    end
 end
 
 local function get_memberswelcome(chat_id)
     local lang = get_lang(chat_id)
-    if not data[tostring(chat_id)]['welcomemembers'] then
-        return langs[lang].noSetValue
+    if data[tostring(chat_id)] then
+        if data[tostring(chat_id)]['welcomemembers'] then
+            return data[tostring(chat_id)]['welcomemembers']
+        else
+            return langs[lang].noSetValue
+        end
     end
-    local value = data[tostring(chat_id)]['welcomemembers']
-    return value
 end
 
 local function set_goodbye(chat_id, goodbye)
     local lang = get_lang(chat_id)
-    data[tostring(chat_id)]['goodbye'] = goodbye
-    save_data(_config.moderation.data, data)
-    return langs[lang].newGoodbye .. goodbye
+    if data[tostring(chat_id)] then
+        data[tostring(chat_id)]['goodbye'] = goodbye
+        save_data(_config.moderation.data, data)
+        return langs[lang].newGoodbye .. goodbye
+    end
 end
 
 local function get_goodbye(chat_id)
@@ -64,18 +74,22 @@ end
 
 local function unset_goodbye(chat_id)
     local lang = get_lang(chat_id)
-    data[tostring(chat_id)]['goodbye'] = nil
-    save_data(_config.moderation.data, data)
-    return langs[lang].goodbyeRemoved
+    if data[tostring(chat_id)] then
+        data[tostring(chat_id)]['goodbye'] = nil
+        save_data(_config.moderation.data, data)
+        return langs[lang].goodbyeRemoved
+    end
 end
 
 local function get_rules(chat_id)
     local lang = get_lang(chat_id)
-    if not data[tostring(chat_id)]['rules'] then
-        return langs[lang].noRules
+    if data[tostring(chat_id)] then
+        if data[tostring(chat_id)]['rules'] then
+            return data[tostring(chat_id)]['rules']
+        else
+            return langs[lang].noRules
+        end
     end
-    local rules = data[tostring(chat_id)]['rules']
-    return rules
 end
 
 local function adjust_goodbyewelcome(goodbyewelcome, chat, user)
