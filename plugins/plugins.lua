@@ -57,8 +57,8 @@ end
 local function list_plugins_sudo()
     local text = ''
     for k, v in pairs(plugins_names()) do
-        --  ✅ enabled, 🚫 disabled
-        local status = '🚫'
+        --  ✅ enabled, ☑️ disabled
+        local status = '☑️'
         -- get the name
         v = string.match(v, "(.*)%.lua")
         -- Check if enabled
@@ -77,8 +77,8 @@ end
 local function list_plugins(chat_id)
     local text = ''
     for k, v in pairs(plugins_names()) do
-        --  ✅ enabled, 🚫 disabled
-        local status = '🚫'
+        --  ✅ enabled, ☑️ disabled
+        local status = '☑️'
         -- get the name
         v = string.match(v, "(.*)%.lua")
         -- Check if is enabled
@@ -89,7 +89,7 @@ local function list_plugins(chat_id)
         if system_plugin(v) then
             status = '💻'
         elseif plugin_disabled_on_chat(v, chat_id) then
-            status = '❌'
+            status = '🚫'
         end
         text = text .. k .. '. ' .. status .. ' ' .. v .. '\n'
     end
@@ -137,7 +137,7 @@ local function disable_plugin(plugin_name, chat_id)
     table.remove(_config.enabled_plugins, k)
     save_config()
     reload_plugins()
-    return '🚫 ' .. plugin_name .. langs[lang].disabled
+    return '☑️ ' .. plugin_name .. langs[lang].disabled
 end
 
 local function disable_plugin_on_chat(plugin_name, receiver)
@@ -157,7 +157,7 @@ local function disable_plugin_on_chat(plugin_name, receiver)
     _config.disabled_plugin_on_chat[receiver][plugin_name] = true
 
     save_config()
-    return '❌ ' .. plugin_name .. langs[lang].disabledOnChat
+    return '🚫 ' .. plugin_name .. langs[lang].disabledOnChat
 end
 
 local function reenable_plugin_on_chat(plugin_name, receiver)
@@ -189,7 +189,7 @@ local function list_disabled_plugin_on_chat(receiver)
         return langs[lang].noDisabledPlugin
     end
 
-    local status = '❌'
+    local status = '🚫'
     local text = ''
     for k in pairs(_config.disabled_plugin_on_chat[receiver]) do
         if _config.disabled_plugin_on_chat[receiver][k] == true then

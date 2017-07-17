@@ -623,7 +623,7 @@ return {
         pluginEnabledAgain = ' nuovamente abilitato.',
         pluginsReloaded = '💊 Plugins ricaricati.',
         pluginsList = 'Lista plugins: ',
-        pluginsIntro = 'Legenda plugins:\n💻 Di sistema\n✅ Abilitato\n🚫 Disabilitato\n❌ Disabilitato nella chat\n✔️ Già abilitato\n✖️ Già disabilitato\n❔ Non esistente',
+        pluginsIntro = 'Legenda plugins:\n💻 Di sistema\n✅ Abilitato\n☑️ Disabilitato\n🚫 Disabilitato nella chat\n✔️ Già abilitato\n✖️ Già disabilitato\n❔ Non esistente',
 
         -- pokedex.lua --
         noPoke = 'Nessun pokémon trovato.',
@@ -1818,7 +1818,7 @@ return {
         pluginEnabledAgain = ' enabled on chat again.',
         pluginsReloaded = '💊 Plugins reloaded.',
         pluginsList = 'Plugins\' list: ',
-        pluginsIntro = 'Plugins\' legend:\n💻 System\n✅ Enabled\n🚫 Disabled\n❌ Disabled on chat\n✔️ Already enabled\n✖️ Already disabled\n❔ Not existent',
+        pluginsIntro = 'Plugins\' legend:\n💻 System\n✅ Enabled\n☑️ Disabled\n🚫 Disabled on chat\n✔️ Already enabled\n✖️ Already disabled\n❔ Not existent',
 
         -- pokedex.lua --
         noPoke = 'No pokémon found.',
