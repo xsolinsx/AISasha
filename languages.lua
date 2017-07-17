@@ -537,6 +537,7 @@ return {
         errorChangeUsername = 'Errore nell\'impostare l\'username.\nPotrebbe già essere in uso.\n\nPuoi usare lettere numeri e l\'underscore.\nLunghezza minima 5 caratteri.',
         usernameCleaned = 'Username gruppo pulito.',
         errorCleanedUsername = 'Errore nel tentativo di pulire l\'username.',
+        errorPromoteDemoteAdmin = 'Errore nel tentativo di promuovere/degradare un utente ad amministratore (telegram).',
 
         -- info.lua --
         infoWord = 'INFO',
@@ -1731,6 +1732,7 @@ return {
         errorChangeUsername = 'Error changing username.\nIt could be already in use.\n\nYou can use letters numbers and underscore.\nMinimum length 5 characters.',
         usernameCleaned = 'Supergroup username cleaned.',
         errorCleanedUsername = 'Error while cleaning supergroup username.',
+        errorPromoteDemoteAdmin = 'Error while trying to promote/demote an user to administrator (telegram).',
 
         -- info.lua --
         infoWord = 'INFO',

@@ -1056,7 +1056,9 @@ end
 
 local function check_admin_success(extra, success, result)
     if success then
-        send_large_msg(channel_id, text)
+        send_large_msg(extra.receiver, extra.text)
+    else
+        send_large_msg(extra.receiver, langs[get_lang(string.match(extra.receiver, '%d+'))].errorPromoteDemoteAdmin)
     end
 end
 
