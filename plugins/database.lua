@@ -286,6 +286,12 @@ end
 
 local function pre_process(msg)
     if msg then
+        if data[tostring(msg.to.id)] then
+            if data[tostring(msg.to.id)].set_name then
+                -- update chat's names
+                data[tostring(msg.to.id)].set_name = string.gsub(msg.to.print_name, '_', ' ')
+            end
+        end
         if database then
             if msg.to.type == 'chat' then
                 -- save group info
