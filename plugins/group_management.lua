@@ -2243,7 +2243,7 @@ local function run(msg, matches)
             end
             if matches[1]:lower() == 'setflood' then
                 if is_momod(msg) then
-                    if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
+                    if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 20 then
                         return langs[msg.lang].errorFloodRange
                     end
                     data[tostring(msg.to.id)].settings['flood_max'] = matches[2]
@@ -2786,7 +2786,7 @@ local function run(msg, matches)
                 end
                 if matches[1]:lower() == 'setflood' then
                     if is_momod(msg) then
-                        if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 200 then
+                        if tonumber(matches[2]) < 3 or tonumber(matches[2]) > 20 then
                             return langs[msg.lang].errorFloodRange
                         end
                         data[tostring(msg.to.id)].settings['flood_max'] = matches[2]
