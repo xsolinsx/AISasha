@@ -25,7 +25,6 @@ local function system_plugin(p)
         p == 'anti_spam' or
         p == 'banhammer' or
         p == 'bot' or
-        p == 'broadcast' or
         p == 'check_tag' or
         p == 'database' or
         p == 'feedback' or
@@ -35,7 +34,6 @@ local function system_plugin(p)
         p == 'info' or
         p == 'lua_exec' or
         p == 'msg_checks' or
-        p == 'onservice' or
         p == 'plugins' or
         p == 'strings' or
         p == 'whitelist' then

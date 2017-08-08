@@ -185,7 +185,7 @@ function pre_process_msg(msg)
     msg = plugins.msg_checks.pre_process(msg)
     for name, plugin in pairs(plugins) do
         if plugin.pre_process and msg then
-            if plugin.description ~= 'ANTI_SPAM' and plugin.description ~= 'DATABASE' and plugin.description ~= 'DELWORD' and plugin.description ~= 'MSG_CHECKS' and plugin.description ~= 'ONSERVICE' then
+            if plugin.description ~= 'ANTI_SPAM' and plugin.description ~= 'DATABASE' and plugin.description ~= 'DELWORD' and plugin.description ~= 'MSG_CHECKS' then
                 print('Preprocess', name)
                 msg = plugin.pre_process(msg)
             end
@@ -309,7 +309,6 @@ function create_config()
         {
             "anti_spam",
             "msg_checks",
-            "onservice",
             "check_tag",
             "strings",
             "administrator",
@@ -321,7 +320,6 @@ function create_config()
             "stats",
             "plugins",
             "help",
-            "broadcast",
             "invite",
             "info",
             "whitelist",

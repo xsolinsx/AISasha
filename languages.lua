@@ -269,6 +269,8 @@ return {
         userAuthorized = 'Utente autorizzato.',
         userDeauthorized = 'Utente deautorizzato.',
         dataReloaded = 'Dati gruppi ricaricati.',
+        notMyGroup = 'Questo non è un mio gruppo, addio.',
+        apiReboot = 'AISashaAPI uccisa da ',
 
         -- anti_spam.lua --
         blockedForSpam = ' bloccato (SPAM).',
@@ -602,10 +604,6 @@ return {
         -- me.lua --
         meString = 'Hai mandato W (X%) messaggi e questa chat ne ha Z.',
 
-        -- onservice.lua --
-        notMyGroup = 'Questo non è un mio gruppo, addio.',
-        apiReboot = 'AISashaAPI uccisa da ',
-
         -- patch_for_api.lua --
         groupPatched = 'Patch per l\'utilizzo simultaneo di Sasha BOT e Sasha Utente eseguita. Sarà sempre possibile eseguire i comandi con Sasha Utente usando il tag in questo modo "@AISasha <command>", così facendo Sasha BOT ignorerà il messaggio.',
         groupUnpatched = 'Patch per l\'utilizzo simultaneo di Sasha BOT e Sasha Utente rimossa. Si prega di fare attenzione ai conflitti tra i due bot.',
@@ -797,6 +795,8 @@ return {
             '#checkspeed: Sasha calcola la velocità con cui processa i messaggi.',
             '#ping: Sasha risponde con "Pong".',
             '#laststart: Sasha manda la data dell\'avvio.',
+            '#br <group_id> <text>: Sasha invia <text> a <group_id>.',
+            '(#leave|sasha abbandona) [<group_id>]: Sasha lascia il gruppo.',
             'SUDO',
             '#addadmin <user_id>|<username>: Sasha promuove l\'utente specificato ad amminstratore.',
             '#removeadmin <user_id>|<username>: Sasha degrada l\'utente specificato.',
@@ -807,6 +807,8 @@ return {
             '#deauthorizereboot <user_id>: Sasha deautorizza <user_id> a riavviare la sua versione BOT.',
             '#list reboot authorized: Sasha manda la lista di utenti autorizzati a riavviare la sua versione BOT.',
             '#reloaddata: Sasha ricarica i dati dei gruppi.',
+            '#broadcast <text>: Sasha invia <text> a tutti i gruppi.',
+            '#rebootapi: Sasha riavvia la sua versione BOT.',
         },
 
         banhammer =
@@ -858,16 +860,6 @@ return {
             '#unsetbot <username>: Sasha smetterà di interagire con <username>.',
             'ADMIN',
             '#setbot <username>: Sasha interagirà con <username>.',
-        },
-
-        broadcast =
-        {
-            '🅿️ BROADCAST',
-            'Plugin per mandare messaggi broadcast.',
-            'ADMIN',
-            '#br <group_id> <text>: Sasha invia <text> a <group_id>.',
-            'SUDO',
-            '#broadcast <text>: Sasha invia <text> a tutti i gruppi.',
         },
 
         database =
@@ -1182,16 +1174,6 @@ return {
             '#me: Sasha dice quanti messaggi hai mandato.',
         },
 
-        onservice =
-        {
-            '🅿️ ONSERVICE',
-            'Plugin per far abbandonare un gruppo a Sasha.',
-            'ADMIN',
-            '(#leave|sasha abbandona) [<group_id>]: Sasha lascia il gruppo.',
-            "SUDO",
-            '#rebootapi: Sasha riavvia la sua versione BOT.',
-        },
-
         patch_for_api =
         {
             '🅿️ PATCH_FOR_API',
@@ -1458,6 +1440,8 @@ return {
         userAuthorized = 'Utente authorized.',
         userDeauthorized = 'Utente deauthorized.',
         dataReloaded = 'Groups\' data reloaded.',
+        notMyGroup = 'This is not one of my groups, bye.',
+        apiReboot = 'AISashaAPI killed by ',
 
         -- anti_spam.lua --
         blockedForSpam = ' blocked (SPAM).',
@@ -1792,10 +1776,6 @@ return {
         -- me.lua --
         meString = 'You have sent W (X%) messages and this chat has Z messages.',
 
-        -- onservice.lua --
-        notMyGroup = 'This is not one of my groups, bye.',
-        apiReboot = 'AISashaAPI killed by ',
-
         -- patch_for_api.lua --
         groupPatched = 'Patch to use Sasha BOT and Sasha User executed. Everyone will be able to execute Sasha User commands by using her tag like this "@AISasha <command>", in this way Sasha BOT will ignore the message.',
         groupUnpatched = 'Patch to use Sasha BOT and Sasha User removed. Be careful of conflicts between the two.',
@@ -1987,6 +1967,8 @@ return {
             '#checkspeed: Sasha calculates how much time she needs to process messages.',
             '#ping: Sasha answers with "Pong".',
             '#laststart: Sasha sends last start date.',
+            '(#leave|sasha abbandona) [<group_id>]: Sasha leaves the group.',
+            '#br <group_id> <text>: Sasha sends <text> to <group_id>.',
             'SUDO',
             '#addadmin <user_id>|<username>: Sasha promotes the specified user to administrator.',
             '#removeadmin <user_id>|<username>: Sasha demotes the specified user from administrator.',
@@ -1997,6 +1979,8 @@ return {
             '#deauthorizereboot <user_id>: Sasha deauthorize <user_id> to reboot her BOT version.',
             '#list reboot authorized: Sasha sends the list of users that are authorized to reboot her BOT version.',
             '#reloaddata: Sasha reloads groups\' data.',
+            '#broadcast <text>: Sasha sends <text> to all groups.',
+            '#rebootapi: Sasha reboots her BOT version.',
         },
 
         banhammer =
@@ -2048,16 +2032,6 @@ return {
             '#unsetbot <username>: Sasha will stop the interaction with <username>.',
             'ADMIN',
             '#setbot <username>: Sasha will interact with <username>.',
-        },
-
-        broadcast =
-        {
-            '🅿️ BROADCAST',
-            'Plugin to send broadcast messages.',
-            'ADMIN',
-            '#br <group_id> <text>: Sasha sends <text> to <group_id>.',
-            'SUDO',
-            '#broadcast <text>: Sasha sends <text> to all groups.',
         },
 
         database =
@@ -2356,16 +2330,6 @@ return {
             'Plugin to know number of sent messages.',
             'USER',
             '#me: Sasha tells you how many messages you\'ve sent.',
-        },
-
-        onservice =
-        {
-            '🅿️ ONSERVICE',
-            'Plugin to make Sasha leave a group.',
-            'ADMIN',
-            '(#leave|sasha abbandona) [<group_id>]: Sasha leaves the group.',
-            "SUDO",
-            '#rebootapi: Sasha reboots her BOT version.',
         },
 
         patch_for_api =

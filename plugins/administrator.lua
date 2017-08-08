@@ -182,6 +182,19 @@ local function run(msg, matches)
     local group = msg.to.id
     local print_name = user_print_name(msg.from):gsub("‮", "")
     local name_log = print_name:gsub("_", " ")
+    if matches[1]:lower() == 'rebootapi' then
+        if is_reboot_allowed(msg) then
+            io.popen('kill -9 $(pgrep lua)'):read('*all')
+            send_large_msg_SUDOERS(langs[msg.lang].apiReboot .. msg.from.print_name:gsub('_', ' ') .. ' ' .. msg.from.id)
+            return langs[msg.lang].apiReboot .. msg.from.print_name:gsub('_', ' ') .. ' ' .. msg.from.id
+        else
+            return langs[msg.lang].require_authorized_or_sudo
+        end
+    elseif msg.service and msg.action.type == "chat_add_user" and msg.action.user.id == tonumber(our_id) and not is_admin1(msg) then
+        chat_del_user(get_receiver(msg), 'user#id' .. our_id, ok_cb, false)
+        leave_channel(get_receiver(msg), ok_cb, false)
+        return langs[msg.lang].notMyGroup
+    end
     if is_admin1(msg) then
         if msg.media then
             if msg.media.type == 'photo' and redis:get("bot:photo") then
@@ -212,6 +225,19 @@ local function run(msg, matches)
             return start_time
         end
         if not msg.api_patch then
+            if matches[1] == 'br' then
+                send_large_msg("chat#id" .. matches[2], matches[3])
+                send_large_msg("channel#id" .. matches[2], matches[3])
+            end
+            if matches[1]:lower() == 'leave' or matches[1]:lower() == 'sasha abbandona' then
+                if not matches[2] then
+                    chat_del_user(get_receiver(msg), 'user#id' .. our_id, ok_cb, false)
+                    leave_channel(get_receiver(msg), ok_cb, false)
+                else
+                    chat_del_user("chat#id" .. matches[2], 'user#id' .. our_id, ok_cb, false)
+                    leave_channel("channel#id" .. matches[2], ok_cb, false)
+                end
+            end
             if matches[1]:lower() == "pm" then
                 send_large_msg("user#id" .. matches[2], matches[3])
                 return langs[msg.lang].pmSent
@@ -253,6 +279,15 @@ local function run(msg, matches)
             end
         end
         if is_sudo(msg) then
+            if matches[1] == 'broadcast' then
+                for k, v in pairs(data['groups']) do
+                    local function post_msg()
+                        send_large_msg('chat#id' .. v, matches[2])
+                        send_large_msg('channel#id' .. v, matches[2])
+                    end
+                    postpone(post_msg, false, math.fmod(math.random(1, 1000), 30) + 1)
+                end
+            end
             if matches[1]:lower() == 'addadmin' then
                 if string.match(matches[2], '^%d+$') then
                     print("user " .. matches[2] .. " has been promoted as admin")
@@ -345,7 +380,13 @@ return {
         "^[#!/]([Dd][Ee][Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Rr][Ee][Bb][Oo][Oo][Tt]) (%d+)$",
         "^[#!/]([Ll][Ii][Ss][Tt] [Rr][Ee][Bb][Oo][Oo][Tt] [Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Dd])$",
         "^[#!/]([Rr][Ee][Ll][Oo][Aa][Dd][Dd][Aa][Tt][Aa])$",
+        "^[#!/]([Bb][Rr][Oo][Aa][Dd][Cc][Aa][Ss][Tt]) +(.+)$",
+        "^[#!/]([Bb][Rr]) (%d+) (.*)$"
+        "^[#!/]([Ll][Ee][Aa][Vv][Ee]) (%d+)$",
+        "^[#!/]([Ll][Ee][Aa][Vv][Ee])$",
+        "^[#!/]([Rr][Ee][Bb][Oo][Oo][Tt][Aa][Pp][Ii])$",
         "%[(photo)%]",
+        "^!!tgservice (.+)$",
         -- pm
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii][Aa]) (%d+) (.*)$",
         -- pmunblock
@@ -359,6 +400,9 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Cc][Aa][Mm][Bb][Ii][Aa] [Ff][Oo][Tt][Oo])$",
         -- backup
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Bb][Aa][Cc][Kk][Uu][Pp])$",
+        -- leave
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Bb][Bb][Aa][Nn][Dd][Oo][Nn][Aa]) (%d+)$",
+        "^([Ss][Aa][Ss][Hh][Aa] [Aa][Bb][Bb][Aa][Nn][Dd][Oo][Nn][Aa])$",
     },
     run = run,
     min_rank = 3,
@@ -375,6 +419,8 @@ return {
         "#checkspeed",
         "#ping",
         "#laststart",
+        "#br <group_id> <text>",
+        "(#leave|sasha abbandona) [<group_id>]",
         "SUDO",
         "(#backup|sasha esegui backup)",
         "#update",
@@ -385,6 +431,8 @@ return {
         "#reloaddata",
         "#addadmin <user_id>|<username>",
         "#removeadmin <user_id>|<username>",
+        "#broadcast <text>",
+        "#rebootapi",
     },
 }
 -- By @imandaneshi :)
