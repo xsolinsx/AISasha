@@ -381,7 +381,7 @@ return {
         "^[#!/]([Ll][Ii][Ss][Tt] [Rr][Ee][Bb][Oo][Oo][Tt] [Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Dd])$",
         "^[#!/]([Rr][Ee][Ll][Oo][Aa][Dd][Dd][Aa][Tt][Aa])$",
         "^[#!/]([Bb][Rr][Oo][Aa][Dd][Cc][Aa][Ss][Tt]) +(.+)$",
-        "^[#!/]([Bb][Rr]) (%d+) (.*)$"
+        "^[#!/]([Bb][Rr]) (%d+) (.*)$",
         "^[#!/]([Ll][Ee][Aa][Vv][Ee]) (%d+)$",
         "^[#!/]([Ll][Ee][Aa][Vv][Ee])$",
         "^[#!/]([Rr][Ee][Bb][Oo][Oo][Tt][Aa][Pp][Ii])$",
