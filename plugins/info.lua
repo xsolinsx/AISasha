@@ -569,58 +569,42 @@ local function run(msg, matches)
     if not msg.api_patch then
         if matches[1]:lower() == "id" then
             if type(msg.reply_id) ~= "nil" then
-                if is_momod(msg) then
-                    if matches[2] then
-                        if matches[2]:lower() == 'from' then
-                            get_message(msg.reply_id, id_by_from, { receiver = receiver })
-                            return
-                        else
-                            get_message(msg.reply_id, id_by_reply, { receiver = receiver })
-                            return
-                        end
+                if matches[2] then
+                    if matches[2]:lower() == 'from' then
+                        get_message(msg.reply_id, id_by_from, { receiver = receiver })
+                        return
                     else
                         get_message(msg.reply_id, id_by_reply, { receiver = receiver })
                         return
                     end
                 else
-                    return langs[msg.lang].require_mod
+                    get_message(msg.reply_id, id_by_reply, { receiver = receiver })
+                    return
                 end
             elseif matches[2] and matches[2] ~= '' then
-                if is_momod(msg) then
-                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), id_by_username, { receiver = receiver })
-                    return
-                else
-                    return langs[msg.lang].require_mod
-                end
+                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), id_by_username, { receiver = receiver })
+                return
             else
                 return msg.from.id .. '\n' .. msg.to.id
             end
         end
         if matches[1]:lower() == "username" then
             if type(msg.reply_id) ~= "nil" then
-                if is_momod(msg) then
-                    if matches[2] then
-                        if matches[2]:lower() == 'from' then
-                            get_message(msg.reply_id, username_by_from, { receiver = receiver })
-                            return
-                        else
-                            get_message(msg.reply_id, username_by_reply, { receiver = receiver })
-                            return
-                        end
+                if matches[2] then
+                    if matches[2]:lower() == 'from' then
+                        get_message(msg.reply_id, username_by_from, { receiver = receiver })
+                        return
                     else
                         get_message(msg.reply_id, username_by_reply, { receiver = receiver })
                         return
                     end
                 else
-                    return langs[msg.lang].require_mod
+                    get_message(msg.reply_id, username_by_reply, { receiver = receiver })
+                    return
                 end
             elseif matches[2] and matches[2] ~= '' then
-                if is_momod(msg) then
-                    user_info('user#id' .. matches[2], username_by_id, { receiver = receiver })
-                    return
-                else
-                    return langs[msg.lang].require_mod
-                end
+                user_info('user#id' .. matches[2], username_by_id, { receiver = receiver })
+                return
             else
                 return(msg.from.username or('NOUSER ' .. msg.from.first_name .. ' ' ..(msg.from.last_name or ''))) .. '\n' ..(msg.to.username or('NOUSER ' .. msg.to.title))
             end
@@ -1020,16 +1004,14 @@ return {
     syntax =
     {
         "USER",
-        "#id",
-        "#username",
+        "#id [<username>|<reply>|from]",
+        "#username [<is>|<reply>|from]",
         "#getrank|rango [<id>|<username>|<reply>|from]",
         "#whoami",
         "(#info|[sasha] info)",
         "#ishere <id>|<username>",
         "(#groupinfo|[sasha] info gruppo)",
         "MOD",
-        "#id <username>|<reply>|from",
-        "#username <is>|<reply>|from",
         "(#info|[sasha] info) <id>|<username>|<reply>|from",
         "(#who|#members|[sasha] lista membri)",
         "(#kicked|[sasha] lista rimossi)",
