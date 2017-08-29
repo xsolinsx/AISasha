@@ -1976,9 +1976,6 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti" then
-                if not has_mutes(msg.to.id) then
-                    set_mutes(msg.to.id)
-                end
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
                 return mutes_list(msg.to.id, msg.to.print_name)
             end
@@ -2175,7 +2172,6 @@ local function run(msg, matches)
                     print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") added")
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added SuperGroup")
                     superadd(msg)
-                    set_mutes(msg.to.id)
                     channel_set_admin(get_receiver(msg), 'user#id' .. msg.from.id, ok_cb, false)
                 else
                     return langs[msg.lang].require_admin
@@ -2657,9 +2653,6 @@ local function run(msg, matches)
                     end
                 end
                 if matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti" then
-                    if not has_mutes(msg.to.id) then
-                        set_mutes(msg.to.id)
-                    end
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
                     return mutes_list(msg.to.id, msg.to.print_name)
                 end
