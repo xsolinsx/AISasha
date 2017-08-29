@@ -1,3 +1,69 @@
+local function muteuser_by_reply(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_reply_receiver(result) == extra.receiver then
+        local user_id = -1
+        if result.service then
+            if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
+                if result.action.user then
+                    user_id = result.action.user.peer_id
+                end
+            end
+        else
+            user_id = result.from.peer_id
+        end
+        if user_id ~= -1 then
+            if compare_ranks(extra.executer, result.from.peer_id, string.match(extra.receiver, '%d+')) then
+                if is_muted_user(string.match(extra.receiver, '%d+'), user_id) then
+                    mute_user(string.match(extra.receiver, '%d+'), user_id)
+                    send_large_msg(extra.receiver, user_id .. langs[lang].muteUserRemove)
+                else
+                    unmute_user(string.match(extra.receiver, '%d+'), user_id)
+                    send_large_msg(extra.receiver, user_id .. langs[lang].muteUserAdd)
+                end
+            else
+                send_large_msg(extra.receiver, langs[lang].require_rank)
+            end
+        end
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
+end
+
+local function muteuser_from(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    if get_reply_receiver(result) == extra.receiver then
+        if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
+            if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
+                unmute_user(result.to.peer_id, result.fwd_from.peer_id)
+                send_large_msg(extra.receiver, result.fwd_from.peer_id .. langs[lang].muteUserRemove)
+            else
+                mute_user(result.to.peer_id, result.fwd_from.peer_id)
+                send_large_msg(extra.receiver, result.fwd_from.peer_id .. langs[lang].muteUserAdd)
+            end
+        else
+            send_large_msg(extra.receiver, langs[lang].require_rank)
+        end
+    else
+        send_large_msg(extra.receiver, langs[lang].oldMessage)
+    end
+end
+
+local function muteuser_by_username(extra, success, result)
+    local lang = get_lang(string.match(extra.receiver, '%d+'))
+    -- ignore higher or same rank
+    if compare_ranks(extra.executer, result.peer_id, string.match(extra.receiver, '%d+')) then
+        if is_muted_user(string.match(extra.receiver, '%d+'), result.peer_id) then
+            unmute_user(string.match(extra.receiver, '%d+'), result.peer_id)
+            send_large_msg(extra.receiver, result.peer_id .. langs[lang].muteUserRemove)
+        else
+            mute_user(string.match(extra.receiver, '%d+'), result.peer_id)
+            send_large_msg(extra.receiver, result.peer_id .. langs[lang].muteUserAdd)
+        end
+    else
+        send_large_msg(extra.receiver, langs[lang].require_rank)
+    end
+end
+
 local function warn_by_username(extra, success, result)
     local lang = get_lang(extra.chat_id)
     if success == 0 then
@@ -738,6 +804,52 @@ local function run(msg, matches)
             return langs[msg.lang].useYourGroups
         end
     end
+    if matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce' then
+        if is_momod(msg) then
+            if type(msg.reply_id) ~= "nil" then
+                if matches[2] then
+                    if matches[2]:lower() == 'from' then
+                        get_message(msg.reply_id, muteuser_from, { receiver = get_receiver(msg), executer = msg.from.id })
+                    else
+                        muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
+                    end
+                else
+                    muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
+                end
+                return
+            elseif matches[2] and matches[2] ~= '' then
+                if string.match(matches[2], '^%d+$') then
+                    -- ignore higher or same rank
+                    if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                        if is_muted_user(msg.to.id, matches[2]) then
+                            unmute_user(msg.to.id, matches[2])
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
+                            return matches[2] .. langs[msg.lang].muteUserRemove
+                        else
+                            mute_user(msg.to.id, matches[2])
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
+                            return matches[2] .. langs[msg.lang].muteUserAdd
+                        end
+                    else
+                        return langs[msg.lang].require_rank
+                    end
+                else
+                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
+                    return
+                end
+            end
+        else
+            return langs[msg.lang].require_mod
+        end
+    end
+    if matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti" then
+        if is_momod(msg) then
+            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
+            return muted_user_list(msg.to.id, msg.to.print_name)
+        else
+            return langs[msg.lang].require_mod
+        end
+    end
     if matches[1]:lower() == 'warn' or matches[1]:lower() == 'sasha avverti' or matches[1]:lower() == 'avverti' then
         if msg.to.type == 'chat' or msg.to.type == 'channel' then
             if not msg.api_patch then
@@ -1256,6 +1368,9 @@ return {
         "^[#!/]([Kk][Ii][Cc][Kk][Mm][Ee])$",
         "^[#!/]([Gg][Ee][Tt][Uu][Ss][Ee][Rr][Ww][Aa][Rr][Nn][Ss]) ([^%s]+)$",
         "^[#!/]([Gg][Ee][Tt][Uu][Ss][Ee][Rr][Ww][Aa][Rr][Nn][Ss])$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr]) ([^%s]+)$",
+        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr])",
+        "^[#!/]([Mm][Uu][Tt][Ee][Ll][Ii][Ss][Tt])",
         "^[#!/]([Ww][Aa][Rr][Nn]) ([^%s]+)$",
         "^[#!/]([Ww][Aa][Rr][Nn])$",
         "^[#!/]([Uu][Nn][Ww][Aa][Rr][Nn]) ([^%s]+)$",
@@ -1292,6 +1407,11 @@ return {
         "^([Ss][Aa][Ss][Hh][Aa] [Oo][Tt][Tt][Ii][Ee][Nn][Ii] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii])$",
         "^([Oo][Tt][Tt][Ii][Ee][Nn][Ii] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii]) ([^%s]+)$",
         "^([Oo][Tt][Tt][Ii][Ee][Nn][Ii] [Aa][Vv][Vv][Ee][Rr][Tt][Ii][Mm][Ee][Nn][Tt][Ii])$",
+        -- muteuser
+        "^([Vv][Oo][Cc][Ee])$",
+        "^([Vv][Oo][Cc][Ee]) ([^%s]+)$",
+        -- mutelist
+        "^([Ll][Ii][Ss][Tt][Aa] [Uu][Tt][Ee][Nn][Tt][Ii] [Mm][Uu][Tt][Ii])$",
         -- warn
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii]) ([^%s]+)$",
         "^([Ss][Aa][Ss][Hh][Aa] [Aa][Vv][Vv][Ee][Rr][Tt][Ii])$",
@@ -1363,6 +1483,8 @@ return {
         "(#kickme|sasha (uccidimi|esplodimi|sparami|decompilami|bannami))",
         "MOD",
         "(#getuserwarns|[sasha] ottieni avvertimenti) <id>|<username>|<reply>|from",
+        "#muteuser|voce <id>|<username>|<reply>|from",
+        "(#mutelist|lista utenti muti)",
         "(#warn|[sasha] avverti) <id>|<username>|<reply>|from",
         "#unwarn <id>|<username>|<reply>|from",
         "(#unwarnall|[sasha] azzera avvertimenti) <id>|<username>|<reply>|from",

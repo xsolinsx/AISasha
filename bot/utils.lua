@@ -1286,30 +1286,6 @@ function is_whitelisted_gban(group_id, user_id)
 end
 
 -- Begin Chat Mutes
-function set_mutes(chat_id)
-    local lang = get_lang(chat_id)
-    if data[tostring(chat_id)] then
-        if data[tostring(chat_id)].settings then
-            data[tostring(chat_id)].settings.mutes = { ["all"] = false, ["audio"] = false, ["contact"] = false, ["document"] = false, ["gif"] = false, ["location"] = false, ["photo"] = false, ["sticker"] = false, ["text"] = false, ["tgservice"] = false, ["video"] = false, ["video_note"] = false, ["voice_note"] = false }
-            save_data(_config.moderation.data, data)
-            return langs[lang].mutesSet
-        end
-    end
-end
-
-function has_mutes(chat_id)
-    if data[tostring(chat_id)] then
-        if data[tostring(chat_id)].settings.mutes then
-            return true
-        end
-    end
-    if set_mutes(chat_id) then
-        return true
-    else
-        return false
-    end
-end
-
 function is_muted(chat_id, msg_type)
     if data[tostring(chat_id)] then
         if data[tostring(chat_id)].settings then

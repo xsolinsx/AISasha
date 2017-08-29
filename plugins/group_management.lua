@@ -804,72 +804,6 @@ local function modlist(msg)
     return message
 end
 
-local function muteuser_by_reply(extra, success, result)
-    local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_reply_receiver(result) == extra.receiver then
-        local user_id = -1
-        if result.service then
-            if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
-                if result.action.user then
-                    user_id = result.action.user.peer_id
-                end
-            end
-        else
-            user_id = result.from.peer_id
-        end
-        if user_id ~= -1 then
-            if compare_ranks(extra.executer, result.from.peer_id, string.match(extra.receiver, '%d+')) then
-                if is_muted_user(string.match(extra.receiver, '%d+'), user_id) then
-                    mute_user(string.match(extra.receiver, '%d+'), user_id)
-                    send_large_msg(extra.receiver, user_id .. langs[lang].muteUserRemove)
-                else
-                    unmute_user(string.match(extra.receiver, '%d+'), user_id)
-                    send_large_msg(extra.receiver, user_id .. langs[lang].muteUserAdd)
-                end
-            else
-                send_large_msg(extra.receiver, langs[lang].require_rank)
-            end
-        end
-    else
-        send_large_msg(extra.receiver, langs[lang].oldMessage)
-    end
-end
-
-local function muteuser_from(extra, success, result)
-    local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_reply_receiver(result) == extra.receiver then
-        if compare_ranks(extra.executer, result.fwd_from.peer_id, result.to.peer_id) then
-            if is_muted_user(result.to.peer_id, result.fwd_from.peer_id) then
-                unmute_user(result.to.peer_id, result.fwd_from.peer_id)
-                send_large_msg(extra.receiver, result.fwd_from.peer_id .. langs[lang].muteUserRemove)
-            else
-                mute_user(result.to.peer_id, result.fwd_from.peer_id)
-                send_large_msg(extra.receiver, result.fwd_from.peer_id .. langs[lang].muteUserAdd)
-            end
-        else
-            send_large_msg(extra.receiver, langs[lang].require_rank)
-        end
-    else
-        send_large_msg(extra.receiver, langs[lang].oldMessage)
-    end
-end
-
-local function muteuser_by_username(extra, success, result)
-    local lang = get_lang(string.match(extra.receiver, '%d+'))
-    -- ignore higher or same rank
-    if compare_ranks(extra.executer, result.peer_id, string.match(extra.receiver, '%d+')) then
-        if is_muted_user(string.match(extra.receiver, '%d+'), result.peer_id) then
-            unmute_user(string.match(extra.receiver, '%d+'), result.peer_id)
-            send_large_msg(extra.receiver, result.peer_id .. langs[lang].muteUserRemove)
-        else
-            mute_user(string.match(extra.receiver, '%d+'), result.peer_id)
-            send_large_msg(extra.receiver, result.peer_id .. langs[lang].muteUserAdd)
-        end
-    else
-        send_large_msg(extra.receiver, langs[lang].require_rank)
-    end
-end
-
 local function setowner_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if get_reply_receiver(result) == extra.receiver then
@@ -1140,38 +1074,6 @@ local function get_message_callback(extra, success, result)
             savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] demoted mod: @" .. member_username .. "[" .. result.from.peer_id .. "] by reply")
             demote2("channel#id" .. result.to.peer_id, member_username, member_id)
             -- channel_demote(channel_id, user, ok_cb, false)
-        elseif get_cmd == 'mute_user' then
-            if result.service then
-                if result.action.type == 'chat_add_user' or result.action.type == 'chat_del_user' or result.action.type == 'chat_rename' or result.action.type == 'chat_change_photo' then
-                    if result.action.user then
-                        user_id = result.action.user.peer_id
-                    end
-                end
-                if result.action.type == 'chat_add_user_link' then
-                    if result.from then
-                        user_id = result.from.peer_id
-                    end
-                end
-            else
-                user_id = result.from.peer_id
-            end
-            local receiver = extra.receiver
-            local chat_id = msg.to.id
-            print(user_id)
-            print(chat_id)
-
-            -- ignore higher or same rank
-            if compare_ranks(msg.from.id, user_id, chat_id) then
-                if is_muted_user(chat_id, user_id) then
-                    unmute_user(chat_id, user_id)
-                    send_large_msg(receiver, user_id .. langs[msg.lang].muteUserRemove)
-                else
-                    mute_user(chat_id, user_id)
-                    send_large_msg(receiver, user_id .. langs[msg.lang].muteUserAdd)
-                end
-            else
-                send_large_msg(receiver, langs[msg.lang].require_rank)
-            end
         end
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)
@@ -1230,23 +1132,6 @@ local function callbackres(extra, success, result)
             text = result.peer_id .. langs[lang].demoteSupergroupMod
         end
         channel_demote(channel_id, user_id, check_admin_success, { receiver = channel_id, text = text })
-    elseif get_cmd == 'mute_user' then
-        local user_id = result.peer_id
-        local receiver = extra.receiver
-        local chat_id = string.gsub(receiver, 'channel#id', '')
-
-        -- ignore higher or same rank
-        if compare_ranks(extra.executer, user_id, chat_id) then
-            if is_muted_user(chat_id, user_id) then
-                unmute_user(chat_id, user_id)
-                send_large_msg(receiver, user_id .. langs[lang].muteUserRemove)
-            else
-                mute_user(chat_id, user_id)
-                send_large_msg(receiver, user_id .. langs[lang].muteUserAdd)
-            end
-        else
-            send_large_msg(receiver, langs[lang].require_rank)
-        end
     end
 end
 
@@ -1710,11 +1595,7 @@ local function run(msg, matches)
                         end
                     end
                 else
-                    if is_momod(msg) then
-                        return showSettings(msg.to.id, msg.lang)
-                    else
-                        return langs[msg.lang].require_mod
-                    end
+                    return showSettings(msg.to.id, msg.lang)
                 end
             end
             if matches[1]:lower() == 'setgprules' then
@@ -2071,12 +1952,8 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == 'settings' then
-                if is_momod(msg) then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group settings ")
-                    return showSettings(msg.to.id, msg.lang)
-                else
-                    return langs[msg.lang].require_mod
-                end
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group settings ")
+                return showSettings(msg.to.id, msg.lang)
             end
             if matches[1]:lower() == 'mute' or matches[1]:lower() == 'silenzia' then
                 if is_owner(msg) then
@@ -2099,64 +1976,11 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti" then
-                if is_momod(msg) then
-                    if not has_mutes(msg.to.id) then
-                        set_mutes(msg.to.id)
-                    end
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
-                    return mutes_list(msg.to.id, msg.to.print_name)
-                else
-                    return langs[msg.lang].require_mod
+                if not has_mutes(msg.to.id) then
+                    set_mutes(msg.to.id)
                 end
-            end
-            if (matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce') then
-                if is_momod(msg) then
-                    local chat_id = msg.to.id
-                    local hash = "mute_user" .. chat_id
-                    local user_id = ""
-                    if type(msg.reply_id) ~= "nil" then
-                        if matches[2] then
-                            if matches[2]:lower() == 'from' then
-                                get_message(msg.reply_id, muteuser_from, { receiver = get_receiver(msg), executer = msg.from.id })
-                            else
-                                muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
-                            end
-                        else
-                            muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
-                        end
-                        return
-                    elseif matches[2] and matches[2] ~= '' then
-                        if string.match(matches[2], '^%d+$') then
-                            -- ignore higher or same rank
-                            if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                                if is_muted_user(msg.to.id, matches[2]) then
-                                    unmute_user(msg.to.id, matches[2])
-                                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
-                                    return matches[2] .. langs[msg.lang].muteUserRemove
-                                else
-                                    mute_user(msg.to.id, matches[2])
-                                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
-                                    return matches[2] .. langs[msg.lang].muteUserAdd
-                                end
-                            else
-                                return langs[msg.lang].require_rank
-                            end
-                        else
-                            resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
-                            return
-                        end
-                    end
-                else
-                    return langs[msg.lang].require_mod
-                end
-            end
-            if (matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti") then
-                if is_momod(msg) then
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
-                    return muted_user_list(msg.to.id, msg.to.print_name)
-                else
-                    return langs[msg.lang].require_mod
-                end
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
+                return mutes_list(msg.to.id, msg.to.print_name)
             end
             if matches[1]:lower() == 'newlink' and not is_realm(msg) then
                 if is_momod(msg) then
@@ -2832,76 +2656,16 @@ local function run(msg, matches)
                         return langs[msg.lang].require_owner
                     end
                 end
-                if matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce' then
-                    if is_momod(msg) then
-                        local hash = "mute_user" .. msg.to.id
-                        if type(msg.reply_id) ~= "nil" then
-                            if matches[2] then
-                                if matches[2]:lower() == 'from' then
-                                    get_message(msg.reply_id, muteuser_from, { receiver = get_receiver(msg), executer = msg.from.id })
-                                    return
-                                else
-                                    local get_cmd = "mute_user"
-                                    get_message(msg.reply_id, get_message_callback, { receiver = get_receiver(msg), get_cmd = get_cmd, msg = msg })
-                                    return
-                                end
-                            else
-                                local get_cmd = "mute_user"
-                                get_message(msg.reply_id, get_message_callback, { receiver = get_receiver(msg), get_cmd = get_cmd, msg = msg })
-                                return
-                            end
-                        elseif matches[2] and matches[2] ~= '' then
-                            if string.match(matches[2], '^%d+$') then
-                                -- ignore higher or same rank
-                                if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                                    if is_muted_user(msg.to.id, matches[2]) then
-                                        unmute_user(msg.to.id, matches[2])
-                                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
-                                        return matches[2] .. langs[msg.lang].muteUserRemove
-                                    else
-                                        mute_user(msg.to.id, matches[2])
-                                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
-                                        return matches[2] .. langs[msg.lang].muteUserAdd
-                                    end
-                                else
-                                    return langs[msg.lang].require_rank
-                                end
-                            else
-                                local get_cmd = "mute_user"
-                                resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), callbackres, { receiver = get_receiver(msg), get_cmd = get_cmd, executer = msg.from.id })
-                                return
-                            end
-                        end
-                    else
-                        return langs[msg.lang].require_mod
-                    end
-                end
                 if matches[1]:lower() == "muteslist" or matches[1]:lower() == "lista muti" then
-                    if is_momod(msg) then
-                        if not has_mutes(msg.to.id) then
-                            set_mutes(msg.to.id)
-                        end
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
-                        return mutes_list(msg.to.id, msg.to.print_name)
-                    else
-                        return langs[msg.lang].require_mod
+                    if not has_mutes(msg.to.id) then
+                        set_mutes(msg.to.id)
                     end
-                end
-                if matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti" then
-                    if is_momod(msg) then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
-                        return muted_user_list(msg.to.id, msg.to.print_name)
-                    else
-                        return langs[msg.lang].require_mod
-                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup muteslist")
+                    return mutes_list(msg.to.id, msg.to.print_name)
                 end
                 if matches[1]:lower() == 'settings' then
-                    if is_momod(msg) then
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup settings ")
-                        return showSettings(msg.to.id, msg.lang)
-                    else
-                        return langs[msg.lang].require_mod
-                    end
+                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup settings ")
+                    return showSettings(msg.to.id, msg.lang)
                 end
                 if matches[1]:lower() == 'rules' or matches[1]:lower() == "sasha regole" then
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested group rules")
@@ -3063,9 +2827,6 @@ return {
         "^[#!/]([Pp][Rr][Oo][Mm][Oo][Tt][Ee])",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee]) ([^%s]+)$",
         "^[#!/]([Dd][Ee][Mm][Oo][Tt][Ee])",
-        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr]) ([^%s]+)$",
-        "^[#!/]([Mm][Uu][Tt][Ee][Uu][Ss][Ee][Rr])",
-        "^[#!/]([Mm][Uu][Tt][Ee][Ll][Ii][Ss][Tt])",
         "^[#!/]([Mm][Uu][Tt][Ee][Ss][Ll][Ii][Ss][Tt])",
         "^[#!/]([Uu][Nn][Mm][Uu][Tt][Ee]) ([^%s]+)",
         "^[#!/]([Mm][Uu][Tt][Ee]) ([^%s]+)",
@@ -3133,13 +2894,8 @@ return {
         "^([Ss][Ii][Ll][Ee][Nn][Zz][Ii][Aa]) ([^%s]+)$",
         -- unmute
         "^([Rr][Ii][Pp][Rr][Ii][Ss][Tt][Ii][Nn][Aa]) ([^%s]+)$",
-        -- muteuser
-        "^([Vv][Oo][Cc][Ee])$",
-        "^([Vv][Oo][Cc][Ee]) ([^%s]+)$",
         -- muteslist
         "^([Ll][Ii][Ss][Tt][Aa] [Mm][Uu][Tt][Ii])$",
-        -- mutelist
-        "^([Ll][Ii][Ss][Tt][Aa] [Uu][Tt][Ee][Nn][Tt][Ii] [Mm][Uu][Tt][Ii])$",
     },
     run = run,
     min_rank = 0,
@@ -3153,16 +2909,14 @@ return {
         "#owner",
         "#admins [<reply>|<text>]",
         "(#link|sasha link)",
+        "#settings",
+        "(#muteslist|lista muti)",
         "MOD",
         "#type",
         "#setname <group_name>",
         "#setphoto",
         "(#setrules|sasha imposta regole) <text>",
         "(#setabout|sasha imposta descrizione) <text>",
-        "#muteuser|voce <id>|<username>|<reply>|from",
-        "(#muteslist|lista muti)",
-        "(#mutelist|lista utenti muti)",
-        "#settings",
         "(#newlink|sasha crea link)",
         "#setflood <value>",
         "#setwarn <value>",
