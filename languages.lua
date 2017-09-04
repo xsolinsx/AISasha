@@ -357,7 +357,7 @@ return {
         pluginListStart = "ℹ️Lista plugin: \n\n",
         helpInfo = "ℹ️Scrivi \"!help <plugin_name>|<plugin_number>\" per maggiori informazioni su quel plugin.\nℹ️O \"!helpall\" per mostrare tutte le informazioni.",
         errorNoPlugin = "Questo plugin non esiste o non ha una descrizione.",
-        helpIntro = "Ogni '#' può essere sostituito con i simboli '/' o '!'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale.\nLe parentesi tonde indicano una scelta evidenziata da '|' che significa \"oppure\".\n\n",
+        helpIntro = "Ogni '#' può essere sostituito con i simboli '/' o '!'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale (E NON DEVI METTERLE).\nLe parentesi tonde indicano una scelta evidenziata da '|' che significa \"oppure\" (E NON DEVI METTERLE).\n\n",
         commandNotFound = "Sintassi comando non trovata.",
 
         -- games --
@@ -1526,7 +1526,7 @@ return {
         pluginListStart = "ℹ️Plugins list: \n\n",
         helpInfo = "ℹ️Write \"!help <plugin_name>|<plugin_number>\" for more info on that plugin.\nℹ️Or \"!helpall\" to have all commands.",
         errorNoPlugin = "This plugin doesn't exist or doesn't have a description.",
-        helpIntro = "Every '#' can be replaced with '/' or '!'.\nAll commands are Case Insensitive.\nSquare brackets means that is an optional.\nRound brackets indicate a choice with '|' that means \"or\".\n\n",
+        helpIntro = "Every '#' can be replaced with '/' or '!'.\nAll commands are Case Insensitive.\nSquare brackets means that is an optional (AND YOU MUST NOT WRITE THEM).\nRound brackets indicate a choice with '|' that means \"or\" (AND YOU MUST NOT WRITE THEM).\n\n",
         commandNotFound = "Sintassi comando non trovata.",
 
         -- games --
