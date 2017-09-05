@@ -6,91 +6,93 @@ local function check_time(not_hour)
 end
 
 local function run(msg, matches)
-    if msg.to.type == 'channel' then
-        if matches[1]:lower() == 'tempmsg' or matches[1]:lower() == 'sasha temporizza' or matches[1]:lower() == 'temporizza' then
-            if is_momod(msg) then
-                local hours, minutes, seconds = false
-                local vhours, vminutes, vseconds = -1
-                if matches[6] then
-                    -- X hour Y minutes OR X hour Y seconds OR X minutes Y seconds
-                    if matches[3]:lower() == 'h' then
-                        hours = true
-                        vhours = tonumber(matches[2])
-                    elseif matches[3]:lower() == 'm' then
-                        if check_time(matches[2]) then
-                            minutes = true
-                            vminutes = tonumber(matches[2])
-                        else
-                            return langs[msg.lang].wrongTimeFormat
-                        end
-                    end
-                    if matches[5]:lower() == 'm' then
-                        if not minutes then
-                            if check_time(matches[4]) then
+    if not msg.api_patch then
+        if msg.to.type == 'channel' then
+            if matches[1]:lower() == 'tempmsg' or matches[1]:lower() == 'sasha temporizza' or matches[1]:lower() == 'temporizza' then
+                if is_momod(msg) then
+                    local hours, minutes, seconds = false
+                    local vhours, vminutes, vseconds = -1
+                    if matches[6] then
+                        -- X hour Y minutes OR X hour Y seconds OR X minutes Y seconds
+                        if matches[3]:lower() == 'h' then
+                            hours = true
+                            vhours = tonumber(matches[2])
+                        elseif matches[3]:lower() == 'm' then
+                            if check_time(matches[2]) then
                                 minutes = true
-                                vminutes = tonumber(matches[4])
+                                vminutes = tonumber(matches[2])
                             else
                                 return langs[msg.lang].wrongTimeFormat
                             end
-                        else
-                            -- X minutes Y minutes (ERROR)
-                            return langs[msg.lang].wrongTimeFormat
                         end
-                    elseif matches[5]:lower() == 's' then
-                        if check_time(matches[4]) then
-                            seconds = true
-                            vseconds = tonumber(matches[4])
-                        else
-                            return langs[msg.lang].wrongTimeFormat
+                        if matches[5]:lower() == 'm' then
+                            if not minutes then
+                                if check_time(matches[4]) then
+                                    minutes = true
+                                    vminutes = tonumber(matches[4])
+                                else
+                                    return langs[msg.lang].wrongTimeFormat
+                                end
+                            else
+                                -- X minutes Y minutes (ERROR)
+                                return langs[msg.lang].wrongTimeFormat
+                            end
+                        elseif matches[5]:lower() == 's' then
+                            if check_time(matches[4]) then
+                                seconds = true
+                                vseconds = tonumber(matches[4])
+                            else
+                                return langs[msg.lang].wrongTimeFormat
+                            end
                         end
-                    end
-                elseif matches[5] then
-                    -- X hour Y minutes Z seconds
-                    hours = true
-                    vhours = tonumber(matches[3])
-                    if check_time(matches[4]) and check_time(matches[5]) then
-                        minutes = true
-                        vminutes = tonumber(matches[4])
-                        seconds = true
-                        vseconds = tonumber(matches[5])
-                    else
-                        return langs[msg.lang].wrongTimeFormat
-                    end
-                elseif matches[4] then
-                    -- X hour OR X minutes OR X seconds
-                    if matches[3]:lower() == 'h' then
+                    elseif matches[5] then
+                        -- X hour Y minutes Z seconds
                         hours = true
-                        vhours = tonumber(matches[2])
-                    elseif matches[3]:lower() == 'm' then
-                        if check_time(matches[2]) then
+                        vhours = tonumber(matches[3])
+                        if check_time(matches[4]) and check_time(matches[5]) then
                             minutes = true
-                            vminutes = tonumber(matches[2])
+                            vminutes = tonumber(matches[4])
+                            seconds = true
+                            vseconds = tonumber(matches[5])
                         else
                             return langs[msg.lang].wrongTimeFormat
                         end
-                    elseif matches[3]:lower() == 's' then
-                        if check_time(matches[2]) then
-                            seconds = true
-                            vseconds = tonumber(matches[2])
-                        else
-                            return langs[msg.lang].wrongTimeFormat
+                    elseif matches[4] then
+                        -- X hour OR X minutes OR X seconds
+                        if matches[3]:lower() == 'h' then
+                            hours = true
+                            vhours = tonumber(matches[2])
+                        elseif matches[3]:lower() == 'm' then
+                            if check_time(matches[2]) then
+                                minutes = true
+                                vminutes = tonumber(matches[2])
+                            else
+                                return langs[msg.lang].wrongTimeFormat
+                            end
+                        elseif matches[3]:lower() == 's' then
+                            if check_time(matches[2]) then
+                                seconds = true
+                                vseconds = tonumber(matches[2])
+                            else
+                                return langs[msg.lang].wrongTimeFormat
+                            end
                         end
                     end
+                    local tot_seconds = 0
+                    if hours and vhours ~= -1 then
+                        tot_seconds = tot_seconds +(vhours * 60 * 60)
+                    end
+                    if minutes and vminutes ~= -1 then
+                        tot_seconds = tot_seconds +(vminutes * 60)
+                    end
+                    if seconds and vseconds ~= -1 then
+                        tot_seconds = tot_seconds + vseconds
+                    end
+                    redis:set('temp:' .. msg.to.id, msg.id)
+                    redis:setex(msg.to.id, tot_seconds, msg.id)
+                else
+                    return langs[msg.lang].require_mod
                 end
-                local tot_seconds = 0
-                if hours and vhours ~= -1 then
-                    tot_seconds = tot_seconds +(vhours * 60 * 60)
-                end
-                if minutes and vminutes ~= -1 then
-                    tot_seconds = tot_seconds +(vminutes * 60)
-                end
-                if seconds and vseconds ~= -1 then
-                    tot_seconds = tot_seconds + vseconds
-                end
-                redis:set('temp:' .. msg.to.id, msg.id)
-                redis:setex(msg.to.id, tot_seconds, msg.id)
-            else
-                return langs[msg.lang].require_mod
             end
         end
     end
@@ -98,12 +100,14 @@ end
 
 local function pre_process(msg)
     if msg then
-        if redis:get('temp:' .. msg.to.id) then
-            -- if there was a tempmsg
-            if not redis:get(msg.to.id) then
-                -- if the time is finished
-                delete_msg(redis:get('temp:' .. msg.to.id), ok_cb, false)
-                redis:del('temp:' .. msg.to.id)
+        if not msg.api_patch then
+            if redis:get('temp:' .. msg.to.id) then
+                -- if there was a tempmsg
+                if not redis:get(msg.to.id) then
+                    -- if the time is finished
+                    delete_msg(redis:get('temp:' .. msg.to.id), ok_cb, false)
+                    redis:del('temp:' .. msg.to.id)
+                end
             end
         end
         return msg
