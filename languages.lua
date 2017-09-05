@@ -269,7 +269,7 @@ return {
         userAuthorized = "Utente autorizzato.",
         userDeauthorized = "Utente deautorizzato.",
         dataReloaded = "Dati gruppi ricaricati.",
-        notMyGroup = "Questo non è un mio gruppo, addio.",
+        notMyGroup = "Questo non è un mio gruppo.",
         apiReboot = "AISashaAPI uccisa da ",
 
         -- anti_spam.lua --
@@ -1438,7 +1438,7 @@ return {
         userAuthorized = "Utente authorized.",
         userDeauthorized = "Utente deauthorized.",
         dataReloaded = "Groups' data reloaded.",
-        notMyGroup = "This is not one of my groups, bye.",
+        notMyGroup = "This is not one of my groups.",
         apiReboot = "AISashaAPI killed by ",
 
         -- anti_spam.lua --

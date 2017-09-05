@@ -177,15 +177,21 @@ end
 function pre_process_msg(msg)
     print('Preprocess', 'database')
     msg = plugins.database.pre_process(msg)
+    print('Preprocess', 'banhammer')
+    msg = plugins.banhammer.pre_process(msg)
     print('Preprocess', 'anti_spam')
     msg = plugins.anti_spam.pre_process(msg)
-    print('Preprocess', 'delword')
-    msg = plugins.delword.pre_process(msg)
     print('Preprocess', 'msg_checks')
     msg = plugins.msg_checks.pre_process(msg)
+    print('Preprocess', 'delword')
+    msg = plugins.delword.pre_process(msg)
     for name, plugin in pairs(plugins) do
         if plugin.pre_process and msg then
-            if plugin.description ~= 'ANTI_SPAM' and plugin.description ~= 'DATABASE' and plugin.description ~= 'DELWORD' and plugin.description ~= 'MSG_CHECKS' then
+            if plugin.description ~= 'ANTI_SPAM' and
+                plugin.description ~= 'BANHAMMER' and
+                plugin.description ~= 'DATABASE' and
+                plugin.description ~= 'DELWORD' and
+                plugin.description ~= 'MSG_CHECKS' then
                 print('Preprocess', name)
                 msg = plugin.pre_process(msg)
             end
