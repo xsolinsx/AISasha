@@ -837,23 +837,22 @@ local function run(msg, matches)
         langs[msg.lang].long_id .. msg.from.peer_id
         return text
     end
-    if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' then
-        if not matches[2] then
+    if (matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo') and matches[2] then
+        if is_admin1(msg) then
+            channel_info('channel#id' .. matches[2], channel_callback_info, { receiver = receiver })
+            chat_info('chat#id' .. matches[2], chat_callback_info, { receiver = receiver })
+        else
+            return langs[msg.lang].require_admin
+        end
+    end
+    if not msg.api_patch then
+        if matches[1]:lower() == 'groupinfo' or matches[1]:lower() == 'sasha info gruppo' or matches[1]:lower() == 'info gruppo' and not matches[2] then
             if chat_type == 'channel' then
                 channel_info(receiver, channel_callback_info, { receiver = receiver })
             elseif chat_type == 'chat' then
                 chat_info(receiver, chat_callback_info, { receiver = receiver })
             end
-        else
-            if is_admin1(msg) then
-                channel_info('channel#id' .. matches[2], channel_callback_info, { receiver = receiver })
-                chat_info('chat#id' .. matches[2], chat_callback_info, { receiver = receiver })
-            else
-                return langs[msg.lang].require_admin
-            end
         end
-    end
-    if not msg.api_patch then
         if matches[1]:lower() == 'grouplink' or matches[1]:lower() == 'sasha link gruppo' or matches[1]:lower() == 'link gruppo' and matches[2] then
             if is_admin1(msg) then
                 local group_link = data[tostring(matches[2])]['settings']['set_link']
