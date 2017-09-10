@@ -82,32 +82,6 @@ local function create_group(group_creator, group_name, lang)
     end
 end
 
-local function killchat(extra, success, result)
-    for k, v in pairs(result.members) do
-        if v.peer_id ~= our_id then
-            local function post_kick()
-                kick_user_any(v.peer_id, result.peer_id)
-            end
-            postpone(post_kick, false, 1)
-            sleep(1)
-        end
-    end
-    chat_del_user('chat#id' .. result.peer_id, 'user#id' .. our_id, ok_cb, true)
-end
-
-local function killchannel(extra, success, result)
-    --[[for k, v in pairsByKeys(result) do
-        if v.peer_id ~= our_id then
-            local function post_kick()
-                kick_user_any(v.peer_id, extra.chat_id)
-            end
-            postpone(post_kick, false, 1)
-            sleep(1)
-        end
-    end]]
-    leave_channel('channel#id' .. extra.chat_id, ok_cb, false)
-end
-
 -- begin LOCK/UNLOCK FUNCTIONS
 local function adjustSettingType(setting_type)
     if setting_type == 'arabic' then
@@ -582,48 +556,6 @@ local function check_member_modadd(extra, success, result)
     end
 end
 
-local function check_member_realmrem(extra, success, result)
-    local msg = extra.msg
-    for k, v in pairs(result.members) do
-        local member_id = v.id
-        if member_id ~= our_id then
-            -- Realm configuration removal
-            data[tostring(msg.to.id)] = nil
-            save_data(_config.moderation.data, data)
-            local realms = 'realms'
-            if not data[tostring(realms)] then
-                data[tostring(realms)] = nil
-                save_data(_config.moderation.data, data)
-            end
-            data[tostring(realms)][tostring(msg.to.id)] = nil
-            save_data(_config.moderation.data, data)
-            send_large_msg(extra.receiver, langs[msg.lang].realmRemoved)
-            return
-        end
-    end
-end
-
-local function check_member_modrem(extra, success, result)
-    local msg = extra.msg
-    for k, v in pairs(result.members) do
-        local member_id = v.peer_id
-        if member_id ~= our_id then
-            -- Group configuration removal
-            data[tostring(msg.to.id)] = nil
-            save_data(_config.moderation.data, data)
-            local groups = 'groups'
-            if not data[tostring(groups)] then
-                data[tostring(groups)] = nil
-                save_data(_config.moderation.data, data)
-            end
-            data[tostring(groups)][tostring(msg.to.id)] = nil
-            save_data(_config.moderation.data, data)
-            send_large_msg(extra.receiver, langs[msg.lang].groupRemoved)
-            return
-        end
-    end
-end
-
 local function modadd(msg)
     if is_group(msg) then
         return langs[msg.lang].groupAlreadyAdded
@@ -636,20 +568,6 @@ local function realmadd(msg)
         return langs[msg.lang].realmAlreadyAdded
     end
     chat_info(get_receiver(msg), check_member_realm_add, { receiver = get_receiver(msg), msg = msg })
-end
-
-local function modrem(msg)
-    if not is_group(msg) then
-        return langs[msg.lang].groupNotAdded
-    end
-    chat_info(get_receiver(msg), check_member_modrem, { receiver = get_receiver(msg), msg = msg })
-end
-
-local function realmrem(msg)
-    if not is_realm(msg) then
-        return langs[msg.lang].realmNotAdded
-    end
-    chat_info(get_receiver(msg), check_member_realmrem, { receiver = get_receiver(msg), msg = msg })
 end
 
 local function automodadd(msg)
@@ -908,40 +826,10 @@ local function check_member_super(extra, success, result)
     end
 end
 
--- Check Members #rem supergroup
-local function check_member_superrem(extra, success, result)
-    local receiver = extra.receiver
-    local msg = extra.msg
-    for k, v in pairs(result) do
-        local member_id = v.id
-        if member_id ~= our_id then
-            -- Group configuration removal
-            data[tostring(msg.to.id)] = nil
-            save_data(_config.moderation.data, data)
-            local groups = 'groups'
-            if not data[tostring(groups)] then
-                data[tostring(groups)] = nil
-                save_data(_config.moderation.data, data)
-            end
-            data[tostring(groups)][tostring(msg.to.id)] = nil
-            save_data(_config.moderation.data, data)
-            local text = langs[msg.lang].supergroupRemoved
-            reply_msg(msg.id, text, ok_cb, false)
-            return
-        end
-    end
-end
-
 -- Function to Add supergroup
 local function superadd(msg)
     local receiver = get_receiver(msg)
     channel_get_users(receiver, check_member_super, { receiver = receiver, msg = msg })
-end
-
--- Function to remove supergroup
-local function superrem(msg)
-    local receiver = get_receiver(msg)
-    channel_get_users(receiver, check_member_superrem, { receiver = receiver, msg = msg })
 end
 
 -- Get and output admins and bots in supergroup
@@ -1502,18 +1390,30 @@ local function run(msg, matches)
             if is_admin1(msg) then
                 if matches[2]:lower() == 'group' and matches[3] then
                     print("Closing Group: " .. 'chat#id' .. matches[3])
-                    chat_info('chat#id' .. matches[3], killchat, false)
-                    return modrem(msg)
+                    chat_del_user('chat#id' .. matches[3], 'user#id' .. our_id, ok_cb, true)
+                    data[tostring(matches[3])] = nil
+                    data.groups[tostring(matches[3])] = nil
+                    save_data(_config.moderation.data, data)
+                    reply_msg(msg.id, langs[msg.lang].groupRemoved, ok_cb, false)
+                    return
                 end
                 if matches[2]:lower() == 'supergroup' and matches[3] then
                     print("Closing Supergroup: " .. 'channel#id' .. matches[3])
-                    channel_get_users('channel#id' .. matches[3], killchannel, { chat_id = matches[3] })
-                    return modrem(msg)
+                    leave_channel('channel#id' .. matches[3], ok_cb, false)
+                    data[tostring(matches[3])] = nil
+                    data.groups[tostring(matches[3])] = nil
+                    save_data(_config.moderation.data, data)
+                    reply_msg(msg.id, langs[msg.lang].supergroupRemoved, ok_cb, false)
+                    return
                 end
                 if matches[2]:lower() == 'realm' and matches[3] then
                     print("Closing Realm: " .. 'chat#id' .. matches[3])
-                    chat_info('chat#id' .. matches[3], killchat, false)
-                    return realmrem(msg)
+                    chat_del_user('chat#id' .. matches[3], 'user#id' .. our_id, ok_cb, true)
+                    data[tostring(matches[3])] = nil
+                    data.groups[tostring(matches[3])] = nil
+                    save_data(_config.moderation.data, data)
+                    reply_msg(msg.id, langs[msg.lang].realmRemoved, ok_cb, false)
+                    return
                 end
             else
                 return langs[msg.lang].require_admin
@@ -1523,16 +1423,11 @@ local function run(msg, matches)
             if matches[1]:lower() == 'rem' and matches[2] then
                 if is_admin1(msg) then
                     -- Group configuration removal
-                    data[tostring(matches[2])] = nil
+                    data[tostring(msg.to.id)] = nil
+                    data.groups[tostring(msg.to.id)] = nil
                     save_data(_config.moderation.data, data)
-                    local groups = 'groups'
-                    if not data[tostring(groups)] then
-                        data[tostring(groups)] = nil
-                        save_data(_config.moderation.data, data)
-                    end
-                    data[tostring(groups)][tostring(matches[2])] = nil
-                    save_data(_config.moderation.data, data)
-                    send_large_msg(get_receiver(msg), langs[msg.lang].chat .. matches[2] .. langs[msg.lang].removed)
+                    reply_msg(msg.id, langs[msg.lang].realmRemoved, ok_cb, false)
+                    chat_del_user('chat#id' .. msg.to.id, 'user#id' .. our_id, ok_cb, true)
                     return
                 else
                     return langs[msg.lang].require_admin
@@ -1706,7 +1601,12 @@ local function run(msg, matches)
                     end
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed group [ " .. msg.to.id .. " ]")
                     print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed")
-                    return modrem(msg)
+                    data[tostring(msg.to.id)] = nil
+                    data.groups[tostring(msg.to.id)] = nil
+                    save_data(_config.moderation.data, data)
+                    reply_msg(msg.id, langs[msg.lang].groupRemoved, ok_cb, false)
+                    chat_del_user('chat#id' .. msg.to.id, 'user#id' .. our_id, ok_cb, true)
+                    return
                 else
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to remove group [ " .. msg.to.id .. " ]")
                     return langs[msg.lang].require_admin
@@ -1719,7 +1619,12 @@ local function run(msg, matches)
                     end
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed realm [ " .. msg.to.id .. " ]")
                     print("group " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed as a realm")
-                    return realmrem(msg)
+                    data[tostring(msg.to.id)] = nil
+                    data.groups[tostring(msg.to.id)] = nil
+                    save_data(_config.moderation.data, data)
+                    reply_msg(msg.id, langs[msg.lang].realmRemoved, ok_cb, false)
+                    chat_del_user('chat#id' .. msg.to.id, 'user#id' .. our_id, ok_cb, true)
+                    return
                 else
                     savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to remove realm [ " .. msg.to.id .. " ]")
                     return langs[msg.lang].require_sudo
@@ -2129,8 +2034,12 @@ local function run(msg, matches)
                 if is_admin1(msg) then
                     if is_group(msg) then
                         print("Closing Group: " .. get_receiver(msg))
-                        chat_info(get_receiver(msg), killchat, false)
-                        return modrem(msg)
+                        data[tostring(msg.to.id)] = nil
+                        data.groups[tostring(msg.to.id)] = nil
+                        save_data(_config.moderation.data, data)
+                        reply_msg(msg.id, langs[msg.lang].groupRemoved, ok_cb, false)
+                        chat_del_user('chat#id' .. msg.to.id, 'user#id' .. our_id, ok_cb, true)
+                        return
                     else
                         return langs[msg.lang].realmIs
                     end
@@ -2141,8 +2050,12 @@ local function run(msg, matches)
                 if is_sudo(msg) then
                     if is_realm(msg) then
                         print("Closing realm: " .. get_receiver(msg))
-                        chat_info(get_receiver(msg), killchat, false)
-                        return realmrem(msg)
+                        data[tostring(msg.to.id)] = nil
+                        data.groups[tostring(msg.to.id)] = nil
+                        save_data(_config.moderation.data, data)
+                        reply_msg(msg.id, langs[msg.lang].realmRemoved, ok_cb, false)
+                        chat_del_user('chat#id' .. msg.to.id, 'user#id' .. our_id, ok_cb, true)
+                        return
                     else
                         return langs[msg.lang].groupIs
                     end
@@ -2184,7 +2097,12 @@ local function run(msg, matches)
                         return
                     end
                     print("SuperGroup " .. msg.to.print_name .. "(" .. msg.to.id .. ") removed")
-                    superrem(msg)
+                    data[tostring(msg.to.id)] = nil
+                    data.groups[tostring(msg.to.id)] = nil
+                    save_data(_config.moderation.data, data)
+                    reply_msg(msg.id, langs[msg.lang].supergroupRemoved, ok_cb, false)
+                    leave_channel('channel#id' .. msg.to.id, ok_cb, false)
+                    return
                 else
                     return langs[msg.lang].require_admin
                 end
@@ -2669,10 +2587,14 @@ local function run(msg, matches)
                 end
             end
             if matches[1]:lower() == 'kill' and matches[2]:lower() == 'supergroup' then
-                if is_admin1(msg) then
+                if is_super_group(msg) then
                     print("Closing Group: " .. get_receiver(msg))
-                    channel_get_users(get_receiver(msg), killchannel, { chat_id = msg.to.id })
-                    return modrem(msg)
+                    data[tostring(msg.to.id)] = nil
+                    data.groups[tostring(msg.to.id)] = nil
+                    save_data(_config.moderation.data, data)
+                    reply_msg(msg.id, langs[msg.lang].supergroupRemoved, ok_cb, false)
+                    leave_channel('channel#id' .. msg.to.id, ok_cb, false)
+                    return
                 else
                     return langs[msg.lang].require_admin
                 end
