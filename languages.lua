@@ -202,12 +202,12 @@ return {
     it =
     {
         -- global --
-        require_sudo = "🚫 Questo comando richiede i privilegi di sudo.",
-        require_authorized_or_sudo = "🚫 Questo comando richiede che tu sia autorizzato o i privilegi di sudo.",
-        require_admin = "🚫 Questo comando richiede privilegi da admin o superiori.",
-        require_owner = "🚫 Questo comando richiede privilegi da owner o superiori.",
-        require_mod = "🚫 Questo comando richiede privilegi da moderatore o superiori.",
-        require_rank = "🚫 Non puoi eseguire questo comando su qualcuno che ha privilegi superiori o uguali ai tuoi!",
+        require_sudo = "🚫 Questo comando richiede i privilegi di sudo. 🚫",
+        require_authorized_or_sudo = "🚫 Questo comando richiede che tu sia autorizzato o i privilegi di sudo. 🚫",
+        require_admin = "🚫 Questo comando richiede privilegi da admin o superiori. 🚫",
+        require_owner = "🚫 Questo comando richiede privilegi da owner o superiori. 🚫",
+        require_mod = "🚫 Questo comando richiede privilegi da moderatore o superiori. 🚫",
+        require_rank = "🚫 Non puoi eseguire questo comando su qualcuno che ha privilegi superiori o uguali ai tuoi! 🚫",
         errorTryAgain = "Errore, prova di nuovo.",
         opsError = "Ops, errore.",
         useYourGroups = "Usalo nei tuoi gruppi!",
@@ -353,11 +353,11 @@ return {
         errorParameter = "Errore variabile redis mancante.",
 
         -- help.lua --
-        require_higher = "🚫 Questo plugin richiede privilegi superiori a quelli che possiedi.\n",
-        pluginListStart = "ℹ️Lista plugin: \n\n",
-        helpInfo = "ℹ️Scrivi \"!help <plugin_name>|<plugin_number>\" per maggiori informazioni su quel plugin.\nℹ️O \"!helpall\" per mostrare tutte le informazioni.",
+        require_higher = "🚫 Questo plugin richiede privilegi superiori a quelli che possiedi. 🚫\n",
+        pluginListStart = "ℹ️ Lista plugin: \n\n",
+        helpInfo = "ℹ️ Scrivi \"!help <plugin_name>|<plugin_number>\" per maggiori informazioni su quel plugin. ℹ️\nℹ️ O \"!helpall\" per mostrare tutte le informazioni. ℹ️",
         errorNoPlugin = "Questo plugin non esiste o non ha una descrizione.",
-        helpIntro = "Ogni '#' può essere sostituito con i simboli '/' o '!'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale (E NON DEVI METTERLE).\nLe parentesi tonde indicano una scelta evidenziata da '|' che significa \"oppure\" (E NON DEVI METTERLE).\nSe hai domande consulta prima le /faq\n\n",
+        helpIntro = "Ogni '#' può essere sostituito con i simboli '/' o '!'.\nTutti i comandi sono Case Insensitive.\nLe parentesi quadre significano opzionale (E NON DEVI METTERLE).\nLe parentesi tonde indicano una scelta evidenziata da '|' che significa \"oppure\" (E NON DEVI METTERLE).\nLe parentesi angolari indicano una cosa che varia a seconda dell'input dell'utente, ciò che c'è al loro interno dà un'idea di cosa dovrebbe essere messo in quella posizione (E NON DEVI METTERLE).\nSe hai domande consulta prima le /faq.\n\n",
         commandNotFound = "Sintassi comando non trovata.",
 
         -- games --
@@ -614,12 +614,12 @@ return {
         alreadyEnabled = " già abilitato.",
         alreadyDisabled = " già disabilitato.",
         notExists = " non esiste o è disabilitato.",
-        systemPlugin = "⛔️ Non è possibile disabilitare questo plugin in quanto è necessario per il corretto funzionamento del sistema.",
+        systemPlugin = "⛔️ Non è possibile disabilitare questo plugin in quanto è necessario per il corretto funzionamento del sistema. ⛔️",
         disabledOnChat = " disabilitato su questa chat.",
-        noDisabledPlugin = "❔ Nessun plugin disabilitato su questa chat.",
-        pluginNotDisabled = "✔️ Questo plugin non è disabilitato su questa chat.",
+        noDisabledPlugin = "❔ Nessun plugin disabilitato su questa chat. ❔",
+        pluginNotDisabled = "✔️ Questo plugin non è disabilitato su questa chat. ✔️",
         pluginEnabledAgain = " nuovamente abilitato.",
-        pluginsReloaded = "💊 Plugins ricaricati.",
+        pluginsReloaded = "💊 Plugins ricaricati. 💊",
         pluginsList = "Lista plugins: ",
         pluginsIntro = "Legenda plugins:\n💻 Di sistema\n✅ Abilitato\n☑️ Disabilitato\n🚫 Disabilitato nella chat\n✔️ Già abilitato\n✖️ Già disabilitato\n❔ Non esistente",
 
@@ -669,8 +669,8 @@ return {
         statsCleaned = "Statistiche azzerate.",
 
         -- strings.lua --
-        langUpdate = "ℹ️ Stringhe aggiornate.",
-        langSet = "ℹ️ Lingua impostata.",
+        langUpdate = "ℹ️ Stringhe aggiornate. ℹ️",
+        langSet = "ℹ️ Lingua impostata. ℹ️",
 
         -- tempmessage.lua --
         wrongTimeFormat = "Formato timer errato.",
@@ -1367,12 +1367,12 @@ return {
     en =
     {
         -- global --
-        require_sudo = "🚫 This plugin requires sudo privileges.",
-        require_authorized_or_sudo = "🚫 This plugin requires that you have been authorized or sudo privileges.",
-        require_admin = "🚫 This plugin requires admin privileges or higher.",
-        require_owner = "🚫 This plugin requires owner privileges or higher.",
-        require_mod = "🚫 This plugin requires mod privileges or higher.",
-        require_rank = "🚫 You can't do this to someone who's higher than you or at your same rank!",
+        require_sudo = "🚫 This plugin requires sudo privileges. 🚫",
+        require_authorized_or_sudo = "🚫 This plugin requires that you have been authorized or sudo privileges. 🚫",
+        require_admin = "🚫 This plugin requires admin privileges or higher. 🚫",
+        require_owner = "🚫 This plugin requires owner privileges or higher. 🚫",
+        require_mod = "🚫 This plugin requires mod privileges or higher. 🚫",
+        require_rank = "🚫 You can't do this to someone who's higher than you or at your same rank! 🚫",
         errorTryAgain = "Error, try again.",
         opsError = "Ops, error.",
         useYourGroups = "Use it in your groups!",
@@ -1522,11 +1522,11 @@ return {
         errorParameter = "Redis variable missing.",
 
         -- help.lua --
-        require_higher = "🚫 This plugin requires higher privileges.\n",
-        pluginListStart = "ℹ️Plugins list: \n\n",
-        helpInfo = "ℹ️Write \"!help <plugin_name>|<plugin_number>\" for more info on that plugin.\nℹ️Or \"!helpall\" to have all commands.",
+        require_higher = "🚫 This plugin requires higher privileges. 🚫\n",
+        pluginListStart = "ℹ️ Plugins list: \n\n",
+        helpInfo = "ℹ️ Write \"!help <plugin_name>|<plugin_number>\" for more info on that plugin. ℹ️\nℹ️ Or \"!helpall\" to have all commands. ℹ️",
         errorNoPlugin = "This plugin doesn't exist or doesn't have a description.",
-        helpIntro = "Every '#' can be replaced with '/' or '!'.\nAll commands are Case Insensitive.\nSquare brackets means that is an optional (AND YOU MUST NOT WRITE THEM).\nRound brackets indicate a choice with '|' that means \"or\" (AND YOU MUST NOT WRITE THEM).\nIf you have questions see /faq first.\n\n",
+        helpIntro = "Every '#' can be replaced with '/' or '!'.\nAll commands are Case Insensitive.\nSquare brackets means optional (AND YOU MUST NOT WRITE THEM).\nRound brackets indicate a choice with '|' that means \"or\" (AND YOU MUST NOT WRITE THEM).\nAngle brackets indicate something that vary with the user's input, what is inside these brackets helps you to understand the thing that should be put there (AND YOU MUST NOT WRITE THEM).\nIf you have questions see /faq first.\n\n",
         commandNotFound = "Sintassi comando non trovata.",
 
         -- games --
@@ -1784,12 +1784,12 @@ return {
         alreadyEnabled = " already enabled.",
         alreadyDisabled = " already disabled.",
         notExists = " not exists or is disabled.",
-        systemPlugin = "⛔️ You can't disable this plugin because is a system one.",
+        systemPlugin = "⛔️ You can't disable this plugin because is a system one. ⛔️",
         disabledOnChat = " disabled on chat.",
-        noDisabledPlugin = "❔ No plugins disabled on chat.",
-        pluginNotDisabled = "✔️ This plugin is not disabled on chat.",
+        noDisabledPlugin = "❔ No plugins disabled on chat. ❔",
+        pluginNotDisabled = "✔️ This plugin is not disabled on chat. ✔️",
         pluginEnabledAgain = " enabled on chat again.",
-        pluginsReloaded = "💊 Plugins reloaded.",
+        pluginsReloaded = "💊 Plugins reloaded. 💊",
         pluginsList = "Plugins' list: ",
         pluginsIntro = "Plugins' legend:\n💻 System\n✅ Enabled\n☑️ Disabled\n🚫 Disabled on chat\n✔️ Already enabled\n✖️ Already disabled\n❔ Not existent",
 
@@ -1839,8 +1839,8 @@ return {
         statsCleaned = "Stats cleaned.",
 
         -- strings.lua --
-        langUpdate = "ℹ️ Strings updated.",
-        langSet = "ℹ️ Language set.",
+        langUpdate = "ℹ️ Strings updated. ℹ️",
+        langSet = "ℹ️ Language set. ℹ️",
 
         -- tempmessage.lua --
         wrongTimeFormat = "Wrong time format.",
