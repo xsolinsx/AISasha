@@ -751,8 +751,8 @@ local function run(msg, matches)
         return
     end
     local receiver = get_receiver(msg)
-    if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' or matches[1]:lower() == 'sasha esplodimi' or matches[1]:lower() == 'sasha sparami' or matches[1]:lower() == 'sasha decompilami' or matches[1]:lower() == 'sasha bannami' then
-        if not msg.api_patch then
+    if not msg.api_patch then
+        if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' or matches[1]:lower() == 'sasha esplodimi' or matches[1]:lower() == 'sasha sparami' or matches[1]:lower() == 'sasha decompilami' or matches[1]:lower() == 'sasha bannami' then
             -- /kickme
             if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 local print_name = user_print_name(msg.from):gsub("‮", "")
@@ -767,12 +767,10 @@ local function run(msg, matches)
             else
                 return langs[msg.lang].useYourGroups
             end
+            return
         end
-        return
-    end
-    if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then
-        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-            if not msg.api_patch then
+        if matches[1]:lower() == 'getuserwarns' or matches[1]:lower() == 'sasha ottieni avvertimenti' or matches[1]:lower() == 'ottieni avvertimenti' then
+            if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 if is_momod(msg) then
                     if get_warn(msg.to.id) == langs[msg.lang].noWarnSet then
                         return langs[msg.lang].noWarnSet
@@ -798,61 +796,59 @@ local function run(msg, matches)
                 else
                     return langs[msg.lang].require_mod
                 end
+                return
+            else
+                return langs[msg.lang].useYourGroups
             end
-            return
-        else
-            return langs[msg.lang].useYourGroups
         end
-    end
-    if matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce' then
-        if is_momod(msg) then
-            if type(msg.reply_id) ~= "nil" then
-                if matches[2] then
-                    if matches[2]:lower() == 'from' then
-                        get_message(msg.reply_id, muteuser_from, { receiver = get_receiver(msg), executer = msg.from.id })
+        if matches[1]:lower() == "muteuser" or matches[1]:lower() == 'voce' then
+            if is_momod(msg) then
+                if type(msg.reply_id) ~= "nil" then
+                    if matches[2] then
+                        if matches[2]:lower() == 'from' then
+                            get_message(msg.reply_id, muteuser_from, { receiver = get_receiver(msg), executer = msg.from.id })
+                        else
+                            muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
+                        end
                     else
                         muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
                     end
-                else
-                    muteuser = get_message(msg.reply_id, muteuser_by_reply, { receiver = get_receiver(msg), executer = msg.from.id })
-                end
-                return
-            elseif matches[2] and matches[2] ~= '' then
-                if string.match(matches[2], '^%d+$') then
-                    -- ignore higher or same rank
-                    if compare_ranks(msg.from.id, matches[2], msg.to.id) then
-                        if is_muted_user(msg.to.id, matches[2]) then
-                            unmute_user(msg.to.id, matches[2])
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
-                            return matches[2] .. langs[msg.lang].muteUserRemove
+                    return
+                elseif matches[2] and matches[2] ~= '' then
+                    if string.match(matches[2], '^%d+$') then
+                        -- ignore higher or same rank
+                        if compare_ranks(msg.from.id, matches[2], msg.to.id) then
+                            if is_muted_user(msg.to.id, matches[2]) then
+                                unmute_user(msg.to.id, matches[2])
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
+                                return matches[2] .. langs[msg.lang].muteUserRemove
+                            else
+                                mute_user(msg.to.id, matches[2])
+                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
+                                return matches[2] .. langs[msg.lang].muteUserAdd
+                            end
                         else
-                            mute_user(msg.to.id, matches[2])
-                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
-                            return matches[2] .. langs[msg.lang].muteUserAdd
+                            return langs[msg.lang].require_rank
                         end
                     else
-                        return langs[msg.lang].require_rank
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
+                        return
                     end
-                else
-                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), muteuser_by_username, { receiver = get_receiver(msg), executer = msg.from.id })
-                    return
                 end
+            else
+                return langs[msg.lang].require_mod
             end
-        else
-            return langs[msg.lang].require_mod
         end
-    end
-    if matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti" then
-        if is_momod(msg) then
-            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
-            return muted_user_list(msg.to.id, msg.to.print_name)
-        else
-            return langs[msg.lang].require_mod
+        if matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti" then
+            if is_momod(msg) then
+                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
+                return muted_user_list(msg.to.id, msg.to.print_name)
+            else
+                return langs[msg.lang].require_mod
+            end
         end
-    end
-    if matches[1]:lower() == 'warn' or matches[1]:lower() == 'sasha avverti' or matches[1]:lower() == 'avverti' then
-        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-            if not msg.api_patch then
+        if matches[1]:lower() == 'warn' or matches[1]:lower() == 'sasha avverti' or matches[1]:lower() == 'avverti' then
+            if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 if is_momod(msg) then
                     if get_warn(msg.to.id) == langs[msg.lang].noWarnSet then
                         return langs[msg.lang].noWarnSet
@@ -885,15 +881,13 @@ local function run(msg, matches)
                 else
                     return langs[msg.lang].require_mod
                 end
+                return
+            else
+                return langs[msg.lang].useYourGroups
             end
-            return
-        else
-            return langs[msg.lang].useYourGroups
         end
-    end
-    if matches[1]:lower() == 'unwarn' then
-        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-            if not msg.api_patch then
+        if matches[1]:lower() == 'unwarn' then
+            if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 if is_momod(msg) then
                     if get_warn(msg.to.id) == langs[msg.lang].noWarnSet then
                         return langs[msg.lang].noWarnSet
@@ -926,15 +920,13 @@ local function run(msg, matches)
                 else
                     return langs[msg.lang].require_mod
                 end
+                return
+            else
+                return langs[msg.lang].useYourGroups
             end
-            return
-        else
-            return langs[msg.lang].useYourGroups
         end
-    end
-    if matches[1]:lower() == 'unwarnall' or matches[1]:lower() == 'sasha azzera avvertimenti' or matches[1]:lower() == 'azzera avvertimenti' then
-        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-            if not msg.api_patch then
+        if matches[1]:lower() == 'unwarnall' or matches[1]:lower() == 'sasha azzera avvertimenti' or matches[1]:lower() == 'azzera avvertimenti' then
+            if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 if is_momod(msg) then
                     if get_warn(msg.to.id) == langs[msg.lang].noWarnSet then
                         return langs[msg.lang].noWarnSet
@@ -967,15 +959,13 @@ local function run(msg, matches)
                 else
                     return langs[msg.lang].require_mod
                 end
+                return
+            else
+                return langs[msg.lang].useYourGroups
             end
-            return
-        else
-            return langs[msg.lang].useYourGroups
         end
-    end
-    if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
-        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-            if not msg.api_patch then
+        if matches[1]:lower() == 'kick' or matches[1]:lower() == 'sasha uccidi' or matches[1]:lower() == 'uccidi' or matches[1]:lower() == 'spara' then
+            if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 if is_momod(msg) then
                     -- /kick
                     if type(msg.reply_id) ~= "nil" then
@@ -1009,14 +999,12 @@ local function run(msg, matches)
                 else
                     return langs[msg.lang].require_mod
                 end
+                return
+            else
+                return langs[msg.lang].useYourGroups
             end
-            return
-        else
-            return langs[msg.lang].useYourGroups
         end
-    end
-    if matches[1]:lower() == 'kickrandom' then
-        if not msg.api_patch then
+        if matches[1]:lower() == 'kickrandom' then
             if is_momod(msg) then
                 if msg.to.type == 'chat' then
                     chat_info(receiver, kickrandom_chat, { chat_id = msg.to.id })
@@ -1028,10 +1016,8 @@ local function run(msg, matches)
                 return langs[msg.lang].require_mod
             end
         end
-    end
-    if matches[1]:lower() == 'ban' or matches[1]:lower() == 'sasha banna' or matches[1]:lower() == 'sasha decompila' or matches[1]:lower() == 'banna' or matches[1]:lower() == 'decompila' or matches[1]:lower() == 'esplodi' or matches[1]:lower() == 'kaboom' then
-        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-            if not msg.api_patch then
+        if matches[1]:lower() == 'ban' or matches[1]:lower() == 'sasha banna' or matches[1]:lower() == 'sasha decompila' or matches[1]:lower() == 'banna' or matches[1]:lower() == 'decompila' or matches[1]:lower() == 'esplodi' or matches[1]:lower() == 'kaboom' then
+            if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 if is_momod(msg) then
                     -- /ban
                     if type(msg.reply_id) ~= "nil" then
@@ -1065,15 +1051,13 @@ local function run(msg, matches)
                 else
                     return langs[msg.lang].require_mod
                 end
+                return
+            else
+                return langs[msg.lang].useYourGroups
             end
-            return
-        else
-            return langs[msg.lang].useYourGroups
         end
-    end
-    if matches[1]:lower() == 'unban' or matches[1]:lower() == 'sasha sbanna' or matches[1]:lower() == 'sasha ricompila' or matches[1]:lower() == 'sasha compila' or matches[1]:lower() == 'sbanna' or matches[1]:lower() == 'ricompila' or matches[1]:lower() == 'compila' then
-        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-            if not msg.api_patch then
+        if matches[1]:lower() == 'unban' or matches[1]:lower() == 'sasha sbanna' or matches[1]:lower() == 'sasha ricompila' or matches[1]:lower() == 'sasha compila' or matches[1]:lower() == 'sbanna' or matches[1]:lower() == 'ricompila' or matches[1]:lower() == 'compila' then
+            if msg.to.type == 'chat' or msg.to.type == 'channel' then
                 if is_momod(msg) then
                     -- /unban
                     if type(msg.reply_id) ~= "nil" then
@@ -1105,14 +1089,12 @@ local function run(msg, matches)
                 else
                     return langs[msg.lang].require_mod
                 end
+                return
+            else
+                return langs[msg.lang].useYourGroups
             end
-            return
-        else
-            return langs[msg.lang].useYourGroups
         end
-    end
-    if matches[1]:lower() == "banlist" or matches[1]:lower() == "sasha lista ban" or matches[1]:lower() == "lista ban" then
-        if not msg.api_patch then
+        if matches[1]:lower() == "banlist" or matches[1]:lower() == "sasha lista ban" or matches[1]:lower() == "lista ban" then
             -- /banlist
             if matches[2] and is_admin1(msg) then
                 return ban_list(matches[2])
@@ -1125,11 +1107,9 @@ local function run(msg, matches)
             else
                 return langs[msg.lang].require_mod
             end
+            return
         end
-        return
-    end
-    if matches[1]:lower() == 'kickdeleted' then
-        if not msg.api_patch then
+        if matches[1]:lower() == 'kickdeleted' then
             if is_momod(msg) then
                 -- /kickdeleted
                 if msg.to.type == 'chat' then
@@ -1142,9 +1122,7 @@ local function run(msg, matches)
                 return langs[msg.lang].require_mod
             end
         end
-    end
-    if matches[1]:lower() == 'kickinactive' then
-        if not msg.api_patch then
+        if matches[1]:lower() == 'kickinactive' then
             if is_owner(msg) then
                 -- /kickinactive
                 local num = 1
@@ -1160,11 +1138,9 @@ local function run(msg, matches)
             else
                 return langs[msg.lang].require_owner
             end
+            return
         end
-        return
-    end
-    if matches[1]:lower() == 'kicknouser' then
-        if not msg.api_patch then
+        if matches[1]:lower() == 'kicknouser' then
             if is_owner(msg) then
                 -- /kicknouser
                 if msg.to.type == 'chat' then
@@ -1177,9 +1153,7 @@ local function run(msg, matches)
                 return langs[msg.lang].require_owner
             end
         end
-    end
-    if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
-        if not msg.api_patch then
+        if matches[1]:lower() == 'gban' or matches[1]:lower() == 'sasha superbanna' or matches[1]:lower() == 'superbanna' then
             if is_admin1(msg) then
                 -- /gban
                 if type(msg.reply_id) ~= "nil" then
@@ -1212,11 +1186,9 @@ local function run(msg, matches)
             else
                 return langs[msg.lang].require_admin
             end
+            return
         end
-        return
-    end
-    if matches[1]:lower() == 'ungban' or matches[1]:lower() == 'sasha supersbanna' or matches[1]:lower() == 'supersbanna' then
-        if not msg.api_patch then
+        if matches[1]:lower() == 'ungban' or matches[1]:lower() == 'sasha supersbanna' or matches[1]:lower() == 'supersbanna' then
             if is_admin1(msg) then
                 -- /ungban
                 if type(msg.reply_id) ~= "nil" then
@@ -1249,11 +1221,9 @@ local function run(msg, matches)
             else
                 return langs[msg.lang].require_admin
             end
+            return
         end
-        return
-    end
-    if matches[1]:lower() == 'gbanlist' or matches[1]:lower() == 'sasha lista superban' or matches[1]:lower() == 'lista superban' then
-        if not msg.api_patch then
+        if matches[1]:lower() == 'gbanlist' or matches[1]:lower() == 'sasha lista superban' or matches[1]:lower() == 'lista superban' then
             if is_admin1(msg) then
                 -- /gbanlist
                 local list = banall_list()
@@ -1267,8 +1237,8 @@ local function run(msg, matches)
             else
                 return langs[msg.lang].require_admin
             end
+            return
         end
-        return
     end
 end
 
