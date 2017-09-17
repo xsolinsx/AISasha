@@ -2620,20 +2620,22 @@ local function run(msg, matches)
             -- Admin Join Service Message
             if msg.service then
                 if msg.action then
-                    if msg.action.type == 'chat_add_user_link' then
-                        if is_owner2(msg.from.id) then
-                            local receiver = get_receiver(msg)
-                            local user = "user#id" .. msg.from.id
-                            savelog(msg.to.id, name_log .. " Admin [" .. msg.from.id .. "] joined the SuperGroup via link")
-                            channel_set_admin(get_receiver(msg), user, ok_cb, false)
+                    if not msg.api_patch then
+                        if msg.action.type == 'chat_add_user_link' then
+                            if is_owner2(msg.from.id) then
+                                local receiver = get_receiver(msg)
+                                local user = "user#id" .. msg.from.id
+                                savelog(msg.to.id, name_log .. " Admin [" .. msg.from.id .. "] joined the SuperGroup via link")
+                                channel_set_admin(get_receiver(msg), user, ok_cb, false)
+                            end
                         end
-                    end
-                    if msg.action.type == 'chat_add_user' then
-                        if is_owner2(msg.action.user.id) then
-                            local receiver = get_receiver(msg)
-                            local user = "user#id" .. msg.action.user.id
-                            savelog(msg.to.id, name_log .. " Admin [" .. msg.action.user.id .. "] added to the SuperGroup by [ " .. msg.from.id .. " ]")
-                            channel_set_admin(get_receiver(msg), user, ok_cb, false)
+                        if msg.action.type == 'chat_add_user' then
+                            if is_owner2(msg.action.user.id) then
+                                local receiver = get_receiver(msg)
+                                local user = "user#id" .. msg.action.user.id
+                                savelog(msg.to.id, name_log .. " Admin [" .. msg.action.user.id .. "] added to the SuperGroup by [ " .. msg.from.id .. " ]")
+                                channel_set_admin(get_receiver(msg), user, ok_cb, false)
+                            end
                         end
                     end
                 end
