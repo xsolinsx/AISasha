@@ -9,7 +9,7 @@ local function estrai(t, chat_id, msg_id, n)
         if #tab > 0 then
             reply_msg(msg_id, 'Ci sono ' .. #tab .. ' partecipanti.\nIl vincitore è... ' .. tab[math.random(#tab)] .. '!\nQuesta era l\'ultima estrazione :)', ok_cb, false)
         else
-            reply_msg(msg.id, 'Non ci sono partecipanti o la biglietteria non è stata aperta.', ok_cb, false)
+            reply_msg(msg_id, 'Non ci sono partecipanti o la biglietteria non è stata aperta.', ok_cb, false)
         end
     else
         for k, v in pairs(t) do
