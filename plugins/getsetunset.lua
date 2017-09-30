@@ -629,7 +629,15 @@ end
 
 local function pre_process(msg, matches)
     if msg then
+        local continue = false
         if not msg.api_patch then
+            continue = true
+        elseif msg.from.username then
+            if string.sub(msg.from.username:lower(), -3) == 'bot' then
+                continue = true
+            end
+        end
+        if continue then
             -- local
             local vars = list_variables(msg, false)
             local answer = nil
