@@ -3,14 +3,10 @@ local BASE_FOLDER = "/"
 
 local function callback(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
-    if get_reply_receiver(result) == extra.receiver then
-        if success then
-            send_large_msg(extra.receiver, langs[lang].fileDownloadedTo .. result)
-        else
-            send_large_msg(extra.receiver, langs[lang].errorDownloading)
-        end
+    if success then
+        send_large_msg(extra.receiver, langs[lang].fileDownloadedTo .. result)
     else
-        send_large_msg(extra.receiver, langs[lang].oldMessage)
+        send_large_msg(extra.receiver, langs[lang].errorDownloading)
     end
 end
 
