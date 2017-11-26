@@ -104,8 +104,8 @@ local function pre_process(msg)
         if (msg.to.type == 'chat' or msg.to.type == 'channel') then
             if not msg.api_patch then
                 for v, user in pairs(_config.sudo_users) do
-                    -- exclude bot tags, autotags and tags of BOT version
-                    if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(user) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) and tonumber(msg.from.id) ~= 283058260 then
+                    -- exclude bot tags, autotags of ourselves, autotags, tags from BOT version and tags of BOT version
+                    if tonumber(msg.from.id) ~= tonumber(our_id) and tonumber(user) ~= tonumber(our_id) and tonumber(msg.from.id) ~= tonumber(user) and tonumber(msg.from.id) ~= 283058260 and tonumber(user) ~= 283058260 then
                         user_info('user#id' .. user, callback_sudo_ids, { msg = msg, user = user })
                     end
                 end
