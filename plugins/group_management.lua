@@ -1735,26 +1735,26 @@ local function run(msg, matches)
                     return
                 end
             end
-            if matches[1]:lower() == 'setname' and is_group(msg) then
-                if is_momod(msg) then
-                    data[tostring(msg.to.id)].set_name = string.gsub(matches[2], '_', ' ')
-                    save_data(_config.moderation.data, data)
-                    rename_chat('chat#id' .. msg.to.id, data[tostring(msg.to.id)].set_name, ok_cb, false)
-                    return savelog(msg.to.id, "Group { " .. msg.to.print_name .. " }  name changed to [ " .. string.gsub(matches[2], '_', ' ') .. " ] by " .. name_log .. " [" .. msg.from.id .. "]")
-                else
-                    return langs[msg.lang].require_mod
-                end
-            end
-            if matches[1]:lower() == 'setphoto' then
-                if is_momod(msg) then
-                    data[tostring(msg.to.id)].set_photo = 'waiting'
-                    save_data(_config.moderation.data, data)
-                    return langs[msg.lang].sendNewGroupPic
-                else
-                    return langs[msg.lang].require_mod
-                end
-            end
             if not msg.api_patch then
+                if matches[1]:lower() == 'setname' and is_group(msg) then
+                    if is_momod(msg) then
+                        data[tostring(msg.to.id)].set_name = string.gsub(matches[2], '_', ' ')
+                        save_data(_config.moderation.data, data)
+                        rename_chat('chat#id' .. msg.to.id, data[tostring(msg.to.id)].set_name, ok_cb, false)
+                        return savelog(msg.to.id, "Group { " .. msg.to.print_name .. " }  name changed to [ " .. string.gsub(matches[2], '_', ' ') .. " ] by " .. name_log .. " [" .. msg.from.id .. "]")
+                    else
+                        return langs[msg.lang].require_mod
+                    end
+                end
+                if matches[1]:lower() == 'setphoto' then
+                    if is_momod(msg) then
+                        data[tostring(msg.to.id)].set_photo = 'waiting'
+                        save_data(_config.moderation.data, data)
+                        return langs[msg.lang].sendNewGroupPic
+                    else
+                        return langs[msg.lang].require_mod
+                    end
+                end
                 if matches[1]:lower() == 'promote' or matches[1]:lower() == 'sasha promuovi' or matches[1]:lower() == 'promuovi' then
                     if is_owner(msg) then
                         if type(msg.reply_id) ~= "nil" then
