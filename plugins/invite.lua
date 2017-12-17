@@ -29,38 +29,40 @@ local function invite_from(extra, success, result)
 end
 
 local function run(msg, matches)
-    if is_admin1(msg) then
-        local receiver = get_receiver(msg)
-        if not is_realm(msg) then
-            if data[tostring(msg.to.id)]['settings']['lock_member'] and not is_admin1(msg) then
-                return langs[msg.lang].privateGroup
+    if not msg.api_patch then
+        if is_admin1(msg) then
+            local receiver = get_receiver(msg)
+            if not is_realm(msg) then
+                if data[tostring(msg.to.id)]['settings']['lock_member'] and not is_admin1(msg) then
+                    return langs[msg.lang].privateGroup
+                end
             end
-        end
-        if msg.to.type == 'chat' or msg.to.type == 'channel' then
-            if type(msg.reply_id) ~= "nil" then
-                if matches[2] then
-                    if matches[2]:lower() == 'from' then
-                        get_message(msg.reply_id, invite_from, { receiver = receiver })
-                        return
+            if msg.to.type == 'chat' or msg.to.type == 'channel' then
+                if type(msg.reply_id) ~= "nil" then
+                    if matches[2] then
+                        if matches[2]:lower() == 'from' then
+                            get_message(msg.reply_id, invite_from, { receiver = receiver })
+                            return
+                        else
+                            get_message(msg.reply_id, invite_by_reply, { receiver = receiver })
+                        end
                     else
                         get_message(msg.reply_id, invite_by_reply, { receiver = receiver })
                     end
-                else
-                    get_message(msg.reply_id, invite_by_reply, { receiver = receiver })
+                elseif matches[2] and matches[2] ~= '' then
+                    if string.match(matches[2], '^%d+$') then
+                        chat_add_user(receiver, 'user#id' .. matches[2], ok_cb, false)
+                        channel_invite(receiver, 'user#id' .. matches[2], ok_cb, false)
+                    else
+                        resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), invite_by_username, { receiver = receiver })
+                    end
                 end
-            elseif matches[2] and matches[2] ~= '' then
-                if string.match(matches[2], '^%d+$') then
-                    chat_add_user(receiver, 'user#id' .. matches[2], ok_cb, false)
-                    channel_invite(receiver, 'user#id' .. matches[2], ok_cb, false)
-                else
-                    resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), invite_by_username, { receiver = receiver })
-                end
+            else
+                return langs[msg.lang].useYourGroups
             end
         else
-            return langs[msg.lang].useYourGroups
+            return langs[msg.lang].require_admin
         end
-    else
-        return langs[msg.lang].require_admin
     end
 end
 
