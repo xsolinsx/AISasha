@@ -180,7 +180,10 @@ local function run(msg, matches)
 
             if matches[1]:lower() == 'countdatabase' then
                 local i = 0
-                for k, v in pairsByKeys(database) do
+                for k, v in pairsByKeys(database.groups) do
+                    i = i + 1
+                end
+                for k, v in pairsByKeys(database.users) do
                     i = i + 1
                 end
                 return i
