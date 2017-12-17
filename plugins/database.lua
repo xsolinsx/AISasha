@@ -178,6 +178,14 @@ local function run(msg, matches)
                 end
             end
 
+            if matches[1]:lower() == 'countdatabase' then
+                local i = 0
+                for k, v in pairsByKeys(database) do
+                    i = i + 1
+                end
+                return i
+            end
+
             if (matches[1]:lower() == 'dbsearch' or matches[1]:lower() == 'sasha cerca db' or matches[1]:lower() == 'cerca db') and matches[2] then
                 if database['users'][tostring(matches[2])] then
                     return serpent.block(database['users'][tostring(matches[2])], { sortkeys = false, comment = false })
@@ -442,6 +450,7 @@ return {
     {
         "^[#!/]([Cc][Rr][Ee][Aa][Tt][Ee][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Dd][Oo][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
+        "^[#!/]([Cc][Oo][Uu][Nn][Tt][Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
         "^[#!/]([Dd][Bb][Ss][Ee][Aa][Rr][Cc][Hh]) (%d+)$",
         "^[#!/]([Aa][Dd][Dd][Rr][Ee][Cc][Oo][Rr][Dd]) ([^%s]+) (.*)$",
         "^[#!/]([Dd][Bb][Dd][Ee][Ll][Ee][Tt][Ee]) (%d+)$",
@@ -458,6 +467,7 @@ return {
         "SUDO",
         "#createdatabase",
         "(#dodatabase|sasha esegui database)",
+        "#countdatabase",
         "#dbsearch <id>",
         "#dbdelete <id>",
         "#addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>",
