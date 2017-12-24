@@ -136,7 +136,7 @@ function download_to_file(url, file_name)
 
     if code ~= 200 then return nil end
 
-    file_name = file_name or get_http_file_name(url, headers)
+    file_name = file_name or string.random(50)
 
     local file_path = "data/tmp/" .. file_name
     print("Saved to: " .. file_path)
