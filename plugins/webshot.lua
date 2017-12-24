@@ -1,6 +1,6 @@
 ﻿local function run(msg, matches)
     if is_momod(msg) then
-        local url = "http://webshot.okfnlabs.org/api/generate?url=" .. URL.escape(matches[1])
+        local url = "http://webshot.okfnlabs.org/api/generate?url=" .. URL.escape("http://" .. matches[1])
         if matches[2] and not matches[3] then
             url = url .. "&full=true"
         elseif matches[2] and matches[3] then
