@@ -1251,7 +1251,7 @@ function ban_list(chat_id)
 end
 
 -- Returns globally ban list
-function banall_list()
+function banall_list(chat_id)
     local lang = get_lang(chat_id)
     local hash = 'gbanned'
     local list = redis:smembers(hash)

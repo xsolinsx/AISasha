@@ -1226,7 +1226,7 @@ local function run(msg, matches)
         if matches[1]:lower() == 'gbanlist' or matches[1]:lower() == 'sasha lista superban' or matches[1]:lower() == 'lista superban' then
             if is_admin1(msg) then
                 -- /gbanlist
-                local list = banall_list()
+                local list = banall_list(msg.to.id)
                 local file = io.open("./groups/gbanlist.txt", "w")
                 file:write(list)
                 file:flush()
