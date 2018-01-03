@@ -752,7 +752,6 @@ local function run(msg, matches)
     end
     local receiver = get_receiver(msg)
     if not msg.api_patch then
-        print('in')
         if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' or matches[1]:lower() == 'sasha esplodimi' or matches[1]:lower() == 'sasha sparami' or matches[1]:lower() == 'sasha decompilami' or matches[1]:lower() == 'sasha bannami' then
             -- /kickme
             if msg.to.type == 'chat' or msg.to.type == 'channel' then
@@ -821,11 +820,11 @@ local function run(msg, matches)
                         if compare_ranks(msg.from.id, matches[2], msg.to.id) then
                             if is_muted_user(msg.to.id, matches[2]) then
                                 unmute_user(msg.to.id, matches[2])
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
+                                savelog(msg.to.id, " [" .. msg.from.id .. "] removed [" .. matches[2] .. "] from the muted users list")
                                 return matches[2] .. langs[msg.lang].muteUserRemove
                             else
                                 mute_user(msg.to.id, matches[2])
-                                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
+                                savelog(msg.to.id, " [" .. msg.from.id .. "] added [" .. matches[2] .. "] to the muted users list")
                                 return matches[2] .. langs[msg.lang].muteUserAdd
                             end
                         else
@@ -841,10 +840,8 @@ local function run(msg, matches)
             end
         end
         if matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti" then
-            print('in')
             if is_momod(msg) then
-                print('in')
-                savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
+                savelog(msg.to.id, " [" .. msg.from.id .. "] requested SuperGroup mutelist")
                 local hash = 'mute_user:' .. msg.to.id
                 local list = redis:smembers(hash)
                 local text = langs[msg.lang].mutedUsersStart .. msg.to.print_name:gsub('_', ' ') .. " [" .. msg.to.id .. "]\n\n"

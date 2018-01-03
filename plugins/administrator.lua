@@ -180,8 +180,6 @@ end
 local function run(msg, matches)
     local receiver = get_receiver(msg)
     local group = msg.to.id
-    local print_name = user_print_name(msg.from):gsub("‮", "")
-    local name_log = print_name:gsub("_", " ")
     if matches[1]:lower() == 'rebootapi' then
         if is_reboot_allowed(msg) then
             io.popen('kill -9 $(pgrep lua)'):read('*all')
