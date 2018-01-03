@@ -842,7 +842,20 @@ local function run(msg, matches)
         if matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti" then
             if is_momod(msg) then
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
-                return muted_user_list(msg.to.id, msg.to.print_name)
+                local hash = 'mute_user:' .. msg.to.id
+                local list = redis:smembers(hash)
+                local text = langs[msg.lang].mutedUsersStart .. msg.to.print_name:gsub('_', ' ') .. " [" .. msg.to.id .. "]\n\n"
+                for k, v in pairsByKeys(list) do
+                    local user_info = redis:hgetall('user:' .. v)
+                    if user_info and user_info.print_name then
+                        local print_name = string.gsub(user_info.print_name, "_", " ")
+                        local print_name = string.gsub(print_name, "‮", "")
+                        text = text .. k .. " - " .. print_name .. " [" .. v .. "]\n"
+                    else
+                        text = text .. k .. " - [ " .. v .. " ]\n"
+                    end
+                end
+                return text
             else
                 return langs[msg.lang].require_mod
             end
