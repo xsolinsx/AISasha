@@ -752,6 +752,7 @@ local function run(msg, matches)
     end
     local receiver = get_receiver(msg)
     if not msg.api_patch then
+        print('in')
         if matches[1]:lower() == 'kickme' or matches[1]:lower() == 'sasha uccidimi' or matches[1]:lower() == 'sasha esplodimi' or matches[1]:lower() == 'sasha sparami' or matches[1]:lower() == 'sasha decompilami' or matches[1]:lower() == 'sasha bannami' then
             -- /kickme
             if msg.to.type == 'chat' or msg.to.type == 'channel' then
@@ -840,12 +841,13 @@ local function run(msg, matches)
             end
         end
         if matches[1]:lower() == "mutelist" or matches[1]:lower() == "lista utenti muti" then
+            print('in')
             if is_momod(msg) then
+                print('in')
                 savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] requested SuperGroup mutelist")
                 local hash = 'mute_user:' .. msg.to.id
                 local list = redis:smembers(hash)
                 local text = langs[msg.lang].mutedUsersStart .. msg.to.print_name:gsub('_', ' ') .. " [" .. msg.to.id .. "]\n\n"
-                vardump(list)
                 for k, v in pairsByKeys(list) do
                     local user_info = redis:hgetall('user:' .. v)
                     if user_info and user_info.print_name then
@@ -856,7 +858,6 @@ local function run(msg, matches)
                         text = text .. k .. " - [ " .. v .. " ]\n"
                     end
                 end
-                print(text)
                 return text
             else
                 return langs[msg.lang].require_mod
