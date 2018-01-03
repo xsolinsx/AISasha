@@ -845,6 +845,7 @@ local function run(msg, matches)
                 local hash = 'mute_user:' .. msg.to.id
                 local list = redis:smembers(hash)
                 local text = langs[msg.lang].mutedUsersStart .. msg.to.print_name:gsub('_', ' ') .. " [" .. msg.to.id .. "]\n\n"
+                vardump(list)
                 for k, v in pairsByKeys(list) do
                     local user_info = redis:hgetall('user:' .. v)
                     if user_info and user_info.print_name then
@@ -855,6 +856,7 @@ local function run(msg, matches)
                         text = text .. k .. " - [ " .. v .. " ]\n"
                     end
                 end
+                print(text)
                 return text
             else
                 return langs[msg.lang].require_mod
