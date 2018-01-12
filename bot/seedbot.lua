@@ -420,7 +420,8 @@ end
 function cron_plugins()
     for name, plugin in pairs(plugins) do
         -- Only plugins with cron function
-        if plugin.cron ~= nil then
+        if plugin.cron then
+            print("CRON: ", name)
             plugin.cron()
         end
     end
