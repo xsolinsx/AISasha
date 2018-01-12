@@ -10,6 +10,7 @@ serpent =(loadfile "./libs/serpent.lua")()
 json =(loadfile "./libs/JSON.lua")()
 mimetype =(loadfile "./libs/mimetype.lua")()
 redis =(loadfile "./libs/redis.lua")()
+sha2 =(loadfile "./libs/sha2.lua")()
 langs = dofile("languages.lua")
 
 http.TIMEOUT = 10
