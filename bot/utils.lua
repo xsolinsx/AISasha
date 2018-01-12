@@ -7,11 +7,9 @@ https = require "ssl.https"
 ltn12 = require "ltn12"
 
 serpent =(loadfile "./libs/serpent.lua")()
-feedparser =(loadfile "./libs/feedparser.lua")()
 json =(loadfile "./libs/JSON.lua")()
 mimetype =(loadfile "./libs/mimetype.lua")()
 redis =(loadfile "./libs/redis.lua")()
-JSON =(loadfile "./libs/dkjson.lua")()
 langs = dofile("languages.lua")
 
 http.TIMEOUT = 10

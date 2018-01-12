@@ -8,7 +8,7 @@
             return langs[msg.lang].opsError
         end
 
-        local jdat = JSON.decode(jstr)
+        local jdat = json:decode(jstr)
         if jdat.result_type == "no_results" then
             return langs[msg.lang].opsError
         end

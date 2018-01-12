@@ -399,7 +399,7 @@ function load_data(filename)
     end
     local s = f:read('*all')
     f:close()
-    local data = JSON.decode(s)
+    local data = json:decode(s)
 
     return data
 end
