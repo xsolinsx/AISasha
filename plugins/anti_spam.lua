@@ -111,7 +111,7 @@ local function pre_process(msg)
                             return msg
                         end
                         local receiver = get_receiver(msg)
-                        if kicktable[user] == true then
+                        if kicktable[tostring(user)] == true then
                             return
                         end
                         delete_msg(msg.id, ok_cb, false)
@@ -164,7 +164,7 @@ local function pre_process(msg)
                                 end
                             end
                         end
-                        kicktable[user] = true
+                        kicktable[tostring(user)] = true
                         msg = nil
                     end
                 end
@@ -176,7 +176,7 @@ local function pre_process(msg)
 end
 
 local function cron()
-    -- clear that table on the top of the plugins
+    -- clear that table on the top of the plugin
     kicktable = { }
 end
 
