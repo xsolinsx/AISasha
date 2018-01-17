@@ -2170,28 +2170,28 @@ local function run(msg, matches)
                     return langs[msg.lang].require_mod
                 end
             end
-            if matches[1]:lower() == 'newlink' or matches[1]:lower() == "sasha crea link" then
-                if is_momod(msg) then
-                    local function callback_link(extra, success, result)
-                        local receiver = get_receiver(msg)
-                        if success == 0 then
-                            send_large_msg(get_receiver(msg), langs[msg.lang].errorCreateLink)
-                            data[tostring(msg.to.id)].settings['set_link'] = nil
-                            save_data(_config.moderation.data, data)
-                        else
-                            send_large_msg(get_receiver(msg), langs[msg.lang].linkCreated)
-                            data[tostring(msg.to.id)].settings['set_link'] = result
-                            save_data(_config.moderation.data, data)
-                        end
-                    end
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to create a new SuperGroup link")
-                    export_channel_link(get_receiver(msg), callback_link, false)
-                    return
-                else
-                    return langs[msg.lang].require_mod
-                end
-            end
             if not msg.api_patch then
+                if matches[1]:lower() == 'newlink' or matches[1]:lower() == "sasha crea link" then
+                    if is_momod(msg) then
+                        local function callback_link(extra, success, result)
+                            local receiver = get_receiver(msg)
+                            if success == 0 then
+                                send_large_msg(get_receiver(msg), langs[msg.lang].errorCreateLink)
+                                data[tostring(msg.to.id)].settings['set_link'] = nil
+                                save_data(_config.moderation.data, data)
+                            else
+                                send_large_msg(get_receiver(msg), langs[msg.lang].linkCreated)
+                                data[tostring(msg.to.id)].settings['set_link'] = result
+                                save_data(_config.moderation.data, data)
+                            end
+                        end
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] attempted to create a new SuperGroup link")
+                        export_channel_link(get_receiver(msg), callback_link, false)
+                        return
+                    else
+                        return langs[msg.lang].require_mod
+                    end
+                end
                 if (matches[1]:lower() == 'setlink' or matches[1]:lower() == "sasha imposta link") and matches[2] then
                     if is_owner(msg) then
                         data[tostring(msg.to.id)].settings['set_link'] = matches[2]
