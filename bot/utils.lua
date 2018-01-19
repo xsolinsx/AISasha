@@ -1416,15 +1416,19 @@ end
 
 function doSendBackup()
     local time = os.time()
-    local tar_command = 'tar -zcvf backupRaspberryPi' .. time .. '.tar.gz ' ..
+    local tar_command = 'sudo tar -zcvf backupRaspberryPi' .. time .. '.tar.gz ' ..
+    -- exclusions
+    '--exclude=/home/pi/AISasha/.git --exclude=/home/pi/AISasha/.luarocks --exclude=/home/pi/AISasha/patches --exclude=/home/pi/AISasha/tg ' ..
+    '--exclude=/home/pi/AISashaAPI/.git ' ..
+    '--exclude=/home/pi/MyBotForReported/.git ' ..
     -- desktop
     '/home/pi/Desktop ' ..
     -- sasha user
-    '/home/pi/AISasha --exclude=/home/pi/AISasha/.git --exclude=/home/pi/AISasha/.luarocks --exclude=/home/pi/AISasha/patches --exclude=/home/pi/AISasha/tg ' ..
+    '/home/pi/AISasha ' ..
     -- sasha bot
-    '/home/pi/AISashaAPI --exclude=/home/pi/AISashaAPI/.git ' ..
+    '/home/pi/AISashaAPI ' ..
     -- bot for reported
-    '/home/pi/MyBotForReported  --exclude=/home/pi/MyBotForReported/.git ' ..
+    '/home/pi/MyBotForReported ' ..
     -- redis database
     '/var/lib/redis'
     -- save redis db
