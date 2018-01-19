@@ -188,10 +188,6 @@ local function run(msg, matches)
         else
             return langs[msg.lang].require_authorized_or_sudo
         end
-    elseif msg.service and msg.action.type == "chat_add_user" and msg.action.user.id == tonumber(our_id) and not is_admin1(msg) then
-        chat_del_user(get_receiver(msg), 'user#id' .. our_id, ok_cb, false)
-        leave_channel(get_receiver(msg), ok_cb, false)
-        return langs[msg.lang].notMyGroup
     end
     if is_admin1(msg) then
         if msg.media then
@@ -384,7 +380,6 @@ return {
         "^[#!/]([Ll][Ee][Aa][Vv][Ee])$",
         "^[#!/]([Rr][Ee][Bb][Oo][Oo][Tt][Aa][Pp][Ii])$",
         "%[(photo)%]",
-        "^!!tgservice (.+)$",
         -- pm
         "^([Ss][Aa][Ss][Hh][Aa] [Mm][Ee][Ss][Ss][Aa][Gg][Gg][Ii][Aa]) (%d+) (.*)$",
         -- pmunblock
