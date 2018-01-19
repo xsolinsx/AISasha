@@ -878,6 +878,7 @@ return {
             "#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]: Sasha aggiunge manualmente al database il gruppo specificato.",
             "#uploaddb: Sasha manda il database.",
             "#replacedb <reply>: Sasha sostituisce il database.",
+            "#savedb <reply>: Sasha salva il database.",
         },
 
         delword =
@@ -2037,6 +2038,7 @@ return {
             "#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]: Sasha manually adds the specified group to the database.",
             "#uploaddb: Sasha uploads the database.",
             "#replacedb <reply>: Sasha replaces the database.",
+            "#savedb <reply>: Sasha saves the database.",
         },
 
         delword =

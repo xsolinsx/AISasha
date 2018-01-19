@@ -459,6 +459,7 @@ return {
         "^[#!/]([Dd][Bb][Dd][Ee][Ll][Ee][Tt][Ee]) (%d+)$",
         "^[#!/]([Uu][Pp][Ll][Oo][Aa][Dd][Dd][Bb])$",
         "^[#!/]([Rr][Ee][Pp][Ll][Aa][Cc][Ee][Dd][Bb])$",
+        "^[#!/]([Ss][Aa][Vv][Ee][Dd][Bb])$",
         -- dodatabase
         "^([Ss][Aa][Ss][Hh][Aa] [Ee][Ss][Ee][Gg][Uu][Ii] [Dd][Aa][Tt][Aa][Bb][Aa][Ss][Ee])$",
     },
@@ -476,5 +477,7 @@ return {
         "#addrecord user <id>\n<print_name>\n<old_print_names>\n<username>\n<old_usernames>\n<long_id>\n<groups_ids_separated_by_space>",
         "#addrecord group <id>\n<print_name>\n<old_print_names>\n<lang>\n<long_id>\n[<username>\n<old_usernames>]",
         "#uploaddb",
+        "#replacedb",
+        "#savedb",
     },
 }
