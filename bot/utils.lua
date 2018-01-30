@@ -1,4 +1,4 @@
-rank_table = { ["USER"] = 0, ["MOD"] = 1, ["OWNER"] = 2, ["ADMIN"] = 3, ["SUDO"] = 4, ["BOT"] = 5 }
+rank_table = { ["USER"] = 1, ["MOD"] = 2, ["OWNER"] = 3, ["ADMIN"] = 4, ["SUDO"] = 5, ["BOT"] = 6 }
 reverse_rank_table = { "USER", "MOD", "OWNER", "ADMIN", "SUDO", "BOT" }
 
 URL = require "socket.url"

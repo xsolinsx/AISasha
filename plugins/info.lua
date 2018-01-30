@@ -77,14 +77,14 @@ local function get_rank_by_username(extra, success, result)
         return
     end
     local rank = get_rank(result.peer_id, extra.chat_id)
-    send_large_msg(extra.receiver, langs[lang].rank .. reverse_rank_table[rank + 1])
+    send_large_msg(extra.receiver, langs[lang].rank .. reverse_rank_table[rank])
 end
 
 local function get_rank_by_reply(extra, success, result)
     local lang = get_lang(string.match(extra.receiver, '%d+'))
     if get_reply_receiver(result) == extra.receiver then
         local rank = get_rank(result.from.peer_id, result.to.peer_id)
-        send_large_msg(extra.receiver, langs[lang].rank .. reverse_rank_table[rank + 1])
+        send_large_msg(extra.receiver, langs[lang].rank .. reverse_rank_table[rank])
     else
         send_large_msg(extra.receiver, langs[lang].oldMessage)
     end
@@ -242,7 +242,7 @@ local function info_by_username(extra, success, result)
             ]]
         end
         local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.chat_id) or 0)
-        text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.peer_id, extra.chat_id) + 1] ..
+        text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.peer_id, extra.chat_id)] ..
         langs[lang].date .. os.date('%c') ..
         langs[lang].totalMessages .. msgs
         local otherinfo = langs[lang].otherInfo
@@ -312,7 +312,7 @@ local function info_by_reply(extra, success, result)
             ]]
             end
             local msgs = tonumber(redis:get('msgs:' .. result.action.user.peer_id .. ':' .. result.to.peer_id) or 0)
-            text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.action.user.peer_id, result.to.peer_id) + 1] ..
+            text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.action.user.peer_id, result.to.peer_id)] ..
             langs[lang].date .. os.date('%c') ..
             langs[lang].totalMessages .. msgs
             local otherinfo = langs[lang].otherInfo
@@ -365,7 +365,7 @@ local function info_by_reply(extra, success, result)
             ]]
             end
             local msgs = tonumber(redis:get('msgs:' .. result.from.peer_id .. ':' .. result.to.peer_id) or 0)
-            text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id) + 1] ..
+            text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.from.peer_id, result.to.peer_id)] ..
             langs[lang].date .. os.date('%c') ..
             langs[lang].totalMessages .. msgs
             local otherinfo = langs[lang].otherInfo
@@ -439,7 +439,7 @@ local function info_by_from(extra, success, result)
             ]]
             end
             local msgs = tonumber(redis:get('msgs:' .. result.fwd_from.peer_id .. ':' .. result.to.peer_id) or 0)
-            text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.fwd_from.peer_id, result.to.peer_id) + 1] ..
+            text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.fwd_from.peer_id, result.to.peer_id)] ..
             langs[lang].date .. os.date('%c') ..
             langs[lang].totalMessages .. msgs
             local otherinfo = langs[lang].otherInfo
@@ -503,7 +503,7 @@ local function info_by_id(extra, success, result)
         ]]
     end
     local msgs = tonumber(redis:get('msgs:' .. result.peer_id .. ':' .. extra.chat_id) or 0)
-    text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.peer_id, extra.chat_id) + 1] ..
+    text = text .. langs[lang].rank .. reverse_rank_table[get_rank(result.peer_id, extra.chat_id)] ..
     langs[lang].date .. os.date('%c') ..
     langs[lang].totalMessages .. msgs
     local otherinfo = langs[lang].otherInfo
@@ -615,13 +615,13 @@ local function run(msg, matches)
                 return
             elseif matches[2] and matches[2] ~= '' then
                 if string.match(matches[2], '^%d+$') then
-                    return langs[msg.lang].rank .. reverse_rank_table[get_rank(matches[2], chat) + 1]
+                    return langs[msg.lang].rank .. reverse_rank_table[get_rank(matches[2], chat)]
                 else
                     resolve_username(string.match(matches[2], '^[^%s]+'):gsub('@', ''), get_rank_by_username, { receiver = receiver, chat_id = chat })
                     return
                 end
             else
-                return langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1]
+                return langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat)]
             end
         end
         if matches[1]:lower() == 'ishere' and matches[2] then
@@ -700,7 +700,7 @@ local function run(msg, matches)
                 ]]
                 end
                 local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
-                text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
+                text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat)] ..
                 langs[msg.lang].date .. os.date('%c') ..
                 langs[msg.lang].totalMessages .. msgs
                 local otherinfo = langs[msg.lang].otherInfo
@@ -754,7 +754,7 @@ local function run(msg, matches)
                     end
                     ]]
                     end
-                    text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.to.id, chat) + 1] ..
+                    text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.to.id, chat)] ..
                     langs[msg.lang].date .. os.date('%c') ..
                     langs[msg.lang].peer_id .. msg.to.id ..
                     langs[msg.lang].long_id .. msg.to.peer_id
@@ -807,7 +807,7 @@ local function run(msg, matches)
                 ]]
         end
         local msgs = tonumber(redis:get('msgs:' .. msg.from.id .. ':' .. msg.to.id) or 0)
-        text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat) + 1] ..
+        text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.from.id, chat)] ..
         langs[msg.lang].date .. os.date('%c') ..
         langs[msg.lang].totalMessages .. msgs
         local otherinfo = langs[msg.lang].otherInfo
@@ -927,7 +927,7 @@ local function pre_process(msg)
                     end
                     ]]
                     end
-                    text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, msg.to.id) + 1] ..
+                    text = text .. langs[msg.lang].rank .. reverse_rank_table[get_rank(msg.fwd_from.peer_id, msg.to.id)] ..
                     langs[msg.lang].date .. os.date('%c')
                     local otherinfo = langs[msg.lang].otherInfo
                     if is_whitelisted(msg.to.id, msg.fwd_from.peer_id) then
