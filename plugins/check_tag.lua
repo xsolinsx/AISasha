@@ -119,5 +119,5 @@ return {
     description = "CHECK_TAG",
     patterns = { },
     pre_process = pre_process,
-    min_rank = 5
+    min_rank = 6
 }

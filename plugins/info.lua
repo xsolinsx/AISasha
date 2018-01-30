@@ -999,7 +999,7 @@ return {
     },
     run = run,
     pre_process = pre_process,
-    min_rank = 0,
+    min_rank = 1,
     syntax =
     {
         "USER",

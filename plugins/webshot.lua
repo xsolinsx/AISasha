@@ -24,7 +24,7 @@ return {
         "^[#!/][Ww][Ee][Bb][Ss][Hh][Oo][Tt] ([%w-_%.%?%.:/%+=&]+)$",
     },
     run = run,
-    min_rank = 1,
+    min_rank = 2,
     syntax =
     {
         "MOD",

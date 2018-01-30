@@ -21,7 +21,7 @@ return {
         "^[#!/][Aa][Pp][Ii][Pp][Aa][Tt][Cc][Hh] ([Ee][Nn][Aa][Bb][Ll][Ee])$",
     },
     run = run,
-    min_rank = 2,
+    min_rank = 3,
     syntax =
     {
         "OWNER",

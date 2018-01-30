@@ -15,7 +15,7 @@ return {
         "^[#!/][Ll][Uu][Aa] (.*)",
     },
     run = run,
-    min_rank = 4,
+    min_rank = 5,
     syntax =
     {
         "SUDO",

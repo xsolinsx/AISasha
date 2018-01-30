@@ -270,7 +270,7 @@ return {
         "^[#!/]([Kk][Ii][Cc][Kk][Dd][Ee][Ll][Ee][Tt][Ee][Dd])$",
     },
     run = run,
-    min_rank = 1,
+    min_rank = 2,
     syntax =
     {
         "MOD",

@@ -139,7 +139,7 @@ return {
         "^[#!/]([Ee][Ss][Tt][Rr][Aa][Zz][Ii][Oo][Nn][Ee])%d*$",
     },
     run = run,
-    min_rank = 0,
+    min_rank = 1,
     syntax =
     {
         "USER",

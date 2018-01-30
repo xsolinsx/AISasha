@@ -157,7 +157,7 @@ return {
     },
     pre_process = pre_process,
     run = run,
-    min_rank = 0,
+    min_rank = 1,
     syntax =
     {
         "USER",

@@ -50,7 +50,7 @@ return {
         "^[Ss][Aa][Ss][Hh][Aa] [Tt][Aa][Gg][Gg][Aa] [Tt][Uu][Tt][Tt][Ii] +(.+)$",
     },
     run = run,
-    min_rank = 2,
+    min_rank = 3,
     syntax =
     {
         "OWNER",

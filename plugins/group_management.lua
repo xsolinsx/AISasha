@@ -2815,7 +2815,7 @@ return {
         "^([Ll][Ii][Ss][Tt][Aa] [Mm][Uu][Tt][Ii])$",
     },
     run = run,
-    min_rank = 0,
+    min_rank = 1,
     syntax =
     {
         "USER",

@@ -83,7 +83,7 @@ return {
         "^([Rr][Ee][Ss][Uu][Ss][Cc][Ii][Tt][Aa])$",
     },
     run = run,
-    min_rank = 3,
+    min_rank = 4,
     syntax =
     {
         "ADMIN",

@@ -336,7 +336,7 @@ return {
         "^([Ll][Ii][Ss][Tt][Aa] [Dd][Ii][Ss][Aa][Tt][Tt][Ii][Vv][Aa][Tt][Ii])$",
     },
     run = run,
-    min_rank = 2,
+    min_rank = 3,
     syntax =
     {
         "OWNER",
