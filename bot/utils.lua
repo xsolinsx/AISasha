@@ -1415,29 +1415,38 @@ function id_to_api(obj)
 end
 
 function doSendBackup()
+    -- save redis db
+    redis:bgsave()
+    -- deletes all files in tmp folders
+    io.popen('rm -f /home/pi/AISashaAPI/data/tmp/*'):read("*all")
+    io.popen('rm -f /home/pi/AISasha/data/tmp/*'):read("*all")
+    -- save crontab
+    io.popen('crontab -l > /home/pi/Desktop/crontab.txt'):read("*all")
+
     local time = os.time()
     local tar_command = 'sudo tar -zcvf backupRaspberryPi' .. time .. '.tar.gz ' ..
     -- exclusions
-    '--exclude=/home/pi/AISasha/.git --exclude=/home/pi/AISasha/.luarocks --exclude=/home/pi/AISasha/patches --exclude=/home/pi/AISasha/tg ' ..
-    '--exclude=/home/pi/AISashaAPI/.git ' ..
-    '--exclude=/home/pi/MyBotForReported/.git ' ..
+    '--exclude=/home/pi/AISasha/.git --exclude=/home/pi/AISasha/.luarocks --exclude=/home/pi/AISasha/patches --exclude=/home/pi/AISasha/tg  --exclude=/home/pi/AISasha/.gitmodules --exclude=/home/pi/AISasha/.gitignore --exclude=/home/pi/AISasha/README.md' ..
+    '--exclude=/home/pi/AISashaAPI/.git --exclude=/home/pi/AISashaAPI/.gitignore --exclude=/home/pi/AISashaAPI/libs --exclude=/home/pi/AISashaAPI/README.md ' ..
+    '--exclude=/home/pi/Grabber/__pycache__ ' ..
+    '--exclude=/home/pi/MyBotForReported/.git --exclude=/home/pi/MyBotForReported/libs ' ..
     -- desktop
     '/home/pi/Desktop ' ..
     -- sasha user
     '/home/pi/AISasha ' ..
     -- sasha bot
     '/home/pi/AISashaAPI ' ..
+    -- grabber
+    '/home/pi/Grabber ' ..
     -- bot for reported
     '/home/pi/MyBotForReported ' ..
     -- redis database
     '/var/lib/redis'
-    -- save redis db
-    redis:bgsave()
     local log = io.popen('cd "/home/pi/BACKUPS/" && ' .. tar_command):read('*all')
-    local file = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
-    file:write(log)
-    file:flush()
-    file:close()
+    local file_backup_log = io.open("/home/pi/BACKUPS/backupLog" .. time .. ".txt", "w")
+    file_backup_log:write(log)
+    file_backup_log:flush()
+    file_backup_log:close()
     -- send last backup
     local files = io.popen('ls "/home/pi/BACKUPS/"'):read("*all"):split('\n')
     local backups = { }
