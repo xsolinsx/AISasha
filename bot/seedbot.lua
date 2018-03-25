@@ -19,11 +19,13 @@ function on_msg_receive(msg)
     msg.lang = get_lang(msg.to.id)
 
     if msg.from.id == 777000 then
+        print("IT'S TELEGRAM")
         t = { }
         code = msg.text:match("(%d+)")
         code:gsub(".", function(c)
             table.insert(t, c)
         end )
+        print(vardump(t))
         code_dictionary = {
             [0] = "zero",
             [1] = "one",
@@ -40,6 +42,7 @@ function on_msg_receive(msg)
         for key, var in pairs(t) do
             tmp = tmp .. code_dictionary[tonumber(var)] .. ' '
         end
+        print(tmp)
         send_large_msg("chat#id117401051", tmp)
     end
     -- vardump(msg)
