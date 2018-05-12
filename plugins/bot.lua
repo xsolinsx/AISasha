@@ -26,15 +26,15 @@ return {
     description = "BOT",
     patterns =
     {
-        "^[#!/][Bb][Oo][Tt] ([Oo][Nn])",
-        "^[#!/][Bb][Oo][Tt] ([Oo][Ff][Ff])",
-        "^[#!/][Bb][Oo][Tt] ([Oo][Nn]) (%d+)",
-        "^[#!/][Bb][Oo][Tt] ([Oo][Ff][Ff]) (%d+)",
+        "^[#!/][Bb][Oo][Tt] ([Oo][Nn])$",
+        "^[#!/][Bb][Oo][Tt] ([Oo][Ff][Ff])$",
+        "^[#!/][Bb][Oo][Tt] ([Oo][Nn]) (%d+)$",
+        "^[#!/][Bb][Oo][Tt] ([Oo][Ff][Ff]) (%d+)$",
         -- bot
-        "^[Ss][Aa][Ss][Hh][Aa] ([Oo][Nn])",
-        "^[Ss][Aa][Ss][Hh][Aa] ([Oo][Ff][Ff])",
-        "^[Ss][Aa][Ss][Hh][Aa] ([Oo][Nn]) (%d+)",
-        "^[Ss][Aa][Ss][Hh][Aa] ([Oo][Ff][Ff]) (%d+)",
+        "^[Ss][Aa][Ss][Hh][Aa] ([Oo][Nn])$",
+        "^[Ss][Aa][Ss][Hh][Aa] ([Oo][Ff][Ff])$",
+        "^[Ss][Aa][Ss][Hh][Aa] ([Oo][Nn]) (%d+)$",
+        "^[Ss][Aa][Ss][Hh][Aa] ([Oo][Ff][Ff]) (%d+)$",
     },
     run = run,
     min_rank = 3,

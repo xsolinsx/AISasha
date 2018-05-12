@@ -51,3 +51,4 @@ data/tmp/*.*
 *.user
 *.luaproj
 /plugins/localtest.lua
+*.code-workspace
