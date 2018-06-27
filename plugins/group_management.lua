@@ -1270,7 +1270,7 @@ local function run(msg, matches)
                 return langs[msg.lang].require_owner
             end
         end
-        if matches[1]:lower() == 'admins' then
+        if matches[1]:lower() == 'admin' or matches[1]:lower() == 'admins' then
             send_large_msg(get_receiver(msg), langs[msg.lang].useAISashaAPI)
             --[[if msg.to.type == 'channel' then
                 return channel_get_admins(get_receiver(msg), contact_mods_callback, { msg = msg })
@@ -2731,7 +2731,7 @@ return {
         -- COMMON
         "^[#!/]([Tt][Yy][Pp][Ee])$",
         "^[#!/]([Ll][Oo][Gg])$",
-        "^[#!/]([Aa][Dd][Mm][Ii][Nn][Ss])",
+        "^[#!/@]([Aa][Dd][Mm][Ii][Nn][Ss]?)",
         "^[#!/]([Aa][Dd][Dd])$",
         "^[#!/]([Rr][Ee][Mm])$",
         "^[#!/]([Rr][Uu][Ll][Ee][Ss])$",
