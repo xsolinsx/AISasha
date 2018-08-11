@@ -1633,106 +1633,93 @@ local function run(msg, matches)
         end
         if data[tostring(msg.to.id)] then
             local settings = data[tostring(msg.to.id)].settings
-            if matches[1] == 'chat_add_user' then
-                if not msg.service then
-                    return
-                end
-                if settings.lock_member and not is_owner2(msg.action.user.id, msg.to.id) then
-                    chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
-                    return
-                elseif settings.lock_member and tonumber(msg.from.id) == tonumber(our_id) then
-                    return
-                elseif settings.lock_member then
-                    return
-                end
-            end
-            if matches[1] == 'chat_del_user' then
-                if not msg.service then
-                    return
-                end
-                return savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted user  " .. 'user#id' .. msg.action.user.id)
-            end
-            if matches[1] == 'chat_delete_photo' then
-                if not msg.service then
-                    return
-                end
-                if settings.lock_photo then
-                    local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
-                    redis:incr(picturehash)
-                    local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
-                    local picprotectionredis = redis:get(picturehash)
-                    if picprotectionredis then
-                        if tonumber(picprotectionredis) == 4 and not is_owner(msg) then
-                            kick_user(msg.from.id, msg.to.id)
-                        end
-                        if tonumber(picprotectionredis) == 8 and not is_owner(msg) then
-                            ban_user(msg.from.id, msg.to.id)
-                            local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
-                            redis:set(picturehash, 0)
-                        end
-                    end
-
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to delete picture but failed  ")
-                    chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
-                    return
-                elseif settings.lock_photo then
-                    return
-                end
-            end
-            if matches[1] == 'chat_change_photo' and msg.from.id ~= 0 then
-                if not msg.service then
-                    return
-                end
-                if settings.lock_photo then
-                    local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
-                    redis:incr(picturehash)
-                    -- -
-                    local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
-                    local picprotectionredis = redis:get(picturehash)
-                    if picprotectionredis then
-                        if tonumber(picprotectionredis) == 4 and not is_owner(msg) then
-                            kick_user(msg.from.id, msg.to.id)
-                        end
-                        if tonumber(picprotectionredis) == 8 and not is_owner(msg) then
-                            ban_user(msg.from.id, msg.to.id)
-                            local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
-                            redis:set(picturehash, 0)
-                        end
-                    end
-
-                    savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to change picture but failed  ")
-                    chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
-                    return
-                elseif settings.lock_photo then
-                    return
-                end
-            end
-            if matches[1] == 'chat_rename' then
-                if not msg.service then
-                    return
-                end
-                if settings.lock_name then
-                    if data[tostring(msg.to.id)].set_name ~= tostring(msg.to.print_name) then
-                        local namehash = 'name:changed:' .. msg.to.id .. ':' .. msg.from.id
-                        redis:incr(namehash)
-                        local namehash = 'name:changed:' .. msg.to.id .. ':' .. msg.from.id
-                        local nameprotectionredis = redis:get(namehash)
-                        if nameprotectionredis then
-                            if tonumber(nameprotectionredis) == 4 and not is_owner(msg) then
-                                kick_user(msg.from.id, msg.to.id)
-                            end
-                            if tonumber(nameprotectionredis) == 8 and not is_owner(msg) then
-                                ban_user(msg.from.id, msg.to.id)
-                                local namehash = 'name:changed:' .. msg.to.id .. ':' .. msg.from.id
-                                redis:set(namehash, 0)
-                            end
-                        end
-                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to change name but failed  ")
-                        rename_chat('chat#id' .. msg.to.id, data[tostring(msg.to.id)].set_name, ok_cb, false)
+            if not msg.service then
+                if matches[1] == 'chat_add_user' then
+                    if settings.lock_member and not is_owner2(msg.action.user.id, msg.to.id) then
+                        chat_del_user('chat#id' .. msg.to.id, 'user#id' .. msg.action.user.id, ok_cb, true)
+                        return
+                    elseif settings.lock_member and tonumber(msg.from.id) == tonumber(our_id) then
+                        return
+                    elseif settings.lock_member then
                         return
                     end
-                elseif settings.lock_name then
-                    return
+                end
+                if matches[1] == 'chat_del_user' then
+                    return savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] deleted user  " .. 'user#id' .. msg.action.user.id)
+                end
+                if matches[1] == 'chat_delete_photo' then
+                    if settings.lock_photo then
+                        local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
+                        redis:incr(picturehash)
+                        local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
+                        local picprotectionredis = redis:get(picturehash)
+                        if picprotectionredis then
+                            if tonumber(picprotectionredis) == 4 and not is_owner(msg) then
+                                kick_user(msg.from.id, msg.to.id)
+                            end
+                            if tonumber(picprotectionredis) == 8 and not is_owner(msg) then
+                                ban_user(msg.from.id, msg.to.id)
+                                local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
+                                redis:set(picturehash, 0)
+                            end
+                        end
+
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to delete picture but failed  ")
+                        chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                        return
+                    elseif settings.lock_photo then
+                        return
+                    end
+                end
+                if matches[1] == 'chat_change_photo' and msg.from.id ~= 0 then
+                    if settings.lock_photo then
+                        local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
+                        redis:incr(picturehash)
+                        -- -
+                        local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
+                        local picprotectionredis = redis:get(picturehash)
+                        if picprotectionredis then
+                            if tonumber(picprotectionredis) == 4 and not is_owner(msg) then
+                                kick_user(msg.from.id, msg.to.id)
+                            end
+                            if tonumber(picprotectionredis) == 8 and not is_owner(msg) then
+                                ban_user(msg.from.id, msg.to.id)
+                                local picturehash = 'picture:changed:' .. msg.to.id .. ':' .. msg.from.id
+                                redis:set(picturehash, 0)
+                            end
+                        end
+
+                        savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to change picture but failed  ")
+                        chat_set_photo(get_receiver(msg), data[tostring(msg.to.id)].set_photo, ok_cb, false)
+                        return
+                    elseif settings.lock_photo then
+                        return
+                    end
+                end
+                if matches[1] == 'chat_rename' then
+                    if settings.lock_name then
+                        if data[tostring(msg.to.id)].set_name ~= tostring(msg.to.print_name) then
+                            local namehash = 'name:changed:' .. msg.to.id .. ':' .. msg.from.id
+                            redis:incr(namehash)
+                            local namehash = 'name:changed:' .. msg.to.id .. ':' .. msg.from.id
+                            local nameprotectionredis = redis:get(namehash)
+                            if nameprotectionredis then
+                                if tonumber(nameprotectionredis) == 4 and not is_owner(msg) then
+                                    kick_user(msg.from.id, msg.to.id)
+                                end
+                                if tonumber(nameprotectionredis) == 8 and not is_owner(msg) then
+                                    ban_user(msg.from.id, msg.to.id)
+                                    local namehash = 'name:changed:' .. msg.to.id .. ':' .. msg.from.id
+                                    redis:set(namehash, 0)
+                                end
+                            end
+                            savelog(msg.to.id, name_log .. " [" .. msg.from.id .. "] tried to change name but failed  ")
+                            rename_chat('chat#id' .. msg.to.id, data[tostring(msg.to.id)].set_name, ok_cb, false)
+                            return
+                        end
+                    elseif settings.lock_name then
+                        return
+                    end
                 end
             end
             if not msg.api_patch then
